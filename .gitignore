@@ -1,0 +1,15 @@
+data/raw/
+data/*.db
+data/*.db-journal
+node_modules/
+frontend/dist/
+frontend/.astro/
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+.DS_Store
+# gemini_config leeft nu buiten de repo (~/.bipolariteit/agy_gemini_config,
+# zie docs/handoff.md) -- deze regel blijft als vangnet mocht die directory
+# ooit per ongeluk weer lokaal onder de repo aangemaakt worden.
+docker/agy/gemini_config/

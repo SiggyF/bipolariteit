@@ -1,0 +1,30 @@
+---
+import topicsIndex from "../../../data/export/topics-index.json";
+import "../styles/main.css";
+---
+
+<html lang="nl">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width" />
+		<title>Bipolariteit</title>
+	</head>
+	<body>
+		<main>
+			<h1>Bipolariteit</h1>
+			<p class="intro">Argumenten in gepolariseerde Nederlandse maatschappelijke discussies — we listen and we don't judge.</p>
+			<ul class="topic-list">
+				{topicsIndex.map((topic) => (
+					<li>
+						<a href={`/topics/${topic.slug}/`}>
+							<span class="topic-name">{topic.name}</span>
+							<span class="topic-count">{topic.argument_count} argumenten</span>
+						</a>
+					</li>
+				))}
+			</ul>
+			<a href="/about/" class="about-link">Over dit platform &amp; uitgangspunten</a>
+		</main>
+	</body>
+</html>
