@@ -16,6 +16,7 @@ from pathlib import Path
 
 from pipeline.db import db
 from pipeline.tag_arguments import (
+    PROMPT_VERSION,
     _build_prompt,
     _extract_json,
     _validate_tags,
@@ -99,7 +100,10 @@ def main():
         latencies.append(elapsed)
 
         insert_llm_tags(conn, arg["id"], accepted)
-        conn.execute("UPDATE arguments SET tagged_at = ? WHERE id = ?", (datetime.now(timezone.utc).isoformat(), arg["id"]))
+        conn.execute(
+            "UPDATE arguments SET tagged_at = ?, tag_prompt_version = ?, tag_model = ? WHERE id = ?",
+            (datetime.now(timezone.utc).isoformat(), PROMPT_VERSION, args.model, arg["id"]),
+        )
         conn.commit()
 
         total_llm += len(accepted)

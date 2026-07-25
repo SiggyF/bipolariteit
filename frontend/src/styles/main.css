@@ -28,6 +28,32 @@ main {
 	padding: 2rem 1.5rem 4rem;
 }
 
+.site-nav {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 1rem 1.5rem;
+	border-bottom: 1px solid var(--color-border);
+}
+
+.site-nav-brand {
+	font-weight: 600;
+	text-decoration: none;
+	color: var(--color-text);
+}
+
+.site-nav-link {
+	color: var(--color-muted);
+	text-decoration: none;
+	font-size: 0.9rem;
+}
+
+.site-nav-link:hover {
+	text-decoration: underline;
+}
+
 h1 {
 	font-size: 2rem;
 	margin-bottom: 0.25rem;
@@ -221,6 +247,26 @@ h1 {
 	color: var(--color-unclear);
 }
 
+.column-load-more {
+	display: flex;
+	justify-content: center;
+	padding: 1rem 0;
+}
+
+.column-load-more button {
+	background: var(--color-card-bg);
+	border: 1px solid var(--color-border);
+	border-radius: 0.5rem;
+	padding: 0.5rem 1rem;
+	color: var(--color-text);
+	cursor: pointer;
+	font-size: 0.85rem;
+}
+
+.column-load-more button:hover {
+	border-color: var(--color-muted);
+}
+
 .argument-card {
 	background: var(--color-card-bg);
 	border: 1px solid var(--color-border);
@@ -389,6 +435,22 @@ h1 {
 .feedback-export button:disabled {
 	opacity: 0.4;
 	cursor: not-allowed;
+}
+
+.pipeline-diagram {
+	margin: 1.5rem 0;
+	padding: 1rem;
+	background: #ffffff;
+	border: 1px solid var(--color-border);
+	border-radius: 8px;
+	overflow-x: auto;
+}
+
+.pipeline-diagram img {
+	display: block;
+	max-width: 100%;
+	height: auto;
+	margin: 0 auto;
 }
 
 @media (prefers-color-scheme: dark) {

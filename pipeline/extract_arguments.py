@@ -87,11 +87,11 @@ def _validate_argument(arg):
         raise ValueError("quote_text ontbreekt of is leeg")
 
 
-def insert_argument(conn, document_id, topic_id, actor_id, arg):
+def insert_argument(conn, document_id, topic_id, actor_id, arg, model):
     conn.execute(
         """INSERT INTO arguments
-           (document_id, topic_id, actor_id, stance, typology, quote_text, quote_context, extracted_at, prompt_version)
-           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+           (document_id, topic_id, actor_id, stance, typology, quote_text, quote_context, extracted_at, prompt_version, extraction_model)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
         (
             document_id,
             topic_id,
@@ -102,6 +102,7 @@ def insert_argument(conn, document_id, topic_id, actor_id, arg):
             arg.get("quote_context"),
             datetime.now(timezone.utc).isoformat(),
             PROMPT_VERSION,
+            model,
         ),
     )
     argument_id = conn.execute("SELECT last_insert_rowid() AS id").fetchone()["id"]
@@ -196,13 +197,13 @@ def main():
                 continue
             n_claims += len(arg.get("claims") or [])
             if not args.dry_run:
-                insert_argument(conn, doc["id"], topic_id, doc["actor_id"], arg)
+                insert_argument(conn, doc["id"], topic_id, doc["actor_id"], arg, args.model)
             n_valid += 1
 
         if not args.dry_run:
             conn.execute(
-                "UPDATE documents SET extraction_attempted_at = ?, extraction_prompt_version = ? WHERE id = ?",
-                (datetime.now(timezone.utc).isoformat(), PROMPT_VERSION, doc["id"]),
+                "UPDATE documents SET extraction_attempted_at = ?, extraction_prompt_version = ?, extraction_model = ? WHERE id = ?",
+                (datetime.now(timezone.utc).isoformat(), PROMPT_VERSION, args.model, doc["id"]),
             )
             conn.commit()
 

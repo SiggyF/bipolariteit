@@ -35,8 +35,10 @@ CREATE TABLE documents (
     activiteit_soort TEXT, -- VLOS <activiteit soort="..."> waarde (bv. "Plenair debat"); NULL indien onbekend/niet TK
     extraction_attempted_at TEXT, -- gezet zodra Stage 1 (extract_arguments.py) dit document verwerkt heeft, ook als dat 0 arguments opleverde
     extraction_prompt_version TEXT, -- hash van pipeline/prompts/extract_argument.md t.t.v. de laatste extractiepoging; NULL = vóór versionering bestond
+    extraction_model TEXT, -- LLM-modelnaam (bv. "qwen/qwen3.6-27b") gebruikt bij de laatste extractiepoging; NULL = vóór dit veld bestond
     activiteit_aanvangstijd TEXT, -- VLOS <activiteit><aanvangstijd>: starttijd van het hele debat (activiteit-niveau, niet de sprekerbeurt); input voor de video_url/Debat Direct-matchheuristiek
-    activiteit_eindtijd TEXT -- VLOS <activiteit><eindtijd>: eindtijd van het hele debat, idem
+    activiteit_eindtijd TEXT, -- VLOS <activiteit><eindtijd>: eindtijd van het hele debat, idem
+    handelingen_url TEXT -- publieke, leesbare tweedekamer.nl/officielebekendmakingen.nl Handelingen-tekstpagina voor dit Verslag (i.t.t. `url`, dat de machine-leesbare OData resource-XML is); NULL tot uitgezocht/gebackfilld
 );
 
 CREATE TABLE actors (
@@ -61,7 +63,10 @@ CREATE TABLE arguments (
     cluster_id INTEGER, -- hook voor toekomstige cross-source clustering; nog niet gevuld
     redactie_status TEXT CHECK (redactie_status IN ('balanced', 'imbalanced', 'flag')),
     tagged_at TEXT, -- gezet zodra de tag_arguments.py-pass voor dit argument compleet is (ook als dat 0 tags opleverde)
-    prompt_version TEXT -- hash van pipeline/prompts/extract_argument.md die dit specifieke argument opleverde; NULL = vóór versionering bestond
+    prompt_version TEXT, -- hash van pipeline/prompts/extract_argument.md die dit specifieke argument opleverde; NULL = vóór versionering bestond
+    extraction_model TEXT, -- LLM-modelnaam (bv. "qwen/qwen3.6-27b") die dit argument opleverde; NULL = vóór dit veld bestond
+    tag_prompt_version TEXT, -- hash van pipeline/prompts/tag_argument.md t.t.v. de laatste tag_arguments.py-pass voor dit argument
+    tag_model TEXT -- LLM-modelnaam gebruikt door de tag_arguments.py-pass; NULL voor argumenten zonder LLM-tags of vóór dit veld bestond
 );
 
 -- Genoemde getallen/claims en de bron die de spreker eraan toeschrijft.
@@ -95,6 +100,7 @@ CREATE TABLE redactie_reviews (
     pass_status TEXT NOT NULL CHECK (pass_status IN ('balanced', 'imbalanced', 'flag')),
     notes TEXT,
     reviewer_model TEXT,
+    prompt_version TEXT, -- hash van pipeline/prompts/redactie_bias_check.md t.t.v. deze review; NULL = vóór versionering bestond
     created_at TEXT NOT NULL
 );
 

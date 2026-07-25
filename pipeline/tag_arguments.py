@@ -17,7 +17,9 @@ Gebruik:
 """
 
 import argparse
+import hashlib
 import json
+import logging
 import re
 import time
 from datetime import datetime, timezone
@@ -28,7 +30,10 @@ import requests
 from pipeline.db import db
 from pipeline.taxonomy import DERIVED_LABELGROEPEN, field_name_for
 
+logger = logging.getLogger(__name__)
+
 PROMPT_TEMPLATE = (Path(__file__).parent / "prompts" / "tag_argument.md").read_text()
+PROMPT_VERSION = hashlib.sha256(PROMPT_TEMPLATE.encode()).hexdigest()[:12]
 
 _JSON_FENCE_RE = re.compile(r"```(?:json)?\s*(.*?)\s*```", re.DOTALL)
 
@@ -170,23 +175,23 @@ def _validate_tags(parsed, valid_tags):
             continue
         entries = [value] if isinstance(value, (str, dict)) else value
         if not isinstance(entries, list):
-            print(f"    overgeslagen veld {field!r}: onverwacht type {type(value)}")
+            logger.warning("    overgeslagen veld %r: onverwacht type %s", field, type(value))
             continue
         coerced = []
         for entry in entries:
             result = _coerce_tag_entry(entry)
             if result is None:
-                print(f"    overgeslagen onherkenbaar tag-item in {field!r}: {entry!r}")
+                logger.warning("    overgeslagen onherkenbaar tag-item in %r: %r", field, entry)
                 continue
             coerced.append(result)
         if selectie == "enkel" and len(coerced) > 1:
-            print(f"    overgeslagen veld {field!r}: enkelvoudige labelgroep kreeg meerdere tags: {coerced}")
+            logger.warning("    overgeslagen veld %r: enkelvoudige labelgroep kreeg meerdere tags: %s", field, coerced)
             continue
         for sleutel, reden in coerced:
             if sleutel in allowed:
                 accepted.append((sleutel, reden))
             else:
-                print(f"    overgeslagen onbekende sleutel in {field!r}: {sleutel!r}")
+                logger.warning("    overgeslagen onbekende sleutel in %r: %r", field, sleutel)
     return accepted
 
 
@@ -276,10 +281,13 @@ def main():
 
     arguments = fetch_untagged_arguments(conn, topic_id, args.limit, args.min_id)
     if not arguments:
-        print("Geen ongetagde argumenten (al verwerkt, of geen argumenten voor deze topic).")
+        logger.info("Geen ongetagde argumenten (al verwerkt, of geen argumenten voor deze topic).")
         return
 
-    print(f"Model: {args.model} | reasoning_effort={args.reasoning_effort!r} | {len(arguments)} argumenten\n")
+    logger.info(
+        "Model: %s | reasoning_effort=%r | prompt_version=%s | %d argumenten",
+        args.model, args.reasoning_effort, PROMPT_VERSION, len(arguments),
+    )
 
     total_derived = 0
     total_llm = 0
@@ -302,7 +310,7 @@ def main():
             llm_tags = _validate_tags(parsed, valid_tags)
         except Exception as exc:
             elapsed = time.monotonic() - start
-            print(f"[arg {arg['id']:>5}] {arg['actor_name']:<25} FOUT na {elapsed:5.1f}s: {exc}")
+            logger.error("[arg %5d] %-25s FOUT na %5.1fs: %s", arg["id"], arg["actor_name"], elapsed, exc)
             total_errors += 1
             if not args.dry_run:
                 conn.commit()
@@ -312,26 +320,30 @@ def main():
 
         if not args.dry_run:
             insert_llm_tags(conn, arg["id"], llm_tags)
-            conn.execute("UPDATE arguments SET tagged_at = ? WHERE id = ?", (datetime.now(timezone.utc).isoformat(), arg["id"]))
+            conn.execute(
+                "UPDATE arguments SET tagged_at = ?, tag_prompt_version = ?, tag_model = ? WHERE id = ?",
+                (datetime.now(timezone.utc).isoformat(), PROMPT_VERSION, args.model, arg["id"]),
+            )
             conn.commit()
 
         llm_sleutels = [sleutel for sleutel, _reden in llm_tags]
         total_llm += len(llm_tags)
-        print(
-            f"[arg {arg['id']:>5}] {arg['actor_name']:<25} {elapsed:5.1f}s | "
-            f"derived: {derived} | llm: {llm_sleutels}"
+        logger.info(
+            "[arg %5d] %-25s %5.1fs | derived: %s | llm: %s",
+            arg["id"], arg["actor_name"], elapsed, derived, llm_sleutels,
         )
 
     conn.close()
 
-    print()
-    print(f"Klaar: {len(arguments)} argumenten verwerkt, {total_errors} fout(en).")
-    print(f"Totaal: {total_derived} afgeleide tags, {total_llm} LLM-tags.")
+    logger.info("Klaar: %d argumenten verwerkt, %d fout(en).", len(arguments), total_errors)
+    logger.info("Totaal: %d afgeleide tags, %d LLM-tags.", total_derived, total_llm)
     if latencies:
-        print(f"Latency: gem={sum(latencies)/len(latencies):.1f}s min={min(latencies):.1f}s max={max(latencies):.1f}s")
+        avg = sum(latencies) / len(latencies)
+        logger.info("Latency: gem=%.1fs min=%.1fs max=%.1fs", avg, min(latencies), max(latencies))
     if args.dry_run:
-        print("(--dry-run: niets weggeschreven naar de database)")
+        logger.info("(--dry-run: niets weggeschreven naar de database)")
 
 
 if __name__ == "__main__":
+    logging.basicConfig(level=logging.INFO)
     main()

@@ -1,5 +1,6 @@
 ---
 import topicsIndex from "../../../data/export/topics-index.json";
+import SiteNav from "../components/SiteNav.astro";
 import "../styles/main.css";
 ---
 
@@ -11,6 +12,7 @@ import "../styles/main.css";
 		<title>Bipolariteit</title>
 	</head>
 	<body>
+		<SiteNav />
 		<main>
 			<h1>Bipolariteit</h1>
 			<p class="intro">Argumenten in gepolariseerde Nederlandse maatschappelijke discussies — we listen and we don't judge.</p>
@@ -24,7 +26,6 @@ import "../styles/main.css";
 					</li>
 				))}
 			</ul>
-			<a href="/about/" class="about-link">Over dit platform &amp; uitgangspunten</a>
 		</main>
 	</body>
 </html>

@@ -1,9 +1,10 @@
 ---
-import ArgumentCard from "../../components/ArgumentCard.vue";
+import ArgumentColumn from "../../components/ArgumentColumn.vue";
 import StatsPanel from "../../components/StatsPanel.vue";
 import TagsPerParty from "../../components/TagsPerParty.vue";
 import TagCorrespondenceMap from "../../components/TagCorrespondenceMap.vue";
 import FeedbackExport from "../../components/FeedbackExport.vue";
+import SiteNav from "../../components/SiteNav.astro";
 import "../../styles/main.css";
 
 const topicModules = import.meta.glob("../../../../data/export/topics/*.json", { eager: true });
@@ -28,6 +29,7 @@ const topic = mod.default;
 		<title>{topic.name} — Bipolariteit</title>
 	</head>
 	<body>
+		<SiteNav />
 		<main>
 			<a href="/" class="back-link">&larr; alle onderwerpen</a>
 			<h1>{topic.name}</h1>
@@ -38,24 +40,9 @@ const topic = mod.default;
 			<TagCorrespondenceMap correspondence={topic.tag_correspondence} client:only="vue" />
 
 			<div class="columns">
-				<section class="column column-pro">
-					<h2>Pro ({topic.pro.length})</h2>
-					{topic.pro.map((argument: any) => (
-						<ArgumentCard argument={argument} topicSlug={topic.slug} client:load />
-					))}
-				</section>
-				<section class="column column-contra">
-					<h2>Contra ({topic.contra.length})</h2>
-					{topic.contra.map((argument: any) => (
-						<ArgumentCard argument={argument} topicSlug={topic.slug} client:load />
-					))}
-				</section>
-				<section class="column column-unclear">
-					<h2>Onduidelijk ({topic.unclear.length})</h2>
-					{topic.unclear.map((argument: any) => (
-						<ArgumentCard argument={argument} topicSlug={topic.slug} client:load />
-					))}
-				</section>
+				<ArgumentColumn arguments={topic.pro} topicSlug={topic.slug} label="Pro" stanceClass="column-pro" client:load />
+				<ArgumentColumn arguments={topic.contra} topicSlug={topic.slug} label="Contra" stanceClass="column-contra" client:load />
+				<ArgumentColumn arguments={topic.unclear} topicSlug={topic.slug} label="Onduidelijk" stanceClass="column-unclear" client:load />
 			</div>
 
 			<FeedbackExport client:load />

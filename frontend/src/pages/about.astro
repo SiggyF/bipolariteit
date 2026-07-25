@@ -1,4 +1,5 @@
 ---
+import SiteNav from "../components/SiteNav.astro";
 import "../styles/main.css";
 ---
 
@@ -10,6 +11,7 @@ import "../styles/main.css";
 		<title>Over dit platform — Bipolariteit</title>
 	</head>
 	<body>
+		<SiteNav />
 		<main class="about">
 			<a href="/" class="back-link">&larr; alle onderwerpen</a>
 			<h1>Over dit platform</h1>
@@ -47,6 +49,50 @@ import "../styles/main.css";
 				claims met hun bron. Dit is een geautomatiseerd, foutgevoelig proces — extractiekwaliteit
 				verbetert nog met de tijd, en je kunt op elke kaart feedback geven als iets niet klopt.
 			</p>
+
+			<div class="pipeline-diagram">
+				<img
+					src="/pipeline-workflow.svg"
+					alt="Workflow: Tweede Kamer-bron → crawlen → segmenteren → Stage 1 argumenten extraheren → tags toekennen → Stage 2 redactie-check → steekproefcontrole en validatierapport → export → frontend-build → bipolariteit.org, met de About-pagina die per stap het gebruikte model en de promptversie toont."
+				/>
+			</div>
+
+			<h2>Beschrijvende tags, geen oordeel</h2>
+			<p>
+				Naast stance/typologie krijgen argumenten waar mogelijk ook tags uit een argumentatietheoretische
+				taxonomie (o.a. redeneerschema's, en — in de labelgroep "Dialectische Kwaliteit"/"Metadiscussie" —
+				retorische patronen zoals stropop of ad-hominem). Dit zijn <strong>beschrijvingen van vorm</strong>,
+				geen oordeel: een tag zegt "dit fragment heeft de vorm van een ad-hominem-constructie", niet "dit
+				argument is daarom ongeldig of oneerlijk". Deze taxonomie-laag is minder uitgebreid gevalideerd dan
+				stance/typologie en kan foutgevoeliger zijn bij subtiele gevallen — zie de validatie-rapportage
+				hieronder voor de laatste steekproefresultaten.
+			</p>
+
+			<h2>Transparantie &amp; reproduceerbaarheid</h2>
+			<p>
+				We claimen geen feilloosheid, wel traceerbaarheid: elk argument is te herleiden tot het exacte
+				model, de exacte promptversie en de brontekst waaruit het is gedestilleerd.
+			</p>
+			<ul>
+				<li>
+					<strong>Modellen &amp; promptversies.</strong> Extractie (Stage 1), tagging (Stage 1b) en de
+					redactie-balanscheck (Stage 2) draaien lokaal via een open-source model (momenteel
+					<code>qwen/qwen3.6-27b</code>); validatiesteekproeven gebruiken daarnaast Gemini als tweede
+					beoordelaar. Elke prompt-versie wordt gehasht en per document/argument opgeslagen
+					(<code>extraction_prompt_version</code>/<code>prompt_version</code> in de database), zodat
+					een prompt- of modelwijziging altijd traceerbaar is.
+				</li>
+				<li>
+					<strong>Validatie-rapportage.</strong> Vóór elke publicatieronde wordt een representatieve
+					steekproef per onderwerp handmatig + door een tweede LLM herbeoordeeld. Zie de
+					<a href="/validatie-rapportage">validatie-rapportage</a> voor de laatste resultaten
+					(foutpercentage en systematische patronen per stage).
+				</li>
+				<li>
+					<strong>Open werkwijze.</strong> De volledige pipeline, prompts en taxonomie zijn onderdeel
+					van de broncode van dit platform — niets hiervan is een black box.
+				</li>
+			</ul>
 		</main>
 	</body>
 </html>

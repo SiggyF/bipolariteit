@@ -24,6 +24,7 @@ Gebruik:
 """
 
 import argparse
+import hashlib
 import json
 import logging
 import re
@@ -38,6 +39,7 @@ from pipeline.db import db
 logger = logging.getLogger(__name__)
 
 PROMPT_TEMPLATE = (Path(__file__).parent / "prompts" / "redactie_bias_check.md").read_text()
+PROMPT_VERSION = hashlib.sha256(PROMPT_TEMPLATE.encode()).hexdigest()[:12]
 
 VALID_RELATION_TYPES = {"direct_rebuttal", "thematic"}
 MAX_CANDIDATES_PER_STANCE = 10
@@ -229,7 +231,10 @@ def main():
         logger.info("Geen openstaande documenten (al gecontroleerd, of nog geen documenten met arguments voor deze topic).")
         return
 
-    logger.info("Model: %s | reasoning_effort=%r | %d documenten", args.model, args.reasoning_effort, len(documents))
+    logger.info(
+        "Model: %s | reasoning_effort=%r | prompt_version=%s | %d documenten",
+        args.model, args.reasoning_effort, PROMPT_VERSION, len(documents),
+    )
 
     total_oppositions = 0
     total_errors = 0
@@ -268,9 +273,9 @@ def main():
         if not args.dry_run:
             inserted = insert_oppositions(conn, oppositions)
             conn.execute(
-                """INSERT INTO redactie_reviews (document_id, pass_status, notes, reviewer_model, created_at)
-                   VALUES (?, ?, ?, ?, ?)""",
-                (doc["id"], pass_status, notes, args.model, datetime.now(timezone.utc).isoformat()),
+                """INSERT INTO redactie_reviews (document_id, pass_status, notes, reviewer_model, created_at, prompt_version)
+                   VALUES (?, ?, ?, ?, ?, ?)""",
+                (doc["id"], pass_status, notes, args.model, datetime.now(timezone.utc).isoformat(), PROMPT_VERSION),
             )
             conn.commit()
         else:
