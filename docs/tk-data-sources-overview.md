@@ -85,9 +85,63 @@ die dit gedegen uitzoekt.
 - Geen bestaande issue specifiek over Activiteit↔Vergadering (gecontroleerd, geen duplicaat-risico als hier later alsnog een issue over komt).
 - Andere issues gecontroleerd (#87, #75) betreffen Document↔Zaak-relaties, niet relevant voor dit onderwerp.
 
+## 10. Officiële Bekendmakingen / KOOP (Handelingen — leesbare + machine-XML tekst)
+
+Toegevoegd tijdens het uitzoeken van de "Check de Kamer"-brondeeplink (v1-launchplan): een
+**derde, geheel apart systeem** naast OData en Debat Direct, met zijn eigen identifiers,
+voor de officiële, gecorrigeerde Handelingen-tekst (het woordelijk verslag zoals het na
+correctie definitief gepubliceerd wordt door KOOP/Overheid.nl — niet hetzelfde document als
+de OData `Verslag`-resource, zie tabel hieronder).
+
+- **SRU-zoekservice** (het opzoekmechanisme, geen documentbron zelf): `https://repository.overheid.nl/sru`
+  — officiële "Search & Retrieve by URL"-standaard, handleiding lokaal in `docs/HandleidingSRU2.0.pdf`.
+  Voorbeeldquery (vergaderjaar + vergaderingnummer → alle agendapunten van die dag):
+  `https://repository.overheid.nl/sru?query=c.product-area==officielepublicaties AND dt.type=="Handeling" AND w.vergaderjaar=="2024-2025" AND w.publicatienummer=="87"&maximumRecords=100`
+  — **let op de exacte veldnamen** (bevestigd via `?operation=explain&version=2.0`, niet zomaar aan te nemen uit de handleiding-tekst): `w.publicatienummer` (niet `publicationnummer`), `w.vergaderjaar`, `dt.type=="Handeling"` **enkelvoud** (niet `"Handelingen"` — die waarde bestaat ook maar is dan het verkeerde niveau/type).
+- **Identifier-vorm**: `h-tk-{vergaderjaar zonder streepje}-{vergaderingnummer}-{agendapunt-itemnummer}`, bv. `h-tk-20242025-87-15`. Volledig losstaand van OData's GUID-identifiers (`Verslag.Id`, `Vergadering.Id`) — de enige gedeelde sleutel is `vergaderjaar`+`vergaderingnummer` (beide al beschikbaar via OData's `Vergadering`-entiteit, zie sectie 1), **niet** het agendapunt-itemnummer: dat moet je alsnog matchen op titel-tekst (bv. `Activiteit.Onderwerp` tegen `dcterms:title` van elk SRU-resultaat), want er is geen numerieke join op dat niveau.
+- **Alleen gecorrigeerde/definitieve debatten hebben een Handeling-record.** Recente debatten (OData `Verslag.Status == "Ongecorrigeerd"`) leveren 0 SRU-resultaten op — dit is normaal, geen fout, en moet in een backfill-script gewoon `NULL` opleveren i.p.v. hard falen.
+
+### Overzichtstabel: welke bron voor welk doel
+
+| Doel | Bron/systeem | Identifier | Voorbeeld-URL |
+|---|---|---|---|
+| Machine-leesbare XML, **ruwe/lopende** tekst (incl. niet-gecorrigeerd) | OData `Verslag`-resource | GUID (`Verslag.Id`) | `https://gegevensmagazijn.tweedekamer.nl/OData/v4/2.0/Verslag/1b96d9e0-.../resource` |
+| Mens-leesbare pagina, **video** van het debat | Debat Direct | slug (datum/categorie/locatie/titel) | `https://debatdirect.tweedekamer.nl/2025-05-22/natuur-en-milieu/plenaire-zaal/verslag-.../video` |
+| Mens-leesbare pagina, **officieel gecorrigeerde tekst** van één agendapunt | Overheid.nl (KOOP), via SRU | `h-tk-{jaar}-{vergadering}-{item}` | `https://zoek.officielebekendmakingen.nl/h-tk-20242025-87-15.html` |
+| Machine-leesbare XML van diezelfde **gecorrigeerde** tekst | Overheid.nl (KOOP), zelfde identifier | `h-tk-{jaar}-{vergadering}-{item}` | `https://zoek.officielebekendmakingen.nl/h-tk-20242025-87-15.xml` |
+| PDF van diezelfde gecorrigeerde tekst (FRBR-repository, versiegeteld) | `repository.overheid.nl`, zelfde identifier | `h-tk-{jaar}-{vergadering}-{item}`, plus expliciet versienummer (`/1/`) | `https://repository.overheid.nl/frbr/officielepublicaties/h-tk/20242025/h-tk-20242025-87-13/1/pdf/h-tk-20242025-87-13.pdf` |
+| Machine-leesbare XML, zelfde FRBR-repository-vorm | `repository.overheid.nl`, zelfde identifier | idem | `https://repository.overheid.nl/frbr/officielepublicaties/h-tk/20242025/h-tk-20242025-87-13/1/xml/h-tk-20242025-87-13.xml` |
+
+Twee dingen vallen op: (1) de mens-leesbare en machine-leesbare varianten van de **gecorrigeerde**
+Handelingen-tekst bestaan zowel op `zoek.officielebekendmakingen.nl` (kort, geen versienummer
+— gebruik dit als canonieke link, komt overeen met SRU's `gzd:preferredUrl`) als op
+`repository.overheid.nl/frbr/...` (met expliciet `/1/`-versienummer, ook pdf/odt beschikbaar);
+(2) dit is een volledig ander document dan de OData `Verslag`-resource — twee aparte bronnen
+voor twee aparte redenen (ruwe/altijd-beschikbare tekst vs. officieel gecorrigeerde tekst),
+niet twee vormen van hetzelfde bestand.
+
+## 11. tweedekamer.nl Activiteit-detailpagina via `Activiteit.Nummer` (opgelost: veruit de eenvoudigste "Check de Kamer"-link)
+
+**Dit maakt sectie 10 grotendeels overbodig voor de v1-brondeeplink.** Gevonden via de officiële
+FAQ ["Zijn de data gekoppeld aan de website van de Tweede Kamer?"](https://opendata.tweedekamer.nl/veelgestelde-vraag/zijn-de-data-gekoppeld-aan-de-website-van-de-tweede-kamer-0):
+het attribuut `Activiteit.Nummer` (bv. `"2025A03345"`, een leesbare code — niet de GUID `Id`) bouwt
+direct een URL naar de eigen tweedekamer.nl-detailpagina van die Activiteit:
+
+- Plenaire vergaderingen: `https://tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=` + `Nummer`
+- Commissievergaderingen: `https://tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=` + `Nummer`
+
+**Geverifieerd, twee gevallen:**
+1. `https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2025A03345` (`Activiteit.Nummer` voor de bekende stikstofdebat van 22 mei 2025, `Onderwerp="Debat over het verslag van de ministeriële commissie Economie en Natuurherstel inzake de stikstofproblemen"`) — HTTP 200, pagina bevat zowel "verslag" (Handelingen-link) als "Debat Direct" (video-link). **Eén pagina die beide al voor ons koppelt** — geen aparte SRU-lookup of titel-matching (sectie 10) nodig.
+2. `https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2026A02765` (`Activiteit.Nummer` voor het recente, nog niet gecorrigeerde stikstofdebat van 1 juli 2026) — ook HTTP 200. **Werkt dus ook voor debatten die nog geen Handelingen-record hebben** (sectie 10's grootste beperking), waarschijnlijk omdat de pagina zelf degradeert naar wat er wél al is (video/agenda) als de Handelingen-tekst nog ontbreekt.
+
+**Waarom dit praktisch zoveel simpeler is dan sectie 10**: onze crawler (`crawlers/tweede_kamer/tweede_kamer/odata.py`) doorloopt nu al de keten `Activiteit -> Vergadering -> Verslag` om een debat op onderwerp te vinden (zie sectie 1) — we hébben de juiste `Activiteit`-rij dus al te pakken tijdens het crawlen, `Nummer` zit al in die respons. Geen extra systeem (SRU), geen fuzzy titel-matching, geen aparte "nog niet gepubliceerd"-uitzondering nodig.
+
+**Nog te doen voor implementatie**: `Activiteit.Nummer` + `Soort` (voor plenair-vs-commissie-URL-keuze) moeten nog daadwerkelijk doorgegeven worden van de crawler naar `pipeline/ingest/ingest_tk.py` (momenteel wordt de Activiteit alleen gebruikt om het juiste debat te *vinden*, niet opgeslagen als brondata voor `documents`) — dit is de kolom die eerder `handelingen_url` genoemd was in het schema/plan; gezien deze vondst is een neutralere naam als `documents.tweedekamer_activiteit_url` toepasselijker (dekt zowel plenair als commissie, en linkt naar meer dan alleen de Handelingen-tekst).
+
 ## Open vragen voor een vervolgsessie
 
 1. Is er een productievere combinatie van deze bronnen voor topic-discovery dan onze huidige `Activiteit.Onderwerp`-substring-match (bv. Debat Direct's `q=`-zoekfunctie, of `Zaak`/`Kamerstukdossier`)?
 2. Is de tweedekamer.nl Autonomy-zoekfunctie praktisch bruikbaar (programmatisch, zonder sessiegebonden `form_build_id`-problemen)?
 3. Is het de moeite waard om alsnog een issue bij de officiële maintainers in te dienen over Activiteit↔Vergadering — en zo ja, met welke argumentatie (zie de eerdere reflectie: het concrete topic→transcript-gebruiksdoel, niet "andere projecten hebben dit ook niet")?
 4. Wil je `video_url` daadwerkelijk implementeren via de `tkconv`-aanpak (Debat Direct search + heuristiek), en zo ja, in `build_static_data.py` of een aparte enrichmentstap?
+5. ~~Hoe robuust moet de titel-matching worden tussen `Activiteit.Onderwerp` (OData) en `dcterms:title` (SRU/Handelingen)...~~ **Vervallen** — zie sectie 11: `Activiteit.Nummer` geeft een directe tweedekamer.nl-link zonder titel-matching, dus dit is niet meer nodig voor de brondeeplink.
