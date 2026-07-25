@@ -31,7 +31,12 @@ interface Argument {
 	quote_context: string | null;
 	prompt_version: string | null;
 	actor: { name: string; party: string | null };
-	document: { url: string | null; video_url: string | null; speaker_video_url: string | null };
+	document: {
+		url: string | null;
+		video_url: string | null;
+		speaker_video_url: string | null;
+		tweedekamer_activiteit_url: string | null;
+	};
 	claims: Claim[];
 	tags: Tag[];
 }
@@ -100,11 +105,19 @@ function submit() {
 
 		<div class="argument-links">
 			<a
+				v-if="argument.document.tweedekamer_activiteit_url"
+				:href="argument.document.tweedekamer_activiteit_url"
+				target="_blank"
+				rel="noopener"
+				title="Officiële tweedekamer.nl-pagina van dit debat (Verslag/Handelingen + video)"
+				>bekijk in de Tweede Kamer</a
+			>
+			<a
 				v-if="argument.document.url"
 				:href="argument.document.url"
 				target="_blank"
 				rel="noopener"
-				title="Ruwe brondata (XML) van de Tweede Kamer -- nog geen leesbare debatpagina, zie docs/tk-data-sources-overview.md"
+				title="Ruwe brondata (XML) van de Tweede Kamer -- machine-leesbaar, geen leesbare pagina"
 				>ruwe brondata (XML)</a
 			>
 			<a

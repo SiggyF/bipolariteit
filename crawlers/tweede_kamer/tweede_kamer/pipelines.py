@@ -1,5 +1,6 @@
 import json
 
+from . import odata
 from .paths import RAW_DIR
 
 
@@ -28,10 +29,16 @@ class RawFilePipeline:
                     "verslag_id": item["verslag_id"],
                     "verslag_soort": item["verslag_soort"],
                     "verslag_status": item["verslag_status"],
-                    # Officiële, verifieerbare bronlink (open data resource).
-                    # TODO: vervangen door de publieke tweedekamer.nl debat-URL
-                    # zodra het exacte URL-patroon is uitgezocht (niet gegokt).
+                    # Officiële, verifieerbare bronlink (open data resource) --
+                    # machine-leesbare XML, geen leesbare pagina.
                     "source_resource_url": item["source_resource_url"],
+                    # Publieke, mens-leesbare tweedekamer.nl-pagina (zie
+                    # docs/tk-data-sources-overview.md sectie 11). None als
+                    # Activiteit.Soort geen plenair/commissie-variant is
+                    # (bv. e-mailprocedures) waarvoor geen detailpagina bestaat.
+                    "tweedekamer_activiteit_url": odata.activiteit_website_url(
+                        item.get("activiteit_nummer"), item.get("activiteit_soort_odata")
+                    ),
                 },
                 indent=2,
                 ensure_ascii=False,

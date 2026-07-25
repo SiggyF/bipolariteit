@@ -88,3 +88,19 @@ def best_verslag(verslagen):
         if v["Soort"] == "Eindpublicatie":
             return v
     return verslagen[0]
+
+
+def activiteit_website_url(nummer, soort):
+    """Bouwt de publieke tweedekamer.nl-detailpagina voor een Activiteit uit
+    Nummer (leesbare code, bv. "2025A03345" -- niet de GUID Id) en Soort.
+    Zie docs/tk-data-sources-overview.md sectie 11: officieel gedocumenteerd
+    via de OData-FAQ, geverifieerd voor zowel gecorrigeerde als nog niet
+    gecorrigeerde debatten (werkt dus ook vlak na een recent debat). Geen
+    HTTP hier, puur URL-opbouw -- zelfde stijl als de rest van deze module."""
+    if not nummer:
+        return None
+    if soort and soort.startswith("Plenair"):
+        return f"https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id={nummer}"
+    if soort and "Commissie" in soort:
+        return f"https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id={nummer}"
+    return None

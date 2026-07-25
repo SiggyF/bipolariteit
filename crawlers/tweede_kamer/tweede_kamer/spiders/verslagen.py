@@ -118,6 +118,8 @@ class VerslagenSpider(scrapy.Spider):
             activiteit_id=activiteit["Id"],
             activiteit_onderwerp=activiteit["Onderwerp"],
             activiteit_datum=activiteit["Datum"],
+            activiteit_nummer=activiteit.get("Nummer"),
+            activiteit_soort_odata=activiteit.get("Soort"),
             vergadering_id=vergadering["Id"],
             vergadering_titel=vergadering["Titel"],
             verslag_id=verslag["Id"],

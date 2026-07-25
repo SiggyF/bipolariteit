@@ -6,6 +6,8 @@ class VerslagItem(scrapy.Item):
     activiteit_id = scrapy.Field()
     activiteit_onderwerp = scrapy.Field()
     activiteit_datum = scrapy.Field()
+    activiteit_nummer = scrapy.Field()
+    activiteit_soort_odata = scrapy.Field()
     vergadering_id = scrapy.Field()
     vergadering_titel = scrapy.Field()
     verslag_id = scrapy.Field()

@@ -189,8 +189,8 @@ def ingest_file(conn, xml_path, meta_path, topic_keyword):
             conn.execute(
                 """
                 INSERT INTO documents
-                    (source_id, topic_id, actor_id, external_id, title, content, published_at, raw_ref, url, activiteit_soort, activiteit_aanvangstijd, activiteit_eindtijd)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    (source_id, topic_id, actor_id, external_id, title, content, published_at, raw_ref, url, activiteit_soort, activiteit_aanvangstijd, activiteit_eindtijd, tweedekamer_activiteit_url)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                 (
                     source_id,
@@ -205,6 +205,7 @@ def ingest_file(conn, xml_path, meta_path, topic_keyword):
                     activiteit_soort,
                     activiteit_aanvangstijd,
                     activiteit_eindtijd,
+                    metadata.get("tweedekamer_activiteit_url"),
                 ),
             )
             inserted += 1

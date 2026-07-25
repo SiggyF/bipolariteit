@@ -88,7 +88,8 @@ def fetch_arguments(conn, topic_id):
     rows = conn.execute(
         """SELECT ar.id, ar.stance, ar.typology, ar.quote_text, ar.quote_context,
                   ar.prompt_version, ac.name AS actor_name, ac.party AS actor_party,
-                  d.id AS document_id, d.url AS document_url, d.video_url, d.published_at
+                  d.id AS document_id, d.url AS document_url, d.video_url, d.published_at,
+                  d.tweedekamer_activiteit_url
            FROM arguments ar
            JOIN actors ac ON ac.id = ar.actor_id
            JOIN documents d ON d.id = ar.document_id
@@ -149,6 +150,7 @@ def fetch_arguments(conn, topic_id):
                     "url": row["document_url"],
                     "video_url": row["video_url"],
                     "speaker_video_url": _speaker_event_url(row["video_url"], row["published_at"]),
+                    "tweedekamer_activiteit_url": row["tweedekamer_activiteit_url"],
                     "redactie_review": redactie_by_document.get(row["document_id"]),
                 },
                 "claims": claims_by_argument.get(row["id"], []),

@@ -38,7 +38,7 @@ CREATE TABLE documents (
     extraction_model TEXT, -- LLM-modelnaam (bv. "qwen/qwen3.6-27b") gebruikt bij de laatste extractiepoging; NULL = vóór dit veld bestond
     activiteit_aanvangstijd TEXT, -- VLOS <activiteit><aanvangstijd>: starttijd van het hele debat (activiteit-niveau, niet de sprekerbeurt); input voor de video_url/Debat Direct-matchheuristiek
     activiteit_eindtijd TEXT, -- VLOS <activiteit><eindtijd>: eindtijd van het hele debat, idem
-    handelingen_url TEXT -- publieke, leesbare tweedekamer.nl/officielebekendmakingen.nl Handelingen-tekstpagina voor dit Verslag (i.t.t. `url`, dat de machine-leesbare OData resource-XML is); NULL tot uitgezocht/gebackfilld
+    tweedekamer_activiteit_url TEXT -- publieke, mens-leesbare tweedekamer.nl-detailpagina van de Activiteit (via Activiteit.Nummer, zie docs/tk-data-sources-overview.md sectie 11) -- i.t.t. `url`, dat de machine-leesbare OData resource-XML is; NULL voor Activiteit-soorten zonder detailpagina (bv. e-mailprocedures) of nog niet gebackfilld
 );
 
 CREATE TABLE actors (
