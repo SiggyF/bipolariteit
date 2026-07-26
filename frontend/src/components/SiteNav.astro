@@ -2,6 +2,41 @@
 ---
 
 <nav class="site-nav">
-	<a href="/" class="site-nav-brand">Bipolariteit</a>
-	<a href="/about/" class="site-nav-link">Over dit platform</a>
+	<a href="/" class="site-nav-brand" aria-label="Bipolariteit">
+		<svg class="brand-mark" viewBox="0 0 100 60" role="img" aria-hidden="true">
+			<ellipse cx="35" cy="30" rx="30" ry="13" transform="rotate(-15 35 30)" fill="none" stroke="currentColor" stroke-width="2.5" />
+			<ellipse cx="65" cy="30" rx="30" ry="13" transform="rotate(15 65 30)" fill="none" stroke="currentColor" stroke-width="2.5" />
+			<circle cx="7" cy="21" r="5" fill="currentColor" />
+			<circle cx="93" cy="39" r="5" fill="currentColor" />
+		</svg>
+	</a>
+	<div class="site-nav-links">
+		<a href="/about/" class="site-nav-link">Over dit platform</a>
+		<button type="button" class="theme-toggle" id="theme-toggle" aria-label="Wissel tussen licht en donker">
+			<span aria-hidden="true">&#9681;</span>
+		</button>
+	</div>
 </nav>
+
+<script is:inline>
+	(function () {
+		var stored = localStorage.getItem("theme");
+		if (stored === "dark") document.documentElement.setAttribute("data-theme", "dark");
+
+		document.addEventListener("DOMContentLoaded", function () {
+			var button = document.getElementById("theme-toggle");
+			if (!button) return;
+			button.addEventListener("click", function () {
+				var isDark = document.documentElement.getAttribute("data-theme") === "dark";
+				var next = isDark ? "light" : "dark";
+				if (next === "dark") {
+					document.documentElement.setAttribute("data-theme", "dark");
+				} else {
+					document.documentElement.removeAttribute("data-theme");
+				}
+				localStorage.setItem("theme", next);
+				document.dispatchEvent(new CustomEvent("themechange", { detail: { theme: next } }));
+			});
+		});
+	})();
+</script>

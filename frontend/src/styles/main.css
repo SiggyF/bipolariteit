@@ -1,14 +1,135 @@
+/* Typefaces: Libre Caslon (headlines, newspaper-masthead register) +
+   Work Sans (body, thin/modern) + IBM Plex Mono (tags/data, agate-type register).
+   Self-hosted, Latin-only subsets — no external font CDN request. */
+@font-face {
+	font-family: "Libre Caslon Text";
+	font-style: normal;
+	font-weight: 400;
+	font-display: swap;
+	src: url("/fonts/libre-caslon-text-400.woff2") format("woff2");
+}
+
+@font-face {
+	font-family: "Libre Caslon Text";
+	font-style: italic;
+	font-weight: 400;
+	font-display: swap;
+	src: url("/fonts/libre-caslon-text-400i.woff2") format("woff2");
+}
+
+@font-face {
+	font-family: "Libre Caslon Text";
+	font-style: normal;
+	font-weight: 700;
+	font-display: swap;
+	src: url("/fonts/libre-caslon-text-700.woff2") format("woff2");
+}
+
+@font-face {
+	font-family: "Libre Caslon Display";
+	font-style: normal;
+	font-weight: 400;
+	font-display: swap;
+	src: url("/fonts/libre-caslon-display-400.woff2") format("woff2");
+}
+
+@font-face {
+	font-family: "Work Sans";
+	font-style: normal;
+	font-weight: 300;
+	font-display: swap;
+	src: url("/fonts/work-sans-300.woff2") format("woff2");
+}
+
+@font-face {
+	font-family: "Work Sans";
+	font-style: normal;
+	font-weight: 400;
+	font-display: swap;
+	src: url("/fonts/work-sans-400.woff2") format("woff2");
+}
+
+@font-face {
+	font-family: "Work Sans";
+	font-style: italic;
+	font-weight: 400;
+	font-display: swap;
+	src: url("/fonts/work-sans-400i.woff2") format("woff2");
+}
+
+@font-face {
+	font-family: "Work Sans";
+	font-style: normal;
+	font-weight: 500;
+	font-display: swap;
+	src: url("/fonts/work-sans-500.woff2") format("woff2");
+}
+
+@font-face {
+	font-family: "Work Sans";
+	font-style: normal;
+	font-weight: 600;
+	font-display: swap;
+	src: url("/fonts/work-sans-600.woff2") format("woff2");
+}
+
+@font-face {
+	font-family: "IBM Plex Mono";
+	font-style: normal;
+	font-weight: 400;
+	font-display: swap;
+	src: url("/fonts/ibm-plex-mono-400.woff2") format("woff2");
+}
+
+@font-face {
+	font-family: "IBM Plex Mono";
+	font-style: normal;
+	font-weight: 600;
+	font-display: swap;
+	src: url("/fonts/ibm-plex-mono-600.woff2") format("woff2");
+}
+
 :root {
-	--color-bg: #fafaf9;
-	--color-text: #1c1917;
-	--color-muted: #78716c;
-	--color-border: #e7e5e4;
-	/* diverging pair (dataviz skill): pro/contra = blue/red poles, unclear = neutral gray */
-	--color-pro: #2a78d6;
-	--color-contra: #e34948;
-	--color-unclear: #a8a29e;
-	--color-card-bg: #ffffff;
-	font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+	/* Newsprint neutrals: muted warm paper, not stationery-cream or cool stone-gray. */
+	--color-bg: #f2efe7;
+	--color-text: #221f1b;
+	--color-muted: #6f6558;
+	--color-border: #ddd5c4;
+	--color-card-bg: #fbf9f4;
+
+	/* "Ink & Rust" diverging pair for pro/contra/unclear — replaces the generic
+	   blue/red default. Deep ink teal vs. oxblood keeps a blue-channel/red-channel
+	   split (same colorblind-safety property as blue/red) without the screen-native
+	   saturation, and stays clear of the cliché cream+terracotta combination. */
+	--color-pro: #1f6f66;
+	--color-contra: #9c3b32;
+	--color-unclear: #948a79;
+
+	/* Distinct accent hue for links/interactive chrome — kept separate from
+	   --color-pro so hyperlinks don't implicitly read as "pro"-colored. */
+	--color-accent: #33456e;
+
+	--font-display: "Libre Caslon Display", "Libre Caslon Text", Georgia, serif;
+	--font-heading: "Libre Caslon Text", Georgia, serif;
+	--font-body: "Work Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+	--font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+
+	/* Type scale, 1.25 ratio on a 1rem base. */
+	--step--1: 0.85rem;
+	--step-0: 1rem;
+	--step-1: 1.25rem;
+	--step-2: 1.563rem;
+	--step-3: 1.953rem;
+	--step-4: 2.441rem;
+
+	/* 8px spacing rhythm. */
+	--space-1: 0.5rem;
+	--space-2: 1rem;
+	--space-3: 1.5rem;
+	--space-4: 2rem;
+	--space-5: 3rem;
+
+	font-family: var(--font-body);
 }
 
 * {
@@ -19,13 +140,14 @@ body {
 	margin: 0;
 	background: var(--color-bg);
 	color: var(--color-text);
-	line-height: 1.5;
+	font-weight: 300;
+	line-height: 1.6;
 }
 
 main {
 	max-width: 1200px;
 	margin: 0 auto;
-	padding: 2rem 1.5rem 4rem;
+	padding: var(--space-4) var(--space-3) var(--space-5);
 }
 
 .site-nav {
@@ -34,100 +156,222 @@ main {
 	justify-content: space-between;
 	max-width: 1200px;
 	margin: 0 auto;
-	padding: 1rem 1.5rem;
-	border-bottom: 1px solid var(--color-border);
+	padding: var(--space-2) var(--space-3);
+	border-bottom: 2px solid var(--color-text);
 }
 
 .site-nav-brand {
-	font-weight: 600;
-	text-decoration: none;
+	display: flex;
+	align-items: center;
 	color: var(--color-text);
+}
+
+.brand-mark {
+	width: 44px;
+	height: 26px;
+}
+
+.site-nav-links {
+	display: flex;
+	align-items: center;
+	gap: var(--space-2);
 }
 
 .site-nav-link {
 	color: var(--color-muted);
 	text-decoration: none;
-	font-size: 0.9rem;
+	font-size: var(--step--1);
 }
 
 .site-nav-link:hover {
+	color: var(--color-accent);
 	text-decoration: underline;
 }
 
+.theme-toggle {
+	background: none;
+	border: 1px solid var(--color-border);
+	color: var(--color-text);
+	width: 1.75rem;
+	height: 1.75rem;
+	line-height: 1;
+	font-size: 1rem;
+	cursor: pointer;
+}
+
+.theme-toggle:hover {
+	border-color: var(--color-accent);
+}
+
 h1 {
-	font-size: 2rem;
-	margin-bottom: 0.25rem;
+	font-family: var(--font-display);
+	font-weight: 400;
+	font-size: var(--step-4);
+	line-height: 1.1;
+	text-wrap: balance;
+	margin: 0 0 var(--space-1);
 	text-transform: capitalize;
 }
 
-.intro,
-.topic-description {
+h2 {
+	font-family: var(--font-heading);
+	font-weight: 700;
+	font-size: var(--step-2);
+	line-height: 1.2;
+	text-wrap: balance;
+}
+
+.intro {
 	color: var(--color-muted);
+	font-size: var(--step-1);
 	max-width: 60ch;
+	padding-bottom: var(--space-3);
+	border-bottom: 1px solid var(--color-border);
+}
+
+.topic-header {
+	max-width: 70ch;
+	margin: 0 0 var(--space-4);
+	padding: var(--space-3);
+	background: var(--color-card-bg);
+	border: 1px solid var(--color-border);
+	border-left: 4px solid var(--color-accent);
+}
+
+.topic-header h1 {
+	margin-bottom: var(--space-2);
+}
+
+.topic-description {
+	color: var(--color-text);
+	font-size: var(--step-0);
+	margin: 0;
+}
+
+/* Long-form article text (About, validation report): give body copy the same
+   paper-and-ink treatment as the rest of the page -- a readable measure,
+   newspaper-style section rules above headings, dash-marked lists, and a
+   pull-quote treatment for the motto. */
+.about p {
+	max-width: 65ch;
+	margin: 0 0 var(--space-2);
+}
+
+.about h2 {
+	margin-top: var(--space-4);
+	padding-top: var(--space-2);
+	border-top: 1px solid var(--color-border);
+}
+
+.about ul {
+	max-width: 65ch;
+	list-style: none;
+	padding: 0;
+	margin: 0 0 var(--space-2);
+	display: grid;
+	gap: var(--space-1);
+}
+
+.about li {
+	padding-left: 1.2rem;
+	position: relative;
+}
+
+.about li::before {
+	content: "\2014";
+	position: absolute;
+	left: 0;
+	color: var(--color-muted);
+}
+
+.about strong {
+	font-weight: 600;
+}
+
+.about code {
+	font-family: var(--font-mono);
+	font-size: 0.85em;
+	background: var(--color-border);
+	padding: 0.05em 0.35em;
+}
+
+.motto {
+	font-family: var(--font-heading);
+	font-style: italic;
+	font-size: var(--step-2);
+	max-width: 40ch;
+	margin: var(--space-3) auto;
+	padding: var(--space-2) 0;
+	text-align: center;
+	border-top: 1px solid var(--color-border);
+	border-bottom: 1px solid var(--color-border);
 }
 
 .back-link {
 	color: var(--color-muted);
 	text-decoration: none;
-	font-size: 0.9rem;
+	font-size: var(--step--1);
 }
 
 .back-link:hover {
+	color: var(--color-accent);
 	text-decoration: underline;
 }
 
 .topic-list {
 	list-style: none;
 	padding: 0;
-	margin: 2rem 0 0;
+	margin: var(--space-4) 0 0;
 	display: grid;
-	gap: 0.75rem;
+	gap: var(--space-1);
 }
 
 .topic-list a {
 	display: flex;
 	justify-content: space-between;
-	padding: 1rem 1.25rem;
+	padding: var(--space-2) var(--space-3);
 	border: 1px solid var(--color-border);
-	border-radius: 0.5rem;
 	background: var(--color-card-bg);
 	text-decoration: none;
 	color: inherit;
 }
 
 .topic-list a:hover {
-	border-color: var(--color-muted);
+	border-color: var(--color-accent);
 }
 
 .topic-name {
-	font-weight: 600;
+	font-family: var(--font-heading);
+	font-weight: 700;
 	text-transform: capitalize;
 }
 
 .topic-count {
 	color: var(--color-muted);
+	font-family: var(--font-mono);
+	font-size: var(--step--1);
+	font-variant-numeric: tabular-nums;
 }
 
 .stats-panel {
-	margin-top: 2rem;
-	padding: 1.25rem 1.5rem;
+	margin-top: var(--space-4);
+	padding: var(--space-3);
 	border: 1px solid var(--color-border);
-	border-radius: 0.5rem;
 	background: var(--color-card-bg);
 }
 
 .stats-panel h2 {
-	font-size: 1.1rem;
-	margin: 0 0 0.25rem;
+	font-size: var(--step-1);
+	margin: 0 0 var(--space-1);
 }
 
 .chart-legend {
 	list-style: none;
 	display: flex;
-	gap: 1rem;
+	gap: var(--space-2);
 	padding: 0;
-	margin: 0 0 0.5rem;
-	font-size: 0.8rem;
+	margin: 0 0 var(--space-1);
+	font-size: var(--step--1);
 	color: var(--color-muted);
 }
 
@@ -146,8 +390,8 @@ h1 {
 
 .panel-note {
 	color: var(--color-muted);
-	font-size: 0.8rem;
-	margin: 0 0 1rem;
+	font-size: var(--step--1);
+	margin: 0 0 var(--space-2);
 }
 
 .party-chart {
@@ -162,8 +406,8 @@ h1 {
 .party-table {
 	width: 100%;
 	border-collapse: collapse;
-	margin-top: 1.5rem;
-	font-size: 0.85rem;
+	margin-top: var(--space-3);
+	font-size: var(--step--1);
 }
 
 .party-table th,
@@ -176,6 +420,11 @@ h1 {
 .party-table th {
 	color: var(--color-muted);
 	font-weight: 600;
+}
+
+.party-table td:not(.party-cell) {
+	font-family: var(--font-mono);
+	font-variant-numeric: tabular-nums;
 }
 
 .party-cell {
@@ -219,20 +468,42 @@ h1 {
 .columns {
 	display: grid;
 	grid-template-columns: repeat(3, 1fr);
-	gap: 1.5rem;
-	margin-top: 1.5rem;
+	gap: 0;
+	margin-top: var(--space-3);
 	align-items: start;
+}
+
+.column {
+	padding: 0 var(--space-3);
+	border-left: 1px solid var(--color-border);
+}
+
+.column:first-child {
+	padding-left: 0;
+	border-left: none;
 }
 
 @media (max-width: 900px) {
 	.columns {
 		grid-template-columns: 1fr;
 	}
+
+	.column {
+		padding: 0;
+		border-left: none;
+		border-top: 1px solid var(--color-border);
+		padding-top: var(--space-3);
+	}
+
+	.column:first-child {
+		border-top: none;
+		padding-top: 0;
+	}
 }
 
 .column h2 {
-	font-size: 1.1rem;
-	margin-bottom: 1rem;
+	font-size: var(--step-1);
+	margin-bottom: var(--space-2);
 }
 
 .column-pro h2 {
@@ -250,30 +521,29 @@ h1 {
 .column-load-more {
 	display: flex;
 	justify-content: center;
-	padding: 1rem 0;
+	padding: var(--space-2) 0;
 }
 
 .column-load-more button {
 	background: var(--color-card-bg);
 	border: 1px solid var(--color-border);
-	border-radius: 0.5rem;
 	padding: 0.5rem 1rem;
 	color: var(--color-text);
+	font-family: var(--font-body);
 	cursor: pointer;
-	font-size: 0.85rem;
+	font-size: var(--step--1);
 }
 
 .column-load-more button:hover {
-	border-color: var(--color-muted);
+	border-color: var(--color-accent);
 }
 
 .argument-card {
 	background: var(--color-card-bg);
 	border: 1px solid var(--color-border);
 	border-left: 4px solid var(--color-unclear);
-	border-radius: 0.5rem;
-	padding: 1rem 1.25rem;
-	margin-bottom: 1rem;
+	padding: var(--space-2) var(--space-3);
+	margin-bottom: var(--space-2);
 }
 
 .argument-card.stance-pro {
@@ -290,18 +560,20 @@ h1 {
 
 .typology-badge {
 	display: inline-block;
+	font-family: var(--font-mono);
 	font-size: 0.7rem;
 	text-transform: uppercase;
-	letter-spacing: 0.03em;
+	letter-spacing: 0.04em;
 	color: var(--color-muted);
 	border: 1px solid var(--color-border);
-	border-radius: 999px;
 	padding: 0.1rem 0.6rem;
 }
 
 .quote {
+	font-family: var(--font-heading);
 	margin: 0.6rem 0;
-	font-size: 0.95rem;
+	font-size: var(--step-0);
+	line-height: 1.5;
 }
 
 .quote-context {
@@ -333,10 +605,10 @@ h1 {
 }
 
 .tag-badge {
+	font-family: var(--font-mono);
 	font-size: 0.65rem;
 	color: var(--color-muted);
 	border: 1px solid var(--color-border);
-	border-radius: 999px;
 	padding: 0.1rem 0.5rem;
 	cursor: help;
 	text-decoration: underline dotted;
@@ -351,10 +623,11 @@ h1 {
 }
 
 .argument-links a {
-	color: var(--color-pro);
+	color: var(--color-accent);
 }
 
 .debug-version {
+	font-family: var(--font-mono);
 	font-size: 0.65rem;
 	color: var(--color-border);
 	margin: 0.5rem 0 0;
@@ -391,11 +664,10 @@ h1 {
 }
 
 .feedback-panel textarea {
-	font: inherit;
+	font-family: var(--font-body);
 	font-size: 0.8rem;
 	padding: 0.4rem;
 	border: 1px solid var(--color-border);
-	border-radius: 0.3rem;
 	background: var(--color-bg);
 	color: var(--color-text);
 	resize: vertical;
@@ -403,12 +675,12 @@ h1 {
 
 .feedback-submit {
 	align-self: flex-start;
+	font-family: var(--font-body);
 	font-size: 0.8rem;
 	padding: 0.3rem 0.8rem;
-	border: 1px solid var(--color-pro);
-	color: var(--color-pro);
+	border: 1px solid var(--color-accent);
+	color: var(--color-accent);
 	background: none;
-	border-radius: 0.3rem;
 	cursor: pointer;
 }
 
@@ -418,15 +690,15 @@ h1 {
 }
 
 .feedback-export {
-	margin-top: 2rem;
+	margin-top: var(--space-4);
 	text-align: center;
 }
 
 .feedback-export button {
+	font-family: var(--font-body);
 	font-size: 0.85rem;
 	padding: 0.5rem 1rem;
 	border: 1px solid var(--color-border);
-	border-radius: 0.4rem;
 	background: var(--color-card-bg);
 	color: var(--color-text);
 	cursor: pointer;
@@ -438,11 +710,10 @@ h1 {
 }
 
 .pipeline-diagram {
-	margin: 1.5rem 0;
-	padding: 1rem;
-	background: #ffffff;
+	margin: var(--space-3) 0;
+	padding: var(--space-2);
+	background: var(--color-card-bg);
 	border: 1px solid var(--color-border);
-	border-radius: 8px;
 	overflow-x: auto;
 }
 
@@ -453,15 +724,17 @@ h1 {
 	margin: 0 auto;
 }
 
-@media (prefers-color-scheme: dark) {
-	:root {
-		--color-bg: #1c1917;
-		--color-text: #f5f5f4;
-		--color-muted: #a8a29e;
-		--color-border: #44403c;
-		--color-card-bg: #292524;
-		--color-pro: #3987e5;
-		--color-contra: #e66767;
-		--color-unclear: #78716c;
-	}
+/* Dark-on-light is the default -- no automatic prefers-color-scheme switch.
+   Dark mode is opt-in only, toggled explicitly via SiteNav's theme button,
+   which sets data-theme on <html> and persists the choice in localStorage. */
+:root[data-theme="dark"] {
+	--color-bg: #1c1815;
+	--color-text: #f2ede3;
+	--color-muted: #a89e8c;
+	--color-border: #453f36;
+	--color-card-bg: #242019;
+	--color-pro: #4fa89b;
+	--color-contra: #cf6b5f;
+	--color-unclear: #a89e8c;
+	--color-accent: #7d97c4;
 }

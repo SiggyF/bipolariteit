@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import { computed, ref, onMounted, onUnmounted } from "vue";
+import { computed } from "vue";
+import { useTheme } from "../lib/useTheme";
+import { displayPartyName } from "../lib/parties";
 import VChart from "vue-echarts";
 import { use } from "echarts/core";
 import { CanvasRenderer } from "echarts/renderers";
@@ -36,27 +38,16 @@ const props = defineProps<{ correspondence: Correspondence | null }>();
 // distinct from the pro/contra/onduidelijk diverging palette used elsewhere,
 // since this map encodes "party vs. tag", not stance.
 const COLORS = {
-	light: { party: "#2a78d6", tag: "#1baf7a" },
-	dark: { party: "#3987e5", tag: "#199e70" },
+	light: { party: "#33456e", tag: "#a9822f" },
+	dark: { party: "#7d97c4", tag: "#c9a54b" },
 };
 
-const isDark = ref(false);
-let mql: MediaQueryList | undefined;
-const updateDark = () => {
-	isDark.value = document.documentElement.getAttribute("data-theme") === "dark" || (mql?.matches ?? false);
-};
-onMounted(() => {
-	mql = window.matchMedia("(prefers-color-scheme: dark)");
-	mql.addEventListener("change", updateDark);
-	updateDark();
-});
-onUnmounted(() => mql?.removeEventListener("change", updateDark));
-
+const isDark = useTheme();
 const colors = computed(() => (isDark.value ? COLORS.dark : COLORS.light));
 
 const chartOption = computed(() => {
 	const c = props.correspondence!;
-	const axisLineStyle = { lineStyle: { color: isDark.value ? "#44403c" : "#e7e5e4" } };
+	const axisLineStyle = { lineStyle: { color: isDark.value ? "#453f36" : "#ddd5c4" } };
 	return {
 		backgroundColor: "transparent",
 		textStyle: { fontFamily: "inherit" },
@@ -70,7 +61,7 @@ const chartOption = computed(() => {
 		legend: {
 			data: ["Partijen", "Tags"],
 			top: 0,
-			textStyle: { color: isDark.value ? "#f5f5f4" : "#1c1917" },
+			textStyle: { color: isDark.value ? "#f2ede3" : "#221f1b" },
 		},
 		grid: { left: 40, right: 24, top: 40, bottom: 40 },
 		xAxis: {
@@ -81,7 +72,7 @@ const chartOption = computed(() => {
 			axisLine: { show: true, ...axisLineStyle },
 			splitLine: axisLineStyle,
 			axisLabel: { show: false },
-			nameTextStyle: { color: isDark.value ? "#a8a29e" : "#78716c" },
+			nameTextStyle: { color: isDark.value ? "#a89e8c" : "#6f6558" },
 		},
 		yAxis: {
 			type: "value",
@@ -89,20 +80,20 @@ const chartOption = computed(() => {
 			axisLine: { show: true, ...axisLineStyle },
 			splitLine: axisLineStyle,
 			axisLabel: { show: false },
-			nameTextStyle: { color: isDark.value ? "#a8a29e" : "#78716c" },
+			nameTextStyle: { color: isDark.value ? "#a89e8c" : "#6f6558" },
 		},
 		series: [
 			{
 				name: "Partijen",
 				type: "scatter",
 				symbolSize: (val: number[]) => Math.max(14, Math.min(40, Math.sqrt(val[2]) * 6)),
-				data: c.parties.map((p) => ({ name: p.party, value: [p.x, p.y, p.n], n: p.n })),
+				data: c.parties.map((p) => ({ name: displayPartyName(p.party), value: [p.x, p.y, p.n], n: p.n })),
 				itemStyle: { color: colors.value.party },
 				label: {
 					show: true,
 					formatter: "{b}",
 					position: "top",
-					color: isDark.value ? "#f5f5f4" : "#1c1917",
+					color: isDark.value ? "#f2ede3" : "#221f1b",
 					fontSize: 11,
 					fontWeight: 600,
 				},
@@ -123,7 +114,7 @@ const chartOption = computed(() => {
 					show: true,
 					formatter: "{b}",
 					position: "top",
-					color: isDark.value ? "#a8a29e" : "#78716c",
+					color: isDark.value ? "#a89e8c" : "#6f6558",
 					fontSize: 9,
 				},
 			},

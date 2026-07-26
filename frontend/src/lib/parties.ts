@@ -1,7 +1,9 @@
-// Disambiguatie voor partijnamen die zonder context verwarrend zijn
-// (fusies, hernoemingen). Puur weergave -- de brondata blijft ongewijzigd.
+// Disambiguatie voor partijnamen die zonder context verwarrend zijn.
+// "PRO" is zowel een partijnaam als de stance-waarde "Pro" (voorstander) --
+// overal "Partij PRO" tonen voorkomt die verwarring. Puur weergave -- de
+// brondata blijft ongewijzigd.
 const PARTY_DISPLAY_NAMES: Record<string, string> = {
-	PRO: "PRO (voorheen PvdA/GroenLinks)",
+	PRO: "PRO (PvdA/GroenLinks)",
 };
 
 export function displayPartyName(party: string): string {
