@@ -14,6 +14,12 @@ Bij het begin van deze sessie bleek de sectie hieronder ("Stand bij einde sessie
 - Deze wijzigingen (crawler, schema, ingest, extract_arguments, pipeline_status, backfill-script) stonden aan het begin van deze sessie nog **ongecommit** in de working tree, samen met een losstaande, al-gestagede frontend-redesign (fonts, `useTheme.ts`, CSS, nav/stats/tags-componenten). Beide zijn in deze sessie als aparte commits vastgelegd (zie git-log voor de exacte commit-hashes).
 - `data/bipolariteit.db.bak-20260725220207` was een ongetrackt lokaal backup-bestand van vóór de purge-stap — bewust niet in git, blijft lokaal liggen.
 
+## Stand bij einde sessie (2026-07-26)
+
+- Stage-1-batch hervat op stroom (`lms load qwen/qwen3.6-27b` + `extract_arguments.py --topic stikstof --limit 4000`), daarna bewust gestopt (`kill`, geen crash) omdat de gebruiker moest gaan unpluggen. Model expliciet unloaded (`lms unload --all`).
+- **Stand bij stoppen: 2287/5213 documenten geprobeerd (max doc-id 2341), 1034 arguments.** Nog ~2870 documenten te gaan (van de 5213, exclusief 156 voorzitter-beurten).
+- Hervatten zodra weer op stroom: zelfde commando als hierboven in de sectie "Stand bij begin sessie (2026-07-26)", pakt automatisch verder via het skip-mechanisme.
+
 ## Stand bij einde sessie (2026-07-25) — verouderd, zie sectie hierboven
 
 ## Stand bij einde sessie (2026-07-25) — begin hier bij een nieuwe sessie
