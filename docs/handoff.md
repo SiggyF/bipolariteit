@@ -19,6 +19,18 @@ Bij het begin van deze sessie bleek de sectie hieronder ("Stand bij einde sessie
 - Stage-1-batch hervat op stroom (`lms load qwen/qwen3.6-27b` + `extract_arguments.py --topic stikstof --limit 4000`), daarna bewust gestopt (`kill`, geen crash) omdat de gebruiker moest gaan unpluggen. Model expliciet unloaded (`lms unload --all`).
 - **Stand bij stoppen: 2287/5213 documenten geprobeerd (max doc-id 2341), 1034 arguments.** Nog ~2870 documenten te gaan (van de 5213, exclusief 156 voorzitter-beurten).
 - Hervatten zodra weer op stroom: zelfde commando als hierboven in de sectie "Stand bij begin sessie (2026-07-26)", pakt automatisch verder via het skip-mechanisme.
+- Verse export gedraaid (`make export TOPIC=stikstof`) tegen de 1034-argument-stand — `data/export/topics/stikstof.json`/`topics-index.json` zijn nog **niet gecommit** (bewust, want de batch loopt nog door en deze export is dus alweer een tussenstand; opnieuw draaien vóór commit als er een "definitieve" snapshot nodig is).
+
+### Extra `agy`-tagging-batch: bijgewerkte quota-kalibratie (derde meting)
+
+Nog wat reservequota bij `agy` beschikbaar (gebruiker gaf ~20% budget vrij, `We're at 100%`) — ingezet als extra validatie-/doorvoerbatch bovenop de bestaande lokale tagging (niet i.p.v.), zelfde afweging als eerder (zie sectie "`agy` als tagging-validatiemiddel" hierboven): batch-tagging via `agy` blijft te duur voor de vólle batch, maar is bruikbaar voor gerichte extra doorvoer binnen een quota-budget.
+
+```bash
+open -a Docker   # als de daemon nog niet draaide
+PYTHONPATH=. uv run python scripts/agy_run_tagging_batch.py --topic stikstof --limit 130
+```
+
+**Resultaat: 130 argumenten getagd, 0 fouten, 260 derived + 804 llm tags, gem. 6.3s/argument** (id 40 t/m 169). Tagged-totaal nu **168** (was 38). Quota 100% → 84.47% = **15.53% voor 130 argumenten, ~0.12%/argument** — iets gunstiger dan de eerdere meting (~0.154%/argument bij een kleinere taxonomie), dus binnen het opgegeven 20%-budget; geen noodstop nodig geweest ondanks dat een tussentijdse meting (92%→89% over documenten 40-78) op een schijnbaar hoger tempo (~0.205%/doc) wees — die tussenmeting bleek achteraf ruis, niet de trend. **Les voor een volgende keer**: één tussentijdse `/usage`-meting vroeg in een batch is te ruisgevoelig om een noodstop op te baseren; minstens twee metingen verspreid over de batch (zoals nu toevallig gebeurde) geven een betrouwbaarder beeld.
 
 ## Stand bij einde sessie (2026-07-25) — verouderd, zie sectie hierboven
 
