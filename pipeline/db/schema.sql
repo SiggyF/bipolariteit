@@ -38,7 +38,8 @@ CREATE TABLE documents (
     extraction_model TEXT, -- LLM-modelnaam (bv. "qwen/qwen3.6-27b") gebruikt bij de laatste extractiepoging; NULL = vóór dit veld bestond
     activiteit_aanvangstijd TEXT, -- VLOS <activiteit><aanvangstijd>: starttijd van het hele debat (activiteit-niveau, niet de sprekerbeurt); input voor de video_url/Debat Direct-matchheuristiek
     activiteit_eindtijd TEXT, -- VLOS <activiteit><eindtijd>: eindtijd van het hele debat, idem
-    tweedekamer_activiteit_url TEXT -- publieke, mens-leesbare tweedekamer.nl-detailpagina van de Activiteit (via Activiteit.Nummer, zie docs/tk-data-sources-overview.md sectie 11) -- i.t.t. `url`, dat de machine-leesbare OData resource-XML is; NULL voor Activiteit-soorten zonder detailpagina (bv. e-mailprocedures) of nog niet gebackfilld
+    tweedekamer_activiteit_url TEXT, -- publieke, mens-leesbare tweedekamer.nl-detailpagina van de Activiteit (via Activiteit.Nummer, zie docs/tk-data-sources-overview.md sectie 11) -- i.t.t. `url`, dat de machine-leesbare OData resource-XML is; NULL voor Activiteit-soorten zonder detailpagina (bv. e-mailprocedures) of nog niet gebackfilld
+    is_voorzitter_turn INTEGER NOT NULL DEFAULT 0 -- 1 als de omsluitende VLOS <activiteitdeel><titel> "voorzitter" bevat (bv. "Spreekbeurt - De voorzitter"): de spreker zit op dat moment voor, spreekt procedureel, niet als woordvoerder van hun fractie. Fractie in de brondata blijft ongewijzigd (bv. CDA voor Krul) -- dit is puur een rol-vlag, geen partij-override. Stage 1 slaat deze documenten over (zie extract_arguments.py).
 );
 
 CREATE TABLE actors (

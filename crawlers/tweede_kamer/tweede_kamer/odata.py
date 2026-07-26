@@ -18,6 +18,7 @@ module bevat alleen de empirisch uitgevonden logica (zie docs/handoff.md):
 """
 
 import datetime
+import re
 import urllib.parse
 
 BASE_URL = "https://gegevensmagazijn.tweedekamer.nl/OData/v4/2.0"
@@ -51,18 +52,61 @@ def activiteiten_url(topic_keyword, soort, top):
     return build_url("Activiteit", filter=filter_expr, orderby="Datum desc", top=top)
 
 
-def vergadering_url_for_activiteit(datum):
+def vergadering_soort_for_activiteit(activiteit_soort):
+    """Vergadering.Soort kent maar twee waarden ('Plenair'/'Commissie',
+    geverifieerd live tegen de OData API) -- Activiteit.Soort heeft veel meer
+    varianten (bv. "Plenair debat (debat)", "Commissiedebat",
+    "Plenair debat (tweeminutendebat)"). 'Commissie' als default voor niet-
+    Plenair-activiteiten is een aanname (nog niet tegen elke activiteit_soort
+    getest, alleen tegen "Commissiedebat")."""
+    if activiteit_soort and activiteit_soort.startswith("Plenair"):
+        return "Plenair"
+    return "Commissie"
+
+
+def vergadering_url_for_activiteit(datum, activiteit_soort=None):
     target_date = datetime.date.fromisoformat(datum.split("T")[0])
     start = (target_date - datetime.timedelta(days=1)).isoformat()
     end = (target_date + datetime.timedelta(days=1)).isoformat()
+    vergadering_soort = vergadering_soort_for_activiteit(activiteit_soort)
     filter_expr = (
         f"Datum ge {start}T00:00:00Z and Datum le {end}T23:59:59Z "
-        f"and Kamer eq 'Tweede Kamer' and Soort eq 'Plenair' and Verwijderd eq false"
+        f"and Kamer eq 'Tweede Kamer' and Soort eq '{vergadering_soort}' and Verwijderd eq false"
     )
-    return build_url("Vergadering", filter=filter_expr, top=10)
+    # top=50: op drukke commissiedagen lopen tientallen commissies parallel
+    # (zie pick_closest_vergadering) -- bij Plenair zit er sowieso maar één
+    # vergadering per dag in, dus deze cap raakt die stroom nooit.
+    return build_url("Vergadering", filter=filter_expr, top=50)
 
 
-def pick_closest_vergadering(matches, datum):
+_STOPWOORDEN = {"en", "de", "het", "een", "van", "voor", "over", "met", "in", "op"}
+
+
+def _title_words(text):
+    return {w for w in re.findall(r"[a-z]+", text.lower()) if w not in _STOPWOORDEN and len(w) > 2}
+
+
+def pick_closest_vergadering(matches, datum, onderwerp=None, vergadering_soort=None):
+    """Bij Plenair is er hooguit één Vergadering per dag en heet die sowieso
+    generiek (bv. "89e vergadering, woensdag..."), dus datum-nabijheid is de
+    enige en volstaande tiebreaker -- titel-matching zou daar juist nooit
+    iets vinden en is dus niet aan de orde.
+
+    Bij Commissie lopen op drukke dagen tientallen commissies parallel
+    (zelfde datum), én kan een Activiteit zelf al geannuleerd/omgezet zijn
+    zonder dat er die dag ook maar íets vergelijkbaars plaatsvond. Twee
+    empirische gevallen bevestigen dat datum-nabijheid alléén dan niet
+    volstaat, zelfs niet als er maar één kandidaat overblijft:
+    - 2025-06-18 (10 same-day kandidaten): zonder titel-tiebreak koos dit
+      puur op volgorde de verkeerde ("Vreemdelingen- en asielbeleid" i.p.v.
+      "Stikstof en mestbeleid").
+    - Een "OMGEZET in schriftelijk overleg"-Activiteit (dus geen sprekers-
+      debat die dag) matchte de enige same-day kandidaat die toevallig
+      bestond ("Cyberstrategie Defensie") -- compleet ongerelateerd.
+    Daarom is voor Commissie een titel/onderwerp-woordoverlap altijd
+    verplicht, ook bij precies één kandidaat; zonder overlap geven we bewust
+    None terug (gemiste match) in plaats van te gokken (stille verkeerde
+    match)."""
     if not matches:
         return None
     target_date = datetime.date.fromisoformat(datum.split("T")[0])
@@ -70,7 +114,26 @@ def pick_closest_vergadering(matches, datum):
         matches,
         key=lambda v: abs((datetime.date.fromisoformat(v["Datum"].split("T")[0]) - target_date).days),
     )
-    return matches[0]
+    closest_diff = abs((datetime.date.fromisoformat(matches[0]["Datum"].split("T")[0]) - target_date).days)
+    same_day = [
+        v for v in matches
+        if abs((datetime.date.fromisoformat(v["Datum"].split("T")[0]) - target_date).days) == closest_diff
+    ]
+    if vergadering_soort != "Commissie":
+        return same_day[0]
+
+    onderwerp_words = _title_words(onderwerp) if onderwerp else set()
+    if not onderwerp_words:
+        return None
+
+    scored = sorted(
+        same_day,
+        key=lambda v: len(_title_words(v["Titel"]) & onderwerp_words),
+        reverse=True,
+    )
+    if len(_title_words(scored[0]["Titel"]) & onderwerp_words) > 0:
+        return scored[0]
+    return None
 
 
 def verslagen_url_for_vergadering(vergadering_id):

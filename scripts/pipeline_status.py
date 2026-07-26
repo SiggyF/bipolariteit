@@ -40,9 +40,13 @@ def _count(conn, query, params=()):
 
 def topic_status(conn, topic_id, topic_slug):
     total_documents = _count(conn, "SELECT COUNT(*) FROM documents WHERE topic_id = ?", (topic_id,))
+    voorzitter_turns = _count(
+        conn, "SELECT COUNT(*) FROM documents WHERE topic_id = ? AND is_voorzitter_turn = 1", (topic_id,)
+    )
     pending_extraction = _count(
         conn,
-        "SELECT COUNT(*) FROM documents WHERE topic_id = ? AND extraction_attempted_at IS NULL",
+        """SELECT COUNT(*) FROM documents
+           WHERE topic_id = ? AND extraction_attempted_at IS NULL AND is_voorzitter_turn = 0""",
         (topic_id,),
     )
     outdated_extraction = _count(
@@ -83,6 +87,7 @@ def topic_status(conn, topic_id, topic_slug):
 
     return {
         "documents": total_documents,
+        "voorzitter_turns": voorzitter_turns,
         "pending_extraction": pending_extraction,
         "outdated_extraction": outdated_extraction,
         "arguments": total_arguments,
@@ -113,8 +118,8 @@ def print_report(conn, topics):
         logger.info("")
         logger.info("=== %s (%s)%s ===", topic["name"], topic["slug"], missing_description)
         logger.info(
-            "  documenten: %d totaal | %d nog niet geëxtraheerd | %d met verouderde extractie-prompt",
-            status["documents"], status["pending_extraction"], status["outdated_extraction"],
+            "  documenten: %d totaal | %d nog niet geëxtraheerd | %d met verouderde extractie-prompt | %d voorzitter-beurten (overgeslagen)",
+            status["documents"], status["pending_extraction"], status["outdated_extraction"], status["voorzitter_turns"],
         )
         logger.info(
             "  arguments:  %d totaal | %d nog niet getagd | %d met verouderde tag-prompt",

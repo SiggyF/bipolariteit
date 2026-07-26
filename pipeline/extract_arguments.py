@@ -124,6 +124,7 @@ def fetch_pending_documents(conn, topic_id, limit, min_id=0):
            WHERE d.topic_id = ?
              AND d.id >= ?
              AND d.extraction_attempted_at IS NULL
+             AND d.is_voorzitter_turn = 0
            ORDER BY d.id
            LIMIT ?""",
         (topic_id, min_id, limit),

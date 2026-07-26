@@ -110,6 +110,27 @@ def find_speaking_turns(activiteit):
     return turns
 
 
+def build_parent_map(root):
+    """xml.etree geeft geen ouder-toegang -- nodig om vanaf een sprekerbeurt
+    omhoog te zoeken naar de omsluitende <activiteitdeel> (zie is_voorzitter_turn)."""
+    return {child: parent for parent in root.iter() for child in parent}
+
+
+def is_voorzitter_turn(turn_el, parent_map):
+    """Een sprekerbeurt is een voorzitter-beurt als de dichtstbijzijnde
+    omsluitende <activiteitdeel> een <titel> heeft die "voorzitter" bevat
+    (bv. "Spreekbeurt - De voorzitter"). De <spreker> zelf draagt geen rol-
+    markering -- <functie> blijft "lid Tweede Kamer", ook tijdens het
+    voorzitten -- dus dit is de enige betrouwbare marker in de brondata."""
+    el = turn_el
+    while el in parent_map:
+        el = parent_map[el]
+        if _local(el.tag) == "activiteitdeel":
+            titel = el.findtext(NS + "titel") or ""
+            return "voorzitter" in titel.lower()
+    return False
+
+
 def get_or_create_topic(conn, topic_keyword):
     row = conn.execute("SELECT id FROM topics WHERE slug = ?", (topic_keyword,)).fetchone()
     if row:
@@ -161,6 +182,7 @@ def ingest_file(conn, xml_path, meta_path, topic_keyword):
     metadata = json.loads(meta_path.read_text())
     tree = ET.parse(xml_path)
     root = tree.getroot()
+    parent_map = build_parent_map(root)
 
     topic_id = get_or_create_topic(conn, topic_keyword)
     source_id = get_or_create_source(conn)
@@ -185,12 +207,13 @@ def ingest_file(conn, xml_path, meta_path, topic_keyword):
             actor_id = get_or_create_actor(conn, name, party)
 
             published_at = turn_el.findtext(NS + "markeertijdbegin") or metadata.get("activiteit_datum")
+            voorzitter_turn = is_voorzitter_turn(turn_el, parent_map)
 
             conn.execute(
                 """
                 INSERT INTO documents
-                    (source_id, topic_id, actor_id, external_id, title, content, published_at, raw_ref, url, activiteit_soort, activiteit_aanvangstijd, activiteit_eindtijd, tweedekamer_activiteit_url)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    (source_id, topic_id, actor_id, external_id, title, content, published_at, raw_ref, url, activiteit_soort, activiteit_aanvangstijd, activiteit_eindtijd, tweedekamer_activiteit_url, is_voorzitter_turn)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                 (
                     source_id,
@@ -206,6 +229,7 @@ def ingest_file(conn, xml_path, meta_path, topic_keyword):
                     activiteit_aanvangstijd,
                     activiteit_eindtijd,
                     metadata.get("tweedekamer_activiteit_url"),
+                    int(voorzitter_turn),
                 ),
             )
             inserted += 1

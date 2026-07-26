@@ -62,7 +62,7 @@ class VerslagenSpider(scrapy.Spider):
             yield from self.process_next_activiteit(activiteiten, index + 1)
             return
 
-        url = odata.vergadering_url_for_activiteit(datum)
+        url = odata.vergadering_url_for_activiteit(datum, activiteit.get("Soort"))
         yield scrapy.Request(
             url,
             callback=self.parse_vergadering,
@@ -71,7 +71,10 @@ class VerslagenSpider(scrapy.Spider):
 
     def parse_vergadering(self, response, activiteit, activiteiten, index):
         body = json.loads(response.text)
-        vergadering = odata.pick_closest_vergadering(body.get("value", []), activiteit["Datum"])
+        vergadering_soort = odata.vergadering_soort_for_activiteit(activiteit.get("Soort"))
+        vergadering = odata.pick_closest_vergadering(
+            body.get("value", []), activiteit["Datum"], activiteit.get("Onderwerp"), vergadering_soort
+        )
         if not vergadering:
             self.logger.info(f"overslaan (geen vergadering gevonden): {activiteit['Onderwerp']}")
             yield from self.process_next_activiteit(activiteiten, index + 1)
