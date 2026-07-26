@@ -42,9 +42,9 @@ const topic = mod.default;
 			<TagCorrespondenceMap correspondence={topic.tag_correspondence} client:only="vue" />
 
 			<div class="columns">
-				<ArgumentColumn arguments={topic.pro} topicSlug={topic.slug} label="Pro" stanceClass="column-pro" client:load />
-				<ArgumentColumn arguments={topic.contra} topicSlug={topic.slug} label="Contra" stanceClass="column-contra" client:load />
-				<ArgumentColumn arguments={topic.unclear} topicSlug={topic.slug} label="Onduidelijk" stanceClass="column-unclear" client:load />
+				<ArgumentColumn argumentList={topic.pro} topicSlug={topic.slug} label="Pro" stanceClass="column-pro" client:load />
+				<ArgumentColumn argumentList={topic.contra} topicSlug={topic.slug} label="Contra" stanceClass="column-contra" client:load />
+				<ArgumentColumn argumentList={topic.unclear} topicSlug={topic.slug} label="Onduidelijk" stanceClass="column-unclear" client:load />
 			</div>
 
 			<FeedbackExport client:load />
