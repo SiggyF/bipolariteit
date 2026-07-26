@@ -87,6 +87,18 @@ def _speaker_party(spreker_el):
     return fractie.strip() if fractie and fractie.strip() else None
 
 
+def _speaker_role_title(spreker_el):
+    """Bewindspersonen (Minister/Staatssecretaris) hebben geen <fractie> --
+    ze spreken op dat moment niet namens een Kamerfractie. <spreker soort="...">
+    onderscheidt ze van "Tweede Kamerlid"; <functie> geeft de exacte
+    portefeuille (bv. "minister van Landbouw, Visserij, Voedselzekerheid en
+    Natuur"). NULL voor gewone Kamerleden -- daar zegt de fractie al genoeg."""
+    if spreker_el.attrib.get("soort") == "Tweede Kamerlid":
+        return None
+    functie = spreker_el.findtext(NS + "functie")
+    return functie.strip() if functie and functie.strip() else None
+
+
 def find_matching_activiteiten(root, topic_keyword):
     keyword = topic_keyword.lower()
     matches = []
@@ -208,12 +220,13 @@ def ingest_file(conn, xml_path, meta_path, topic_keyword):
 
             published_at = turn_el.findtext(NS + "markeertijdbegin") or metadata.get("activiteit_datum")
             voorzitter_turn = is_voorzitter_turn(turn_el, parent_map)
+            speaker_role_title = _speaker_role_title(spreker_el)
 
             conn.execute(
                 """
                 INSERT INTO documents
-                    (source_id, topic_id, actor_id, external_id, title, content, published_at, raw_ref, url, activiteit_soort, activiteit_aanvangstijd, activiteit_eindtijd, tweedekamer_activiteit_url, is_voorzitter_turn)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    (source_id, topic_id, actor_id, external_id, title, content, published_at, raw_ref, url, activiteit_soort, activiteit_aanvangstijd, activiteit_eindtijd, tweedekamer_activiteit_url, is_voorzitter_turn, speaker_role_title)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                 (
                     source_id,
@@ -230,6 +243,7 @@ def ingest_file(conn, xml_path, meta_path, topic_keyword):
                     activiteit_eindtijd,
                     metadata.get("tweedekamer_activiteit_url"),
                     int(voorzitter_turn),
+                    speaker_role_title,
                 ),
             )
             inserted += 1

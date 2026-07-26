@@ -30,7 +30,7 @@ interface Argument {
 	quote_text: string;
 	quote_context: string | null;
 	prompt_version: string | null;
-	actor: { name: string; party: string | null };
+	actor: { name: string; party: string | null; role_title: string | null };
 	document: {
 		url: string | null;
 		video_url: string | null;
@@ -85,7 +85,7 @@ function submit() {
 		<p v-if="argument.quote_context" class="quote-context">{{ argument.quote_context }}</p>
 		<p class="attribution">
 			<PartyLogo v-if="argument.actor.party" :party="argument.actor.party" />
-			Volgens <strong>{{ argument.actor.name }}</strong><span v-if="argument.actor.party"> ({{ displayPartyName(argument.actor.party) }})</span>
+			Volgens <strong>{{ argument.actor.name }}</strong><span v-if="argument.actor.party"> ({{ displayPartyName(argument.actor.party) }})</span><span v-if="argument.actor.role_title" class="role-title"> — {{ argument.actor.role_title }}</span>
 		</p>
 		<ul v-if="argument.claims.length" class="claims">
 			<li v-for="(claim, i) in argument.claims" :key="i">

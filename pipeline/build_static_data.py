@@ -89,7 +89,7 @@ def fetch_arguments(conn, topic_id):
         """SELECT ar.id, ar.stance, ar.typology, ar.quote_text, ar.quote_context,
                   ar.prompt_version, ac.name AS actor_name, ac.party AS actor_party,
                   d.id AS document_id, d.url AS document_url, d.video_url, d.published_at,
-                  d.tweedekamer_activiteit_url
+                  d.tweedekamer_activiteit_url, d.speaker_role_title
            FROM arguments ar
            JOIN actors ac ON ac.id = ar.actor_id
            JOIN documents d ON d.id = ar.document_id
@@ -145,7 +145,11 @@ def fetch_arguments(conn, topic_id):
                 "quote_text": row["quote_text"],
                 "quote_context": row["quote_context"],
                 "prompt_version": row["prompt_version"],
-                "actor": {"name": row["actor_name"], "party": row["actor_party"]},
+                "actor": {
+                    "name": row["actor_name"],
+                    "party": row["actor_party"],
+                    "role_title": row["speaker_role_title"],
+                },
                 "document": {
                     "url": row["document_url"],
                     "video_url": row["video_url"],
