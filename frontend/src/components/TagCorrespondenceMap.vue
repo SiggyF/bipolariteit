@@ -2,6 +2,7 @@
 import { computed } from "vue";
 import { useTheme } from "../lib/useTheme";
 import { displayPartyName } from "../lib/parties";
+import { setTagFilter, useTagFilter } from "../lib/useTagFilter";
 import VChart from "vue-echarts";
 import { use } from "echarts/core";
 import { CanvasRenderer } from "echarts/renderers";
@@ -44,6 +45,13 @@ const COLORS = {
 
 const isDark = useTheme();
 const colors = computed(() => (isDark.value ? COLORS.dark : COLORS.light));
+const activeFilter = useTagFilter();
+
+function onChartClick(p: any) {
+	if (p.seriesName !== "Tags") return;
+	const isSame = activeFilter.value?.sleutel === p.data.name;
+	setTagFilter(isSame ? null : { sleutel: p.data.name, beschrijving: p.data.beschrijving });
+}
 
 const chartOption = computed(() => {
 	const c = props.correspondence!;
@@ -53,9 +61,10 @@ const chartOption = computed(() => {
 		textStyle: { fontFamily: "inherit" },
 		tooltip: {
 			trigger: "item",
+			extraCssText: "max-width: 220px; white-space: normal; line-height: 1.35;",
 			formatter: (p: any) => {
 				if (p.seriesName === "Partijen") return `<strong>${p.data.name}</strong><br/>${p.data.n} tags`;
-				return `<strong>${p.data.name}</strong><br/>${p.data.labelgroep}<br/>${p.data.beschrijving}<br/>${p.data.n}x toegekend`;
+				return `<strong>${p.data.name}</strong><br/><span style="opacity:0.7">${p.data.labelgroep}</span><br/>${p.data.beschrijving}<br/><span style="opacity:0.7">${p.data.n}x toegekend</span>`;
 			},
 		},
 		legend: {
@@ -110,6 +119,7 @@ const chartOption = computed(() => {
 					labelgroep: t.labelgroep,
 				})),
 				itemStyle: { color: colors.value.tag, opacity: 0.75 },
+				cursor: "pointer",
 				label: {
 					show: true,
 					formatter: "{b}",
@@ -128,9 +138,20 @@ const chartOption = computed(() => {
 		<h2>Partijen &amp; tags (correspondentieanalyse)</h2>
 		<p class="panel-note">
 			Partijen dicht bij elkaar gebruiken vergelijkbare soorten argumenten; een tag dicht bij een partij komt relatief vaak bij die
-			partij voor. Gebaseerd op nog weinig getagde data -- wordt betrouwbaarder naarmate de taggingbatch vordert.
+			partij voor. Gebaseerd op nog weinig getagde data -- wordt betrouwbaarder naarmate de taggingbatch vordert. Klik op een tag om
+			alleen de argumenten met die tag te tonen.
 		</p>
-		<VChart v-if="correspondence" class="party-chart correspondence-chart" :option="chartOption" autoresize />
+		<p v-if="activeFilter" class="active-tag-filter">
+			Gefilterd op tag: <strong>{{ activeFilter.sleutel }}</strong>
+			<button type="button" @click="setTagFilter(null)">alles tonen</button>
+		</p>
+		<VChart
+			v-if="correspondence"
+			class="party-chart correspondence-chart"
+			:option="chartOption"
+			autoresize
+			@click="onChartClick"
+		/>
 		<p v-else class="panel-note">Nog te weinig getagde data voor een zinnige analyse (minimaal 3 partijen en 3 tags met genoeg volume nodig).</p>
 	</section>
 </template>

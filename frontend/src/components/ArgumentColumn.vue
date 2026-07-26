@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, onBeforeUnmount } from "vue";
+import { ref, computed, watch, onMounted, onBeforeUnmount } from "vue";
 import ArgumentCard from "./ArgumentCard.vue";
+import { useTagFilter } from "../lib/useTagFilter";
 
 const PAGE_SIZE = 50;
 
@@ -13,9 +14,20 @@ const PAGE_SIZE = 50;
 // getal, ongeacht de echte data) i.p.v. een fout te gooien.
 const props = defineProps<{ argumentList: any[]; topicSlug: string; label: string; stanceClass: string }>();
 
-const visibleCount = ref(Math.min(PAGE_SIZE, props.argumentList.length));
-const visible = computed(() => props.argumentList.slice(0, visibleCount.value));
-const hasMore = computed(() => visibleCount.value < props.argumentList.length);
+const activeFilter = useTagFilter();
+const filtered = computed(() => {
+	const sleutel = activeFilter.value?.sleutel;
+	if (!sleutel) return props.argumentList;
+	return props.argumentList.filter((a) => a.tags?.some((t: any) => t.sleutel === sleutel));
+});
+
+const visibleCount = ref(Math.min(PAGE_SIZE, filtered.value.length));
+const visible = computed(() => filtered.value.slice(0, visibleCount.value));
+const hasMore = computed(() => visibleCount.value < filtered.value.length);
+
+watch(filtered, (list) => {
+	visibleCount.value = Math.min(PAGE_SIZE, list.length);
+});
 
 const sentinel = ref<HTMLElement | null>(null);
 let observer: IntersectionObserver | null = null;
@@ -24,7 +36,7 @@ onMounted(() => {
 	observer = new IntersectionObserver(
 		(entries) => {
 			if (entries[0].isIntersecting && hasMore.value) {
-				visibleCount.value = Math.min(visibleCount.value + PAGE_SIZE, props.argumentList.length);
+				visibleCount.value = Math.min(visibleCount.value + PAGE_SIZE, filtered.value.length);
 			}
 		},
 		{ rootMargin: "400px" },
@@ -39,11 +51,11 @@ onBeforeUnmount(() => {
 
 <template>
 	<section class="column" :class="stanceClass">
-		<h2>{{ label }} ({{ argumentList.length }})</h2>
+		<h2>{{ label }} ({{ filtered.length }})</h2>
 		<ArgumentCard v-for="argument in visible" :key="argument.id" :argument="argument" :topicSlug="topicSlug" />
 		<div v-if="hasMore" ref="sentinel" class="column-load-more">
-			<button type="button" @click="visibleCount = Math.min(visibleCount + PAGE_SIZE, argumentList.length)">
-				meer laden ({{ argumentList.length - visibleCount }} resterend)
+			<button type="button" @click="visibleCount = Math.min(visibleCount + PAGE_SIZE, filtered.length)">
+				meer laden ({{ filtered.length - visibleCount }} resterend)
 			</button>
 		</div>
 	</section>
