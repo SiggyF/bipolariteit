@@ -2,14 +2,15 @@
 import { computed } from "vue";
 import VChart from "vue-echarts";
 import { use } from "echarts/core";
-import { CanvasRenderer } from "echarts/renderers";
+import { SVGRenderer } from "echarts/renderers";
 import { CustomChart } from "echarts/charts";
 import { TooltipComponent, GridComponent } from "echarts/components";
 import PartyLogo from "./PartyLogo.vue";
 import { useTheme } from "../lib/useTheme";
 import { displayPartyName } from "../lib/parties";
+import { setPartyFilter, usePartyFilter } from "../lib/usePartyFilter";
 
-use([CanvasRenderer, CustomChart, TooltipComponent, GridComponent]);
+use([SVGRenderer, CustomChart, TooltipComponent, GridComponent]);
 
 interface StanceCounts {
 	total: number;
@@ -45,6 +46,37 @@ const colors = computed(() => (isDark.value ? COLORS.dark : COLORS.light));
 // Sorted ascending so the biggest party ends up nearest the top in ECharts'
 // bottom-up category axis.
 const parties = computed(() => [...props.stats.by_party].slice().reverse());
+
+const activeFilter = usePartyFilter();
+
+function applyPartyFilter(party: string) {
+	const isSame = activeFilter.value?.party === party;
+	setPartyFilter(isSame ? null : { party });
+}
+
+// Bar-segment clicks: ECharts' own click event, componentType "series".
+function onChartClick(p: any) {
+	const idx = Array.isArray(p.value) ? (p.value[0] as number) : undefined;
+	if (idx === undefined) return;
+	const party = parties.value[idx]?.party;
+	if (!party) return;
+	applyPartyFilter(party);
+}
+
+// Party-name axis labels: ECharts' `axisLabel.triggerEvent` never fires a
+// click for category-axis labels under the SVG renderer (confirmed against
+// a minimal, non-custom-series repro on echarts 6.1.0 -- an echarts
+// limitation, not something specific to this chart). SVGRenderer does give
+// us real <text> DOM nodes though, so we match those directly instead of
+// going through ECharts' event system.
+function onChartWrapperClick(e: MouseEvent) {
+	const target = e.target as Element;
+	if (!(target instanceof SVGTextElement)) return;
+	const text = target.textContent?.trim();
+	if (!text) return;
+	const match = parties.value.find((p) => displayPartyName(p.party) === text);
+	if (match) applyPartyFilter(match.party);
+}
 
 // Bar thickness reflects how many arguments a party has -- sqrt scale so a
 // party with 10x the arguments doesn't get a 10x-thick bar, just visibly
@@ -97,6 +129,7 @@ function makeSegmentSeries(segment: "pro" | "contra" | "unclear", color: string,
 				type: "rect",
 				shape: { x: x0, y: y - barHeight / 2, width: x1 - x0, height: barHeight },
 				style: { fill: color },
+				cursor: "pointer",
 			};
 		},
 		tooltip: {
@@ -146,7 +179,21 @@ const chartHeight = computed(() => `${Math.max(200, parties.value.length * 42 + 
 			<li><span class="legend-swatch" :style="{ background: colors.unclear }"></span>Onduidelijk</li>
 		</ul>
 
-		<VChart class="party-chart" :option="chartOption" :style="{ height: chartHeight }" autoresize />
+		<p v-if="activeFilter" class="active-tag-filter">
+			Gefilterd op partij: <strong>{{ displayPartyName(activeFilter.party) }}</strong>
+			<button type="button" @click="setPartyFilter(null)">alles tonen</button>
+		</p>
+
+		<div @click="onChartWrapperClick">
+			<VChart
+				class="party-chart"
+				:option="chartOption"
+				:init-options="{ renderer: 'svg' }"
+				:style="{ height: chartHeight }"
+				autoresize
+				@click="onChartClick"
+			/>
+		</div>
 
 		<table class="party-table">
 			<caption class="visually-hidden">Argumenten per partij, met aantallen naast de percentages uit de grafiek</caption>

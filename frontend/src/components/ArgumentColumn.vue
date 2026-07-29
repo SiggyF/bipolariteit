@@ -2,6 +2,7 @@
 import { ref, computed, watch, onMounted, onBeforeUnmount } from "vue";
 import ArgumentCard from "./ArgumentCard.vue";
 import { useTagFilter } from "../lib/useTagFilter";
+import { usePartyFilter } from "../lib/usePartyFilter";
 
 const PAGE_SIZE = 50;
 
@@ -14,11 +15,18 @@ const PAGE_SIZE = 50;
 // getal, ongeacht de echte data) i.p.v. een fout te gooien.
 const props = defineProps<{ argumentList: any[]; topicSlug: string; label: string; stanceClass: string }>();
 
-const activeFilter = useTagFilter();
+const activeTagFilter = useTagFilter();
+const activePartyFilter = usePartyFilter();
 const filtered = computed(() => {
-	const sleutel = activeFilter.value?.sleutel;
-	if (!sleutel) return props.argumentList;
-	return props.argumentList.filter((a) => a.tags?.some((t: any) => t.sleutel === sleutel));
+	let list = props.argumentList;
+
+	const sleutel = activeTagFilter.value?.sleutel;
+	if (sleutel) list = list.filter((a) => a.tags?.some((t: any) => t.sleutel === sleutel));
+
+	const party = activePartyFilter.value?.party;
+	if (party) list = list.filter((a) => (party === "Onbekend" ? !a.actor?.party : a.actor?.party === party));
+
+	return list;
 });
 
 const visibleCount = ref(Math.min(PAGE_SIZE, filtered.value.length));
