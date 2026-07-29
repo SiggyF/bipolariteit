@@ -277,6 +277,41 @@ def build_correspondence_analysis(rows, min_party_total=3, min_tag_total=2):
     }
 
 
+def fetch_pipeline_status(conn, topic_row):
+    """Ruwe voortgangscijfers per stap van de pipeline (crawlen -> Stage 1
+    extractie -> tagging -> Stage 2 redactie-check), voor de publieke
+    /status-pagina. Puur telwerk, geen kwaliteitsoordeel."""
+    topic_id = topic_row["id"]
+
+    documents_total, extraction_attempted = conn.execute(
+        """SELECT COUNT(*), COUNT(extraction_attempted_at)
+           FROM documents WHERE topic_id = ?""",
+        (topic_id,),
+    ).fetchone()
+
+    arguments_total, arguments_tagged = conn.execute(
+        """SELECT COUNT(*), COUNT(tagged_at) FROM arguments WHERE topic_id = ?""",
+        (topic_id,),
+    ).fetchone()
+
+    documents_with_redactie = conn.execute(
+        """SELECT COUNT(DISTINCT rr.document_id)
+           FROM redactie_reviews rr JOIN documents d ON d.id = rr.document_id
+           WHERE d.topic_id = ?""",
+        (topic_id,),
+    ).fetchone()[0]
+
+    return {
+        "slug": topic_row["slug"],
+        "name": topic_row["name"],
+        "documents_total": documents_total,
+        "documents_extracted": extraction_attempted,
+        "arguments_total": arguments_total,
+        "arguments_tagged": arguments_tagged,
+        "documents_redactie_checked": documents_with_redactie,
+    }
+
+
 def build_topic_export(conn, topic_row):
     arguments = fetch_arguments(conn, topic_row["id"])
     pro = [a for a in arguments if a["stance"] == "pro"]
@@ -314,8 +349,10 @@ def main():
     topics_dir.mkdir(parents=True, exist_ok=True)
 
     index = []
+    status = {"generated_at": datetime.now(_AMSTERDAM).isoformat(timespec="seconds"), "topics": []}
     for topic_row in topic_rows:
         export = build_topic_export(conn, topic_row)
+        status["topics"].append(fetch_pipeline_status(conn, topic_row))
         out_path = topics_dir / f"{topic_row['slug']}.json"
         out_path.write_text(json.dumps(export, ensure_ascii=False, indent=2))
         index.append(
@@ -334,6 +371,10 @@ def main():
     index_path = EXPORT_DIR / "topics-index.json"
     index_path.write_text(json.dumps(index, ensure_ascii=False, indent=2))
     logger.info("Index -> %s", index_path)
+
+    status_path = EXPORT_DIR / "status.json"
+    status_path.write_text(json.dumps(status, ensure_ascii=False, indent=2))
+    logger.info("Status -> %s", status_path)
 
 
 if __name__ == "__main__":

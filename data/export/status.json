@@ -1,0 +1,14 @@
+{
+  "generated_at": "2026-07-29T10:55:26+02:00",
+  "topics": [
+    {
+      "slug": "stikstof",
+      "name": "stikstof",
+      "documents_total": 5213,
+      "documents_extracted": 2734,
+      "arguments_total": 1368,
+      "arguments_tagged": 1363,
+      "documents_redactie_checked": 5
+    }
+  ]
+}
