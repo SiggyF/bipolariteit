@@ -3,13 +3,19 @@
 TOPIC ?= stikstof
 LIMIT ?= 15
 
-.PHONY: help test test-frontend status build dev dev-stop extract tag redactie export db-init pipeline-status backup-db
+.PHONY: help test test-js test-frontend ca-fixture status build dev dev-stop extract tag redactie export db-init pipeline-status backup-db
 
 help: ## Toon deze lijst
 	@grep -E '^[a-zA-Z_-]+:.*## ' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*## "}; {printf "  \033[36m%-16s\033[0m %s\n", $$1, $$2}'
 
 test: ## Draai de volledige pytest-suite
 	uv run pytest tests/ -v
+
+test-js: ## Unittests van de rekencode in de frontend (vitest, geen browser nodig)
+	cd frontend && npx vitest run
+
+ca-fixture: ## Genereer de gouden prince-fixture voor de correspondentie-tests
+	PYTHONPATH=. uv run python scripts/dump_ca_fixture.py
 
 test-frontend: ## Rooktest van de filterbalk in een echte browser (bouwt + serveert zelf)
 	cd frontend && npm run build
