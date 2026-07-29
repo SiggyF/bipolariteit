@@ -28,6 +28,7 @@ from pathlib import Path
 import requests
 
 from pipeline.db import db
+from pipeline.periodes import PeriodeIndex
 from pipeline.taxonomy import DERIVED_LABELGROEPEN, field_name_for
 
 logger = logging.getLogger(__name__)
@@ -242,19 +243,27 @@ def insert_llm_tags(conn, argument_id, tag_reden_pairs):
         )
 
 
-def fetch_untagged_arguments(conn, topic_id, limit, min_id=0):
+def fetch_untagged_arguments(conn, topic_id, limit, min_id=0, vanaf=None):
+    """`vanaf` is een ISO-datum op de publicatiedatum van het brondocument;
+    zelfde drempel als bij de extractie ([verwerking].vanaf), zodat we
+    geen argumenten taggen uit een periode die we verder buiten beschouwing
+    laten. De data blijft staan, alleen deze query ziet 'm niet."""
+    if vanaf is None:
+        vanaf = PeriodeIndex().drempel
     return conn.execute(
         """SELECT ar.id, ar.document_id, ar.actor_id, ar.stance, ar.typology,
                   ar.quote_text, ar.quote_context,
                   act.name AS actor_name, act.party AS actor_party
            FROM arguments ar
            JOIN actors act ON act.id = ar.actor_id
+           JOIN documents d ON d.id = ar.document_id
            WHERE ar.topic_id = ?
              AND ar.id >= ?
+             AND d.published_at >= ?
              AND ar.tagged_at IS NULL
            ORDER BY ar.id
            LIMIT ?""",
-        (topic_id, min_id, limit),
+        (topic_id, min_id, vanaf, limit),
     ).fetchall()
 
 
@@ -267,6 +276,12 @@ def main():
     parser.add_argument("--base-url", default="http://localhost:1234/v1")
     parser.add_argument("--reasoning-effort", default="none")
     parser.add_argument("--timeout", type=float, default=120.0)
+    parser.add_argument(
+        "--vanaf",
+        default=None,
+        help="ISO-datum; overschrijft [verwerking].vanaf uit data/politieke-periodes.toml "
+             "(voor een bewuste backfill van een oudere periode)",
+    )
     parser.add_argument("--dry-run", action="store_true", help="niets naar de database schrijven, alleen printen")
     args = parser.parse_args()
 
@@ -279,7 +294,7 @@ def main():
     valid_tags = load_valid_tags(conn)
     tag_catalogue, tag_json_skeleton = build_tag_catalogue(conn)
 
-    arguments = fetch_untagged_arguments(conn, topic_id, args.limit, args.min_id)
+    arguments = fetch_untagged_arguments(conn, topic_id, args.limit, args.min_id, args.vanaf)
     if not arguments:
         logger.info("Geen ongetagde argumenten (al verwerkt, of geen argumenten voor deze topic).")
         return

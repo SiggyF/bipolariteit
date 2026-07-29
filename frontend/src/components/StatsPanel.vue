@@ -8,30 +8,18 @@ import { TooltipComponent, GridComponent } from "echarts/components";
 import PartyLogo from "./PartyLogo.vue";
 import { useTheme } from "../lib/useTheme";
 import { displayPartyName } from "../lib/parties";
-import { setPartyFilter, usePartyFilter } from "../lib/usePartyFilter";
+import { deriveStats } from "../lib/aggregate";
+import { toggleValue } from "../lib/filters";
+import type { Argument } from "../lib/types";
 
 use([SVGRenderer, CustomChart, TooltipComponent, GridComponent]);
 
-interface StanceCounts {
-	total: number;
-	pro: number;
-	contra: number;
-	unclear: number;
-	pro_pct: number;
-	contra_pct: number;
-	unclear_pct: number;
-}
+// Rekent op de al gefilterde lijst: filter je op één partij, dan gaat deze
+// grafiek daarin mee in plaats van corpus-brede cijfers te blijven tonen naast
+// een gefilterde kolom.
+const props = defineProps<{ argumentList: Argument[] }>();
 
-interface PartyStats extends StanceCounts {
-	party: string;
-}
-
-interface Stats {
-	overall: StanceCounts;
-	by_party: PartyStats[];
-}
-
-const props = defineProps<{ stats: Stats }>();
+const stats = computed(() => deriveStats(props.argumentList));
 
 // "Ink & Rust" diverging pair -- mirrors --color-pro/--color-contra/--color-unclear
 // in main.css (ECharts can't read CSS custom properties, so this stays a manual mirror).
@@ -45,14 +33,7 @@ const colors = computed(() => (isDark.value ? COLORS.dark : COLORS.light));
 
 // Sorted ascending so the biggest party ends up nearest the top in ECharts'
 // bottom-up category axis.
-const parties = computed(() => [...props.stats.by_party].slice().reverse());
-
-const activeFilter = usePartyFilter();
-
-function applyPartyFilter(party: string) {
-	const isSame = activeFilter.value?.party === party;
-	setPartyFilter(isSame ? null : { party });
-}
+const parties = computed(() => [...stats.value.by_party].slice().reverse());
 
 // Bar-segment clicks: ECharts' own click event, componentType "series".
 function onChartClick(p: any) {
@@ -60,7 +41,7 @@ function onChartClick(p: any) {
 	if (idx === undefined) return;
 	const party = parties.value[idx]?.party;
 	if (!party) return;
-	applyPartyFilter(party);
+	toggleValue("partij", party);
 }
 
 // Party-name axis labels: ECharts' `axisLabel.triggerEvent` never fires a
@@ -75,7 +56,7 @@ function onChartWrapperClick(e: MouseEvent) {
 	const text = target.textContent?.trim();
 	if (!text) return;
 	const match = parties.value.find((p) => displayPartyName(p.party) === text);
-	if (match) applyPartyFilter(match.party);
+	if (match) toggleValue("partij", match.party);
 }
 
 // Bar thickness reflects how many arguments a party has -- sqrt scale so a
@@ -171,7 +152,7 @@ const chartHeight = computed(() => `${Math.max(200, parties.value.length * 42 + 
 
 <template>
 	<section class="stats-panel">
-		<h2>Statistieken per partij</h2>
+		<h2>Statistieken per partij <span class="panel-scope">({{ stats.overall.total }} argumenten in selectie)</span></h2>
 
 		<ul class="chart-legend">
 			<li><span class="legend-swatch" :style="{ background: colors.pro }"></span>Pro</li>
@@ -179,12 +160,9 @@ const chartHeight = computed(() => `${Math.max(200, parties.value.length * 42 + 
 			<li><span class="legend-swatch" :style="{ background: colors.unclear }"></span>Onduidelijk</li>
 		</ul>
 
-		<p v-if="activeFilter" class="active-tag-filter">
-			Gefilterd op partij: <strong>{{ displayPartyName(activeFilter.party) }}</strong>
-			<button type="button" @click="setPartyFilter(null)">alles tonen</button>
-		</p>
+		<p class="panel-note">Klik op een balk of partijnaam om op die partij te filteren.</p>
 
-		<div @click="onChartWrapperClick">
+		<div class="clickable-chart" @click="onChartWrapperClick">
 			<VChart
 				class="party-chart"
 				:option="chartOption"

@@ -12,8 +12,13 @@ docs/handoff.md):
 Reeds verwerkte documenten worden overgeslagen via `documents.extraction_attempted_at`
 (gezet zodra een document door de LLM is gestuurd, ook als dat 0 arguments
 opleverde -- zelfde patroon als `arguments.tagged_at` in tag_arguments.py),
-dus herhaald draaien is veilig en de volle batch (3949 documenten) kan
-onderbroken/herstart worden zonder dubbel werk.
+dus herhaald draaien is veilig en de volle batch kan onderbroken/herstart
+worden zonder dubbel werk.
+
+Documenten van vóór [verwerking].vanaf in data/politieke-periodes.toml
+worden overgeslagen: we analyseren de huidige en de vorige Kamer. Die
+documenten blijven gewoon in de database staan; met --vanaf kan een oudere
+periode alsnog bewust verwerkt worden.
 """
 
 import argparse
@@ -28,6 +33,7 @@ from pathlib import Path
 import requests
 
 from pipeline.db import db
+from pipeline.periodes import PeriodeIndex
 
 logger = logging.getLogger(__name__)
 
@@ -135,18 +141,25 @@ def insert_argument(conn, document_id, topic_id, actor_id, arg, model):
     return argument_id
 
 
-def fetch_pending_documents(conn, topic_id, limit, min_id=0):
+def fetch_pending_documents(conn, topic_id, limit, min_id=0, vanaf=None):
+    """`vanaf` is een ISO-datum; oudere documenten blijven in de database maar
+    komen hier niet uit. Default is [verwerking].vanaf uit
+    data/politieke-periodes.toml -- we analyseren de huidige en de vorige
+    Kamer, en dat scheelt aanzienlijk LLM-werk."""
+    if vanaf is None:
+        vanaf = PeriodeIndex().drempel
     return conn.execute(
         """SELECT d.id, d.content, d.actor_id, a.name AS actor_name, a.party AS actor_party
            FROM documents d
            JOIN actors a ON a.id = d.actor_id
            WHERE d.topic_id = ?
              AND d.id >= ?
+             AND d.published_at >= ?
              AND d.extraction_attempted_at IS NULL
              AND d.is_voorzitter_turn = 0
            ORDER BY d.id
            LIMIT ?""",
-        (topic_id, min_id, limit),
+        (topic_id, min_id, vanaf, limit),
     ).fetchall()
 
 
@@ -163,6 +176,12 @@ def main():
         help="LM Studio reasoning_effort ('none' om denkstappen uit te schakelen; leeg om het veld weg te laten)",
     )
     parser.add_argument("--timeout", type=float, default=120.0, help="request-timeout in seconden per document")
+    parser.add_argument(
+        "--vanaf",
+        default=None,
+        help="ISO-datum; overschrijft [verwerking].vanaf uit data/politieke-periodes.toml "
+             "(voor een bewuste backfill van een oudere periode)",
+    )
     parser.add_argument("--dry-run", action="store_true", help="niets naar de database schrijven, alleen printen")
     args = parser.parse_args()
 
@@ -177,7 +196,7 @@ def main():
             "zet dit eerst via UPDATE topics SET description = ... (zie docs/handoff.md)"
         )
 
-    documents = fetch_pending_documents(conn, topic_id, args.limit, args.min_id)
+    documents = fetch_pending_documents(conn, topic_id, args.limit, args.min_id, args.vanaf)
     if not documents:
         logger.info("Geen openstaande documenten (al verwerkt, of geen documenten voor deze topic).")
         return

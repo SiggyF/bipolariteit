@@ -33,6 +33,10 @@ const generated = new Date(status.generated_at).toLocaleString("nl-NL", {
 			{status.topics.map((topic) => (
 				<section class="status-topic">
 					<h2>{topic.name}</h2>
+					<p class="panel-note">
+						Telt vanaf {topic.vanaf}, de start van de vorige kamerperiode. Oudere debatten zitten wel in de database,
+						maar worden niet geanalyseerd en niet getoond.
+					</p>
 					<ul class="status-bars">
 						<li>
 							<div class="status-bar-label">

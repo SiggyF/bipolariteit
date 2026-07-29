@@ -1,8 +1,5 @@
 ---
-import ArgumentColumn from "../../components/ArgumentColumn.vue";
-import StatsPanel from "../../components/StatsPanel.vue";
-import TagsPerParty from "../../components/TagsPerParty.vue";
-import TagCorrespondenceMap from "../../components/TagCorrespondenceMap.vue";
+import TopicView from "../../components/TopicView.vue";
 import FeedbackExport from "../../components/FeedbackExport.vue";
 import SiteNav from "../../components/SiteNav.astro";
 import "../../styles/main.css";
@@ -37,15 +34,17 @@ const topic = mod.default;
 				{topic.description && <p class="topic-description">{topic.description}</p>}
 			</div>
 
-			<StatsPanel stats={topic.stats} client:only="vue" />
-			<TagsPerParty tagsPerParty={topic.tags_per_party} client:only="vue" />
-			<TagCorrespondenceMap correspondence={topic.tag_correspondence} client:only="vue" />
-
-			<div class="columns">
-				<ArgumentColumn argumentList={topic.pro} topicSlug={topic.slug} label="Pro" stanceClass="column-pro" client:load />
-				<ArgumentColumn argumentList={topic.contra} topicSlug={topic.slug} label="Contra" stanceClass="column-contra" client:load />
-				<ArgumentColumn argumentList={topic.unclear} topicSlug={topic.slug} label="Onduidelijk" stanceClass="column-unclear" client:load />
-			</div>
+			{/* Eén island voor alles wat op het filter reageert: de grafieken en de
+			    kolommen delen zo dezelfde argumentenlijst en filterstore. Ook
+			    scheelt het serialiseren -- het corpus is enkele MB's groot en zou
+			    anders per island in de HTML terechtkomen. client:only omdat de
+			    filterstore de URL leest, wat op de server niet bestaat. */}
+			<TopicView
+				argumentList={topic.arguments}
+				topicSlug={topic.slug}
+				correspondence={topic.tag_correspondence}
+				client:only="vue"
+			/>
 
 			<FeedbackExport client:load />
 		</main>

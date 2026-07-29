@@ -2,7 +2,8 @@
 import { computed } from "vue";
 import { useTheme } from "../lib/useTheme";
 import { displayPartyName } from "../lib/parties";
-import { setTagFilter, useTagFilter } from "../lib/useTagFilter";
+import { filters, toggleValue } from "../lib/filters";
+import { NO_PARTY, type Argument, type Correspondence } from "../lib/types";
 import VChart from "vue-echarts";
 import { use } from "echarts/core";
 import { CanvasRenderer } from "echarts/renderers";
@@ -11,29 +12,26 @@ import { TooltipComponent, GridComponent, LegendComponent } from "echarts/compon
 
 use([CanvasRenderer, ScatterChart, TooltipComponent, GridComponent, LegendComponent]);
 
-interface PartyPoint {
-	party: string;
-	x: number;
-	y: number;
-	n: number;
+// De kaart zelf is corpus-breed en wordt server-side berekend (prince). Bij een
+// actief filter herberekenen we 'm dus niet, maar markeren we welke punten nog
+// in de selectie voorkomen -- alles daarbuiten dimt. Client-side herberekenen
+// (en daarmee een echt gefilterde analyse) staat in #3.
+const props = defineProps<{ correspondence: Correspondence | null; argumentList: Argument[] }>();
+
+const partiesInSelection = computed(() => new Set(props.argumentList.map((a) => a.actor.party ?? NO_PARTY)));
+const tagsInSelection = computed(() => new Set(props.argumentList.flatMap((a) => a.tags.map((t) => t.sleutel))));
+
+// Zonder filter zit elk punt in de selectie, dus dan dimt er vanzelf niets --
+// geen aparte "is er gefilterd?"-vlag nodig.
+const DIMMED_OPACITY = 0.15;
+
+function partyOpacity(party: string): number {
+	return partiesInSelection.value.has(party) ? 1 : DIMMED_OPACITY;
 }
 
-interface TagPoint {
-	sleutel: string;
-	beschrijving: string;
-	labelgroep: string;
-	x: number;
-	y: number;
-	n: number;
+function tagOpacity(sleutel: string): number {
+	return tagsInSelection.value.has(sleutel) ? 0.75 : DIMMED_OPACITY;
 }
-
-interface Correspondence {
-	inertia_pct: number[];
-	parties: PartyPoint[];
-	tags: TagPoint[];
-}
-
-const props = defineProps<{ correspondence: Correspondence | null }>();
 
 // Categorical identity colors (dataviz skill, slots 1 + 3) -- deliberately
 // distinct from the pro/contra/onduidelijk diverging palette used elsewhere,
@@ -45,12 +43,9 @@ const COLORS = {
 
 const isDark = useTheme();
 const colors = computed(() => (isDark.value ? COLORS.dark : COLORS.light));
-const activeFilter = useTagFilter();
-
 function onChartClick(p: any) {
-	if (p.seriesName !== "Tags") return;
-	const isSame = activeFilter.value?.sleutel === p.data.name;
-	setTagFilter(isSame ? null : { sleutel: p.data.name, beschrijving: p.data.beschrijving });
+	if (p.seriesName === "Tags") toggleValue("tag", p.data.name);
+	else if (p.seriesName === "Partijen") toggleValue("partij", p.data.party);
 }
 
 const chartOption = computed(() => {
@@ -96,8 +91,14 @@ const chartOption = computed(() => {
 				name: "Partijen",
 				type: "scatter",
 				symbolSize: (val: number[]) => Math.max(14, Math.min(40, Math.sqrt(val[2]) * 6)),
-				data: c.parties.map((p) => ({ name: displayPartyName(p.party), value: [p.x, p.y, p.n], n: p.n })),
-				itemStyle: { color: colors.value.party },
+				data: c.parties.map((p) => ({
+					name: displayPartyName(p.party),
+					party: p.party,
+					value: [p.x, p.y, p.n],
+					n: p.n,
+					itemStyle: { color: colors.value.party, opacity: partyOpacity(p.party) },
+				})),
+				cursor: "pointer",
 				label: {
 					show: true,
 					formatter: "{b}",
@@ -117,8 +118,8 @@ const chartOption = computed(() => {
 					n: t.n,
 					beschrijving: t.beschrijving,
 					labelgroep: t.labelgroep,
+					itemStyle: { color: colors.value.tag, opacity: tagOpacity(t.sleutel) },
 				})),
-				itemStyle: { color: colors.value.tag, opacity: 0.75 },
 				cursor: "pointer",
 				label: {
 					show: true,
@@ -138,12 +139,12 @@ const chartOption = computed(() => {
 		<h2>Partijen &amp; tags (correspondentieanalyse)</h2>
 		<p class="panel-note">
 			Partijen dicht bij elkaar gebruiken vergelijkbare soorten argumenten; een tag dicht bij een partij komt relatief vaak bij die
-			partij voor. Gebaseerd op nog weinig getagde data -- wordt betrouwbaarder naarmate de taggingbatch vordert. Klik op een tag om
-			alleen de argumenten met die tag te tonen.
+			partij voor. Gebaseerd op nog weinig getagde data -- wordt betrouwbaarder naarmate de taggingbatch vordert. Klik op een tag
+			of partij om erop te filteren.
 		</p>
-		<p v-if="activeFilter" class="active-tag-filter">
-			Gefilterd op tag: <strong>{{ activeFilter.sleutel }}</strong>
-			<button type="button" @click="setTagFilter(null)">alles tonen</button>
+		<p class="panel-note">
+			Deze analyse is corpus-breed berekend en wordt <em>niet</em> herberekend op je selectie; punten die buiten de selectie
+			vallen worden gedimd.
 		</p>
 		<VChart
 			v-if="correspondence"

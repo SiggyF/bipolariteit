@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { ref, computed, watch, onMounted, onBeforeUnmount } from "vue";
 import ArgumentCard from "./ArgumentCard.vue";
-import { useTagFilter } from "../lib/useTagFilter";
-import { usePartyFilter } from "../lib/usePartyFilter";
+import type { Argument } from "../lib/types";
 
 const PAGE_SIZE = 50;
 
@@ -13,29 +12,21 @@ const PAGE_SIZE = 50;
 // naar de prop te resolven, dus `{{ arguments.length }}` in een template
 // gaf stilzwijgend de lengte van dat native object terug (altijd hetzelfde
 // getal, ongeacht de echte data) i.p.v. een fout te gooien.
-const props = defineProps<{ argumentList: any[]; topicSlug: string; label: string; stanceClass: string }>();
+// Krijgt een al gefilterde lijst binnen: TopicView past het filter één keer
+// toe voor de hele pagina, zodat kolommen en grafieken niet elk hun eigen
+// interpretatie kunnen hebben.
+const props = defineProps<{ argumentList: Argument[]; topicSlug: string; label: string; stanceClass: string }>();
 
-const activeTagFilter = useTagFilter();
-const activePartyFilter = usePartyFilter();
-const filtered = computed(() => {
-	let list = props.argumentList;
+const visibleCount = ref(Math.min(PAGE_SIZE, props.argumentList.length));
+const visible = computed(() => props.argumentList.slice(0, visibleCount.value));
+const hasMore = computed(() => visibleCount.value < props.argumentList.length);
 
-	const sleutel = activeTagFilter.value?.sleutel;
-	if (sleutel) list = list.filter((a) => a.tags?.some((t: any) => t.sleutel === sleutel));
-
-	const party = activePartyFilter.value?.party;
-	if (party) list = list.filter((a) => (party === "Onbekend" ? !a.actor?.party : a.actor?.party === party));
-
-	return list;
-});
-
-const visibleCount = ref(Math.min(PAGE_SIZE, filtered.value.length));
-const visible = computed(() => filtered.value.slice(0, visibleCount.value));
-const hasMore = computed(() => visibleCount.value < filtered.value.length);
-
-watch(filtered, (list) => {
-	visibleCount.value = Math.min(PAGE_SIZE, list.length);
-});
+watch(
+	() => props.argumentList,
+	(list) => {
+		visibleCount.value = Math.min(PAGE_SIZE, list.length);
+	},
+);
 
 const sentinel = ref<HTMLElement | null>(null);
 let observer: IntersectionObserver | null = null;
@@ -44,7 +35,7 @@ onMounted(() => {
 	observer = new IntersectionObserver(
 		(entries) => {
 			if (entries[0].isIntersecting && hasMore.value) {
-				visibleCount.value = Math.min(visibleCount.value + PAGE_SIZE, filtered.value.length);
+				visibleCount.value = Math.min(visibleCount.value + PAGE_SIZE, props.argumentList.length);
 			}
 		},
 		{ rootMargin: "400px" },
@@ -59,11 +50,11 @@ onBeforeUnmount(() => {
 
 <template>
 	<section class="column" :class="stanceClass">
-		<h2>{{ label }} ({{ filtered.length }})</h2>
+		<h2>{{ label }} ({{ argumentList.length }})</h2>
 		<ArgumentCard v-for="argument in visible" :key="argument.id" :argument="argument" :topicSlug="topicSlug" />
 		<div v-if="hasMore" ref="sentinel" class="column-load-more">
-			<button type="button" @click="visibleCount = Math.min(visibleCount + PAGE_SIZE, filtered.length)">
-				meer laden ({{ filtered.length - visibleCount }} resterend)
+			<button type="button" @click="visibleCount = Math.min(visibleCount + PAGE_SIZE, argumentList.length)">
+				meer laden ({{ argumentList.length - visibleCount }} resterend)
 			</button>
 		</div>
 	</section>
