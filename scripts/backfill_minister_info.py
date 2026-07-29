@@ -17,12 +17,27 @@ frontend geen partij/naam-context. Twee losse stappen, geen LLM:
    - Christianne van der Wal(-Zeggelink) -> VVD (zetel t/m 2025-03-25)
    - Mark Harbers -> VVD (twee zetelperiodes, laatste t/m 2022-01-09)
 
-   Bewust NIET geraden voor Dick Schoof, Jean Rummenie, Piet Adema en Jaimi
-   van Essen: geen Persoon-record met Kamerlidschap/Fractiegeschiedenis
-   gevonden in de OData API (Schoof is in werkelijkheid ook partijloos
-   minister-president) -- hun party blijft NULL, wat hier feitelijk correct
-   is, geen hiaat. speaker_role_title (stap 1) toont voor hen alsnog de
-   functie, dus ze blijven niet content-loos in de UI.
+   Adema en Rummenie zitten inmiddels niet meer in het huidige kabinet
+   (niet meer op rijksoverheid.nl/regering/bewindspersonen) en hebben geen
+   Persoon-record met Kamerlidschap/Fractiegeschiedenis in de OData API,
+   vandaar de Wikidata-route voor beiden hieronder.
+
+   - Jaimi van Essen -> D66, via rijksoverheid.nl (geen Kamerlidschap, dus
+     niet in de OData API, maar het bio-profiel noemt de partij expliciet:
+     "Partij: D66", rijksoverheid.nl/regering/bewindspersonen/jaimi-van-essen,
+     geverifieerd op 2026-07-26).
+   - Jean Rummenie -> BBB, via Wikidata (Q123173854, P102 -> Q101083924
+     "BoerBurgerBeweging"), geverifieerd op 2026-07-26 via de publieke
+     Special:EntityData-JSON-API (niet de HTML-pagina).
+   - Dick Schoof -> "Onafhankelijk" (geen bestaande partij, dus geen
+     OData/rijksoverheid-route mogelijk of nodig). Wikidata (Q22338116,
+     P102) toont hem als PvdA-lid t/m 2021, en sindsdien -- dus ook tijdens
+     zijn premierschap -- als onafhankelijk politicus. Dit is dus een
+     bewuste waarde, geen gok: hij hoort niet bij "Onbekend" (data-hiaat)
+     maar ook niet bij een bestaande fractie.
+   - Piet Adema -> ChristenUnie, via Wikidata (Q2688310, P102 -> Q239539
+     "ChristenUnie"), geverifieerd op 2026-07-26 via de publieke
+     Special:EntityData-JSON-API.
 
 Gebruik:
     uv run python scripts/backfill_minister_info.py --topic stikstof [--dry-run]
@@ -47,6 +62,10 @@ MINISTER_PARTY = {
     "Christianne van der Wal-Zeggelink": "VVD",
     "Christianne van der Wal": "VVD",
     "Mark Harbers": "VVD",
+    "Jaimi van Essen": "D66",
+    "Jean Rummenie": "BBB",
+    "Dick Schoof": "Onafhankelijk",
+    "Piet Adema": "ChristenUnie",
 }
 
 
