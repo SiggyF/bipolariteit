@@ -1,6 +1,7 @@
 data/raw/
 data/*.db
 data/*.db-journal
+data/*.db.bak-*
 node_modules/
 frontend/dist/
 frontend/.astro/
