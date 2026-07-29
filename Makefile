@@ -3,7 +3,7 @@
 TOPIC ?= stikstof
 LIMIT ?= 15
 
-.PHONY: help test status build dev dev-stop extract tag redactie export db-init pipeline-status
+.PHONY: help test status build dev dev-stop extract tag redactie export db-init pipeline-status backup-db
 
 help: ## Toon deze lijst
 	@grep -E '^[a-zA-Z_-]+:.*## ' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*## "}; {printf "  \033[36m%-16s\033[0m %s\n", $$1, $$2}'
@@ -16,6 +16,10 @@ status: ## Doorlopend overzicht van openstaand pipeline-werk per topic (scripts/
 
 db-init: ## Initialiseer/migreer het lokale SQLite-schema (pipeline/db/schema.sql)
 	uv run python -m pipeline.db.db
+
+backup-db: ## Kopieer data/bipolariteit.db naar ~/data/bipolariteit/ (sync die map zelf, bv. met Google Drive)
+	mkdir -p ~/data/bipolariteit
+	cp data/bipolariteit.db ~/data/bipolariteit/bipolariteit-$$(date +%Y%m%d-%H%M%S).db
 
 extract: ## Stage 1 -- argumenten extraheren (LLM, alleen op netstroom). Vars: TOPIC, LIMIT
 	uv run python -m pipeline.extract_arguments --topic $(TOPIC) --limit $(LIMIT)
