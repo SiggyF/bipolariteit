@@ -7,18 +7,23 @@ import { BarChart } from "echarts/charts";
 import { TooltipComponent, GridComponent } from "echarts/components";
 import { useTheme } from "../lib/useTheme";
 import { displayPartyName } from "../lib/parties";
+import { deriveTagsPerParty } from "../lib/aggregate";
+import { toggleValue } from "../lib/filters";
+import type { Argument } from "../lib/types";
 
 use([CanvasRenderer, BarChart, TooltipComponent, GridComponent]);
 
-interface PartyTagCount {
-	party: string;
-	tag_count: number;
-}
+const props = defineProps<{ argumentList: Argument[] }>();
 
-const props = defineProps<{ tagsPerParty: PartyTagCount[] }>();
+const tagsPerParty = computed(() => deriveTagsPerParty(props.argumentList));
 
 // Ascending so the biggest party lands nearest the top of ECharts' bottom-up axis.
-const rows = computed(() => [...props.tagsPerParty].slice().reverse());
+const rows = computed(() => [...tagsPerParty.value].slice().reverse());
+
+function onChartClick(p: any) {
+	const party = rows.value[p.dataIndex]?.party;
+	if (party) toggleValue("partij", party);
+}
 
 const isDark = useTheme();
 const barColor = computed(() => (isDark.value ? "#7d97c4" : "#33456e"));
@@ -44,6 +49,7 @@ const chartOption = computed(() => ({
 			data: rows.value.map((r) => r.tag_count),
 			itemStyle: { color: barColor.value },
 			barMaxWidth: 22,
+			cursor: "pointer",
 		},
 	],
 }));
@@ -54,7 +60,11 @@ const chartHeight = computed(() => `${Math.max(160, rows.value.length * 34 + 24)
 <template>
 	<section class="stats-panel">
 		<h2>Aantal tags per partij</h2>
-		<p class="panel-note">Alleen LLM-toegekende tags (de 3 automatisch afgeleide labelgroepen tellen hier niet mee).</p>
-		<VChart class="party-chart" :option="chartOption" :style="{ height: chartHeight }" autoresize />
+		<p class="panel-note">
+			Alleen LLM-toegekende tags (de 3 automatisch afgeleide labelgroepen tellen hier niet mee). Klik op een balk om op die
+			partij te filteren.
+		</p>
+		<p v-if="!rows.length" class="panel-note">Geen getagde argumenten in deze selectie.</p>
+		<VChart v-else class="party-chart" :option="chartOption" :style="{ height: chartHeight }" autoresize @click="onChartClick" />
 	</section>
 </template>

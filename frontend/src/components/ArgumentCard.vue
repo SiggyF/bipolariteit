@@ -2,43 +2,13 @@
 import { ref, onMounted } from "vue";
 import { ISSUE_TYPES, type IssueKey, getFeedbackFor, submitFeedback } from "../lib/feedback";
 import { displayPartyName } from "../lib/parties";
+import { filters, toggleValue } from "../lib/filters";
+import type { Argument, Tag } from "../lib/types";
 import PartyLogo from "./PartyLogo.vue";
-
-interface Claim {
-	claim_text: string;
-	attributed_source_text: string | null;
-}
-
-interface Tag {
-	sleutel: string;
-	beschrijving: string;
-	labelgroep: string;
-	perspectief: string;
-	created_by: "llm" | "derived" | "manual";
-	reden: string | null;
-}
 
 function tagTooltip(tag: Tag): string {
 	const base = `${tag.labelgroep}: ${tag.beschrijving}`;
 	return tag.reden ? `${base}\n\nReden: ${tag.reden}` : base;
-}
-
-interface Argument {
-	id: number;
-	stance: "pro" | "contra" | "unclear";
-	typology: "factual" | "moral" | "economic" | "legal" | "other";
-	quote_text: string;
-	quote_context: string | null;
-	prompt_version: string | null;
-	actor: { name: string; party: string | null; role_title: string | null };
-	document: {
-		url: string | null;
-		video_url: string | null;
-		speaker_video_url: string | null;
-		tweedekamer_activiteit_url: string | null;
-	};
-	claims: Claim[];
-	tags: Tag[];
 }
 
 const props = defineProps<{ argument: Argument; topicSlug: string }>();
@@ -93,13 +63,17 @@ function submit() {
 			</li>
 		</ul>
 		<ul v-if="argument.tags.length" class="tags">
-			<li
-				v-for="tag in argument.tags"
-				:key="tag.sleutel"
-				class="tag-badge"
-				:title="tagTooltip(tag)"
-			>
-				{{ tag.sleutel }}
+			<li v-for="tag in argument.tags" :key="tag.sleutel">
+				<button
+					type="button"
+					class="tag-badge"
+					:class="{ 'is-active': filters.values.tag.includes(tag.sleutel) }"
+					:title="tagTooltip(tag)"
+					:aria-pressed="filters.values.tag.includes(tag.sleutel)"
+					@click="toggleValue('tag', tag.sleutel)"
+				>
+					{{ tag.sleutel }}
+				</button>
 			</li>
 		</ul>
 

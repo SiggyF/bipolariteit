@@ -5,6 +5,10 @@ Puur een export -- geen LLM-calls, geen schrijfacties naar de DB.
 
 Exporteert Stage 1-argumenten (pro/contra/unclear) inclusief tags, en Stage 2
 (redactie-balanscheck per document, opposition-links tussen argumenten).
+Bewust één platte `arguments`-lijst zonder voorgeaggregeerde cijfers: alles
+wat af te leiden is (stance-kolommen, statistieken per partij, tags per
+partij) leidt de frontend zelf af, zodat filteren nooit een grafiek en een
+kolom uit de pas kan laten lopen.
 `prompt_version` wordt meegeëxporteerd per argument zodat zichtbaar is welke
 extractieprompt een argument opleverde -- de DB bevat nu een mix van vóór-
 en na-Gemini-review-fix geëxtraheerde argumenten.
@@ -17,6 +21,7 @@ Gebruik:
 import argparse
 import json
 import logging
+from collections import Counter
 from datetime import datetime
 from pathlib import Path
 from urllib.parse import quote
@@ -153,6 +158,9 @@ def fetch_arguments(conn, topic_id):
                 "document": {
                     "url": row["document_url"],
                     "video_url": row["video_url"],
+                    # Naive lokale tijd (VLOS markeertijdbegin), zonder offset --
+                    # de frontend gebruikt alleen het datumdeel, voor het datumfilter.
+                    "published_at": row["published_at"],
                     "speaker_video_url": _speaker_event_url(row["video_url"], row["published_at"]),
                     "tweedekamer_activiteit_url": row["tweedekamer_activiteit_url"],
                     "redactie_review": redactie_by_document.get(row["document_id"]),
@@ -163,40 +171,6 @@ def fetch_arguments(conn, topic_id):
             }
         )
     return arguments
-
-
-def _stance_counts(arguments):
-    total = len(arguments)
-    pro = sum(1 for a in arguments if a["stance"] == "pro")
-    contra = sum(1 for a in arguments if a["stance"] == "contra")
-    unclear = sum(1 for a in arguments if a["stance"] == "unclear")
-    return {
-        "total": total,
-        "pro": pro,
-        "contra": contra,
-        "unclear": unclear,
-        "pro_pct": round(100 * pro / total, 1) if total else 0,
-        "contra_pct": round(100 * contra / total, 1) if total else 0,
-        "unclear_pct": round(100 * unclear / total, 1) if total else 0,
-    }
-
-
-def build_stats(arguments):
-    by_party = {}
-    for argument in arguments:
-        party = argument["actor"]["party"] or "Onbekend"
-        by_party.setdefault(party, []).append(argument)
-
-    parties = [
-        {"party": party, **_stance_counts(party_arguments)}
-        for party, party_arguments in by_party.items()
-    ]
-    parties.sort(key=lambda p: p["pro_pct"], reverse=True)
-
-    return {
-        "overall": _stance_counts(arguments),
-        "by_party": parties,
-    }
 
 
 def fetch_party_tag_counts(conn, topic_id):
@@ -217,15 +191,6 @@ def fetch_party_tag_counts(conn, topic_id):
         (topic_id,),
     ).fetchall()
     return rows
-
-
-def build_tags_per_party(rows):
-    totals = {}
-    for row in rows:
-        totals[row["party"]] = totals.get(row["party"], 0) + row["n"]
-    result = [{"party": party, "tag_count": count} for party, count in totals.items()]
-    result.sort(key=lambda p: p["tag_count"], reverse=True)
-    return result
 
 
 def build_correspondence_analysis(rows, min_party_total=3, min_tag_total=2):
@@ -313,21 +278,21 @@ def fetch_pipeline_status(conn, topic_row):
 
 
 def build_topic_export(conn, topic_row):
+    """Eén platte argumentenlijst, geen voorgeaggregeerde cijfers. De frontend
+    leidt statistieken, tags-per-partij en de stance-kolommen zelf af uit deze
+    lijst, zodat een gefilterde weergave niet uit de pas kan lopen met de
+    grafieken ernaast (dat was precies de bug: kolommen filterden wel, de
+    voorberekende `stats`/`tags_per_party` niet). De correspondentieanalyse
+    blijft server-side -- die heeft een SVD nodig; client-side herberekenen
+    staat in #3."""
     arguments = fetch_arguments(conn, topic_row["id"])
-    pro = [a for a in arguments if a["stance"] == "pro"]
-    contra = [a for a in arguments if a["stance"] == "contra"]
-    unclear = [a for a in arguments if a["stance"] == "unclear"]
     tag_rows = fetch_party_tag_counts(conn, topic_row["id"])
     return {
         "slug": topic_row["slug"],
         "name": topic_row["name"],
         "description": topic_row["description"],
-        "pro": pro,
-        "contra": contra,
-        "unclear": unclear,
+        "arguments": arguments,
         "argument_count": len(arguments),
-        "stats": build_stats(arguments),
-        "tags_per_party": build_tags_per_party(tag_rows),
         "tag_correspondence": build_correspondence_analysis(tag_rows),
     }
 
@@ -363,9 +328,11 @@ def main():
                 "argument_count": export["argument_count"],
             }
         )
+        stances = Counter(a["stance"] for a in export["arguments"])
         logger.info(
             "%s: %d argumenten (pro=%d, contra=%d, unclear=%d) -> %s",
-            topic_row["slug"], export["argument_count"], len(export["pro"]), len(export["contra"]), len(export["unclear"]), out_path,
+            topic_row["slug"], export["argument_count"],
+            stances["pro"], stances["contra"], stances["unclear"], out_path,
         )
 
     index_path = EXPORT_DIR / "topics-index.json"

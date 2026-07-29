@@ -394,22 +394,204 @@ h2 {
 	margin: 0 0 var(--space-2);
 }
 
-.active-tag-filter {
-	display: flex;
-	align-items: center;
-	gap: var(--space-2);
+.panel-scope {
+	font-weight: 400;
 	font-size: var(--step--1);
-	margin: 0 0 var(--space-2);
+	color: var(--color-muted);
 }
 
-.active-tag-filter button {
-	font-size: var(--step--2);
-	padding: 0.15rem 0.6rem;
-	border-radius: 999px;
+.clickable-chart {
+	cursor: pointer;
+}
+
+/* --- filterbalk -------------------------------------------------------- */
+
+/* Sticky, zodat bij het scrollen door honderden argumenten altijd zichtbaar
+   blijft dat (en waarop) er gefilterd is. */
+.filter-bar {
+	position: sticky;
+	top: 0;
+	z-index: 10;
+	background: var(--color-bg);
+	border-bottom: 1px solid var(--color-border);
+	padding: var(--space-2) 0;
+	margin-bottom: var(--space-3);
+}
+
+/* Accentrand als er iets actief is -- het verschil tussen "weinig data" en
+   "strak filter" moet in één oogopslag te zien zijn. */
+.filter-bar.is-active {
+	border-left: 4px solid var(--color-accent);
+	padding-left: var(--space-2);
+}
+
+.filter-bar-row {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: var(--space-2);
+}
+
+.filter-count {
+	font-size: var(--step--1);
+	color: var(--color-muted);
+	white-space: nowrap;
+}
+
+.filter-count strong {
+	color: var(--color-text);
+}
+
+.filter-facets {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.3rem;
+}
+
+.facet-button {
+	font-size: var(--step--1);
+	padding: 0.2rem 0.7rem;
 	border: 1px solid var(--color-border);
-	background: transparent;
+	border-radius: 999px;
+	background: var(--color-card-bg);
 	color: inherit;
 	cursor: pointer;
+}
+
+.facet-button:hover,
+.facet-button.is-open {
+	border-color: var(--color-accent);
+}
+
+.facet-button.has-selection {
+	border-color: var(--color-accent);
+	color: var(--color-accent);
+	font-weight: 500;
+}
+
+.facet-badge {
+	font-family: var(--font-mono);
+	font-size: var(--step--2);
+	margin-left: 0.3rem;
+}
+
+.filter-clear {
+	margin-left: auto;
+	font-size: var(--step--1);
+	background: none;
+	border: none;
+	color: var(--color-accent);
+	text-decoration: underline;
+	cursor: pointer;
+}
+
+.filter-chips {
+	list-style: none;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.3rem;
+	padding: 0;
+	margin: var(--space-2) 0 0;
+}
+
+.filter-chip {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.4rem;
+	font-size: var(--step--1);
+	padding: 0.15rem 0.3rem 0.15rem 0.6rem;
+	border: 1px solid var(--color-accent);
+	border-radius: 999px;
+	background: var(--color-card-bg);
+}
+
+.chip-dimension {
+	font-family: var(--font-mono);
+	font-size: var(--step--2);
+	color: var(--color-muted);
+}
+
+.filter-chip button {
+	border: none;
+	background: none;
+	color: var(--color-muted);
+	font-size: var(--step-0);
+	line-height: 1;
+	padding: 0 0.3rem;
+	cursor: pointer;
+}
+
+.filter-chip button:hover {
+	color: var(--color-contra);
+}
+
+.facet-panel {
+	margin-top: var(--space-2);
+	padding: var(--space-2);
+	border: 1px solid var(--color-border);
+	background: var(--color-card-bg);
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-2);
+}
+
+.facet-hint {
+	margin: 0;
+	font-size: var(--step--2);
+	color: var(--color-muted);
+}
+
+.facet-search {
+	padding: 0.3rem 0.5rem;
+	border: 1px solid var(--color-border);
+	background: var(--color-bg);
+	color: inherit;
+	font: inherit;
+	font-size: var(--step--1);
+}
+
+.facet-options {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	max-height: 16rem;
+	overflow-y: auto;
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+	gap: 0.1rem var(--space-2);
+}
+
+.facet-options label {
+	display: flex;
+	align-items: center;
+	gap: 0.4rem;
+	font-size: var(--step--1);
+	padding: 0.15rem 0;
+	cursor: pointer;
+}
+
+.facet-option-label {
+	flex: 1;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.facet-option-count {
+	font-family: var(--font-mono);
+	font-size: var(--step--2);
+	color: var(--color-muted);
+}
+
+.facet-empty {
+	font-size: var(--step--1);
+	color: var(--color-muted);
+}
+
+.no-results {
+	padding: var(--space-4) 0;
+	text-align: center;
+	color: var(--color-muted);
 }
 
 .party-chart {
@@ -622,16 +804,31 @@ h2 {
 	margin: 0.5rem 0;
 }
 
+/* Klikbaar: filtert op deze tag. Was eerder een <li> met alleen een tooltip --
+   de meest voor de hand liggende filterknop van de pagina deed niets. */
 .tag-badge {
 	font-family: var(--font-mono);
 	font-size: 0.65rem;
 	color: var(--color-muted);
+	background: transparent;
 	border: 1px solid var(--color-border);
 	padding: 0.1rem 0.5rem;
-	cursor: help;
+	cursor: pointer;
 	text-decoration: underline dotted;
 	text-decoration-color: var(--color-border);
 	text-underline-offset: 2px;
+}
+
+.tag-badge:hover {
+	border-color: var(--color-accent);
+	color: var(--color-accent);
+}
+
+.tag-badge.is-active {
+	border-color: var(--color-accent);
+	color: var(--color-accent);
+	font-weight: 600;
+	text-decoration: none;
 }
 
 .argument-links {
