@@ -128,21 +128,34 @@ await page.goto(TOPIC);
 await page.locator(".filter-bar").waitFor();
 await openFacet(page, "Kabinet");
 const kabinetten = await page.locator(".facet-options .facet-option-label").allInnerTexts();
-const kabinetDatums = [];
+const facetVolgorde = (await page.locator(".facet-options .facet-option-count").allInnerTexts()).map(Number);
+
+// Periodefacetten horen chronologisch te staan, niet op aantal. Dat is hier
+// toetsbaar omdat beide volgordes verschillen: chronologisch is Schoof (618)
+// vóór Jetten (687), op aantal zou Jetten voorop staan. Een oplopende reeks
+// bewijst dus dat er niet op aantal gesorteerd wordt.
+const opAantalGesorteerd = facetVolgorde.every((n, i) => i === 0 || facetVolgorde[i - 1] >= n);
+check("kabinetten staan chronologisch, niet op aantal", !opAantalGesorteerd, facetVolgorde.join(", "));
+
+// Kamerperiode-namen bevatten hun jaartallen, dus alfabetisch oplopend is
+// hier hetzelfde als chronologisch.
+await page.locator(".facet-button", { hasText: "Kabinet" }).first().click();
+await openFacet(page, "Kamerperiode");
+const kamers = await page.locator(".facet-options .facet-option-label").allInnerTexts();
+check("kamerperiodes staan chronologisch", kamers.join("|") === [...kamers].sort().join("|"), kamers.join(", "));
+await page.locator(".facet-button", { hasText: "Kamerperiode" }).first().click();
+
+const kabinetAantallen = [];
 for (const naam of kabinetten) {
-	// Filter los op elk kabinet en onthoud de vroegste datum in de selectie,
-	// zodat we kunnen controleren dat de opties chronologisch staan.
 	await page.goto(`${TOPIC}?regering=${encodeURIComponent(naam)}`);
 	await page.locator(".filter-bar").waitFor();
-	kabinetDatums.push((await counts(page)).shown);
-	await openFacet(page, "Kabinet");
-	await page.locator(".facet-button", { hasText: "Kabinet" }).first().click();
+	kabinetAantallen.push((await counts(page)).shown);
 }
-check("elk kabinet levert een niet-lege, kleinere selectie", kabinetDatums.every((n) => n > 0 && n < initial.total),
-	kabinetDatums.join(", "));
+check("elk kabinet levert een niet-lege, kleinere selectie", kabinetAantallen.every((n) => n > 0 && n < initial.total),
+	kabinetAantallen.join(", "));
 check("kabinetten dekken samen het hele corpus",
-	kabinetDatums.reduce((a, b) => a + b, 0) === initial.total,
-	`${kabinetDatums.reduce((a, b) => a + b, 0)} vs ${initial.total}`);
+	kabinetAantallen.reduce((a, b) => a + b, 0) === initial.total,
+	`${kabinetAantallen.reduce((a, b) => a + b, 0)} vs ${initial.total}`);
 
 console.log("onzinnige URL-waarden worden genegeerd");
 await page.goto(`${TOPIC}?stance=bogus&van=gisteren`);

@@ -59,13 +59,13 @@ def laad_periodes(path=PERIODES_PATH):
     )
 
 
-def zoek(periodes, dag: date) -> str:
+def zoek(periodes, dag: date, bron=PERIODES_PATH) -> str:
     for periode in periodes:
         if periode.bevat(dag):
             return periode.naam
     soort = periodes[0].soort if periodes else "periode"
     raise ValueError(
-        f"{dag} valt buiten elke {soort} in {PERIODES_PATH.name} -- vul de ontbrekende periode aan"
+        f"{dag} valt buiten elke {soort} in {Path(bron).name} -- vul de ontbrekende periode aan"
     )
 
 
@@ -96,6 +96,7 @@ class PeriodeIndex:
     hergebruiken; het inlezen van de toml hoeft niet per argument."""
 
     def __init__(self, path=PERIODES_PATH):
+        self.bron = path
         self.kamerperiodes, self.regeringsperiodes, self.drempel = laad_periodes(path)
 
     def voor(self, published_at):
@@ -103,4 +104,7 @@ class PeriodeIndex:
         if not published_at:
             return {"kamer": None, "regering": None}
         dag = date.fromisoformat(published_at[:10])
-        return {"kamer": zoek(self.kamerperiodes, dag), "regering": zoek(self.regeringsperiodes, dag)}
+        return {
+            "kamer": zoek(self.kamerperiodes, dag, self.bron),
+            "regering": zoek(self.regeringsperiodes, dag, self.bron),
+        }

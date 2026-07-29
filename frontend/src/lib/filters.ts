@@ -239,8 +239,14 @@ function syncToUrl() {
 	history.pushState(null, "", query ? `?${query}${location.hash}` : `${location.pathname}${location.hash}`);
 }
 
-/** Leest de URL in de store en houdt beide daarna in sync. Eén keer aanroepen,
- * met de volledige argumentenlijst van de topic om URL-waarden tegen te toetsen. */
+function onPopState() {
+	applySearchParams(new URLSearchParams(location.search));
+}
+
+/** Leest de URL in de store en houdt beide daarna in sync. Bedoeld als één
+ * aanroep bij het opzetten van de pagina, maar idempotent: HMR of een
+ * hermontage van het island mag geen tweede popstate-listener opleveren, want
+ * dan zou elke URL-wijziging dubbel verwerkt worden. */
 export function initFiltersFromUrl(argumentList: Argument[]) {
 	knownValues = new Map(
 		DIMENSIONS.map((dimension) => [
@@ -249,5 +255,7 @@ export function initFiltersFromUrl(argumentList: Argument[]) {
 		]),
 	);
 	applySearchParams(new URLSearchParams(location.search));
-	window.addEventListener("popstate", () => applySearchParams(new URLSearchParams(location.search)));
+	// Zelfde functiereferentie, dus een tweede registratie is een no-op.
+	window.removeEventListener("popstate", onPopState);
+	window.addEventListener("popstate", onPopState);
 }
