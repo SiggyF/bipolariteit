@@ -3,13 +3,19 @@
 TOPIC ?= stikstof
 LIMIT ?= 15
 
-.PHONY: help test status build dev dev-stop extract tag redactie export db-init pipeline-status backup-db
+.PHONY: help test test-frontend status build dev dev-stop extract tag redactie export db-init pipeline-status backup-db
 
 help: ## Toon deze lijst
 	@grep -E '^[a-zA-Z_-]+:.*## ' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*## "}; {printf "  \033[36m%-16s\033[0m %s\n", $$1, $$2}'
 
 test: ## Draai de volledige pytest-suite
 	uv run pytest tests/ -v
+
+test-frontend: ## Rooktest van de filterbalk in een echte browser (bouwt + serveert zelf)
+	cd frontend && npm run build
+	cd frontend && npx astro preview --port 4321 & \
+		sleep 4; cd frontend && node tests/smoke-filters.mjs; status=$$?; \
+		pkill -f "astro preview" >/dev/null 2>&1; exit $$status
 
 status: ## Doorlopend overzicht van openstaand pipeline-werk per topic (scripts/pipeline_status.py)
 	PYTHONPATH=. uv run python scripts/pipeline_status.py

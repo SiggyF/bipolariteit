@@ -23,6 +23,11 @@ export interface Dimension {
 	valuesOf(argument: Argument): string[];
 	/** Weergavenaam voor een waarde; default de waarde zelf. */
 	format?(value: string): string;
+	/** Opties op tijd sorteren i.p.v. op aantal. Voor periodes is "Rutte IV,
+	 * Schoof, Jetten" de enige leesbare volgorde; welke toevallig het meeste
+	 * volume heeft zegt niets. De volgorde volgt uit de vroegste publicatie-
+	 * datum binnen een periode, dus zonder extra veld in de export. */
+	chronological?: boolean;
 }
 
 // Rol is alleen gevuld voor bewindspersonen (documents.speaker_role_title).
@@ -46,6 +51,22 @@ export const DIMENSIONS: Dimension[] = [
 	},
 	{ key: "persoon", label: "Persoon", valuesOf: (a) => [a.actor.name] },
 	{ key: "rol", label: "Rol", valuesOf: (a) => [a.actor.role_title ?? NO_ROLE] },
+	// Kabinetten en Kamers wisselen op andere momenten dan kalenderjaren, en
+	// niet gelijk met elkaar -- vandaar twee losse dimensies naast het vrije
+	// datumbereik. De grenzen komen uit data/politieke-periodes.toml en zijn
+	// in de pipeline al per argument opgezocht.
+	{
+		key: "regering",
+		label: "Kabinet",
+		valuesOf: (a) => (a.periode.regering ? [a.periode.regering] : []),
+		chronological: true,
+	},
+	{
+		key: "kamer",
+		label: "Kamerperiode",
+		valuesOf: (a) => (a.periode.kamer ? [a.periode.kamer] : []),
+		chronological: true,
+	},
 	{ key: "tag", label: "Tag", valuesOf: (a) => a.tags.map((t) => t.sleutel) },
 	{ key: "labelgroep", label: "Labelgroep", valuesOf: (a) => a.tags.map((t) => t.labelgroep) },
 	{ key: "perspectief", label: "Perspectief", valuesOf: (a) => a.tags.map((t) => t.perspectief) },
@@ -111,16 +132,27 @@ export function labelFor(dimensionKey: string): string {
 export function facetOptions(argumentList: Argument[]) {
 	return DIMENSIONS.map((dimension) => {
 		const counts = new Map<string, number>();
+		const earliest = new Map<string, string>();
 		for (const argument of argumentList) {
+			const date = argument.document.published_at ?? "";
 			// Set: een argument met 3 tags uit dezelfde labelgroep telt één keer
 			// mee voor die labelgroep, net zoals het filter het één keer matcht.
 			for (const value of new Set(dimension.valuesOf(argument))) {
 				counts.set(value, (counts.get(value) ?? 0) + 1);
+				const known = earliest.get(value);
+				if (known === undefined || date < known) earliest.set(value, date);
 			}
 		}
-		const options = [...counts]
-			.map(([value, count]) => ({ value, count, label: formatValue(dimension.key, value) }))
-			.sort((a, b) => b.count - a.count || a.label.localeCompare(b.label, "nl"));
+		const options = [...counts].map(([value, count]) => ({
+			value,
+			count,
+			label: formatValue(dimension.key, value),
+		}));
+		options.sort((a, b) =>
+			dimension.chronological
+				? earliest.get(a.value)!.localeCompare(earliest.get(b.value)!)
+				: b.count - a.count || a.label.localeCompare(b.label, "nl"),
+		);
 		return { key: dimension.key, label: dimension.label, options };
 	});
 }

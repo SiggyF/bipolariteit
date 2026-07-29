@@ -104,6 +104,27 @@ check("kolomtotalen tellen op tot de selectie",
 		.map((t) => Number(t.match(/\((\d+)\)/)[1]))
 		.reduce((a, b) => a + b, 0) === tagFiltered.shown);
 
+console.log("periodes");
+await page.goto(TOPIC);
+await page.locator(".filter-bar").waitFor();
+await openFacet(page, "Kabinet");
+const kabinetten = await page.locator(".facet-options .facet-option-label").allInnerTexts();
+const kabinetDatums = [];
+for (const naam of kabinetten) {
+	// Filter los op elk kabinet en onthoud de vroegste datum in de selectie,
+	// zodat we kunnen controleren dat de opties chronologisch staan.
+	await page.goto(`${TOPIC}?regering=${encodeURIComponent(naam)}`);
+	await page.locator(".filter-bar").waitFor();
+	kabinetDatums.push((await counts(page)).shown);
+	await openFacet(page, "Kabinet");
+	await page.locator(".facet-button", { hasText: "Kabinet" }).first().click();
+}
+check("elk kabinet levert een niet-lege, kleinere selectie", kabinetDatums.every((n) => n > 0 && n < initial.total),
+	kabinetDatums.join(", "));
+check("kabinetten dekken samen het hele corpus",
+	kabinetDatums.reduce((a, b) => a + b, 0) === initial.total,
+	`${kabinetDatums.reduce((a, b) => a + b, 0)} vs ${initial.total}`);
+
 console.log("onzinnige URL-waarden worden genegeerd");
 await page.goto(`${TOPIC}?stance=bogus&van=gisteren`);
 await page.locator(".filter-bar").waitFor();

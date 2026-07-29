@@ -1,0 +1,59 @@
+title = "Politieke periodes"
+description = """
+Periodes waarin een argument valt op basis van de publicatiedatum van het
+brondocument. Puur feitelijke staatsrechtelijke grenzen -- geen oordeel over
+beleid, partijen of personen.
+
+Twee onafhankelijke indelingen, want ze lopen niet gelijk: een kabinet kan
+vallen zonder verkiezingen, en een nieuwe Kamer erft vaak een demissionair
+kabinet.
+
+  kamerperiodes      zittingsperiode van de Tweede Kamer, van installatie van
+                     de nieuwgekozen Kamer tot de dag voor de installatie van
+                     de volgende.
+  regeringsperiodes  van beediging van een kabinet tot de dag voor beediging
+                     van zijn opvolger. Demissionaire perioden vallen hier
+                     bewust binnen: een demissionair kabinet is nog steeds
+                     hetzelfde kabinet.
+
+`eind` weglaten betekent "loopt nog". De periodes moeten aansluiten en mogen
+niet overlappen; pipeline/periodes.py controleert dat en weigert dienst als
+een documentdatum buiten elke periode valt -- liever een harde fout dan
+argumenten stilzwijgend in de verkeerde periode.
+"""
+
+# Bron: nl.wikipedia.org / wikidata. Verkiezingsdatum staat erbij ter
+# controle; de periode zelf begint bij de *installatie* van de Kamer.
+
+[[kamerperiodes]]
+naam = "Tweede Kamer 2021-2023"
+verkiezingen = "2021-03-17"
+start = "2021-03-31"
+eind = "2023-12-05"
+
+[[kamerperiodes]]
+naam = "Tweede Kamer 2023-2025"
+verkiezingen = "2023-11-22"
+start = "2023-12-06"
+eind = "2025-11-11"
+
+[[kamerperiodes]]
+naam = "Tweede Kamer 2025-heden"
+verkiezingen = "2025-10-29"
+start = "2025-11-12"
+
+[[regeringsperiodes]]
+naam = "Kabinet-Rutte IV"
+start = "2022-01-10"
+eind = "2024-07-01"
+demissionair_vanaf = "2023-07-07"
+
+[[regeringsperiodes]]
+naam = "Kabinet-Schoof"
+start = "2024-07-02"
+eind = "2026-02-22"
+demissionair_vanaf = "2025-06-03"
+
+[[regeringsperiodes]]
+naam = "Kabinet-Jetten"
+start = "2026-02-23"

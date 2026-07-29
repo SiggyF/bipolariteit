@@ -35,6 +35,9 @@ export interface Argument {
 		tweedekamer_activiteit_url: string | null;
 		redactie_review: { pass_status: string; notes: string | null } | null;
 	};
+	// Staatsrechtelijke context van de publicatiedatum, afgeleid in de pipeline
+	// uit data/politieke-periodes.toml. Null als het document geen datum heeft.
+	periode: { kamer: string | null; regering: string | null };
 	claims: Claim[];
 	tags: Tag[];
 	oppositions: { argument_id: number; relation_type: string; confidence: number | null }[];

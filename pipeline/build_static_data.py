@@ -31,6 +31,7 @@ import pandas as pd
 import prince
 
 from pipeline.db import db
+from pipeline.periodes import PeriodeIndex
 
 logger = logging.getLogger(__name__)
 
@@ -89,7 +90,7 @@ def fetch_oppositions(conn, topic_id):
     return oppositions_by_argument
 
 
-def fetch_arguments(conn, topic_id):
+def fetch_arguments(conn, topic_id, periode_index):
     rows = conn.execute(
         """SELECT ar.id, ar.stance, ar.typology, ar.quote_text, ar.quote_context,
                   ar.prompt_version, ac.name AS actor_name, ac.party AS actor_party,
@@ -165,6 +166,10 @@ def fetch_arguments(conn, topic_id):
                     "tweedekamer_activiteit_url": row["tweedekamer_activiteit_url"],
                     "redactie_review": redactie_by_document.get(row["document_id"]),
                 },
+                # Kamer- en regeringsperiode van de publicatiedatum: staats-
+                # rechtelijke context waarop de frontend kan filteren zonder
+                # zelf datumgrenzen te kennen (data/politieke-periodes.toml).
+                "periode": periode_index.voor(row["published_at"]),
                 "claims": claims_by_argument.get(row["id"], []),
                 "tags": tags_by_argument.get(row["id"], []),
                 "oppositions": oppositions_by_argument.get(row["id"], []),
@@ -277,7 +282,7 @@ def fetch_pipeline_status(conn, topic_row):
     }
 
 
-def build_topic_export(conn, topic_row):
+def build_topic_export(conn, topic_row, periode_index):
     """Eén platte argumentenlijst, geen voorgeaggregeerde cijfers. De frontend
     leidt statistieken, tags-per-partij en de stance-kolommen zelf af uit deze
     lijst, zodat een gefilterde weergave niet uit de pas kan lopen met de
@@ -285,7 +290,7 @@ def build_topic_export(conn, topic_row):
     voorberekende `stats`/`tags_per_party` niet). De correspondentieanalyse
     blijft server-side -- die heeft een SVD nodig; client-side herberekenen
     staat in #3."""
-    arguments = fetch_arguments(conn, topic_row["id"])
+    arguments = fetch_arguments(conn, topic_row["id"], periode_index)
     tag_rows = fetch_party_tag_counts(conn, topic_row["id"])
     return {
         "slug": topic_row["slug"],
@@ -303,6 +308,7 @@ def main():
     args = parser.parse_args()
 
     conn = db.connect()
+    periode_index = PeriodeIndex()
     if args.topic:
         topic_rows = conn.execute("SELECT id, slug, name, description FROM topics WHERE slug = ?", (args.topic,)).fetchall()
         if not topic_rows:
@@ -316,7 +322,7 @@ def main():
     index = []
     status = {"generated_at": datetime.now(_AMSTERDAM).isoformat(timespec="seconds"), "topics": []}
     for topic_row in topic_rows:
-        export = build_topic_export(conn, topic_row)
+        export = build_topic_export(conn, topic_row, periode_index)
         status["topics"].append(fetch_pipeline_status(conn, topic_row))
         out_path = topics_dir / f"{topic_row['slug']}.json"
         out_path.write_text(json.dumps(export, ensure_ascii=False, indent=2))
