@@ -22,6 +22,21 @@ een documentdatum buiten elke periode valt -- liever een harde fout dan
 argumenten stilzwijgend in de verkeerde periode.
 """
 
+# Vanaf welke datum we analyseren en tonen. Alles daarvoor blijft in de
+# database staan maar valt buiten de queries die werk ophalen en de export
+# voeden -- we zijn geinteresseerd in de huidige en de vorige Kamer.
+#
+# Bewust een expliciete datum en niet "de op een na laatste kamerperiode":
+# die zou meeschuiven zodra hieronder een nieuwe kamerperiode bijkomt, en dan
+# verdwijnen in een klap alle al geanalyseerde argumenten van de dan
+# voorlaatste Kamer van de site -- werk dat al betaald is. Opschuiven hoort
+# een besluit te zijn, geen bijwerking van een routine-edit.
+#
+# Moet gelijk zijn aan de start van een van de kamerperiodes hieronder;
+# pipeline/periodes.py weigert dienst als dat niet klopt.
+[verwerking]
+vanaf = "2023-12-06"  # start Tweede Kamer 2023-2025
+
 # Bron: nl.wikipedia.org / wikidata. Verkiezingsdatum staat erbij ter
 # controle; de periode zelf begint bij de *installatie* van de Kamer.
 

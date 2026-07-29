@@ -110,6 +110,19 @@ check("kolomtotalen tellen op tot de selectie",
 		.map((t) => Number(t.match(/\((\d+)\)/)[1]))
 		.reduce((a, b) => a + b, 0) === tagFiltered.shown);
 
+console.log("paneel sluiten");
+await page.goto(TOPIC);
+await page.locator(".filter-bar").waitFor();
+await openFacet(page, "Partij");
+await page.locator(".topic-header h1").click();
+check("klik buiten de balk klapt het paneel dicht", (await page.locator(".facet-panel").count()) === 0);
+await openFacet(page, "Partij");
+await page.keyboard.press("Escape");
+check("Escape klapt het paneel dicht", (await page.locator(".facet-panel").count()) === 0);
+await openFacet(page, "Partij");
+await page.locator(".facet-options label").first().locator("input").check();
+check("klik binnen het paneel laat het open", (await page.locator(".facet-panel").count()) === 1);
+
 console.log("periodes");
 await page.goto(TOPIC);
 await page.locator(".filter-bar").waitFor();

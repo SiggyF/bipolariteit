@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed, onBeforeUnmount, onMounted, ref } from "vue";
 import type { Argument } from "../lib/types";
 import {
 	DIMENSIONS,
@@ -51,10 +51,35 @@ const chips = computed(() =>
 function isSelected(key: string, value: string) {
 	return filters.values[key].includes(value);
 }
+
+// Klik buiten de balk (of Escape) klapt het open paneel weer dicht. Het paneel
+// is hoog en de argumenten staan eronder, dus wegklikken is de natuurlijke
+// manier om verder te lezen.
+const bar = ref<HTMLElement | null>(null);
+
+function onDocumentPointerDown(e: PointerEvent) {
+	if (!openFacet.value) return;
+	if (bar.value?.contains(e.target as Node)) return;
+	openFacet.value = null;
+}
+
+function onKeydown(e: KeyboardEvent) {
+	if (e.key === "Escape") openFacet.value = null;
+}
+
+onMounted(() => {
+	document.addEventListener("pointerdown", onDocumentPointerDown);
+	document.addEventListener("keydown", onKeydown);
+});
+
+onBeforeUnmount(() => {
+	document.removeEventListener("pointerdown", onDocumentPointerDown);
+	document.removeEventListener("keydown", onKeydown);
+});
 </script>
 
 <template>
-	<div class="filter-bar" :class="{ 'is-active': isActive() }">
+	<div ref="bar" class="filter-bar" :class="{ 'is-active': isActive() }">
 		<div class="filter-bar-row">
 			<span class="filter-count">
 				<strong>{{ matchCount }}</strong> van {{ argumentList.length }} argumenten

@@ -15,9 +15,10 @@ opleverde -- zelfde patroon als `arguments.tagged_at` in tag_arguments.py),
 dus herhaald draaien is veilig en de volle batch kan onderbroken/herstart
 worden zonder dubbel werk.
 
-Documenten van vóór de start van de vorige kamerperiode worden overgeslagen
-(zie periodes.verwerkingsdrempel): we analyseren de huidige en de vorige
-Kamer. Die documenten blijven wel gewoon in de database staan.
+Documenten van vóór [verwerking].vanaf in data/politieke-periodes.toml
+worden overgeslagen: we analyseren de huidige en de vorige Kamer. Die
+documenten blijven gewoon in de database staan; met --vanaf kan een oudere
+periode alsnog bewust verwerkt worden.
 """
 
 import argparse
@@ -142,8 +143,8 @@ def insert_argument(conn, document_id, topic_id, actor_id, arg, model):
 
 def fetch_pending_documents(conn, topic_id, limit, min_id=0, vanaf=None):
     """`vanaf` is een ISO-datum; oudere documenten blijven in de database maar
-    komen hier niet uit. Default is de start van de vorige kamerperiode (zie
-    periodes.verwerkingsdrempel) -- we analyseren de huidige en de vorige
+    komen hier niet uit. Default is [verwerking].vanaf uit
+    data/politieke-periodes.toml -- we analyseren de huidige en de vorige
     Kamer, en dat scheelt aanzienlijk LLM-werk."""
     if vanaf is None:
         vanaf = PeriodeIndex().drempel
@@ -175,6 +176,12 @@ def main():
         help="LM Studio reasoning_effort ('none' om denkstappen uit te schakelen; leeg om het veld weg te laten)",
     )
     parser.add_argument("--timeout", type=float, default=120.0, help="request-timeout in seconden per document")
+    parser.add_argument(
+        "--vanaf",
+        default=None,
+        help="ISO-datum; overschrijft [verwerking].vanaf uit data/politieke-periodes.toml "
+             "(voor een bewuste backfill van een oudere periode)",
+    )
     parser.add_argument("--dry-run", action="store_true", help="niets naar de database schrijven, alleen printen")
     args = parser.parse_args()
 
@@ -189,7 +196,7 @@ def main():
             "zet dit eerst via UPDATE topics SET description = ... (zie docs/handoff.md)"
         )
 
-    documents = fetch_pending_documents(conn, topic_id, args.limit, args.min_id)
+    documents = fetch_pending_documents(conn, topic_id, args.limit, args.min_id, args.vanaf)
     if not documents:
         logger.info("Geen openstaande documenten (al verwerkt, of geen documenten voor deze topic).")
         return

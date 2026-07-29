@@ -9,14 +9,14 @@ def index():
 
 
 def test_toml_parst_en_bevat_beide_reeksen():
-    kamerperiodes, regeringsperiodes = laad_periodes()
+    kamerperiodes, regeringsperiodes, _ = laad_periodes()
     assert kamerperiodes, f"geen kamerperiodes in {PERIODES_PATH.name}"
     assert regeringsperiodes, f"geen regeringsperiodes in {PERIODES_PATH.name}"
 
 
 def test_reeksen_sluiten_aan_zonder_gat():
     """Een gat zou argumenten stilzwijgend buiten elke periode laten vallen."""
-    for periodes in laad_periodes():
+    for periodes in laad_periodes()[:2]:
         for vorige, volgende in zip(periodes, periodes[1:]):
             assert (volgende.start - vorige.eind).days == 1, (
                 f"gat of overlap tussen '{vorige.naam}' en '{volgende.naam}'"
@@ -53,24 +53,29 @@ def test_zonder_publicatiedatum_geen_periode(index):
     assert index.voor(None) == {"kamer": None, "regering": None}
 
 
-def test_drempel_is_start_van_de_vorige_kamerperiode(index):
-    assert index.drempel == index.kamerperiodes[-2].start.isoformat()
+def test_drempel_komt_uit_de_toml_en_is_een_kamerperiode_start(index):
+    """Expliciet in [verwerking].vanaf, niet afgeleid uit lijstpositie: een
+    meeschuivende drempel zou bij de volgende verkiezingen in stilte alle al
+    geanalyseerde argumenten van de dan voorlaatste Kamer van de site halen."""
+    assert index.drempel in {p.start.isoformat() for p in index.kamerperiodes}
 
 
 def test_drempel_laat_huidige_en_vorige_periode_door(index):
     """De drempel is een ISO-datum die lexicografisch tegen published_at
     (naive ISO-tijd) vergeleken wordt in de SQL -- dat moet op de grensdag
     de goede kant op vallen."""
-    vorige, huidige = index.kamerperiodes[-2], index.kamerperiodes[-1]
-    assert f"{huidige.start}T09:00:00" >= index.drempel
-    assert f"{vorige.start}T00:00:00" >= index.drempel
-    # Laatste dag van de periode ervóór valt er net buiten.
-    dag_ervoor = index.kamerperiodes[-3].eind
-    assert not f"{dag_ervoor}T23:59:59" >= index.drempel
+    from datetime import date, timedelta
+
+    drempel = date.fromisoformat(index.drempel)
+    assert f"{drempel}T00:00:00" >= index.drempel
+    assert f"{drempel + timedelta(days=400)}T09:00:00" >= index.drempel
+    # De dag ervoor valt er net buiten.
+    assert not f"{drempel - timedelta(days=1)}T23:59:59" >= index.drempel
 
 
-def test_drempel_vereist_twee_periodes():
+def test_drempel_buiten_de_kamerperiodes_faalt_hard(index):
+    """Vangt een typefout of een datum midden in een periode meteen af."""
     from pipeline.periodes import verwerkingsdrempel
 
-    with pytest.raises(ValueError, match="minstens twee"):
-        verwerkingsdrempel([])
+    with pytest.raises(ValueError, match="geen startdatum van een kamerperiode"):
+        verwerkingsdrempel({"verwerking": {"vanaf": "2024-01-01"}}, index.kamerperiodes)

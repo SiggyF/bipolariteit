@@ -48,11 +48,14 @@ def _laad_reeks(data, sleutel, soort):
 
 
 def laad_periodes(path=PERIODES_PATH):
-    """(kamerperiodes, regeringsperiodes), beide op startdatum gesorteerd."""
+    """(kamerperiodes, regeringsperiodes, drempel); de reeksen op startdatum
+    gesorteerd, de drempel als ISO-datum."""
     data = tomllib.loads(path.read_text(encoding="utf-8"))
+    kamerperiodes = _laad_reeks(data, "kamerperiodes", "kamerperiode")
     return (
-        _laad_reeks(data, "kamerperiodes", "kamerperiode"),
+        kamerperiodes,
         _laad_reeks(data, "regeringsperiodes", "regeringsperiode"),
+        verwerkingsdrempel(data, kamerperiodes),
     )
 
 
@@ -66,18 +69,26 @@ def zoek(periodes, dag: date) -> str:
     )
 
 
-def verwerkingsdrempel(kamerperiodes) -> str:
-    """Startdatum van de vórige kamerperiode, als ISO-datum.
+def verwerkingsdrempel(data, kamerperiodes) -> str:
+    """ISO-datum uit [verwerking].vanaf: alles daarvoor blijft in de database
+    staan maar valt buiten de queries die werk ophalen en de export voeden.
 
-    Alles daarvoor blijft gewoon in de database staan, maar valt buiten de
-    queries die werk ophalen en de export voeden: we zijn geïnteresseerd in de
-    huidige en de vorige Kamer. Afgeleid uit data/politieke-periodes.toml en
-    dus schuivend -- zodra daar een nieuwe kamerperiode bijkomt, verschuift de
-    drempel automatisch mee en valt de dan oudste periode buiten beeld.
+    Expliciet in de toml en niet afgeleid als "de op een na laatste
+    kamerperiode": die zou meeschuiven zodra er een kamerperiode bijkomt, en
+    dan verdwijnen alle al geanalyseerde argumenten van de dan voorlaatste
+    Kamer in één klap van de site. Opschuiven hoort een besluit te zijn.
+
+    Wel getoetst aan de kamerperiodes, zodat een typefout of een datum midden
+    in een periode meteen opvalt.
     """
-    if len(kamerperiodes) < 2:
-        raise ValueError("minstens twee kamerperiodes nodig om 'huidige en vorige' te bepalen")
-    return kamerperiodes[-2].start.isoformat()
+    vanaf = data["verwerking"]["vanaf"]
+    starts = {p.start.isoformat(): p.naam for p in kamerperiodes}
+    if vanaf not in starts:
+        raise ValueError(
+            f"[verwerking].vanaf = {vanaf!r} is geen startdatum van een kamerperiode "
+            f"(bekend: {', '.join(sorted(starts))})"
+        )
+    return vanaf
 
 
 class PeriodeIndex:
@@ -85,8 +96,7 @@ class PeriodeIndex:
     hergebruiken; het inlezen van de toml hoeft niet per argument."""
 
     def __init__(self, path=PERIODES_PATH):
-        self.kamerperiodes, self.regeringsperiodes = laad_periodes(path)
-        self.drempel = verwerkingsdrempel(self.kamerperiodes)
+        self.kamerperiodes, self.regeringsperiodes, self.drempel = laad_periodes(path)
 
     def voor(self, published_at):
         """published_at is naive ISO-tijd uit documents.published_at."""

@@ -13,9 +13,9 @@ kolom uit de pas kan laten lopen.
 extractieprompt een argument opleverde -- de DB bevat nu een mix van vóór-
 en na-Gemini-review-fix geëxtraheerde argumenten.
 
-Exporteert alleen de huidige en vorige kamerperiode (zie
-periodes.verwerkingsdrempel); oudere argumenten blijven in de database maar
-komen niet in de JSON en dus niet op de site.
+Exporteert alleen vanaf [verwerking].vanaf in data/politieke-periodes.toml
+(de huidige en vorige kamerperiode); oudere argumenten blijven in de database
+maar komen niet in de JSON en dus niet op de site.
 
 Gebruik:
     uv run python -m pipeline.build_static_data
