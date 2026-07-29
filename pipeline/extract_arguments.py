@@ -34,6 +34,9 @@ logger = logging.getLogger(__name__)
 PROMPT_TEMPLATE = (Path(__file__).parent / "prompts" / "extract_argument.md").read_text()
 PROMPT_VERSION = hashlib.sha256(PROMPT_TEMPLATE.encode()).hexdigest()[:12]
 
+BATCH_PROMPT_TEMPLATE = (Path(__file__).parent / "prompts" / "extract_argument_batch.md").read_text()
+BATCH_PROMPT_VERSION = hashlib.sha256(BATCH_PROMPT_TEMPLATE.encode()).hexdigest()[:12]
+
 VALID_STANCE = {"pro", "contra", "unclear"}
 VALID_TYPOLOGY = {"factual", "moral", "economic", "legal", "other"}
 
@@ -48,6 +51,22 @@ def _build_prompt(topic_name, topic_description, actor_name, actor_party, conten
         actor_name=actor_name,
         actor_party_suffix=actor_party_suffix,
         content=content,
+    )
+
+
+def _build_batch_prompt(topic_name, topic_description, docs):
+    """docs: iterable van dicts/Rows met id, actor_name, actor_party, content."""
+    blocks = []
+    for doc in docs:
+        actor_party_suffix = f" ({doc['actor_party']})" if doc["actor_party"] else ""
+        blocks.append(
+            f"--- document_id={doc['id']} — spreker: {doc['actor_name']}{actor_party_suffix} ---\n"
+            f'"""\n{doc["content"]}\n"""'
+        )
+    return BATCH_PROMPT_TEMPLATE.format(
+        topic=topic_name,
+        topic_description=topic_description or topic_name,
+        documents_block="\n\n".join(blocks),
     )
 
 
