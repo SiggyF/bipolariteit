@@ -66,12 +66,27 @@ def zoek(periodes, dag: date) -> str:
     )
 
 
+def verwerkingsdrempel(kamerperiodes) -> str:
+    """Startdatum van de vórige kamerperiode, als ISO-datum.
+
+    Alles daarvoor blijft gewoon in de database staan, maar valt buiten de
+    queries die werk ophalen en de export voeden: we zijn geïnteresseerd in de
+    huidige en de vorige Kamer. Afgeleid uit data/politieke-periodes.toml en
+    dus schuivend -- zodra daar een nieuwe kamerperiode bijkomt, verschuift de
+    drempel automatisch mee en valt de dan oudste periode buiten beeld.
+    """
+    if len(kamerperiodes) < 2:
+        raise ValueError("minstens twee kamerperiodes nodig om 'huidige en vorige' te bepalen")
+    return kamerperiodes[-2].start.isoformat()
+
+
 class PeriodeIndex:
     """Resolvert publicatiedatums naar periodenamen. Eén keer opbouwen en
     hergebruiken; het inlezen van de toml hoeft niet per argument."""
 
     def __init__(self, path=PERIODES_PATH):
         self.kamerperiodes, self.regeringsperiodes = laad_periodes(path)
+        self.drempel = verwerkingsdrempel(self.kamerperiodes)
 
     def voor(self, published_at):
         """published_at is naive ISO-tijd uit documents.published_at."""

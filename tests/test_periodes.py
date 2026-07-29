@@ -51,3 +51,26 @@ def test_datum_buiten_elke_periode_faalt_hard(index):
 
 def test_zonder_publicatiedatum_geen_periode(index):
     assert index.voor(None) == {"kamer": None, "regering": None}
+
+
+def test_drempel_is_start_van_de_vorige_kamerperiode(index):
+    assert index.drempel == index.kamerperiodes[-2].start.isoformat()
+
+
+def test_drempel_laat_huidige_en_vorige_periode_door(index):
+    """De drempel is een ISO-datum die lexicografisch tegen published_at
+    (naive ISO-tijd) vergeleken wordt in de SQL -- dat moet op de grensdag
+    de goede kant op vallen."""
+    vorige, huidige = index.kamerperiodes[-2], index.kamerperiodes[-1]
+    assert f"{huidige.start}T09:00:00" >= index.drempel
+    assert f"{vorige.start}T00:00:00" >= index.drempel
+    # Laatste dag van de periode ervóór valt er net buiten.
+    dag_ervoor = index.kamerperiodes[-3].eind
+    assert not f"{dag_ervoor}T23:59:59" >= index.drempel
+
+
+def test_drempel_vereist_twee_periodes():
+    from pipeline.periodes import verwerkingsdrempel
+
+    with pytest.raises(ValueError, match="minstens twee"):
+        verwerkingsdrempel([])

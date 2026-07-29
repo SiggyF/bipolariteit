@@ -13,6 +13,10 @@ kolom uit de pas kan laten lopen.
 extractieprompt een argument opleverde -- de DB bevat nu een mix van vóór-
 en na-Gemini-review-fix geëxtraheerde argumenten.
 
+Exporteert alleen de huidige en vorige kamerperiode (zie
+periodes.verwerkingsdrempel); oudere argumenten blijven in de database maar
+komen niet in de JSON en dus niet op de site.
+
 Gebruik:
     uv run python -m pipeline.build_static_data
     uv run python -m pipeline.build_static_data --topic stikstof
@@ -100,8 +104,9 @@ def fetch_arguments(conn, topic_id, periode_index):
            JOIN actors ac ON ac.id = ar.actor_id
            JOIN documents d ON d.id = ar.document_id
            WHERE ar.topic_id = ?
+             AND d.published_at >= ?
            ORDER BY ar.id""",
-        (topic_id,),
+        (topic_id, periode_index.drempel),
     ).fetchall()
 
     claims_by_argument = {}
@@ -178,7 +183,7 @@ def fetch_arguments(conn, topic_id, periode_index):
     return arguments
 
 
-def fetch_party_tag_counts(conn, topic_id):
+def fetch_party_tag_counts(conn, topic_id, drempel):
     """(party, tag_sleutel, tag_beschrijving, labelgroep) -> count, alleen
     LLM-toegekende, actieve tags -- de 3 deterministische labelgroepen
     (Actor Type/Issue Arena/Parlementaire Context) zijn bij TK-data vrijwel
@@ -190,10 +195,12 @@ def fetch_party_tag_counts(conn, topic_id):
            JOIN arguments ar ON ar.id = at.argument_id
            JOIN actors a ON a.id = ar.actor_id
            JOIN tags t ON t.sleutel = at.tag_sleutel
+           JOIN documents d ON d.id = ar.document_id
            WHERE ar.topic_id = ? AND at.created_by = 'llm' AND t.active = 1
              AND a.party IS NOT NULL
+             AND d.published_at >= ?
            GROUP BY a.party, t.sleutel""",
-        (topic_id,),
+        (topic_id, drempel),
     ).fetchall()
     return rows
 
@@ -247,33 +254,39 @@ def build_correspondence_analysis(rows, min_party_total=3, min_tag_total=2):
     }
 
 
-def fetch_pipeline_status(conn, topic_row):
+def fetch_pipeline_status(conn, topic_row, drempel):
     """Ruwe voortgangscijfers per stap van de pipeline (crawlen -> Stage 1
     extractie -> tagging -> Stage 2 redactie-check), voor de publieke
-    /status-pagina. Puur telwerk, geen kwaliteitsoordeel."""
+    /status-pagina. Puur telwerk, geen kwaliteitsoordeel.
+
+    Telt alleen binnen de verwerkingsdrempel, anders zou de voortgangsbalk
+    blijven hangen op documenten die we bewust niet verwerken."""
     topic_id = topic_row["id"]
 
     documents_total, extraction_attempted = conn.execute(
         """SELECT COUNT(*), COUNT(extraction_attempted_at)
-           FROM documents WHERE topic_id = ?""",
-        (topic_id,),
+           FROM documents WHERE topic_id = ? AND published_at >= ?""",
+        (topic_id, drempel),
     ).fetchone()
 
     arguments_total, arguments_tagged = conn.execute(
-        """SELECT COUNT(*), COUNT(tagged_at) FROM arguments WHERE topic_id = ?""",
-        (topic_id,),
+        """SELECT COUNT(*), COUNT(ar.tagged_at) FROM arguments ar
+           JOIN documents d ON d.id = ar.document_id
+           WHERE ar.topic_id = ? AND d.published_at >= ?""",
+        (topic_id, drempel),
     ).fetchone()
 
     documents_with_redactie = conn.execute(
         """SELECT COUNT(DISTINCT rr.document_id)
            FROM redactie_reviews rr JOIN documents d ON d.id = rr.document_id
-           WHERE d.topic_id = ?""",
-        (topic_id,),
+           WHERE d.topic_id = ? AND d.published_at >= ?""",
+        (topic_id, drempel),
     ).fetchone()[0]
 
     return {
         "slug": topic_row["slug"],
         "name": topic_row["name"],
+        "vanaf": drempel,
         "documents_total": documents_total,
         "documents_extracted": extraction_attempted,
         "arguments_total": arguments_total,
@@ -291,7 +304,7 @@ def build_topic_export(conn, topic_row, periode_index):
     blijft server-side -- die heeft een SVD nodig; client-side herberekenen
     staat in #3."""
     arguments = fetch_arguments(conn, topic_row["id"], periode_index)
-    tag_rows = fetch_party_tag_counts(conn, topic_row["id"])
+    tag_rows = fetch_party_tag_counts(conn, topic_row["id"], periode_index.drempel)
     return {
         "slug": topic_row["slug"],
         "name": topic_row["name"],
@@ -323,7 +336,7 @@ def main():
     status = {"generated_at": datetime.now(_AMSTERDAM).isoformat(timespec="seconds"), "topics": []}
     for topic_row in topic_rows:
         export = build_topic_export(conn, topic_row, periode_index)
-        status["topics"].append(fetch_pipeline_status(conn, topic_row))
+        status["topics"].append(fetch_pipeline_status(conn, topic_row, periode_index.drempel))
         out_path = topics_dir / f"{topic_row['slug']}.json"
         out_path.write_text(json.dumps(export, ensure_ascii=False, indent=2))
         index.append(

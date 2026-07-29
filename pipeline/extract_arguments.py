@@ -12,8 +12,12 @@ docs/handoff.md):
 Reeds verwerkte documenten worden overgeslagen via `documents.extraction_attempted_at`
 (gezet zodra een document door de LLM is gestuurd, ook als dat 0 arguments
 opleverde -- zelfde patroon als `arguments.tagged_at` in tag_arguments.py),
-dus herhaald draaien is veilig en de volle batch (3949 documenten) kan
-onderbroken/herstart worden zonder dubbel werk.
+dus herhaald draaien is veilig en de volle batch kan onderbroken/herstart
+worden zonder dubbel werk.
+
+Documenten van vóór de start van de vorige kamerperiode worden overgeslagen
+(zie periodes.verwerkingsdrempel): we analyseren de huidige en de vorige
+Kamer. Die documenten blijven wel gewoon in de database staan.
 """
 
 import argparse
@@ -28,6 +32,7 @@ from pathlib import Path
 import requests
 
 from pipeline.db import db
+from pipeline.periodes import PeriodeIndex
 
 logger = logging.getLogger(__name__)
 
@@ -135,18 +140,25 @@ def insert_argument(conn, document_id, topic_id, actor_id, arg, model):
     return argument_id
 
 
-def fetch_pending_documents(conn, topic_id, limit, min_id=0):
+def fetch_pending_documents(conn, topic_id, limit, min_id=0, vanaf=None):
+    """`vanaf` is een ISO-datum; oudere documenten blijven in de database maar
+    komen hier niet uit. Default is de start van de vorige kamerperiode (zie
+    periodes.verwerkingsdrempel) -- we analyseren de huidige en de vorige
+    Kamer, en dat scheelt aanzienlijk LLM-werk."""
+    if vanaf is None:
+        vanaf = PeriodeIndex().drempel
     return conn.execute(
         """SELECT d.id, d.content, d.actor_id, a.name AS actor_name, a.party AS actor_party
            FROM documents d
            JOIN actors a ON a.id = d.actor_id
            WHERE d.topic_id = ?
              AND d.id >= ?
+             AND d.published_at >= ?
              AND d.extraction_attempted_at IS NULL
              AND d.is_voorzitter_turn = 0
            ORDER BY d.id
            LIMIT ?""",
-        (topic_id, min_id, limit),
+        (topic_id, min_id, vanaf, limit),
     ).fetchall()
 
 
