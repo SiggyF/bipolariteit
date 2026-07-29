@@ -76,9 +76,15 @@ await page.goto(sharedUrl);
 await page.locator(".filter-bar").waitFor();
 check("filter overleeft een herladen", (await counts(page)).shown === filtered.shown);
 
+// Expliciet op een verse load, niet na een klik: de grafieken monteren in
+// hetzelfde island als de filterstore, dus de volgorde van initialiseren en
+// monteren moet ook kloppen als het filter al uit de URL komt.
+check("grafiek volgt het filter direct bij laden", (await page.locator(".party-table tbody tr").count()) === 1);
+
 await page.goBack();
 await page.locator(".filter-bar").waitFor();
 check("terugknop maakt het filter ongedaan", (await counts(page)).shown === initial.total);
+check("grafiek volgt de terugknop", (await page.locator(".party-table tbody tr").count()) > 1);
 
 console.log("filteren via een tag op een kaart");
 await page.goto(TOPIC);

@@ -13,9 +13,10 @@ test: ## Draai de volledige pytest-suite
 
 test-frontend: ## Rooktest van de filterbalk in een echte browser (bouwt + serveert zelf)
 	cd frontend && npm run build
-	cd frontend && npx astro preview --port 4321 & \
-		sleep 4; cd frontend && node tests/smoke-filters.mjs; status=$$?; \
-		pkill -f "astro preview" >/dev/null 2>&1; exit $$status
+	@cd frontend && npx astro preview --port 4321 >/dev/null 2>&1 & \
+		pid=$$!; sleep 4; \
+		(cd frontend && node tests/smoke-filters.mjs); status=$$?; \
+		kill $$pid 2>/dev/null; exit $$status
 
 status: ## Doorlopend overzicht van openstaand pipeline-werk per topic (scripts/pipeline_status.py)
 	PYTHONPATH=. uv run python scripts/pipeline_status.py
