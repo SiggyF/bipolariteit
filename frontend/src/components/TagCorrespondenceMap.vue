@@ -903,8 +903,8 @@ const tagFilterActief = computed(() => filters.values.tag.length > 0 || filters.
 		<h2>Partijen &amp; tags (correspondentieanalyse)</h2>
 		<p class="panel-note">
 			Rijen dicht bij elkaar gebruiken vergelijkbare soorten argumenten; een tag dicht bij een rij komt relatief vaak bij die rij
-			voor. Kleur en icoon geven het perspectief van de tag aan. Alleen de vaakst toegekende tags houden hun naam in beeld; wijs
-			een punt aan voor de rest. Klik op een punt om erop te filteren.
+			voor. Kleur geeft het perspectief van de tag aan. Alleen de vaakst toegekende tags houden hun naam in beeld; wijs een punt
+			aan voor de rest. Klik op een punt om erop te filteren.
 		</p>
 		<p class="panel-note">
 			De analyse wordt op je selectie herberekend. Filters op <strong>tag</strong> en <strong>partij</strong> vormen de
@@ -961,7 +961,7 @@ const tagFilterActief = computed(() => filters.values.tag.length > 0 || filters.
 		</p>
 
 		<div
-			v-if="correspondence"
+			v-if="weergave"
 			ref="wrapperEl"
 			class="correspondence-wrapper"
 			:class="{ 'is-3d': driedimensionaal }"

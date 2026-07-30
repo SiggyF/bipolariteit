@@ -2,7 +2,41 @@
 
 Status per 2026-07-27. Zie `docs/plan.md` voor het volledige, goedgekeurde architectuurplan. Dit document is voor het vervolg: wat staat er al, wat is er onderweg ontdekt, en wat is de volgende concrete stap.
 
-## Stand bij einde sessie (2026-07-30) — begin hier bij een nieuwe sessie
+## Stand bij einde sessie (2026-07-30, vervolg) — begin hier bij een nieuwe sessie
+
+Vervolg op de sessie hieronder, zelfde dag, zelfde branch (`feature/correspondentie-3d`, PR [#8](https://github.com/SiggyF/bipolariteit/pull/8)). Deze sessie ging over ontwerpersfeedback op de kaart uit de vorige sessie, plus een reeks navigatiebugs die tijdens het verifiëren aan het licht kwamen. **Alles is gecommit** (twee commits: de feature, plus een opruimronde erna).
+
+### Ontwerpersfeedback verwerkt
+
+- **Tagpunten zijn nu effen, halftransparante cirkels, geen iconen meer.** Zowel de per-tag-iconen (vijftig) als later ook de per-perspectief-iconen (vier) bleken op kaartschaal niet als teken te lezen, vooral in dichte clusters van hetzelfde perspectief — zie de "brain"-blob die de sessie in gang zette (screenshot toonde een cauliflower-vormige klont in plaats van een herkenbaar brein-icoon; bleek 3-4 overlappende iconen van dezelfde vorm, geen renderbug). Kleur draagt de codering nu alleen; `tag-styles.json`'s `marker`-veld (circle/triangle/diamond/square) ligt klaar als extra onderscheid mocht kleur ooit weer te weinig zijn.
+- **Iconen komen niet meer uit een gok naar het gelijknamige Lucide-icoon.** De gebruiker leverde de échte SVG's uit het ontwerpsysteem aan (eerst als `<script>`-blok met inline paden, uiteindelijk verwerkt tot `docs/design/tag-iconografie/icons/*.svg`, één bestand per icoonnaam). `build_tag_icons.mjs` leest daar nu uit i.p.v. uit `lucide-static` (dependency verwijderd) — geen `VERVANGERS`-tabel met handmatige gok meer nodig, want alle 54 namen uit `tag-styles.json` hebben nu hun eigen tekening.
+- **Partijlogo's**: vereenvoudigde iconenset (`frontend/public/party-logos/simplified/*.svg`, vierkant 160×160, door de ontwerper geleverd) i.p.v. de officiële wordmarks met outline-effect. Vast op 20% verzadiging (geen toggle meer, "in kleur" verloor het altijd). Rijen zonder partij (of zonder logobestand) krijgen een initiaal-tegel i.p.v. een kale stip, dezelfde stijl als `PartyLogo.vue`'s bestaande placeholder — nu gedeelde `partyInitial()`-logica in `parties.ts`.
+- **Plotcontrols herbouwd als pil-toolbar** (bordered, mono/uppercase labels) i.p.v. native `<select>`/checkbox, consistent met de rest van de paper-stijl. 2D/3D is nu ook een toggle i.p.v. checkbox.
+- **Default rij-eenheid is nu "Personen"** i.p.v. "Partijen" — een partij is een optelsom van tientallen sprekers, en die nuance is precies waar de kaart voor bedoeld is.
+
+**Nog een losse constatering, niet opgevolgd:** het `logos.ai`-bestand (Illustrator-bronbestand voor de partijlogo's) staat als los, ongetrackt/gewijzigd bestand in de repo; gebruiker vroeg expliciet om het mee te pushen, dus zit in de tweede commit.
+
+### Drie echte navigatiebugs gevonden tijdens het verifiëren
+
+1. **Scrollen op de 2D-kaart scrollde de pagina, niet de grafiek.** `wiel()` deed alleen `preventDefault()` in de 3D-tak; in 2D liet dat de pagina onder de muis vandaan scrollen, waardoor de rest van de scrollbeweging de kaart al niet meer raakte. `preventDefault()` staat nu onvoorwaardelijk vooraan in de functie.
+2. **Zoom kon niet ver genoeg uit.** De 2D-assen hadden geen vaste `min`/`max` (auto-schaal), dus het genormaliseerde standaardvenster (90e-percentielvenster tegen de Ideologie-Links-Economisch-uitschieter) werd zelf de 0%-100%-referentie voor `dataZoom` — er was letterlijk nergens heen om uit te zoomen. Nieuwe `asVolledigeGrenzen` (het echte maximum, niet het percentiel) is nu de vaste asgrens; `asGrenzen` (90e percentiel) blijft alleen het *startvenster*.
+3. **Dat startvenster zette zichzelf niet betrouwbaar terug.** `dispatchAction` op de ECharts-instantie bleek racy (chartRef wordt al waar vóórdat VChart's eigen `onMounted` de instantie initialiseert) — zelfs met een `requestAnimationFrame`-herkansing bleef het een stille no-op. Nu declaratief: `forceerNormalisatie` (ref) bepaalt of `chartOption` zelf `startValue`/`endValue` meegeeft in de `dataZoom`-config, in dezelfde `setOption`-aanroep die de kaart toch al ververst. Gaat na die ene toepassing weer uit (watcher op `chartOption`, `flush: "post"`) zodat latere her-renders (bv. een tagklik) de handmatige zoomstand van de gebruiker niet resetten.
+
+Bijvangst: labels in 2D bleven bij inzoomen vast op de globale top-12-op-frequentie, ook als die twaalf allemaal buiten het gezoomde venster vielen. Nu bijgehouden via het `datazoom`-event (`opDataZoom`/`zicht2D`) — analoog aan de al bestaande dieptegebaseerde labelselectie in 3D tijdens slepen.
+
+### Radiale compressie tegen de Ideologie-Links-Economisch-uitschieter
+
+Op verzoek gecheckt: de Mahalanobis-afstand van deze tag (n=43, de zeldzaamste) in de eerste 3 CA-componenten is **~6× de mediaan** — geen renderbug maar standaard CA-gedrag bij een kolom met kleine massa. Na overleg (opties besproken: laten staan, radiale compressie, clip+flag, hogere ondergrenzen) gekozen voor radiale compressie: `r' = r^0.6` op de weergavecoördinaten, richting ongewijzigd, toegepast ná de echte CA en ná `alignSigns` (nieuwe `weergave`-computed, puur presentatie — `correspondence` zelf blijft ongemoeid, en klikken-om-te-filteren gaat toch op tagsleutel/rijlabel). Effect: de uitschieter zakt naar ~2,9× de mediaan, én — neveneffect van `r^p > r` zodra `r < 1` — de dichte kern van de wolk spreidt juist uit, waar het echte overlapprobleem zat.
+
+**Open punt:** afstanden op de kaart zijn na deze compressie geen letterlijke chi-kwadraatafstanden meer, alleen richting en relatieve volgorde blijven behouden. Dat staat nu alleen in code-comments, nog niet in de gebruikersgerichte panel-copy of `/about`.
+
+### Nog niet gedaan
+
+- dim1/dim2/dim3 een naam (x/y/z) en eenheid geven in de UI — gevraagd, nog niet opgepakt.
+- 3D-panning (naast roteren en zoomen) — gevraagd, nog niet opgepakt.
+- Het palet-hervalidatie-punt uit de vorige sessie (zie hieronder) staat nog open.
+
+## Stand bij einde sessie (2026-07-30) — verouderd, zie sectie hierboven
 
 Deze sessie ging volledig over de correspondentiekaart (`frontend/src/components/TagCorrespondenceMap.vue`), issue #3. Branch: `feature/correspondentie-3d`. **Alles staat uncommitted** — `npm test` (23 tests) en `npx astro build` zijn groen, de kaart is met Playwright-screenshots geverifieerd, maar er is bewust nog niet gecommit.
 
