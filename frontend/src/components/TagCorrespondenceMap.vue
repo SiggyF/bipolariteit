@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref, watch } from "vue";
 import { useTheme } from "../lib/useTheme";
-import { displayPartyName } from "../lib/parties";
+import { displayPartyName, partyInitial } from "../lib/parties";
 import { logoSprite } from "../lib/partyLogoSprite";
-import { ICOON_PAD, PERSPECTIEVEN, TAG_ICOON } from "../lib/tagIcons.generated";
+import { PERSPECTIEVEN } from "../lib/tagIcons.generated";
 import { filters, matches, matchesExcept, toggleValue } from "../lib/filters";
 import { NO_PARTY, type Argument } from "../lib/types";
 import { alignSigns, buildCorrespondence, type Correspondence, type RowUnit } from "../lib/correspondence";
@@ -22,7 +22,10 @@ const props = defineProps<{ argumentList: Argument[] }>();
 // instorten. Die twee filters sturen alleen nog het dimmen aan.
 const REKENT_NIET_OP = ["tag", "partij"];
 
-const unit = ref<RowUnit>("partij");
+// Personen boven partijen: een partij is een optelsom van tientallen sprekers
+// met uiteenlopende eigen stijl, en die nuance is precies waar de kaart voor
+// bedoeld is -- partijen blijven een schakelbare optie, geen standaard.
+const unit = ref<RowUnit>("persoon");
 const driedimensionaal = ref(false);
 
 // Bij persoon als rij is een drempel van 3 te laag: veel sprekers hebben één of
@@ -57,35 +60,60 @@ const correspondence = computed<Correspondence | null>(() => {
 	return ref ? alignSigns(ref, berekend) : berekend;
 });
 
+// Ideologie-Links-Economisch (n=43, de zeldzaamste tag) ligt in de ruwe
+// correspondentieanalyse op een Mahalanobis-afstand van ~6x de mediaan --
+// standaard CA-gedrag voor een zeldzame kolom (kleine kolommassa versterkt de
+// coordinaat), maar het perst de rest van de wolk tot een vlekje. Radiale
+// compressie (r' = r^p, richting ongewijzigd) trekt uitschieters naar de kern
+// zonder ze te verbergen: bij p=0.6 daalt die afstand naar ~2,9x de mediaan,
+// en -- neveneffect, want r^p > r zodra r < 1 -- duwt het juist de dichte
+// kern uit elkaar, waar het overlapprobleem eigenlijk zit.
+//
+// Zuiver een weergavetransformatie: alleen hier, ná de echte CA en ná
+// alignSigns. Klikken-om-te-filteren gaat op tagsleutel/rijlabel, niet op
+// coordinaten, dus die blijft correct. Wat wél verloren gaat: afstanden op de
+// kaart zijn na compressie geen letterlijke chi-kwadraatafstanden meer, alleen
+// richting en relatieve volgorde blijven behouden.
+const COMPRESSIE_EXPONENT = 0.6;
+
+function comprimeer(coords: number[]): number[] {
+	const r = Math.hypot(...coords);
+	if (r === 0) return coords;
+	// r' = r^p, uniform herschaald langs dezelfde straal: r'/r = r^(p-1).
+	const factor = r ** (COMPRESSIE_EXPONENT - 1);
+	return coords.map((c) => c * factor);
+}
+
+const weergave = computed<Correspondence | null>(() => {
+	const c = correspondence.value;
+	if (!c) return null;
+	return {
+		...c,
+		rows: c.rows.map((r) => ({ ...r, coords: comprimeer(r.coords) })),
+		tags: c.tags.map((t) => ({ ...t, coords: comprimeer(t.coords) })),
+	};
+});
+
 const heeftDerdeAs = computed(() => (referentie.value?.nComponents ?? 0) >= 3);
 
-// Kleur en icoon per perspectief komen uit het ontwerpsysteem in
+// Kleur per perspectief komt uit het ontwerpsysteem in
 // docs/design/tag-iconografie/ -- één bron, en niet nog een keer overgetypt in
 // deze component. `scripts/build_tag_icons.mjs` maakt daar
 // lib/tagIcons.generated.ts van.
 //
-// Let op wat dit palet wél en niet doet. Het is mono-accent: vier gedempte
-// aardetinten die naast elkaar liggen in plaats van tegen elkaar schreeuwen.
-// Mooier op deze achtergrond, maar het onderlinge kleurverschil is kleiner dan
-// bij het palet dat hier eerder stond, en zeker onder kleurenblindheid draagt
-// kleur alleen de vier perspectieven niet meer uit elkaar. Het icoon is hier
-// dus geen versiering maar de eigenlijke codering; de kleur bevestigt alleen.
-// Daarom hebben de tagpunten hun tagicoon en niet een generiek bolletje.
+// Tagpunten zijn effen, halftransparante cirkels: de perspectieficonen (brein,
+// weegschaal, ...) lazen op kaartschaal niet als teken maar als ruis, zeker
+// zodra tags van hetzelfde perspectief clusteren. Kleur draagt de codering nu
+// dus alleen -- het ontwerpsysteem definieert ook een aparte markeringsvorm
+// per perspectief (`marker` in tag-styles.json: circle/triangle/diamond/
+// square) voor precies dit soort gevallen, mocht kleur alleen ooit weer te
+// weinig onderscheid geven.
 //
 // Eén palet voor beide modes: aardetinten van deze verzadiging houden op zowel
 // #f2efe7 als #1c1815 genoeg contrast, dus een aparte donkere variant zou hier
 // alleen maar uit elkaar gaan lopen.
-const PERSPECTIEF_STIJL: Record<string, { kleur: string; icoon: string }> = Object.fromEntries(
-	PERSPECTIEVEN.map((p) => [p.naam, { kleur: p.kleur, icoon: p.icoon }]),
-);
-const ONBEKEND_PERSPECTIEF = { kleur: "#6f6558", icoon: "circle-help" };
-
-/** Lucide-iconen zijn lijntekeningen, dus een tagpunt is een contour en geen
- * vlak. Vandaar dat de kleur hieronder in `borderColor` terechtkomt. */
-function icoonSymbool(naam: string): string {
-	const pad = ICOON_PAD[naam];
-	return pad ? `path://${pad}` : "circle";
-}
+const PERSPECTIEF_KLEUR: Record<string, string> = Object.fromEntries(PERSPECTIEVEN.map((p) => [p.naam, p.kleur]));
+const ONBEKENDE_KLEUR = "#6f6558";
 
 // Achtergrondkleuren uit main.css; ECharts kan de CSS-variabelen niet lezen.
 const ACHTERGROND = { licht: "#f2efe7", donker: "#1c1815" };
@@ -105,7 +133,11 @@ function mist(kleur: string, nabijheid: number): string {
 	const doel = ontleed(isDark.value ? ACHTERGROND.donker : ACHTERGROND.licht);
 	const bron = ontleed(kleur);
 	// Niet helemaal tot de achtergrond: het verste punt moet zichtbaar blijven.
-	const mengsel = 0.55 * (1 - nabijheid);
+	// Op 0,55 gemengd met de daaronder óók al aflopende opacity (zie tagSeries/
+	// rijSerie) telden de twee dieptecues bij elkaar op tot een scène die als
+	// geheel vager oogde dan 2D -- terwijl alleen het verste punt zo sterk hoefde
+	// te vervagen. 0,35 laat het kleurverschil dichter bij de camera intact.
+	const mengsel = 0.35 * (1 - nabijheid);
 	const kanalen = bron.map((c, i) => Math.round(c + (doel[i] - c) * mengsel));
 	return `rgb(${kanalen[0]}, ${kanalen[1]}, ${kanalen[2]})`;
 }
@@ -119,15 +151,30 @@ const rasterLijn = computed(() => (isDark.value ? "#453f36" : "#ddd5c4"));
 
 // Kleurlogo's zijn direct herkenbaar, maar ze brengen vijftien extra kleuren de
 // kaart in en concurreren daarmee met de vier perspectiefkleuren, die hier de
-// betekenisdragers zijn. De outline-variant zet ze terug naar één inkt. Als
-// toggle en niet als besluit: welke van de twee wint, hangt af van hoe druk de
-// wolk is, en dat verschilt per selectie.
-const logoStijl = ref<"kleur" | "inkt">("inkt");
-const logoInkt = computed(() => (logoStijl.value === "inkt" ? inkt.value : null));
+// betekenisdragers zijn. Vast op 20% verzadiging -- nog altijd de eigen vorm
+// en een vleugje eigen kleur, maar onderling consistent genoeg om niet met de
+// perspectieven te wedijveren. Geen toggle (meer): in kleur verloor het altijd
+// van die afweging, dus geen keuze om aan te bieden.
+const LOGO_VERZADIGING = 0.2;
+
+// Rijen zonder logo (geen partij, of een partij zonder logobestand) krijgen
+// dezelfde initiaal-tegel als PartyLogo.vue's placeholder elders in de app --
+// wit met ink-kleurige rand en letter -- i.p.v. een generieke stip, zodat het
+// beeldtaal-consistent blijft. `partyInitial` (parties.ts) is dezelfde functie
+// als PartyLogo.vue gebruikt, dus "Groep Markuszower" wordt hier en daar
+// dezelfde letter.
+function initiaalSprite(letter: string, kleur: string): string {
+	const svg =
+		`<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">` +
+		`<rect x="1.5" y="1.5" width="21" height="21" rx="4" fill="#fff" stroke="${kleur}" stroke-width="1.5"/>` +
+		`<text x="12" y="12.5" text-anchor="middle" dominant-baseline="central" font-family="sans-serif" ` +
+		`font-size="13" font-weight="700" fill="${kleur}">${letter}</text>` +
+		`</svg>`;
+	return `image://data:image/svg+xml,${encodeURIComponent(svg)}`;
+}
 
 function stijlVoor(perspectief: string) {
-	const stijl = PERSPECTIEF_STIJL[perspectief] ?? ONBEKEND_PERSPECTIEF;
-	return { kleur: stijl.kleur, symbool: icoonSymbool(stijl.icoon) };
+	return PERSPECTIEF_KLEUR[perspectief] ?? ONBEKENDE_KLEUR;
 }
 
 const perspectieven = computed(() => {
@@ -169,9 +216,12 @@ const LABEL_LAYOUT = () => ({ hideOverlap: true, moveOverlap: "shiftY" });
 // Maar `hideOverlap` is een noodrem, geen ontwerp: welk label het overleeft
 // hangt af van de tekenvolgorde, dus bij het inzoomen wisselt willekeurig welke
 // tags een naam hebben. Daarom kiezen we zelf welke tags een vast label
-// verdienen -- de vaakst toegekende -- en krijgt de rest zijn naam bij hover.
-// Rijen (hooguit een stuk of twintig partijen) houden altijd hun label; dat
-// zijn de ankers waaraan je de rest afleest.
+// verdienen -- in 2D de vaakst toegekende, in 3D de twaalf die nu het dichtst
+// bij de camera liggen (zie `tagDrempel` in `chartOption`), zodat de selectie
+// meedraait met wat je bekijkt in plaats van vast te staan op een globale
+// telling -- en krijgt de rest zijn naam bij hover. Rijen (hooguit een stuk of
+// twintig partijen) houden altijd hun label; dat zijn de ankers waaraan je de
+// rest afleest.
 const VASTE_TAGLABELS = 12;
 
 // --- 3D: eigen projectie ---------------------------------------------------
@@ -257,8 +307,13 @@ function stopSleep(e: PointerEvent) {
 }
 
 function wiel(e: WheelEvent) {
-	if (!driedimensionaal.value) return;
+	// Ook in 2D altijd preventDefault: zonder dat scrollt de pagina onder de
+	// muis vandaan zodra de cursor de grafiek nog maar even verlaat, en dan
+	// landt de rest van de scrollbeweging niet meer op de kaart. In 2D doet
+	// ECharts' eigen dataZoom de rest (zie chartOption); deze functie hoeft er
+	// dan niets aan toe te voegen, alleen de paginascroll te blokkeren.
 	e.preventDefault();
+	if (!driedimensionaal.value) return;
 	// Ondergrens ruim onder 1: het venster staat op het 90e percentiel, en de
 	// verste tag ligt daar ~4x buiten. Bleef de ondergrens op 0,6 staan, dan was
 	// die tag met geen enkele zoomstand in beeld te krijgen -- en bleef de hint
@@ -268,17 +323,122 @@ function wiel(e: WheelEvent) {
 
 const chartRef = ref<any>(null);
 
+function percentiel(waarden: number[], p: number): number {
+	if (waarden.length === 0) return 1e-9;
+	const gesorteerd = [...waarden].sort((a, b) => a - b);
+	const index = Math.min(gesorteerd.length - 1, Math.floor(gesorteerd.length * p));
+	return Math.max(gesorteerd[index], 1e-9);
+}
+
+/** Idem als `straal` hieronder, maar per as en dus ook zinvol in 2D: x en y
+ * schalen daar los van elkaar, maar een enkele uitschieter (Ideologie-Links-
+ * Economisch ligt ver van de rest) kan alsnog één van de twee assen alleen
+ * domineren en de rest van die as tot een streep persen. Het 90e percentiel
+ * per as geeft een venster waar de kern in past; de uitschieter valt er
+ * standaard net als in 3D buiten, met dezelfde "zoom uit"-route terug. */
+const asGrenzen = computed<[number, number]>(() => {
+	const c = weergave.value;
+	if (!c) return [1, 1];
+	const punten = [...c.rows, ...c.tags];
+	const x = percentiel(
+		punten.map((p) => Math.abs(p.coords[0] ?? 0)),
+		0.9,
+	);
+	const y = percentiel(
+		punten.map((p) => Math.abs(p.coords[1] ?? 0)),
+		0.9,
+	);
+	return [x * 1.15, y * 1.15];
+});
+
+/** De echte, volledige spreiding per as (het maximum, niet het percentiel).
+ * Dit is de vaste `xAxis`/`yAxis`-grens in 2D -- zonder een vaste grens laat
+ * ECharts de as auto-schalen op basis van wat er *op dat moment* zichtbaar
+ * is, en dan wordt het venster dat `normaliseer2D` uitzet zelf de nieuwe
+ * 0%-100%-referentie: uitzoomen heeft dan letterlijk nergens heen. Met een
+ * vaste grens is 100% altijd de echte uitschieter, en blijft er ruimte om
+ * daar met scrollen te komen. */
+const asVolledigeGrenzen = computed<[number, number]>(() => {
+	const c = weergave.value;
+	if (!c) return [1, 1];
+	const punten = [...c.rows, ...c.tags];
+	const x = Math.max(...punten.map((p) => Math.abs(p.coords[0] ?? 0)), 1e-9);
+	const y = Math.max(...punten.map((p) => Math.abs(p.coords[1] ?? 0)), 1e-9);
+	return [x * 1.08, y * 1.08];
+});
+
+const buitenBeeld2D = computed(() => {
+	const c = weergave.value;
+	if (driedimensionaal.value || !c) return 0;
+	const [gx, gy] = asGrenzen.value;
+	return [...c.rows, ...c.tags].filter((p) => Math.abs(p.coords[0] ?? 0) > gx || Math.abs(p.coords[1] ?? 0) > gy).length;
+});
+
+// Zet het 2D-venster terug op het 90e-percentielvenster. `dispatchAction` op
+// de chartinstantie bleek onbetrouwbaar: `chartRef.value` is al waar zodra
+// VChart's component-instantie bestaat, ruim vóórdat VChart's eigen onMounted
+// de ECharts-instantie initialiseert, en zelfs met een requestAnimationFrame-
+// herkansing bleef de dispatch een stille no-op (geverifieerd via
+// `getOption()`: startValue/endValue bleven op de volle asgrens staan).
+// Daarom nu declaratief: `forceerNormalisatie` bepaalt of `chartOption`
+// hieronder zelf startValue/endValue meegeeft in de dataZoom-config. Dat gaat
+// mee in dezelfde `setOption`-aanroep die de kaart toch al ververst, dus geen
+// race meer. Ná die ene toepassing gaat de vlag weer uit (zie de watcher op
+// `chartOption` verderop), zodat latere her-renders (bv. een tagklik, die
+// alleen opacity raakt) geen startValue/endValue meer meesturen en de
+// handmatige zoomstand van de gebruiker met rust laten.
+const forceerNormalisatie = ref(true);
+
 function herstelAanzicht() {
 	yaw.value = BEGIN_YAW;
 	pitch.value = BEGIN_PITCH;
 	zoom.value = 1;
-	// De 2D-zoom zit in ECharts' eigen state en niet in een ref van ons, dus die
-	// moet expliciet terug naar het volledige bereik.
-	chartRef.value?.dispatchAction({ type: "dataZoom", start: 0, end: 100 });
+	forceerNormalisatie.value = true;
+	zicht2D.value = null;
+}
+
+// Wisselen tussen 2D en 3D betekent een compleet ander venstermodel (dataZoom
+// vs. camera-zoom); een oud `zicht2D` zou anders de labelselectie in de
+// nieuwe weergave nog even sturen op een stand die daar niet bij hoort.
+watch(driedimensionaal, () => {
+	zicht2D.value = null;
+});
+
+// Elke keer dat de onderliggende punten structureel veranderen (ander filter
+// dan tag/partij, of wisselen van rij-eenheid/dimensiecount) opnieuw
+// normaliseren. Klikken op een tag of partij verandert de coordinaten zelf
+// niet (zie `rekenLijst`), dus dat triggert deze watcher niet.
+watch(correspondence, () => {
+	forceerNormalisatie.value = true;
+	zicht2D.value = null;
+});
+
+// Huidige zichtbare data-range in 2D, bijgehouden via het `datazoom`-event
+// (zie VChart in de template) -- net als de dieptegebaseerde labelselectie in
+// 3D, maar dan op basis van wat er na pannen/zoomen daadwerkelijk in beeld is
+// i.p.v. camera-afstand. `null` betekent "nog niet gezoomd/gepand sinds de
+// laatste normalisatie", dus dan valt de labelselectie hieronder terug op het
+// volledige (genormaliseerde) venster.
+const zicht2D = ref<{ x: [number, number]; y: [number, number] } | null>(null);
+
+function opDataZoom() {
+	const dz = chartRef.value?.getOption?.()?.dataZoom;
+	if (!dz || dz.length < 2) return;
+	const [volledigX, volledigY] = asVolledigeGrenzen.value;
+	// start/end zijn percentages van de vaste as-grens (asVolledigeGrenzen),
+	// dus terugrekenen naar data-eenheden kan zonder de as zelf te bevragen.
+	const naarBereik = (start: number | undefined, end: number | undefined, grens: number): [number, number] => [
+		-grens + ((start ?? 0) / 100) * 2 * grens,
+		-grens + ((end ?? 100) / 100) * 2 * grens,
+	];
+	zicht2D.value = {
+		x: naarBereik(dz[0]?.start, dz[0]?.end, volledigX),
+		y: naarBereik(dz[1]?.start, dz[1]?.end, volledigY),
+	};
 }
 
 const normen = computed(() => {
-	const c = correspondence.value;
+	const c = weergave.value;
 	if (!c) return [0];
 	return [...c.rows, ...c.tags].map((p) => Math.hypot(p.coords[0] ?? 0, p.coords[1] ?? 0, p.coords[2] ?? 0)).sort((a, b) => a - b);
 });
@@ -341,7 +501,13 @@ onUnmounted(() => waarnemer?.disconnect());
  * van beeldsymbolen aan, die geen kleur kunnen aannemen. */
 function nabijheid(diepte: number, bereik: number): number {
 	if (!driedimensionaal.value || bereik <= 0) return 1;
-	return Math.max(0, Math.min(1, (diepte + bereik) / (2 * bereik)));
+	const lineair = Math.max(0, Math.min(1, (diepte + bereik) / (2 * bereik)));
+	// De puntenwolk clustert rond het midden (diepte ~0), dus de meeste punten
+	// zaten op deze lineaire schaal rond 0,5 -- ver van de "volle kleur" die
+	// alleen het allervoorste punt (1,0) kreeg. Een machtscurve tilt het
+	// middenbereik dichter naar 1 op, zodat de meerderheid van de wolk zijn
+	// eigen kleur houdt en alleen de echte achterhoede nog merkbaar vervaagt.
+	return Math.pow(lineair, 0.4);
 }
 
 /** 1, 2 of 5 maal een macht van tien: geeft rasterlijnen op afstanden die je
@@ -353,7 +519,7 @@ function netteStap(ruw: number): number {
 }
 
 const chartOption = computed(() => {
-	const c = correspondence.value;
+	const c = weergave.value;
 	if (!c) return {};
 
 	const geprojecteerd = {
@@ -362,12 +528,36 @@ const chartOption = computed(() => {
 	};
 	const bereik = straal.value;
 
-	// Drempel waarboven een tag zijn naam vast in beeld houdt.
-	const tagDrempel = [...c.tags]
-		.map((t) => t.n)
-		.sort((a, b) => b - a)
-		.slice(0, VASTE_TAGLABELS)
-		.pop() ?? 0;
+	// Drempel waarboven een tag zijn naam vast in beeld houdt. In 3D op diepte
+	// i.p.v. frequentie: anders blijft het altijd dezelfde twaalf (globaal
+	// vaakst toegekende) tags, ook als je wegdraait van de plek waar ze staan.
+	// Op diepte draait de selectie mee -- de twaalf tags die nu vooraan liggen
+	// krijgen een naam, en dat verandert elke keer dat `projecteer` opnieuw
+	// draait tijdens het slepen.
+	//
+	// In 2D is er geen diepte, maar hetzelfde probleem doet zich voor bij
+	// inzoomen: de globale top-twaalf kan volledig buiten het gezoomde venster
+	// vallen, en dan blijft er niets gelabeld terwijl je juist wél op een
+	// cluster hebt ingezoomd. `zicht2D` (bijgehouden via het `datazoom`-event)
+	// beperkt de top-twaalf-selectie dan tot wat er nu in beeld is.
+	const tagsInZicht2D = zicht2D.value
+		? c.tags.filter(
+				(t) => t.coords[0] >= zicht2D.value!.x[0] && t.coords[0] <= zicht2D.value!.x[1] &&
+					t.coords[1] >= zicht2D.value!.y[0] && t.coords[1] <= zicht2D.value!.y[1],
+			)
+		: c.tags;
+	const tagDrempel = driedimensionaal.value
+		? ([...geprojecteerd.tags]
+				.map((t) => t.diepte)
+				.sort((a, b) => b - a)
+				.slice(0, VASTE_TAGLABELS)
+				.pop() ?? -Infinity)
+		: ([...tagsInZicht2D]
+				.map((t) => t.n)
+				.sort((a, b) => b - a)
+				.slice(0, VASTE_TAGLABELS)
+				.pop() ?? 0);
+	const tagInZichtSleutels = driedimensionaal.value ? null : new Set(tagsInZicht2D.map((t) => t.sleutel));
 
 	const asStijl = { lineStyle: { color: rasterLijn.value } };
 	// In 3D zijn de schermassen geen dimensies meer maar een gedraaide mengeling
@@ -396,37 +586,42 @@ const chartOption = computed(() => {
 			.map(({ punt, x, y, diepte, schaal }) => {
 				const nabij = nabijheid(diepte, bereik);
 				const inSelectie = rijenInSelectie.value.has(punt.label);
-				// Het logo zegt in één blik welke partij het is; de zwarte stip zei
-				// dat pas via het label ernaast. Alleen partijen hebben logo's --
-				// personen en fracties zonder officieel logo houden de stip.
+				// Het logo zegt in één blik welke partij het is. Alleen partijen
+				// hebben logo's -- personen en fracties zonder officieel logo krijgen
+				// dezelfde initiaal-tegel als PartyLogo.vue's placeholder (zie
+				// `initiaalSprite`), geen generieke stip: dat is een van de twee
+				// beeldtaal-tegels, niet buiten het systeem.
 				const partij = unit.value === "partij" ? punt.label : partijVanRij.value.get(punt.label);
-				const logo = partij ? logoSprite(partij, logoInkt.value) : null;
-				const basis = Math.max(9, Math.min(24, Math.sqrt(punt.n) * 3.2)) * schaal;
-				// Een beeldsymbool wordt in het vak geperst dat je opgeeft, dus een
-				// vierkante maat maakt van elk wordmerk een uitgerekt wordmerk. De
-				// hoogte volgt de puntgrootte, de breedte de eigen verhouding --
-				// afgetopt, want PVV is 13:1 en dat wordt een streep over de kaart.
-				const grootte = logo ? [basis * 1.15 * Math.min(logo.verhouding, 3), basis * 1.15] : basis;
+				const logo = partij ? logoSprite(partij, LOGO_VERZADIGING) : null;
+				const symbool = logo?.symbool ?? initiaalSprite(partyInitial(punt.label), inkt.value);
+				// De vereenvoudigde iconenset (en de initiaal-tegel) is één vast
+				// vierkant kavas per partij, dus in tegenstelling tot de officiële
+				// wordmarks hoeft de maat hier niet naar een eigen verhouding te kijken.
+				const grootte = Math.max(9, Math.min(24, Math.sqrt(punt.n) * 3.2)) * schaal * 1.15;
 				return {
 					name: unit.value === "persoon" ? punt.label : displayPartyName(punt.label),
 					rowLabel: punt.label,
 					value: [x, y, punt.n],
 					n: punt.n,
-					symbol: logo ? logo.symbool : "circle",
+					symbol: symbool,
 					symbolSize: grootte,
 					itemStyle: {
-						// Een beeldsymbool neemt geen kleur aan, dus daar moet de mist
-						// via opacity: minder mooi, maar het is de enige knop die er is.
-						color: mist(inkt.value, nabij),
-						// Iets doorschijnend, zodat overlappende logo's elkaar niet
-						// helemaal wegdrukken in het dichte midden van de wolk.
-						opacity: (inSelectie ? (logo ? 0.8 : 0.9) : DIM) * (logo ? 0.55 + 0.45 * nabij : 1),
+						// Elke rij is nu een beeldsymbool (logo of initiaal-tegel), en dat
+						// neemt geen kleur aan -- dus moet de mist via opacity, minder mooi,
+						// maar de enige knop die er is. Niet lager dan 0,75: op deze lichte
+						// achtergrond mengt een halftransparant vlak zichtbaar naar de
+						// achtergrondkleur (bv. het logorood op 50% wordt een grijzige roze,
+						// niet halfdoorzichtig rood) -- vooral merkbaar bij logo's, die al op
+						// 20% verzadiging staan. 0,75 laat nog genoeg doorschijnen om
+						// overlappende tegels niet helemaal dicht te slibben.
+						opacity: (inSelectie ? 0.75 : DIM) * (0.7 + 0.3 * nabij),
 					},
-					// Een logo is zijn eigen label; de partijnaam eronder zetten is dan
-					// dubbelop en kost precies de ruimte die de kaart niet heeft. Voor
-					// fracties zonder logo blijft de naam het enige aanknopingspunt.
+					// Een logo is zijn eigen label -- maar alleen als rij en logo dezelfde
+					// entiteit zijn. Bij partijen is dat zo (dubbelop om de partijnaam er
+					// nog eens bij te zetten), bij personen niet: het logo zegt alleen
+					// welke partij, niet wie. Daar blijft de naam dus altijd nodig.
 					label: {
-						show: !logo,
+						show: !logo || unit.value === "persoon",
 						formatter: "{b}",
 						position: "top",
 						color: mist(inkt.value, nabij),
@@ -441,15 +636,15 @@ const chartOption = computed(() => {
 	};
 
 	const tagSeries = perspectieven.value.map((perspectief) => {
-		const { kleur, symbool } = stijlVoor(perspectief);
+		const kleur = stijlVoor(perspectief);
 		return {
 			id: `tags-${perspectief}`,
 			name: perspectief,
 			type: "scatter",
-			symbol: symbool,
+			symbol: "circle",
 			cursor: "pointer",
 			z: 2,
-			itemStyle: { color: "transparent", borderColor: kleur, borderWidth: 1.6 },
+			itemStyle: { color: kleur, opacity: 0.5 },
 			labelLayout: LABEL_LAYOUT,
 			data: geprojecteerd.tags
 				.filter(({ punt }) => punt.perspectief === perspectief)
@@ -464,23 +659,26 @@ const chartOption = computed(() => {
 						beschrijving: punt.beschrijving,
 						labelgroep: punt.labelgroep,
 						perspectief: punt.perspectief,
-						// Ruimer dan de oude 7..20: een icoon heeft meer pixels nodig dan
-						// een cirkel voordat het silhouet leesbaar wordt.
-						// Het perspectiefsymbool is de terugval; heeft de tag een eigen
-						// icoon in het ontwerpsysteem, dan wint dat. Op de kaart is dat bij
-						// ~16 px vooral textuur, maar in de tooltip en de legenda telt het
-						// wel, en zo staat er overal hetzelfde teken voor dezelfde tag.
-						symbol: icoonSymbool(TAG_ICOON[punt.sleutel] ?? ""),
-						symbolSize: Math.max(13, Math.min(28, Math.sqrt(punt.n) * 3.2)) * schaal,
-						// Lijntekening: de kleur zit in de rand, de vulling blijft leeg.
+						symbolSize: Math.max(13, Math.min(28, Math.sqrt(punt.n) * 3.2)) * schaal * 0.6,
+						// Effen cirkel: iconen per tag (vijftig) en zelfs per perspectief
+						// (vier) lazen op kaartschaal niet als teken, zeker in een dichte
+						// cluster -- alleen kleur nog. Niet lager dan 0,75 opacity: op deze
+						// lichte achtergrond mengt een halftransparant vlak zichtbaar naar de
+						// achtergrondkleur (het perspectiefpalet is al gedempt "aardetinten",
+						// dus op 50% wordt het nauwelijks meer dan grijs), en dat was precies
+						// de klacht. 0,75 laat nog genoeg doorschijnen om overlappende punten
+						// niet helemaal dicht te slibben.
 						itemStyle: {
-							color: "transparent",
-							borderColor: mist(kleur, nabij),
-							borderWidth: 1.6,
-							opacity: inSelectie ? 0.9 : DIM,
+							color: mist(kleur, nabij),
+							// Vloer op 0,7 i.p.v. 0,5: in 3D telde deze opacity-afname vroeger op
+							// bij de kleurmist hierboven, en samen maakten ze de hele wolk vager
+							// dan in 2D -- ook punten die niet eens ver weg lagen.
+							opacity: (inSelectie ? 0.75 : DIM) * (0.7 + 0.3 * nabij),
 						},
 						label: {
-							show: punt.n >= tagDrempel,
+							show: driedimensionaal.value
+								? diepte >= tagDrempel
+								: (tagInZichtSleutels?.has(punt.sleutel) ?? true) && punt.n >= tagDrempel,
 							formatter: "{b}",
 							position: "top",
 							color: mist(gedempt.value, nabij),
@@ -508,8 +706,12 @@ const chartOption = computed(() => {
 	// doos buiten beeld.
 	const maxSchaal = CAMERA_AFSTAND / (CAMERA_AFSTAND - 1);
 	const halveHoogte = (straal.value * 1.03 * maxSchaal) / zoom.value;
-	const grensY = driedimensionaal.value ? halveHoogte : undefined;
-	const grensX = driedimensionaal.value ? halveHoogte * plotVerhouding.value : undefined;
+	// In 3D is dit het venster zelf (het draait mee, zie hierboven); in 2D is
+	// het de vaste, nooit-veranderende as-grens waarbinnen dataZoom pant en
+	// zoomt -- zie `asVolledigeGrenzen`.
+	const [volledigX, volledigY] = asVolledigeGrenzen.value;
+	const grensY = driedimensionaal.value ? halveHoogte : volledigY;
+	const grensX = driedimensionaal.value ? halveHoogte * plotVerhouding.value : volledigX;
 
 	function lijnSerie(id: string, punten: number[][], kleur: string, breedte: number, z = 1) {
 		return {
@@ -620,11 +822,27 @@ const chartOption = computed(() => {
 		// het venster uit de serie, en dan herberekent ECharts de labelplaatsing en
 		// springen de overgebleven labels rond bij elke zoomstap. Nu worden ze
 		// alleen afgekapt.
+		// throttle: 0 -- ECharts' eigen advies bij animation:false (hierboven):
+		// de standaard 100ms-throttle is bedoeld om animatieframes te sparen, en
+		// zonder animatie levert die throttle alleen vertraging op, geen besparing.
+		// Zonder deze regel voelde slepen in 2D hortend/beperkt aan.
 		dataZoom: driedimensionaal.value
 			? []
 			: [
-					{ type: "inside", xAxisIndex: 0, filterMode: "none" },
-					{ type: "inside", yAxisIndex: 0, filterMode: "none" },
+					{
+						type: "inside",
+						xAxisIndex: 0,
+						filterMode: "none",
+						throttle: 0,
+						...(forceerNormalisatie.value ? { startValue: -asGrenzen.value[0], endValue: asGrenzen.value[0] } : {}),
+					},
+					{
+						type: "inside",
+						yAxisIndex: 0,
+						filterMode: "none",
+						throttle: 0,
+						...(forceerNormalisatie.value ? { startValue: -asGrenzen.value[1], endValue: asGrenzen.value[1] } : {}),
+					},
 				],
 		grid: { ...GRID },
 		xAxis: {
@@ -650,6 +868,19 @@ const chartOption = computed(() => {
 		series: [...frameSeries, rijSerie, ...tagSeries],
 	};
 });
+
+// Na de render waarin `forceerNormalisatie` zijn startValue/endValue heeft
+// laten meesturen, de vlag weer uit -- anders zou elke volgende her-render
+// (bv. een tagklik, die alleen opacity raakt) de gebruiker terugzetten op het
+// normalisatievenster. `flush: "post"` zodat dit pas ná de echte chart-update
+// gebeurt, niet ervoor.
+watch(
+	chartOption,
+	() => {
+		if (forceerNormalisatie.value) forceerNormalisatie.value = false;
+	},
+	{ flush: "post" },
+);
 
 function onChartClick(p: any) {
 	// Het einde van een sleep is ook een click; die mag geen filter omzetten.
@@ -681,25 +912,36 @@ const tagFilterActief = computed(() => filters.values.tag.length > 0 || filters.
 		</p>
 
 		<div class="chart-controls">
-			<label>
-				Rijen:
-				<select v-model="unit">
-					<option value="partij">partijen</option>
-					<option value="persoon">personen</option>
-				</select>
-			</label>
-			<label>
-				Logo's:
-				<select v-model="logoStijl">
-					<option value="kleur">in kleur</option>
-					<option value="inkt">als contour</option>
-				</select>
-			</label>
-			<label :title="heeftDerdeAs ? '' : 'Te weinig data voor een derde dimensie'">
-				<input type="checkbox" v-model="driedimensionaal" :disabled="!heeftDerdeAs" />
-				3D
-			</label>
-			<button type="button" class="control-knop" @click="herstelAanzicht">Aanzicht herstellen</button>
+			<div class="chart-controls-group">
+				<span class="chart-controls-label">Rijen</span>
+				<div class="toggle-group" role="group">
+					<button type="button" class="toggle-btn" :class="{ 'is-active': unit === 'partij' }" @click="unit = 'partij'">
+						Partijen
+					</button>
+					<button type="button" class="toggle-btn" :class="{ 'is-active': unit === 'persoon' }" @click="unit = 'persoon'">
+						Personen
+					</button>
+				</div>
+			</div>
+			<div class="chart-controls-group">
+				<span class="chart-controls-label">Weergave</span>
+				<div class="toggle-group" role="group">
+					<button type="button" class="toggle-btn" :class="{ 'is-active': !driedimensionaal }" @click="driedimensionaal = false">
+						2D
+					</button>
+					<button
+						type="button"
+						class="toggle-btn"
+						:class="{ 'is-active': driedimensionaal }"
+						:disabled="!heeftDerdeAs"
+						:title="heeftDerdeAs ? '' : 'Te weinig data voor een derde dimensie'"
+						@click="driedimensionaal = true"
+					>
+						3D
+					</button>
+				</div>
+				<button type="button" class="control-knop" @click="herstelAanzicht">Aanzicht herstellen</button>
+			</div>
 			<template v-if="driedimensionaal">
 				<span class="control-hint">
 					slepen draait, scrollen zoomt<template v-if="buitenBeeld">
@@ -708,7 +950,9 @@ const tagFilterActief = computed(() => filters.values.tag.length > 0 || filters.
 				</span>
 			</template>
 			<span v-else class="control-hint">
-				scrollen zoomt, slepen verschuift<template v-if="!heeftDerdeAs"> &middot; 3D vereist minstens 4 rijen en 4 tags</template>
+				scrollen zoomt, slepen verschuift<template v-if="buitenBeeld2D">
+					&middot; {{ buitenBeeld2D }} punt{{ buitenBeeld2D === 1 ? "" : "en" }} buiten beeld, zoom uit om ze te zien</template
+				><template v-if="!heeftDerdeAs"> &middot; 3D vereist minstens 4 rijen en 4 tags</template>
 			</span>
 		</div>
 
@@ -734,6 +978,7 @@ const tagFilterActief = computed(() => filters.values.tag.length > 0 || filters.
 				:update-options="{ replaceMerge: ['series', 'dataZoom'] }"
 				autoresize
 				@click="onChartClick"
+				@datazoom="opDataZoom"
 			/>
 		</div>
 		<p v-else class="panel-note">

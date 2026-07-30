@@ -20,7 +20,6 @@
     "vue-echarts": "^8.0.1"
   },
   "devDependencies": {
-    "lucide-static": "^1.28.0",
     "playwright": "^1.62.0",
     "vitest": "^4.1.10"
   }

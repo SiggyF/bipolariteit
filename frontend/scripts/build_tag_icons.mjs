@@ -1,18 +1,21 @@
 // Genereert src/lib/tagIcons.generated.ts uit het ontwerpsysteem in
-// docs/design/tag-iconografie/tag-styles.json plus de Lucide-iconen.
+// docs/design/tag-iconografie/ (tag-styles.json + icons/*.svg).
 //
 //   node scripts/build_tag_icons.mjs
 //
-// Waarom een generatiestap en niet gewoon de SVG's importeren:
+// icons/*.svg zijn rechtstreeks uit de ontwerptool geëxporteerd, één bestand
+// per icoonnaam -- dat is de echte gebruikte tekening, en dus betrouwbaarder
+// dan een gok naar het gelijknamige Lucide-icoon. Zeven namen uit het
+// ontwerpsysteem ("person-lectern", "cheque", enz.) bestaan niet in Lucide;
+// met deze eigen set is dat geen probleem meer, want elke naam in
+// tag-styles.json heeft hier zijn eigen tekening.
 //
-// 1. ECharts wil één padstring (`path://d`), maar een Lucide-icoon is een mix
-//    van <path>, <circle>, <line>, <polyline> en <rect>. Die moeten samen tot
-//    één `d` gesmolten worden.
-// 2. Lucide-iconen zijn lijntekeningen (fill: none, stroke-width 2). Op de
-//    kaart tekenen we ze dus met itemStyle.borderColor i.p.v. .color -- zie
-//    TagCorrespondenceMap.vue.
-// 3. Het resultaat staat in de repo, dus lucide-static is alleen bij het
-//    genereren nodig en belandt niet in de bundel.
+// Waarom een generatiestap en niet gewoon de SVG's importeren: ECharts wil één
+// padstring (`path://d`), maar deze iconen zijn een mix van <path>, <circle>,
+// <line>, <polyline> en <rect>. Die moeten samen tot één `d` gesmolten worden.
+// Het zijn bovendien lijntekeningen (fill: none, stroke-width 2) -- op de
+// kaart tekenen we ze dus met itemStyle.borderColor i.p.v. .color, zie
+// TagCorrespondenceMap.vue.
 
 import { readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
@@ -20,7 +23,7 @@ import { dirname, resolve } from "node:path";
 
 const hier = dirname(fileURLToPath(import.meta.url));
 const stijlen = JSON.parse(readFileSync(resolve(hier, "../../docs/design/tag-iconografie/tag-styles.json"), "utf8"));
-const iconenMap = resolve(hier, "../node_modules/lucide-static/icons");
+const iconenMap = resolve(hier, "../../docs/design/tag-iconografie/icons");
 const doel = resolve(hier, "../src/lib/tagIcons.generated.ts");
 
 const getal = (el, naam, standaard = 0) => {
@@ -75,19 +78,6 @@ function naarPad(svg) {
 	return `M0 0 M24 24 ${delen.filter(Boolean).join("")}`;
 }
 
-// Zeven iconen uit het ontwerpsysteem bestaan niet in Lucide -- deels Nederlandse
-// namen, deels bedachte. Hier staat wat we in de plaats gebruiken, expliciet en
-// niet stilzwijgend, zodat de afwijking van het ontwerp zichtbaar blijft.
-const VERVANGERS = {
-	"person-lectern": "presentation", // Actor-Politicus: spreker achter een katheder
-	cheque: "hand-heart", // Actor-NGO: maatschappelijke organisatie
-	"person-cap": "user-round", // Actor-Burger
-	"resize-figure": "scaling", // Moraliteit-Proportionaliteit
-	"round-table": "users-round", // Context-Commissie
-	voorzittershamer: "gavel", // Context-Plenair
-	paper: "file-text", // Context-Tweeminutendebat
-};
-
 const namen = new Set();
 for (const p of stijlen.perspectives) {
 	namen.add(p.icon);
@@ -98,8 +88,7 @@ const paden = {};
 const ontbreekt = [];
 for (const naam of [...namen].sort()) {
 	try {
-		const bestand = VERVANGERS[naam] ?? naam;
-		paden[naam] = naarPad(readFileSync(resolve(iconenMap, `${bestand}.svg`), "utf8"));
+		paden[naam] = naarPad(readFileSync(resolve(iconenMap, `${naam}.svg`), "utf8"));
 	} catch {
 		ontbreekt.push(naam);
 	}
@@ -114,11 +103,11 @@ const perspectieven = stijlen.perspectives.map((p) => ({
 }));
 
 const uit = `// GEGENEREERD -- niet met de hand aanpassen.
-// Bron: docs/design/tag-iconografie/tag-styles.json + lucide-static.
+// Bron: docs/design/tag-iconografie/tag-styles.json + icons/*.svg.
 // Opnieuw maken: cd frontend && node scripts/build_tag_icons.mjs
 
-/** Lucide-iconen als ECharts-padstring. Lijntekeningen: teken ze met
- *  itemStyle.borderColor en een doorzichtige vulling, niet met .color. */
+/** Iconen uit het ontwerpsysteem als ECharts-padstring. Lijntekeningen: teken
+ *  ze met itemStyle.borderColor en een doorzichtige vulling, niet met .color. */
 export const ICOON_PAD: Record<string, string> = ${JSON.stringify(paden, null, "\t")};
 
 export interface PerspectiefStijl {
@@ -142,4 +131,4 @@ export const TAG_ICOON: Record<string, string> = ${JSON.stringify(
 
 writeFileSync(doel, uit);
 console.log(`${Object.keys(paden).length} iconen weggeschreven naar ${doel}`);
-if (ontbreekt.length) console.warn(`niet gevonden in lucide-static: ${ontbreekt.join(", ")}`);
+if (ontbreekt.length) console.warn(`niet gevonden in icons/: ${ontbreekt.join(", ")}`);

@@ -1,22 +1,18 @@
-// Partijlogo's als ECharts-symbool. Een logo op de kaart is niet hetzelfde als
-// een logo in een tabel: ECharts tekent een `image://`-symbool in een vak dat
-// jij opgeeft, dus zonder de echte verhouding wordt een breed wordmerk (PVV is
-// 13:1) in een vierkant geperst. Daarom lezen we de SVG zelf en halen we de
-// verhouding uit de viewBox.
+// Partijlogo's als ECharts-symbool. De vereenvoudigde iconenset in
+// public/party-logos/simplified/ is één vast vierkant kavas (160x160) per
+// partij, dus in tegenstelling tot de officiële wordmarks (PVV is 13:1) is er
+// hier geen verhouding om rekening mee te houden.
 //
-// Diezelfde binnengehaalde SVG-tekst laat een tweede ding toe: hem
-// hertekenen. CSS kan dat niet -- het logo belandt op een canvas, buiten het
-// bereik van stylesheets -- maar de opmaak aanpassen en als data-URI
-// terugserveren kan wel.
+// De ingehaalde SVG-tekst laat een tweede ding toe: hem hertekenen. CSS kan
+// dat niet -- het logo belandt op een canvas, buiten het bereik van
+// stylesheets -- maar de opmaak aanpassen en als data-URI terugserveren wel.
 
 import { ref } from "vue";
-import { partyLogo } from "./parties";
+import { partyLogoSimple } from "./parties";
 
 export interface LogoSprite {
 	/** Bron voor het ECharts-symbool, dus inclusief het `image://`-voorvoegsel. */
 	symbool: string;
-	/** breedte / hoogte. 1 als de SVG niets bruikbaars meldt. */
-	verhouding: number;
 }
 
 // Reactief: de fetches komen na de eerste render binnen, en de kaart moet zich
@@ -41,55 +37,44 @@ function svgTekst(pad: string): string | null {
 	return null;
 }
 
-/** breedte/hoogte uit viewBox, anders uit width/height, anders 1. */
-function verhoudingVan(svg: string): number {
-	const viewBox = svg.match(/viewBox\s*=\s*"([^"]+)"/);
-	if (viewBox) {
-		const [, , b, h] = viewBox[1].trim().split(/[\s,]+/).map(Number);
-		if (b > 0 && h > 0) return b / h;
-	}
-	const breedte = Number.parseFloat(svg.match(/\swidth\s*=\s*"([\d.]+)/)?.[1] ?? "");
-	const hoogte = Number.parseFloat(svg.match(/\sheight\s*=\s*"([\d.]+)/)?.[1] ?? "");
-	if (breedte > 0 && hoogte > 0) return breedte / hoogte;
-	return 1;
+function hexNaarRgb(hex: string): [number, number, number] | null {
+	const m = hex.replace("#", "");
+	const acht = m.length === 3 ? [...m].map((c) => c + c).join("") : m;
+	if (acht.length !== 6) return null;
+	return [0, 2, 4].map((i) => Number.parseInt(acht.slice(i, i + 2), 16)) as [number, number, number];
 }
 
-/** Alle kleur eruit, alles als lijntekening in één inkt terug. Bewust outline
- * en geen silhouet: een gevuld silhouet maakt van elk meerlaags logo (CDA, PRO)
- * één zwarte klodder, terwijl de contour de vorm nog laat zien. */
-function naarOutline(svg: string, inkt: string, verhouding: number): string {
-	const viewBox = svg.match(/viewBox\s*=\s*"([^"]+)"/);
-	const eenheden = viewBox ? Number(viewBox[1].trim().split(/[\s,]+/)[2]) : 100;
-	// Lijndikte in gebruikerseenheden, zodat hij na schaling overal even zwaar
-	// oogt -- Volt tekent op 2047 eenheden, VVD op 80.
-	const dikte = (Number.isFinite(eenheden) && eenheden > 0 ? eenheden : 100) / 90;
-	return svg
-		.replace(/<style[\s\S]*?<\/style>/g, "")
-		.replace(/\s(fill|stroke)\s*=\s*"(?!none")[^"]*"/g, "")
-		.replace(/\sstyle\s*=\s*"[^"]*"/g, "")
-		.replace(
-			/<svg\b/,
-			`<svg fill="none" stroke="${inkt}" stroke-width="${dikte}" stroke-linejoin="round" ` +
-				// Sommige bestanden hebben geen viewBox; zonder afmeting rendert een
-				// data-URI als niets.
-				(viewBox ? "" : `viewBox="0 0 100 ${Math.round(100 / verhouding)}" `),
-		);
+function rgbNaarHex([r, g, b]: [number, number, number]): string {
+	return `#${[r, g, b].map((c) => Math.round(Math.max(0, Math.min(255, c))).toString(16).padStart(2, "0")).join("")}`;
+}
+
+/** Verzadiging schalen zonder de tint te verliezen: mengen naar het grijs op
+ * dezelfde helderheid (luminantie-gewogen, geen HSL-omweg nodig voor dit
+ * doel). Factor 1 = ongewijzigd, 0 = grijstinten. */
+function verzadig([r, g, b]: [number, number, number], factor: number): [number, number, number] {
+	const grijs = 0.299 * r + 0.587 * g + 0.114 * b;
+	return [r, g, b].map((c) => grijs + (c - grijs) * factor) as [number, number, number];
+}
+
+/** Elke `fill: #hex` in het `<style>`-blok vervangen -- alle vlakken in deze
+ * set zitten daar (zie `.cls-N { fill: #... }`), dus dit ene patroon volstaat. */
+function herkleur(svg: string, bewerk: (rgb: [number, number, number]) => [number, number, number]): string {
+	return svg.replace(/fill:\s*#([0-9a-fA-F]{3,6})/g, (heel, hex) => {
+		const rgb = hexNaarRgb(hex);
+		return rgb ? `fill: ${rgbNaarHex(bewerk(rgb))}` : heel;
+	});
 }
 
 /**
  * @param partij  fractienaam zoals in de data
- * @param inkt    hex-kleur voor de outline-variant, of null voor het originele logo
+ * @param verzadiging  1 = ongewijzigde merkkleuren, lager mengt naar grijs --
+ *   het ontwerp vraagt 10% als gedempte, onderling consistente variant.
  */
-export function logoSprite(partij: string, inkt: string | null): LogoSprite | null {
-	const pad = partyLogo(partij);
+export function logoSprite(partij: string, verzadiging: number): LogoSprite | null {
+	const pad = partyLogoSimple(partij);
 	if (!pad) return null;
-	// De originele variant hoeft de SVG-tekst alleen voor de verhouding, maar
-	// zonder die tekst is er ook geen verhouding, dus in beide gevallen wachten
-	// we tot hij binnen is.
 	const tekst = svgTekst(pad);
 	if (!tekst) return null;
-	const verhouding = verhoudingVan(tekst);
-	if (!inkt) return { symbool: `image://${pad}`, verhouding };
-	const uri = `data:image/svg+xml,${encodeURIComponent(naarOutline(tekst, inkt, verhouding))}`;
-	return { symbool: `image://${uri}`, verhouding };
+	const bewerkt = verzadiging >= 1 ? tekst : herkleur(tekst, (rgb) => verzadig(rgb, verzadiging));
+	return { symbool: `image://data:image/svg+xml,${encodeURIComponent(bewerkt)}` };
 }
