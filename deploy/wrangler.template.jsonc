@@ -1,0 +1,33 @@
+// Sjabloon voor de wrangler-configuratie van één preview-release.
+//
+// scripts/release_preview.py vult de twee placeholders hieronder in en schrijft
+// het resultaat naar wrangler.generated.jsonc in de repo-root (ongetrackt). Dat
+// gebeurt per release, want zowel de Worker-naam als de hostnaam bevatten de
+// tag. Noem de placeholders niet in commentaar: ze worden overal vervangen.
+{
+	"name": "__NAAM__",
+	"main": "deploy/worker.js",
+	"compatibility_date": "2026-07-30",
+	"assets": {
+		"directory": "frontend/dist",
+		"binding": "ASSETS",
+		// De site heeft (nog) geen eigen 404-pagina; zonder die pagina valt
+		// Cloudflare terug op een kaal 404-antwoord. Bewust gekozen boven
+		// "single-page-application", want dit is een multi-page site: bij die
+		// laatste instelling zou een typfout in de URL de homepage met status
+		// 200 teruggeven en dat maakt kapotte links onzichtbaar.
+		"not_found_handling": "404-page"
+	},
+	"routes": [
+		{
+			// custom_domain laat Cloudflare zelf het DNS-record aanmaken en het
+			// certificaat regelen. Eén niveau onder het domein, dus gedekt door
+			// het gratis Universal SSL-certificaat (*.bipolariteit.org).
+			"pattern": "__HOSTNAAM__",
+			"custom_domain": true
+		}
+	],
+	"observability": {
+		"enabled": true
+	}
+}
