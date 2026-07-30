@@ -88,6 +88,21 @@ def schrijf_robots(dist: Path) -> None:
 	logger.info("robots.txt geschreven (alles geweerd) naar %s", robots)
 
 
+def meld_hostnaam(hostnaam: str) -> None:
+	"""Geef de hostnaam door aan GitHub Actions, als we daarin draaien.
+
+	Zo hoeft de workflow de tag niet nóg een keer zelf om te zetten -- dat zou
+	dezelfde logica dupliceren in shell-quoting waar een tag met een aanhalings-
+	teken de stap breekt.
+	"""
+	uitvoer = os.environ.get("GITHUB_OUTPUT")
+	if not uitvoer:
+		return
+	with open(uitvoer, "a", encoding="utf-8") as fh:
+		fh.write(f"hostnaam={hostnaam}\n")
+	logger.debug("hostnaam doorgegeven aan GITHUB_OUTPUT")
+
+
 def render_config(naam: str, hostnaam: str) -> Path:
 	sjabloon = SJABLOON.read_text(encoding="utf-8")
 	config = sjabloon.replace("__NAAM__", naam).replace("__HOSTNAAM__", hostnaam)
@@ -113,6 +128,7 @@ def main(argv: list[str] | None = None) -> int:
 	naam = f"{NAAM_PREFIX}{slug}{ACHTERVOEGSEL}"
 
 	logger.info("tag %s -> https://%s (worker %s)", args.tag, hostnaam, naam)
+	meld_hostnaam(hostnaam)
 
 	if not DIST.is_dir() or not (DIST / "index.html").is_file():
 		logger.error(

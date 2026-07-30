@@ -59,8 +59,16 @@ Een API-token is een wachtwoord waarmee GitHub namens jou mag deployen.
 
 > De twee extra rechten staan niet als zodanig in de Cloudflare-documentatie;
 > ze zijn afgeleid uit wat `custom_domain: true` doet (een DNS-record aanmaken
-> en een certificaat laten uitgeven). Loopt de eerste deploy stuk op een
-> permissie-fout, dan noemt wrangler in de foutmelding welk recht ontbreekt.
+> en een certificaat laten uitgeven).
+>
+> Loopt de eerste deploy stuk op een 403 of een authenticatiefout, maak dan
+> **geen nieuwe token aan**: ga terug naar
+> <https://dash.cloudflare.com/profile/api-tokens>, klik op de bestaande token
+> → **Edit**, en voeg het ontbrekende recht toe. De secret in GitHub hoeft dan
+> niet vervangen te worden. Cloudflare noemt in zo'n fout vaak alleen een
+> foutcode; ga af op wat er misging — het uploaden van de Worker (dan mist
+> *Workers Scripts*) of het aanmaken van het subdomein (dan mist *DNS* of
+> *SSL and Certificates*).
 
 ### 2. Account-ID opzoeken
 
@@ -110,6 +118,12 @@ make release TAG=v0.3.0       # bouwt en publiceert
 ```
 
 Beide targets bouwen de frontend zelf; `make build` vooraf hoeft niet.
+
+Het script weigert te draaien zonder die twee variabelen, ook als je lokaal al
+met `npx wrangler login` bent ingelogd. Dat is expres: die inlogsessie heeft
+veel ruimere rechten dan de CI-token, dus een lokale deploy zou kunnen slagen
+terwijl de token in GitHub rechten mist — en dan ontdek je dat pas bij de
+volgende tag. Haal die controle er dus niet uit.
 
 ## Waarom deze URL-vorm
 

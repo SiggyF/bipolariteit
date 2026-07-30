@@ -11,11 +11,11 @@
 	"assets": {
 		"directory": "frontend/dist",
 		"binding": "ASSETS",
-		// De site heeft (nog) geen eigen 404-pagina; zonder die pagina valt
-		// Cloudflare terug op een kaal 404-antwoord. Bewust gekozen boven
-		// "single-page-application", want dit is een multi-page site: bij die
-		// laatste instelling zou een typfout in de URL de homepage met status
-		// 200 teruggeven en dat maakt kapotte links onzichtbaar.
+		// Serveert dist/404.html (uit frontend/src/pages/404.astro) bij een
+		// onbekende URL. Bewust gekozen boven "single-page-application", want
+		// dit is een multi-page site: bij die laatste instelling zou een
+		// typfout in de URL de homepage met status 200 teruggeven, en dat
+		// maakt kapotte links onzichtbaar.
 		"not_found_handling": "404-page"
 	},
 	"routes": [

@@ -42,6 +42,7 @@ jobs:
         run: echo "naam=${{ inputs.tag || github.ref_name }}" >> "$GITHUB_OUTPUT"
 
       - name: Bouw en publiceer
+        id: publiceer
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
@@ -49,13 +50,11 @@ jobs:
 
       - name: Toon de URL in de samenvatting
         if: success()
+        # De hostnaam komt uit het releasescript zelf (het schrijft hem naar
+        # GITHUB_OUTPUT), zodat de tag hier niet nog eens omgezet hoeft te worden.
+        env:
+          host: ${{ steps.publiceer.outputs.hostnaam }}
         run: |
-          host=$(uv run python -c "
-          import sys
-          sys.path.insert(0, 'scripts')
-          from release_preview import slug_van_tag, ACHTERVOEGSEL, DOMEIN
-          print(f'{slug_van_tag(\"${{ steps.tag.outputs.naam }}\")}{ACHTERVOEGSEL}.{DOMEIN}')
-          ")
           {
             echo "## Preview-release gepubliceerd"
             echo ""
