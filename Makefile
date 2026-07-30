@@ -3,7 +3,7 @@
 TOPIC ?= stikstof
 LIMIT ?= 15
 
-.PHONY: help test test-js test-frontend ca-fixture status build dev dev-stop extract tag redactie export db-init pipeline-status backup-db
+.PHONY: help test test-js test-frontend ca-fixture status build dev dev-stop extract tag redactie export db-init pipeline-status backup-db release release-dry
 
 help: ## Toon deze lijst
 	@grep -E '^[a-zA-Z_-]+:.*## ' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*## "}; {printf "  \033[36m%-16s\033[0m %s\n", $$1, $$2}'
@@ -54,3 +54,17 @@ dev: ## Start de Astro dev-server op de achtergrond (localhost:4321)
 
 dev-stop: ## Stop de achtergrond dev-server
 	cd frontend && npx astro dev stop
+
+# De ontwikkelbalk wordt bij het bouwen ingebakken, dus PUBLIC_RELEASE_TAG moet
+# mee met `npm run build` -- niet met het releasescript, dat draait pas als
+# dist/ al af is. Daarom bouwen deze targets zelf in plaats van `build` als
+# prerequisite te gebruiken.
+release: ## Publiceer een preview-release naar Cloudflare (zie docs/release.md). Vars: TAG
+	@test -n "$(TAG)" || { echo "Gebruik: make release TAG=v0.3.0"; exit 1; }
+	cd frontend && PUBLIC_RELEASE_TAG="$(TAG)" npm run build
+	uv run python scripts/release_preview.py "$(TAG)"
+
+release-dry: ## Zelfde als release, maar toont alleen hostnaam + config. Vars: TAG
+	@test -n "$(TAG)" || { echo "Gebruik: make release-dry TAG=v0.3.0"; exit 1; }
+	cd frontend && PUBLIC_RELEASE_TAG="$(TAG)" npm run build
+	uv run python scripts/release_preview.py "$(TAG)" --dry-run

@@ -24,6 +24,28 @@ import "../styles/main.css";
 				heeft, maar om zichtbaar te maken welke argumenten er, van welke kant, gebruikt worden.
 			</p>
 
+			{
+				import.meta.env.PUBLIC_RELEASE_OFFICIEEL !== "true" && (
+					<>
+						<h2>Dit is een ontwikkelversie</h2>
+						<p>
+							Wat je hier ziet is werk in uitvoering
+							{import.meta.env.PUBLIC_RELEASE_TAG
+								? ` (versie ${import.meta.env.PUBLIC_RELEASE_TAG})`
+								: ""}, geen
+							officiële publicatie. De site is openbaar bereikbaar zodat er meegekeken kan
+							worden, maar is bewust afgeschermd voor zoekmachines.
+						</p>
+						<p>
+							Concreet betekent dat: de argumenten zijn nog niet allemaal door een
+							redactiepas heen, de dekking per onderwerp is onvolledig, en zowel cijfers
+							als teksten kunnen zonder aankondiging veranderen. Citeer deze versie niet
+							als bron.
+						</p>
+					</>
+				)
+			}
+
 			<h2>Uitgangspunten</h2>
 			<ul>
 				<li>

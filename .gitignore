@@ -4,6 +4,8 @@ data/*.db-journal
 data/*.db.bak-*
 node_modules/
 frontend/dist/
+# Per release gerenderd uit deploy/wrangler.template.jsonc.
+wrangler.generated.jsonc
 frontend/.astro/
 __pycache__/
 *.pyc

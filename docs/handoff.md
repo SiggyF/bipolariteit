@@ -2,7 +2,25 @@
 
 Status per 2026-07-27. Zie `docs/plan.md` voor het volledige, goedgekeurde architectuurplan. Dit document is voor het vervolg: wat staat er al, wat is er onderweg ontdekt, en wat is de volgende concrete stap.
 
-## Stand bij einde sessie (2026-07-30, vervolg) — begin hier bij een nieuwe sessie
+## Stand bij einde sessie (2026-07-30, releasepad) — begin hier bij een nieuwe sessie
+
+Losse sessie, eigen branch (`feature/preview-release`, PR [#15](https://github.com/SiggyF/bipolariteit/pull/15)). Ging alleen over publiceren; niets aan de pipeline of de kaart veranderd. Volledige documentatie staat in **`docs/release.md`** — hieronder alleen wat je daar niet uit afleidt.
+
+Releasen is: `make export` → commit → `git tag v0.3.0` → `git push origin v0.3.0`. De Action doet de rest. `v0.3.0` wordt `https://v0-3-0-preview.bipolariteit.org`.
+
+**Waarom Workers en niet Pages.** Eerst op Cloudflare Pages ingezet, maar Pages ondersteunt geen custom domain per preview-deployment — er is geen wildcard voor branch-aliassen. Workers static assets wel; `custom_domain: true` regelt DNS-record en certificaat vanzelf. Gevolg: `_headers` werkt niet (Pages-feature, wordt op Workers stil als statisch bestand geserveerd), vandaar de noindex-header in `deploy/worker.js`.
+
+**Waarom `-preview` een streepje is en geen punt.** Universal SSL is gratis maar dekt één niveau: `*.bipolariteit.org`. Twee niveaus diep zou een betaald Advanced Certificate vereisen.
+
+**De ontwikkelbalk is fail-open.** Verschijnt tenzij `PUBLIC_RELEASE_OFFICIEEL=true`. Belangrijk detail: `PUBLIC_RELEASE_TAG` moet mee met `npm run build`, niet met het deploy-script — Astro bakt de balk in de HTML. Daarom bouwen de `release`-targets zelf in plaats van `build` als prerequisite te gebruiken. Zet je de vlag op de verkeerde plek, dan is de balk leeg zonder dat er iets faalt.
+
+**Al gedaan door de gebruiker:** Cloudflare API-token aangemaakt (sjabloon *Edit Cloudflare Workers* plus Zone→DNS→Edit en Zone→SSL and Certificates→Edit) en samen met het account-ID als GitHub-secret gezet. Het per ongeluk aangemaakte Pages-project `bipolariteit` is weer verwijderd.
+
+**Nog niet gedaan:** er is nog nooit echt gedeployd. De eerste tag is de eerste live test; als hij stukloopt op een 403 gaat het vrijwel zeker om een ontbrekend token-recht — zie de hersteltip in `docs/release.md`, en maak géén nieuwe token aan.
+
+**Losse constatering:** er stond een `astro dev`-server uit een vorige sessie op poort 4321, waardoor `make test-frontend` stil tegen de verkeerde server praatte en op een timeout viel. `make dev-stop` loste het op. De moeite waard om te onthouden bij een onverklaarbare smoke-test-fout.
+
+## Stand bij einde sessie (2026-07-30, vervolg)
 
 Vervolg op de sessie hieronder, zelfde dag, zelfde branch (`feature/correspondentie-3d`, PR [#8](https://github.com/SiggyF/bipolariteit/pull/8)). Deze sessie ging over ontwerpersfeedback op de kaart uit de vorige sessie, plus een reeks navigatiebugs die tijdens het verifiëren aan het licht kwamen. **Alles is gecommit** (twee commits: de feature, plus een opruimronde erna).
 
