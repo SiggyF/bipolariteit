@@ -1,5 +1,5 @@
 // Partijlogo's als ECharts-symbool. De vereenvoudigde iconenset in
-// public/party-logos/simplified/ is één vast vierkant kavas (160x160) per
+// public/party-logos/simplified/ is één vast vierkant canvas (160x160) per
 // partij, dus in tegenstelling tot de officiële wordmarks (PVV is 13:1) is er
 // hier geen verhouding om rekening mee te houden.
 //

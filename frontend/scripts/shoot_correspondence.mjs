@@ -1,13 +1,16 @@
-// Debug-hulpje voor de correspondentiekaart: zet 3D aan, sleept een stuk en
-// maakt screenshots, zodat de 3D-projectie zonder handmatig klikken te
-// inspecteren is.
+// Handmatig debug-hulpje voor de correspondentiekaart, geen automatische test
+// (geen assertions -- schrijft screenshots weg voor eigen inspectie, draait
+// niet mee in `npm test` of CI). Zet 3D aan, sleept een stuk en maakt
+// screenshots, zodat de 3D-projectie zonder handmatig klikken te inspecteren is.
 //
-//   cd frontend && node ../scripts/shoot_correspondence.mjs [url] [outdir]
+//   cd frontend && node scripts/shoot_correspondence.mjs [url] [outdir]
 
+import { mkdirSync } from "node:fs";
 import { chromium } from "playwright";
 
-const url = process.argv[2] ?? "http://localhost:4322/topics/stikstof/";
+const url = process.argv[2] ?? "http://localhost:4321/topics/stikstof/";
 const outDir = process.argv[3] ?? "/tmp/correspondence-shots";
+mkdirSync(outDir, { recursive: true });
 
 const browser = await chromium.launch();
 const page = await browser.newPage({ viewport: { width: 1400, height: 1000 } });
@@ -21,22 +24,12 @@ await wrapper.scrollIntoViewIfNeeded();
 await page.waitForTimeout(500);
 await page.screenshot({ path: `${outDir}/01-2d.png` });
 
-// 3D-checkbox: de enige checkbox in de chart-controls van dit paneel.
-const toggle = page.locator(".chart-controls input[type=checkbox]").first();
-console.log("3D disabled?", await toggle.isDisabled());
-await toggle.check();
+// 3D is een pil-toggle (net als "Rijen: Partijen/Personen"), geen checkbox meer.
+const toggle3D = page.locator(".chart-controls .toggle-btn", { hasText: "3D" });
+console.log("3D disabled?", await toggle3D.isDisabled());
+await toggle3D.click();
 await page.waitForTimeout(800);
 await page.screenshot({ path: `${outDir}/02-3d.png` });
-
-// Logo's als contour i.p.v. in kleur, om de twee varianten te kunnen vergelijken.
-const logoKeuze = page.locator(".chart-controls select").nth(1);
-if (await logoKeuze.count()) {
-	await logoKeuze.selectOption("inkt");
-	await page.waitForTimeout(600);
-	await page.screenshot({ path: `${outDir}/02b-3d-contourlogos.png` });
-	await logoKeuze.selectOption("kleur");
-	await page.waitForTimeout(400);
-}
 
 const box = await wrapper.boundingBox();
 const cx = box.x + box.width / 2;

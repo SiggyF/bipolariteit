@@ -38,10 +38,13 @@ export function partyLogo(party: string): string | null {
 	return PARTY_LOGOS[party] ?? null;
 }
 
-// Vereenvoudigde, uniforme iconenset (vierkant 160x160-kavas, door de
+// Vereenvoudigde, uniforme iconenset (vierkant 160x160-canvas, door de
 // ontwerper geleverd) -- voor gebruik als puntsymbool op de correspondentiekaart.
 // De officiële wordmarks hierboven passen daar niet: sterk uiteenlopende
 // verhoudingen (PVV is 13:1) en detail dat pas bij tabelformaat leesbaar wordt.
+// Beide sets blijven dus naast elkaar bestaan, met verschillende consumenten:
+// `partyLogo()` (wordmarks) voor `PartyLogo.vue` (argumentkaarten, statspaneel),
+// `partyLogoSimple()` (dit) alleen voor `partyLogoSprite.ts`/de kaart.
 const PARTY_LOGOS_SIMPLE: Record<string, string> = {
 	BBB: "/party-logos/simplified/bbb.svg",
 	CDA: "/party-logos/simplified/cda.svg",

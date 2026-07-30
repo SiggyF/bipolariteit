@@ -595,7 +595,7 @@ const chartOption = computed(() => {
 				const logo = partij ? logoSprite(partij, LOGO_VERZADIGING) : null;
 				const symbool = logo?.symbool ?? initiaalSprite(partyInitial(punt.label), inkt.value);
 				// De vereenvoudigde iconenset (en de initiaal-tegel) is één vast
-				// vierkant kavas per partij, dus in tegenstelling tot de officiële
+				// vierkant canvas per partij, dus in tegenstelling tot de officiële
 				// wordmarks hoeft de maat hier niet naar een eigen verhouding te kijken.
 				const grootte = Math.max(9, Math.min(24, Math.sqrt(punt.n) * 3.2)) * schaal * 1.15;
 				return {

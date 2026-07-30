@@ -1,13 +1,11 @@
 # Ontwerp-artefacten
 
-Bronmateriaal voor de visuele kant van de site. Geen code die meedraait — de
-frontend leest hier (nog) niets uit; wat hier staat is de afspraak waar de code
-naartoe werkt.
+Bronmateriaal voor de visuele kant van de site.
 
 ## `tag-iconografie/`
 
-Iconografie- en kleurschema voor de 50 tags en hun vier perspectieven, als
-Claude-design-artefact. `tag-styles.json` is het machineleesbare deel:
+Iconografie- en kleurschema voor de 50 tags en hun vier perspectieven.
+`tag-styles.json` is het machineleesbare deel:
 
 ```
 perspectives[] : key, naam, color, marker, icon
@@ -15,27 +13,30 @@ perspectives[] : key, naam, color, marker, icon
     tags[]     : sleutel, icon
 ```
 
-De iconen zijn **namen** van [Lucide](https://lucide.dev)-iconen, geen paddata.
+`icon` is een naam die verwijst naar een bestand in `icons/<naam>.svg` — de
+échte tekening uit het ontwerpsysteem, niet een gok naar een gelijknamig
+Lucide-icoon. `frontend/scripts/build_tag_icons.mjs` leest beide bestanden en
+genereert daaruit `frontend/src/lib/tagIcons.generated.ts` (ECharts-padstrings
++ de perspectief-/tagmetadata). Opnieuw genereren na een wijziging in
+`tag-styles.json` of `icons/`:
 
-### Wat er nog tussen dit schema en de kaart zit
+```
+cd frontend && node scripts/build_tag_icons.mjs
+```
 
-Voordat `TagCorrespondenceMap.vue` hierop over kan:
+Op de correspondentiekaart (`TagCorrespondenceMap.vue`) wordt alleen de
+perspectiefkleur nog gebruikt — de iconen (vijftig per tag, vier per
+perspectief) bleken op kaartschaal niet als teken te lezen, zeker in een
+dichte cluster van hetzelfde perspectief. `marker` (circle/triangle/diamond/
+square) ligt klaar als extra coderingslaag mocht kleur alleen ooit
+tekortschieten (zie [#12](https://github.com/SiggyF/bipolariteit/issues/12)).
+De tagiconen zelf zijn nog wel bruikbaar in de tooltip, de legenda en de
+tagoverzichtspagina's uit #5 — daar staat nog niets voor gebouwd.
 
-- **Lucide is nog geen dependency.** MIT-licentie, dus dat mag, maar het is een
-  bewuste toevoeging (`lucide-static` levert de losse SVG's).
-- **Lucide-iconen zijn lijntekeningen** (`fill: none`, `stroke-width: 2`) en
-  bestaan uit `<path>`, `<circle>`, `<line>` en `<polyline>` door elkaar.
-  ECharts' `path://` wil één padstring en vult die standaard. Er is dus een
-  conversiestap nodig, plus `itemStyle.borderColor`/`borderWidth` in plaats van
-  `color`.
-- **Vijftig tagiconen zijn op de scatter niet uit elkaar te houden.** Bij de
-  ~14 px die een tagpunt daar krijgt, draagt alleen het perspectiefniveau (vier
-  iconen) informatie. De tagiconen zijn wel bruikbaar in de tooltip, de legenda
-  en de tagoverzichtspagina's uit #5.
-- **De kleuren wijken af van het huidige palet.** Dit schema is mono-accent
-  (`#B68235`, `#4C7C7A`, `#B15E4A`, `#6B8558`); de kleuren die nu in
-  `TagCorrespondenceMap.vue` staan zijn gevalideerd met de dataviz-validator
-  tegen `--color-bg` in licht én donker, met `--pairs all`. Overstappen vraagt
-  dus om een nieuwe validatieronde, en in donkere modus is dat de lastige.
+`Tag Iconografie en Kleurenschema (standalone).html` is het visuele naslagwerk
+waar dit schema uit gehaald is (open lokaal in een browser). `uploads/` is het
+originele ontwerpbrief-materiaal (`tags.toml` + een screenshot).
 
-Zie #3 (correspondentiekaart) en #5 (tagoverzichtspagina's).
+Zie #3 (correspondentiekaart), #5 (tagoverzichtspagina's) en
+[#12](https://github.com/SiggyF/bipolariteit/issues/12) (paletvalidatie, nog
+open).
