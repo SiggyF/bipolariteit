@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import { partyLogo } from "../lib/parties";
+import { partyInitial, partyLogo } from "../lib/parties";
 
 const props = defineProps<{ party: string }>();
 
 const logo = computed(() => partyLogo(props.party));
-const initial = computed(() => props.party.trim().charAt(0).toUpperCase());
+const initial = computed(() => partyInitial(props.party));
 </script>
 
 <template>

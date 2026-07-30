@@ -37,3 +37,42 @@ const PARTY_LOGOS: Record<string, string> = {
 export function partyLogo(party: string): string | null {
 	return PARTY_LOGOS[party] ?? null;
 }
+
+// Vereenvoudigde, uniforme iconenset (vierkant 160x160-canvas, door de
+// ontwerper geleverd) -- voor gebruik als puntsymbool op de correspondentiekaart.
+// De officiële wordmarks hierboven passen daar niet: sterk uiteenlopende
+// verhoudingen (PVV is 13:1) en detail dat pas bij tabelformaat leesbaar wordt.
+// Beide sets blijven dus naast elkaar bestaan, met verschillende consumenten:
+// `partyLogo()` (wordmarks) voor `PartyLogo.vue` (argumentkaarten, statspaneel),
+// `partyLogoSimple()` (dit) alleen voor `partyLogoSprite.ts`/de kaart.
+const PARTY_LOGOS_SIMPLE: Record<string, string> = {
+	BBB: "/party-logos/simplified/bbb.svg",
+	CDA: "/party-logos/simplified/cda.svg",
+	ChristenUnie: "/party-logos/simplified/christenunie.svg",
+	D66: "/party-logos/simplified/d66.svg",
+	DENK: "/party-logos/simplified/denk.svg",
+	FVD: "/party-logos/simplified/fvd.svg",
+	"GroenLinks-PvdA": "/party-logos/simplified/groenlinks-pvda.svg",
+	JA21: "/party-logos/simplified/ja21.svg",
+	NSC: "/party-logos/simplified/nsc.svg",
+	PRO: "/party-logos/simplified/pro.svg",
+	PvdD: "/party-logos/simplified/pvdd.svg",
+	PVV: "/party-logos/simplified/pvv.svg",
+	SGP: "/party-logos/simplified/sgp.svg",
+	SP: "/party-logos/simplified/sp.svg",
+	Volt: "/party-logos/simplified/volt.svg",
+	VVD: "/party-logos/simplified/vvd.svg",
+};
+
+export function partyLogoSimple(party: string): string | null {
+	return PARTY_LOGOS_SIMPLE[party] ?? null;
+}
+
+/** Initiaal voor de placeholder-tegel van een partij/fractie zonder logo
+ * (PartyLogo.vue, en de rijen zonder logo op de correspondentiekaart). Het
+ * voorvoegsel van eenmansgroepen ("Lid Keijzer", "Groep Markuszower") zegt
+ * niets over wie het is -- de kern van de naam wel. */
+export function partyInitial(party: string): string {
+	const kern = party.replace(/^(Lid|Groep|Fractie)\s+/i, "").trim();
+	return (kern.charAt(0) || party.charAt(0) || "?").toUpperCase();
+}

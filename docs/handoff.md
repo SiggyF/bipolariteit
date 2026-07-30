@@ -2,7 +2,86 @@
 
 Status per 2026-07-27. Zie `docs/plan.md` voor het volledige, goedgekeurde architectuurplan. Dit document is voor het vervolg: wat staat er al, wat is er onderweg ontdekt, en wat is de volgende concrete stap.
 
-## Stand bij einde sessie (2026-07-28) — begin hier bij een nieuwe sessie
+## Stand bij einde sessie (2026-07-30, vervolg) — begin hier bij een nieuwe sessie
+
+Vervolg op de sessie hieronder, zelfde dag, zelfde branch (`feature/correspondentie-3d`, PR [#8](https://github.com/SiggyF/bipolariteit/pull/8)). Deze sessie ging over ontwerpersfeedback op de kaart uit de vorige sessie, plus een reeks navigatiebugs die tijdens het verifiëren aan het licht kwamen. **Alles is gecommit** (twee commits: de feature, plus een opruimronde erna).
+
+### Ontwerpersfeedback verwerkt
+
+- **Tagpunten zijn nu effen, halftransparante cirkels, geen iconen meer.** Zowel de per-tag-iconen (vijftig) als later ook de per-perspectief-iconen (vier) bleken op kaartschaal niet als teken te lezen, vooral in dichte clusters van hetzelfde perspectief — zie de "brain"-blob die de sessie in gang zette (screenshot toonde een cauliflower-vormige klont in plaats van een herkenbaar brein-icoon; bleek 3-4 overlappende iconen van dezelfde vorm, geen renderbug). Kleur draagt de codering nu alleen; `tag-styles.json`'s `marker`-veld (circle/triangle/diamond/square) ligt klaar als extra onderscheid mocht kleur ooit weer te weinig zijn.
+- **Iconen komen niet meer uit een gok naar het gelijknamige Lucide-icoon.** De gebruiker leverde de échte SVG's uit het ontwerpsysteem aan (eerst als `<script>`-blok met inline paden, uiteindelijk verwerkt tot `docs/design/tag-iconografie/icons/*.svg`, één bestand per icoonnaam). `build_tag_icons.mjs` leest daar nu uit i.p.v. uit `lucide-static` (dependency verwijderd) — geen `VERVANGERS`-tabel met handmatige gok meer nodig, want alle 54 namen uit `tag-styles.json` hebben nu hun eigen tekening.
+- **Partijlogo's**: vereenvoudigde iconenset (`frontend/public/party-logos/simplified/*.svg`, vierkant 160×160, door de ontwerper geleverd) i.p.v. de officiële wordmarks met outline-effect. Vast op 20% verzadiging (geen toggle meer, "in kleur" verloor het altijd). Rijen zonder partij (of zonder logobestand) krijgen een initiaal-tegel i.p.v. een kale stip, dezelfde stijl als `PartyLogo.vue`'s bestaande placeholder — nu gedeelde `partyInitial()`-logica in `parties.ts`.
+- **Plotcontrols herbouwd als pil-toolbar** (bordered, mono/uppercase labels) i.p.v. native `<select>`/checkbox, consistent met de rest van de paper-stijl. 2D/3D is nu ook een toggle i.p.v. checkbox.
+- **Default rij-eenheid is nu "Personen"** i.p.v. "Partijen" — een partij is een optelsom van tientallen sprekers, en die nuance is precies waar de kaart voor bedoeld is.
+
+**Nog een losse constatering, niet opgevolgd:** het `logos.ai`-bestand (Illustrator-bronbestand voor de partijlogo's) staat als los, ongetrackt/gewijzigd bestand in de repo; gebruiker vroeg expliciet om het mee te pushen, dus zit in de tweede commit.
+
+### Drie echte navigatiebugs gevonden tijdens het verifiëren
+
+1. **Scrollen op de 2D-kaart scrollde de pagina, niet de grafiek.** `wiel()` deed alleen `preventDefault()` in de 3D-tak; in 2D liet dat de pagina onder de muis vandaan scrollen, waardoor de rest van de scrollbeweging de kaart al niet meer raakte. `preventDefault()` staat nu onvoorwaardelijk vooraan in de functie.
+2. **Zoom kon niet ver genoeg uit.** De 2D-assen hadden geen vaste `min`/`max` (auto-schaal), dus het genormaliseerde standaardvenster (90e-percentielvenster tegen de Ideologie-Links-Economisch-uitschieter) werd zelf de 0%-100%-referentie voor `dataZoom` — er was letterlijk nergens heen om uit te zoomen. Nieuwe `asVolledigeGrenzen` (het echte maximum, niet het percentiel) is nu de vaste asgrens; `asGrenzen` (90e percentiel) blijft alleen het *startvenster*.
+3. **Dat startvenster zette zichzelf niet betrouwbaar terug.** `dispatchAction` op de ECharts-instantie bleek racy (chartRef wordt al waar vóórdat VChart's eigen `onMounted` de instantie initialiseert) — zelfs met een `requestAnimationFrame`-herkansing bleef het een stille no-op. Nu declaratief: `forceerNormalisatie` (ref) bepaalt of `chartOption` zelf `startValue`/`endValue` meegeeft in de `dataZoom`-config, in dezelfde `setOption`-aanroep die de kaart toch al ververst. Gaat na die ene toepassing weer uit (watcher op `chartOption`, `flush: "post"`) zodat latere her-renders (bv. een tagklik) de handmatige zoomstand van de gebruiker niet resetten.
+
+Bijvangst: labels in 2D bleven bij inzoomen vast op de globale top-12-op-frequentie, ook als die twaalf allemaal buiten het gezoomde venster vielen. Nu bijgehouden via het `datazoom`-event (`opDataZoom`/`zicht2D`) — analoog aan de al bestaande dieptegebaseerde labelselectie in 3D tijdens slepen.
+
+### Radiale compressie tegen de Ideologie-Links-Economisch-uitschieter
+
+Op verzoek gecheckt: de Mahalanobis-afstand van deze tag (n=43, de zeldzaamste) in de eerste 3 CA-componenten is **~6× de mediaan** — geen renderbug maar standaard CA-gedrag bij een kolom met kleine massa. Na overleg (opties besproken: laten staan, radiale compressie, clip+flag, hogere ondergrenzen) gekozen voor radiale compressie: `r' = r^0.6` op de weergavecoördinaten, richting ongewijzigd, toegepast ná de echte CA en ná `alignSigns` (nieuwe `weergave`-computed, puur presentatie — `correspondence` zelf blijft ongemoeid, en klikken-om-te-filteren gaat toch op tagsleutel/rijlabel). Effect: de uitschieter zakt naar ~2,9× de mediaan, én — neveneffect van `r^p > r` zodra `r < 1` — de dichte kern van de wolk spreidt juist uit, waar het echte overlapprobleem zat.
+
+**Open punt:** afstanden op de kaart zijn na deze compressie geen letterlijke chi-kwadraatafstanden meer, alleen richting en relatieve volgorde blijven behouden. Dat staat nu alleen in code-comments, nog niet in de gebruikersgerichte panel-copy of `/about`.
+
+### Nog niet gedaan
+
+- dim1/dim2/dim3 een naam (x/y/z) en eenheid geven in de UI — gevraagd, nog niet opgepakt.
+- 3D-panning (naast roteren en zoomen) — gevraagd, nog niet opgepakt.
+- Het palet-hervalidatie-punt uit de vorige sessie (zie hieronder) staat nog open.
+
+## Stand bij einde sessie (2026-07-30) — verouderd, zie sectie hierboven
+
+Deze sessie ging volledig over de correspondentiekaart (`frontend/src/components/TagCorrespondenceMap.vue`), issue #3. Branch: `feature/correspondentie-3d`. **Alles staat uncommitted** — `npm test` (23 tests) en `npx astro build` zijn groen, de kaart is met Playwright-screenshots geverifieerd, maar er is bewust nog niet gecommit.
+
+### De drie gemelde 3D-bugs, en wat de oorzaak was
+
+De 3D-modus is geen `echarts-gl`/`scatter3D`, maar een eigen orthografische-projectie-laag vóór een gewone 2D-scatter. Dat is een bewuste keuze (zie de comment bovenin de component: klikken-om-te-filteren, tooltip, dimmen en labelplaatsing hoeven niet dubbel gebouwd te worden), en het heeft één concreet voordeel dat onderweg belangrijk bleek: `labelLayout` is een 2D-cartesische feature die `scatter3D` niet kent, en die hebben we hier dus wél.
+
+1. **Assen liepen niet synchroon met de punten.** Twee oorzaken. (a) x- en y-as spanden allebei `±grens` over een tekengebied van 3:1, dus op het scherm was de projectie een rotatie *plus* een uitrekking — de aslijnen bleven bijna horizontaal terwijl de wolk kantelde. Nu is het venster gelijk-aspect: een `ResizeObserver` op de wrapper meet de verhouding en `grensX` volgt daaruit. (b) Het venster werd elk frame opnieuw uit de *geprojecteerde* punten berekend, dus de kaart zoomde bij elke muisbeweging in en uit. Het venster hangt nu aan `straal`, een rotatie-invariante maat.
+2. **Vertraging tussen slepen en punten.** ECharts koppelt zijn overgangsanimatie aan de index in de data-array, en de dieptesortering hersorteert die array elk frame — punten animeerden dus naar de plek van hun buurman. `animation: false`. (Dit is de 2D-scatter-knop `series.animation`, niet `scatter3D.animationDurationUpdate`.)
+3. **Geen assenraster.** In 3D stond het cartesische raster van ECharts bewust uit (het zou een gedraaide mengeling van dimensies "dim 1"/"dim 2" noemen), maar er kwam niets voor in de plaats behalve twee vage lijntjes plus zwevende `axisTick`-streepjes op de nullijnen. Nu tekent de component een echt meegedraaid referentiekader: vloerraster in het dim1-dim3-vlak, ribben van de kubus, drie aslijnen vanuit de oorsprong en `dim n (x%)`-labels op de tippen — allemaal door dezelfde `projecteer()`, dus synchroon per constructie.
+
+### Wat er verder in dezelfde ronde bij is gekomen
+
+- **Perspectief in plaats van orthografisch.** `CAMERA_AFSTAND = 4` (in eenheden van `straal`); de isometrische look maakte de draairichting dubbelzinnig. Het venster houdt rekening met de maximale perspectiefvergroting, anders valt de voorste ribbe buiten beeld.
+- **Luchtperspectief.** `mist()` mengt elke kleur naar de achtergrond naarmate een punt verder weg ligt — haalt in één bewerking verzadiging én contrast weg. Beeldsymbolen (logo's) kunnen geen kleur aannemen, die krijgen de mist via opacity.
+- **Slepen zet geen filter meer om.** Het einde van een sleep was ook een `click`; nu geldt een marge van 4 px.
+- **Zoom.** Scrollen in 3D zoomt (eigen `zoom`-ref), scrollen in 2D gebruikt ECharts' `dataZoom` type `inside` met `filterMode: "none"` — die laatste is belangrijk, want de standaard gooit punten uit de serie en dan springen de labels bij elke zoomstap. Knop "Aanzicht herstellen" reset beide.
+- **Labels.** `labelLayout` staat op `{ hideOverlap: true, moveOverlap: "shiftY" }`, maar dat bleek een noodrem en geen ontwerp: welk label overleeft hangt af van de tekenvolgorde. Daarom houden alleen de 12 vaakst toegekende tags een vast label (`VASTE_TAGLABELS`), de rest komt bij hover. Rijen houden hun label, behalve als ze een logo hebben.
+- **Partijlogo's als punt.** `lib/partyLogoSprite.ts` haalt de SVG op, leest de verhouding uit de `viewBox` (nodig, want ECharts perst een `image://`-symbool in het vak dat je opgeeft — zonder verhouding wordt PVV's 13:1 wordmerk een vierkant) en kan het logo herteken als contour in één inkt. CSS kan dat niet: het logo belandt op een canvas. Toggle "Logo's: in kleur / als contour", staat nu op contour. In personenweergave krijgt een spreker het logo van zijn partij.
+- **Uitschieter-beleid.** `straal` is het **90e percentiel** van de puntafstanden, niet het maximum: één tag (`Ideologie-Links-Economisch`) ligt vier keer zo ver als de kern en perste met gelijk-aspect de rest tot een vlekje. In 2D viel dat niet op omdat elke as daar los schaalt. Gevolg: een handvol punten valt standaard buiten beeld, met een telling in de hint en een zoom-ondergrens (0,12) die ver genoeg uitzoomt om ze binnen te halen.
+- **SGP-logo vervangen** door de 2016-versie van Wikimedia Commons (het oude bestand was verkeerd).
+
+### Ontwerpsysteem voor de tagiconografie — geadopteerd, maar kijk er nog eens naar
+
+`docs/design/tag-iconografie/` (verplaatst uit de repo-root, met een `docs/design/README.md` ernaast). `tag-styles.json` is het machineleesbare deel: per perspectief een kleur, marker en Lucide-icoon, en per tag een Lucide-icoon.
+
+`frontend/scripts/build_tag_icons.mjs` genereert daaruit `src/lib/tagIcons.generated.ts`. Wat die stap doet: Lucide-iconen zijn een mix van `<path>`, `<circle>`, `<line>`, `<polyline>` en `<rect>`, en ECharts wil één padstring — dus alles wordt tot één `d` gesmolten, met twee lege `M`-sprongen ervoor die de bounding box op het volle 24×24-raster zetten (anders rekt ECharts elk icoon afzonderlijk uit tot het opgegeven vak). `lucide-static` is toegevoegd als **devDependency**; het gegenereerde bestand staat in de repo, dus Lucide belandt niet in de bundel.
+
+**Zeven icoonnamen uit het ontwerpsysteem bestaan niet in Lucide** — `person-lectern`, `cheque`, `person-cap`, `resize-figure`, `round-table`, `voorzittershamer`, `paper`. Er staat nu een expliciete `VERVANGERS`-map in het generatiescript (bv. `voorzittershamer` → `gavel`, `cheque` → `hand-heart`). Die keuzes zijn van mij, niet van de ontwerper; laat ze nakijken.
+
+**Openstaand punt, en het belangrijkste van deze sectie:** het geadopteerde palet is mono-accent — vier gedempte aardetinten (`#B68235`, `#4C7C7A`, `#B15E4A`, `#6B8558`). Het palet dat er stond was gevalideerd met de dataviz-validator tegen `--color-bg` in licht én donker met `--pairs all`; dit palet is dat niet, en het onderlinge kleurverschil is duidelijk kleiner. Het ontwerpsysteem vangt dat op met vorm ("perspectives are distinguished by tone + shape, not by clashing hues"), en de tagpunten dragen nu inderdaad hun eigen icoon. Maar: Lucide-iconen zijn lijntekeningen, dus de punten worden getekend met `itemStyle.borderColor` en een doorzichtige vulling — en op de screenshot van 2026-07-30 oogt de kaart daardoor **te licht en te vlak**, zeker in combinatie met de contourlogo's. Er is nog geen aparte donkere variant van het palet. Concreet nog te doen: contrast opnieuw meten, en overwegen de tagpunten wél te vullen (of de lijndikte op te voeren) zodat de wolk weer gewicht krijgt.
+
+### Bestanden
+
+Nieuw: `frontend/src/lib/partyLogoSprite.ts`, `frontend/src/lib/tagIcons.generated.ts`, `frontend/scripts/build_tag_icons.mjs`, `frontend/scripts/shoot_correspondence.mjs` (Playwright-hulpje: zet 3D aan, sleept, schiet screenshots naar `/tmp/correspondence-shots`), `docs/design/`.
+
+Gewijzigd: `TagCorrespondenceMap.vue` (het leeuwendeel), `styles/main.css` (`.control-knop`, hogere grafiek in 3D), `package.json` (lucide-static), `public/party-logos/sgp.svg`.
+
+**Let op:** er staan twee ongewenste bestanden in `frontend/public/party-logos/` — `logos.ai` en een `~ai-*.tmp`. Die horen daar niet; opruimen of in `.gitignore`.
+
+### Nieuwe issue
+
+**#7 — Taal in de codebase: vaste grens tussen Nederlands en Engels.** De repo mengt beide, soms binnen één functie (`correspondence.ts` heeft een Engelse API met Nederlandse helpers; `TagCorrespondenceMap.vue` Engelse props met Nederlandse locals). Voorstel in de issue: Engels voor alles wat met de techniek meepraat, Nederlands voor domeinbegrippen-als-waarde en voor commentaar/docs/commits, met een expliciete uitzondering voor domeinwoorden die niet vertaalbaar zijn.
+
+## Stand bij einde sessie (2026-07-28)
 
 Vervolg op de sessie van 2026-07-27 hieronder. Deze sessie ging over `agy` als tweede extractie-/taggingbackend naast de lokale qwen-pipeline — zowel een verworpen experiment (gebundelde prompts) als een geslaagde echte batch (single-call, zoals de bestaande aanpak).
 

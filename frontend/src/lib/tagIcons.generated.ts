@@ -1,0 +1,210 @@
+// GEGENEREERD -- niet met de hand aanpassen.
+// Bron: docs/design/tag-iconografie/tag-styles.json + icons/*.svg.
+// Opnieuw maken: cd frontend && node scripts/build_tag_icons.mjs
+
+/** Iconen uit het ontwerpsysteem als ECharts-padstring. Lijntekeningen: teken
+ *  ze met itemStyle.borderColor en een doorzichtige vulling, niet met .color. */
+export const ICOON_PAD: Record<string, string> = {
+	"arrow-left-right": "M0 0 M24 24 M3 12L21 12M7 8l-4 4 4 4M17 8l4 4-4 4",
+	"badge-check": "M0 0 M24 24 M12 2l2.2 1.6 2.7-.3 1 2.6 2.6 1-.3 2.7L22 12l-1.8 2.2.3 2.7-2.6 1-1 2.6-2.7-.3L12 22l-2.2-1.6-2.7.3-1-2.6-2.6-1 .3-2.7L2 12l1.8-2.2-.3-2.7 2.6-1 1-2.6 2.7.3zM9 12l2 2 4-4",
+	"banknote": "M0 0 M24 24 M4 6h16a2 2 0 0 1 2 2v8a2 2 0 0 1 -2 2h-16a2 2 0 0 1 -2 -2v-8a2 2 0 0 1 2 -2ZM9 12a3 3 0 1 0 6 0a3 3 0 1 0 -6 0M6 10L6 10.01M18 14L18 14.01",
+	"bar-chart-2": "M0 0 M24 24 M12 20L12 10M18 20L18 4M6 20L6 16",
+	"brain": "M0 0 M24 24 M9 3a3 3 0 0 0-3 3 3 3 0 0 0-1.5 5.6A3 3 0 0 0 6 17a3 3 0 0 0 3 3zM15 3a3 3 0 0 1 3 3 3 3 0 0 1 1.5 5.6A3 3 0 0 1 18 17a3 3 0 0 1-3 3zM9 3v17M15 3v17",
+	"briefcase": "M0 0 M24 24 M4 7h16a2 2 0 0 1 2 2v9a2 2 0 0 1 -2 2h-16a2 2 0 0 1 -2 -2v-9a2 2 0 0 1 2 -2ZM8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M2 12L22 12",
+	"building-2": "M0 0 M24 24 M4 3h10v18h-10ZM14 9h6v12h-6ZM7 7L7 7.01M11 7L11 7.01M7 11L7 11.01M11 11L11 11.01",
+	"calendar-clock": "M0 0 M24 24 M5 5h14a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2ZM16 3v4M8 3v4M3 11h18M13 16a3 3 0 1 0 6 0a3 3 0 1 0 -6 0M16 14.5V16l1 1",
+	"camera": "M0 0 M24 24 M5 7h14a2 2 0 0 1 2 2v9a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-9a2 2 0 0 1 2 -2ZM8 7l1.5-3h5L16 7M8.5 13.5a3.5 3.5 0 1 0 7 0a3.5 3.5 0 1 0 -7 0",
+	"cheque": "M0 0 M24 24 M5 6h16a1 1 0 0 1 1 1v10a1 1 0 0 1 -1 1h-16a1 1 0 0 1 -1 -1v-10a1 1 0 0 1 1 -1ZM4 6L4 18M15 10.5a2 2 0 1 0 4 0a2 2 0 1 0 -4 0M8 15q1.5-2 3 0t3 0",
+	"compass": "M0 0 M24 24 M3 12a9 9 0 1 0 18 0a9 9 0 1 0 -18 0M15 9l-2 6-6 2 2-6z",
+	"crop": "M0 0 M24 24 M6 2v14a2 2 0 0 0 2 2h14M18 22V8a2 2 0 0 0-2-2H2",
+	"crown": "M0 0 M24 24 M3 8l4 4 5-7 5 7 4-4v9H3zM3 20L21 20",
+	"equal": "M0 0 M24 24 M5 9L19 9M5 15L19 15",
+	"flask-conical": "M0 0 M24 24 M9 3h6M10 3v6l-6 10a1 1 0 0 0 1 1.5h14a1 1 0 0 0 1-1.5L14 9V3M8 15L16 15",
+	"gavel": "M0 0 M24 24 M14 4l6 6M6.5 11.5 2 16l2 2 4.5-4.5M9 9l6 6M4 20h6",
+	"git-fork": "M0 0 M24 24 M4 4a2 2 0 1 0 4 0a2 2 0 1 0 -4 0M4 20a2 2 0 1 0 4 0a2 2 0 1 0 -4 0M16 4a2 2 0 1 0 4 0a2 2 0 1 0 -4 0M6 6v4a4 4 0 0 0 4 4h4a4 4 0 0 0 4-4V6M6 10v8",
+	"glasses": "M0 0 M24 24 M3 12a3 3 0 1 0 6 0a3 3 0 1 0 -6 0M15 12a3 3 0 1 0 6 0a3 3 0 1 0 -6 0M9 12h6M3 12c0-2 1-3 2-3M21 12c0-2-1-3-2-3",
+	"graduation-cap": "M0 0 M24 24 M12 3 2 8l10 5 10-5-10-5zM6 10v5c0 1.5 3 3 6 3s6-1.5 6-3v-5",
+	"hand-coins": "M0 0 M24 24 M7 8a3 3 0 1 0 6 0a3 3 0 1 0 -6 0M4 21v-2a4 4 0 0 1 4-4h2M13 14h2a2 2 0 1 1 0 4h-4l-3-1M18 10c1 0 3-.5 3-2s-2-2-3-2-2 1-2 2",
+	"handshake": "M0 0 M24 24 M3 11l4-4 4 3 3-3 4 4M7 10l5 5 2-2M12 15l2 2 3-3",
+	"hash": "M0 0 M24 24 M5 9L19 9M5 15L19 15M10 4L8 20M16 4L14 20",
+	"heart": "M0 0 M24 24 M12 21s-7-4.5-9.5-9C1 8 2 4 6 4c2.5 0 4 2 6 2s3.5-2 6-2c4 0 5 4 3.5 8-2.5 4.5-9.5 9-9.5 9z",
+	"heart-pulse": "M0 0 M24 24 M12 20s-7-4.3-9-8.5C1.3 8 2.5 5 6 5c2 0 3.5 1.3 4.5 2.8M12 20s7-4.3 9-8.5C21.7 8 20.5 5 17 5c-2 0-3.5 1.3-4.5 2.8M6 12h3l2 4 3-8 2 4h2",
+	"landmark": "M0 0 M24 24 M3 21L21 21M5 21L5 10M19 21L19 10M3 10l9-6 9 6M9 21L9 10M15 21L15 10",
+	"layout-template": "M0 0 M24 24 M4 3h16a1 1 0 0 1 1 1v5a1 1 0 0 1 -1 1h-16a1 1 0 0 1 -1 -1v-5a1 1 0 0 1 1 -1ZM4 14h7a1 1 0 0 1 1 1v5a1 1 0 0 1 -1 1h-7a1 1 0 0 1 -1 -1v-5a1 1 0 0 1 1 -1ZM16 14h4a1 1 0 0 1 1 1v5a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1v-5a1 1 0 0 1 1 -1Z",
+	"leaf": "M0 0 M24 24 M11 20A7 7 0 0 1 4 13c0-6 5-11 15-11 0 10-5 15-11 15zM4 20l7-7",
+	"lectern": "M0 0 M24 24 M4 10 20 5v3L4 13zM12 11L12 20M8 20L16 20",
+	"library": "M0 0 M24 24 M4 21V5a1 1 0 0 1 1-1h2v17M10 21V4h2v17M16 21l2-16 2 .3-2 16zM3 21L21 21",
+	"link": "M0 0 M24 24 M9 17H7a5 5 0 0 1 0-10h2M15 7h2a5 5 0 0 1 0 10h-2M8 12L16 12",
+	"megaphone": "M0 0 M24 24 M3 11v3a2 2 0 0 0 2 2h1l2 5h2l-1-5h1l9 4V6l-9 4H6a2 2 0 0 0-2 2zM18 14a4 4 0 0 0 0-8",
+	"message-square-quote": "M0 0 M24 24 M21 15a2 2 0 0 1-2 2H8l-5 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2zM8 9c0-1 .5-2 2-2M13 9c0-1 .5-2 2-2",
+	"newspaper": "M0 0 M24 24 M4 4h13a2 2 0 0 1 2 2v13a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1zM7 8L15 8M7 12L15 12M7 16L11 16",
+	"paper": "M0 0 M24 24 M6 2h9l5 5v13a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1zM15 2v5h5M8 13L16 13M8 17L13 17",
+	"person-cap": "M0 0 M24 24 M8 9a4 4 0 1 0 8 0a4 4 0 1 0 -8 0M8 7a4 4 0 0 1 8 0M15.8 7.3h2.7M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8",
+	"person-lectern": "M0 0 M24 24 M10 4a2 2 0 1 0 4 0a2 2 0 1 0 -4 0M9 10c0-1.7 1.3-3 3-3s3 1.3 3 3M4 15 20 10v3L4 18zM12 16L12 21M8 21L16 21",
+	"pie-chart": "M0 0 M24 24 M21.2 15.9A10 10 0 1 1 8 2.8M22 12A10 10 0 0 0 12 2v10z",
+	"radio": "M0 0 M24 24 M9 14a3 3 0 1 0 6 0a3 3 0 1 0 -6 0M6.5 10.5a7.5 7.5 0 0 1 11 0M3.5 7.5a12 12 0 0 1 17 0M12 17L12 21M8 21L16 21",
+	"resize-figure": "M0 0 M24 24 M6 6a2 2 0 1 0 4 0a2 2 0 1 0 -4 0M5 15c0-2.8 1.3-5 3-5s3 2.2 3 5M15 14a3 3 0 1 0 6 0a3 3 0 1 0 -6 0M13.5 21c0-3.9 2-7 4.5-7s4.5 3.1 4.5 7",
+	"round-table": "M0 0 M24 24 M4 13a8 4.5 0 1 0 16 0a8 4.5 0 1 0 -16 0M10.8 6a1.2 1.2 0 1 0 2.4 0a1.2 1.2 0 1 0 -2.4 0M18.3 9.5a1.2 1.2 0 1 0 2.4 0a1.2 1.2 0 1 0 -2.4 0M18.3 16.5a1.2 1.2 0 1 0 2.4 0a1.2 1.2 0 1 0 -2.4 0M10.8 20a1.2 1.2 0 1 0 2.4 0a1.2 1.2 0 1 0 -2.4 0M3.3 16.5a1.2 1.2 0 1 0 2.4 0a1.2 1.2 0 1 0 -2.4 0M3.3 9.5a1.2 1.2 0 1 0 2.4 0a1.2 1.2 0 1 0 -2.4 0",
+	"ruler": "M0 0 M24 24 M3.3 8.7 8.7 3.3a1 1 0 0 1 1.4 0l10.6 10.6a1 1 0 0 1 0 1.4l-5.4 5.4a1 1 0 0 1-1.4 0L3.3 10.1a1 1 0 0 1 0-1.4zM7 9l2-2M10 12l2-2M13 15l2-2",
+	"scale": "M0 0 M24 24 M12 3v18M5 7l-3 7a3 3 0 0 0 6 0zM19 7l-3 7a3 3 0 0 0 6 0zM3 7h18M9 21h6",
+	"shield": "M0 0 M24 24 M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z",
+	"shield-off": "M0 0 M24 24 M4 5v6c0 5 4 8 8 9 1.3-.3 2.5-.8 3.6-1.6M19.5 14c.3-1 .5-2 .5-3V5l-8-3-3.3 1.2M2 2L22 22",
+	"sparkles": "M0 0 M24 24 M12 3l1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5zM19 15l.7 2.3L22 18l-2.3.7L19 21l-.7-2.3L16 18l2.3-.7z",
+	"swords": "M0 0 M24 24 M4 4l7 7M20 4l-7 7M4 20l6-6M20 20l-6-6M11 11l2 2",
+	"trending-up": "M0 0 M24 24 M3 17l6-6 4 4 8-9M17 6h4v4",
+	"unlock": "M0 0 M24 24 M6 11h12a2 2 0 0 1 2 2v6a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-6a2 2 0 0 1 2 -2ZM8 11V7a4 4 0 0 1 7.6-1.8M10.5 16a1.5 1.5 0 1 0 3 0a1.5 1.5 0 1 0 -3 0",
+	"user-check": "M0 0 M24 24 M5 8a4 4 0 1 0 8 0a4 4 0 1 0 -8 0M2 21c0-4 3-7 7-7M17 12l2 2 4-4",
+	"user-x": "M0 0 M24 24 M5 8a4 4 0 1 0 8 0a4 4 0 1 0 -8 0M2 21c0-4 3-7 7-7M17 8l5 5M22 8l-5 5",
+	"users": "M0 0 M24 24 M5 7a4 4 0 1 0 8 0a4 4 0 1 0 -8 0M2 21c0-4 3-7 7-7s7 3 7 7M14 7a3 3 0 1 0 6 0a3 3 0 1 0 -6 0M23 21c0-3-2-5.5-5-6.3",
+	"voorzittershamer": "M0 0 M24 24 M4 7h6a1 1 0 0 1 1 1v3a1 1 0 0 1 -1 1h-6a1 1 0 0 1 -1 -1v-3a1 1 0 0 1 1 -1ZM11 9.5L19 9.5M6 18a6 2.5 0 1 0 12 0a6 2.5 0 1 0 -12 0M12 12L12 15.5",
+	"wind": "M0 0 M24 24 M3 8h9a3 3 0 1 0-3-3M3 13h13a3 3 0 1 1-3 3M3 18h7",
+	"workflow": "M0 0 M24 24 M3 12a2 2 0 1 0 4 0a2 2 0 1 0 -4 0M7 12L17 12M14 8l4 4-4 4"
+};
+
+export interface PerspectiefStijl {
+	key: string;
+	naam: string;
+	kleur: string;
+	icoon: string;
+	/** tagsleutel -> icoonnaam */
+	tags: Record<string, string>;
+}
+
+export const PERSPECTIEVEN: PerspectiefStijl[] = [
+	{
+		"key": "filosofisch-argumentatietheoretisch",
+		"naam": "Filosofisch & Argumentatietheoretisch",
+		"kleur": "#B68235",
+		"icoon": "library",
+		"tags": {
+			"Walton-Causaal": "workflow",
+			"Walton-Consequentie": "trending-up",
+			"Walton-Expertise": "graduation-cap",
+			"Walton-Analogie": "arrow-left-right",
+			"Walton-Regel": "gavel",
+			"Drogreden-Ad-Hominem": "user-x",
+			"Drogreden-Stropop": "wind",
+			"Drogreden-Vals-Dilemma": "git-fork",
+			"Drogreden-Ontduiken-Bewijslast": "shield-off",
+			"Drogreden-Bespelen-Publiek": "megaphone",
+			"Meta-Bevoegdheid": "scale",
+			"Meta-Agenda-Tijdigheid": "calendar-clock",
+			"Meta-Reikwijdte": "crop",
+			"Meta-Vorm-Setting": "layout-template",
+			"Meta-Deelnemers": "users"
+		}
+	},
+	{
+		"key": "communicatiewetenschappelijk-media",
+		"naam": "Communicatiewetenschappelijk & Media",
+		"kleur": "#4C7C7A",
+		"icoon": "radio",
+		"tags": {
+			"Frame-Episodisch": "camera",
+			"Frame-Thematisch": "bar-chart-2",
+			"Frame-Conflict": "swords",
+			"Frame-Economisch": "banknote",
+			"Frame-Menselijk-Belang": "heart",
+			"Frame-Moraliteit": "compass",
+			"Frame-Verantwoordelijkheid": "user-check",
+			"Arena-Parlement": "landmark",
+			"Arena-Legacy-Media": "newspaper",
+			"Arena-Social-Media": "hash",
+			"Arena-Wetenschap": "flask-conical",
+			"Actor-Politicus": "person-lectern",
+			"Actor-Expert": "glasses",
+			"Actor-NGO": "cheque",
+			"Actor-Bedrijf": "building-2",
+			"Actor-Burger": "person-cap"
+		}
+	},
+	{
+		"key": "politicologisch-sociaal-psychologisch",
+		"naam": "Politicologisch & Sociaal-Psychologisch",
+		"kleur": "#B15E4A",
+		"icoon": "brain",
+		"tags": {
+			"Ideologie-GAL": "leaf",
+			"Ideologie-TAN": "shield",
+			"Ideologie-Links-Economisch": "hand-coins",
+			"Ideologie-Rechts-Economisch": "briefcase",
+			"Moraliteit-Zorg": "heart-pulse",
+			"Moraliteit-Eerlijkheid": "equal",
+			"Moraliteit-Proportionaliteit": "resize-figure",
+			"Moraliteit-Loyaliteit": "handshake",
+			"Moraliteit-Autoriteit": "crown",
+			"Moraliteit-Zuiverheid": "sparkles",
+			"Moraliteit-Vrijheid": "unlock"
+		}
+	},
+	{
+		"key": "methodologisch-contextueel",
+		"naam": "Methodologisch & Contextueel",
+		"kleur": "#6B8558",
+		"icoon": "ruler",
+		"tags": {
+			"Bewijs-Statistisch": "pie-chart",
+			"Bewijs-Anekdotisch": "message-square-quote",
+			"Bewijs-Causaal": "link",
+			"Bewijs-Expert": "badge-check",
+			"Context-Vragenuur": "lectern",
+			"Context-Commissie": "round-table",
+			"Context-Plenair": "voorzittershamer",
+			"Context-Tweeminutendebat": "paper"
+		}
+	}
+];
+
+/** Icoonnaam voor een tagsleutel, over alle perspectieven heen. */
+export const TAG_ICOON: Record<string, string> = {
+	"Walton-Causaal": "workflow",
+	"Walton-Consequentie": "trending-up",
+	"Walton-Expertise": "graduation-cap",
+	"Walton-Analogie": "arrow-left-right",
+	"Walton-Regel": "gavel",
+	"Drogreden-Ad-Hominem": "user-x",
+	"Drogreden-Stropop": "wind",
+	"Drogreden-Vals-Dilemma": "git-fork",
+	"Drogreden-Ontduiken-Bewijslast": "shield-off",
+	"Drogreden-Bespelen-Publiek": "megaphone",
+	"Meta-Bevoegdheid": "scale",
+	"Meta-Agenda-Tijdigheid": "calendar-clock",
+	"Meta-Reikwijdte": "crop",
+	"Meta-Vorm-Setting": "layout-template",
+	"Meta-Deelnemers": "users",
+	"Frame-Episodisch": "camera",
+	"Frame-Thematisch": "bar-chart-2",
+	"Frame-Conflict": "swords",
+	"Frame-Economisch": "banknote",
+	"Frame-Menselijk-Belang": "heart",
+	"Frame-Moraliteit": "compass",
+	"Frame-Verantwoordelijkheid": "user-check",
+	"Arena-Parlement": "landmark",
+	"Arena-Legacy-Media": "newspaper",
+	"Arena-Social-Media": "hash",
+	"Arena-Wetenschap": "flask-conical",
+	"Actor-Politicus": "person-lectern",
+	"Actor-Expert": "glasses",
+	"Actor-NGO": "cheque",
+	"Actor-Bedrijf": "building-2",
+	"Actor-Burger": "person-cap",
+	"Ideologie-GAL": "leaf",
+	"Ideologie-TAN": "shield",
+	"Ideologie-Links-Economisch": "hand-coins",
+	"Ideologie-Rechts-Economisch": "briefcase",
+	"Moraliteit-Zorg": "heart-pulse",
+	"Moraliteit-Eerlijkheid": "equal",
+	"Moraliteit-Proportionaliteit": "resize-figure",
+	"Moraliteit-Loyaliteit": "handshake",
+	"Moraliteit-Autoriteit": "crown",
+	"Moraliteit-Zuiverheid": "sparkles",
+	"Moraliteit-Vrijheid": "unlock",
+	"Bewijs-Statistisch": "pie-chart",
+	"Bewijs-Anekdotisch": "message-square-quote",
+	"Bewijs-Causaal": "link",
+	"Bewijs-Expert": "badge-check",
+	"Context-Vragenuur": "lectern",
+	"Context-Commissie": "round-table",
+	"Context-Plenair": "voorzittershamer",
+	"Context-Tweeminutendebat": "paper"
+};
