@@ -101,7 +101,19 @@ export function activeCount(): number {
 }
 
 export function matches(argument: Argument): boolean {
+	return matchesExcept(argument, []);
+}
+
+/** Als `matches`, maar met een paar dimensies overgeslagen.
+ *
+ * Bestaat voor de correspondentiekaart: die rekent zichzelf uit op de selectie,
+ * maar haar hoofdactie is klikken op een tag om erop te filteren. Zou ze op de
+ * volledig gefilterde lijst rekenen, dan bleef er na één klik één kolom over en
+ * stortte de analyse in. De kaart slaat daarom `tag` en `partij` over bij het
+ * rekenen en gebruikt die twee alleen nog om punten te dimmen. */
+export function matchesExcept(argument: Argument, skipKeys: string[]): boolean {
 	for (const dimension of DIMENSIONS) {
+		if (skipKeys.includes(dimension.key)) continue;
 		const selected = filters.values[dimension.key];
 		if (!selected.length) continue;
 		const values = dimension.valuesOf(argument);

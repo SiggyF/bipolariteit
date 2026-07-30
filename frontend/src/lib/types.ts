@@ -43,32 +43,6 @@ export interface Argument {
 	oppositions: { argument_id: number; relation_type: string; confidence: number | null }[];
 }
 
-// Correspondentieanalyse: server-side berekend (prince, zie
-// build_correspondence_analysis). Corpus-breed, dus niet herberekend bij
-// filteren -- de kaart markeert alleen wat binnen de selectie valt. Client-side
-// herberekenen staat in #3.
-export interface PartyPoint {
-	party: string;
-	x: number;
-	y: number;
-	n: number;
-}
-
-export interface TagPoint {
-	sleutel: string;
-	beschrijving: string;
-	labelgroep: string;
-	x: number;
-	y: number;
-	n: number;
-}
-
-export interface Correspondence {
-	inertia_pct: number[];
-	parties: PartyPoint[];
-	tags: TagPoint[];
-}
-
 // Sentinel voor argumenten waarvan de spreker geen partij heeft. Eén plek,
 // zodat filter, statistieken en grafieken gegarandeerd hetzelfde bedoelen.
 export const NO_PARTY = "Onbekend";

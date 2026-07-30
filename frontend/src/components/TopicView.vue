@@ -5,7 +5,7 @@ import StatsPanel from "./StatsPanel.vue";
 import TagsPerParty from "./TagsPerParty.vue";
 import TagCorrespondenceMap from "./TagCorrespondenceMap.vue";
 import ArgumentColumn from "./ArgumentColumn.vue";
-import { STANCES, stanceLabel, type Argument, type Correspondence } from "../lib/types";
+import { STANCES, stanceLabel, type Argument } from "../lib/types";
 import { filters, initFiltersFromUrl, matches } from "../lib/filters";
 
 // Alles wat op het filter reageert zit bewust in dit ene island: de grafieken
@@ -15,7 +15,6 @@ import { filters, initFiltersFromUrl, matches } from "../lib/filters";
 const props = defineProps<{
 	argumentList: Argument[];
 	topicSlug: string;
-	correspondence: Correspondence | null;
 }>();
 
 initFiltersFromUrl(props.argumentList);
@@ -38,7 +37,7 @@ const columns = computed(() =>
 
 	<StatsPanel :argumentList="filtered" />
 	<TagsPerParty :argumentList="filtered" />
-	<TagCorrespondenceMap :correspondence="correspondence" :argumentList="filtered" />
+	<TagCorrespondenceMap :argumentList="argumentList" />
 
 	<p v-if="!filtered.length" class="no-results">
 		Geen argumenten voldoen aan dit filter. Verwijder een filter hierboven om er meer te zien.

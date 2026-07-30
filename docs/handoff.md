@@ -2,7 +2,52 @@
 
 Status per 2026-07-27. Zie `docs/plan.md` voor het volledige, goedgekeurde architectuurplan. Dit document is voor het vervolg: wat staat er al, wat is er onderweg ontdekt, en wat is de volgende concrete stap.
 
-## Stand bij einde sessie (2026-07-28) — begin hier bij een nieuwe sessie
+## Stand bij einde sessie (2026-07-30) — begin hier bij een nieuwe sessie
+
+Deze sessie ging volledig over de correspondentiekaart (`frontend/src/components/TagCorrespondenceMap.vue`), issue #3. Branch: `feature/correspondentie-3d`. **Alles staat uncommitted** — `npm test` (23 tests) en `npx astro build` zijn groen, de kaart is met Playwright-screenshots geverifieerd, maar er is bewust nog niet gecommit.
+
+### De drie gemelde 3D-bugs, en wat de oorzaak was
+
+De 3D-modus is geen `echarts-gl`/`scatter3D`, maar een eigen orthografische-projectie-laag vóór een gewone 2D-scatter. Dat is een bewuste keuze (zie de comment bovenin de component: klikken-om-te-filteren, tooltip, dimmen en labelplaatsing hoeven niet dubbel gebouwd te worden), en het heeft één concreet voordeel dat onderweg belangrijk bleek: `labelLayout` is een 2D-cartesische feature die `scatter3D` niet kent, en die hebben we hier dus wél.
+
+1. **Assen liepen niet synchroon met de punten.** Twee oorzaken. (a) x- en y-as spanden allebei `±grens` over een tekengebied van 3:1, dus op het scherm was de projectie een rotatie *plus* een uitrekking — de aslijnen bleven bijna horizontaal terwijl de wolk kantelde. Nu is het venster gelijk-aspect: een `ResizeObserver` op de wrapper meet de verhouding en `grensX` volgt daaruit. (b) Het venster werd elk frame opnieuw uit de *geprojecteerde* punten berekend, dus de kaart zoomde bij elke muisbeweging in en uit. Het venster hangt nu aan `straal`, een rotatie-invariante maat.
+2. **Vertraging tussen slepen en punten.** ECharts koppelt zijn overgangsanimatie aan de index in de data-array, en de dieptesortering hersorteert die array elk frame — punten animeerden dus naar de plek van hun buurman. `animation: false`. (Dit is de 2D-scatter-knop `series.animation`, niet `scatter3D.animationDurationUpdate`.)
+3. **Geen assenraster.** In 3D stond het cartesische raster van ECharts bewust uit (het zou een gedraaide mengeling van dimensies "dim 1"/"dim 2" noemen), maar er kwam niets voor in de plaats behalve twee vage lijntjes plus zwevende `axisTick`-streepjes op de nullijnen. Nu tekent de component een echt meegedraaid referentiekader: vloerraster in het dim1-dim3-vlak, ribben van de kubus, drie aslijnen vanuit de oorsprong en `dim n (x%)`-labels op de tippen — allemaal door dezelfde `projecteer()`, dus synchroon per constructie.
+
+### Wat er verder in dezelfde ronde bij is gekomen
+
+- **Perspectief in plaats van orthografisch.** `CAMERA_AFSTAND = 4` (in eenheden van `straal`); de isometrische look maakte de draairichting dubbelzinnig. Het venster houdt rekening met de maximale perspectiefvergroting, anders valt de voorste ribbe buiten beeld.
+- **Luchtperspectief.** `mist()` mengt elke kleur naar de achtergrond naarmate een punt verder weg ligt — haalt in één bewerking verzadiging én contrast weg. Beeldsymbolen (logo's) kunnen geen kleur aannemen, die krijgen de mist via opacity.
+- **Slepen zet geen filter meer om.** Het einde van een sleep was ook een `click`; nu geldt een marge van 4 px.
+- **Zoom.** Scrollen in 3D zoomt (eigen `zoom`-ref), scrollen in 2D gebruikt ECharts' `dataZoom` type `inside` met `filterMode: "none"` — die laatste is belangrijk, want de standaard gooit punten uit de serie en dan springen de labels bij elke zoomstap. Knop "Aanzicht herstellen" reset beide.
+- **Labels.** `labelLayout` staat op `{ hideOverlap: true, moveOverlap: "shiftY" }`, maar dat bleek een noodrem en geen ontwerp: welk label overleeft hangt af van de tekenvolgorde. Daarom houden alleen de 12 vaakst toegekende tags een vast label (`VASTE_TAGLABELS`), de rest komt bij hover. Rijen houden hun label, behalve als ze een logo hebben.
+- **Partijlogo's als punt.** `lib/partyLogoSprite.ts` haalt de SVG op, leest de verhouding uit de `viewBox` (nodig, want ECharts perst een `image://`-symbool in het vak dat je opgeeft — zonder verhouding wordt PVV's 13:1 wordmerk een vierkant) en kan het logo herteken als contour in één inkt. CSS kan dat niet: het logo belandt op een canvas. Toggle "Logo's: in kleur / als contour", staat nu op contour. In personenweergave krijgt een spreker het logo van zijn partij.
+- **Uitschieter-beleid.** `straal` is het **90e percentiel** van de puntafstanden, niet het maximum: één tag (`Ideologie-Links-Economisch`) ligt vier keer zo ver als de kern en perste met gelijk-aspect de rest tot een vlekje. In 2D viel dat niet op omdat elke as daar los schaalt. Gevolg: een handvol punten valt standaard buiten beeld, met een telling in de hint en een zoom-ondergrens (0,12) die ver genoeg uitzoomt om ze binnen te halen.
+- **SGP-logo vervangen** door de 2016-versie van Wikimedia Commons (het oude bestand was verkeerd).
+
+### Ontwerpsysteem voor de tagiconografie — geadopteerd, maar kijk er nog eens naar
+
+`docs/design/tag-iconografie/` (verplaatst uit de repo-root, met een `docs/design/README.md` ernaast). `tag-styles.json` is het machineleesbare deel: per perspectief een kleur, marker en Lucide-icoon, en per tag een Lucide-icoon.
+
+`frontend/scripts/build_tag_icons.mjs` genereert daaruit `src/lib/tagIcons.generated.ts`. Wat die stap doet: Lucide-iconen zijn een mix van `<path>`, `<circle>`, `<line>`, `<polyline>` en `<rect>`, en ECharts wil één padstring — dus alles wordt tot één `d` gesmolten, met twee lege `M`-sprongen ervoor die de bounding box op het volle 24×24-raster zetten (anders rekt ECharts elk icoon afzonderlijk uit tot het opgegeven vak). `lucide-static` is toegevoegd als **devDependency**; het gegenereerde bestand staat in de repo, dus Lucide belandt niet in de bundel.
+
+**Zeven icoonnamen uit het ontwerpsysteem bestaan niet in Lucide** — `person-lectern`, `cheque`, `person-cap`, `resize-figure`, `round-table`, `voorzittershamer`, `paper`. Er staat nu een expliciete `VERVANGERS`-map in het generatiescript (bv. `voorzittershamer` → `gavel`, `cheque` → `hand-heart`). Die keuzes zijn van mij, niet van de ontwerper; laat ze nakijken.
+
+**Openstaand punt, en het belangrijkste van deze sectie:** het geadopteerde palet is mono-accent — vier gedempte aardetinten (`#B68235`, `#4C7C7A`, `#B15E4A`, `#6B8558`). Het palet dat er stond was gevalideerd met de dataviz-validator tegen `--color-bg` in licht én donker met `--pairs all`; dit palet is dat niet, en het onderlinge kleurverschil is duidelijk kleiner. Het ontwerpsysteem vangt dat op met vorm ("perspectives are distinguished by tone + shape, not by clashing hues"), en de tagpunten dragen nu inderdaad hun eigen icoon. Maar: Lucide-iconen zijn lijntekeningen, dus de punten worden getekend met `itemStyle.borderColor` en een doorzichtige vulling — en op de screenshot van 2026-07-30 oogt de kaart daardoor **te licht en te vlak**, zeker in combinatie met de contourlogo's. Er is nog geen aparte donkere variant van het palet. Concreet nog te doen: contrast opnieuw meten, en overwegen de tagpunten wél te vullen (of de lijndikte op te voeren) zodat de wolk weer gewicht krijgt.
+
+### Bestanden
+
+Nieuw: `frontend/src/lib/partyLogoSprite.ts`, `frontend/src/lib/tagIcons.generated.ts`, `frontend/scripts/build_tag_icons.mjs`, `frontend/scripts/shoot_correspondence.mjs` (Playwright-hulpje: zet 3D aan, sleept, schiet screenshots naar `/tmp/correspondence-shots`), `docs/design/`.
+
+Gewijzigd: `TagCorrespondenceMap.vue` (het leeuwendeel), `styles/main.css` (`.control-knop`, hogere grafiek in 3D), `package.json` (lucide-static), `public/party-logos/sgp.svg`.
+
+**Let op:** er staan twee ongewenste bestanden in `frontend/public/party-logos/` — `logos.ai` en een `~ai-*.tmp`. Die horen daar niet; opruimen of in `.gitignore`.
+
+### Nieuwe issue
+
+**#7 — Taal in de codebase: vaste grens tussen Nederlands en Engels.** De repo mengt beide, soms binnen één functie (`correspondence.ts` heeft een Engelse API met Nederlandse helpers; `TagCorrespondenceMap.vue` Engelse props met Nederlandse locals). Voorstel in de issue: Engels voor alles wat met de techniek meepraat, Nederlands voor domeinbegrippen-als-waarde en voor commentaar/docs/commits, met een expliciete uitzondering voor domeinwoorden die niet vertaalbaar zijn.
+
+## Stand bij einde sessie (2026-07-28)
 
 Vervolg op de sessie van 2026-07-27 hieronder. Deze sessie ging over `agy` als tweede extractie-/taggingbackend naast de lokale qwen-pipeline — zowel een verworpen experiment (gebundelde prompts) als een geslaagde echte batch (single-call, zoals de bestaande aanpak).
 

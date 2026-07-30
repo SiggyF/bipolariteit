@@ -598,9 +598,81 @@ h2 {
 	width: 100%;
 }
 
+/* Categorische kleuren per perspectief in de correspondentiekaart. Gevalideerd
+   met de dataviz-validator tegen --color-bg in beide modes, met --pairs all
+   (scatter: elk punt kan naast elk ander liggen). In donkere modus zit het
+   zwakste paar op de CVD-ondergrens, en die is alleen toegestaan mét een tweede
+   codering -- vandaar dat elk perspectief ook een eigen symboolvorm heeft.
+   TagCorrespondenceMap.vue spiegelt deze waarden, want ECharts kan geen CSS-
+   variabelen lezen. */
+:root {
+	--perspectief-filosofisch: #2a78d6;
+	--perspectief-communicatie: #eda100;
+	--perspectief-politicologisch: #e87ba4;
+	--perspectief-methodologisch: #008300;
+}
+
+.chart-controls {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: var(--space-2);
+	margin-bottom: var(--space-2);
+	font-size: var(--step--1);
+}
+
+.chart-controls label {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.4rem;
+}
+
+.chart-controls select {
+	font: inherit;
+	font-size: var(--step--1);
+	padding: 0.15rem 0.4rem;
+	border: 1px solid var(--color-border);
+	background: var(--color-bg);
+	color: inherit;
+}
+
+.control-knop {
+	font: inherit;
+	font-size: var(--step--1);
+	padding: 0.15rem 0.5rem;
+	border: 1px solid var(--color-border);
+	background: var(--color-bg);
+	color: inherit;
+	cursor: pointer;
+}
+
+.control-hint {
+	color: var(--color-muted);
+	font-size: var(--step--2);
+}
+
+/* In 3D is slepen de manier om te draaien; de grab-cursor is de enige hint dat
+   dat kan, naast de tekstuele hint in de controls. */
+.correspondence-wrapper.is-3d {
+	cursor: grab;
+	touch-action: none;
+}
+
+.correspondence-wrapper.is-3d:active {
+	cursor: grabbing;
+}
+
 .correspondence-chart {
 	width: 100%;
 	height: 420px;
+}
+
+/* In 3D moet het tekengebied per pixel evenveel data-eenheden op x als op y
+   tellen, anders is de projectie op het scherm geen rotatie. Daardoor bepaalt
+   de hoogte hoe groot de kubus wordt en blijft de breedte over als marge; een
+   hogere grafiek is hier dus een grotere grafiek. */
+.correspondence-wrapper.is-3d .correspondence-chart {
+	height: 620px;
 }
 
 .party-table {

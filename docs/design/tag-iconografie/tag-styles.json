@@ -1,0 +1,146 @@
+{
+  "notes": "Icon names are semantic references to Lucide (https://lucide.dev) icons; colors are hex, one per perspective (Classical is a mono-accent system, so perspectives are distinguished by tone + shape, not by clashing hues). marker is the shape to use for this perspective in charts/legends.",
+  "perspectives": [
+    {
+      "key": "filosofisch-argumentatietheoretisch",
+      "naam": "Filosofisch & Argumentatietheoretisch",
+      "color": "#B68235",
+      "marker": "circle",
+      "icon": "library",
+      "groepen": [
+        {
+          "naam": "Redeneerschema",
+          "tags": [
+            { "sleutel": "Walton-Causaal", "icon": "workflow" },
+            { "sleutel": "Walton-Consequentie", "icon": "trending-up" },
+            { "sleutel": "Walton-Expertise", "icon": "graduation-cap" },
+            { "sleutel": "Walton-Analogie", "icon": "arrow-left-right" },
+            { "sleutel": "Walton-Regel", "icon": "gavel" }
+          ]
+        },
+        {
+          "naam": "Dialectische Kwaliteit",
+          "tags": [
+            { "sleutel": "Drogreden-Ad-Hominem", "icon": "user-x" },
+            { "sleutel": "Drogreden-Stropop", "icon": "wind" },
+            { "sleutel": "Drogreden-Vals-Dilemma", "icon": "git-fork" },
+            { "sleutel": "Drogreden-Ontduiken-Bewijslast", "icon": "shield-off" },
+            { "sleutel": "Drogreden-Bespelen-Publiek", "icon": "megaphone" }
+          ]
+        },
+        {
+          "naam": "Metadiscussie",
+          "tags": [
+            { "sleutel": "Meta-Bevoegdheid", "icon": "scale" },
+            { "sleutel": "Meta-Agenda-Tijdigheid", "icon": "calendar-clock" },
+            { "sleutel": "Meta-Reikwijdte", "icon": "crop" },
+            { "sleutel": "Meta-Vorm-Setting", "icon": "layout-template" },
+            { "sleutel": "Meta-Deelnemers", "icon": "users" }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "communicatiewetenschappelijk-media",
+      "naam": "Communicatiewetenschappelijk & Media",
+      "color": "#4C7C7A",
+      "marker": "triangle",
+      "icon": "radio",
+      "groepen": [
+        {
+          "naam": "Framing-Focus",
+          "tags": [
+            { "sleutel": "Frame-Episodisch", "icon": "camera" },
+            { "sleutel": "Frame-Thematisch", "icon": "bar-chart-2" }
+          ]
+        },
+        {
+          "naam": "Generieke Nieuwsframes",
+          "tags": [
+            { "sleutel": "Frame-Conflict", "icon": "swords" },
+            { "sleutel": "Frame-Economisch", "icon": "banknote" },
+            { "sleutel": "Frame-Menselijk-Belang", "icon": "heart" },
+            { "sleutel": "Frame-Moraliteit", "icon": "compass" },
+            { "sleutel": "Frame-Verantwoordelijkheid", "icon": "user-check" }
+          ]
+        },
+        {
+          "naam": "Issue Arena",
+          "tags": [
+            { "sleutel": "Arena-Parlement", "icon": "landmark" },
+            { "sleutel": "Arena-Legacy-Media", "icon": "newspaper" },
+            { "sleutel": "Arena-Social-Media", "icon": "hash" },
+            { "sleutel": "Arena-Wetenschap", "icon": "flask-conical" }
+          ]
+        },
+        {
+          "naam": "Actor Type",
+          "tags": [
+            { "sleutel": "Actor-Politicus", "icon": "person-lectern" },
+            { "sleutel": "Actor-Expert", "icon": "glasses" },
+            { "sleutel": "Actor-NGO", "icon": "cheque" },
+            { "sleutel": "Actor-Bedrijf", "icon": "building-2" },
+            { "sleutel": "Actor-Burger", "icon": "person-cap" }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "politicologisch-sociaal-psychologisch",
+      "naam": "Politicologisch & Sociaal-Psychologisch",
+      "color": "#B15E4A",
+      "marker": "diamond",
+      "icon": "brain",
+      "groepen": [
+        {
+          "naam": "Cultureel-Ideologische Breuklijn",
+          "tags": [
+            { "sleutel": "Ideologie-GAL", "icon": "leaf" },
+            { "sleutel": "Ideologie-TAN", "icon": "shield" },
+            { "sleutel": "Ideologie-Links-Economisch", "icon": "hand-coins" },
+            { "sleutel": "Ideologie-Rechts-Economisch", "icon": "briefcase" }
+          ]
+        },
+        {
+          "naam": "Morele Fundamenten",
+          "tags": [
+            { "sleutel": "Moraliteit-Zorg", "icon": "heart-pulse" },
+            { "sleutel": "Moraliteit-Eerlijkheid", "icon": "equal" },
+            { "sleutel": "Moraliteit-Proportionaliteit", "icon": "resize-figure" },
+            { "sleutel": "Moraliteit-Loyaliteit", "icon": "handshake" },
+            { "sleutel": "Moraliteit-Autoriteit", "icon": "crown" },
+            { "sleutel": "Moraliteit-Zuiverheid", "icon": "sparkles" },
+            { "sleutel": "Moraliteit-Vrijheid", "icon": "unlock" }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "methodologisch-contextueel",
+      "naam": "Methodologisch & Contextueel",
+      "color": "#6B8558",
+      "marker": "square",
+      "icon": "ruler",
+      "groepen": [
+        {
+          "naam": "Type Bewijsvoering",
+          "tags": [
+            { "sleutel": "Bewijs-Statistisch", "icon": "pie-chart" },
+            { "sleutel": "Bewijs-Anekdotisch", "icon": "message-square-quote" },
+            { "sleutel": "Bewijs-Causaal", "icon": "link" },
+            { "sleutel": "Bewijs-Expert", "icon": "badge-check" }
+          ]
+        },
+        {
+          "naam": "Parlementaire Context",
+          "tags": [
+            { "sleutel": "Context-Vragenuur", "icon": "lectern" },
+            { "sleutel": "Context-Commissie", "icon": "round-table" },
+            { "sleutel": "Context-Plenair", "icon": "voorzittershamer" },
+            { "sleutel": "Context-Tweeminutendebat", "icon": "paper" }
+          ]
+        }
+      ]
+    }
+  ]
+}
