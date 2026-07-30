@@ -42,20 +42,34 @@ Een API-token is een wachtwoord waarmee GitHub namens jou mag deployen.
 
 1. Ga naar <https://dash.cloudflare.com/profile/api-tokens>.
 2. **Create Token**.
-3. Kies het sjabloon **Edit Cloudflare Workers** → **Use template**.
-4. Dat sjabloon dekt het uploaden van de Worker, maar niet het aanmaken van het
-   DNS-record en het certificaat die bij een eigen subdomein horen. Voeg onder
-   **Permissions** daarom twee regels toe:
+3. Kies het sjabloon **Edit Cloudflare Workers** → **Use template**, of bouw
+   een custom token met precies deze vier regels:
 
    | Scope | Onderdeel | Recht |
    | --- | --- | --- |
+   | Account | Workers Scripts | Edit |
+   | Zone | Workers Routes | Edit |
    | Zone | DNS | Edit |
    | Zone | SSL and Certificates | Edit |
 
-5. Beperk onder **Zone Resources** tot `bipolariteit.org`, en onder
+   Let op de scope-kolom: elke permissieregel begint met een dropdown
+   `Account` / `Zone` / `User`. **Workers Scripts** bestaat alleen onder
+   `Account`; **Workers Routes** alleen onder `Zone`. Staat de eerste dropdown
+   op `Account`, dan is `Workers Routes` niet eens zichtbaar in de tweede lijst
+   — dat is het makkelijkst te missen punt van dit hele stappenplan.
+
+   De laatste drie zijn er omdat `custom_domain: true` méér doet dan een script
+   uploaden: de route koppelen (Workers Routes), het subdomein-record aanmaken
+   (DNS) en het certificaat laten uitgeven (SSL).
+
+4. Beperk onder **Zone Resources** tot `bipolariteit.org`, en onder
    **Account Resources** tot je eigen account.
-6. **Continue to summary** → **Create Token**.
-7. **Kopieer de token nu** — hij is daarna niet meer op te vragen.
+5. **Continue to summary** → **Create Token**.
+6. **Kopieer de token nu** — hij is daarna niet meer op te vragen.
+
+> Bewerk je een bestaande token, vergeet dan niet onderaan op **Update token**
+> te drukken. Zonder die klik worden de aangevinkte rechten niet opgeslagen en
+> blijf je dezelfde `Authentication error [code: 10000]` zien.
 
 > De twee extra rechten staan niet als zodanig in de Cloudflare-documentatie;
 > ze zijn afgeleid uit wat `custom_domain: true` doet (een DNS-record aanmaken
@@ -153,6 +167,16 @@ afgedwongen:
 3. **Niet indexeerbaar**: `robots.txt` (geschreven door het releasescript) én
    de `X-Robots-Tag: noindex, nofollow`-header uit `deploy/worker.js`. Die
    tweede is er omdat niet elke crawler zich aan `robots.txt` houdt.
+
+> De header hangt aan `run_worker_first: true` in de wrangler-config. Zonder
+> die instelling serveert Cloudflare een bestaand bestand rechtstreeks en wordt
+> de Worker helemaal niet aangeroepen — de header ontbreekt dan op precies de
+> pagina's waar hij nodig is, en niets faalt. Controleer na een deploy dus
+> altijd de header zelf, niet alleen of de pagina laadt:
+>
+> ```sh
+> curl -sI https://v0-3-0-preview.bipolariteit.org/ | grep -i x-robots-tag
+> ```
 
 De hostnaam zelf is overigens sowieso niet geheim: zodra Cloudflare het
 certificaat uitgeeft verschijnt hij in de openbare
