@@ -11,6 +11,11 @@
 	"assets": {
 		"directory": "frontend/dist",
 		"binding": "ASSETS",
+		// Zonder dit draait deploy/worker.js alleen bij een 404: standaard
+		// serveert Cloudflare een bestaand bestand rechtstreeks en slaat de
+		// Worker over. De noindex-header ontbrak daardoor stilzwijgend op
+		// precies de pagina's waar hij nodig is.
+		"run_worker_first": true,
 		// Serveert dist/404.html (uit frontend/src/pages/404.astro) bij een
 		// onbekende URL. Bewust gekozen boven "single-page-application", want
 		// dit is een multi-page site: bij die laatste instelling zou een
