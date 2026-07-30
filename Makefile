@@ -55,10 +55,16 @@ dev: ## Start de Astro dev-server op de achtergrond (localhost:4321)
 dev-stop: ## Stop de achtergrond dev-server
 	cd frontend && npx astro dev stop
 
-release: build ## Publiceer een preview-release naar Cloudflare (zie docs/release.md). Vars: TAG
+# De ontwikkelbalk wordt bij het bouwen ingebakken, dus PUBLIC_RELEASE_TAG moet
+# mee met `npm run build` -- niet met het releasescript, dat draait pas als
+# dist/ al af is. Daarom bouwen deze targets zelf in plaats van `build` als
+# prerequisite te gebruiken.
+release: ## Publiceer een preview-release naar Cloudflare (zie docs/release.md). Vars: TAG
 	@test -n "$(TAG)" || { echo "Gebruik: make release TAG=v0.3.0"; exit 1; }
-	uv run python scripts/release_preview.py $(TAG)
+	cd frontend && PUBLIC_RELEASE_TAG="$(TAG)" npm run build
+	uv run python scripts/release_preview.py "$(TAG)"
 
-release-dry: build ## Zelfde als release, maar toont alleen hostnaam + config. Vars: TAG
+release-dry: ## Zelfde als release, maar toont alleen hostnaam + config. Vars: TAG
 	@test -n "$(TAG)" || { echo "Gebruik: make release-dry TAG=v0.3.0"; exit 1; }
-	uv run python scripts/release_preview.py $(TAG) --dry-run
+	cd frontend && PUBLIC_RELEASE_TAG="$(TAG)" npm run build
+	uv run python scripts/release_preview.py "$(TAG)" --dry-run

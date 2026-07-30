@@ -138,22 +138,43 @@ steeds in, maar als streepje in plaats van als punt, dus het blijft één niveau
 
 `bipolariteit.org` zelf en `www` blijven vrij voor de publieke site later.
 
-## Hoe privé is dit precies
+## Openbaar, maar geen officiële publicatie
 
-De preview is **niet met een wachtwoord afgeschermd**. De URL is het enige dat
-hem beschermt, en dat is een zwakkere garantie dan het klinkt:
+Een release is gewoon bereikbaar voor wie de URL heeft — er zit geen wachtwoord
+op, en dat is een bewuste keuze: het moet makkelijk zijn om mee te laten kijken.
+Wat het níét is, is een officiële publicatie. Dat wordt op drie plekken
+afgedwongen:
 
-- Zoekmachines worden geweerd via `robots.txt` én de `X-Robots-Tag`-header.
-- Maar: zodra Cloudflare het certificaat uitgeeft, wordt de hostnaam binnen
-  enkele minuten gepubliceerd in de openbare
-  [Certificate Transparency](https://certificate.transparency.dev/)-logs. Die
-  worden continu uitgelezen. De hostnaam is dus vindbaar, ook al is de inhoud
-  niet geïndexeerd.
-- En de tagnaam is te raden voor wie het project kent.
+1. **Een balk boven aan elke pagina**: "Ontwikkelversie v0.3.0 — geen officiële
+   publicatie." Komt uit `frontend/src/components/SiteNav.astro`, die op alle
+   pagina's staat.
+2. **Een uitgebreidere toelichting op `/about`** — waarom de cijfers kunnen
+   schuiven en waarom je deze versie niet als bron moet citeren.
+3. **Niet indexeerbaar**: `robots.txt` (geschreven door het releasescript) én
+   de `X-Robots-Tag: noindex, nofollow`-header uit `deploy/worker.js`. Die
+   tweede is er omdat niet elke crawler zich aan `robots.txt` houdt.
 
-Voor een échte afscherming is Cloudflare Access de volgende stap (gratis tot 50
-gebruikers, inloggen met een code per e-mail). `deploy/worker.js` is de plek
-waar dat inhaakt.
+De hostnaam zelf is overigens sowieso niet geheim: zodra Cloudflare het
+certificaat uitgeeft verschijnt hij in de openbare
+[Certificate Transparency](https://certificate.transparency.dev/)-logs. Reken er
+dus niet op dat een release onvindbaar blijft; reken erop dat hij herkenbaar is
+als ontwikkelversie.
+
+### De vlaggen
+
+| Variabele | Effect |
+| --- | --- |
+| `PUBLIC_RELEASE_TAG` | Versienummer in de balk. Wordt door `make release` gezet. |
+| `PUBLIC_RELEASE_OFFICIEEL=true` | Verbergt balk én `/about`-sectie. |
+
+De balk is **fail-open**: hij verschijnt tenzij een build zichzelf expliciet
+als officieel bestempelt. Vergeet je de vlag bij een echte publicatie, dan staat
+er ten onrechte "ontwikkelversie" — vervelend, maar de omgekeerde fout (een
+ontwikkelversie die zich als officieel voordoet) is veel erger.
+
+Let op dat `PUBLIC_RELEASE_TAG` bij het **bouwen** meegegeven moet worden, niet
+bij het deployen: Astro bakt de balk in de HTML. `make release` doet dat goed;
+`make build` gevolgd door het script rechtstreeks aanroepen niet.
 
 ## Opruimen
 

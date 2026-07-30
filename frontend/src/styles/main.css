@@ -150,6 +150,30 @@ main {
 	padding: var(--space-4) var(--space-3) var(--space-5);
 }
 
+/* Ontwikkelbalk boven de navigatie. Alleen bestaande tokens, zodat de donkere
+   variant vanzelf meeloopt (zie :root[data-theme="dark"] onderaan). */
+.dev-balk {
+	margin: 0;
+	padding: var(--space-1) var(--space-3);
+	background: var(--color-card-bg);
+	border-bottom: 2px solid var(--color-contra);
+	color: var(--color-muted);
+	font-family: var(--font-mono);
+	font-size: var(--step--1);
+	line-height: 1.5;
+	text-align: center;
+}
+
+.dev-balk strong {
+	color: var(--color-contra);
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+}
+
+.dev-balk a {
+	color: inherit;
+}
+
 .site-nav {
 	display: flex;
 	align-items: center;
