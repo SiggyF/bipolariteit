@@ -224,6 +224,10 @@ const LABEL_LAYOUT = () => ({ hideOverlap: true, moveOverlap: "shiftY" });
 // rest afleest.
 const VASTE_TAGLABELS = 12;
 
+// Letter per dimensie-index, gebruikt in zowel de 2D-aslabels (`asNaam`) als
+// de 3D-aslabels hieronder -- zie issue #10.
+const AS_LETTERS = ["x", "y", "z"];
+
 // --- 3D: eigen projectie ---------------------------------------------------
 // Bewust geen echarts-gl of three.js. Die brengen een tweede renderer én een
 // eigen option-oppervlak mee, waardoor klikken-om-te-filteren, de tooltip, het
@@ -564,7 +568,11 @@ const chartOption = computed(() => {
 	// van alle drie. Ze dan toch "dim 1" en "dim 2" noemen zou liegen, dus in die
 	// modus verdwijnt het hele cartesische assenstelsel van ECharts en tekenen we
 	// zelf een meegedraaid raster (zie hieronder).
-	const asNaam = (k: number) => (driedimensionaal.value ? "" : `dim ${k + 1} (${c.inertiaPct[k]}%)`);
+	// `[ - ]`: CA-coördinaten zijn dimensieloos (geen euro's, geen aantallen) --
+	// een expliciete "geen eenheid"-notatie is eerlijker dan er niets bij te
+	// zetten, zie issue #10.
+	const asNaam = (k: number) =>
+		driedimensionaal.value ? "" : `${AS_LETTERS[k]} · dim ${k + 1} (${c.inertiaPct[k]}%) [ - ]`;
 	const raster = driedimensionaal.value ? { show: false } : asStijl;
 	const verborgenAs = {
 		axisLine: { show: !driedimensionaal.value, ...asStijl },
@@ -776,7 +784,7 @@ const chartOption = computed(() => {
 					value: [q.x, q.y],
 					label: {
 						show: true,
-						formatter: `dim ${k + 1} (${c.inertiaPct[k]}%)`,
+						formatter: `${AS_LETTERS[k]} · dim ${k + 1} (${c.inertiaPct[k]}%) [ - ]`,
 						color: gedempt.value,
 						fontSize: 10,
 						position: "top",
