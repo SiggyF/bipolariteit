@@ -38,8 +38,23 @@ const tagRows = computed(() => {
 	return props.mode === "persoon" ? bucketSmallCounts(rows, PERSON_TAG_THRESHOLD) : rows;
 });
 
-// Ascending so the biggest bar lands nearest the top of ECharts' bottom-up axis.
-const chartRows = computed(() => [...tagRows.value].reverse());
+// Groepeer op perspectief (in de volgorde van de taxonomie, data/tags.toml)
+// i.p.v. kaal op aantal -- zo staan gelijkgekleurde tags bij elkaar en oogt de
+// grafiek als vier blokken in plaats van willekeurig door elkaar gehusselde
+// kleuren. Binnen een perspectief blijft aantal-aflopend de sortering.
+const PERSPECTIEF_VOLGORDE = new Map(PERSPECTIEVEN.map((p, i) => [p.naam, i]));
+const gegroepeerdeRows = computed(() => {
+	const rows = [...tagRows.value];
+	rows.sort((a, b) => {
+		const volgordeA = PERSPECTIEF_VOLGORDE.get(a.perspectief) ?? PERSPECTIEVEN.length;
+		const volgordeB = PERSPECTIEF_VOLGORDE.get(b.perspectief) ?? PERSPECTIEVEN.length;
+		return volgordeA - volgordeB || b.count - a.count;
+	});
+	return rows;
+});
+
+// Ascending so each perspectief-blok reads top-down by count on ECharts' bottom-up axis.
+const chartRows = computed(() => [...gegroepeerdeRows.value].reverse());
 
 const isDark = useTheme();
 
