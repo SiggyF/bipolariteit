@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-07-29T15:18:55+02:00",
+  "generated_at": "2026-07-31T23:01:25+02:00",
   "topics": [
     {
       "slug": "stikstof",
       "name": "stikstof",
       "vanaf": "2023-12-06",
       "documents_total": 4377,
-      "documents_extracted": 2665,
-      "arguments_total": 1305,
+      "documents_extracted": 2849,
+      "arguments_total": 1394,
       "arguments_tagged": 1301,
       "documents_redactie_checked": 5
     }

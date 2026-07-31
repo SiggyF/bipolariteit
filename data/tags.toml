@@ -22,9 +22,9 @@ beschrijving = "Legt de interne logica van het argument bloot en toetst de diale
   tags = [
     { sleutel = "Drogreden-Ad-Hominem", beschrijving = "Persoonlijke aanval op de tegenstander (op de man spelen) in plaats van een inhoudelijke weerlegging." },
     { sleutel = "Drogreden-Stropop", beschrijving = "Het vertekenen of overdrijven van het standpunt van de opponent om dit makkelijker te kunnen aanvallen." },
-    { sleutel = "Drogreden-Vals-Dilemma", beschrijving = "Zwart-wit denken; de situatie onterecht voorgesteld alsof er slechts twee uiterste, elkaar uitsluitende opties bestaan." },
+    { sleutel = "Drogreden-Vals-Dilemma", beschrijving = "Zwart-wit denken; de situatie voorstellen alsof er slechts twee uiterste, elkaar uitsluitende opties bestaan." },
     { sleutel = "Drogreden-Ontduiken-Bewijslast", beschrijving = "Doen alsof een claim geen bewijs behoeft of de tegenstander dwingen het tegendeel te bewijzen." },
-    { sleutel = "Drogreden-Bespelen-Publiek", beschrijving = "Emotioneel manipulatief argumenteren gericht op het oproepen van angst, woede of medelijden bij de toehoorder." }
+    { sleutel = "Drogreden-Bespelen-Publiek", beschrijving = "Emotioneel argumenteren gericht op het oproepen van angst, woede of medelijden bij de toehoorder." }
   ]
 
   [[perspectieven.labelgroepen]]

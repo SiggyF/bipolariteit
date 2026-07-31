@@ -1,0 +1,61 @@
+---
+import SiteNav from "../../components/SiteNav.astro";
+import { PERSPECTIEVEN } from "../../lib/tagIcons.generated";
+import { slugify } from "../../lib/slug";
+import "../../styles/main.css";
+
+const topicModules = import.meta.glob("../../../../data/export/topics/*.json", { eager: true });
+
+const tagPerspectief = new Map<string, string>();
+for (const perspectief of PERSPECTIEVEN) {
+	for (const sleutel of Object.keys(perspectief.tags)) tagPerspectief.set(sleutel, perspectief.naam);
+}
+
+const counts = new Map<string, number>();
+for (const mod of Object.values(topicModules) as any[]) {
+	for (const argument of mod.default.arguments) {
+		for (const tag of argument.tags) {
+			if (tag.created_by !== "llm") continue;
+			counts.set(tag.perspectief, (counts.get(tag.perspectief) ?? 0) + 1);
+		}
+	}
+}
+
+const perspectieven = PERSPECTIEVEN.map((p) => ({
+	naam: p.naam,
+	kleur: p.kleur,
+	count: counts.get(p.naam) ?? 0,
+}));
+---
+
+<html lang="nl">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width" />
+		<title>Perspectieven — Bipolariteit</title>
+	</head>
+	<body>
+		<SiteNav />
+		<main>
+			<a href="/" class="back-link">&larr; alle onderwerpen</a>
+			<h1>Perspectieven</h1>
+			<p class="intro">
+				Welke partij welke tags gebruikt en hoe vaak, per perspectief uit de taxonomie, over alle onderwerpen heen.
+			</p>
+			<ul class="topic-list">
+				{perspectieven.map((p) => (
+					<li>
+						<a href={`/perspectief/${slugify(p.naam)}/`}>
+							<span class="perspectief-list-name">
+								<span class="perspectief-swatch" style={`background:${p.kleur}`}></span>
+								<span class="topic-name">{p.naam}</span>
+							</span>
+							<span class="topic-count">{p.count} toekenningen</span>
+						</a>
+					</li>
+				))}
+			</ul>
+		</main>
+	</body>
+</html>

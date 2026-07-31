@@ -6,6 +6,7 @@ import { displayPartyName } from "../lib/parties";
 import { slugify } from "../lib/slug";
 import { NO_PARTY } from "../lib/types";
 import { TEGENSTELLING } from "../lib/topics";
+import { ICOON_PAD, PERSPECTIEVEN } from "../lib/tagIcons.generated";
 import "../styles/main.css";
 
 const topicModules = import.meta.glob("../../../data/export/topics/*.json", { eager: true });
@@ -65,6 +66,31 @@ for (const mod of Object.values(topicModules) as any[]) {
 					</li>
 				))}
 			</ul>
+			<h2>Perspectieven</h2>
+			<p class="intro">Welke partij welke tags gebruikt en hoe vaak, per perspectief uit de taxonomie.</p>
+			<ul class="card-grid card-grid--perspectieven">
+				{PERSPECTIEVEN.map((p) => (
+					<li>
+						<a href={`/perspectief/${slugify(p.naam)}/`} class="card-tile card-tile--perspectief">
+							<svg
+								class="card-tile-perspectief-icon"
+								viewBox="0 0 24 24"
+								width="32"
+								height="32"
+								fill="none"
+								stroke={p.kleur}
+								stroke-width="1.75"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+							>
+								<path d={ICOON_PAD[p.icoon]} />
+							</svg>
+							<span class="card-tile-name">{p.naam}</span>
+						</a>
+					</li>
+				))}
+			</ul>
+
 			<h2>Personen</h2>
 			<p class="intro">Welke tags een spreker gebruikt en hoe vaak, over alle onderwerpen heen.</p>
 			<ul class="card-grid">

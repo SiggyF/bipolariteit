@@ -173,29 +173,31 @@ const chartHeight = computed(() => `${Math.max(200, parties.value.length * 42 + 
 			/>
 		</div>
 
-		<table class="party-table">
-			<caption class="visually-hidden">Argumenten per partij, met aantallen naast de percentages uit de grafiek</caption>
-			<thead>
-				<tr>
-					<th>Partij</th>
-					<th>Argumenten</th>
-					<th>Pro</th>
-					<th>Contra</th>
-					<th>Onduidelijk</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr v-for="party in stats.by_party" :key="party.party">
-					<td class="party-cell">
-						<PartyLogo :party="party.party" />
-						{{ displayPartyName(party.party) }}
-					</td>
-					<td>{{ party.total }}</td>
-					<td>{{ party.pro_pct }}% ({{ party.pro }})</td>
-					<td>{{ party.contra_pct }}% ({{ party.contra }})</td>
-					<td>{{ party.unclear_pct }}% ({{ party.unclear }})</td>
-				</tr>
-			</tbody>
-		</table>
+		<div class="table-scroll">
+			<table class="party-table">
+				<caption class="visually-hidden">Argumenten per partij, met aantallen naast de percentages uit de grafiek</caption>
+				<thead>
+					<tr>
+						<th>Partij</th>
+						<th>Argumenten</th>
+						<th>Pro</th>
+						<th>Contra</th>
+						<th>Onduidelijk</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr v-for="party in stats.by_party" :key="party.party">
+						<td class="party-cell">
+							<PartyLogo :party="party.party" />
+							{{ displayPartyName(party.party) }}
+						</td>
+						<td>{{ party.total }}</td>
+						<td>{{ party.pro_pct }}% ({{ party.pro }})</td>
+						<td>{{ party.contra_pct }}% ({{ party.contra }})</td>
+						<td>{{ party.unclear_pct }}% ({{ party.unclear }})</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
 	</section>
 </template>
