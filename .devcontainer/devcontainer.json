@@ -5,7 +5,8 @@
       "version": "lts"
     },
     "ghcr.io/devcontainers/features/github-cli:1": {},
-    "ghcr.io/anthropics/devcontainer-features/claude-code:1.0": {}
+    "ghcr.io/anthropics/devcontainer-features/claude-code:1.0": {},
+    "ghcr.io/va-h/devcontainers-features/uv:1": {}
   },
   "mounts": [
     {
@@ -29,6 +30,6 @@
   "containerEnv": {
     "CLAUDE_CONFIG_DIR": "/home/vscode/.claude"
   },
-  "postCreateCommand": "gpg --import .devcontainer/gpg-pubkey.asc && git config --global commit.gpgsign true && cd frontend && npx playwright install --with-deps chromium",
+  "postCreateCommand": "gpg --import .devcontainer/gpg-pubkey.asc && git config --global commit.gpgsign true && uv sync && cd frontend && npx playwright install --with-deps chromium",
   "postStartCommand": "sudo chown -R vscode:vscode ~/.claude"
 }
