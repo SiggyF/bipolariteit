@@ -1,0 +1,25 @@
+{
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+  "features": {
+    "ghcr.io/devcontainers/features/node:2.1.0": {
+      "version": "lts"
+    },
+    "ghcr.io/devcontainers/features/github-cli:1": {},
+    "ghcr.io/anthropics/devcontainer-features/claude-code:1.0": {}
+  },
+  "mounts": [
+    {
+      "source": "claude-dev-container-${devcontainerId}",
+      "target": "/home/vscode/.claude",
+      "type": "volume"
+    }
+  ],
+  "runArgs": [
+  "--env-file", "${localWorkspaceFolder}/.devcontainer/.env.local"
+  ],
+  "containerEnv": {
+    "CLAUDE_CONFIG_DIR": "/home/vscode/.claude"
+  },
+  "postCreateCommand": "gpg --import .devcontainer/gpg-pubkey.asc && git config --global commit.gpgsign true",
+  "postStartCommand": "sudo chown -R vscode:vscode ~/.claude"
+}

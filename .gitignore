@@ -19,3 +19,8 @@ docker/agy/gemini_config/
 
 # Illustrator-krasbestanden; het echte logos.ai wordt wel ingecheckt.
 ~ai-*.tmp
+
+# Local git settings
+.env.local
+.devcontainer/.env.local
+.devcontainer/gpg-pubkey.asc
