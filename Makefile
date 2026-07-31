@@ -50,7 +50,7 @@ build: ## Frontend production build (frontend/dist/)
 	cd frontend && npm run build
 
 dev: ## Start de Astro dev-server op de achtergrond (localhost:4321)
-	cd frontend && npx astro dev --background
+	cd frontend && npx astro dev --background --host 0.0.0.0
 
 dev-stop: ## Stop de achtergrond dev-server
 	cd frontend && npx astro dev stop
