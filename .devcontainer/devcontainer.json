@@ -14,8 +14,8 @@
       "type": "volume"
     }
   ],
-  "forwardPorts": [4321, 4321],
-  
+  "forwardPorts": [4321],
+
   // Optional: Auto-open browser or set custom labels
   "portsAttributes": {
     "4321": {

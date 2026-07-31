@@ -935,7 +935,7 @@ const tagFilterActief = computed(() => filters.values.tag.length > 0 || filters.
 		<div class="chart-controls">
 			<div class="chart-controls-group">
 				<span class="chart-controls-label">Rijen</span>
-				<div class="toggle-group" role="group">
+				<div class="toggle-group" role="group" aria-label="Rijen">
 					<button type="button" class="toggle-btn" :class="{ 'is-active': unit === 'partij' }" @click="unit = 'partij'">
 						Partijen
 					</button>
@@ -946,7 +946,7 @@ const tagFilterActief = computed(() => filters.values.tag.length > 0 || filters.
 			</div>
 			<div v-if="tagFilterActief" class="chart-controls-group">
 				<span class="chart-controls-label">Tag-/partijfilter</span>
-				<div class="toggle-group" role="group">
+				<div class="toggle-group" role="group" aria-label="Tag-/partijfilter: focus of detail">
 					<button type="button" class="toggle-btn" :class="{ 'is-active': analyseModus === 'focus' }" @click="analyseModus = 'focus'">
 						Focus
 					</button>
@@ -957,7 +957,7 @@ const tagFilterActief = computed(() => filters.values.tag.length > 0 || filters.
 			</div>
 			<div class="chart-controls-group">
 				<span class="chart-controls-label">Weergave</span>
-				<div class="toggle-group" role="group">
+				<div class="toggle-group" role="group" aria-label="Weergave">
 					<button type="button" class="toggle-btn" :class="{ 'is-active': !driedimensionaal }" @click="driedimensionaal = false">
 						2D
 					</button>

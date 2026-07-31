@@ -159,8 +159,10 @@ a {
 	text-decoration-color: var(--color-border);
 }
 
+/* Duidelijk onderscheiden van onbezocht: anders is er geen visuele
+   navigatie-oriëntatie meer (welke pagina's al bekeken zijn). */
 a:visited {
-	color: var(--color-accent);
+	color: var(--color-muted);
 }
 
 a:hover {

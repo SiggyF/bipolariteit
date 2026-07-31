@@ -49,7 +49,7 @@ export: ## SQLite -> data/export/topics/<slug>.json + topics-index.json. Vars: T
 build: ## Frontend production build (frontend/dist/)
 	cd frontend && npm run build
 
-dev: ## Start de Astro dev-server op de achtergrond (localhost:4321)
+dev: ## Start de Astro dev-server op de achtergrond (0.0.0.0:4321, ook bereikbaar via localhost:4321)
 	cd frontend && npx astro dev --background --host 0.0.0.0
 
 dev-stop: ## Stop de achtergrond dev-server
