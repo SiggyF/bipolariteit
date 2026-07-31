@@ -4,7 +4,7 @@ import { useTheme } from "../lib/useTheme";
 import { displayPartyName, partyInitial } from "../lib/parties";
 import { logoSprite } from "../lib/partyLogoSprite";
 import { PERSPECTIEVEN } from "../lib/tagIcons.generated";
-import { filters, matches, matchesExcept, toggleValue } from "../lib/filters";
+import { filters, matches, toggleValue } from "../lib/filters";
 import { NO_PARTY, type Argument } from "../lib/types";
 import { alignSigns, buildCorrespondence, type Correspondence, type RowUnit } from "../lib/correspondence";
 import VChart from "vue-echarts";
@@ -17,11 +17,6 @@ use([CanvasRenderer, ScatterChart, LineChart, TooltipComponent, GridComponent, L
 
 const props = defineProps<{ argumentList: Argument[] }>();
 
-// De analyse rekent op alles behalve de tag- en partijfilters -- klikken op een
-// tag zou anders de tabel tot één kolom terugbrengen en de analyse laten
-// instorten. Die twee filters sturen alleen nog het dimmen aan.
-const REKENT_NIET_OP = ["tag", "partij"];
-
 // Personen boven partijen: een partij is een optelsom van tientallen sprekers
 // met uiteenlopende eigen stijl, en die nuance is precies waar de kaart voor
 // bedoeld is -- partijen blijven een schakelbare optie, geen standaard.
@@ -32,7 +27,11 @@ const driedimensionaal = ref(false);
 // twee argumenten en zouden als losse punten de wolk vullen zonder iets te zeggen.
 const MIN_ROW_TOTAL: Record<RowUnit, number> = { partij: 3, persoon: 12 };
 
-const rekenLijst = computed(() => props.argumentList.filter((a) => matchesExcept(a, REKENT_NIET_OP)));
+// De analyse rekent op de volledige selectie, inclusief tag- en partijfilters:
+// klikken op een tag/partij-punt filtert 'm dus net zo weg als elk ander
+// filter. `buildTable` (correspondence.ts) geeft `null` bij minder dan 3
+// rijen/kolommen i.p.v. iets te tonen dat niks meer zegt, dus een filter dat te
+// ver doorschiet laat de kaart netjes leeg lopen in plaats van vast te lopen.
 const gefilterd = computed(() => props.argumentList.filter(matches));
 
 // Referentie over het hele corpus: waar de tekens van de assen aan opgehangen
@@ -50,7 +49,7 @@ const referentie = computed(() =>
 );
 
 const correspondence = computed<Correspondence | null>(() => {
-	const berekend = buildCorrespondence(rekenLijst.value, {
+	const berekend = buildCorrespondence(gefilterd.value, {
 		nComponents: driedimensionaal.value ? 3 : 2,
 		unit: unit.value,
 		minRowTotal: MIN_ROW_TOTAL[unit.value],
@@ -408,10 +407,9 @@ watch(driedimensionaal, () => {
 	zicht2D.value = null;
 });
 
-// Elke keer dat de onderliggende punten structureel veranderen (ander filter
-// dan tag/partij, of wisselen van rij-eenheid/dimensiecount) opnieuw
-// normaliseren. Klikken op een tag of partij verandert de coordinaten zelf
-// niet (zie `rekenLijst`), dus dat triggert deze watcher niet.
+// Elke keer dat de onderliggende punten structureel veranderen -- elk filter
+// (inclusief tag/partij, sinds die de tabel nu ook echt filteren) of wisselen
+// van rij-eenheid/dimensiecount -- opnieuw normaliseren.
 watch(correspondence, () => {
 	forceerNormalisatie.value = true;
 	zicht2D.value = null;
