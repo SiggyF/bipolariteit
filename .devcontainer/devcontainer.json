@@ -20,6 +20,6 @@
   "containerEnv": {
     "CLAUDE_CONFIG_DIR": "/home/vscode/.claude"
   },
-  "postCreateCommand": "gpg --import .devcontainer/gpg-pubkey.asc && git config --global commit.gpgsign true",
+  "postCreateCommand": "gpg --import .devcontainer/gpg-pubkey.asc && git config --global commit.gpgsign true && cd frontend && npx playwright install --with-deps chromium",
   "postStartCommand": "sudo chown -R vscode:vscode ~/.claude"
 }
