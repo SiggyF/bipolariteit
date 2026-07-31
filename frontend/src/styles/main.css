@@ -150,6 +150,25 @@ main {
 	padding: var(--space-4) var(--space-3) var(--space-5);
 }
 
+/* Basisstijl voor inline/prose-links (attributie, intro, uitsplitsingen).
+   Kaart-achtige links (topic-list, party-grid, ...) zetten hier zelf
+   `color: inherit` overheen -- dit is alleen de vangnet-stijl tegen het
+   browserstandaard blauw/paars, dat niet bij de krant-esthetiek past. */
+a {
+	color: var(--color-accent);
+	text-decoration-color: var(--color-border);
+}
+
+/* Duidelijk onderscheiden van onbezocht: anders is er geen visuele
+   navigatie-oriëntatie meer (welke pagina's al bekeken zijn). */
+a:visited {
+	color: var(--color-muted);
+}
+
+a:hover {
+	text-decoration-color: currentColor;
+}
+
 /* Ontwikkelbalk boven de navigatie. Alleen bestaande tokens, zodat de donkere
    variant vanzelf meeloopt (zie :root[data-theme="dark"] onderaan). */
 .dev-balk {
@@ -377,11 +396,171 @@ h2 {
 	font-variant-numeric: tabular-nums;
 }
 
+/* Grid i.p.v. flex space-between: bij een variabele naamlengte schuift de
+   balk anders mee, waardoor de balken niet in een rechte kolom staan. */
+.person-list a.person-row {
+	display: grid;
+	grid-template-columns: minmax(220px, 1fr) 80px auto;
+	align-items: center;
+	gap: var(--space-2);
+}
+
+.person-row-who {
+	display: flex;
+	align-items: center;
+	gap: var(--space-1);
+	min-width: 0;
+}
+
+.person-row-party {
+	display: flex;
+	align-items: center;
+	gap: 0.35rem;
+	color: var(--color-muted);
+	font-size: var(--step--1);
+}
+
+.person-row-party .card-tile-logo {
+	width: 20px;
+	height: 20px;
+}
+
+.person-row-party .card-tile-logo img {
+	max-width: 16px;
+	max-height: 16px;
+}
+
+.person-row-party .card-tile-initial {
+	font-size: var(--step--1);
+}
+
+.stance-bar {
+	display: flex;
+	width: 80px;
+	height: 10px;
+	flex-shrink: 0;
+	overflow: hidden;
+	background: var(--color-border);
+}
+
+.stance-bar-segment {
+	height: 100%;
+}
+
+.card-grid {
+	list-style: none;
+	padding: 0;
+	margin: var(--space-2) 0 0;
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+	gap: var(--space-1);
+}
+
+.card-tile {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: var(--space-1);
+	padding: var(--space-2);
+	border: 1px solid var(--color-border);
+	background: var(--color-card-bg);
+	text-decoration: none;
+	color: inherit;
+	text-align: center;
+}
+
+.card-tile:hover {
+	border-color: var(--color-accent);
+}
+
+/* Vast kader rond elk partij-icoon: de brondata (party-logos/simplified/*.svg)
+   deelt wel een 160x160-viewBox, maar niet elk logo vult 'm even ver -- sommige
+   zijn edge-to-edge (GroenLinks-PvdA, CDA), andere een smal beeldmerk met veel
+   marge (ChristenUnie, DENK). Zonder dit kader oogden de vollere logo's daarom
+   groter, terwijl de bounding box identiek was. Het logo krimpt binnen dit
+   kader i.p.v. het kader te vullen, zodat elke partij dezelfde "voetafdruk"
+   krijgt ongeacht hoeveel van het eigen canvas het beeldmerk zelf gebruikt. */
+.card-tile-logo {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 40px;
+	height: 40px;
+}
+
+.card-tile-logo img {
+	max-width: 30px;
+	max-height: 30px;
+	object-fit: contain;
+}
+
+.card-tile-initial {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 40px;
+	height: 40px;
+	border: 1px solid var(--color-border);
+	border-radius: 4px;
+	background: var(--color-bg);
+	font-family: var(--font-heading);
+	font-weight: 700;
+}
+
+.card-tile-name {
+	font-family: var(--font-heading);
+	font-weight: 700;
+	font-size: var(--step--1);
+	text-transform: capitalize;
+}
+
+.card-tile-subtitle {
+	color: var(--color-muted);
+	font-size: var(--step--1);
+	line-height: 1.3;
+}
+
+.card-tile-count {
+	color: var(--color-muted);
+	font-family: var(--font-mono);
+	font-size: var(--step--1);
+	font-variant-numeric: tabular-nums;
+}
+
 .stats-panel {
 	margin-top: var(--space-4);
 	padding: var(--space-3);
 	border: 1px solid var(--color-border);
 	background: var(--color-card-bg);
+}
+
+.actor-header {
+	display: flex;
+	align-items: center;
+	gap: var(--space-2);
+}
+
+.actor-header h1 {
+	margin: 0;
+}
+
+.topic-breakdown {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	display: grid;
+	gap: var(--space-1);
+}
+
+.topic-breakdown li {
+	display: flex;
+	justify-content: space-between;
+	gap: var(--space-2);
+}
+
+.topic-breakdown .topic-count {
+	color: var(--color-muted);
+	font-size: var(--step--1);
 }
 
 .stats-panel h2 {

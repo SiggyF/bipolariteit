@@ -1,0 +1,19 @@
+---
+import { partyLogoSimple, partyInitial } from "../lib/parties";
+
+interface Props {
+	party: string;
+}
+const { party } = Astro.props;
+const logo = partyLogoSimple(party);
+---
+
+{
+	logo ? (
+		<span class="card-tile-logo">
+			<img src={logo} alt="" />
+		</span>
+	) : (
+		<span class="card-tile-logo card-tile-initial">{partyInitial(party)}</span>
+	)
+}

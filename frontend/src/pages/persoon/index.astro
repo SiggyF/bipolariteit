@@ -1,0 +1,91 @@
+---
+import SiteNav from "../../components/SiteNav.astro";
+import PartyIcon from "../../components/PartyIcon.astro";
+import { displayPartyName } from "../../lib/parties";
+import { slugify } from "../../lib/slug";
+import { NO_PARTY } from "../../lib/types";
+import { PERSPECTIEVEN } from "../../lib/tagIcons.generated";
+import "../../styles/main.css";
+
+const topicModules = import.meta.glob("../../../../data/export/topics/*.json", { eager: true });
+
+// Kleur per perspectief, niet per stance: stance (pro/contra) is per definitie
+// topic-specifiek (zie data/tags.toml), terwijl perspectief/labelgroep de
+// vaste, onderwerp-onafhankelijke taxonomie is. Zelfde bron als de
+// correspondentiekaart (TagCorrespondenceMap.vue), zodat een kleur overal op
+// de site hetzelfde perspectief betekent.
+const PERSPECTIEF_KLEUR = new Map(PERSPECTIEVEN.map((p) => [p.naam, p.kleur]));
+const ONBEKENDE_KLEUR = "#6f6558";
+
+const counts = new Map<string, number>();
+const partyOf = new Map<string, string>();
+const perspectiefOf = new Map<string, Map<string, number>>();
+
+for (const mod of Object.values(topicModules) as any[]) {
+	for (const argument of mod.default.arguments) {
+		const name = argument.actor.name;
+		counts.set(name, (counts.get(name) ?? 0) + 1);
+		if (argument.actor.party && !partyOf.has(name)) partyOf.set(name, argument.actor.party);
+
+		const perspectieven = perspectiefOf.get(name) ?? new Map<string, number>();
+		for (const tag of argument.tags) {
+			if (tag.created_by !== "llm") continue;
+			perspectieven.set(tag.perspectief, (perspectieven.get(tag.perspectief) ?? 0) + 1);
+		}
+		perspectiefOf.set(name, perspectieven);
+	}
+}
+const persons = [...counts.entries()].sort((a, b) => b[1] - a[1]);
+---
+
+<html lang="nl">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width" />
+		<title>Personen — Bipolariteit</title>
+	</head>
+	<body>
+		<SiteNav />
+		<main>
+			<a href="/" class="back-link">&larr; alle onderwerpen</a>
+			<h1>Personen</h1>
+			<p class="intro">Welke tags een spreker gebruikt en hoe vaak, over alle onderwerpen heen.</p>
+			<ul class="topic-list person-list">
+				{persons.map(([name, count]) => {
+					const party = partyOf.get(name);
+					const perspectieven = [...perspectiefOf.get(name)!.entries()];
+					const tagTotal = perspectieven.reduce((sum, [, n]) => sum + n, 0);
+					return (
+						<li>
+							<a href={`/persoon/${slugify(name)}/`} class="person-row">
+								<span class="person-row-who">
+									{party && party !== NO_PARTY && (
+										<span class="person-row-party">
+											<PartyIcon party={party} />
+											{displayPartyName(party)}
+										</span>
+									)}
+									<span class="topic-name">{name}</span>
+								</span>
+								<span
+									class="stance-bar"
+									title={perspectieven.map(([p, n]) => `${p}: ${n}`).join(", ") || "geen getagde argumenten"}
+								>
+									{tagTotal > 0 &&
+										perspectieven.map(([perspectief, n]) => (
+											<span
+												class="stance-bar-segment"
+												style={`width: ${(n / tagTotal) * 100}%; background: ${PERSPECTIEF_KLEUR.get(perspectief) ?? ONBEKENDE_KLEUR}`}
+											/>
+										))}
+								</span>
+								<span class="topic-count">{count} argumenten</span>
+							</a>
+						</li>
+					);
+				})}
+			</ul>
+		</main>
+	</body>
+</html>

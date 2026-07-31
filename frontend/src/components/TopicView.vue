@@ -35,9 +35,9 @@ const columns = computed(() =>
 <template>
 	<FilterBar :argumentList="argumentList" :matchCount="filtered.length" />
 
+	<TagCorrespondenceMap :argumentList="argumentList" />
 	<StatsPanel :argumentList="filtered" />
 	<TagsPerParty :argumentList="filtered" />
-	<TagCorrespondenceMap :argumentList="argumentList" />
 
 	<p v-if="!filtered.length" class="no-results">
 		Geen argumenten voldoen aan dit filter. Verwijder een filter hierboven om er meer te zien.
