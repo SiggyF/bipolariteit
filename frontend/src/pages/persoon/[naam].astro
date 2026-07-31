@@ -1,0 +1,49 @@
+---
+import ActorTagUsage from "../../components/ActorTagUsage.vue";
+import SiteNav from "../../components/SiteNav.astro";
+import { slugify } from "../../lib/slug";
+import "../../styles/main.css";
+
+const topicModules = import.meta.glob("../../../../data/export/topics/*.json", { eager: true });
+
+function allArguments() {
+	return Object.values(topicModules).flatMap((mod: any) =>
+		mod.default.arguments.map((argument: any) => ({
+			...argument,
+			topicSlug: mod.default.slug,
+			topicName: mod.default.name,
+		})),
+	);
+}
+
+export function getStaticPaths() {
+	const modules = import.meta.glob("../../../../data/export/topics/*.json", { eager: true });
+	const persons = new Set<string>();
+	for (const mod of Object.values(modules) as any[]) {
+		for (const argument of mod.default.arguments) persons.add(argument.actor.name);
+	}
+	return [...persons].map((name) => ({
+		params: { naam: slugify(name) },
+		props: { name },
+	}));
+}
+
+const { name } = Astro.props;
+const argumentList = allArguments().filter((a: any) => a.actor.name === name);
+---
+
+<html lang="nl">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width" />
+		<title>{name} — Bipolariteit</title>
+	</head>
+	<body>
+		<SiteNav />
+		<main>
+			<a href="/" class="back-link">&larr; alle onderwerpen</a>
+			<ActorTagUsage name={name} mode="persoon" argumentList={argumentList} client:only="vue" />
+		</main>
+	</body>
+</html>

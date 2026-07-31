@@ -3,6 +3,7 @@ import { ref, onMounted } from "vue";
 import { ISSUE_TYPES, type IssueKey, getFeedbackFor, submitFeedback } from "../lib/feedback";
 import { displayPartyName } from "../lib/parties";
 import { filters, toggleValue } from "../lib/filters";
+import { slugify } from "../lib/slug";
 import type { Argument, Tag } from "../lib/types";
 import PartyLogo from "./PartyLogo.vue";
 
@@ -54,8 +55,10 @@ function submit() {
 		<blockquote class="quote">"{{ argument.quote_text }}"</blockquote>
 		<p v-if="argument.quote_context" class="quote-context">{{ argument.quote_context }}</p>
 		<p class="attribution">
-			<PartyLogo v-if="argument.actor.party" :party="argument.actor.party" />
-			Volgens <strong>{{ argument.actor.name }}</strong><span v-if="argument.actor.party"> ({{ displayPartyName(argument.actor.party) }})</span><span v-if="argument.actor.role_title" class="role-title"> — {{ argument.actor.role_title }}</span>
+			<a v-if="argument.actor.party" :href="`/partij/${slugify(argument.actor.party)}/`" :title="`Alle tags van ${argument.actor.party}`">
+				<PartyLogo :party="argument.actor.party" />
+			</a>
+			Volgens <a :href="`/persoon/${slugify(argument.actor.name)}/`" :title="`Alle tags van ${argument.actor.name}`"><strong>{{ argument.actor.name }}</strong></a><span v-if="argument.actor.party"> (<a :href="`/partij/${slugify(argument.actor.party)}/`">{{ displayPartyName(argument.actor.party) }}</a>)</span><span v-if="argument.actor.role_title" class="role-title"> — {{ argument.actor.role_title }}</span>
 		</p>
 		<ul v-if="argument.claims.length" class="claims">
 			<li v-for="(claim, i) in argument.claims" :key="i">

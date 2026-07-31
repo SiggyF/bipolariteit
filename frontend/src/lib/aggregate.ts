@@ -82,3 +82,58 @@ export function deriveTagsPerParty(argumentList: Argument[]): PartyTagCount[] {
 		.map(([party, tag_count]) => ({ party, tag_count }))
 		.sort((a, b) => b.tag_count - a.tag_count);
 }
+
+export interface TagUsageRow {
+	sleutel: string;
+	beschrijving: string;
+	labelgroep: string;
+	perspectief: string;
+	count: number;
+}
+
+/** Aantal toekenningen per tag over een (al gefilterde) argumentenlijst --
+ * bedoeld voor de partij-/persoonpagina's, die hier alleen de argumenten van
+ * één actor in stoppen. Alleen LLM-toegekende tags, zelfde reden als
+ * `deriveTagsPerParty`: de 3 deterministische labelgroepen zijn bij TK-data
+ * vrijwel overal gelijk en dragen geen signaal. */
+export function deriveTagUsage(argumentList: Argument[]): TagUsageRow[] {
+	const rows = new Map<string, TagUsageRow>();
+	for (const argument of argumentList) {
+		for (const tag of argument.tags) {
+			if (tag.created_by !== "llm") continue;
+			const existing = rows.get(tag.sleutel);
+			if (existing) existing.count += 1;
+			else
+				rows.set(tag.sleutel, {
+					sleutel: tag.sleutel,
+					beschrijving: tag.beschrijving,
+					labelgroep: tag.labelgroep,
+					perspectief: tag.perspectief,
+					count: 1,
+				});
+		}
+	}
+	return [...rows.values()].sort((a, b) => b.count - a.count || a.sleutel.localeCompare(b.sleutel, "nl"));
+}
+
+/** Vouwt tags met minder dan `threshold` toekenningen samen tot één "overig"-
+ * rij. Bij deze taggingvolumes heeft een individuele spreker vaak maar 1-3
+ * toekenningen van een tag; die als ranglijst tonen suggereert een patroon dat
+ * er niet is (zie issue #5). Alleen zinvol op persoonsniveau -- partijvolumes
+ * zijn hoog genoeg om dit niet nodig te hebben. */
+export function bucketSmallCounts(rows: TagUsageRow[], threshold: number): TagUsageRow[] {
+	const kept = rows.filter((r) => r.count >= threshold);
+	const rest = rows.filter((r) => r.count < threshold);
+	if (!rest.length) return kept;
+	const restTotal = rest.reduce((sum, r) => sum + r.count, 0);
+	return [
+		...kept,
+		{
+			sleutel: "overig",
+			beschrijving: `${rest.length} tags met elk minder dan ${threshold} toekenningen`,
+			labelgroep: "",
+			perspectief: "",
+			count: restTotal,
+		},
+	];
+}
