@@ -1,7 +1,9 @@
 ---
 import ActorTagUsage from "../../components/ActorTagUsage.vue";
 import SiteNav from "../../components/SiteNav.astro";
+import { displayPartyName } from "../../lib/parties";
 import { slugify } from "../../lib/slug";
+import { NO_PARTY } from "../../lib/types";
 import "../../styles/main.css";
 
 const topicModules = import.meta.glob("../../../../data/export/topics/*.json", { eager: true });
@@ -30,6 +32,7 @@ export function getStaticPaths() {
 
 const { name } = Astro.props;
 const argumentList = allArguments().filter((a: any) => a.actor.name === name);
+const party = argumentList.find((a: any) => a.actor.party)?.actor.party ?? null;
 ---
 
 <html lang="nl">
@@ -42,7 +45,11 @@ const argumentList = allArguments().filter((a: any) => a.actor.name === name);
 	<body>
 		<SiteNav />
 		<main>
-			<a href="/" class="back-link">&larr; alle onderwerpen</a>
+			{party && party !== NO_PARTY ? (
+				<a href={`/partij/${slugify(party)}/`} class="back-link">&larr; {displayPartyName(party)}</a>
+			) : (
+				<a href="/persoon/" class="back-link">&larr; alle personen</a>
+			)}
 			<ActorTagUsage name={name} mode="persoon" argumentList={argumentList} client:only="vue" />
 		</main>
 	</body>

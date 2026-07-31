@@ -8,6 +8,8 @@ import { TooltipComponent, GridComponent } from "echarts/components";
 import { useTheme } from "../lib/useTheme";
 import { displayPartyName } from "../lib/parties";
 import { deriveTagUsage, bucketSmallCounts } from "../lib/aggregate";
+import { slugify } from "../lib/slug";
+import { PERSPECTIEVEN } from "../lib/tagIcons.generated";
 import PartyLogo from "./PartyLogo.vue";
 import ArgumentCard from "./ArgumentCard.vue";
 import type { Argument } from "../lib/types";
@@ -40,7 +42,13 @@ const tagRows = computed(() => {
 const chartRows = computed(() => [...tagRows.value].reverse());
 
 const isDark = useTheme();
-const barColor = computed(() => (isDark.value ? "#7d97c4" : "#33456e"));
+
+// Kleur per perspectief i.p.v. één vaste kleur -- zelfde bron als de
+// correspondentiekaart (TagCorrespondenceMap.vue), zodat een perspectief
+// overal op de site dezelfde kleur draagt. De "overig"-rij (bucketSmallCounts)
+// heeft geen perspectief en valt terug op de gedempte kleur.
+const PERSPECTIEF_KLEUR = new Map(PERSPECTIEVEN.map((p) => [p.naam, p.kleur]));
+const ONBEKENDE_KLEUR = "#6f6558";
 
 const chartOption = computed(() => ({
 	backgroundColor: "transparent",
@@ -60,8 +68,10 @@ const chartOption = computed(() => ({
 	series: [
 		{
 			type: "bar",
-			data: chartRows.value.map((r) => r.count),
-			itemStyle: { color: barColor.value },
+			data: chartRows.value.map((r) => ({
+				value: r.count,
+				itemStyle: { color: PERSPECTIEF_KLEUR.get(r.perspectief) ?? ONBEKENDE_KLEUR },
+			})),
 			barMaxWidth: 22,
 		},
 	],
@@ -85,6 +95,13 @@ function topicLink(topicSlug: string): string {
 	const param = props.mode === "partij" ? "partij" : "persoon";
 	return `/topics/${topicSlug}/?${param}=${encodeURIComponent(props.name)}`;
 }
+
+const persons = computed(() => {
+	if (props.mode !== "partij") return [];
+	const counts = new Map<string, number>();
+	for (const argument of props.argumentList) counts.set(argument.actor.name, (counts.get(argument.actor.name) ?? 0) + 1);
+	return [...counts.entries()].map(([person, count]) => ({ person, count })).sort((a, b) => b.count - a.count);
+});
 
 const exampleArguments = computed(() =>
 	[...props.argumentList]
@@ -116,10 +133,22 @@ const exampleArguments = computed(() =>
 
 		<section class="stats-panel">
 			<h2>Per onderwerp</h2>
-			<ul class="topic-breakdown">
+			<ul class="card-grid">
 				<li v-for="topic in perTopic" :key="topic.topicSlug">
-					<a :href="topicLink(topic.topicSlug)">{{ topic.topicName }}</a>
-					<span class="topic-count">{{ topic.count }} argumenten</span>
+					<a :href="topicLink(topic.topicSlug)" class="card-tile">
+						<span class="card-tile-name">{{ topic.topicName }}</span>
+						<span class="card-tile-count">{{ topic.count }} argumenten</span>
+					</a>
+				</li>
+			</ul>
+		</section>
+
+		<section v-if="mode === 'partij'" class="stats-panel">
+			<h2>Personen</h2>
+			<ul class="topic-breakdown">
+				<li v-for="row in persons" :key="row.person">
+					<a :href="`/persoon/${slugify(row.person)}/`">{{ row.person }}</a>
+					<span class="topic-count">{{ row.count }} argumenten</span>
 				</li>
 			</ul>
 		</section>

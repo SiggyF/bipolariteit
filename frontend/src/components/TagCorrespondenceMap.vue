@@ -4,7 +4,7 @@ import { useTheme } from "../lib/useTheme";
 import { displayPartyName, partyInitial } from "../lib/parties";
 import { logoSprite } from "../lib/partyLogoSprite";
 import { PERSPECTIEVEN } from "../lib/tagIcons.generated";
-import { filters, matches, toggleValue } from "../lib/filters";
+import { filters, matches, matchesExcept, toggleValue } from "../lib/filters";
 import { NO_PARTY, type Argument } from "../lib/types";
 import { alignSigns, buildCorrespondence, type Correspondence, type RowUnit } from "../lib/correspondence";
 import VChart from "vue-echarts";
@@ -27,12 +27,25 @@ const driedimensionaal = ref(false);
 // twee argumenten en zouden als losse punten de wolk vullen zonder iets te zeggen.
 const MIN_ROW_TOTAL: Record<RowUnit, number> = { partij: 3, persoon: 12 };
 
-// De analyse rekent op de volledige selectie, inclusief tag- en partijfilters:
-// klikken op een tag/partij-punt filtert 'm dus net zo weg als elk ander
-// filter. `buildTable` (correspondence.ts) geeft `null` bij minder dan 3
-// rijen/kolommen i.p.v. iets te tonen dat niks meer zegt, dus een filter dat te
-// ver doorschiet laat de kaart netjes leeg lopen in plaats van vast te lopen.
 const gefilterd = computed(() => props.argumentList.filter(matches));
+
+// Twee manieren om met een tag-/partijfilter om te gaan (de rest van de
+// dimensies filtert de analyse altijd volledig, in beide standen):
+// - "focus" (standaard): rekent op alles behalve tag/partij, en dimt de
+//   punten buiten de selectie. Zo blijft de hele wolk zichtbaar terwijl de
+//   selectie oplicht -- handig om te zien waar een partij/tag t.o.v. de rest
+//   staat, en voorkomt dat de tabel na een klik op een tag/partij-punt tot
+//   één rij/kolom terugvalt.
+// - "detail": herberekent de analyse alleen op de gefilterde selectie, net
+//   als de rest van de pagina. `buildTable` (correspondence.ts) geeft `null`
+//   bij minder dan 3 rijen/kolommen i.p.v. iets te tonen dat niks meer zegt,
+//   dus een filter dat te ver doorschiet laat de kaart netjes leeg lopen i.p.v.
+//   vast te lopen.
+const analyseModus = ref<"focus" | "detail">("focus");
+const REKENT_NIET_OP = ["tag", "partij"];
+const rekenLijst = computed(() =>
+	analyseModus.value === "detail" ? gefilterd.value : props.argumentList.filter((a) => matchesExcept(a, REKENT_NIET_OP)),
+);
 
 // Referentie over het hele corpus: waar de tekens van de assen aan opgehangen
 // worden, zodat de kaart niet spiegelt terwijl je filtert.
@@ -49,7 +62,7 @@ const referentie = computed(() =>
 );
 
 const correspondence = computed<Correspondence | null>(() => {
-	const berekend = buildCorrespondence(gefilterd.value, {
+	const berekend = buildCorrespondence(rekenLijst.value, {
 		nComponents: driedimensionaal.value ? 3 : 2,
 		unit: unit.value,
 		minRowTotal: MIN_ROW_TOTAL[unit.value],
@@ -407,9 +420,10 @@ watch(driedimensionaal, () => {
 	zicht2D.value = null;
 });
 
-// Elke keer dat de onderliggende punten structureel veranderen -- elk filter
-// (inclusief tag/partij, sinds die de tabel nu ook echt filteren) of wisselen
-// van rij-eenheid/dimensiecount -- opnieuw normaliseren.
+// Elke keer dat de onderliggende punten structureel veranderen opnieuw
+// normaliseren: een filter dat `rekenLijst` raakt (in "focus" alles behalve
+// tag/partij, in "detail" ook die twee), wisselen van rij-eenheid/
+// dimensiecount, of wisselen tussen focus/detail zelf.
 watch(correspondence, () => {
 	forceerNormalisatie.value = true;
 	zicht2D.value = null;
@@ -913,8 +927,9 @@ const tagFilterActief = computed(() => filters.values.tag.length > 0 || filters.
 			aan voor de rest. Klik op een punt om erop te filteren.
 		</p>
 		<p class="panel-note">
-			De analyse wordt op je selectie herberekend. Filters op <strong>tag</strong> en <strong>partij</strong> vormen de
-			uitzondering: die zouden de tabel tot één rij of kolom terugbrengen, dus die dimmen alleen de punten buiten de selectie.
+			De analyse wordt op je selectie herberekend. Filters op <strong>tag</strong> en <strong>partij</strong> zijn een
+			uitzondering: in "focus" (standaard) dimmen die twee alleen de punten buiten de selectie, zodat de tabel niet tot één
+			rij/kolom terugvalt. Kies "detail" om de kaart net als de rest van de pagina volledig op de selectie te herberekenen.
 		</p>
 
 		<div class="chart-controls">
@@ -926,6 +941,17 @@ const tagFilterActief = computed(() => filters.values.tag.length > 0 || filters.
 					</button>
 					<button type="button" class="toggle-btn" :class="{ 'is-active': unit === 'persoon' }" @click="unit = 'persoon'">
 						Personen
+					</button>
+				</div>
+			</div>
+			<div v-if="tagFilterActief" class="chart-controls-group">
+				<span class="chart-controls-label">Tag-/partijfilter</span>
+				<div class="toggle-group" role="group">
+					<button type="button" class="toggle-btn" :class="{ 'is-active': analyseModus === 'focus' }" @click="analyseModus = 'focus'">
+						Focus
+					</button>
+					<button type="button" class="toggle-btn" :class="{ 'is-active': analyseModus === 'detail' }" @click="analyseModus = 'detail'">
+						Detail
 					</button>
 				</div>
 			</div>
@@ -963,7 +989,10 @@ const tagFilterActief = computed(() => filters.values.tag.length > 0 || filters.
 		</div>
 
 		<p v-if="tagFilterActief" class="panel-note">
-			Er staat een tag- of partijfilter aan; de kaart toont daarom nog de volledige analyse met de selectie gemarkeerd.
+			<template v-if="analyseModus === 'focus'">
+				Er staat een tag- of partijfilter aan; de kaart toont in "focus" nog de volledige analyse met de selectie gemarkeerd.
+			</template>
+			<template v-else> Er staat een tag- of partijfilter aan; de kaart in "detail" rekent alleen nog op de selectie. </template>
 		</p>
 
 		<div
