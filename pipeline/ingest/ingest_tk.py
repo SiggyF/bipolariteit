@@ -115,11 +115,13 @@ _bewindspersoon_party_cache = {}
 # ("Partij: D66") in rijksoverheid.nl/regering/bewindspersonen/jaimi-van-essen,
 # geverifieerd op 2026-07-26.
 #
-# Teun Struycken stond hier eerder ook in (voorgedragen namens NSC maar zelf
-# geen lid) -- inmiddels via Wikidata zelf opgelost (P102 -> Q327591
-# "onafhankelijk politicus", 2026-08-01), dus die uitzondering is niet meer
-# nodig; data/bewindspersonen.toml levert hem nu automatisch als
-# "Onafhankelijk".
+# Teun Struycken stond hier eerder ook in: "Teun Struycken is door NSC
+# benaderd om in het kabinet-Schoof staatssecretaris Rechtsbescherming te
+# worden, maar hij is geen lid van de partij en is dat ook niet van plan te
+# worden" (NOS-liveblog, 2024-07-13) -- inmiddels via Wikidata zelf opgelost
+# (P102 -> Q327591 "onafhankelijk politicus", 2026-08-01), dus die
+# uitzondering is niet meer nodig; data/bewindspersonen.toml levert hem nu
+# automatisch als "Onafhankelijk".
 BEWINDSPERSOON_PARTY_OVERRIDES = {
     "Jaimi van Essen": "D66",
 }
@@ -160,7 +162,10 @@ def lookup_bewindspersoon_party(name):
     achternaam = parts[-1]
     voornaam = parts[0] if len(parts) > 1 else None
     try:
-        filter_expr = f"Achternaam eq '{achternaam}'"
+        # contains i.p.v. eq: Persoon.Achternaam bevat soms het volledige
+        # tussenvoegsel+achternaam (bv. "van der Wal"), dan matcht een eq op
+        # alleen het laatste woord ("Wal") niet.
+        filter_expr = f"contains(Achternaam,'{achternaam}')"
         expand = "FractieZetelPersoon($expand=FractieZetel($expand=Fractie))"
         url = (
             f"{_ODATA_BASE}/Persoon?$filter={urllib.parse.quote(filter_expr)}"
@@ -222,10 +227,10 @@ TOPIC_EXCLUDE_ACTIVITEITEN = {
 
 
 def find_matching_activiteiten(root, topic_keyword):
-    """Retourneert (activiteit, titel_match)-paren. titel_match=True betekent
+    """Retourneert (activiteit, title_match)-paren. title_match=True betekent
     dat het keyword in de onderwerp/titel van de activiteit zelf staat -- een
     overduidelijk op-topic debat, dus alle sprekerbeurten worden meegenomen.
-    titel_match=False is het ruimere net: het keyword komt ergens in de
+    title_match=False is het ruimere net: het keyword komt ergens in de
     activiteit voor, maar de activiteit zelf gaat over iets anders (bv. het
     eufemisme "Vrouwengezondheid", of een incidentele motie over abortuscijfers
     in een medische-ethiekdebat) -- ingest_file neemt dan alleen de losse
@@ -238,8 +243,8 @@ def find_matching_activiteiten(root, topic_keyword):
         titel = activiteit.findtext(NS + "titel") or ""
         if onderwerp.lower() in excludes or titel.lower() in excludes:
             continue
-        titel_match = keyword in onderwerp.lower() or keyword in titel.lower()
-        if titel_match:
+        title_match = keyword in onderwerp.lower() or keyword in titel.lower()
+        if title_match:
             matches.append((activiteit, True))
             continue
         activiteit_text = " ".join(activiteit.itertext())
@@ -339,7 +344,7 @@ def ingest_file(conn, xml_path, meta_path, topic_keyword):
 
     keyword = topic_keyword.lower()
     inserted = 0
-    for activiteit, titel_match in find_matching_activiteiten(root, topic_keyword):
+    for activiteit, title_match in find_matching_activiteiten(root, topic_keyword):
         activiteit_titel = activiteit.findtext(NS + "titel") or metadata.get("activiteit_onderwerp")
         activiteit_soort = activiteit.attrib.get("soort")
         activiteit_aanvangstijd = activiteit.findtext(NS + "aanvangstijd") or metadata.get("activiteit_datum")
@@ -348,11 +353,11 @@ def ingest_file(conn, xml_path, meta_path, topic_keyword):
             content = _text_of(tekst_el)
             if not content:
                 continue
-            # Bij een ruim-net-treffer (titel_match=False) alleen de sprekerbeurten
+            # Bij een ruim-net-treffer (title_match=False) alleen de sprekerbeurten
             # meenemen die zelf het keyword bevatten -- anders zou één incidentele
             # vermelding (bv. een motie over abortuscijfers in een stikstofdebat)
             # het hele, verder onrelateerde debat meeslepen.
-            if not titel_match and keyword not in content.lower():
+            if not title_match and keyword not in content.lower():
                 continue
 
             external_id = turn_el.attrib.get("objectid")

@@ -6,12 +6,12 @@
 # losse "connection refused"-fouten per document.
 set -euo pipefail
 
-KANDIDATEN=(
+CANDIDATES=(
   "http://localhost:1234/v1"
   "http://host.docker.internal:1234/v1"
 )
 
-for url in "${KANDIDATEN[@]}"; do
+for url in "${CANDIDATES[@]}"; do
   if curl -fsS --max-time 2 "$url/models" >/dev/null 2>&1; then
     echo "$url"
     exit 0

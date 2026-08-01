@@ -18,12 +18,6 @@ functie = "staatssecretaris"
 functietitel = "Nederlands staatssecretaris van Infrastructuur en Waterstaat"
 
 [[bewindspersonen]]
-naam = "Barbara Visser"
-partij = "VVD"
-functie = "minister"
-functietitel = "Nederlands minister van Infrastructuur en Waterstaat"
-
-[[bewindspersonen]]
 naam = "Barry Madlener"
 partij = "PVV"
 functie = "minister"
@@ -34,18 +28,6 @@ naam = "Bart van den Brink"
 partij = "CDA"
 functie = "minister"
 functietitel = "viceminister-president van Nederland"
-
-[[bewindspersonen]]
-naam = "Bas van 't Wout"
-partij = "VVD"
-functie = "minister"
-functietitel = "Nederlandse minister"
-
-[[bewindspersonen]]
-naam = "Ben Knapen"
-partij = "CDA"
-functie = "minister"
-functietitel = "Nederlands minister van Buitenlandse Zaken"
 
 [[bewindspersonen]]
 naam = "Carola Schouten"
@@ -90,12 +72,6 @@ functie = "minister"
 functietitel = "minister van Volksgezondheid, Welzijn en Sport"
 
 [[bewindspersonen]]
-naam = "Cora van Nieuwenhuizen"
-partij = "VVD"
-functie = "minister"
-functietitel = "Minister van Economische Zaken en Klimaat"
-
-[[bewindspersonen]]
 naam = "Daniëlle Jansen"
 partij = "NSC"
 functie = "minister"
@@ -106,12 +82,6 @@ naam = "David van Weel"
 partij = "VVD"
 functie = "minister"
 functietitel = "Nederlands minister van Buitenlandse Zaken"
-
-[[bewindspersonen]]
-naam = "Dennis Wiersma"
-partij = "VVD"
-functie = "staatssecretaris"
-functietitel = "staatssecretaris van Sociale Zaken en Werkgelegenheid"
 
 [[bewindspersonen]]
 naam = "Dick Schoof"
@@ -330,12 +300,6 @@ functie = "minister"
 functietitel = "Minister van Binnenlandse Zaken en Koninkrijksrelaties"
 
 [[bewindspersonen]]
-naam = "Q732818"
-partij = "VVD"
-functie = "minister"
-functietitel = "Nederlands minister van Defensie"
-
-[[bewindspersonen]]
 naam = "Reinette Klever"
 partij = "PVV"
 functie = "minister"
@@ -384,18 +348,6 @@ functie = "minister"
 functietitel = "minister van Volksgezondheid, Welzijn en Sport"
 
 [[bewindspersonen]]
-naam = "Stef Blok"
-partij = "VVD"
-functie = "minister"
-functietitel = "Minister van Economische Zaken en Klimaat"
-
-[[bewindspersonen]]
-naam = "Steven van Weyenberg"
-partij = "D66"
-functie = "staatssecretaris"
-functietitel = "Nederlands staatssecretaris van Infrastructuur en Waterstaat"
-
-[[bewindspersonen]]
 naam = "Stientje van Veldhoven"
 partij = "D66"
 functie = "minister"
@@ -416,12 +368,6 @@ functietitel = "Minister van Werk en Participatie"
 [[bewindspersonen]]
 naam = "Tom Berendsen"
 partij = "CDA"
-functie = "minister"
-functietitel = "Nederlands minister van Buitenlandse Zaken"
-
-[[bewindspersonen]]
-naam = "Tom de Bruijn"
-partij = "D66"
 functie = "minister"
 functietitel = "Nederlands minister van Buitenlandse Zaken"
 

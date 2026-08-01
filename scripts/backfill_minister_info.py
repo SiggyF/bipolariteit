@@ -83,7 +83,7 @@ def backfill_role_titles(conn, topic_keyword, dry_run=False):
             continue
         root = ET.parse(xml_path).getroot()
 
-        for activiteit, _titel_match in find_matching_activiteiten(root, topic_keyword):
+        for activiteit, _title_match in find_matching_activiteiten(root, topic_keyword):
             for turn_el, spreker_el, _ in find_speaking_turns(activiteit):
                 role_title = _speaker_role_title(spreker_el)
                 if not role_title:

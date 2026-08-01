@@ -1,7 +1,11 @@
 """
-Bouwt data/bewindspersonen.toml: ministers/staatssecretarissen van de laatste
-2 kamerperiodes (vanaf het begin van Kabinet-Rutte IV, 2022-01-10) met hun
-partij, via Wikidata. Nodig omdat bewindspersonen in de VLOS-brondata geen
+Bouwt data/bewindspersonen.toml: ministers/staatssecretarissen relevant voor
+de laatste 2 kamerperiodes (Tweede Kamer 2023-2025 en 2025-heden, samen
+[verwerking].vanaf = 2023-12-06 in data/politieke-periodes.toml) met hun
+partij, via Wikidata. SINDS (zie hieronder) ligt op 2022 -- de start van
+Kabinet-Rutte IV -- niet op de kamerperiode zelf, omdat een bewindspersoon
+zijn functie vóór de exportdrempel kan zijn gestart en die tot erna kan
+hebben behouden. Nodig omdat bewindspersonen in de VLOS-brondata geen
 <fractie> hebben (ze spreken niet namens een Kamerfractie) -- de meesten zijn
 via de TK OData Persoon-API te herleiden (zie
 pipeline.ingest.ingest_tk.lookup_bewindspersoon_party), maar een deel heeft
@@ -13,7 +17,7 @@ Twee SPARQL-queries:
    staatssecretaris (Q1847103), met jurisdictie Nederland (Q55) of Koninkrijk
    der Nederlanden (Q29999) -- beide komen voor, zie de eigenaardigheid dat
    individuele Wikidata-positie-items niet consistent één van de twee kiezen
-   -- gehouden sinds 2022.
+   -- gehouden sinds 2022 (zie SINDS).
 2. Voor alle gevonden personen: hun partij-lidmaatschappen (P102) met
    begin/einddatum, om de partij op het moment van de functie te bepalen
    (niet zomaar de eerste/laatste partij ooit).
@@ -27,6 +31,7 @@ Gebruik:
     uv run python scripts/fetch_bewindspersonen_wikidata.py
 """
 
+import re
 import tomllib
 from pathlib import Path
 
@@ -36,12 +41,14 @@ SPARQL_URL = "https://query.wikidata.org/sparql"
 HEADERS = {"User-Agent": "bipolariteit-wikidata-fetch/0.1 (contact: f.baart@gmail.com; onderzoeksproject)"}
 OUT_PATH = Path(__file__).parent.parent / "data" / "bewindspersonen.toml"
 
-# Begin van kamerperiode Tweede Kamer 2021-2023 (data/politieke-periodes.toml)
-# -- ruimer dan Kabinet-Rutte IV (2022-01-10) omdat een aantal ministers hun
-# positie al eerder startte (bv. Tom de Bruijn, 2021-08-10, nog onder het
-# demissionaire Rutte III, maar wel relevant voor documenten uit de kamerperiode
-# 2021-2023).
-SINDS = 2021
+# De relevante kamerperiodes zijn Tweede Kamer 2023-2025 en 2025-heden (samen
+# [verwerking].vanaf = 2023-12-06 in data/politieke-periodes.toml -- alleen
+# documenten van die datum af worden geexporteerd). SINDS ligt bewust eerder
+# (start Kabinet-Rutte IV, 2022-01-10): een bewindspersoon kan zijn functie
+# vóór de drempel gestart zijn en tot erna hebben behouden, dus zijn positie-
+# startdatum in Wikidata kan vóór 2023-12-06 liggen terwijl hij nog wel in een
+# geexporteerd document spreekt.
+SINDS = 2022
 
 # Wikidata geeft volledige partijnamen; genormaliseerd naar de afkortingen die
 # de rest van de DB gebruikt (actors.party, via TK OData Fractie.Afkorting).
@@ -129,6 +136,11 @@ def main():
     skipped = []
     for qid, info in sorted(positions_by_person.items(), key=lambda kv: kv[1]["name"]):
         name = info["name"]
+        if re.fullmatch(r"Q\d+", name):
+            # Geen label in nl/en -- SERVICE wikibase:label valt dan terug op
+            # de kale QID zelf. Zo'n naam matcht nooit een VLOS-sprekernaam.
+            skipped.append((name, "geen Wikidata-label"))
+            continue
         latest_start, latest_pos = sorted(info["positions"])[-1]
         functie = "staatssecretaris" if "staatssecretaris" in latest_pos.lower() else "minister"
         party = party_at(parties_by_person.get(qid, []), latest_start)
