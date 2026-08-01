@@ -36,9 +36,12 @@ SPARQL_URL = "https://query.wikidata.org/sparql"
 HEADERS = {"User-Agent": "bipolariteit-wikidata-fetch/0.1 (contact: f.baart@gmail.com; onderzoeksproject)"}
 OUT_PATH = Path(__file__).parent.parent / "data" / "bewindspersonen.toml"
 
-# Begin van Kabinet-Rutte IV (data/politieke-periodes.toml) -- de laatste 2
-# kamerperiodes vallen daar ruim binnen.
-SINDS = 2022
+# Begin van kamerperiode Tweede Kamer 2021-2023 (data/politieke-periodes.toml)
+# -- ruimer dan Kabinet-Rutte IV (2022-01-10) omdat een aantal ministers hun
+# positie al eerder startte (bv. Tom de Bruijn, 2021-08-10, nog onder het
+# demissionaire Rutte III, maar wel relevant voor documenten uit de kamerperiode
+# 2021-2023).
+SINDS = 2021
 
 # Wikidata geeft volledige partijnamen; genormaliseerd naar de afkortingen die
 # de rest van de DB gebruikt (actors.party, via TK OData Fractie.Afkorting).
