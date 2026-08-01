@@ -825,10 +825,13 @@ const chartOption = computed(() => {
 			},
 		},
 		legend: {
-			// Bewust niet klikbaar: een legenda die series lokaal verbergt is een
-			// tweede, verborgen filter naast de filterbalk. Haar echt op de
-			// gedeelde filterstore aansluiten staat als los punt in #3.
-			selectedMode: false,
+			// Klikbaar, maar niet als ECharts' eigen lokale verbergen: dat zou een
+			// tweede, verborgen filter naast de filterbalk zijn. `onLegendSelectChanged`
+			// hieronder zet de klik in plaats daarvan om in een `perspectief`-filter op
+			// de gedeelde filterstore en herstelt meteen de eigen selectiestatus, zodat
+			// de bestaande opacity-demping (`inSelection`) de enige zichtbare
+			// filterfeedback blijft -- zie #3.
+			selectedMode: true,
 			data: [rowSeries.name, ...perspectieven.value],
 			top: 0,
 			type: "scroll",
@@ -850,6 +853,7 @@ const chartOption = computed(() => {
 			? []
 			: [
 					{
+						id: "dataZoomX",
 						type: "inside",
 						xAxisIndex: 0,
 						filterMode: "none",
@@ -857,6 +861,7 @@ const chartOption = computed(() => {
 						...(forceNormalization.value ? { startValue: -axisLimits.value[0], endValue: axisLimits.value[0] } : {}),
 					},
 					{
+						id: "dataZoomY",
 						type: "inside",
 						yAxisIndex: 0,
 						filterMode: "none",
@@ -913,6 +918,17 @@ function onChartClick(p: any) {
 		return;
 	}
 	if (p.data?.name) toggleValue("tag", p.data.name);
+}
+
+// Legendaklik verbergt hier bewust geen series lokaal (dat zou een tweede,
+// niet-gedeelde filter zijn): een klik op een perspectief zet het om in een
+// `perspectief`-filter op de gedeelde filterstore, en de eigen ECharts-
+// selectiestatus wordt meteen hersteld zodat de kaart altijd alle series
+// toont. "Partijen"/"Personen" heeft geen bijpassende filterdimensie, dus die
+// blijft alleen aanwezig in de legenda, niet klikbaar.
+function onLegendSelectChanged(p: { name: string }) {
+	if (perspectieven.value.includes(p.name)) toggleValue("perspectief", p.name);
+	chartRef.value?.dispatchAction?.({ type: "legendAllSelect" });
 }
 
 const tagFilterActive = computed(() => filters.values.tag.length > 0 || filters.values.partij.length > 0);
@@ -1014,6 +1030,7 @@ const tagFilterActive = computed(() => filters.values.tag.length > 0 || filters.
 				autoresize
 				@click="onChartClick"
 				@datazoom="onDataZoom"
+				@legendselectchanged="onLegendSelectChanged"
 			/>
 		</div>
 		<p v-else class="panel-note">
