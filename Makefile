@@ -2,6 +2,14 @@
 
 TOPIC ?= stikstof
 LIMIT ?= 15
+# Zonder expliciete BASE_URL=... op de command line wordt scripts/detect_llm_base_url.sh
+# gebruikt: probeert localhost:1234 en host.docker.internal:1234 (devcontainer),
+# en stopt met een foutmelding als geen van beide een LM Studio-instance heeft.
+ifeq ($(origin BASE_URL),command line)
+  RESOLVE_BASE_URL = echo $(BASE_URL)
+else
+  RESOLVE_BASE_URL = scripts/detect_llm_base_url.sh
+endif
 
 .PHONY: help test test-js test-frontend ca-fixture status build dev dev-stop extract tag redactie export db-init pipeline-status backup-db release release-dry
 
@@ -34,17 +42,20 @@ backup-db: ## Kopieer data/bipolariteit.db naar ~/data/bipolariteit/ (sync die m
 	mkdir -p ~/data/bipolariteit
 	cp data/bipolariteit.db ~/data/bipolariteit/bipolariteit-$$(date +%Y%m%d-%H%M%S).db
 
-extract: ## Stage 1 -- argumenten extraheren (LLM, alleen op netstroom). Vars: TOPIC, LIMIT
-	uv run python -m pipeline.extract_arguments --topic $(TOPIC) --limit $(LIMIT)
+extract: ## Stage 1 -- argumenten extraheren (LLM, alleen op netstroom). Vars: TOPIC, LIMIT, BASE_URL
+	@url=$$($(RESOLVE_BASE_URL)) || exit 1; \
+	uv run python -m pipeline.extract_arguments --topic $(TOPIC) --limit $(LIMIT) --base-url $$url
 
-tag: ## Stage 1b -- tags toekennen (LLM, alleen op netstroom). Vars: TOPIC, LIMIT
-	uv run python -m pipeline.tag_arguments --topic $(TOPIC) --limit $(LIMIT)
+tag: ## Stage 1b -- tags toekennen (LLM, alleen op netstroom). Vars: TOPIC, LIMIT, BASE_URL
+	@url=$$($(RESOLVE_BASE_URL)) || exit 1; \
+	uv run python -m pipeline.tag_arguments --topic $(TOPIC) --limit $(LIMIT) --base-url $$url
 
-redactie: ## Stage 2 -- redactie-check/opposition-linking (LLM, alleen op netstroom). Vars: TOPIC, LIMIT
-	uv run python -m pipeline.redactie_check --topic $(TOPIC) --limit $(LIMIT)
+redactie: ## Stage 2 -- redactie-check/opposition-linking (LLM, alleen op netstroom). Vars: TOPIC, LIMIT, BASE_URL
+	@url=$$($(RESOLVE_BASE_URL)) || exit 1; \
+	uv run python -m pipeline.redactie_check --topic $(TOPIC) --limit $(LIMIT) --base-url $$url
 
-export: ## SQLite -> data/export/topics/<slug>.json + topics-index.json. Vars: TOPIC
-	uv run python -m pipeline.build_static_data --topic $(TOPIC)
+export: ## SQLite -> data/export/topics/<slug>.json + topics-index.json, voor alle topics
+	uv run python -m pipeline.build_static_data
 
 build: ## Frontend production build (frontend/dist/)
 	cd frontend && npm run build

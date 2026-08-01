@@ -18,11 +18,16 @@ gevallen zonder aannames over de diepte.
 
 import argparse
 import json
+import logging
 import re
+import urllib.parse
+import urllib.request
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
 from pipeline.db import db
+
+logger = logging.getLogger(__name__)
 from pipeline.paths import RAW_DIR_TWEEDE_KAMER as RAW_DIR
 
 NS = "{http://www.tweedekamer.nl/ggm/vergaderverslag/v1.0}"
@@ -99,14 +104,152 @@ def _speaker_role_title(spreker_el):
     return functie.strip() if functie and functie.strip() else None
 
 
+_ODATA_BASE = "https://gegevensmagazijn.tweedekamer.nl/OData/v4/2.0"
+_ODATA_HEADERS = {"User-Agent": "bipolariteit-tk-crawler/0.1 (contact: f.baart@gmail.com; onderzoeksproject)"}
+_bewindspersoon_party_cache = {}
+
+# Zeldzame, bewuste uitzondering op de automatische lookup hieronder: Jaimi
+# van Essen heeft geen Kamerlidschap (dus geen OData-Persoon-record), en zijn
+# Wikidata-positie-item mist zelf weer een label/jurisdictie (dus valt ook
+# buiten data/bewindspersonen.toml). Partij staat als losse tekst
+# ("Partij: D66") in rijksoverheid.nl/regering/bewindspersonen/jaimi-van-essen,
+# geverifieerd op 2026-07-26.
+#
+# Teun Struycken stond hier eerder ook in: "Teun Struycken is door NSC
+# benaderd om in het kabinet-Schoof staatssecretaris Rechtsbescherming te
+# worden, maar hij is geen lid van de partij en is dat ook niet van plan te
+# worden" (NOS-liveblog, 2024-07-13) -- inmiddels via Wikidata zelf opgelost
+# (P102 -> Q327591 "onafhankelijk politicus", 2026-08-01), dus die
+# uitzondering is niet meer nodig; data/bewindspersonen.toml levert hem nu
+# automatisch als "Onafhankelijk".
+BEWINDSPERSOON_PARTY_OVERRIDES = {
+    "Jaimi van Essen": "D66",
+}
+
+_BEWINDSPERSONEN_TOML = Path(__file__).parent.parent.parent / "data" / "bewindspersonen.toml"
+_bewindspersonen_wikidata = None
+
+
+def _laad_bewindspersonen_wikidata():
+    global _bewindspersonen_wikidata
+    if _bewindspersonen_wikidata is None:
+        import tomllib
+
+        data = tomllib.loads(_BEWINDSPERSONEN_TOML.read_text(encoding="utf-8"))
+        _bewindspersonen_wikidata = {p["naam"]: p["partij"] for p in data["bewindspersonen"]}
+    return _bewindspersonen_wikidata
+
+
+def lookup_bewindspersoon_party(name):
+    """Bewindspersonen (Minister/Staatssecretaris) hebben geen <fractie> in de
+    VLOS-data -- ze spreken op dat moment niet namens een Kamerfractie, maar
+    zijn meestal wel via een eerder/huidig Kamerlidmaatschap aan een partij te
+    koppelen. Drie lagen, in volgorde: (1) een kleine handmatige
+    uitzonderingenlijst voor de zeldzame gevallen die de andere twee lagen niet
+    kunnen oplossen, (2) de laatst bekende Kamerzetel via de TK OData-API
+    (Persoon -> FractieZetelPersoon -> FractieZetel -> Fractie.Afkorting), (3)
+    data/bewindspersonen.toml, gebouwd uit Wikidata voor bewindspersonen van de
+    laatste 2 kamerperiodes zonder eigen Kamerzetel (zie
+    scripts/fetch_bewindspersonen_wikidata.py). Geeft None terug (echte
+    "Onbekend") als geen van de lagen een match heeft -- nooit gokken."""
+    if name in BEWINDSPERSOON_PARTY_OVERRIDES:
+        return BEWINDSPERSOON_PARTY_OVERRIDES[name]
+    if name in _bewindspersoon_party_cache:
+        return _bewindspersoon_party_cache[name]
+
+    party = None
+    parts = name.split()
+    achternaam = parts[-1]
+    voornaam = parts[0] if len(parts) > 1 else None
+    try:
+        # contains i.p.v. eq: Persoon.Achternaam bevat soms het volledige
+        # tussenvoegsel+achternaam (bv. "van der Wal"), dan matcht een eq op
+        # alleen het laatste woord ("Wal") niet.
+        filter_expr = f"contains(Achternaam,'{achternaam}')"
+        expand = "FractieZetelPersoon($expand=FractieZetel($expand=Fractie))"
+        url = (
+            f"{_ODATA_BASE}/Persoon?$filter={urllib.parse.quote(filter_expr)}"
+            f"&$expand={urllib.parse.quote(expand)}&$select=Id,Roepnaam,Voornamen,Achternaam"
+        )
+        req = urllib.request.Request(url, headers=_ODATA_HEADERS)
+        with urllib.request.urlopen(req, timeout=10) as resp:
+            body = json.loads(resp.read())
+        personen = body.get("value", [])
+        if voornaam and len(personen) > 1:
+            personen = [
+                p for p in personen
+                if voornaam.lower() in (p.get("Roepnaam") or "").lower()
+                or voornaam.lower() in (p.get("Voornamen") or "").lower()
+            ] or personen
+
+        zetels = []
+        for persoon in personen:
+            for zp in persoon.get("FractieZetelPersoon", []):
+                fractie = (zp.get("FractieZetel") or {}).get("Fractie") or {}
+                afkorting = fractie.get("Afkorting")
+                van = zp.get("Van")
+                if afkorting and van:
+                    zetels.append((van, afkorting))
+        if zetels:
+            zetels.sort()
+            party = zetels[-1][1]
+    except Exception as e:
+        logger.warning("kon partij niet opzoeken voor bewindspersoon %r: %s", name, e)
+
+    if not party:
+        party = _laad_bewindspersonen_wikidata().get(name)
+
+    _bewindspersoon_party_cache[name] = party
+    return party
+
+
+# Ruim criterium: een debat kan het topic bespreken zonder het keyword in zijn
+# eigen onderwerp/titel te dragen (bv. het keyword "abortus" komt 23x voor in
+# sprekerbeurten van het debat "Vrouwengezondheid", een eufemisme/koepelterm).
+# find_matching_activiteiten matcht daarom op alle tekst binnen de activiteit,
+# niet alleen op onderwerp/titel. Dat ruime net vangt ook debatten die het
+# keyword incidenteel noemen op een heel andere as (bv. "abortuszorg" als
+# onderdeel van ontwikkelingshulp aan slachtoffers van seksueel geweld in
+# oorlogsgebieden, geen Nederlands abortusdebat) -- TOPIC_EXCLUDE_ACTIVITEITEN
+# is de stapsgewijze exclusielijst daarvoor, per topic bijgehouden zodra zo'n
+# fout-positief gevonden wordt.
+TOPIC_EXCLUDE_ACTIVITEITEN = {
+    "abortus": [
+        # Commissiedebat "Bestrijding conflict-gerelateerd seksueel geweld"
+        # (28 mei 2026), onderdeel van dossier Buitenlandse Handel en
+        # Ontwikkelingssamenwerking: gaat over Nederlandse ontwikkelingshulp
+        # (SheDecides/Ipas/UNFPA) aan slachtoffers van seksueel geweld in
+        # oorlogsgebieden, niet over het Nederlandse abortusdebat. Een
+        # Kamerlid markeert dit debat zelf expliciet als "geen abortusdebat".
+        "Bestrijding conflict-gerelateerd seksueel geweld",
+    ],
+}
+
+
 def find_matching_activiteiten(root, topic_keyword):
+    """Retourneert (activiteit, title_match)-paren. title_match=True betekent
+    dat het keyword in de onderwerp/titel van de activiteit zelf staat -- een
+    overduidelijk op-topic debat, dus alle sprekerbeurten worden meegenomen.
+    title_match=False is het ruimere net: het keyword komt ergens in de
+    activiteit voor, maar de activiteit zelf gaat over iets anders (bv. het
+    eufemisme "Vrouwengezondheid", of een incidentele motie over abortuscijfers
+    in een medische-ethiekdebat) -- ingest_file neemt dan alleen de losse
+    sprekerbeurten mee die zelf het keyword bevatten, niet het hele debat."""
     keyword = topic_keyword.lower()
+    excludes = {x.lower() for x in TOPIC_EXCLUDE_ACTIVITEITEN.get(topic_keyword, [])}
     matches = []
     for activiteit in root.iter(NS + "activiteit"):
         onderwerp = activiteit.findtext(NS + "onderwerp") or ""
         titel = activiteit.findtext(NS + "titel") or ""
-        if keyword in onderwerp.lower() or keyword in titel.lower():
-            matches.append(activiteit)
+        if onderwerp.lower() in excludes or titel.lower() in excludes:
+            continue
+        title_match = keyword in onderwerp.lower() or keyword in titel.lower()
+        if title_match:
+            matches.append((activiteit, True))
+            continue
+        activiteit_text = " ".join(activiteit.itertext())
+        if keyword in activiteit_text.lower():
+            matches.append((activiteit, False))
     return matches
 
 
@@ -199,8 +342,9 @@ def ingest_file(conn, xml_path, meta_path, topic_keyword):
     topic_id = get_or_create_topic(conn, topic_keyword)
     source_id = get_or_create_source(conn)
 
+    keyword = topic_keyword.lower()
     inserted = 0
-    for activiteit in find_matching_activiteiten(root, topic_keyword):
+    for activiteit, title_match in find_matching_activiteiten(root, topic_keyword):
         activiteit_titel = activiteit.findtext(NS + "titel") or metadata.get("activiteit_onderwerp")
         activiteit_soort = activiteit.attrib.get("soort")
         activiteit_aanvangstijd = activiteit.findtext(NS + "aanvangstijd") or metadata.get("activiteit_datum")
@@ -209,6 +353,12 @@ def ingest_file(conn, xml_path, meta_path, topic_keyword):
             content = _text_of(tekst_el)
             if not content:
                 continue
+            # Bij een ruim-net-treffer (title_match=False) alleen de sprekerbeurten
+            # meenemen die zelf het keyword bevatten -- anders zou één incidentele
+            # vermelding (bv. een motie over abortuscijfers in een stikstofdebat)
+            # het hele, verder onrelateerde debat meeslepen.
+            if not title_match and keyword not in content.lower():
+                continue
 
             external_id = turn_el.attrib.get("objectid")
             if external_id and document_exists(conn, source_id, external_id):
@@ -216,11 +366,13 @@ def ingest_file(conn, xml_path, meta_path, topic_keyword):
 
             name = _speaker_name(spreker_el)
             party = _speaker_party(spreker_el)
+            speaker_role_title = _speaker_role_title(spreker_el)
+            if party is None and speaker_role_title is not None:
+                party = lookup_bewindspersoon_party(name)
             actor_id = get_or_create_actor(conn, name, party)
 
             published_at = turn_el.findtext(NS + "markeertijdbegin") or metadata.get("activiteit_datum")
             voorzitter_turn = is_voorzitter_turn(turn_el, parent_map)
-            speaker_role_title = _speaker_role_title(spreker_el)
 
             conn.execute(
                 """
@@ -252,7 +404,14 @@ def ingest_file(conn, xml_path, meta_path, topic_keyword):
     return inserted
 
 
-def ingest(topic_keyword, raw_dir=RAW_DIR):
+def ingest(topic_keyword, raw_dir=RAW_DIR, also_dirs=()):
+    """Scant standaard alleen raw_dir/<topic_keyword>/ -- de map waar de
+    crawler onder dat exacte keyword naartoe schreef. also_dirs is de
+    expliciete, per-geval-gekozen uitbreiding voor het ruime-net-criterium
+    (bv. also_dirs=["vrouwengezondheid"] om een eufemisme-gecrawlde map ook
+    op dit topic te doorzoeken) -- nooit een impliciete scan van de hele
+    raw-boom, dat zou topics ongemerkt laten lekken (zie find_matching_activiteiten
+    voor de sprekerbeurt-niveau-filtering die dat soort kruisbestuiving afvangt)."""
     db_path = db.DEFAULT_DB_PATH
     if not db_path.exists():
         db.init_db(db_path)
@@ -260,14 +419,15 @@ def ingest(topic_keyword, raw_dir=RAW_DIR):
     conn = db.connect(db_path)
     try:
         total = 0
-        xml_files = sorted(raw_dir.glob("*.xml"))
+        dirs = [raw_dir / topic_keyword] + [raw_dir / d for d in also_dirs]
+        xml_files = sorted(f for d in dirs if d.exists() for f in d.glob("*.xml"))
         for xml_path in xml_files:
             meta_path = xml_path.with_suffix(".json")
             if not meta_path.exists():
                 print(f"  overslaan (geen metadata): {xml_path.name}")
                 continue
             count = ingest_file(conn, xml_path, meta_path, topic_keyword)
-            print(f"  {xml_path.name}: {count} sprekerbeurten geïmporteerd")
+            print(f"  {xml_path.parent.name}/{xml_path.name}: {count} sprekerbeurten geïmporteerd")
             total += count
         print(f"Klaar: {total} documenten geïmporteerd voor topic '{topic_keyword}'.")
     finally:
@@ -277,5 +437,11 @@ def ingest(topic_keyword, raw_dir=RAW_DIR):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--topic", required=True, help="Zelfde topic-keyword als gebruikt bij fetch_tk/scrapy, bv. stikstof")
+    parser.add_argument(
+        "--also-dir",
+        action="append",
+        default=[],
+        help="Extra raw_dir/<naam>/-map ook doorzoeken op dit topic (ruime-net-criterium, bv. --also-dir vrouwengezondheid). Herhaalbaar.",
+    )
     args = parser.parse_args()
-    ingest(args.topic)
+    ingest(args.topic, also_dirs=args.also_dir)

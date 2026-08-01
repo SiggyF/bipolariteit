@@ -91,12 +91,14 @@ def test_find_matching_activiteiten_filters_on_topic_keyword():
     root = ET.fromstring(VLOS_ROOT)
     matches = find_matching_activiteiten(root, "stikstof")
     assert len(matches) == 1
-    assert matches[0].attrib["objectid"] == "act-1"
+    activiteit, title_match = matches[0]
+    assert activiteit.attrib["objectid"] == "act-1"
+    assert title_match is True
 
 
 def test_find_speaking_turns_includes_woordvoerder_and_interrumpant():
     root = ET.fromstring(VLOS_ROOT)
-    activiteit = find_matching_activiteiten(root, "stikstof")[0]
+    activiteit, _title_match = find_matching_activiteiten(root, "stikstof")[0]
     turns = find_speaking_turns(activiteit)
     turn_ids = {el.attrib["objectid"] for el, _, _ in turns}
     assert turn_ids == {"turn-1", "turn-2"}
@@ -107,6 +109,6 @@ def test_activiteit_aanvangstijd_and_eindtijd_readable_on_debate_level():
     # zie docs/handoff.md), niet te verwarren met een sprekerbeurt's eigen
     # markeertijdbegin -- die zit op woordvoerder-niveau, niet op activiteit-niveau.
     root = ET.fromstring(VLOS_ROOT)
-    activiteit = find_matching_activiteiten(root, "stikstof")[0]
+    activiteit, _title_match = find_matching_activiteiten(root, "stikstof")[0]
     assert activiteit.findtext(NS + "aanvangstijd") == AANVANGSTIJD
     assert activiteit.findtext(NS + "eindtijd") == EINDTIJD

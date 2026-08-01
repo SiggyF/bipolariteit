@@ -1,0 +1,408 @@
+# Ministers/staatssecretarissen van de laatste 2 kamerperiodes (Kabinet-
+# Rutte IV, Kabinet-Schoof, Kabinet-Jetten), gebouwd uit Wikidata --
+# gegenereerd door scripts/fetch_bewindspersonen_wikidata.py, niet met de
+# hand bijgehouden. Gebruikt door pipeline/ingest/ingest_tk.py als laatste
+# fallback wanneer de TK OData Persoon-API geen Kamerlidschap kent
+# (bewindspersonen zonder eigen Kamerzetel).
+
+[[bewindspersonen]]
+naam = "Alexandra van Huffelen"
+partij = "D66"
+functie = "staatssecretaris"
+functietitel = "staatssecretaris Koninksrijkrelaties en Digitalisering"
+
+[[bewindspersonen]]
+naam = "Annet Bertram"
+partij = "CDA"
+functie = "staatssecretaris"
+functietitel = "Nederlands staatssecretaris van Infrastructuur en Waterstaat"
+
+[[bewindspersonen]]
+naam = "Barry Madlener"
+partij = "PVV"
+functie = "minister"
+functietitel = "Nederlands minister van Infrastructuur en Waterstaat"
+
+[[bewindspersonen]]
+naam = "Bart van den Brink"
+partij = "CDA"
+functie = "minister"
+functietitel = "viceminister-president van Nederland"
+
+[[bewindspersonen]]
+naam = "Carola Schouten"
+partij = "ChristenUnie"
+functie = "minister"
+functietitel = "Nederlands minister van Landbouw, Visserij, Voedselzekerheid en Natuur"
+
+[[bewindspersonen]]
+naam = "Caspar Veldkamp"
+partij = "NSC"
+functie = "minister"
+functietitel = "Nederlands minister van Buitenlandse Zaken"
+
+[[bewindspersonen]]
+naam = "Chris Jansen"
+partij = "PVV"
+functie = "staatssecretaris"
+functietitel = "Nederlands staatssecretaris van Infrastructuur en Waterstaat"
+
+[[bewindspersonen]]
+naam = "Christianne van der Wal"
+partij = "VVD"
+functie = "minister"
+functietitel = "minister voor Natuur en Stikstof"
+
+[[bewindspersonen]]
+naam = "Christophe van der Maat"
+partij = "VVD"
+functie = "staatssecretaris"
+functietitel = "staatssecretaris van Defensie"
+
+[[bewindspersonen]]
+naam = "Claudia van Bruggen"
+partij = "D66"
+functie = "staatssecretaris"
+functietitel = "staatssecretaris van Justitie en Veiligheid"
+
+[[bewindspersonen]]
+naam = "Conny Helder"
+partij = "VVD"
+functie = "minister"
+functietitel = "minister van Volksgezondheid, Welzijn en Sport"
+
+[[bewindspersonen]]
+naam = "Daniëlle Jansen"
+partij = "NSC"
+functie = "minister"
+functietitel = "minister van Volksgezondheid, Welzijn en Sport"
+
+[[bewindspersonen]]
+naam = "David van Weel"
+partij = "VVD"
+functie = "minister"
+functietitel = "Nederlands minister van Buitenlandse Zaken"
+
+[[bewindspersonen]]
+naam = "Dick Schoof"
+partij = "Onafhankelijk"
+functie = "minister"
+functietitel = "minister-president van Nederland"
+
+[[bewindspersonen]]
+naam = "Dilan Yeşilgöz"
+partij = "VVD"
+functie = "minister"
+functietitel = "Nederlands minister van Defensie"
+
+[[bewindspersonen]]
+naam = "Dirk Beljaarts"
+partij = "PVV"
+functie = "minister"
+functietitel = "Minister van Economische Zaken en Klimaat"
+
+[[bewindspersonen]]
+naam = "Eddie van Marum"
+partij = "BBB"
+functie = "staatssecretaris"
+functietitel = "staatssecretaris Koninksrijkrelaties en Digitalisering"
+
+[[bewindspersonen]]
+naam = "Eddy van Hijum"
+partij = "NSC"
+functie = "minister"
+functietitel = "viceminister-president van Nederland"
+
+[[bewindspersonen]]
+naam = "Eelco Heinen"
+partij = "VVD"
+functie = "minister"
+functietitel = "Minister van Economische Zaken en Klimaat"
+
+[[bewindspersonen]]
+naam = "Eppo Bruins"
+partij = "NSC"
+functie = "minister"
+functietitel = "minister van Onderwijs, Cultuur en Wetenschap"
+
+[[bewindspersonen]]
+naam = "Eric van der Burg"
+partij = "VVD"
+functie = "staatssecretaris"
+functietitel = "staatssecretaris van Justitie en Veiligheid"
+
+[[bewindspersonen]]
+naam = "Ernst Kuipers"
+partij = "D66"
+functie = "minister"
+functietitel = "minister van Volksgezondheid, Welzijn en Sport"
+
+[[bewindspersonen]]
+naam = "Femke Wiersma"
+partij = "BBB"
+functie = "minister"
+functietitel = "Nederlands minister van Landbouw, Visserij, Voedselzekerheid en Natuur"
+
+[[bewindspersonen]]
+naam = "Fleur Agema"
+partij = "PVV"
+functie = "minister"
+functietitel = "viceminister-president van Nederland"
+
+[[bewindspersonen]]
+naam = "Foort van Oosten"
+partij = "VVD"
+functie = "minister"
+functietitel = "Nederlands minister van Justitie en Veiligheid"
+
+[[bewindspersonen]]
+naam = "Franc Weerwind"
+partij = "D66"
+functie = "minister"
+functietitel = "Minister voor Rechtsbescherming"
+
+[[bewindspersonen]]
+naam = "Geoffrey van Leeuwen"
+partij = "VVD"
+functie = "minister"
+functietitel = "Minister voor Buitenlandse Handel en Ontwikkelingshulp"
+
+[[bewindspersonen]]
+naam = "Gijs Tuinman"
+partij = "BBB"
+functie = "staatssecretaris"
+functietitel = "staatssecretaris van Defensie"
+
+[[bewindspersonen]]
+naam = "Gouke Moes"
+partij = "BBB"
+functie = "minister"
+functietitel = "minister van Onderwijs, Cultuur en Wetenschap"
+
+[[bewindspersonen]]
+naam = "Gunay Uslu"
+partij = "D66"
+functie = "staatssecretaris"
+functietitel = "staatssecretaris Cultuur en Media"
+
+[[bewindspersonen]]
+naam = "Hanke Bruins Slot"
+partij = "CDA"
+functie = "minister"
+functietitel = "Nederlands minister van Buitenlandse Zaken"
+
+[[bewindspersonen]]
+naam = "Hans Vijlbrief"
+partij = "D66"
+functie = "minister"
+functietitel = "Nederlands minister van Sociale Zaken en Werkgelegenheid"
+
+[[bewindspersonen]]
+naam = "Henk Staghouwer"
+partij = "ChristenUnie"
+functie = "minister"
+functietitel = "Nederlands minister van Landbouw, Visserij, Voedselzekerheid en Natuur"
+
+[[bewindspersonen]]
+naam = "Hugo de Jonge"
+partij = "CDA"
+functie = "minister"
+functietitel = "Minister van Binnenlandse Zaken en Koninkrijksrelaties"
+
+[[bewindspersonen]]
+naam = "Ingrid Coenradie"
+partij = "JA21"
+functie = "staatssecretaris"
+functietitel = "staatssecretaris van Justitie en Veiligheid"
+
+[[bewindspersonen]]
+naam = "Jean Rummenie"
+partij = "BBB"
+functie = "staatssecretaris"
+functietitel = "staatssecretaris van Landbouw, Natuurbeheer en Visserij"
+
+[[bewindspersonen]]
+naam = "Judith Uitermark"
+partij = "NSC"
+functie = "minister"
+functietitel = "Minister van Binnenlandse Zaken en Koninkrijksrelaties"
+
+[[bewindspersonen]]
+naam = "Jurgen Nobel"
+partij = "VVD"
+functie = "staatssecretaris"
+functietitel = "staatssecretaris van Sociale Zaken en Werkgelegenheid"
+
+[[bewindspersonen]]
+naam = "Kajsa Ollongren"
+partij = "D66"
+functie = "minister"
+functietitel = "Nederlands minister van Defensie"
+
+[[bewindspersonen]]
+naam = "Karien van Gennip"
+partij = "CDA"
+functie = "minister"
+functietitel = "viceminister-president van Nederland"
+
+[[bewindspersonen]]
+naam = "Liesje Schreinemacher"
+partij = "VVD"
+functie = "minister"
+functietitel = "Minister voor Buitenlandse Handel en Ontwikkelingshulp"
+
+[[bewindspersonen]]
+naam = "Maarten van Ooijen"
+partij = "ChristenUnie"
+functie = "staatssecretaris"
+functietitel = "staatssecretaris van Volksgezondheid, Welzijn en Sport"
+
+[[bewindspersonen]]
+naam = "Marjolein Faber"
+partij = "PVV"
+functie = "minister"
+functietitel = "minister van Asiel en Migratie"
+
+[[bewindspersonen]]
+naam = "Mark Harbers"
+partij = "VVD"
+functie = "minister"
+functietitel = "Nederlands minister van Infrastructuur en Waterstaat"
+
+[[bewindspersonen]]
+naam = "Micky Adriaansens"
+partij = "VVD"
+functie = "minister"
+functietitel = "Minister van Economische Zaken en Klimaat"
+
+[[bewindspersonen]]
+naam = "Mona Keijzer"
+partij = "BBB"
+functie = "minister"
+functietitel = "Nederlands minister van Sociale Zaken en Werkgelegenheid"
+
+[[bewindspersonen]]
+naam = "Pia Dijkstra"
+partij = "D66"
+functie = "minister"
+functietitel = "minister van Langdurige Zorg, Jeugd en Sport"
+
+[[bewindspersonen]]
+naam = "Piet Adema"
+partij = "ChristenUnie"
+functie = "minister"
+functietitel = "Nederlands minister van Landbouw, Visserij, Voedselzekerheid en Natuur"
+
+[[bewindspersonen]]
+naam = "Pieter Heerma"
+partij = "CDA"
+functie = "minister"
+functietitel = "Minister van Binnenlandse Zaken en Koninkrijksrelaties"
+
+[[bewindspersonen]]
+naam = "Reinette Klever"
+partij = "PVV"
+functie = "minister"
+functietitel = "Minister voor Buitenlandse Handel en Ontwikkelingshulp"
+
+[[bewindspersonen]]
+naam = "Rob Jetten"
+partij = "D66"
+functie = "minister"
+functietitel = "minister-president van Nederland"
+
+[[bewindspersonen]]
+naam = "Robbert Dijkgraaf"
+partij = "D66"
+functie = "minister"
+functietitel = "minister van Onderwijs, Cultuur en Wetenschap"
+
+[[bewindspersonen]]
+naam = "Robert Tieman"
+partij = "BBB"
+functie = "minister"
+functietitel = "minister van Volksgezondheid, Welzijn en Sport"
+
+[[bewindspersonen]]
+naam = "Ruben Brekelmans"
+partij = "VVD"
+functie = "minister"
+functietitel = "Nederlands minister van Buitenlandse Zaken"
+
+[[bewindspersonen]]
+naam = "Sigrid Kaag"
+partij = "D66"
+functie = "minister"
+functietitel = "viceminister-president van Nederland"
+
+[[bewindspersonen]]
+naam = "Sjoerd Sjoerdsma"
+partij = "D66"
+functie = "minister"
+functietitel = "Minister voor Buitenlandse Handel en Ontwikkelingshulp"
+
+[[bewindspersonen]]
+naam = "Sophie Hermans"
+partij = "VVD"
+functie = "minister"
+functietitel = "minister van Volksgezondheid, Welzijn en Sport"
+
+[[bewindspersonen]]
+naam = "Stientje van Veldhoven"
+partij = "D66"
+functie = "minister"
+functietitel = "minister van Klimaat en Groene Groei"
+
+[[bewindspersonen]]
+naam = "Teun Struycken"
+partij = "Onafhankelijk"
+functie = "staatssecretaris"
+functietitel = "staatssecretaris van Justitie en Veiligheid"
+
+[[bewindspersonen]]
+naam = "Thierry Aartsen"
+partij = "VVD"
+functie = "minister"
+functietitel = "Minister van Werk en Participatie"
+
+[[bewindspersonen]]
+naam = "Tom Berendsen"
+partij = "CDA"
+functie = "minister"
+functietitel = "Nederlands minister van Buitenlandse Zaken"
+
+[[bewindspersonen]]
+naam = "Vicky Maeijer"
+partij = "PVV"
+functie = "staatssecretaris"
+functietitel = "staatssecretaris van Volksgezondheid, Welzijn en Sport"
+
+[[bewindspersonen]]
+naam = "Vincent Karremans"
+partij = "VVD"
+functie = "minister"
+functietitel = "Nederlands minister van Infrastructuur en Waterstaat"
+
+[[bewindspersonen]]
+naam = "Vivianne Heijnen"
+partij = "CDA"
+functie = "staatssecretaris"
+functietitel = "Nederlands staatssecretaris van Infrastructuur en Waterstaat"
+
+[[bewindspersonen]]
+naam = "Willemijn Aerdts"
+partij = "D66"
+functie = "staatssecretaris"
+functietitel = "staatssecretaris Digitale Economie en Soevereiniteit"
+
+[[bewindspersonen]]
+naam = "Wopke Hoekstra"
+partij = "CDA"
+functie = "minister"
+functietitel = "viceminister-president van Nederland"
+
+[[bewindspersonen]]
+naam = "Zsolt Szabó"
+partij = "VVD"
+functie = "staatssecretaris"
+functietitel = "staatssecretaris Koninksrijkrelaties en Digitalisering"

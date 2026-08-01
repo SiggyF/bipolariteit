@@ -1,15 +1,25 @@
 {
-  "generated_at": "2026-07-31T23:01:25+02:00",
+  "generated_at": "2026-08-01T20:24:27+02:00",
   "topics": [
     {
       "slug": "stikstof",
       "name": "stikstof",
       "vanaf": "2023-12-06",
       "documents_total": 4377,
-      "documents_extracted": 2849,
-      "arguments_total": 1394,
+      "documents_extracted": 3158,
+      "arguments_total": 1551,
       "arguments_tagged": 1301,
       "documents_redactie_checked": 5
+    },
+    {
+      "slug": "abortus",
+      "name": "Abortus",
+      "vanaf": "2023-12-06",
+      "documents_total": 591,
+      "documents_extracted": 34,
+      "arguments_total": 50,
+      "arguments_tagged": 38,
+      "documents_redactie_checked": 0
     }
   ]
 }

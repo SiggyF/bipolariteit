@@ -19,7 +19,6 @@ maar komen niet in de JSON en dus niet op de site.
 
 Gebruik:
     uv run python -m pipeline.build_static_data
-    uv run python -m pipeline.build_static_data --topic stikstof
 """
 
 import argparse
@@ -316,29 +315,28 @@ def build_topic_export(conn, topic_row, periode_index):
 
 
 def main():
-    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("--topic", default=None, help="alleen deze topic-slug exporteren (default: alle topics)")
-    args = parser.parse_args()
+    argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter).parse_args()
 
     conn = db.connect()
     periode_index = PeriodeIndex()
-    if args.topic:
-        topic_rows = conn.execute("SELECT id, slug, name, description FROM topics WHERE slug = ?", (args.topic,)).fetchall()
-        if not topic_rows:
-            raise SystemExit(f"onbekende topic-slug: {args.topic}")
-    else:
-        topic_rows = conn.execute("SELECT id, slug, name, description FROM topics").fetchall()
+    all_topic_rows = conn.execute("SELECT id, slug, name, description FROM topics").fetchall()
 
     topics_dir = EXPORT_DIR / "topics"
     topics_dir.mkdir(parents=True, exist_ok=True)
 
     index = []
     status = {"generated_at": datetime.now(_AMSTERDAM).isoformat(timespec="seconds"), "topics": []}
-    for topic_row in topic_rows:
+    for topic_row in all_topic_rows:
         export = build_topic_export(conn, topic_row, periode_index)
-        status["topics"].append(fetch_pipeline_status(conn, topic_row, periode_index.drempel))
         out_path = topics_dir / f"{topic_row['slug']}.json"
         out_path.write_text(json.dumps(export, ensure_ascii=False, indent=2))
+        stances = Counter(a["stance"] for a in export["arguments"])
+        logger.info(
+            "%s: %d argumenten (pro=%d, contra=%d, unclear=%d) -> %s",
+            topic_row["slug"], export["argument_count"],
+            stances["pro"], stances["contra"], stances["unclear"], out_path,
+        )
+        status["topics"].append(fetch_pipeline_status(conn, topic_row, periode_index.drempel))
         index.append(
             {
                 "slug": topic_row["slug"],
@@ -346,12 +344,6 @@ def main():
                 "description": topic_row["description"],
                 "argument_count": export["argument_count"],
             }
-        )
-        stances = Counter(a["stance"] for a in export["arguments"])
-        logger.info(
-            "%s: %d argumenten (pro=%d, contra=%d, unclear=%d) -> %s",
-            topic_row["slug"], export["argument_count"],
-            stances["pro"], stances["contra"], stances["unclear"], out_path,
         )
 
     index_path = EXPORT_DIR / "topics-index.json"

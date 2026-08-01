@@ -6,15 +6,21 @@ from .paths import RAW_DIR
 
 class RawFilePipeline:
     """Schrijft elk item als ruw XML-bestand + metadata-JSON naar
-    data/raw/tweede_kamer/, in hetzelfde formaat als de oorspronkelijke
-    fetch_tk.py CLI."""
+    data/raw/tweede_kamer/<topic_keyword>/, in hetzelfde formaat als de
+    oorspronkelijke fetch_tk.py CLI. Namespacing per crawl-keyword houdt
+    de ruwe data van verschillende topics uit elkaar -- ingest_tk.py scant
+    per topic standaard alleen de eigen map, zodat een debat dat toevallig
+    een ander topic-woord noemt (bv. een motie over abortuscijfers in een
+    stikstofdebat) niet stilzwijgend meegenomen wordt."""
 
     def open_spider(self, spider):
         RAW_DIR.mkdir(parents=True, exist_ok=True)
 
     def process_item(self, item, spider):
-        out_path = RAW_DIR / f"{item['verslag_id']}.xml"
-        meta_path = RAW_DIR / f"{item['verslag_id']}.json"
+        topic_dir = RAW_DIR / item["topic_keyword"]
+        topic_dir.mkdir(parents=True, exist_ok=True)
+        out_path = topic_dir / f"{item['verslag_id']}.xml"
+        meta_path = topic_dir / f"{item['verslag_id']}.json"
 
         out_path.write_bytes(item["xml_content"])
         meta_path.write_text(
