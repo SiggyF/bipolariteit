@@ -25,7 +25,10 @@ const threeDimensional = ref(false);
 
 // Bij persoon als rij is een drempel van 3 te laag: veel sprekers hebben één of
 // twee argumenten en zouden als losse punten de wolk vullen zonder iets te zeggen.
-const MIN_ROW_TOTAL: Record<RowUnit, number> = { partij: 3, persoon: 12 };
+// 10 is de ondergrens waarop een partij met maar één actieve spreker in een
+// onderwerp (bv. FVD bij abortus) nog wél meetelt, zonder de drempel zo laag te
+// zetten dat sprekers met een enkel argument de wolk weer gaan vullen.
+const MIN_ROW_TOTAL: Record<RowUnit, number> = { partij: 3, persoon: 10 };
 
 const filtered = computed(() => props.argumentList.filter(matches));
 
