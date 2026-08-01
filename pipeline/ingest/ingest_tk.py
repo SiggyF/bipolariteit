@@ -108,38 +108,42 @@ _ODATA_BASE = "https://gegevensmagazijn.tweedekamer.nl/OData/v4/2.0"
 _ODATA_HEADERS = {"User-Agent": "bipolariteit-tk-crawler/0.1 (contact: f.baart@gmail.com; onderzoeksproject)"}
 _bewindspersoon_party_cache = {}
 
-# Zeldzame, bewuste uitzonderingen op de automatische OData-lookup hieronder
-# -- ofwel omdat iemand geen (bruikbaar) Persoon-record met Kamerlidschap
-# heeft (dus de OData-route niets oplevert), ofwel omdat de "laatst bekende
-# Kamerzetel"-heuristiek een gedateerd of onjuist antwoord zou geven. Alle
-# hieronder geverifieerd op 2026-07-26, zie ook scripts/backfill_minister_info.py:
-# - Dick Schoof: Wikidata (Q22338116, P102) toont hem als PvdA-lid t/m 2021
-#   en sindsdien -- ook tijdens zijn premierschap -- als onafhankelijk
-#   politicus. Zonder deze override zou de heuristiek "PvdA" teruggeven.
-# - Jaimi van Essen: geen Kamerlidschap, dus geen OData-Persoon-record; partij
-#   staat als losse tekst ("Partij: D66") in rijksoverheid.nl/regering/
-#   bewindspersonen/jaimi-van-essen.
-# - Jean Rummenie: idem, via Wikidata (Q123173854, P102 -> Q101083924
-#   "BoerBurgerBeweging").
-# - Piet Adema: idem, via Wikidata (Q2688310, P102 -> Q239539 "ChristenUnie").
+# Zeldzame, bewuste uitzondering op de automatische lookup hieronder: Jaimi
+# van Essen heeft geen Kamerlidschap (dus geen OData-Persoon-record), en zijn
+# Wikidata-positie-item mist zelf weer een label/jurisdictie (dus valt ook
+# buiten data/bewindspersonen.toml). Partij staat als losse tekst
+# ("Partij: D66") in rijksoverheid.nl/regering/bewindspersonen/jaimi-van-essen,
+# geverifieerd op 2026-07-26.
 BEWINDSPERSOON_PARTY_OVERRIDES = {
-    "Dick Schoof": "Onafhankelijk",
     "Jaimi van Essen": "D66",
-    "Jean Rummenie": "BBB",
-    "Piet Adema": "ChristenUnie",
 }
+
+_BEWINDSPERSONEN_TOML = Path(__file__).parent.parent.parent / "data" / "bewindspersonen.toml"
+_bewindspersonen_wikidata = None
+
+
+def _laad_bewindspersonen_wikidata():
+    global _bewindspersonen_wikidata
+    if _bewindspersonen_wikidata is None:
+        import tomllib
+
+        data = tomllib.loads(_BEWINDSPERSONEN_TOML.read_text(encoding="utf-8"))
+        _bewindspersonen_wikidata = {p["naam"]: p["partij"] for p in data["bewindspersonen"]}
+    return _bewindspersonen_wikidata
 
 
 def lookup_bewindspersoon_party(name):
     """Bewindspersonen (Minister/Staatssecretaris) hebben geen <fractie> in de
     VLOS-data -- ze spreken op dat moment niet namens een Kamerfractie, maar
     zijn meestal wel via een eerder/huidig Kamerlidmaatschap aan een partij te
-    koppelen. Zoekt de partij op via de laatst bekende Kamerzetel
-    (Persoon -> FractieZetelPersoon -> FractieZetel -> Fractie.Afkorting) in
-    de Tweede Kamer OData-API, zodat dit niet per topic handmatig hoeft te
-    worden nagezocht/onderhouden zoals voorheen in
-    scripts/backfill_minister_info.py. Geeft None terug (echte "Onbekend") als
-    er geen match is of de lookup faalt -- nooit gokken."""
+    koppelen. Drie lagen, in volgorde: (1) een kleine handmatige
+    uitzonderingenlijst voor de zeldzame gevallen die de andere twee lagen niet
+    kunnen oplossen, (2) de laatst bekende Kamerzetel via de TK OData-API
+    (Persoon -> FractieZetelPersoon -> FractieZetel -> Fractie.Afkorting), (3)
+    data/bewindspersonen.toml, gebouwd uit Wikidata voor bewindspersonen van de
+    laatste 2 kamerperiodes zonder eigen Kamerzetel (zie
+    scripts/fetch_bewindspersonen_wikidata.py). Geeft None terug (echte
+    "Onbekend") als geen van de lagen een match heeft -- nooit gokken."""
     if name in BEWINDSPERSOON_PARTY_OVERRIDES:
         return BEWINDSPERSOON_PARTY_OVERRIDES[name]
     if name in _bewindspersoon_party_cache:
@@ -180,6 +184,9 @@ def lookup_bewindspersoon_party(name):
             party = zetels[-1][1]
     except Exception as e:
         logger.warning("kon partij niet opzoeken voor bewindspersoon %r: %s", name, e)
+
+    if not party:
+        party = _laad_bewindspersonen_wikidata().get(name)
 
     _bewindspersoon_party_cache[name] = party
     return party
