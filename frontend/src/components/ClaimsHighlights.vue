@@ -46,11 +46,14 @@ function onClaimClick(candidate: Candidate) {
 	requestScrollTo(candidate.argument.id);
 }
 
-// Claims zijn uit een lopende zin geknipt en beginnen daardoor vaak niet met
-// een hoofdletter; een "..." ervoor maakt dat leesbaar als citaat.
+// Claims zijn uit een lopende zin geknipt en missen daardoor vaak een
+// hoofdletter aan het begin en/of een punt aan het eind; "..." aan de
+// ontbrekende kant(en) maakt dat leesbaar als fragment.
 const STARTS_WITH_CAPITAL = /^[A-ZÀ-ÖØ-Þ]/;
+const ENDS_WITH_SENTENCE_PUNCTUATION = /[.!?]["'”’)]?$/;
 function displayClaimText(text: string): string {
-	return STARTS_WITH_CAPITAL.test(text) ? text : `... ${text}`;
+	const withLeading = STARTS_WITH_CAPITAL.test(text) ? text : `... ${text}`;
+	return ENDS_WITH_SENTENCE_PUNCTUATION.test(text) ? withLeading : `${withLeading} ...`;
 }
 </script>
 
