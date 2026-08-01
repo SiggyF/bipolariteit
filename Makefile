@@ -54,8 +54,8 @@ redactie: ## Stage 2 -- redactie-check/opposition-linking (LLM, alleen op netstr
 	@url=$$($(RESOLVE_BASE_URL)) || exit 1; \
 	uv run python -m pipeline.redactie_check --topic $(TOPIC) --limit $(LIMIT) --base-url $$url
 
-export: ## SQLite -> data/export/topics/<slug>.json + topics-index.json. Vars: TOPIC
-	uv run python -m pipeline.build_static_data --topic $(TOPIC)
+export: ## SQLite -> data/export/topics/<slug>.json + topics-index.json, voor alle topics
+	uv run python -m pipeline.build_static_data
 
 build: ## Frontend production build (frontend/dist/)
 	cd frontend && npm run build
