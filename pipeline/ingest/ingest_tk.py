@@ -99,14 +99,53 @@ def _speaker_role_title(spreker_el):
     return functie.strip() if functie and functie.strip() else None
 
 
+# Ruim criterium: een debat kan het topic bespreken zonder het keyword in zijn
+# eigen onderwerp/titel te dragen (bv. het keyword "abortus" komt 23x voor in
+# sprekerbeurten van het debat "Vrouwengezondheid", een eufemisme/koepelterm).
+# find_matching_activiteiten matcht daarom op alle tekst binnen de activiteit,
+# niet alleen op onderwerp/titel. Dat ruime net vangt ook debatten die het
+# keyword incidenteel noemen op een heel andere as (bv. "abortuszorg" als
+# onderdeel van ontwikkelingshulp aan slachtoffers van seksueel geweld in
+# oorlogsgebieden, geen Nederlands abortusdebat) -- TOPIC_EXCLUDE_ACTIVITEITEN
+# is de stapsgewijze exclusielijst daarvoor, per topic bijgehouden zodra zo'n
+# fout-positief gevonden wordt.
+TOPIC_EXCLUDE_ACTIVITEITEN = {
+    "abortus": [
+        # Commissiedebat "Bestrijding conflict-gerelateerd seksueel geweld"
+        # (28 mei 2026), onderdeel van dossier Buitenlandse Handel en
+        # Ontwikkelingssamenwerking: gaat over Nederlandse ontwikkelingshulp
+        # (SheDecides/Ipas/UNFPA) aan slachtoffers van seksueel geweld in
+        # oorlogsgebieden, niet over het Nederlandse abortusdebat. Een
+        # Kamerlid markeert dit debat zelf expliciet als "geen abortusdebat".
+        "Bestrijding conflict-gerelateerd seksueel geweld",
+    ],
+}
+
+
 def find_matching_activiteiten(root, topic_keyword):
+    """Retourneert (activiteit, titel_match)-paren. titel_match=True betekent
+    dat het keyword in de onderwerp/titel van de activiteit zelf staat -- een
+    overduidelijk op-topic debat, dus alle sprekerbeurten worden meegenomen.
+    titel_match=False is het ruimere net: het keyword komt ergens in de
+    activiteit voor, maar de activiteit zelf gaat over iets anders (bv. het
+    eufemisme "Vrouwengezondheid", of een incidentele motie over abortuscijfers
+    in een medische-ethiekdebat) -- ingest_file neemt dan alleen de losse
+    sprekerbeurten mee die zelf het keyword bevatten, niet het hele debat."""
     keyword = topic_keyword.lower()
+    excludes = {x.lower() for x in TOPIC_EXCLUDE_ACTIVITEITEN.get(topic_keyword, [])}
     matches = []
     for activiteit in root.iter(NS + "activiteit"):
         onderwerp = activiteit.findtext(NS + "onderwerp") or ""
         titel = activiteit.findtext(NS + "titel") or ""
-        if keyword in onderwerp.lower() or keyword in titel.lower():
-            matches.append(activiteit)
+        if onderwerp.lower() in excludes or titel.lower() in excludes:
+            continue
+        titel_match = keyword in onderwerp.lower() or keyword in titel.lower()
+        if titel_match:
+            matches.append((activiteit, True))
+            continue
+        activiteit_text = " ".join(activiteit.itertext())
+        if keyword in activiteit_text.lower():
+            matches.append((activiteit, False))
     return matches
 
 
@@ -199,8 +238,9 @@ def ingest_file(conn, xml_path, meta_path, topic_keyword):
     topic_id = get_or_create_topic(conn, topic_keyword)
     source_id = get_or_create_source(conn)
 
+    keyword = topic_keyword.lower()
     inserted = 0
-    for activiteit in find_matching_activiteiten(root, topic_keyword):
+    for activiteit, titel_match in find_matching_activiteiten(root, topic_keyword):
         activiteit_titel = activiteit.findtext(NS + "titel") or metadata.get("activiteit_onderwerp")
         activiteit_soort = activiteit.attrib.get("soort")
         activiteit_aanvangstijd = activiteit.findtext(NS + "aanvangstijd") or metadata.get("activiteit_datum")
@@ -208,6 +248,12 @@ def ingest_file(conn, xml_path, meta_path, topic_keyword):
         for turn_el, spreker_el, tekst_el in find_speaking_turns(activiteit):
             content = _text_of(tekst_el)
             if not content:
+                continue
+            # Bij een ruim-net-treffer (titel_match=False) alleen de sprekerbeurten
+            # meenemen die zelf het keyword bevatten -- anders zou één incidentele
+            # vermelding (bv. een motie over abortuscijfers in een stikstofdebat)
+            # het hele, verder onrelateerde debat meeslepen.
+            if not titel_match and keyword not in content.lower():
                 continue
 
             external_id = turn_el.attrib.get("objectid")
@@ -252,7 +298,14 @@ def ingest_file(conn, xml_path, meta_path, topic_keyword):
     return inserted
 
 
-def ingest(topic_keyword, raw_dir=RAW_DIR):
+def ingest(topic_keyword, raw_dir=RAW_DIR, also_dirs=()):
+    """Scant standaard alleen raw_dir/<topic_keyword>/ -- de map waar de
+    crawler onder dat exacte keyword naartoe schreef. also_dirs is de
+    expliciete, per-geval-gekozen uitbreiding voor het ruime-net-criterium
+    (bv. also_dirs=["vrouwengezondheid"] om een eufemisme-gecrawlde map ook
+    op dit topic te doorzoeken) -- nooit een impliciete scan van de hele
+    raw-boom, dat zou topics ongemerkt laten lekken (zie find_matching_activiteiten
+    voor de sprekerbeurt-niveau-filtering die dat soort kruisbestuiving afvangt)."""
     db_path = db.DEFAULT_DB_PATH
     if not db_path.exists():
         db.init_db(db_path)
@@ -260,14 +313,15 @@ def ingest(topic_keyword, raw_dir=RAW_DIR):
     conn = db.connect(db_path)
     try:
         total = 0
-        xml_files = sorted(raw_dir.glob("*.xml"))
+        dirs = [raw_dir / topic_keyword] + [raw_dir / d for d in also_dirs]
+        xml_files = sorted(f for d in dirs if d.exists() for f in d.glob("*.xml"))
         for xml_path in xml_files:
             meta_path = xml_path.with_suffix(".json")
             if not meta_path.exists():
                 print(f"  overslaan (geen metadata): {xml_path.name}")
                 continue
             count = ingest_file(conn, xml_path, meta_path, topic_keyword)
-            print(f"  {xml_path.name}: {count} sprekerbeurten geïmporteerd")
+            print(f"  {xml_path.parent.name}/{xml_path.name}: {count} sprekerbeurten geïmporteerd")
             total += count
         print(f"Klaar: {total} documenten geïmporteerd voor topic '{topic_keyword}'.")
     finally:
@@ -277,5 +331,11 @@ def ingest(topic_keyword, raw_dir=RAW_DIR):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--topic", required=True, help="Zelfde topic-keyword als gebruikt bij fetch_tk/scrapy, bv. stikstof")
+    parser.add_argument(
+        "--also-dir",
+        action="append",
+        default=[],
+        help="Extra raw_dir/<naam>/-map ook doorzoeken op dit topic (ruime-net-criterium, bv. --also-dir vrouwengezondheid). Herhaalbaar.",
+    )
     args = parser.parse_args()
-    ingest(args.topic)
+    ingest(args.topic, also_dirs=args.also_dir)

@@ -4,4 +4,5 @@
  * bedoeld voor de topicpagina) -- dit is puur een korte teaser. */
 export const TEGENSTELLING: Record<string, string> = {
 	stikstof: "Snel en streng stikstof terugdringen versus ruimte voor landbouw behouden.",
+	abortus: "Keuzevrijheid van de vrouw versus bescherming van het ongeboren kind.",
 };

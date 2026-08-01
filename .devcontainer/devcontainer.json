@@ -25,7 +25,12 @@
     }
   },
   "runArgs": [
-  "--env-file", "${localWorkspaceFolder}/.devcontainer/.env.local"
+  "--env-file", "${localWorkspaceFolder}/.devcontainer/.env.local",
+  // Maakt de host-machine bereikbaar als host.docker.internal vanuit de
+  // container -- nodig om LM Studio (LLM-extractie/tagging, draait op de
+  // host, niet in de container) te bereiken, bv. via
+  // `--base-url http://host.docker.internal:1234/v1`.
+  "--add-host", "host.docker.internal:host-gateway"
   ],
   "containerEnv": {
     "CLAUDE_CONFIG_DIR": "/home/vscode/.claude"

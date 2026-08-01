@@ -322,36 +322,58 @@ def main():
 
     conn = db.connect()
     periode_index = PeriodeIndex()
+    all_topic_rows = conn.execute("SELECT id, slug, name, description FROM topics").fetchall()
     if args.topic:
-        topic_rows = conn.execute("SELECT id, slug, name, description FROM topics WHERE slug = ?", (args.topic,)).fetchall()
-        if not topic_rows:
+        rows_to_export = [r for r in all_topic_rows if r["slug"] == args.topic]
+        if not rows_to_export:
             raise SystemExit(f"onbekende topic-slug: {args.topic}")
     else:
-        topic_rows = conn.execute("SELECT id, slug, name, description FROM topics").fetchall()
+        rows_to_export = all_topic_rows
 
     topics_dir = EXPORT_DIR / "topics"
     topics_dir.mkdir(parents=True, exist_ok=True)
 
-    index = []
-    status = {"generated_at": datetime.now(_AMSTERDAM).isoformat(timespec="seconds"), "topics": []}
-    for topic_row in topic_rows:
+    argument_counts = {}
+    for topic_row in rows_to_export:
         export = build_topic_export(conn, topic_row, periode_index)
-        status["topics"].append(fetch_pipeline_status(conn, topic_row, periode_index.drempel))
+        argument_counts[topic_row["slug"]] = export["argument_count"]
         out_path = topics_dir / f"{topic_row['slug']}.json"
         out_path.write_text(json.dumps(export, ensure_ascii=False, indent=2))
-        index.append(
-            {
-                "slug": topic_row["slug"],
-                "name": topic_row["name"],
-                "description": topic_row["description"],
-                "argument_count": export["argument_count"],
-            }
-        )
         stances = Counter(a["stance"] for a in export["arguments"])
         logger.info(
             "%s: %d argumenten (pro=%d, contra=%d, unclear=%d) -> %s",
             topic_row["slug"], export["argument_count"],
             stances["pro"], stances["contra"], stances["unclear"], out_path,
+        )
+
+    # Index en status altijd over ALLE topics opbouwen, ook bij een gerichte
+    # --topic-export: die is alleen bedoeld om het dure per-topic exportwerk
+    # (build_topic_export) te beperken tot het gewijzigde topic, niet om
+    # niet-geraakte topics uit topics-index.json/status.json te laten vallen.
+    # Voor een topic dat deze run niet opnieuw gebouwd is, wordt het
+    # argument_count uit het al bestaande topics/<slug>.json gelezen.
+    index = []
+    status = {"generated_at": datetime.now(_AMSTERDAM).isoformat(timespec="seconds"), "topics": []}
+    for topic_row in all_topic_rows:
+        slug = topic_row["slug"]
+        if slug in argument_counts:
+            argument_count = argument_counts[slug]
+        else:
+            existing_path = topics_dir / f"{slug}.json"
+            if not existing_path.exists():
+                raise SystemExit(
+                    f"topic '{slug}' heeft nog geen {existing_path} -- draai eerst "
+                    f"'uv run python -m pipeline.build_static_data --topic {slug}'"
+                )
+            argument_count = json.loads(existing_path.read_text())["argument_count"]
+        status["topics"].append(fetch_pipeline_status(conn, topic_row, periode_index.drempel))
+        index.append(
+            {
+                "slug": slug,
+                "name": topic_row["name"],
+                "description": topic_row["description"],
+                "argument_count": argument_count,
+            }
         )
 
     index_path = EXPORT_DIR / "topics-index.json"
