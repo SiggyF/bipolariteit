@@ -1,12 +1,15 @@
 ## Development
 
-When starting the dev server, use background mode:
+Start/stop the background dev server via de Makefile-targets in de repo-root,
+niet met rauwe `astro dev`-commando's:
 
 ```
-astro dev --background
+make dev       # start (cd frontend && npx astro dev --background --host 0.0.0.0)
+make dev-stop  # stop (cd frontend && npx astro dev stop)
 ```
 
-Manage the background server with `astro dev stop`, `astro dev status`, and `astro dev logs`.
+Voor status/logs van de lopende server volstaat wel het rauwe commando:
+`cd frontend && npx astro dev status` / `npx astro dev logs`.
 
 ## Documentation
 
