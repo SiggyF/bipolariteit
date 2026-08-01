@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, computed, watch, onMounted, onBeforeUnmount } from "vue";
 import ArgumentCard from "./ArgumentCard.vue";
+import { scrollTarget } from "../lib/scrollTarget";
 import type { Argument } from "../lib/types";
 
 const PAGE_SIZE = 50;
@@ -25,6 +26,20 @@ watch(
 	() => props.argumentList,
 	(list) => {
 		visibleCount.value = Math.min(PAGE_SIZE, list.length);
+	},
+);
+
+// Haalt de infinite-scroll-paginering in als ClaimsHighlights vraagt om naar
+// een argument te scrollen dat verderop in deze kolom staat dan wat al
+// zichtbaar is.
+watch(
+	() => scrollTarget.token,
+	() => {
+		const id = scrollTarget.argumentId;
+		if (id == null) return;
+		const idx = props.argumentList.findIndex((a) => a.id === id);
+		if (idx === -1) return;
+		if (idx >= visibleCount.value) visibleCount.value = idx + 1;
 	},
 );
 
