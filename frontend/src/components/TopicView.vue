@@ -36,9 +36,10 @@ const columns = computed(() =>
 <template>
 	<FilterBar :argumentList="argumentList" :matchCount="filtered.length" />
 
+	<TagCorrespondenceMap :argumentList="argumentList" />
+
 	<ClaimsHighlights :argumentList="filtered" />
 
-	<TagCorrespondenceMap :argumentList="argumentList" />
 	<StatsPanel :argumentList="filtered" />
 	<TagsPerParty :argumentList="filtered" />
 
