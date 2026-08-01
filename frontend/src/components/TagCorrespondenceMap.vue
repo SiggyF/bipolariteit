@@ -4,7 +4,7 @@ import { useTheme } from "../lib/useTheme";
 import { displayPartyName, partyInitial } from "../lib/parties";
 import { logoSprite } from "../lib/partyLogoSprite";
 import { PERSPECTIEVEN } from "../lib/tagIcons.generated";
-import { filters, matches, matchesExcept, toggleValue } from "../lib/filters";
+import { isActive, matches, toggleValue } from "../lib/filters";
 import { NO_PARTY, type Argument } from "../lib/types";
 import { alignSigns, buildCorrespondence, type Correspondence, type RowUnit } from "../lib/correspondence";
 import VChart from "vue-echarts";
@@ -29,23 +29,22 @@ const MIN_ROW_TOTAL: Record<RowUnit, number> = { partij: 3, persoon: 12 };
 
 const filtered = computed(() => props.argumentList.filter(matches));
 
-// Twee manieren om met een tag-/partijfilter om te gaan (de rest van de
-// dimensies filtert de analyse altijd volledig, in beide standen):
-// - "focus" (standaard): rekent op alles behalve tag/partij, en dimt de
+// Twee manieren om met een actief filter om te gaan -- welke dimensie(s) ook,
+// dus niet alleen tag/partij: elke selectie kan de tabel tot een handjevol
+// rijen/kolommen laten terugvallen, en dat verdient overal dezelfde knop i.p.v.
+// een uitzondering die per dimensie verschilt.
+// - "focus" (standaard): rekent op de ongefilterde volledige lijst en dimt de
 //   punten buiten de selectie. Zo blijft de hele wolk zichtbaar terwijl de
-//   selectie oplicht -- handig om te zien waar een partij/tag t.o.v. de rest
-//   staat, en voorkomt dat de tabel na een klik op een tag/partij-punt tot
-//   één rij/kolom terugvalt.
+//   selectie oplicht -- handig om te zien waar iets t.o.v. de rest staat, en
+//   voorkomt dat de tabel na een klik op een tag-/partijpunt (of een filter in
+//   de zijbalk) tot één rij/kolom terugvalt.
 // - "detail": herberekent de analyse alleen op de gefilterde selectie, net
 //   als de rest van de pagina. `buildTable` (correspondence.ts) geeft `null`
 //   bij minder dan 3 rijen/kolommen i.p.v. iets te tonen dat niks meer zegt,
 //   dus een filter dat te ver doorschiet laat de kaart netjes leeg lopen i.p.v.
 //   vast te lopen.
 const analysisMode = ref<"focus" | "detail">("focus");
-const EXCLUDED_FROM_COMPUTATION = ["tag", "partij"];
-const sourceList = computed(() =>
-	analysisMode.value === "detail" ? filtered.value : props.argumentList.filter((a) => matchesExcept(a, EXCLUDED_FROM_COMPUTATION)),
-);
+const sourceList = computed(() => (analysisMode.value === "detail" ? filtered.value : props.argumentList));
 
 // Referentie over het hele corpus: waar de tekens van de assen aan opgehangen
 // worden, zodat de kaart niet spiegelt terwijl je filtert.
@@ -576,15 +575,13 @@ const chartOption = computed(() => {
 	const tagKeysInView = threeDimensional.value ? null : new Set(tagsInView2D.map((t) => t.sleutel));
 
 	const axisStyle = { lineStyle: { color: gridLine.value } };
-	// In 3D zijn de schermassen geen dimensies meer maar een gedraaide mengeling
-	// van alle drie. Ze dan toch "dim 1" en "dim 2" noemen zou liegen, dus in die
-	// modus verdwijnt het hele cartesische assenstelsel van ECharts en tekenen we
-	// zelf een meegedraaid raster (zie hieronder).
+	// In 3D tekenen we zelf een meegedraaid raster (zie hieronder) i.p.v. het
+	// cartesische assenstelsel van ECharts.
 	// `[ - ]`: CA-coördinaten zijn dimensieloos (geen euro's, geen aantallen) --
 	// een expliciete "geen eenheid"-notatie is eerlijker dan er niets bij te
 	// zetten, zie issue #10.
 	const axisName = (k: number) =>
-		threeDimensional.value ? "" : `${AXIS_LETTERS[k]} · dim ${k + 1} (${c.inertiaPct[k]}%) [ - ]`;
+		threeDimensional.value ? "" : `${AXIS_LETTERS[k]} (${c.inertiaPct[k]}% van de inertie) [ - ]`;
 	const raster = threeDimensional.value ? { show: false } : axisStyle;
 	const hiddenAxis = {
 		axisLine: { show: !threeDimensional.value, ...axisStyle },
@@ -796,7 +793,7 @@ const chartOption = computed(() => {
 					value: [q.x, q.y],
 					label: {
 						show: true,
-						formatter: `${AXIS_LETTERS[k]} · dim ${k + 1} (${c.inertiaPct[k]}%) [ - ]`,
+						formatter: `${AXIS_LETTERS[k]} (${c.inertiaPct[k]}% van de inertie) [ - ]`,
 						color: muted.value,
 						fontSize: 10,
 						position: "top",
@@ -931,7 +928,7 @@ function onLegendSelectChanged(p: { name: string }) {
 	chartRef.value?.dispatchAction?.({ type: "legendAllSelect" });
 }
 
-const tagFilterActive = computed(() => filters.values.tag.length > 0 || filters.values.partij.length > 0);
+const filterActive = computed(isActive);
 </script>
 
 <template>
@@ -943,9 +940,9 @@ const tagFilterActive = computed(() => filters.values.tag.length > 0 || filters.
 			aan voor de rest. Klik op een punt om erop te filteren.
 		</p>
 		<p class="panel-note">
-			De analyse wordt op je selectie herberekend. Filters op <strong>tag</strong> en <strong>partij</strong> zijn een
-			uitzondering: in "focus" (standaard) dimmen die twee alleen de punten buiten de selectie, zodat de tabel niet tot één
-			rij/kolom terugvalt. Kies "detail" om de kaart net als de rest van de pagina volledig op de selectie te herberekenen.
+			Staat er een filter aan, dan dimt "focus" (standaard) alleen de punten buiten de selectie, zodat de tabel niet tot
+			één rij/kolom terugvalt. Kies "detail" om de kaart net als de rest van de pagina volledig op de selectie te
+			herberekenen.
 		</p>
 
 		<div class="chart-controls">
@@ -960,9 +957,9 @@ const tagFilterActive = computed(() => filters.values.tag.length > 0 || filters.
 					</button>
 				</div>
 			</div>
-			<div v-if="tagFilterActive" class="chart-controls-group">
-				<span class="chart-controls-label">Tag-/partijfilter</span>
-				<div class="toggle-group" role="group" aria-label="Tag-/partijfilter: focus of detail">
+			<div v-if="filterActive" class="chart-controls-group">
+				<span class="chart-controls-label">Filter</span>
+				<div class="toggle-group" role="group" aria-label="Filter: focus of detail">
 					<button type="button" class="toggle-btn" :class="{ 'is-active': analysisMode === 'focus' }" @click="analysisMode = 'focus'">
 						Focus
 					</button>
@@ -1004,11 +1001,11 @@ const tagFilterActive = computed(() => filters.values.tag.length > 0 || filters.
 			</span>
 		</div>
 
-		<p v-if="tagFilterActive" class="panel-note">
+		<p v-if="filterActive" class="panel-note">
 			<template v-if="analysisMode === 'focus'">
-				Er staat een tag- of partijfilter aan; de kaart toont in "focus" nog de volledige analyse met de selectie gemarkeerd.
+				Er staat een filter aan; de kaart toont in "focus" nog de volledige analyse met de selectie gemarkeerd.
 			</template>
-			<template v-else> Er staat een tag- of partijfilter aan; de kaart in "detail" rekent alleen nog op de selectie. </template>
+			<template v-else> Er staat een filter aan; de kaart in "detail" rekent alleen nog op de selectie. </template>
 		</p>
 
 		<div
