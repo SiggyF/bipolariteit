@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import FilterBar from "./FilterBar.vue";
+import ClaimsHighlights from "./ClaimsHighlights.vue";
 import StatsPanel from "./StatsPanel.vue";
 import TagsPerParty from "./TagsPerParty.vue";
 import TagCorrespondenceMap from "./TagCorrespondenceMap.vue";
@@ -34,6 +35,8 @@ const columns = computed(() =>
 
 <template>
 	<FilterBar :argumentList="argumentList" :matchCount="filtered.length" />
+
+	<ClaimsHighlights :argumentList="filtered" />
 
 	<TagCorrespondenceMap :argumentList="argumentList" />
 	<StatsPanel :argumentList="filtered" />

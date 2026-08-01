@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watch, nextTick } from "vue";
 import { ISSUE_TYPES, type IssueKey, getFeedbackFor, submitFeedback } from "../lib/feedback";
 import { displayPartyName } from "../lib/parties";
 import { filters, toggleValue } from "../lib/filters";
+import { scrollTarget } from "../lib/scrollTarget";
 import { slugify } from "../lib/slug";
 import type { Argument, Tag } from "../lib/types";
 import PartyLogo from "./PartyLogo.vue";
@@ -45,10 +46,32 @@ function submit() {
 	saved.value = true;
 	open.value = false;
 }
+
+// Reageert op een "ga naar dit argument"-aanvraag vanuit ClaimsHighlights.vue.
+// immediate: true, zodat een kaart die pas na de aanvraag gemount wordt
+// (omdat ArgumentColumn zijn visibleCount ophoogt) de aanvraag alsnog oppikt.
+const cardEl = ref<HTMLElement | null>(null);
+const justHighlighted = ref(false);
+let highlightTimer: ReturnType<typeof setTimeout> | null = null;
+
+watch(
+	() => scrollTarget.token,
+	async () => {
+		if (scrollTarget.argumentId !== props.argument.id) return;
+		await nextTick();
+		cardEl.value?.scrollIntoView({ behavior: "smooth", block: "center" });
+		justHighlighted.value = true;
+		if (highlightTimer) clearTimeout(highlightTimer);
+		highlightTimer = setTimeout(() => {
+			justHighlighted.value = false;
+		}, 2200);
+	},
+	{ immediate: true },
+);
 </script>
 
 <template>
-	<article class="argument-card" :class="`stance-${argument.stance}`">
+	<article ref="cardEl" class="argument-card" :class="[`stance-${argument.stance}`, { 'is-highlighted': justHighlighted }]">
 		<div class="argument-meta">
 			<span class="typology-badge">{{ argument.typology }}</span>
 		</div>
