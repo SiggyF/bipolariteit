@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-01T18:02:04+02:00",
+  "generated_at": "2026-08-01T19:11:39+02:00",
   "topics": [
     {
       "slug": "stikstof",
@@ -16,9 +16,9 @@
       "name": "Abortus",
       "vanaf": "2023-12-06",
       "documents_total": 591,
-      "documents_extracted": 20,
-      "arguments_total": 24,
-      "arguments_tagged": 24,
+      "documents_extracted": 34,
+      "arguments_total": 50,
+      "arguments_tagged": 38,
       "documents_redactie_checked": 0
     }
   ]

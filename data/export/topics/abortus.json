@@ -510,7 +510,7 @@
       "prompt_version": "3d3ad8b6052c",
       "actor": {
         "name": "Judith Tielen",
-        "party": null,
+        "party": "VVD",
         "role_title": "staatssecretaris Jeugd, Preventie en Sport"
       },
       "document": {
@@ -624,7 +624,7 @@
       "prompt_version": "3d3ad8b6052c",
       "actor": {
         "name": "Judith Tielen",
-        "party": null,
+        "party": "VVD",
         "role_title": "staatssecretaris Jeugd, Preventie en Sport"
       },
       "document": {
@@ -710,7 +710,7 @@
       "prompt_version": "3d3ad8b6052c",
       "actor": {
         "name": "Judith Tielen",
-        "party": null,
+        "party": "VVD",
         "role_title": "staatssecretaris Jeugd, Preventie en Sport"
       },
       "document": {
@@ -1051,7 +1051,7 @@
       "prompt_version": "3d3ad8b6052c",
       "actor": {
         "name": "Judith Tielen",
-        "party": null,
+        "party": "VVD",
         "role_title": "staatssecretaris Jeugd, Preventie en Sport"
       },
       "document": {
@@ -1177,7 +1177,7 @@
       "prompt_version": "3d3ad8b6052c",
       "actor": {
         "name": "Judith Tielen",
-        "party": null,
+        "party": "VVD",
         "role_title": "staatssecretaris Jeugd, Preventie en Sport"
       },
       "document": {
@@ -1262,7 +1262,7 @@
       "prompt_version": "3d3ad8b6052c",
       "actor": {
         "name": "Judith Tielen",
-        "party": null,
+        "party": "VVD",
         "role_title": "staatssecretaris Jeugd, Preventie en Sport"
       },
       "document": {
@@ -2663,212 +2663,2271 @@
         }
       ],
       "oppositions": []
+    },
+    {
+      "id": 1640,
+      "stance": "contra",
+      "typology": "factual",
+      "quote_text": "Wij hebben daar toen tegen gestemd. Daar heb ik nu spijt van; soms heb je voortschrijdend inzicht. Onze tegenstem was heel erg gebaseerd op de administratieve lasten die dit met zich mee zou brengen voor artsen. Dat was de reden dat wij tegen die motie stemden. Maar als ik nu naar de stijging kijk, wil ik toch ook wel graag weten hoe dat komt. Dat heb ik net ook in een interruptie op de heer Bevers aangegeven. Mijn vraag is dus of er opnieuw zo'n motie komt. Dan hebben we een nieuwe ronde en nieuwe kansen. Ik denk namelijk dat het toch heel erg belangrijk is om dit te onderzoeken.",
+      "quote_context": "Spreker pleit voor beter registreren van beweegredenen voor abortus, wat past bij het contra-standpunt voor meer zorgvuldigheid en inzicht, in tegenstelling tot het pro-standpunt dat de keuze volledig aan de vrouw zelf is zonder extra administratieve lasten.",
+      "prompt_version": "3d3ad8b6052c",
+      "actor": {
+        "name": "Caroline van der Plas",
+        "party": "BBB",
+        "role_title": null
+      },
+      "document": {
+        "url": "https://gegevensmagazijn.tweedekamer.nl/OData/v4/2.0/Verslag/1c2ef252-4112-4a82-97e6-e2bb75b953eb/resource",
+        "video_url": null,
+        "published_at": "2025-01-15T14:29:48",
+        "speaker_video_url": null,
+        "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08083",
+        "redactie_review": null
+      },
+      "periode": {
+        "kamer": "Tweede Kamer 2023-2025",
+        "regering": "Kabinet-Schoof"
+      },
+      "claims": [],
+      "tags": [
+        {
+          "sleutel": "Arena-Parlement",
+          "beschrijving": "Debat of uitspraak afkomstig uit de Eerste of Tweede Kamer.",
+          "labelgroep": "Issue Arena",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Bron is een Tweede Kamer-debat (documents.source.type = 'tweede_kamer')."
+        },
+        {
+          "sleutel": "Actor-Politicus",
+          "beschrijving": "Een gekozen volksvertegenwoordiger, bewindspersoon of partijvertegenwoordiger.",
+          "labelgroep": "Actor Type",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Spreker heeft een geregistreerde partij (BBB)."
+        },
+        {
+          "sleutel": "Context-Commissie",
+          "beschrijving": "Commissiedebat of wetgevingsoverleg; technisch en gedetailleerd van aard met een hogere argumentatieve kwaliteit.",
+          "labelgroep": "Parlementaire Context",
+          "perspectief": "Methodologisch & Contextueel",
+          "created_by": "derived",
+          "reden": "Afgeleid van VLOS-activiteitsoort 'Commissiedebat'."
+        },
+        {
+          "sleutel": "Walton-Consequentie",
+          "beschrijving": "Het verdedigen of aanvallen van een standpunt op basis van de verwachte praktische (voordelige of nadelige) gevolgen.",
+          "labelgroep": "Redeneerschema",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De spreker baseert haar verzoek tot onderzoek op de waargenomen consequentie (de stijging van abortus) en de verwachte nuttige uitkomst van meer inzicht en controle."
+        },
+        {
+          "sleutel": "Frame-Thematisch",
+          "beschrijving": "Het benaderen van de kwestie vanuit een breder maatschappelijk, statistisch of historisch kader.",
+          "labelgroep": "Framing-Focus",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "De spreker verwijst naar een algemene 'stijging' in abortuscijfers en pleit voor structureel onderzoek en nieuwe moties, in plaats van te focussen op een enkel individueel geval."
+        },
+        {
+          "sleutel": "Frame-Verantwoordelijkheid",
+          "beschrijving": "De nadruk ligt op de schuldvraag of de plicht tot het oplossen van het probleem.",
+          "labelgroep": "Generieke Nieuwsframes",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "De nadruk ligt op de plicht van de overheid en artsen om de stijging te onderzoeken en verantwoording af te leggen via betere registratie."
+        },
+        {
+          "sleutel": "Ideologie-TAN",
+          "beschrijving": "Conservatief, traditioneel, nationalistisch (Traditional, Authoritarian, Nationalist).",
+          "labelgroep": "Cultureel-Ideologische Breuklijn",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "De spreker (BBB) pleit voor meer administratieve controle en inzicht in abortuspraktijken, wat past bij een conservatief, traditioneel standpunt dat nadruk legt op maatschappelijke orde en zorgvuldigheid boven individuele autonomie."
+        },
+        {
+          "sleutel": "Moraliteit-Autoriteit",
+          "beschrijving": "Gericht op respect voor traditie, legitieme hiërarchie, wetten en maatschappelijke orde.",
+          "labelgroep": "Morele Fundamenten",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "Het pleidooi voor administratieve lasten en registratie benadrukt het belang van regels, procedures en overheidscontrole om de maatschappelijke orde en zorgvuldigheid te waarborgen."
+        },
+        {
+          "sleutel": "Bewijs-Statistisch",
+          "beschrijving": "Onderbouwd met kwantitatieve gegevens, cijfers, percentages of grootschalig representatief onderzoek.",
+          "labelgroep": "Type Bewijsvoering",
+          "perspectief": "Methodologisch & Contextueel",
+          "created_by": "llm",
+          "reden": "De argumentatie leunt op de observatie van een 'stijging' in de cijfers, wat een kwantitatieve indicatie is van de problematiek."
+        },
+        {
+          "sleutel": "Meta-Vorm-Setting",
+          "beschrijving": "Uitingen over de formele procedure, de interactieve spelregels, het vergaderformat of de fysieke en institutionele context van de uitwisseling.",
+          "labelgroep": "Metadiscussie",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De spreker vraagt expliciet of er 'opnieuw zo'n motie komt' en spreekt over 'een nieuwe ronde en nieuwe kansen', waarmee de formele procedure en het debatformat zelf centraal staan."
+        }
+      ],
+      "oppositions": []
+    },
+    {
+      "id": 1641,
+      "stance": "contra",
+      "typology": "moral",
+      "quote_text": "Los van wat ik principieel van abortus vind, is het ook heel ingrijpend voor een vrouw. Er moet in die zin niet normaliserend over gesproken worden, naast dat ik vind dat het begin van het leven ook bescherming verdient. Daar maak ik me altijd zorgen over. Die beschermwaardigheid moet je ook bespreken.",
+      "quote_context": null,
+      "prompt_version": "3d3ad8b6052c",
+      "actor": {
+        "name": "Mirjam Bikker",
+        "party": "ChristenUnie",
+        "role_title": null
+      },
+      "document": {
+        "url": "https://gegevensmagazijn.tweedekamer.nl/OData/v4/2.0/Verslag/1c2ef252-4112-4a82-97e6-e2bb75b953eb/resource",
+        "video_url": null,
+        "published_at": "2025-01-15T14:33:39",
+        "speaker_video_url": null,
+        "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08083",
+        "redactie_review": null
+      },
+      "periode": {
+        "kamer": "Tweede Kamer 2023-2025",
+        "regering": "Kabinet-Schoof"
+      },
+      "claims": [],
+      "tags": [
+        {
+          "sleutel": "Arena-Parlement",
+          "beschrijving": "Debat of uitspraak afkomstig uit de Eerste of Tweede Kamer.",
+          "labelgroep": "Issue Arena",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Bron is een Tweede Kamer-debat (documents.source.type = 'tweede_kamer')."
+        },
+        {
+          "sleutel": "Actor-Politicus",
+          "beschrijving": "Een gekozen volksvertegenwoordiger, bewindspersoon of partijvertegenwoordiger.",
+          "labelgroep": "Actor Type",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Spreker heeft een geregistreerde partij (ChristenUnie)."
+        },
+        {
+          "sleutel": "Context-Commissie",
+          "beschrijving": "Commissiedebat of wetgevingsoverleg; technisch en gedetailleerd van aard met een hogere argumentatieve kwaliteit.",
+          "labelgroep": "Parlementaire Context",
+          "perspectief": "Methodologisch & Contextueel",
+          "created_by": "derived",
+          "reden": "Afgeleid van VLOS-activiteitsoort 'Commissiedebat'."
+        },
+        {
+          "sleutel": "Walton-Regel",
+          "beschrijving": "Het argument beroept zich op een reeds gevestigde wet, formele regel of breed geaccepteerde maatschappelijke norm.",
+          "labelgroep": "Redeneerschema",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het argument beroept zich op een breed geaccepteerde morele norm dat het begin van het leven bescherming verdient en dat dit niet genormaliseerd mag worden."
+        },
+        {
+          "sleutel": "Frame-Thematisch",
+          "beschrijving": "Het benaderen van de kwestie vanuit een breder maatschappelijk, statistisch of historisch kader.",
+          "labelgroep": "Framing-Focus",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "Het argument richt zich op algemene principes (bescherming van het leven, normalisering) en maatschappelijke houdingen in plaats van op een specifiek individueel incident of casus."
+        },
+        {
+          "sleutel": "Frame-Moraliteit",
+          "beschrijving": "Inbranding vanuit ethische plichten, spirituele of religieuze principes.",
+          "labelgroep": "Generieke Nieuwsframes",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "De spreker beroept zich op ethische principes zoals de beschermwaardigheid van het begin van het leven en de morele ingrijpendheid voor de vrouw."
+        },
+        {
+          "sleutel": "Frame-Menselijk-Belang",
+          "beschrijving": "De focus ligt op de menselijke kant, de emoties of het individuele leed (Human Interest).",
+          "labelgroep": "Generieke Nieuwsframes",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "Er wordt expliciet gewezen op de persoonlijke impact en het ingrijpende karakter van abortus voor de vrouw."
+        },
+        {
+          "sleutel": "Ideologie-TAN",
+          "beschrijving": "Conservatief, traditioneel, nationalistisch (Traditional, Authoritarian, Nationalist).",
+          "labelgroep": "Cultureel-Ideologische Breuklijn",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "De spreker benadrukt de bescherming van het begin van het leven en de zorg voor de vrouw, wat aansluit bij conservatieve en traditionele waarden rondom gezin en leven."
+        },
+        {
+          "sleutel": "Moraliteit-Zorg",
+          "beschrijving": "Gericht op empathie, compassie en het voorkomen van leed en schade bij kwetsbaren.",
+          "labelgroep": "Morele Fundamenten",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "De nadruk ligt op de zorg voor de vrouw (het ingrijpende karakter) en de bescherming van het kwetsbare begin van het leven."
+        },
+        {
+          "sleutel": "Moraliteit-Zuiverheid",
+          "beschrijving": "Gericht op het vermijden van morele of fysieke besmetting; streven naar het schone, natuurlijke of verhevene.",
+          "labelgroep": "Morele Fundamenten",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "De verwijzing naar het 'begin van het leven' en de bescherming daarvan impliceert een respect voor de natuurlijke orde en de heiligheid van het leven."
+        },
+        {
+          "sleutel": "Meta-Reikwijdte",
+          "beschrijving": "Uitingen over de thematische grenzen van het debat, de toelaatbaarheid van specifieke beweringen, of de legitimiteit van bepaalde linguïstische framings.",
+          "labelgroep": "Metadiscussie",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De spreker stelt dat er niet 'normaliserend' over gesproken moet worden en dat de 'beschermwaardigheid' besproken moet worden, waarmee de linguïstische framing en thematische grenzen van het debat worden afgebakend."
+        }
+      ],
+      "oppositions": []
+    },
+    {
+      "id": 1642,
+      "stance": "contra",
+      "typology": "factual",
+      "quote_text": "Ik heb zelf — ik ben raadslid geweest in Utrecht — ook gezien dat er familiedruk kan bestaan waardoor vrouwen het niet aandurven om een kind te houden. Dat vind ik vreselijk. Ik wil dat echt voorkomen. Dan kan een beraadtermijn helpen.",
+      "quote_context": null,
+      "prompt_version": "3d3ad8b6052c",
+      "actor": {
+        "name": "Mirjam Bikker",
+        "party": "ChristenUnie",
+        "role_title": null
+      },
+      "document": {
+        "url": "https://gegevensmagazijn.tweedekamer.nl/OData/v4/2.0/Verslag/1c2ef252-4112-4a82-97e6-e2bb75b953eb/resource",
+        "video_url": null,
+        "published_at": "2025-01-15T14:33:39",
+        "speaker_video_url": null,
+        "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08083",
+        "redactie_review": null
+      },
+      "periode": {
+        "kamer": "Tweede Kamer 2023-2025",
+        "regering": "Kabinet-Schoof"
+      },
+      "claims": [],
+      "tags": [
+        {
+          "sleutel": "Arena-Parlement",
+          "beschrijving": "Debat of uitspraak afkomstig uit de Eerste of Tweede Kamer.",
+          "labelgroep": "Issue Arena",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Bron is een Tweede Kamer-debat (documents.source.type = 'tweede_kamer')."
+        },
+        {
+          "sleutel": "Actor-Politicus",
+          "beschrijving": "Een gekozen volksvertegenwoordiger, bewindspersoon of partijvertegenwoordiger.",
+          "labelgroep": "Actor Type",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Spreker heeft een geregistreerde partij (ChristenUnie)."
+        },
+        {
+          "sleutel": "Context-Commissie",
+          "beschrijving": "Commissiedebat of wetgevingsoverleg; technisch en gedetailleerd van aard met een hogere argumentatieve kwaliteit.",
+          "labelgroep": "Parlementaire Context",
+          "perspectief": "Methodologisch & Contextueel",
+          "created_by": "derived",
+          "reden": "Afgeleid van VLOS-activiteitsoort 'Commissiedebat'."
+        },
+        {
+          "sleutel": "Walton-Consequentie",
+          "beschrijving": "Het verdedigen of aanvallen van een standpunt op basis van de verwachte praktische (voordelige of nadelige) gevolgen.",
+          "labelgroep": "Redeneerschema",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Er wordt geargumenteerd dat de invoering van een beraadtermijn (maatregel) zal leiden tot het voorkomen van abortussen onder druk (gewenst gevolg)."
+        },
+        {
+          "sleutel": "Frame-Episodisch",
+          "beschrijving": "Inzoomen op een specifiek, individueel incident, persoonlijk verhaal of een concrete casus.",
+          "labelgroep": "Framing-Focus",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "Het argument leunt op een specifiek, persoonlijk observatie ('Ik heb zelf... gezien') van een concrete situatie in plaats van brede statistieken."
+        },
+        {
+          "sleutel": "Frame-Menselijk-Belang",
+          "beschrijving": "De focus ligt op de menselijke kant, de emoties of het individuele leed (Human Interest).",
+          "labelgroep": "Generieke Nieuwsframes",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "De focus ligt op de emotionele lading ('vreselijk') en de kwetsbare positie van vrouwen onder druk."
+        },
+        {
+          "sleutel": "Frame-Moraliteit",
+          "beschrijving": "Inbranding vanuit ethische plichten, spirituele of religieuze principes.",
+          "labelgroep": "Generieke Nieuwsframes",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "De spreker uit een morele afkeuring ('Dat vind ik vreselijk') en wil een ethisch ongewenste situatie voorkomen."
+        },
+        {
+          "sleutel": "Ideologie-TAN",
+          "beschrijving": "Conservatief, traditioneel, nationalistisch (Traditional, Authoritarian, Nationalist).",
+          "labelgroep": "Cultureel-Ideologische Breuklijn",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "De spreker vertegenwoordigt de ChristenUnie en pleit voor een beraadtermijn om het behoud van het leven te bevorderen, wat aansluit bij conservatieve en traditionele waarden."
+        },
+        {
+          "sleutel": "Moraliteit-Zorg",
+          "beschrijving": "Gericht op empathie, compassie en het voorkomen van leed en schade bij kwetsbaren.",
+          "labelgroep": "Morele Fundamenten",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "De spreker benadrukt het voorkomen van leed en schade bij kwetsbare vrouwen die onder druk staan."
+        },
+        {
+          "sleutel": "Bewijs-Anekdotisch",
+          "beschrijving": "Onderbouwd met één specifiek praktijkgeval, incident, exemplar of persoonlijk verhaal.",
+          "labelgroep": "Type Bewijsvoering",
+          "perspectief": "Methodologisch & Contextueel",
+          "created_by": "llm",
+          "reden": "De claim wordt onderbouwd met een persoonlijk voorbeeld uit de eigen ervaring als raadslid in Utrecht."
+        }
+      ],
+      "oppositions": []
+    },
+    {
+      "id": 1643,
+      "stance": "contra",
+      "typology": "moral",
+      "quote_text": "Ons leven is een prachtig geschenk van de schepper. Het leven is het beschermen waard, van het prilste begin tot het fragielste einde. Ons leven is broos en we leven in een gebroken wereld. Dat vraagt om een verantwoordelijke houding en om compassie met mensen in al hun kwetsbaarheid.",
+      "quote_context": "Inleiding over medische ethiek en levensbeschouwing",
+      "prompt_version": "3d3ad8b6052c",
+      "actor": {
+        "name": "Diederik van Dijk",
+        "party": "SGP",
+        "role_title": null
+      },
+      "document": {
+        "url": "https://gegevensmagazijn.tweedekamer.nl/OData/v4/2.0/Verslag/1c2ef252-4112-4a82-97e6-e2bb75b953eb/resource",
+        "video_url": null,
+        "published_at": "2025-01-15T14:38:30",
+        "speaker_video_url": null,
+        "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08083",
+        "redactie_review": null
+      },
+      "periode": {
+        "kamer": "Tweede Kamer 2023-2025",
+        "regering": "Kabinet-Schoof"
+      },
+      "claims": [],
+      "tags": [
+        {
+          "sleutel": "Arena-Parlement",
+          "beschrijving": "Debat of uitspraak afkomstig uit de Eerste of Tweede Kamer.",
+          "labelgroep": "Issue Arena",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Bron is een Tweede Kamer-debat (documents.source.type = 'tweede_kamer')."
+        },
+        {
+          "sleutel": "Actor-Politicus",
+          "beschrijving": "Een gekozen volksvertegenwoordiger, bewindspersoon of partijvertegenwoordiger.",
+          "labelgroep": "Actor Type",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Spreker heeft een geregistreerde partij (SGP)."
+        },
+        {
+          "sleutel": "Context-Commissie",
+          "beschrijving": "Commissiedebat of wetgevingsoverleg; technisch en gedetailleerd van aard met een hogere argumentatieve kwaliteit.",
+          "labelgroep": "Parlementaire Context",
+          "perspectief": "Methodologisch & Contextueel",
+          "created_by": "derived",
+          "reden": "Afgeleid van VLOS-activiteitsoort 'Commissiedebat'."
+        },
+        {
+          "sleutel": "Walton-Regel",
+          "beschrijving": "Het argument beroept zich op een reeds gevestigde wet, formele regel of breed geaccepteerde maatschappelijke norm.",
+          "labelgroep": "Redeneerschema",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het argument baseert zich op een breed geaccepteerde religieuze/ethische norm dat het leven, als geschenk van de schepper, inherent bescherming waard is."
+        },
+        {
+          "sleutel": "Frame-Thematisch",
+          "beschrijving": "Het benaderen van de kwestie vanuit een breder maatschappelijk, statistisch of historisch kader.",
+          "labelgroep": "Framing-Focus",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "De spreker benadert abortus vanuit een brede, abstracte levensbeschouwelijke en ethische context ('gebroken wereld', 'prilste begin') in plaats van een specifiek individueel incident."
+        },
+        {
+          "sleutel": "Frame-Moraliteit",
+          "beschrijving": "Inbranding vanuit ethische plichten, spirituele of religieuze principes.",
+          "labelgroep": "Generieke Nieuwsframes",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "De kern van het argument is ethisch en spiritueel van aard, waarbij het leven wordt gekaderd als een heilig geschenk dat bescherming verdient."
+        },
+        {
+          "sleutel": "Frame-Menselijk-Belang",
+          "beschrijving": "De focus ligt op de menselijke kant, de emoties of het individuele leed (Human Interest).",
+          "labelgroep": "Generieke Nieuwsframes",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "Er wordt ingespeeld op emoties en kwetsbaarheid door termen als 'broos', 'fragiel' en 'compassie' te gebruiken."
+        },
+        {
+          "sleutel": "Ideologie-TAN",
+          "beschrijving": "Conservatief, traditioneel, nationalistisch (Traditional, Authoritarian, Nationalist).",
+          "labelgroep": "Cultureel-Ideologische Breuklijn",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "Het argument beroept zich op een traditionele, religieuze levensbeschouwing ('geschenk van de schepper') en benadrukt de bescherming van het leven als een conservatieve waarde."
+        },
+        {
+          "sleutel": "Moraliteit-Zorg",
+          "beschrijving": "Gericht op empathie, compassie en het voorkomen van leed en schade bij kwetsbaren.",
+          "labelgroep": "Morele Fundamenten",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "Het argument pleit expliciet voor 'compassie met mensen in al hun kwetsbaarheid' en het beschermen van het 'broze' leven."
+        },
+        {
+          "sleutel": "Moraliteit-Zuiverheid",
+          "beschrijving": "Gericht op het vermijden van morele of fysieke besmetting; streven naar het schone, natuurlijke of verhevene.",
+          "labelgroep": "Morele Fundamenten",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "Het leven wordt gepresenteerd als een 'prachtig geschenk van de schepper', wat wijst op een opvatting van het leven als iets heiligs, natuurgetrouws en moreel onbeschaamd."
+        }
+      ],
+      "oppositions": []
+    },
+    {
+      "id": 1644,
+      "stance": "contra",
+      "typology": "factual",
+      "quote_text": "In 2023 steeg het aantal abortussen opnieuw explosief: 39.332 keer werd pril leven in de moederschoot gedood. Hartverscheurend. Nederland schiet tekort in het erkennen van de waarde van het ongeboren leven.",
+      "quote_context": "Stellingname over de stijging van abortussen en de waardering van ongeboren leven",
+      "prompt_version": "3d3ad8b6052c",
+      "actor": {
+        "name": "Diederik van Dijk",
+        "party": "SGP",
+        "role_title": null
+      },
+      "document": {
+        "url": "https://gegevensmagazijn.tweedekamer.nl/OData/v4/2.0/Verslag/1c2ef252-4112-4a82-97e6-e2bb75b953eb/resource",
+        "video_url": null,
+        "published_at": "2025-01-15T14:38:30",
+        "speaker_video_url": null,
+        "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08083",
+        "redactie_review": null
+      },
+      "periode": {
+        "kamer": "Tweede Kamer 2023-2025",
+        "regering": "Kabinet-Schoof"
+      },
+      "claims": [
+        {
+          "claim_text": "In 2023 steeg het aantal abortussen opnieuw explosief: 39.332 keer werd pril leven in de moederschoot gedood",
+          "attributed_source_text": null
+        }
+      ],
+      "tags": [
+        {
+          "sleutel": "Arena-Parlement",
+          "beschrijving": "Debat of uitspraak afkomstig uit de Eerste of Tweede Kamer.",
+          "labelgroep": "Issue Arena",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Bron is een Tweede Kamer-debat (documents.source.type = 'tweede_kamer')."
+        },
+        {
+          "sleutel": "Actor-Politicus",
+          "beschrijving": "Een gekozen volksvertegenwoordiger, bewindspersoon of partijvertegenwoordiger.",
+          "labelgroep": "Actor Type",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Spreker heeft een geregistreerde partij (SGP)."
+        },
+        {
+          "sleutel": "Context-Commissie",
+          "beschrijving": "Commissiedebat of wetgevingsoverleg; technisch en gedetailleerd van aard met een hogere argumentatieve kwaliteit.",
+          "labelgroep": "Parlementaire Context",
+          "perspectief": "Methodologisch & Contextueel",
+          "created_by": "derived",
+          "reden": "Afgeleid van VLOS-activiteitsoort 'Commissiedebat'."
+        },
+        {
+          "sleutel": "Walton-Consequentie",
+          "beschrijving": "Het verdedigen of aanvallen van een standpunt op basis van de verwachte praktische (voordelige of nadelige) gevolgen.",
+          "labelgroep": "Redeneerschema",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het argument impliceert dat de huidige maatschappelijke houding (tekortschieten in erkenning) leidt tot de nadelige consequentie van een explosieve stijging in het doden van leven."
+        },
+        {
+          "sleutel": "Drogreden-Bespelen-Publiek",
+          "beschrijving": "Emotioneel argumenteren gericht op het oproepen van angst, woede of medelijden bij de toehoorder.",
+          "labelgroep": "Dialectische Kwaliteit",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het gebruik van emotioneel geladen termen als 'hartverscheurend' en 'pril leven in de moederschoot gedood' is gericht op het oproepen van medelijden en schrik bij de toehoorder."
+        },
+        {
+          "sleutel": "Frame-Thematisch",
+          "beschrijving": "Het benaderen van de kwestie vanuit een breder maatschappelijk, statistisch of historisch kader.",
+          "labelgroep": "Framing-Focus",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "Het argument benadert de kwestie vanuit een breder maatschappelijk en statistisch kader door te verwijzen naar de landelijke stijging van het aantal abortussen in 2023."
+        },
+        {
+          "sleutel": "Frame-Moraliteit",
+          "beschrijving": "Inbranding vanuit ethische plichten, spirituele of religieuze principes.",
+          "labelgroep": "Generieke Nieuwsframes",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "De uitspraak inbrandt vanuit ethische en religieuze principes door het doden van ongeboren leven als moreel verwerpelijk ('hartverscheurend') te bestempelen."
+        },
+        {
+          "sleutel": "Frame-Menselijk-Belang",
+          "beschrijving": "De focus ligt op de menselijke kant, de emoties of het individuele leed (Human Interest).",
+          "labelgroep": "Generieke Nieuwsframes",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "De focus ligt op het individuele leed en de menselijke emotie door te spreken van 'pril leven' en 'hartverscheurend' nieuws."
+        },
+        {
+          "sleutel": "Ideologie-TAN",
+          "beschrijving": "Conservatief, traditioneel, nationalistisch (Traditional, Authoritarian, Nationalist).",
+          "labelgroep": "Cultureel-Ideologische Breuklijn",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "De spreker (SGP) en de nadruk op de 'waarde van het ongeboren leven' en het beschermende aspect van traditie sluiten aan bij conservatieve, traditionele waarden."
+        },
+        {
+          "sleutel": "Moraliteit-Zorg",
+          "beschrijving": "Gericht op empathie, compassie en het voorkomen van leed en schade bij kwetsbaren.",
+          "labelgroep": "Morele Fundamenten",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "Er wordt ingespeeld op empathie en het voorkomen van leed bij kwetsbaren door het ongeboren leven als 'pril' en het doden daarvan als 'hartverscheurend' te beschrijven."
+        },
+        {
+          "sleutel": "Moraliteit-Zuiverheid",
+          "beschrijving": "Gericht op het vermijden van morele of fysieke besmetting; streven naar het schone, natuurlijke of verhevene.",
+          "labelgroep": "Morele Fundamenten",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "De retoriek impliceert dat het doden van ongeboren leven een morele besmetting of verontreiniging is van de natuurlijke orde en de waarde van het leven."
+        },
+        {
+          "sleutel": "Bewijs-Statistisch",
+          "beschrijving": "Onderbouwd met kwantitatieve gegevens, cijfers, percentages of grootschalig representatief onderzoek.",
+          "labelgroep": "Type Bewijsvoering",
+          "perspectief": "Methodologisch & Contextueel",
+          "created_by": "llm",
+          "reden": "De claim wordt onderbouwd met een specifiek kwantitatief gegeven: het aantal 39.332 abortussen in 2023."
+        }
+      ],
+      "oppositions": []
+    },
+    {
+      "id": 1645,
+      "stance": "contra",
+      "typology": "factual",
+      "quote_text": "De SGP heeft er meermaals voor gepleit — dat kwam net ook aan de orde — om motieven voor abortus te laten registreren. Zo kunnen we de hulp aan onbedoeld zwangere vrouwen en hun kindje verbeteren.",
+      "quote_context": "Pleidooi voor registratie van abortusmotieven ter verbetering van hulp",
+      "prompt_version": "3d3ad8b6052c",
+      "actor": {
+        "name": "Diederik van Dijk",
+        "party": "SGP",
+        "role_title": null
+      },
+      "document": {
+        "url": "https://gegevensmagazijn.tweedekamer.nl/OData/v4/2.0/Verslag/1c2ef252-4112-4a82-97e6-e2bb75b953eb/resource",
+        "video_url": null,
+        "published_at": "2025-01-15T14:38:30",
+        "speaker_video_url": null,
+        "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08083",
+        "redactie_review": null
+      },
+      "periode": {
+        "kamer": "Tweede Kamer 2023-2025",
+        "regering": "Kabinet-Schoof"
+      },
+      "claims": [],
+      "tags": [
+        {
+          "sleutel": "Arena-Parlement",
+          "beschrijving": "Debat of uitspraak afkomstig uit de Eerste of Tweede Kamer.",
+          "labelgroep": "Issue Arena",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Bron is een Tweede Kamer-debat (documents.source.type = 'tweede_kamer')."
+        },
+        {
+          "sleutel": "Actor-Politicus",
+          "beschrijving": "Een gekozen volksvertegenwoordiger, bewindspersoon of partijvertegenwoordiger.",
+          "labelgroep": "Actor Type",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Spreker heeft een geregistreerde partij (SGP)."
+        },
+        {
+          "sleutel": "Context-Commissie",
+          "beschrijving": "Commissiedebat of wetgevingsoverleg; technisch en gedetailleerd van aard met een hogere argumentatieve kwaliteit.",
+          "labelgroep": "Parlementaire Context",
+          "perspectief": "Methodologisch & Contextueel",
+          "created_by": "derived",
+          "reden": "Afgeleid van VLOS-activiteitsoort 'Commissiedebat'."
+        },
+        {
+          "sleutel": "Walton-Consequentie",
+          "beschrijving": "Het verdedigen of aanvallen van een standpunt op basis van de verwachte praktische (voordelige of nadelige) gevolgen.",
+          "labelgroep": "Redeneerschema",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het argument verdedigt de maatregel (registratie) op basis van het verwachte positieve gevolg (verbetering van de hulpverlening)."
+        },
+        {
+          "sleutel": "Frame-Thematisch",
+          "beschrijving": "Het benaderen van de kwestie vanuit een breder maatschappelijk, statistisch of historisch kader.",
+          "labelgroep": "Framing-Focus",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "Het argument richt zich op een structurele beleidsmaatregel (registratie van motieven) om een bredere maatschappelijke doelstelling (verbetering van hulp) te bereiken, in plaats van op een individueel incident."
+        },
+        {
+          "sleutel": "Frame-Moraliteit",
+          "beschrijving": "Inbranding vanuit ethische plichten, spirituele of religieuze principes.",
+          "labelgroep": "Generieke Nieuwsframes",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "De verwijzing naar 'het kindje' en de zorg voor onbedoeld zwangere vrouwen raakt aan ethische plichten en morele zorg voor kwetsbaren."
+        },
+        {
+          "sleutel": "Frame-Verantwoordelijkheid",
+          "beschrijving": "De nadruk ligt op de schuldvraag of de plicht tot het oplossen van het probleem.",
+          "labelgroep": "Generieke Nieuwsframes",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "Er wordt een plicht geformuleerd om de hulpverlening te verbeteren door middel van registratie, wat de nadruk legt op het oplossen van het probleem."
+        },
+        {
+          "sleutel": "Ideologie-TAN",
+          "beschrijving": "Conservatief, traditioneel, nationalistisch (Traditional, Authoritarian, Nationalist).",
+          "labelgroep": "Cultureel-Ideologische Breuklijn",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "De SGP is een traditioneel-christelijke partij die pleit voor bescherming van het ongeboren leven, wat past binnen de conservatieve en traditionele dimensie."
+        },
+        {
+          "sleutel": "Moraliteit-Zorg",
+          "beschrijving": "Gericht op empathie, compassie en het voorkomen van leed en schade bij kwetsbaren.",
+          "labelgroep": "Morele Fundamenten",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "Het centrale doel is het verbeteren van de hulp aan onbedoeld zwangere vrouwen en hun kindje, wat direct verwijst naar empathie en het voorkomen van leed."
+        },
+        {
+          "sleutel": "Bewijs-Causaal",
+          "beschrijving": "Onderbouwd met een heldere, mechanistische of logische verklaring van oorzaak en gevolg.",
+          "labelgroep": "Type Bewijsvoering",
+          "perspectief": "Methodologisch & Contextueel",
+          "created_by": "llm",
+          "reden": "Er wordt een logische oorzaak-gevolgrelatie gelegd: registratie van motieven leidt tot betere inzichten en daarmee tot verbeterde hulp."
+        }
+      ],
+      "oppositions": []
+    },
+    {
+      "id": 1646,
+      "stance": "contra",
+      "typology": "factual",
+      "quote_text": "De Gezondheidsraad adviseert invoering van een preconceptiedragerschapstest voor iedereen met een kinderwens. Dit advies is sterk ingestoken vanuit de keuzemogelijkheid voor wensouders. Het Rathenau Instituut benadrukt: weeg ook het maatschappelijke perspectief mee.",
+      "quote_context": "Referentie naar advies van Gezondheidsraad en Rathenau Instituut over preconceptietesten",
+      "prompt_version": "3d3ad8b6052c",
+      "actor": {
+        "name": "Diederik van Dijk",
+        "party": "SGP",
+        "role_title": null
+      },
+      "document": {
+        "url": "https://gegevensmagazijn.tweedekamer.nl/OData/v4/2.0/Verslag/1c2ef252-4112-4a82-97e6-e2bb75b953eb/resource",
+        "video_url": null,
+        "published_at": "2025-01-15T14:38:30",
+        "speaker_video_url": null,
+        "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08083",
+        "redactie_review": null
+      },
+      "periode": {
+        "kamer": "Tweede Kamer 2023-2025",
+        "regering": "Kabinet-Schoof"
+      },
+      "claims": [
+        {
+          "claim_text": "De Gezondheidsraad adviseert invoering van een preconceptiedragerschapstest voor iedereen met een kinderwens",
+          "attributed_source_text": "Gezondheidsraad"
+        },
+        {
+          "claim_text": "Het Rathenau Instituut benadrukt: weeg ook het maatschappelijke perspectief mee",
+          "attributed_source_text": "Rathenau Instituut"
+        }
+      ],
+      "tags": [
+        {
+          "sleutel": "Arena-Parlement",
+          "beschrijving": "Debat of uitspraak afkomstig uit de Eerste of Tweede Kamer.",
+          "labelgroep": "Issue Arena",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Bron is een Tweede Kamer-debat (documents.source.type = 'tweede_kamer')."
+        },
+        {
+          "sleutel": "Actor-Politicus",
+          "beschrijving": "Een gekozen volksvertegenwoordiger, bewindspersoon of partijvertegenwoordiger.",
+          "labelgroep": "Actor Type",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Spreker heeft een geregistreerde partij (SGP)."
+        },
+        {
+          "sleutel": "Context-Commissie",
+          "beschrijving": "Commissiedebat of wetgevingsoverleg; technisch en gedetailleerd van aard met een hogere argumentatieve kwaliteit.",
+          "labelgroep": "Parlementaire Context",
+          "perspectief": "Methodologisch & Contextueel",
+          "created_by": "derived",
+          "reden": "Afgeleid van VLOS-activiteitsoort 'Commissiedebat'."
+        },
+        {
+          "sleutel": "Walton-Expertise",
+          "beschrijving": "Het argument leunt op de autoriteit, bevindingen of de verklaring van een specialist of expert.",
+          "labelgroep": "Redeneerschema",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het argument leunt volledig op de adviezen en bevindingen van erkende experts en instituten (Gezondheidsraad, Rathenau Instituut)."
+        },
+        {
+          "sleutel": "Frame-Thematisch",
+          "beschrijving": "Het benaderen van de kwestie vanuit een breder maatschappelijk, statistisch of historisch kader.",
+          "labelgroep": "Framing-Focus",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "Het argument benadert de kwestie vanuit een breed maatschappelijk kader en institutionele adviezen in plaats van een individueel incident."
+        },
+        {
+          "sleutel": "Frame-Verantwoordelijkheid",
+          "beschrijving": "De nadruk ligt op de schuldvraag of de plicht tot het oplossen van het probleem.",
+          "labelgroep": "Generieke Nieuwsframes",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "De nadruk ligt op de plicht om het maatschappelijk perspectief mee te wegen bij beleidskeuzes."
+        },
+        {
+          "sleutel": "Ideologie-TAN",
+          "beschrijving": "Conservatief, traditioneel, nationalistisch (Traditional, Authoritarian, Nationalist).",
+          "labelgroep": "Cultureel-Ideologische Breuklijn",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "De spreker (SGP) en de nadruk op het 'maatschappelijk perspectief' boven individuele keuzevrijheid sluiten aan bij conservatieve, traditionele waarden."
+        },
+        {
+          "sleutel": "Moraliteit-Autoriteit",
+          "beschrijving": "Gericht op respect voor traditie, legitieme hiërarchie, wetten en maatschappelijke orde.",
+          "labelgroep": "Morele Fundamenten",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "Er wordt beroep gedaan op de autoriteit van de Gezondheidsraad en het Rathenau Instituut om de discussie te sturen."
+        },
+        {
+          "sleutel": "Moraliteit-Loyaliteit",
+          "beschrijving": "Gericht op groeps-solidariteit, vaderlandsliefde en trouw aan de eigen gemeenschap (in-group).",
+          "labelgroep": "Morele Fundamenten",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "De oproep om het 'maatschappelijk perspectief' mee te wegen benadrukt de belangen van de bredere gemeenschap boven individuele autonomie."
+        },
+        {
+          "sleutel": "Bewijs-Expert",
+          "beschrijving": "Onderbouwd met de consensus, verklaring of het oordeel van een erkend specialist.",
+          "labelgroep": "Type Bewijsvoering",
+          "perspectief": "Methodologisch & Contextueel",
+          "created_by": "llm",
+          "reden": "De onderbouwing bestaat uit het citeren van officiële adviezen van gespecialiseerde raden en instituten."
+        }
+      ],
+      "oppositions": []
+    },
+    {
+      "id": 1647,
+      "stance": "pro",
+      "typology": "moral",
+      "quote_text": "Want ja, reproductieve rechten zijn ook vrouwenrechten. Elke vrouw heeft recht op zorg en moet haar eigen keuze kunnen maken over haar lichaam en zorg. Want dat is abortus: het is zorg.",
+      "quote_context": "Inleiding over de positie van abortuszorg wereldwijd en in Nederland.",
+      "prompt_version": "3d3ad8b6052c",
+      "actor": {
+        "name": "Elke Slagt-Tichelman",
+        "party": "GroenLinks-PvdA",
+        "role_title": null
+      },
+      "document": {
+        "url": "https://gegevensmagazijn.tweedekamer.nl/OData/v4/2.0/Verslag/1c2ef252-4112-4a82-97e6-e2bb75b953eb/resource",
+        "video_url": null,
+        "published_at": "2025-01-15T14:42:33",
+        "speaker_video_url": null,
+        "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08083",
+        "redactie_review": null
+      },
+      "periode": {
+        "kamer": "Tweede Kamer 2023-2025",
+        "regering": "Kabinet-Schoof"
+      },
+      "claims": [],
+      "tags": [
+        {
+          "sleutel": "Arena-Parlement",
+          "beschrijving": "Debat of uitspraak afkomstig uit de Eerste of Tweede Kamer.",
+          "labelgroep": "Issue Arena",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Bron is een Tweede Kamer-debat (documents.source.type = 'tweede_kamer')."
+        },
+        {
+          "sleutel": "Actor-Politicus",
+          "beschrijving": "Een gekozen volksvertegenwoordiger, bewindspersoon of partijvertegenwoordiger.",
+          "labelgroep": "Actor Type",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Spreker heeft een geregistreerde partij (GroenLinks-PvdA)."
+        },
+        {
+          "sleutel": "Context-Commissie",
+          "beschrijving": "Commissiedebat of wetgevingsoverleg; technisch en gedetailleerd van aard met een hogere argumentatieve kwaliteit.",
+          "labelgroep": "Parlementaire Context",
+          "perspectief": "Methodologisch & Contextueel",
+          "created_by": "derived",
+          "reden": "Afgeleid van VLOS-activiteitsoort 'Commissiedebat'."
+        },
+        {
+          "sleutel": "Walton-Regel",
+          "beschrijving": "Het argument beroept zich op een reeds gevestigde wet, formele regel of breed geaccepteerde maatschappelijke norm.",
+          "labelgroep": "Redeneerschema",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het argument beroept zich op het gevestigde principe/norm dat 'reproductieve rechten vrouwenrechten zijn' en dat vrouwen recht hebben op zorg en keuzevrijheid."
+        },
+        {
+          "sleutel": "Frame-Thematisch",
+          "beschrijving": "Het benaderen van de kwestie vanuit een breder maatschappelijk, statistisch of historisch kader.",
+          "labelgroep": "Framing-Focus",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "Het argument spreekt over algemene principes ('reproductieve rechten', 'elke vrouw') en definieert het fenomeen abortus structureel als zorg, zonder in te zoomen op een specifiek individueel incident."
+        },
+        {
+          "sleutel": "Frame-Moraliteit",
+          "beschrijving": "Inbranding vanuit ethische plichten, spirituele of religieuze principes.",
+          "labelgroep": "Generieke Nieuwsframes",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "De spreker definieert abortus ethisch als 'zorg' en koppelt het aan fundamentele rechten, wat een morele inlijving van het onderwerp is."
+        },
+        {
+          "sleutel": "Ideologie-GAL",
+          "beschrijving": "Progressief, ecologisch, kosmopolitisch (Green, Alternative, Libertarian).",
+          "labelgroep": "Cultureel-Ideologische Breuklijn",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "De nadruk op reproductieve rechten als vrouwenrechten en individuele keuzevrijheid sluit aan bij progressieve, libertaire waarden binnen het GAL-spectrum."
+        },
+        {
+          "sleutel": "Ideologie-Links-Economisch",
+          "beschrijving": "Gericht op herverdeling van welvaart, sterke collectieve voorzieningen en overheidsingrijpen.",
+          "labelgroep": "Cultureel-Ideologische Breuklijn",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "Het benadrukken dat elke vrouw recht heeft op zorg impliceert een collectieve voorziening en overheidsverantwoordelijkheid voor de toegang tot deze zorg."
+        },
+        {
+          "sleutel": "Moraliteit-Vrijheid",
+          "beschrijving": "Gericht op individuele autonomie en weerstand tegen dwang of onderdrukking door dominante actoren.",
+          "labelgroep": "Morele Fundamenten",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "De nadruk op 'eigen keuze kunnen maken over haar lichaam' benadrukt individuele autonomie en vrijheid van dwang."
+        },
+        {
+          "sleutel": "Moraliteit-Zorg",
+          "beschrijving": "Gericht op empathie, compassie en het voorkomen van leed en schade bij kwetsbaren.",
+          "labelgroep": "Morele Fundamenten",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "Door abortus expliciet te definiëren als 'zorg' en te koppelen aan het recht op zorg, wordt ingespeeld op compassie en het welzijn van de vrouw."
+        }
+      ],
+      "oppositions": []
+    },
+    {
+      "id": 1648,
+      "stance": "pro",
+      "typology": "moral",
+      "quote_text": "Daarom is GroenLinks-PvdA bezig met het wetsvoorstel om abortus uit het Wetboek van Strafrecht te halen. Abortus is namelijk geen misdaad. Artsen en vrouwen zijn geen criminelen. Het gaat hier om zorg.",
+      "quote_context": "Onderbouwing van het wetsvoorstel om abortus te decriminaliseren.",
+      "prompt_version": "3d3ad8b6052c",
+      "actor": {
+        "name": "Elke Slagt-Tichelman",
+        "party": "GroenLinks-PvdA",
+        "role_title": null
+      },
+      "document": {
+        "url": "https://gegevensmagazijn.tweedekamer.nl/OData/v4/2.0/Verslag/1c2ef252-4112-4a82-97e6-e2bb75b953eb/resource",
+        "video_url": null,
+        "published_at": "2025-01-15T14:42:33",
+        "speaker_video_url": null,
+        "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08083",
+        "redactie_review": null
+      },
+      "periode": {
+        "kamer": "Tweede Kamer 2023-2025",
+        "regering": "Kabinet-Schoof"
+      },
+      "claims": [],
+      "tags": [
+        {
+          "sleutel": "Arena-Parlement",
+          "beschrijving": "Debat of uitspraak afkomstig uit de Eerste of Tweede Kamer.",
+          "labelgroep": "Issue Arena",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Bron is een Tweede Kamer-debat (documents.source.type = 'tweede_kamer')."
+        },
+        {
+          "sleutel": "Actor-Politicus",
+          "beschrijving": "Een gekozen volksvertegenwoordiger, bewindspersoon of partijvertegenwoordiger.",
+          "labelgroep": "Actor Type",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Spreker heeft een geregistreerde partij (GroenLinks-PvdA)."
+        },
+        {
+          "sleutel": "Context-Commissie",
+          "beschrijving": "Commissiedebat of wetgevingsoverleg; technisch en gedetailleerd van aard met een hogere argumentatieve kwaliteit.",
+          "labelgroep": "Parlementaire Context",
+          "perspectief": "Methodologisch & Contextueel",
+          "created_by": "derived",
+          "reden": "Afgeleid van VLOS-activiteitsoort 'Commissiedebat'."
+        },
+        {
+          "sleutel": "Walton-Regel",
+          "beschrijving": "Het argument beroept zich op een reeds gevestigde wet, formele regel of breed geaccepteerde maatschappelijke norm.",
+          "labelgroep": "Redeneerschema",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het argument beroept zich op de noodzaak om een bestaande wettelijke regel (Strafwetboek) aan te passen omdat de huidige classificatie niet strookt met de werkelijkheid (zorg vs misdaad)."
+        },
+        {
+          "sleutel": "Frame-Thematisch",
+          "beschrijving": "Het benaderen van de kwestie vanuit een breder maatschappelijk, statistisch of historisch kader.",
+          "labelgroep": "Framing-Focus",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "Het argument benadert de kwestie vanuit een breed juridisch en maatschappelijk kader (wetswijziging, status van artsen en vrouwen) in plaats van een specifiek individueel incident."
+        },
+        {
+          "sleutel": "Frame-Moraliteit",
+          "beschrijving": "Inbranding vanuit ethische plichten, spirituele of religieuze principes.",
+          "labelgroep": "Generieke Nieuwsframes",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "De spreker definieert de ethische aard van de handeling door te stellen dat abortus 'geen misdaad' is en dat artsen en vrouwen 'geen criminelen' zijn."
+        },
+        {
+          "sleutel": "Ideologie-GAL",
+          "beschrijving": "Progressief, ecologisch, kosmopolitisch (Green, Alternative, Libertarian).",
+          "labelgroep": "Cultureel-Ideologische Breuklijn",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "Het argument komt van GroenLinks-PvdA en pleit voor decriminalisatie en het herframen van abortus als zorg in plaats van strafbaar feit, wat past binnen progressieve, libertaire waarden."
+        },
+        {
+          "sleutel": "Moraliteit-Zorg",
+          "beschrijving": "Gericht op empathie, compassie en het voorkomen van leed en schade bij kwetsbaren.",
+          "labelgroep": "Morele Fundamenten",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "De spreker frameert abortus expliciet als 'zorg', wat wijst op een focus op medische hulp en het welzijn van de vrouw."
+        },
+        {
+          "sleutel": "Moraliteit-Vrijheid",
+          "beschrijving": "Gericht op individuele autonomie en weerstand tegen dwang of onderdrukking door dominante actoren.",
+          "labelgroep": "Morele Fundamenten",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "Door te stellen dat artsen en vrouwen geen criminelen zijn, wordt verzet geboden tegen de onderdrukking en stigmatisering door het strafrecht."
+        }
+      ],
+      "oppositions": []
+    },
+    {
+      "id": 1649,
+      "stance": "pro",
+      "typology": "factual",
+      "quote_text": "We zien dat in Frankrijk al de toegang en het recht op de zorg in de grondwet zijn verankerd.",
+      "quote_context": "Vergelijking met de situatie in Frankrijk ter ondersteuning van de wens tot verankering in Nederland.",
+      "prompt_version": "3d3ad8b6052c",
+      "actor": {
+        "name": "Elke Slagt-Tichelman",
+        "party": "GroenLinks-PvdA",
+        "role_title": null
+      },
+      "document": {
+        "url": "https://gegevensmagazijn.tweedekamer.nl/OData/v4/2.0/Verslag/1c2ef252-4112-4a82-97e6-e2bb75b953eb/resource",
+        "video_url": null,
+        "published_at": "2025-01-15T14:42:33",
+        "speaker_video_url": null,
+        "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08083",
+        "redactie_review": null
+      },
+      "periode": {
+        "kamer": "Tweede Kamer 2023-2025",
+        "regering": "Kabinet-Schoof"
+      },
+      "claims": [
+        {
+          "claim_text": "in Frankrijk al de toegang en het recht op de zorg in de grondwet zijn verankerd",
+          "attributed_source_text": null
+        }
+      ],
+      "tags": [
+        {
+          "sleutel": "Arena-Parlement",
+          "beschrijving": "Debat of uitspraak afkomstig uit de Eerste of Tweede Kamer.",
+          "labelgroep": "Issue Arena",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Bron is een Tweede Kamer-debat (documents.source.type = 'tweede_kamer')."
+        },
+        {
+          "sleutel": "Actor-Politicus",
+          "beschrijving": "Een gekozen volksvertegenwoordiger, bewindspersoon of partijvertegenwoordiger.",
+          "labelgroep": "Actor Type",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Spreker heeft een geregistreerde partij (GroenLinks-PvdA)."
+        },
+        {
+          "sleutel": "Context-Commissie",
+          "beschrijving": "Commissiedebat of wetgevingsoverleg; technisch en gedetailleerd van aard met een hogere argumentatieve kwaliteit.",
+          "labelgroep": "Parlementaire Context",
+          "perspectief": "Methodologisch & Contextueel",
+          "created_by": "derived",
+          "reden": "Afgeleid van VLOS-activiteitsoort 'Commissiedebat'."
+        },
+        {
+          "sleutel": "Walton-Analogie",
+          "beschrijving": "Er wordt een vergelijking getrokken met een historische gebeurtenis, een andere specifieke casus of een precedent.",
+          "labelgroep": "Redeneerschema",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Er wordt een vergelijking getrokken met de situatie in Frankrijk als precedent om de wens voor verankering in Nederland te onderbouwen."
+        },
+        {
+          "sleutel": "Frame-Thematisch",
+          "beschrijving": "Het benaderen van de kwestie vanuit een breder maatschappelijk, statistisch of historisch kader.",
+          "labelgroep": "Framing-Focus",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "De spreker benadert de kwestie vanuit een breed maatschappelijk en juridisch kader (grondwetgeving in Frankrijk) in plaats van een individueel incident."
+        },
+        {
+          "sleutel": "Ideologie-GAL",
+          "beschrijving": "Progressief, ecologisch, kosmopolitisch (Green, Alternative, Libertarian).",
+          "labelgroep": "Cultureel-Ideologische Breuklijn",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "Het argument komt van een progressieve fractie (GroenLinks-PvdA) en pleit voor de verankering van reproductieve rechten, wat past binnen het kosmopolitische en libertarische spectrum."
+        },
+        {
+          "sleutel": "Moraliteit-Vrijheid",
+          "beschrijving": "Gericht op individuele autonomie en weerstand tegen dwang of onderdrukking door dominante actoren.",
+          "labelgroep": "Morele Fundamenten",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "Het argument focust op het recht op zorg en toegang, wat neerkomt op individuele autonomie en bescherming tegen beperkingen door de staat."
+        },
+        {
+          "sleutel": "Bewijs-Anekdotisch",
+          "beschrijving": "Onderbouwd met één specifiek praktijkgeval, incident, exemplar of persoonlijk verhaal.",
+          "labelgroep": "Type Bewijsvoering",
+          "perspectief": "Methodologisch & Contextueel",
+          "created_by": "llm",
+          "reden": "De onderbouwing leunt op één specifiek praktijkvoorbeeld (de Franse grondwet) als referentiepunt."
+        }
+      ],
+      "oppositions": []
+    },
+    {
+      "id": 1650,
+      "stance": "pro",
+      "typology": "economic",
+      "quote_text": "Voor mensen die geen Nederlandse nationaliteit en geen baan hebben, bijvoorbeeld buitenlandse studenten, kost een abortuspil €504. Voor velen is dit onbetaalbaar. Ik zou daarom dit kabinet willen oproepen om deze groep te helpen. Bied ook hun gelijke toegang tot zorg.",
+      "quote_context": "Aanwijzing naar financiële drempels voor specifieke groepen als reden om gelijke toegang te bieden.",
+      "prompt_version": "3d3ad8b6052c",
+      "actor": {
+        "name": "Elke Slagt-Tichelman",
+        "party": "GroenLinks-PvdA",
+        "role_title": null
+      },
+      "document": {
+        "url": "https://gegevensmagazijn.tweedekamer.nl/OData/v4/2.0/Verslag/1c2ef252-4112-4a82-97e6-e2bb75b953eb/resource",
+        "video_url": null,
+        "published_at": "2025-01-15T14:42:33",
+        "speaker_video_url": null,
+        "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08083",
+        "redactie_review": null
+      },
+      "periode": {
+        "kamer": "Tweede Kamer 2023-2025",
+        "regering": "Kabinet-Schoof"
+      },
+      "claims": [
+        {
+          "claim_text": "kost een abortuspil €504",
+          "attributed_source_text": null
+        }
+      ],
+      "tags": [
+        {
+          "sleutel": "Arena-Parlement",
+          "beschrijving": "Debat of uitspraak afkomstig uit de Eerste of Tweede Kamer.",
+          "labelgroep": "Issue Arena",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Bron is een Tweede Kamer-debat (documents.source.type = 'tweede_kamer')."
+        },
+        {
+          "sleutel": "Actor-Politicus",
+          "beschrijving": "Een gekozen volksvertegenwoordiger, bewindspersoon of partijvertegenwoordiger.",
+          "labelgroep": "Actor Type",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Spreker heeft een geregistreerde partij (GroenLinks-PvdA)."
+        },
+        {
+          "sleutel": "Context-Commissie",
+          "beschrijving": "Commissiedebat of wetgevingsoverleg; technisch en gedetailleerd van aard met een hogere argumentatieve kwaliteit.",
+          "labelgroep": "Parlementaire Context",
+          "perspectief": "Methodologisch & Contextueel",
+          "created_by": "derived",
+          "reden": "Afgeleid van VLOS-activiteitsoort 'Commissiedebat'."
+        },
+        {
+          "sleutel": "Walton-Consequentie",
+          "beschrijving": "Het verdedigen of aanvallen van een standpunt op basis van de verwachte praktische (voordelige of nadelige) gevolgen.",
+          "labelgroep": "Redeneerschema",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het argument stelt dat de huidige situatie (hoge kosten) leidt tot een nadelig gevolg (onbetaalbaarheid) en pleit voor een maatregel om dit gevolg te voorkomen."
+        },
+        {
+          "sleutel": "Frame-Thematisch",
+          "beschrijving": "Het benaderen van de kwestie vanuit een breder maatschappelijk, statistisch of historisch kader.",
+          "labelgroep": "Framing-Focus",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "Het argument benoemt een bredere maatschappelijke groep ('buitenlandse studenten') en een structureel probleem (financiële drempels) in plaats van één specifiek individueel incident."
+        },
+        {
+          "sleutel": "Frame-Economisch",
+          "beschrijving": "De focus ligt op de financiële kosten, baten of budgettaire gevolgen van een kwestie.",
+          "labelgroep": "Generieke Nieuwsframes",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "De focus ligt expliciet op de financiële kosten (€504) en de betaalbaarheid als kernprobleem."
+        },
+        {
+          "sleutel": "Frame-Verantwoordelijkheid",
+          "beschrijving": "De nadruk ligt op de schuldvraag of de plicht tot het oplossen van het probleem.",
+          "labelgroep": "Generieke Nieuwsframes",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "Er wordt een directe oproep gedaan aan het kabinet om verantwoordelijkheid te nemen en de groep te helpen."
+        },
+        {
+          "sleutel": "Ideologie-GAL",
+          "beschrijving": "Progressief, ecologisch, kosmopolitisch (Green, Alternative, Libertarian).",
+          "labelgroep": "Cultureel-Ideologische Breuklijn",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "De spreker (GroenLinks-PvdA) pleit voor kosmopolitische inclusie en gelijke toegang tot zorg voor buitenlandse studenten, wat past binnen het progressieve GAL-spectrum."
+        },
+        {
+          "sleutel": "Ideologie-Links-Economisch",
+          "beschrijving": "Gericht op herverdeling van welvaart, sterke collectieve voorzieningen en overheidsingrijpen.",
+          "labelgroep": "Cultureel-Ideologische Breuklijn",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "Het argument roept de overheid op om in te grijpen en financiële drempels weg te nemen voor een kwetsbare groep, wat wijst op collectieve voorzieningen en herverdeling."
+        },
+        {
+          "sleutel": "Moraliteit-Eerlijkheid",
+          "beschrijving": "Gericht op gelijke kansen, gelijke rechten en onpartijdige behandeling (equality).",
+          "labelgroep": "Morele Fundamenten",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "De spreker pleit voor 'gelijke toegang tot zorg', wat wijst op het principe van gelijke behandeling en rechten."
+        },
+        {
+          "sleutel": "Moraliteit-Zorg",
+          "beschrijving": "Gericht op empathie, compassie en het voorkomen van leed en schade bij kwetsbaren.",
+          "labelgroep": "Morele Fundamenten",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "Er wordt aandacht besteed aan het voorkomen van leed ('onbetaalbaar') voor een kwetsbare groep die hulp nodig heeft."
+        },
+        {
+          "sleutel": "Bewijs-Statistisch",
+          "beschrijving": "Onderbouwd met kwantitatieve gegevens, cijfers, percentages of grootschalig representatief onderzoek.",
+          "labelgroep": "Type Bewijsvoering",
+          "perspectief": "Methodologisch & Contextueel",
+          "created_by": "llm",
+          "reden": "Er wordt een specifiek cijfer (€504) aangehaald als empirische onderbouwing van de financiële drempel."
+        }
+      ],
+      "oppositions": []
+    },
+    {
+      "id": 1651,
+      "stance": "contra",
+      "typology": "factual",
+      "quote_text": "Ik geloof dat alle sprekers voorafgaand aan haar hebben gewezen op de grote stijging van de abortuscijfers. De bedenktermijn is afgeschaft, de abortuspil is verkrijgbaar via de huisarts, 40.000 abortussen per jaar: hoeveel abortussen moeten het zijn voordat mevrouw Slagt-Tichelman zegt dat de toegang toch wel genoeg is? Gaat dat om 50.000 of 100.000? Wanneer komt het moment — dat is mijn hele serieuze vraag — waarop ook PvdA-GroenLinks zegt: goed, nu moeten we misschien toch een keer de vinger leggen bij de waarde van het ongeboren leven?",
+      "quote_context": null,
+      "prompt_version": "3d3ad8b6052c",
+      "actor": {
+        "name": "Diederik van Dijk",
+        "party": "SGP",
+        "role_title": null
+      },
+      "document": {
+        "url": "https://gegevensmagazijn.tweedekamer.nl/OData/v4/2.0/Verslag/1c2ef252-4112-4a82-97e6-e2bb75b953eb/resource",
+        "video_url": null,
+        "published_at": "2025-01-15T14:47:27",
+        "speaker_video_url": null,
+        "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08083",
+        "redactie_review": null
+      },
+      "periode": {
+        "kamer": "Tweede Kamer 2023-2025",
+        "regering": "Kabinet-Schoof"
+      },
+      "claims": [
+        {
+          "claim_text": "grote stijging van de abortuscijfers",
+          "attributed_source_text": "alle sprekers voorafgaand aan haar"
+        },
+        {
+          "claim_text": "De bedenktermijn is afgeschaft",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "de abortuspil is verkrijgbaar via de huisarts",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "40.000 abortussen per jaar",
+          "attributed_source_text": null
+        }
+      ],
+      "tags": [
+        {
+          "sleutel": "Arena-Parlement",
+          "beschrijving": "Debat of uitspraak afkomstig uit de Eerste of Tweede Kamer.",
+          "labelgroep": "Issue Arena",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Bron is een Tweede Kamer-debat (documents.source.type = 'tweede_kamer')."
+        },
+        {
+          "sleutel": "Actor-Politicus",
+          "beschrijving": "Een gekozen volksvertegenwoordiger, bewindspersoon of partijvertegenwoordiger.",
+          "labelgroep": "Actor Type",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Spreker heeft een geregistreerde partij (SGP)."
+        },
+        {
+          "sleutel": "Context-Commissie",
+          "beschrijving": "Commissiedebat of wetgevingsoverleg; technisch en gedetailleerd van aard met een hogere argumentatieve kwaliteit.",
+          "labelgroep": "Parlementaire Context",
+          "perspectief": "Methodologisch & Contextueel",
+          "created_by": "derived",
+          "reden": "Afgeleid van VLOS-activiteitsoort 'Commissiedebat'."
+        },
+        {
+          "sleutel": "Walton-Consequentie",
+          "beschrijving": "Het verdedigen of aanvallen van een standpunt op basis van de verwachte praktische (voordelige of nadelige) gevolgen.",
+          "labelgroep": "Redeneerschema",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De spreker impliceert dat de huidige beleidswijzigingen (afschaffen bedenktermijn, abortuspil) leiden tot een ongewenste consequentie (te hoge cijfers) die een morele grens overschrijdt."
+        },
+        {
+          "sleutel": "Drogreden-Vals-Dilemma",
+          "beschrijving": "Zwart-wit denken; de situatie voorstellen alsof er slechts twee uiterste, elkaar uitsluitende opties bestaan.",
+          "labelgroep": "Dialectische Kwaliteit",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De spreker presenteert de situatie alsof er slechts twee uitersten zijn: ofwel is de toegang 'genoeg' (bij een specifiek, door hem gesteld getal), ofwel wordt het leven niet gewaardeerd, zonder ruimte voor nuance in de huidige wetgeving."
+        },
+        {
+          "sleutel": "Frame-Thematisch",
+          "beschrijving": "Het benaderen van de kwestie vanuit een breder maatschappelijk, statistisch of historisch kader.",
+          "labelgroep": "Framing-Focus",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "Het argument richt zich op bredere maatschappelijke trends, zoals de 'grote stijging van de abortuscijfers' en het totale aantal abortussen per jaar, in plaats van op een individueel geval."
+        },
+        {
+          "sleutel": "Frame-Moraliteit",
+          "beschrijving": "Inbranding vanuit ethische plichten, spirituele of religieuze principes.",
+          "labelgroep": "Generieke Nieuwsframes",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "De kern van het argument draait om de ethische vraag naar de 'waarde van het ongeboren leven' en wanneer de politieke tegenstanders hier grenzen aan moeten stellen."
+        },
+        {
+          "sleutel": "Frame-Conflict",
+          "beschrijving": "De nadruk ligt op de felle strijd of meningsverschillen tussen personen, partijen of groepen.",
+          "labelgroep": "Generieke Nieuwsframes",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "Er wordt een scherpe tegenstelling getrokken tussen de spreker en de fracties PvdA-GroenLinks, waarbij deze worden uitgedaagd om hun standpunt te verdedigen."
+        },
+        {
+          "sleutel": "Ideologie-TAN",
+          "beschrijving": "Conservatief, traditioneel, nationalistisch (Traditional, Authoritarian, Nationalist).",
+          "labelgroep": "Cultureel-Ideologische Breuklijn",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "De spreker (SGP) beroept zich op de 'waarde van het ongeboren leven' en bekritiseert de liberale uitbreiding van abortustoegang, wat past binnen een conservatief en traditioneel wereldbeeld."
+        },
+        {
+          "sleutel": "Moraliteit-Zorg",
+          "beschrijving": "Gericht op empathie, compassie en het voorkomen van leed en schade bij kwetsbaren.",
+          "labelgroep": "Morele Fundamenten",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "Het argument benadrukt de bescherming van het kwetsbare 'ongeboren leven' als morele plicht."
+        },
+        {
+          "sleutel": "Moraliteit-Zuiverheid",
+          "beschrijving": "Gericht op het vermijden van morele of fysieke besmetting; streven naar het schone, natuurlijke of verhevene.",
+          "labelgroep": "Morele Fundamenten",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "De verwijzing naar de 'waarde' van het leven en de bezorgdheid over de normalisering van abortus sluit aan bij het streven naar morele integriteit en het vermijden van wat als moreel schadelijk wordt gezien."
+        },
+        {
+          "sleutel": "Bewijs-Statistisch",
+          "beschrijving": "Onderbouwd met kwantitatieve gegevens, cijfers, percentages of grootschalig representatief onderzoek.",
+          "labelgroep": "Type Bewijsvoering",
+          "perspectief": "Methodologisch & Contextueel",
+          "created_by": "llm",
+          "reden": "Het argument leunt op kwantitatieve gegevens, specifiek de vermelding van '40.000 abortussen per jaar' en hypothetische drempels van 50.000 of 100.000."
+        }
+      ],
+      "oppositions": []
+    },
+    {
+      "id": 1652,
+      "stance": "pro",
+      "typology": "moral",
+      "quote_text": "Wij zijn voor een goed zelfbeschikkingsrecht voor vrouwen wat betreft goede anticonceptie. Daarnaast zijn wij voor goede rechten voor vrouwen voor als zij een ongewenste zwangerschap hebben. Ze moeten zelf de keuze maken wat betreft abortuszorg. Daar moet de toegang goed voor zijn. Daar moeten geen drempels voor zijn.",
+      "quote_context": null,
+      "prompt_version": "3d3ad8b6052c",
+      "actor": {
+        "name": "Elke Slagt-Tichelman",
+        "party": "GroenLinks-PvdA",
+        "role_title": null
+      },
+      "document": {
+        "url": "https://gegevensmagazijn.tweedekamer.nl/OData/v4/2.0/Verslag/1c2ef252-4112-4a82-97e6-e2bb75b953eb/resource",
+        "video_url": null,
+        "published_at": "2025-01-15T14:48:16",
+        "speaker_video_url": null,
+        "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08083",
+        "redactie_review": null
+      },
+      "periode": {
+        "kamer": "Tweede Kamer 2023-2025",
+        "regering": "Kabinet-Schoof"
+      },
+      "claims": [],
+      "tags": [
+        {
+          "sleutel": "Arena-Parlement",
+          "beschrijving": "Debat of uitspraak afkomstig uit de Eerste of Tweede Kamer.",
+          "labelgroep": "Issue Arena",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Bron is een Tweede Kamer-debat (documents.source.type = 'tweede_kamer')."
+        },
+        {
+          "sleutel": "Actor-Politicus",
+          "beschrijving": "Een gekozen volksvertegenwoordiger, bewindspersoon of partijvertegenwoordiger.",
+          "labelgroep": "Actor Type",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Spreker heeft een geregistreerde partij (GroenLinks-PvdA)."
+        },
+        {
+          "sleutel": "Context-Commissie",
+          "beschrijving": "Commissiedebat of wetgevingsoverleg; technisch en gedetailleerd van aard met een hogere argumentatieve kwaliteit.",
+          "labelgroep": "Parlementaire Context",
+          "perspectief": "Methodologisch & Contextueel",
+          "created_by": "derived",
+          "reden": "Afgeleid van VLOS-activiteitsoort 'Commissiedebat'."
+        },
+        {
+          "sleutel": "Walton-Regel",
+          "beschrijving": "Het argument beroept zich op een reeds gevestigde wet, formele regel of breed geaccepteerde maatschappelijke norm.",
+          "labelgroep": "Redeneerschema",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het argument beroept zich op het gevestigde principe van 'zelfbeschikkingsrecht' als normatieve basis voor het beleid."
+        },
+        {
+          "sleutel": "Frame-Thematisch",
+          "beschrijving": "Het benaderen van de kwestie vanuit een breder maatschappelijk, statistisch of historisch kader.",
+          "labelgroep": "Framing-Focus",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "Het argument benoemt algemene beleidsprincipes (toegang, drempels, rechten) zonder in te zoomen op een specifiek individueel incident of casus."
+        },
+        {
+          "sleutel": "Frame-Moraliteit",
+          "beschrijving": "Inbranding vanuit ethische plichten, spirituele of religieuze principes.",
+          "labelgroep": "Generieke Nieuwsframes",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "De spreker baseert haar standpunt op ethische principes van zelfbeschikking en rechten, wat past bij een morele framing."
+        },
+        {
+          "sleutel": "Ideologie-GAL",
+          "beschrijving": "Progressief, ecologisch, kosmopolitisch (Green, Alternative, Libertarian).",
+          "labelgroep": "Cultureel-Ideologische Breuklijn",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "De nadruk op zelfbeschikkingsrecht, vrouwenrechten en het wegnemen van drempels voor abortuszorg sluit aan bij progressieve, libertaire waarden binnen het GAL-spectrum."
+        },
+        {
+          "sleutel": "Moraliteit-Vrijheid",
+          "beschrijving": "Gericht op individuele autonomie en weerstand tegen dwang of onderdrukking door dominante actoren.",
+          "labelgroep": "Morele Fundamenten",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "De kern van het argument is het recht van vrouwen om zelf de keuze te maken (autonomie) zonder externe dwang of drempels."
+        }
+      ],
+      "oppositions": []
+    },
+    {
+      "id": 1653,
+      "stance": "contra",
+      "typology": "moral",
+      "quote_text": "Een van de pijlers van onze abortuswet, die toch heel liberaal is, is de waarde van het ongeboren leven. Daar hoor ik GroenLinks-PvdA, met alle respect, nooit over. Dat is eigenlijk mijn vraag. We hebben nu 40.000 abortussen. Wanneer komt het moment dat ook uw partij zegt: het is toch een keer zaak om de zaak in balans te houden, dus we beklemtonen ook de waarde van een ongeboren kind?",
+      "quote_context": null,
+      "prompt_version": "3d3ad8b6052c",
+      "actor": {
+        "name": "Diederik van Dijk",
+        "party": "SGP",
+        "role_title": null
+      },
+      "document": {
+        "url": "https://gegevensmagazijn.tweedekamer.nl/OData/v4/2.0/Verslag/1c2ef252-4112-4a82-97e6-e2bb75b953eb/resource",
+        "video_url": null,
+        "published_at": "2025-01-15T14:49:42",
+        "speaker_video_url": null,
+        "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08083",
+        "redactie_review": null
+      },
+      "periode": {
+        "kamer": "Tweede Kamer 2023-2025",
+        "regering": "Kabinet-Schoof"
+      },
+      "claims": [
+        {
+          "claim_text": "We hebben nu 40.000 abortussen.",
+          "attributed_source_text": null
+        }
+      ],
+      "tags": [
+        {
+          "sleutel": "Arena-Parlement",
+          "beschrijving": "Debat of uitspraak afkomstig uit de Eerste of Tweede Kamer.",
+          "labelgroep": "Issue Arena",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Bron is een Tweede Kamer-debat (documents.source.type = 'tweede_kamer')."
+        },
+        {
+          "sleutel": "Actor-Politicus",
+          "beschrijving": "Een gekozen volksvertegenwoordiger, bewindspersoon of partijvertegenwoordiger.",
+          "labelgroep": "Actor Type",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Spreker heeft een geregistreerde partij (SGP)."
+        },
+        {
+          "sleutel": "Context-Commissie",
+          "beschrijving": "Commissiedebat of wetgevingsoverleg; technisch en gedetailleerd van aard met een hogere argumentatieve kwaliteit.",
+          "labelgroep": "Parlementaire Context",
+          "perspectief": "Methodologisch & Contextueel",
+          "created_by": "derived",
+          "reden": "Afgeleid van VLOS-activiteitsoort 'Commissiedebat'."
+        },
+        {
+          "sleutel": "Walton-Regel",
+          "beschrijving": "Het argument beroept zich op een reeds gevestigde wet, formele regel of breed geaccepteerde maatschappelijke norm.",
+          "labelgroep": "Redeneerschema",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het argument beroept zich op de reeds gevestigde 'abortuswet' en de daarin vervatte norm ('waarde van het ongeboren leven') als uitgangspunt voor de discussie."
+        },
+        {
+          "sleutel": "Frame-Thematisch",
+          "beschrijving": "Het benaderen van de kwestie vanuit een breder maatschappelijk, statistisch of historisch kader.",
+          "labelgroep": "Framing-Focus",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "Het argument verwijst naar de algemene abortuswet, de ideologische positie van partijen en een landelijk totaal (40.000 abortussen) in plaats van een individueel casus."
+        },
+        {
+          "sleutel": "Frame-Moraliteit",
+          "beschrijving": "Inbranding vanuit ethische plichten, spirituele of religieuze principes.",
+          "labelgroep": "Generieke Nieuwsframes",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "De kern van het argument draait om de ethische 'waarde van het ongeboren leven' en de morele plicht om dit te beklemtonen."
+        },
+        {
+          "sleutel": "Frame-Conflict",
+          "beschrijving": "De nadruk ligt op de felle strijd of meningsverschillen tussen personen, partijen of groepen.",
+          "labelgroep": "Generieke Nieuwsframes",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "Er wordt een contrast getrokken tussen de eigen partij (SGP) en de tegenpartij (GroenLinks-PvdA) door te stellen dat deze laatste nooit over de waarde van het leven spreekt."
+        },
+        {
+          "sleutel": "Ideologie-TAN",
+          "beschrijving": "Conservatief, traditioneel, nationalistisch (Traditional, Authoritarian, Nationalist).",
+          "labelgroep": "Cultureel-Ideologische Breuklijn",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "De spreker benadrukt de 'waarde van het ongeboren leven' en de noodzaak om de zaak 'in balans te houden', wat aansluit bij conservatieve en traditionele waarden die het bestaande morele ordening verdedigen."
+        },
+        {
+          "sleutel": "Moraliteit-Zorg",
+          "beschrijving": "Gericht op empathie, compassie en het voorkomen van leed en schade bij kwetsbaren.",
+          "labelgroep": "Morele Fundamenten",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "Het argument focust op de bescherming en waarde van het kwetsbare 'ongeboren kind'."
+        },
+        {
+          "sleutel": "Moraliteit-Autoriteit",
+          "beschrijving": "Gericht op respect voor traditie, legitieme hiërarchie, wetten en maatschappelijke orde.",
+          "labelgroep": "Morele Fundamenten",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "Er wordt verwezen naar de 'abortuswet' als een bestaande pijler en norm die gerespecteerd en in balans gehouden moet worden."
+        },
+        {
+          "sleutel": "Bewijs-Statistisch",
+          "beschrijving": "Onderbouwd met kwantitatieve gegevens, cijfers, percentages of grootschalig representatief onderzoek.",
+          "labelgroep": "Type Bewijsvoering",
+          "perspectief": "Methodologisch & Contextueel",
+          "created_by": "llm",
+          "reden": "Er wordt een specifiek cijfer ('40.000 abortussen') aangehaald om de omvang van het fenomeen te illustreren."
+        }
+      ],
+      "oppositions": []
+    },
+    {
+      "id": 1654,
+      "stance": "contra",
+      "typology": "factual",
+      "quote_text": "In dat kader wil ik graag aandacht vragen voor de ongekend lange abortustermijn die in Nederland geldt. Voordat ik daarop inga, wil ik opgemerkt hebben dat vanzelfsprekend iedere vrouw die als gevolg van een ongeplande zwangerschap in een noodsituatie verkeert, hulp, steun, begeleiding verdient. Waar het mij om gaat, is het belang om zo veel mogelijk te kiezen voor een oplossing voor die noodsituatie, die zowel de moeder als het ongeboren kind beschermt.",
+      "quote_context": null,
+      "prompt_version": "3d3ad8b6052c",
+      "actor": {
+        "name": "Gideon van Meijeren",
+        "party": "FVD",
+        "role_title": null
+      },
+      "document": {
+        "url": "https://gegevensmagazijn.tweedekamer.nl/OData/v4/2.0/Verslag/1c2ef252-4112-4a82-97e6-e2bb75b953eb/resource",
+        "video_url": null,
+        "published_at": "2025-01-15T14:51:55",
+        "speaker_video_url": null,
+        "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08083",
+        "redactie_review": null
+      },
+      "periode": {
+        "kamer": "Tweede Kamer 2023-2025",
+        "regering": "Kabinet-Schoof"
+      },
+      "claims": [],
+      "tags": [
+        {
+          "sleutel": "Arena-Parlement",
+          "beschrijving": "Debat of uitspraak afkomstig uit de Eerste of Tweede Kamer.",
+          "labelgroep": "Issue Arena",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Bron is een Tweede Kamer-debat (documents.source.type = 'tweede_kamer')."
+        },
+        {
+          "sleutel": "Actor-Politicus",
+          "beschrijving": "Een gekozen volksvertegenwoordiger, bewindspersoon of partijvertegenwoordiger.",
+          "labelgroep": "Actor Type",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Spreker heeft een geregistreerde partij (FVD)."
+        },
+        {
+          "sleutel": "Context-Commissie",
+          "beschrijving": "Commissiedebat of wetgevingsoverleg; technisch en gedetailleerd van aard met een hogere argumentatieve kwaliteit.",
+          "labelgroep": "Parlementaire Context",
+          "perspectief": "Methodologisch & Contextueel",
+          "created_by": "derived",
+          "reden": "Afgeleid van VLOS-activiteitsoort 'Commissiedebat'."
+        }
+      ],
+      "oppositions": []
+    },
+    {
+      "id": 1655,
+      "stance": "contra",
+      "typology": "factual",
+      "quote_text": "Nederland is het enige land in de Europese Unie waar abortussen tot 24 weken zijn toegestaan. In de meeste landen om ons heen geldt een grens van tien of twaalf weken.",
+      "quote_context": null,
+      "prompt_version": "3d3ad8b6052c",
+      "actor": {
+        "name": "Gideon van Meijeren",
+        "party": "FVD",
+        "role_title": null
+      },
+      "document": {
+        "url": "https://gegevensmagazijn.tweedekamer.nl/OData/v4/2.0/Verslag/1c2ef252-4112-4a82-97e6-e2bb75b953eb/resource",
+        "video_url": null,
+        "published_at": "2025-01-15T14:51:55",
+        "speaker_video_url": null,
+        "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08083",
+        "redactie_review": null
+      },
+      "periode": {
+        "kamer": "Tweede Kamer 2023-2025",
+        "regering": "Kabinet-Schoof"
+      },
+      "claims": [
+        {
+          "claim_text": "Nederland is het enige land in de Europese Unie waar abortussen tot 24 weken zijn toegestaan",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "In de meeste landen om ons heen geldt een grens van tien of twaalf weken",
+          "attributed_source_text": null
+        }
+      ],
+      "tags": [],
+      "oppositions": []
+    },
+    {
+      "id": 1656,
+      "stance": "pro",
+      "typology": "factual",
+      "quote_text": "In Nederland staat abortus nog steeds in het strafrecht. We hebben er eerder al voor gepleit om abortus uit het strafrecht te halen.",
+      "quote_context": null,
+      "prompt_version": "3d3ad8b6052c",
+      "actor": {
+        "name": "Sarah Dobbe",
+        "party": "SP",
+        "role_title": null
+      },
+      "document": {
+        "url": "https://gegevensmagazijn.tweedekamer.nl/OData/v4/2.0/Verslag/1c2ef252-4112-4a82-97e6-e2bb75b953eb/resource",
+        "video_url": null,
+        "published_at": "2025-01-15T15:19:43",
+        "speaker_video_url": null,
+        "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08083",
+        "redactie_review": null
+      },
+      "periode": {
+        "kamer": "Tweede Kamer 2023-2025",
+        "regering": "Kabinet-Schoof"
+      },
+      "claims": [],
+      "tags": [],
+      "oppositions": []
+    },
+    {
+      "id": 1657,
+      "stance": "pro",
+      "typology": "economic",
+      "quote_text": "Daarom pleit de SP voor de pil, het spiraaltje én condooms in het basispakket. Via een aantal aanvullende verzekeringen kun je namelijk al jaarlijks gratis een aantal condooms bestellen. Waarom geldt dat eigenlijk niet voor iedereen? Wat betreft de kosten: het is natuurlijk goedkoper dan ofwel abortus ofwel soa's, met al die andere kosten die daaruit voortkomen. Volgens mij kan het dus alleen maar besparend werken. Ik ben benieuwd wat de staatssecretaris daarvan denkt. Voor het verminderen van het aantal ongewenste zwangerschappen is de beste en de goedkoopste manier echt via goede toegang tot anticonceptie.",
+      "quote_context": null,
+      "prompt_version": "3d3ad8b6052c",
+      "actor": {
+        "name": "Sarah Dobbe",
+        "party": "SP",
+        "role_title": null
+      },
+      "document": {
+        "url": "https://gegevensmagazijn.tweedekamer.nl/OData/v4/2.0/Verslag/1c2ef252-4112-4a82-97e6-e2bb75b953eb/resource",
+        "video_url": null,
+        "published_at": "2025-01-15T15:19:43",
+        "speaker_video_url": null,
+        "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08083",
+        "redactie_review": null
+      },
+      "periode": {
+        "kamer": "Tweede Kamer 2023-2025",
+        "regering": "Kabinet-Schoof"
+      },
+      "claims": [],
+      "tags": [],
+      "oppositions": []
+    },
+    {
+      "id": 1658,
+      "stance": "pro",
+      "typology": "factual",
+      "quote_text": "Is de staatssecretaris ook bereid om te kijken hoe voor deze groep vrouwen bijvoorbeeld de abortuspil of abortus vergoed kan worden? Zo hoeven ze geen gevaarlijke illegale abortus te ondergaan of een ongewenste zwangerschap te voldragen onder zeer kwetsbare omstandigheden.",
+      "quote_context": null,
+      "prompt_version": "3d3ad8b6052c",
+      "actor": {
+        "name": "Sarah Dobbe",
+        "party": "SP",
+        "role_title": null
+      },
+      "document": {
+        "url": "https://gegevensmagazijn.tweedekamer.nl/OData/v4/2.0/Verslag/1c2ef252-4112-4a82-97e6-e2bb75b953eb/resource",
+        "video_url": null,
+        "published_at": "2025-01-15T15:19:43",
+        "speaker_video_url": null,
+        "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08083",
+        "redactie_review": null
+      },
+      "periode": {
+        "kamer": "Tweede Kamer 2023-2025",
+        "regering": "Kabinet-Schoof"
+      },
+      "claims": [],
+      "tags": [],
+      "oppositions": []
+    },
+    {
+      "id": 1659,
+      "stance": "contra",
+      "typology": "moral",
+      "quote_text": "Dat zijn best schrikbarende cijfers, want het afbreken van ongeboren leven is niet zomaar een medische handeling. We mogen nooit vergeten dat het hier gaat om ongeboren leven dat bescherming verdient.",
+      "quote_context": null,
+      "prompt_version": "3d3ad8b6052c",
+      "actor": {
+        "name": "Caroline van der Plas",
+        "party": "BBB",
+        "role_title": null
+      },
+      "document": {
+        "url": "https://gegevensmagazijn.tweedekamer.nl/OData/v4/2.0/Verslag/1c2ef252-4112-4a82-97e6-e2bb75b953eb/resource",
+        "video_url": null,
+        "published_at": "2025-01-15T15:24:06",
+        "speaker_video_url": null,
+        "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08083",
+        "redactie_review": null
+      },
+      "periode": {
+        "kamer": "Tweede Kamer 2023-2025",
+        "regering": "Kabinet-Schoof"
+      },
+      "claims": [],
+      "tags": [],
+      "oppositions": []
+    },
+    {
+      "id": 1660,
+      "stance": "contra",
+      "typology": "moral",
+      "quote_text": "Hoewel de cijfers geen oorzaken noemen, zei Monique Opheij van het NGvA, het Nederlands Genootschap van Abortusartsen: het kan te maken hebben met het woningtekort, de economische situatie, maar ook desinformatie over anticonceptie kan een rol spelen. Als vrouwen zich genoodzaakt voelen een kind niet te krijgen omdat zij bang zijn geen huis of geen geld te hebben, dan zie ik dit als vrij simpel, want eigenlijk hebben we het hier dan over het falen van de verzorgingsstaat. Dat kunnen we niet laten gebeuren.",
+      "quote_context": null,
+      "prompt_version": "3d3ad8b6052c",
+      "actor": {
+        "name": "Caroline van der Plas",
+        "party": "BBB",
+        "role_title": null
+      },
+      "document": {
+        "url": "https://gegevensmagazijn.tweedekamer.nl/OData/v4/2.0/Verslag/1c2ef252-4112-4a82-97e6-e2bb75b953eb/resource",
+        "video_url": null,
+        "published_at": "2025-01-15T15:24:06",
+        "speaker_video_url": null,
+        "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08083",
+        "redactie_review": null
+      },
+      "periode": {
+        "kamer": "Tweede Kamer 2023-2025",
+        "regering": "Kabinet-Schoof"
+      },
+      "claims": [
+        {
+          "claim_text": "Monique Opheij van het NGvA zei dat de stijging kan te maken hebben met het woningtekort, de economische situatie, maar ook desinformatie over anticonceptie kan een rol spelen",
+          "attributed_source_text": "Monique Opheij van het NGvA, het Nederlands Genootschap van Abortusartsen"
+        }
+      ],
+      "tags": [],
+      "oppositions": []
+    },
+    {
+      "id": 1661,
+      "stance": "contra",
+      "typology": "factual",
+      "quote_text": "Er zijn onderzoeken die laten zien dat dit relatief betrouwbaar kan zijn, maar dan gaat het wel om vrouwen die uitgebreid geschoold zijn in een zeer nauwkeurige vorm van meten en registratie. Zelfs dan is er kans van minimaal 2% dat een vrouw toch zwanger wordt. Als de vrouwen zelf aan de slag gaan met een app, is deze kans natuurlijk nog veel groter. Ik wil de staatssecretaris vragen: wordt er voldoende aangeboden aan eerstelijnshulpverlening zoals huisartsen en verloskundigen om desinformatie tegen te gaan en vrouwen te helpen bij hun keuze voor anticonceptie, eventueel zonder hormonen?",
+      "quote_context": null,
+      "prompt_version": "3d3ad8b6052c",
+      "actor": {
+        "name": "Caroline van der Plas",
+        "party": "BBB",
+        "role_title": null
+      },
+      "document": {
+        "url": "https://gegevensmagazijn.tweedekamer.nl/OData/v4/2.0/Verslag/1c2ef252-4112-4a82-97e6-e2bb75b953eb/resource",
+        "video_url": null,
+        "published_at": "2025-01-15T15:24:06",
+        "speaker_video_url": null,
+        "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08083",
+        "redactie_review": null
+      },
+      "periode": {
+        "kamer": "Tweede Kamer 2023-2025",
+        "regering": "Kabinet-Schoof"
+      },
+      "claims": [
+        {
+          "claim_text": "onderzoeken laten zien dat natuurlijke geboortebeperking relatief betrouwbaar kan zijn, maar dan gaat het wel om vrouwen die uitgebreid geschoold zijn in een zeer nauwkeurige vorm van meten en registratie",
+          "attributed_source_text": "onderzoeken"
+        },
+        {
+          "claim_text": "Zelfs dan is er kans van minimaal 2% dat een vrouw toch zwanger wordt",
+          "attributed_source_text": "onderzoeken"
+        }
+      ],
+      "tags": [],
+      "oppositions": []
+    },
+    {
+      "id": 1662,
+      "stance": "contra",
+      "typology": "factual",
+      "quote_text": "De meerderheid van de Kamer heeft gestemd voor het afschaffen van de vijf dagen bedenktijd. Mijn fractie was daar heel kritisch op en heeft daar ook tegen gestemd. Die kritiek hebben wij nog steeds. Ik vraag me af of het mogelijk is om te achterhalen of er een verband is met de stijging in het aantal afbrekingen van ongeboren leven. Mijn concrete vraag aan de staatssecretaris is dan ook: heeft het afschaffen van de bedenktijd van vijf dagen mogelijk effect op de stijging van het aantal afbrekingen van ongeboren leven?",
+      "quote_context": null,
+      "prompt_version": "3d3ad8b6052c",
+      "actor": {
+        "name": "Caroline van der Plas",
+        "party": "BBB",
+        "role_title": null
+      },
+      "document": {
+        "url": "https://gegevensmagazijn.tweedekamer.nl/OData/v4/2.0/Verslag/1c2ef252-4112-4a82-97e6-e2bb75b953eb/resource",
+        "video_url": null,
+        "published_at": "2025-01-15T15:24:06",
+        "speaker_video_url": null,
+        "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08083",
+        "redactie_review": null
+      },
+      "periode": {
+        "kamer": "Tweede Kamer 2023-2025",
+        "regering": "Kabinet-Schoof"
+      },
+      "claims": [],
+      "tags": [],
+      "oppositions": []
+    },
+    {
+      "id": 1663,
+      "stance": "contra",
+      "typology": "factual",
+      "quote_text": "Allereerst zou ik graag willen weten van mevrouw Van der Plas: denkt u dan ook niet dat vrouwen het gevoel krijgen dat ze zich moeten verantwoorden voor de keuze waarvan zij denken dat het noodzakelijk is dat ze die maken? En los van het feit dat een besluit tot een abortus meerdere redenen kan hebben — dus ik zie het ook nog niet precies voor me hoe we dat moeten doen — is de vraag: wat doe je daarmee? Uit de praktijk van de hulpverlening weet ik dat als vragen worden ervaren als vragen om je te verantwoorden, je over het algemeen sociaal wenselijke antwoorden krijgt. Hoe moeten we die dan gaan interpreteren? Ik zie dus nog steeds niet hoe we dat zouden moeten inrichten, los van het feit dat daar in lopende onderzoeken en monitoring door ZonMw bij voortduring naar gekeken wordt.",
+      "quote_context": "Kritiek op het voorstel om standaard vragen te stellen naar de redenen voor een abortusbesluit.",
+      "prompt_version": "3d3ad8b6052c",
+      "actor": {
+        "name": "Harry Bevers",
+        "party": "VVD",
+        "role_title": null
+      },
+      "document": {
+        "url": "https://gegevensmagazijn.tweedekamer.nl/OData/v4/2.0/Verslag/1c2ef252-4112-4a82-97e6-e2bb75b953eb/resource",
+        "video_url": null,
+        "published_at": "2025-01-15T15:27:51",
+        "speaker_video_url": null,
+        "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08083",
+        "redactie_review": null
+      },
+      "periode": {
+        "kamer": "Tweede Kamer 2023-2025",
+        "regering": "Kabinet-Schoof"
+      },
+      "claims": [
+        {
+          "claim_text": "als vragen worden ervaren als vragen om je te verantwoorden, je over het algemeen sociaal wenselijke antwoorden krijgt",
+          "attributed_source_text": "de praktijk van de hulpverlening"
+        },
+        {
+          "claim_text": "in lopende onderzoeken en monitoring door ZonMw bij voortduring naar gekeken wordt",
+          "attributed_source_text": "ZonMw"
+        }
+      ],
+      "tags": [],
+      "oppositions": []
+    },
+    {
+      "id": 1664,
+      "stance": "contra",
+      "typology": "factual",
+      "quote_text": "Ons standpunt was destijds — en dat is het nu nog steeds — dat die vijf dagen overkomelijk zijn. Die beraadtermijn kan ook heel veel vrouwen helpen.",
+      "quote_context": null,
+      "prompt_version": "3d3ad8b6052c",
+      "actor": {
+        "name": "Caroline van der Plas",
+        "party": "BBB",
+        "role_title": null
+      },
+      "document": {
+        "url": "https://gegevensmagazijn.tweedekamer.nl/OData/v4/2.0/Verslag/1c2ef252-4112-4a82-97e6-e2bb75b953eb/resource",
+        "video_url": null,
+        "published_at": "2025-01-15T15:36:38",
+        "speaker_video_url": null,
+        "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08083",
+        "redactie_review": null
+      },
+      "periode": {
+        "kamer": "Tweede Kamer 2023-2025",
+        "regering": "Kabinet-Schoof"
+      },
+      "claims": [],
+      "tags": [],
+      "oppositions": []
+    },
+    {
+      "id": 1665,
+      "stance": "contra",
+      "typology": "moral",
+      "quote_text": "We hebben het hier over ongeboren leven. We hebben het hier niet over een leuk technisch succesje; we hebben het hier over leven dat afgebroken wordt.",
+      "quote_context": null,
+      "prompt_version": "3d3ad8b6052c",
+      "actor": {
+        "name": "Caroline van der Plas",
+        "party": "BBB",
+        "role_title": null
+      },
+      "document": {
+        "url": "https://gegevensmagazijn.tweedekamer.nl/OData/v4/2.0/Verslag/1c2ef252-4112-4a82-97e6-e2bb75b953eb/resource",
+        "video_url": null,
+        "published_at": "2025-01-15T15:36:38",
+        "speaker_video_url": null,
+        "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08083",
+        "redactie_review": null
+      },
+      "periode": {
+        "kamer": "Tweede Kamer 2023-2025",
+        "regering": "Kabinet-Schoof"
+      },
+      "claims": [],
+      "tags": [],
+      "oppositions": []
     }
   ],
-  "argument_count": 24,
+  "argument_count": 50,
   "tag_correspondence": {
     "inertia_pct": [
-      50.8,
-      22.0
+      44.8,
+      19.7
     ],
     "parties": [
       {
         "party": "BBB",
-        "x": 1.7687768530272467,
-        "y": -0.5563910404933115,
-        "n": 14
+        "x": 0.9502549209881285,
+        "y": -0.31284974851517483,
+        "n": 21
       },
       {
         "party": "ChristenUnie",
-        "x": 0.8544197783012638,
-        "y": 0.08785387851806839,
-        "n": 8
+        "x": 0.6917554349245464,
+        "y": 0.3968199805329932,
+        "n": 23
       },
       {
         "party": "D66",
-        "x": -0.2283525597289435,
-        "y": 0.26452352858179146,
+        "x": -0.37330310375071424,
+        "y": 0.19097907663488914,
         "n": 7
       },
       {
         "party": "GroenLinks-PvdA",
-        "x": -0.5128240176424685,
-        "y": -0.24758145738498857,
-        "n": 34
+        "x": -0.5390747652882746,
+        "y": 0.4854294693059362,
+        "n": 66
+      },
+      {
+        "party": "SGP",
+        "x": 0.7607982411927805,
+        "y": 0.12701210883045208,
+        "n": 47
       },
       {
         "party": "SP",
-        "x": -0.4989826607273429,
-        "y": -0.4836032729648565,
+        "x": -0.6049836157662016,
+        "y": -0.45292118010182203,
         "n": 24
       },
       {
         "party": "VVD",
-        "x": 0.05253767506050245,
-        "y": 0.5451743056714766,
-        "n": 41
+        "x": -0.22012640739266384,
+        "y": -0.38959050530383305,
+        "n": 79
       }
     ],
     "tags": [
       {
+        "sleutel": "Bewijs-Anekdotisch",
+        "beschrijving": "Onderbouwd met één specifiek praktijkgeval, incident, exemplar of persoonlijk verhaal.",
+        "labelgroep": "Type Bewijsvoering",
+        "x": -0.22251945466633688,
+        "y": 1.1864799135228457,
+        "n": 3
+      },
+      {
         "sleutel": "Bewijs-Causaal",
         "beschrijving": "Onderbouwd met een heldere, mechanistische of logische verklaring van oorzaak en gevolg.",
         "labelgroep": "Type Bewijsvoering",
-        "x": 0.011201824806508472,
-        "y": 0.4959405452182946,
-        "n": 7
+        "x": -0.19355931854130384,
+        "y": -0.5135979138863241,
+        "n": 11
       },
       {
         "sleutel": "Bewijs-Expert",
         "beschrijving": "Onderbouwd met de consensus, verklaring of het oordeel van een erkend specialist.",
         "labelgroep": "Type Bewijsvoering",
-        "x": -0.46833626963464814,
-        "y": -0.3176688660794163,
-        "n": 3
+        "x": -0.3073240361669492,
+        "y": -0.810957473208023,
+        "n": 5
       },
       {
         "sleutel": "Bewijs-Statistisch",
         "beschrijving": "Onderbouwd met kwantitatieve gegevens, cijfers, percentages of grootschalig representatief onderzoek.",
         "labelgroep": "Type Bewijsvoering",
-        "x": 0.3159283104807935,
-        "y": 0.050050072542290686,
-        "n": 7
+        "x": 0.2867712164708339,
+        "y": -0.06159970477016686,
+        "n": 13
+      },
+      {
+        "sleutel": "Drogreden-Bespelen-Publiek",
+        "beschrijving": "Emotioneel argumenteren gericht op het oproepen van angst, woede of medelijden bij de toehoorder.",
+        "labelgroep": "Dialectische Kwaliteit",
+        "x": 0.19153160270892325,
+        "y": 0.7969519970952591,
+        "n": 2
+      },
+      {
+        "sleutel": "Frame-Conflict",
+        "beschrijving": "De nadruk ligt op de felle strijd of meningsverschillen tussen personen, partijen of groepen.",
+        "labelgroep": "Generieke Nieuwsframes",
+        "x": 0.9725548807599792,
+        "y": -0.2917552206638033,
+        "n": 4
       },
       {
         "sleutel": "Frame-Economisch",
         "beschrijving": "De focus ligt op de financiële kosten, baten of budgettaire gevolgen van een kwestie.",
         "labelgroep": "Generieke Nieuwsframes",
-        "x": -0.7518276525122415,
-        "y": -0.8255576305356186,
-        "n": 4
+        "x": -0.7531678958463046,
+        "y": -0.20115213202629204,
+        "n": 8
+      },
+      {
+        "sleutel": "Frame-Episodisch",
+        "beschrijving": "Inzoomen op een specifiek, individueel incident, persoonlijk verhaal of een concrete casus.",
+        "labelgroep": "Framing-Focus",
+        "x": 0.13189028919383164,
+        "y": 1.1480449500584826,
+        "n": 2
+      },
+      {
+        "sleutel": "Frame-Menselijk-Belang",
+        "beschrijving": "De focus ligt op de menselijke kant, de emoties of het individuele leed (Human Interest).",
+        "labelgroep": "Generieke Nieuwsframes",
+        "x": 0.8175408789542083,
+        "y": 0.7979876534520501,
+        "n": 5
       },
       {
         "sleutel": "Frame-Moraliteit",
         "beschrijving": "Inbranding vanuit ethische plichten, spirituele of religieuze principes.",
         "labelgroep": "Generieke Nieuwsframes",
-        "x": 1.3533362206551616,
-        "y": -0.012664461711925557,
-        "n": 2
+        "x": 0.6191373484035109,
+        "y": 0.4733476016039273,
+        "n": 12
       },
       {
         "sleutel": "Frame-Thematisch",
         "beschrijving": "Het benaderen van de kwestie vanuit een breder maatschappelijk, statistisch of historisch kader.",
         "labelgroep": "Framing-Focus",
-        "x": 0.13077452427554795,
-        "y": 0.11453553235545944,
-        "n": 17
+        "x": -0.02703936261160376,
+        "y": -0.12520113091207252,
+        "n": 36
       },
       {
         "sleutel": "Frame-Verantwoordelijkheid",
         "beschrijving": "De nadruk ligt op de schuldvraag of de plicht tot het oplossen van het probleem.",
         "labelgroep": "Generieke Nieuwsframes",
-        "x": -0.3100282487704629,
-        "y": 0.015970062420135576,
-        "n": 13
+        "x": -0.27649677572927056,
+        "y": -0.10138753892707035,
+        "n": 19
       },
       {
         "sleutel": "Ideologie-GAL",
         "beschrijving": "Progressief, ecologisch, kosmopolitisch (Green, Alternative, Libertarian).",
         "labelgroep": "Cultureel-Ideologische Breuklijn",
-        "x": -0.43279106619163465,
-        "y": 0.10691459110153474,
-        "n": 9
+        "x": -0.7483574528450075,
+        "y": 0.3511755218368033,
+        "n": 16
       },
       {
         "sleutel": "Ideologie-Links-Economisch",
         "beschrijving": "Gericht op herverdeling van welvaart, sterke collectieve voorzieningen en overheidsingrijpen.",
         "labelgroep": "Cultureel-Ideologische Breuklijn",
-        "x": -0.753296921734112,
-        "y": -0.7874883745270267,
-        "n": 7
+        "x": -0.8220472622732452,
+        "y": 0.08350723025340341,
+        "n": 12
       },
       {
         "sleutel": "Ideologie-Rechts-Economisch",
         "beschrijving": "Gericht op de vrije markt, deregulering en individuele verantwoordelijkheid.",
         "labelgroep": "Cultureel-Ideologische Breuklijn",
-        "x": 0.07807672701435082,
-        "y": 1.2310782469532753,
+        "x": -0.38030401097114885,
+        "y": -1.013925057785991,
         "n": 3
       },
       {
         "sleutel": "Ideologie-TAN",
         "beschrijving": "Conservatief, traditioneel, nationalistisch (Traditional, Authoritarian, Nationalist).",
         "labelgroep": "Cultureel-Ideologische Breuklijn",
-        "x": 2.175650866401528,
-        "y": -0.7714760836560183,
-        "n": 3
+        "x": 1.2320480887219276,
+        "y": 0.12500058820019389,
+        "n": 13
       },
       {
         "sleutel": "Meta-Reikwijdte",
         "beschrijving": "Uitingen over de thematische grenzen van het debat, de toelaatbaarheid van specifieke beweringen, of de legitimiteit van bepaalde linguïstische framings.",
         "labelgroep": "Metadiscussie",
-        "x": 1.3533362206551616,
-        "y": -0.012664461711925557,
-        "n": 2
+        "x": 0.519057684308516,
+        "y": -0.4523285470634259,
+        "n": 4
+      },
+      {
+        "sleutel": "Meta-Vorm-Setting",
+        "beschrijving": "Uitingen over de formele procedure, de interactieve spelregels, het vergaderformat of de fysieke en institutionele context van de uitwisseling.",
+        "labelgroep": "Metadiscussie",
+        "x": 0.9677114886109665,
+        "y": -0.8807777741600734,
+        "n": 3
       },
       {
         "sleutel": "Moraliteit-Autoriteit",
         "beschrijving": "Gericht op respect voor traditie, legitieme hiërarchie, wetten en maatschappelijke orde.",
         "labelgroep": "Morele Fundamenten",
-        "x": 1.949178442454306,
-        "y": -0.529010540295464,
-        "n": 2
+        "x": 0.906679181606447,
+        "y": -0.2803442875889894,
+        "n": 7
       },
       {
         "sleutel": "Moraliteit-Eerlijkheid",
         "beschrijving": "Gericht op gelijke kansen, gelijke rechten en onpartijdige behandeling (equality).",
         "labelgroep": "Morele Fundamenten",
-        "x": -0.5858467766069231,
-        "y": -0.41423045503783984,
-        "n": 5
+        "x": -0.806434165114184,
+        "y": -0.08504171406062071,
+        "n": 7
       },
       {
         "sleutel": "Moraliteit-Vrijheid",
         "beschrijving": "Gericht op individuele autonomie en weerstand tegen dwang of onderdrukking door dominante actoren.",
         "labelgroep": "Morele Fundamenten",
-        "x": -0.27155862560581556,
-        "y": 0.5287365699100876,
-        "n": 6
+        "x": -0.7049264776400423,
+        "y": 0.3655845079930605,
+        "n": 11
       },
       {
         "sleutel": "Moraliteit-Zorg",
         "beschrijving": "Gericht op empathie, compassie en het voorkomen van leed en schade bij kwetsbaren.",
         "labelgroep": "Morele Fundamenten",
-        "x": -0.04920453712728532,
-        "y": -0.037671040033837616,
-        "n": 13
+        "x": -0.00890908489429723,
+        "y": 0.05308477398457193,
+        "n": 26
+      },
+      {
+        "sleutel": "Moraliteit-Zuiverheid",
+        "beschrijving": "Gericht op het vermijden van morele of fysieke besmetting; streven naar het schone, natuurlijke of verhevene.",
+        "labelgroep": "Morele Fundamenten",
+        "x": 1.3560090405179848,
+        "y": 0.2420396777070234,
+        "n": 5
+      },
+      {
+        "sleutel": "Walton-Analogie",
+        "beschrijving": "Er wordt een vergelijking getrokken met een historische gebeurtenis, een andere specifieke casus of een precedent.",
+        "labelgroep": "Redeneerschema",
+        "x": -0.931338942386674,
+        "y": 1.2633498404515722,
+        "n": 2
       },
       {
         "sleutel": "Walton-Causaal",
         "beschrijving": "Argumentatie gebaseerd op een directe oorzaak-gevolgrelatie.",
         "labelgroep": "Redeneerschema",
-        "x": 0.37599783791392294,
-        "y": 0.9729052076615061,
+        "x": 0.01355187196522266,
+        "y": -0.502258778423145,
         "n": 4
       },
       {
         "sleutel": "Walton-Consequentie",
         "beschrijving": "Het verdedigen of aanvallen van een standpunt op basis van de verwachte praktische (voordelige of nadelige) gevolgen.",
         "labelgroep": "Redeneerschema",
-        "x": -0.45872625509624676,
-        "y": 0.041460844490858934,
-        "n": 7
+        "x": -0.03356120818730175,
+        "y": 0.032016095979131805,
+        "n": 16
       },
       {
         "sleutel": "Walton-Expertise",
         "beschrijving": "Het argument leunt op de autoriteit, bevindingen of de verklaring van een specialist of expert.",
         "labelgroep": "Redeneerschema",
-        "x": -0.46833626963464814,
-        "y": -0.3176688660794163,
-        "n": 3
+        "x": -0.28907904246589927,
+        "y": -0.760215577063531,
+        "n": 4
       },
       {
         "sleutel": "Walton-Regel",
         "beschrijving": "Het argument beroept zich op een reeds gevestigde wet, formele regel of breed geaccepteerde maatschappelijke norm.",
         "labelgroep": "Redeneerschema",
-        "x": 1.7784227185354318,
-        "y": -0.42724536460032597,
-        "n": 3
+        "x": 0.23267745184523408,
+        "y": -0.016684217278349303,
+        "n": 12
       }
     ]
   }

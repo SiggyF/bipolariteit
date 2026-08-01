@@ -38,6 +38,9 @@ frontend geen partij/naam-context. Twee losse stappen, geen LLM:
    - Piet Adema -> ChristenUnie, via Wikidata (Q2688310, P102 -> Q239539
      "ChristenUnie"), geverifieerd op 2026-07-26 via de publieke
      Special:EntityData-JSON-API.
+   - Judith Tielen -> VVD, via de TK OData Persoon/FractieZetelPersoon-API
+     (Kamerzetel t/m 2025-06-18, spreekt in de abortus-data als
+     staatssecretaris Jeugd, Preventie en Sport), geverifieerd op 2026-08-01.
 
 Gebruik:
     uv run python scripts/backfill_minister_info.py --topic stikstof [--dry-run]
@@ -66,20 +69,21 @@ MINISTER_PARTY = {
     "Jean Rummenie": "BBB",
     "Dick Schoof": "Onafhankelijk",
     "Piet Adema": "ChristenUnie",
+    "Judith Tielen": "VVD",
 }
 
 
 def backfill_role_titles(conn, topic_keyword, dry_run=False):
     updated = 0
     skipped_no_meta = 0
-    for xml_path in sorted(RAW_DIR.glob("*.xml")):
+    for xml_path in sorted((RAW_DIR / topic_keyword).glob("*.xml")):
         meta_path = xml_path.with_suffix(".json")
         if not meta_path.exists():
             skipped_no_meta += 1
             continue
         root = ET.parse(xml_path).getroot()
 
-        for activiteit in find_matching_activiteiten(root, topic_keyword):
+        for activiteit, _titel_match in find_matching_activiteiten(root, topic_keyword):
             for turn_el, spreker_el, _ in find_speaking_turns(activiteit):
                 role_title = _speaker_role_title(spreker_el)
                 if not role_title:

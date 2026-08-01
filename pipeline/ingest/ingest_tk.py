@@ -18,11 +18,16 @@ gevallen zonder aannames over de diepte.
 
 import argparse
 import json
+import logging
 import re
+import urllib.parse
+import urllib.request
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
 from pipeline.db import db
+
+logger = logging.getLogger(__name__)
 from pipeline.paths import RAW_DIR_TWEEDE_KAMER as RAW_DIR
 
 NS = "{http://www.tweedekamer.nl/ggm/vergaderverslag/v1.0}"
@@ -97,6 +102,87 @@ def _speaker_role_title(spreker_el):
         return None
     functie = spreker_el.findtext(NS + "functie")
     return functie.strip() if functie and functie.strip() else None
+
+
+_ODATA_BASE = "https://gegevensmagazijn.tweedekamer.nl/OData/v4/2.0"
+_ODATA_HEADERS = {"User-Agent": "bipolariteit-tk-crawler/0.1 (contact: f.baart@gmail.com; onderzoeksproject)"}
+_bewindspersoon_party_cache = {}
+
+# Zeldzame, bewuste uitzonderingen op de automatische OData-lookup hieronder
+# -- ofwel omdat iemand geen (bruikbaar) Persoon-record met Kamerlidschap
+# heeft (dus de OData-route niets oplevert), ofwel omdat de "laatst bekende
+# Kamerzetel"-heuristiek een gedateerd of onjuist antwoord zou geven. Alle
+# hieronder geverifieerd op 2026-07-26, zie ook scripts/backfill_minister_info.py:
+# - Dick Schoof: Wikidata (Q22338116, P102) toont hem als PvdA-lid t/m 2021
+#   en sindsdien -- ook tijdens zijn premierschap -- als onafhankelijk
+#   politicus. Zonder deze override zou de heuristiek "PvdA" teruggeven.
+# - Jaimi van Essen: geen Kamerlidschap, dus geen OData-Persoon-record; partij
+#   staat als losse tekst ("Partij: D66") in rijksoverheid.nl/regering/
+#   bewindspersonen/jaimi-van-essen.
+# - Jean Rummenie: idem, via Wikidata (Q123173854, P102 -> Q101083924
+#   "BoerBurgerBeweging").
+# - Piet Adema: idem, via Wikidata (Q2688310, P102 -> Q239539 "ChristenUnie").
+BEWINDSPERSOON_PARTY_OVERRIDES = {
+    "Dick Schoof": "Onafhankelijk",
+    "Jaimi van Essen": "D66",
+    "Jean Rummenie": "BBB",
+    "Piet Adema": "ChristenUnie",
+}
+
+
+def lookup_bewindspersoon_party(name):
+    """Bewindspersonen (Minister/Staatssecretaris) hebben geen <fractie> in de
+    VLOS-data -- ze spreken op dat moment niet namens een Kamerfractie, maar
+    zijn meestal wel via een eerder/huidig Kamerlidmaatschap aan een partij te
+    koppelen. Zoekt de partij op via de laatst bekende Kamerzetel
+    (Persoon -> FractieZetelPersoon -> FractieZetel -> Fractie.Afkorting) in
+    de Tweede Kamer OData-API, zodat dit niet per topic handmatig hoeft te
+    worden nagezocht/onderhouden zoals voorheen in
+    scripts/backfill_minister_info.py. Geeft None terug (echte "Onbekend") als
+    er geen match is of de lookup faalt -- nooit gokken."""
+    if name in BEWINDSPERSOON_PARTY_OVERRIDES:
+        return BEWINDSPERSOON_PARTY_OVERRIDES[name]
+    if name in _bewindspersoon_party_cache:
+        return _bewindspersoon_party_cache[name]
+
+    party = None
+    parts = name.split()
+    achternaam = parts[-1]
+    voornaam = parts[0] if len(parts) > 1 else None
+    try:
+        filter_expr = f"Achternaam eq '{achternaam}'"
+        expand = "FractieZetelPersoon($expand=FractieZetel($expand=Fractie))"
+        url = (
+            f"{_ODATA_BASE}/Persoon?$filter={urllib.parse.quote(filter_expr)}"
+            f"&$expand={urllib.parse.quote(expand)}&$select=Id,Roepnaam,Voornamen,Achternaam"
+        )
+        req = urllib.request.Request(url, headers=_ODATA_HEADERS)
+        with urllib.request.urlopen(req, timeout=10) as resp:
+            body = json.loads(resp.read())
+        personen = body.get("value", [])
+        if voornaam and len(personen) > 1:
+            personen = [
+                p for p in personen
+                if voornaam.lower() in (p.get("Roepnaam") or "").lower()
+                or voornaam.lower() in (p.get("Voornamen") or "").lower()
+            ] or personen
+
+        zetels = []
+        for persoon in personen:
+            for zp in persoon.get("FractieZetelPersoon", []):
+                fractie = (zp.get("FractieZetel") or {}).get("Fractie") or {}
+                afkorting = fractie.get("Afkorting")
+                van = zp.get("Van")
+                if afkorting and van:
+                    zetels.append((van, afkorting))
+        if zetels:
+            zetels.sort()
+            party = zetels[-1][1]
+    except Exception as e:
+        logger.warning("kon partij niet opzoeken voor bewindspersoon %r: %s", name, e)
+
+    _bewindspersoon_party_cache[name] = party
+    return party
 
 
 # Ruim criterium: een debat kan het topic bespreken zonder het keyword in zijn
@@ -262,11 +348,13 @@ def ingest_file(conn, xml_path, meta_path, topic_keyword):
 
             name = _speaker_name(spreker_el)
             party = _speaker_party(spreker_el)
+            speaker_role_title = _speaker_role_title(spreker_el)
+            if party is None and speaker_role_title is not None:
+                party = lookup_bewindspersoon_party(name)
             actor_id = get_or_create_actor(conn, name, party)
 
             published_at = turn_el.findtext(NS + "markeertijdbegin") or metadata.get("activiteit_datum")
             voorzitter_turn = is_voorzitter_turn(turn_el, parent_map)
-            speaker_role_title = _speaker_role_title(spreker_el)
 
             conn.execute(
                 """
