@@ -45,6 +45,13 @@ const candidates = computed<Candidate[]>(() => {
 function onClaimClick(candidate: Candidate) {
 	requestScrollTo(candidate.argument.id);
 }
+
+// Claims zijn uit een lopende zin geknipt en beginnen daardoor vaak niet met
+// een hoofdletter; een "..." ervoor maakt dat leesbaar als citaat.
+const STARTS_WITH_CAPITAL = /^[A-ZÀ-ÖØ-Þ]/;
+function displayClaimText(text: string): string {
+	return STARTS_WITH_CAPITAL.test(text) ? text : `... ${text}`;
+}
 </script>
 
 <template>
@@ -54,7 +61,7 @@ function onClaimClick(candidate: Candidate) {
 		<ul class="claims-highlights-grid">
 			<li v-for="candidate in candidates" :key="candidate.key">
 				<button type="button" class="claim-highlight-card" @click="onClaimClick(candidate)">
-					<blockquote class="claim-highlight-text">{{ candidate.claim.claim_text }}</blockquote>
+					<blockquote class="claim-highlight-text">{{ displayClaimText(candidate.claim.claim_text) }}</blockquote>
 					<p v-if="candidate.claim.attributed_source_text" class="claim-highlight-source">
 						bron: {{ candidate.claim.attributed_source_text }}
 					</p>
