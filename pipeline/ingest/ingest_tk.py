@@ -114,6 +114,12 @@ _bewindspersoon_party_cache = {}
 # buiten data/bewindspersonen.toml). Partij staat als losse tekst
 # ("Partij: D66") in rijksoverheid.nl/regering/bewindspersonen/jaimi-van-essen,
 # geverifieerd op 2026-07-26.
+#
+# Teun Struycken stond hier eerder ook in (voorgedragen namens NSC maar zelf
+# geen lid) -- inmiddels via Wikidata zelf opgelost (P102 -> Q327591
+# "onafhankelijk politicus", 2026-08-01), dus die uitzondering is niet meer
+# nodig; data/bewindspersonen.toml levert hem nu automatisch als
+# "Onafhankelijk".
 BEWINDSPERSOON_PARTY_OVERRIDES = {
     "Jaimi van Essen": "D66",
 }
