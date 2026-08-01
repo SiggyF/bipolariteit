@@ -19,7 +19,6 @@ maar komen niet in de JSON en dus niet op de site.
 
 Gebruik:
     uv run python -m pipeline.build_static_data
-    uv run python -m pipeline.build_static_data --topic stikstof
 """
 
 import argparse
@@ -316,27 +315,19 @@ def build_topic_export(conn, topic_row, periode_index):
 
 
 def main():
-    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("--topic", default=None, help="alleen deze topic-slug exporteren (default: alle topics)")
-    args = parser.parse_args()
+    argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter).parse_args()
 
     conn = db.connect()
     periode_index = PeriodeIndex()
     all_topic_rows = conn.execute("SELECT id, slug, name, description FROM topics").fetchall()
-    if args.topic:
-        rows_to_export = [r for r in all_topic_rows if r["slug"] == args.topic]
-        if not rows_to_export:
-            raise SystemExit(f"onbekende topic-slug: {args.topic}")
-    else:
-        rows_to_export = all_topic_rows
 
     topics_dir = EXPORT_DIR / "topics"
     topics_dir.mkdir(parents=True, exist_ok=True)
 
-    argument_counts = {}
-    for topic_row in rows_to_export:
+    index = []
+    status = {"generated_at": datetime.now(_AMSTERDAM).isoformat(timespec="seconds"), "topics": []}
+    for topic_row in all_topic_rows:
         export = build_topic_export(conn, topic_row, periode_index)
-        argument_counts[topic_row["slug"]] = export["argument_count"]
         out_path = topics_dir / f"{topic_row['slug']}.json"
         out_path.write_text(json.dumps(export, ensure_ascii=False, indent=2))
         stances = Counter(a["stance"] for a in export["arguments"])
@@ -345,34 +336,13 @@ def main():
             topic_row["slug"], export["argument_count"],
             stances["pro"], stances["contra"], stances["unclear"], out_path,
         )
-
-    # Index en status altijd over ALLE topics opbouwen, ook bij een gerichte
-    # --topic-export: die is alleen bedoeld om het dure per-topic exportwerk
-    # (build_topic_export) te beperken tot het gewijzigde topic, niet om
-    # niet-geraakte topics uit topics-index.json/status.json te laten vallen.
-    # Voor een topic dat deze run niet opnieuw gebouwd is, wordt het
-    # argument_count uit het al bestaande topics/<slug>.json gelezen.
-    index = []
-    status = {"generated_at": datetime.now(_AMSTERDAM).isoformat(timespec="seconds"), "topics": []}
-    for topic_row in all_topic_rows:
-        slug = topic_row["slug"]
-        if slug in argument_counts:
-            argument_count = argument_counts[slug]
-        else:
-            existing_path = topics_dir / f"{slug}.json"
-            if not existing_path.exists():
-                raise SystemExit(
-                    f"topic '{slug}' heeft nog geen {existing_path} -- draai eerst "
-                    f"'uv run python -m pipeline.build_static_data --topic {slug}'"
-                )
-            argument_count = json.loads(existing_path.read_text())["argument_count"]
         status["topics"].append(fetch_pipeline_status(conn, topic_row, periode_index.drempel))
         index.append(
             {
-                "slug": slug,
+                "slug": topic_row["slug"],
                 "name": topic_row["name"],
                 "description": topic_row["description"],
-                "argument_count": argument_count,
+                "argument_count": export["argument_count"],
             }
         )
 
