@@ -49,13 +49,13 @@ describe("correspondentieanalyse tegen de prince-fixture", () => {
 		ca.inertiaPct.forEach((waarde, k) => {
 			expect(waarde).toBeCloseTo(Math.round(gouden.inertiaPct[k] * 10) / 10, 10);
 		});
-		expect(ca.inertiaPct).toEqual([39.6, 16.6, 13.8]);
+		expect(ca.inertiaPct).toEqual(gouden.inertiaPct.map((v) => Math.round(v * 10) / 10));
 	});
 
 	it("gebruikt de volledige inertie als noemer, niet de som van de gebruikte componenten", () => {
 		// Dit is de klassieke portfout: met de top-k als noemer wordt 39,6% ineens ~70%.
 		const twee = buildCorrespondence(argumenten, { nComponents: 2 })!;
-		expect(twee.inertiaPct).toEqual([39.6, 16.6]);
+		expect(twee.inertiaPct).toEqual(gouden.inertiaPct.slice(0, 2).map((v) => Math.round(v * 10) / 10));
 
 		const alle = analyseTable(gouden.counts, 100)!;
 		expect(alle.nComponents).toBe(Math.min(...[gouden.counts.length, gouden.counts[0].length]) - 1);

@@ -1,9 +1,8 @@
 ---
 import PerspectiefView from "../../components/PerspectiefView.vue";
-import SiteNav from "../../components/SiteNav.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
 import { PERSPECTIEVEN } from "../../lib/tagIcons.generated";
 import { slugify } from "../../lib/slug";
-import "../../styles/main.css";
 
 const topicModules = import.meta.glob("../../../../data/export/topics/*.json", { eager: true });
 
@@ -28,18 +27,7 @@ const { perspectief } = Astro.props;
 const argumentList = allArguments();
 ---
 
-<html lang="nl">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<title>{perspectief} — Bipolariteit</title>
-	</head>
-	<body>
-		<SiteNav />
-		<main>
-			<a href="/perspectief/" class="back-link">&larr; alle perspectieven</a>
-			<PerspectiefView perspectief={perspectief} argumentList={argumentList} client:only="vue" />
-		</main>
-	</body>
-</html>
+<BaseLayout title={`${perspectief} — Bipolariteit`}>
+	<a href="/perspectief/" class="back-link">&larr; alle perspectieven</a>
+	<PerspectiefView perspectief={perspectief} argumentList={argumentList} client:only="vue" />
+</BaseLayout>

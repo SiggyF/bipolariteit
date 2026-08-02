@@ -1,31 +1,16 @@
 ---
-import SiteNav from "../components/SiteNav.astro";
-import "../styles/main.css";
+import BaseLayout from "../layouts/BaseLayout.astro";
 ---
 
-<html lang="nl">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<title>Validatie-rapportage — Bipolariteit</title>
-	</head>
-	<body>
-		<SiteNav />
-		<main class="about">
-			<a href="/about" class="back-link">&larr; over dit platform</a>
-			<h1>Validatie-rapportage</h1>
+<BaseLayout title="Validatie-rapportage — Bipolariteit" class="about">
+	<a href="/about" class="back-link">&larr; over dit platform</a>
+	<h1>Validatie-rapportage</h1>
 
-			<p>
-				Vóór elke publicatieronde wordt een representatieve steekproef argumenten per onderwerp
-				handmatig en door een tweede LLM (Gemini, onafhankelijk van het lokale extractiemodel)
-				herbeoordeeld — zie <a href="/about">"Transparantie &amp; reproduceerbaarheid"</a> op de
-				About-pagina. De resultaten (foutpercentage, systematische patronen per stage) komen hier
-				per onderwerp te staan zodra die steekproefronde is afgerond.
-			</p>
-
-			<p><em>Nog geen rapportage beschikbaar — deze pagina wordt gevuld zodra de eerste
-			steekproefronde over alle onderwerpen is afgerond, vóór de publieke launch.</em></p>
-		</main>
-	</body>
-</html>
+	<p>
+		Vóór elke publicatieronde wordt een representatieve steekproef argumenten per onderwerp
+		handmatig en door een tweede LLM (Gemini, onafhankelijk van het lokale extractiemodel)
+		herbeoordeeld — zie <a href="/about">"Transparantie &amp; reproduceerbaarheid"</a> op de
+		About-pagina. De resultaten (foutpercentage, systematische patronen per stage) komen hier
+		per onderwerp te staan zodra die steekproefronde is afgerond.
+	</p>
+</BaseLayout>

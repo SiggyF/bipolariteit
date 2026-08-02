@@ -1,9 +1,8 @@
 ---
 import ActorTagUsage from "../../components/ActorTagUsage.vue";
-import SiteNav from "../../components/SiteNav.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
 import { NO_PARTY } from "../../lib/types";
 import { slugify } from "../../lib/slug";
-import "../../styles/main.css";
 
 const topicModules = import.meta.glob("../../../../data/export/topics/*.json", { eager: true });
 
@@ -35,18 +34,7 @@ const { party } = Astro.props;
 const argumentList = allArguments().filter((a: any) => a.actor.party === party);
 ---
 
-<html lang="nl">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<title>{party} — Bipolariteit</title>
-	</head>
-	<body>
-		<SiteNav />
-		<main>
-			<a href="/" class="back-link">&larr; alle onderwerpen</a>
-			<ActorTagUsage name={party} mode="partij" argumentList={argumentList} client:only="vue" />
-		</main>
-	</body>
-</html>
+<BaseLayout title={`${party} — Bipolariteit`}>
+	<a href="/" class="back-link">&larr; alle onderwerpen</a>
+	<ActorTagUsage name={party} mode="partij" argumentList={argumentList} client:only="vue" />
+</BaseLayout>

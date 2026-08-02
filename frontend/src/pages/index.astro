@@ -1,13 +1,12 @@
 ---
 import topicsIndex from "../../../data/export/topics-index.json";
-import SiteNav from "../components/SiteNav.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
 import PartyIcon from "../components/PartyIcon.astro";
 import { displayPartyName } from "../lib/parties";
 import { slugify } from "../lib/slug";
 import { NO_PARTY } from "../lib/types";
 import { TEGENSTELLING } from "../lib/topics";
 import { ICOON_PAD, PERSPECTIEVEN } from "../lib/tagIcons.generated";
-import "../styles/main.css";
 
 const topicModules = import.meta.glob("../../../data/export/topics/*.json", { eager: true });
 
@@ -26,16 +25,7 @@ for (const mod of Object.values(topicModules) as any[]) {
 }
 ---
 
-<html lang="nl">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<title>Bipolariteit</title>
-	</head>
-	<body>
-		<SiteNav />
-		<main>
+<BaseLayout title="Bipolariteit">
 			<h1>Bipolariteit</h1>
 			<p class="intro">
 				Argumenten in gepolariseerde Nederlandse maatschappelijke discussies &mdash; we listen and we don't judge.
@@ -101,6 +91,4 @@ for (const mod of Object.values(topicModules) as any[]) {
 					</a>
 				</li>
 			</ul>
-		</main>
-	</body>
-</html>
+</BaseLayout>

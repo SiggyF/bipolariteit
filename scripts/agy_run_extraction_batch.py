@@ -96,22 +96,21 @@ def main():
         elapsed = time.monotonic() - start
         latencies.append(elapsed)
 
-        n_valid = n_claims = 0
-        for arg in parsed.get("arguments", []):
-            try:
-                _validate_argument(arg)
-            except ValueError as exc:
-                logger.warning("[doc %5d]   overgeslagen argument: %s", doc["id"], exc)
-                continue
-            n_claims += len(arg.get("claims") or [])
-            insert_argument(conn, doc["id"], topic_id, doc["actor_id"], arg, args.model)
-            n_valid += 1
+        with conn:
+            for arg in parsed.get("arguments", []):
+                try:
+                    _validate_argument(arg)
+                except ValueError as exc:
+                    logger.warning("[doc %5d]   overgeslagen argument: %s", doc["id"], exc)
+                    continue
+                n_claims += len(arg.get("claims") or [])
+                insert_argument(conn, doc["id"], topic_id, doc["actor_id"], arg, args.model)
+                n_valid += 1
 
-        conn.execute(
-            "UPDATE documents SET extraction_attempted_at = ?, extraction_prompt_version = ?, extraction_model = ? WHERE id = ?",
-            (datetime.now(timezone.utc).isoformat(), PROMPT_VERSION, args.model, doc["id"]),
-        )
-        conn.commit()
+            conn.execute(
+                "UPDATE documents SET extraction_attempted_at = ?, extraction_prompt_version = ?, extraction_model = ? WHERE id = ?",
+                (datetime.now(timezone.utc).isoformat(), PROMPT_VERSION, args.model, doc["id"]),
+            )
 
         logger.info(
             "[doc %5d] %-25s %5.1fs | %d argument(en), %d claim(s)",

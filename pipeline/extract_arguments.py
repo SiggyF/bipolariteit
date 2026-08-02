@@ -228,23 +228,32 @@ def main():
         arguments = parsed.get("arguments", [])
         n_valid = 0
         n_claims = 0
-        for arg in arguments:
-            try:
-                _validate_argument(arg)
-            except ValueError as exc:
-                logger.warning("[doc %5d]   overgeslagen argument: %s", doc["id"], exc)
-                continue
-            n_claims += len(arg.get("claims") or [])
-            if not args.dry_run:
-                insert_argument(conn, doc["id"], topic_id, doc["actor_id"], arg, args.model)
-            n_valid += 1
 
         if not args.dry_run:
-            conn.execute(
-                "UPDATE documents SET extraction_attempted_at = ?, extraction_prompt_version = ?, extraction_model = ? WHERE id = ?",
-                (datetime.now(timezone.utc).isoformat(), PROMPT_VERSION, args.model, doc["id"]),
-            )
-            conn.commit()
+            with conn:
+                for arg in arguments:
+                    try:
+                        _validate_argument(arg)
+                    except ValueError as exc:
+                        logger.warning("[doc %5d]   overgeslagen argument: %s", doc["id"], exc)
+                        continue
+                    n_claims += len(arg.get("claims") or [])
+                    insert_argument(conn, doc["id"], topic_id, doc["actor_id"], arg, args.model)
+                    n_valid += 1
+
+                conn.execute(
+                    "UPDATE documents SET extraction_attempted_at = ?, extraction_prompt_version = ?, extraction_model = ? WHERE id = ?",
+                    (datetime.now(timezone.utc).isoformat(), PROMPT_VERSION, args.model, doc["id"]),
+                )
+        else:
+            for arg in arguments:
+                try:
+                    _validate_argument(arg)
+                except ValueError as exc:
+                    logger.warning("[doc %5d]   overgeslagen argument: %s", doc["id"], exc)
+                    continue
+                n_claims += len(arg.get("claims") or [])
+                n_valid += 1
 
         reasoning_tokens = usage.get("completion_tokens_details", {}).get("reasoning_tokens", 0)
         completion_tokens = usage.get("completion_tokens", 0)
