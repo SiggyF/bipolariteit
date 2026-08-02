@@ -4,7 +4,7 @@ import { useTheme } from "../lib/useTheme";
 import { displayPartyName, partyInitial } from "../lib/parties";
 import { logoSprite } from "../lib/partyLogoSprite";
 import { PERSPECTIEVEN } from "../lib/tagIcons.generated";
-import { isActive, matches, toggleValue } from "../lib/filters";
+import { filters, isActive, matches, toggleValue } from "../lib/filters";
 import { NO_PARTY, type Argument } from "../lib/types";
 import { alignSigns, buildCorrespondence, type Correspondence, type RowUnit } from "../lib/correspondence";
 import VChart from "vue-echarts";
@@ -47,7 +47,30 @@ const filtered = computed(() => props.argumentList.filter(matches));
 //   dus een filter dat te ver doorschiet laat de kaart netjes leeg lopen i.p.v.
 //   vast te lopen.
 const analysisMode = ref<"focus" | "detail">("focus");
-const sourceList = computed(() => (analysisMode.value === "detail" ? filtered.value : props.argumentList));
+
+// BELANGRIJKE INVARIANT, niet opnieuw laten wegglippen (zie #39): `matches()`
+// (lib/filters.ts) telt een argument al mee zodra één van zijn tags aan een
+// tag-dimensie (tag/labelgroep/perspectief) voldoet -- OR binnen de dimensie.
+// Zo'n argument kan dus best nog andere, niet-geselecteerde tags dragen. Voor
+// de rijen (personen/partijen) is dat correct: het argument telt terecht mee.
+// Voor de kolommen (tags) is het dat niet -- die andere tags horen zelf niet
+// bij de selectie en mogen dus geen kolom worden (sourceList/detail) én niet
+// als "in selectie" (dus onopvallend/niet-gedimd) getoond worden in "focus"
+// (tagsInSelection). Beide plekken moeten daarom per tag filteren, niet per
+// argument -- gebruik hiervoor altijd deze functie, nooit een kale
+// `argument.tags.map(...)`/`.flatMap(...)`.
+function tagMatchesTagFilters(tag: Argument["tags"][number]): boolean {
+	const { tag: tagSel, labelgroep: labelgroepSel, perspectief: perspectiefSel } = filters.values;
+	if (tagSel.length && !tagSel.includes(tag.sleutel)) return false;
+	if (labelgroepSel.length && !labelgroepSel.includes(tag.labelgroep)) return false;
+	if (perspectiefSel.length && !perspectiefSel.includes(tag.perspectief)) return false;
+	return true;
+}
+
+const sourceList = computed(() => {
+	if (analysisMode.value !== "detail") return props.argumentList;
+	return filtered.value.map((a) => ({ ...a, tags: a.tags.filter(tagMatchesTagFilters) }));
+});
 
 // Referentie over het hele corpus: waar de tekens van de assen aan opgehangen
 // worden, zodat de kaart niet spiegelt terwijl je filtert.
@@ -212,7 +235,10 @@ const partyOfRow = computed(() => {
 const rowsInSelection = computed(
 	() => new Set(filtered.value.map((a) => (unit.value === "persoon" ? a.actor.name : a.actor.party ?? NO_PARTY))),
 );
-const tagsInSelection = computed(() => new Set(filtered.value.flatMap((a) => a.tags.map((t) => t.sleutel))));
+// Zie de invariant bij tagMatchesTagFilters hierboven.
+const tagsInSelection = computed(
+	() => new Set(filtered.value.flatMap((a) => a.tags.filter(tagMatchesTagFilters).map((t) => t.sleutel))),
+);
 
 const DIM = 0.15;
 
