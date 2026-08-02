@@ -964,7 +964,10 @@ const filterActive = computed(isActive);
 
 <template>
 	<section class="stats-panel">
-		<h2>Partijen &amp; tags (correspondentieanalyse)</h2>
+		<h2>
+			Partijen &amp; tags (correspondentieanalyse)
+			<a href="/about/#correspondentiekaart-methode" class="info-link" title="Hoe deze kaart tot stand komt" aria-label="Uitleg: hoe deze kaart tot stand komt">?</a>
+		</h2>
 		<p class="panel-note">
 			Rijen dicht bij elkaar gebruiken vergelijkbare soorten argumenten; een tag dicht bij een rij komt relatief vaak bij die rij
 			voor. Kleur geeft het perspectief van de tag aan. Alleen de vaakst toegekende tags houden hun naam in beeld; wijs een punt
