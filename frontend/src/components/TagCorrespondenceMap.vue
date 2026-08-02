@@ -4,7 +4,7 @@ import { useTheme } from "../lib/useTheme";
 import { displayPartyName, partyInitial } from "../lib/parties";
 import { logoSprite } from "../lib/partyLogoSprite";
 import { PERSPECTIEVEN } from "../lib/tagIcons.generated";
-import { isActive, matches, toggleValue } from "../lib/filters";
+import { filters, isActive, matches, toggleValue } from "../lib/filters";
 import { NO_PARTY, type Argument } from "../lib/types";
 import { alignSigns, buildCorrespondence, type Correspondence, type RowUnit } from "../lib/correspondence";
 import VChart from "vue-echarts";
@@ -47,7 +47,24 @@ const filtered = computed(() => props.argumentList.filter(matches));
 //   dus een filter dat te ver doorschiet laat de kaart netjes leeg lopen i.p.v.
 //   vast te lopen.
 const analysisMode = ref<"focus" | "detail">("focus");
-const sourceList = computed(() => (analysisMode.value === "detail" ? filtered.value : props.argumentList));
+
+// In "detail" filtert `filtered` al welke argumenten meedoen (een argument
+// telt mee zodra één van zijn tags aan een tag-dimensie voldoet), maar zonder
+// deze stap zou elk tag/labelgroep/perspectief van zo'n argument alsnog een
+// kolom worden -- ook tags buiten de selectie. Een labelgroep-filter moet de
+// kolommen dus ook tot die labelgroep(en) beperken, niet alleen de rijen.
+function tagMatchesTagFilters(tag: Argument["tags"][number]): boolean {
+	const { tag: tagSel, labelgroep: labelgroepSel, perspectief: perspectiefSel } = filters.values;
+	if (tagSel.length && !tagSel.includes(tag.sleutel)) return false;
+	if (labelgroepSel.length && !labelgroepSel.includes(tag.labelgroep)) return false;
+	if (perspectiefSel.length && !perspectiefSel.includes(tag.perspectief)) return false;
+	return true;
+}
+
+const sourceList = computed(() => {
+	if (analysisMode.value !== "detail") return props.argumentList;
+	return filtered.value.map((a) => ({ ...a, tags: a.tags.filter(tagMatchesTagFilters) }));
+});
 
 // Referentie over het hele corpus: waar de tekens van de assen aan opgehangen
 // worden, zodat de kaart niet spiegelt terwijl je filtert.
