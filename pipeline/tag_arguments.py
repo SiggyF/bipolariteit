@@ -310,7 +310,7 @@ def main():
     latencies = []
 
     for arg in arguments:
-        derived = assign_derived_tags(conn, arg["id"], arg["document_id"], arg["actor_id"], dry_run=args.dry_run)
+        derived = assign_derived_tags(conn, arg["id"], arg["document_id"], arg["actor_id"], dry_run=True)
         total_derived += len(derived)
 
         prompt = _build_prompt(
@@ -327,19 +327,18 @@ def main():
             elapsed = time.monotonic() - start
             logger.error("[arg %5d] %-25s FOUT na %5.1fs: %s", arg["id"], arg["actor_name"], elapsed, exc)
             total_errors += 1
-            if not args.dry_run:
-                conn.commit()
             continue
         elapsed = time.monotonic() - start
         latencies.append(elapsed)
 
         if not args.dry_run:
-            insert_llm_tags(conn, arg["id"], llm_tags)
-            conn.execute(
-                "UPDATE arguments SET tagged_at = ?, tag_prompt_version = ?, tag_model = ? WHERE id = ?",
-                (datetime.now(timezone.utc).isoformat(), PROMPT_VERSION, args.model, arg["id"]),
-            )
-            conn.commit()
+            with conn:
+                assign_derived_tags(conn, arg["id"], arg["document_id"], arg["actor_id"], dry_run=False)
+                insert_llm_tags(conn, arg["id"], llm_tags)
+                conn.execute(
+                    "UPDATE arguments SET tagged_at = ?, tag_prompt_version = ?, tag_model = ? WHERE id = ?",
+                    (datetime.now(timezone.utc).isoformat(), PROMPT_VERSION, args.model, arg["id"]),
+                )
 
         llm_sleutels = [sleutel for sleutel, _reden in llm_tags]
         total_llm += len(llm_tags)

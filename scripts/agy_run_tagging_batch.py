@@ -76,7 +76,7 @@ def main():
     latencies = []
 
     for arg in arguments:
-        derived = assign_derived_tags(conn, arg["id"], arg["document_id"], arg["actor_id"], dry_run=False)
+        derived = assign_derived_tags(conn, arg["id"], arg["document_id"], arg["actor_id"], dry_run=True)
         total_derived += len(derived)
 
         prompt = _build_prompt(
@@ -94,17 +94,17 @@ def main():
             elapsed = time.monotonic() - start
             print(f"[arg {arg['id']:>5}] {arg['actor_name']:<25} FOUT na {elapsed:5.1f}s: {exc}")
             total_errors += 1
-            conn.commit()
             continue
         elapsed = time.monotonic() - start
         latencies.append(elapsed)
 
-        insert_llm_tags(conn, arg["id"], accepted)
-        conn.execute(
-            "UPDATE arguments SET tagged_at = ?, tag_prompt_version = ?, tag_model = ? WHERE id = ?",
-            (datetime.now(timezone.utc).isoformat(), PROMPT_VERSION, args.model, arg["id"]),
-        )
-        conn.commit()
+        with conn:
+            assign_derived_tags(conn, arg["id"], arg["document_id"], arg["actor_id"], dry_run=False)
+            insert_llm_tags(conn, arg["id"], accepted)
+            conn.execute(
+                "UPDATE arguments SET tagged_at = ?, tag_prompt_version = ?, tag_model = ? WHERE id = ?",
+                (datetime.now(timezone.utc).isoformat(), PROMPT_VERSION, args.model, arg["id"]),
+            )
 
         total_llm += len(accepted)
         print(f"[arg {arg['id']:>5}] {arg['actor_name']:<25} {elapsed:5.1f}s | derived: {len(derived)} | llm: {[s for s, _ in accepted]}")

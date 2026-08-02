@@ -272,8 +272,10 @@ const GRID = { left: 40, right: 24, top: 56, bottom: 40 };
 const CAMERA_DISTANCE = 4;
 
 function project(coords: number[]): { x: number; y: number; depth: number; scale: number } {
-	if (!threeDimensional.value || coords.length < 3) return { x: coords[0], y: coords[1], depth: 0, scale: 1 };
-	const [x, y, z] = coords;
+	if (!threeDimensional.value) return { x: coords[0] ?? 0, y: coords[1] ?? 0, depth: 0, scale: 1 };
+	const x = coords[0] ?? 0;
+	const y = coords[1] ?? 0;
+	const z = coords[2] ?? 0;
 	const cy = Math.cos(yaw.value);
 	const sy = Math.sin(yaw.value);
 	const cp = Math.cos(pitch.value);
@@ -584,7 +586,7 @@ const chartOption = computed(() => {
 	// een expliciete "geen eenheid"-notatie is eerlijker dan er niets bij te
 	// zetten, zie issue #10.
 	const axisName = (k: number) =>
-		threeDimensional.value ? "" : `${AXIS_LETTERS[k]} (${c.inertiaPct[k]}% van de inertie) [ - ]`;
+		threeDimensional.value ? "" : `${AXIS_LETTERS[k]} (${c.inertiaPct[k] ?? 0}% van de inertie) [ - ]`;
 	const raster = threeDimensional.value ? { show: false } : axisStyle;
 	const hiddenAxis = {
 		axisLine: { show: !threeDimensional.value, ...axisStyle },
@@ -796,7 +798,7 @@ const chartOption = computed(() => {
 					value: [q.x, q.y],
 					label: {
 						show: true,
-						formatter: `${AXIS_LETTERS[k]} (${c.inertiaPct[k]}% van de inertie) [ - ]`,
+						formatter: `${AXIS_LETTERS[k]} (${c.inertiaPct[k] ?? 0}% van de inertie) [ - ]`,
 						color: muted.value,
 						fontSize: 10,
 						position: "top",
