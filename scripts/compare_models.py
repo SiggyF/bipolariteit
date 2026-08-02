@@ -9,8 +9,9 @@ reviewer aangewezen) documenten te hertesten.
 Gebruik:
     uv run python scripts/compare_models.py <model>
     uv run python scripts/compare_models.py <model> --doc-ids 56,95,103,150
+    uv run python scripts/compare_models.py <model> --base-url http://host.docker.internal:11434/v1
 """
-import sys
+import argparse
 import time
 
 from pipeline.db import db
@@ -20,10 +21,15 @@ DEFAULT_DOC_IDS = list(range(40, 55))
 
 
 def main():
-    model = sys.argv[1]
-    doc_ids = DEFAULT_DOC_IDS
-    if len(sys.argv) > 2 and sys.argv[2] == "--doc-ids":
-        doc_ids = [int(x) for x in sys.argv[3].split(",")]
+    parser = argparse.ArgumentParser()
+    parser.add_argument("model")
+    parser.add_argument("--doc-ids", default=None, help="komma-gescheiden document-id's, default 40-54")
+    parser.add_argument("--base-url", default="http://localhost:1234/v1")
+    args = parser.parse_args()
+
+    model = args.model
+    base_url = args.base_url
+    doc_ids = [int(x) for x in args.doc_ids.split(",")] if args.doc_ids else DEFAULT_DOC_IDS
 
     conn = db.connect()
     topic_row = conn.execute("SELECT id, name, description FROM topics WHERE slug = 'stikstof'").fetchone()
@@ -45,7 +51,9 @@ def main():
         prompt = _build_prompt(topic_name, topic_description, doc["actor_name"], doc["actor_party"], doc["content"])
         start = time.monotonic()
         try:
-            raw, usage = call_llm("http://localhost:1234/v1", model, prompt, "none", 120.0)
+            raw, usage, finish_reason = call_llm(base_url, model, prompt, "none", 400.0, 4000)
+            if finish_reason == "length":
+                raise ValueError("antwoord afgekapt op max_tokens=4000")
             parsed = _extract_json(raw)
         except Exception as exc:
             elapsed = time.monotonic() - start
