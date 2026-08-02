@@ -3,6 +3,7 @@ import { computed, onBeforeUnmount, onMounted, ref } from "vue";
 import type { Argument } from "../lib/types";
 import {
 	DIMENSIONS,
+	activeCount,
 	clearAll,
 	facetOptions,
 	filters,
@@ -22,6 +23,7 @@ const facets = computed(() => facetOptions(props.argumentList));
 
 const openFacet = ref<string | null>(null);
 const search = ref("");
+const mobileFiltersOpen = ref(false);
 
 function toggleFacet(key: string) {
 	openFacet.value = openFacet.value === key ? null : key;
@@ -64,7 +66,14 @@ function onDocumentPointerDown(e: PointerEvent) {
 }
 
 function onKeydown(e: KeyboardEvent) {
-	if (e.key === "Escape") openFacet.value = null;
+	if (e.key !== "Escape") return;
+	openFacet.value = null;
+	mobileFiltersOpen.value = false;
+}
+
+function closeMobileSheet() {
+	mobileFiltersOpen.value = false;
+	openFacet.value = null;
 }
 
 onMounted(() => {
@@ -84,6 +93,47 @@ onBeforeUnmount(() => {
 			<span class="filter-count">
 				<strong>{{ matchCount }}</strong> van {{ argumentList.length }} argumenten
 			</span>
+
+			<button
+				type="button"
+				class="filter-mobile-toggle"
+				:class="{ 'has-selection': isActive() }"
+				:aria-expanded="mobileFiltersOpen"
+				@click="mobileFiltersOpen = !mobileFiltersOpen"
+			>
+				Filters
+				<span v-if="activeCount()" class="facet-badge">{{ activeCount() }}</span>
+			</button>
+
+			<button v-if="isActive()" type="button" class="filter-clear" @click="clearAll()">alles wissen</button>
+		</div>
+
+		<ul v-if="chips.length || filters.van || filters.tot" class="filter-chips">
+			<li v-for="chip in chips" :key="`${chip.dimension}:${chip.value}`" class="filter-chip">
+				<span class="chip-dimension">{{ chip.dimensionLabel }}</span>
+				{{ chip.label }}
+				<button
+					type="button"
+					:aria-label="`filter ${chip.dimensionLabel} ${chip.label} verwijderen`"
+					@click="removeValue(chip.dimension, chip.value)"
+				>
+					×
+				</button>
+			</li>
+			<li v-if="filters.van || filters.tot" class="filter-chip">
+				<span class="chip-dimension">Datum</span>
+				{{ filters.van || "begin" }} t/m {{ filters.tot || "eind" }}
+				<button type="button" aria-label="datumfilter verwijderen" @click="setDateRange(null, null)">×</button>
+			</li>
+		</ul>
+
+		<div v-if="mobileFiltersOpen" class="filter-scrim" @click="closeMobileSheet()"></div>
+
+		<div class="facet-sheet" :class="{ 'is-open': mobileFiltersOpen }">
+			<div class="facet-sheet-header">
+				<span class="facet-sheet-title">Filters</span>
+				<button type="button" class="facet-sheet-close" aria-label="filters sluiten" @click="closeMobileSheet()">×</button>
+			</div>
 
 			<div class="filter-facets">
 				<button
@@ -109,59 +159,38 @@ onBeforeUnmount(() => {
 				</button>
 			</div>
 
-			<button v-if="isActive()" type="button" class="filter-clear" @click="clearAll()">alles wissen</button>
-		</div>
+			<div v-if="openFacet === 'datum'" class="facet-panel">
+				<label>
+					van
+					<input type="date" :value="filters.van" @change="setDateRange(($event.target as HTMLInputElement).value, filters.tot)" />
+				</label>
+				<label>
+					t/m
+					<input type="date" :value="filters.tot" @change="setDateRange(filters.van, ($event.target as HTMLInputElement).value)" />
+				</label>
+			</div>
 
-		<ul v-if="chips.length || filters.van || filters.tot" class="filter-chips">
-			<li v-for="chip in chips" :key="`${chip.dimension}:${chip.value}`" class="filter-chip">
-				<span class="chip-dimension">{{ chip.dimensionLabel }}</span>
-				{{ chip.label }}
-				<button
-					type="button"
-					:aria-label="`filter ${chip.dimensionLabel} ${chip.label} verwijderen`"
-					@click="removeValue(chip.dimension, chip.value)"
-				>
-					×
-				</button>
-			</li>
-			<li v-if="filters.van || filters.tot" class="filter-chip">
-				<span class="chip-dimension">Datum</span>
-				{{ filters.van || "begin" }} t/m {{ filters.tot || "eind" }}
-				<button type="button" aria-label="datumfilter verwijderen" @click="setDateRange(null, null)">×</button>
-			</li>
-		</ul>
-
-		<div v-if="openFacet === 'datum'" class="facet-panel">
-			<label>
-				van
-				<input type="date" :value="filters.van" @change="setDateRange(($event.target as HTMLInputElement).value, filters.tot)" />
-			</label>
-			<label>
-				t/m
-				<input type="date" :value="filters.tot" @change="setDateRange(filters.van, ($event.target as HTMLInputElement).value)" />
-			</label>
-		</div>
-
-		<div v-else-if="openFacet" class="facet-panel">
-			<p class="facet-hint">
-				Meerdere waarden binnen <strong>{{ labelFor(openFacet) }}</strong> gelden als &ldquo;of&rdquo;; verschillende
-				filtersoorten gelden samen als &ldquo;en&rdquo;.
-			</p>
-			<input v-model="search" type="search" class="facet-search" :placeholder="`zoek in ${labelFor(openFacet).toLowerCase()}…`" />
-			<ul class="facet-options">
-				<li v-for="option in visibleOptions" :key="option.value">
-					<label>
-						<input
-							type="checkbox"
-							:checked="isSelected(openFacet, option.value)"
-							@change="toggleValue(openFacet, option.value)"
-						/>
-						<span class="facet-option-label">{{ option.label }}</span>
-						<span class="facet-option-count">{{ option.count }}</span>
-					</label>
-				</li>
-				<li v-if="!visibleOptions.length" class="facet-empty">geen resultaten</li>
-			</ul>
+			<div v-else-if="openFacet" class="facet-panel">
+				<p class="facet-hint">
+					Meerdere waarden binnen <strong>{{ labelFor(openFacet) }}</strong> gelden als &ldquo;of&rdquo;; verschillende
+					filtersoorten gelden samen als &ldquo;en&rdquo;.
+				</p>
+				<input v-model="search" type="search" class="facet-search" :placeholder="`zoek in ${labelFor(openFacet).toLowerCase()}…`" />
+				<ul class="facet-options">
+					<li v-for="option in visibleOptions" :key="option.value">
+						<label>
+							<input
+								type="checkbox"
+								:checked="isSelected(openFacet, option.value)"
+								@change="toggleValue(openFacet, option.value)"
+							/>
+							<span class="facet-option-label">{{ option.label }}</span>
+							<span class="facet-option-count">{{ option.count }}</span>
+						</label>
+					</li>
+					<li v-if="!visibleOptions.length" class="facet-empty">geen resultaten</li>
+				</ul>
+			</div>
 		</div>
 	</div>
 </template>
