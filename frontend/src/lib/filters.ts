@@ -249,16 +249,49 @@ function syncToUrl() {
 	const params = toSearchParams();
 	const query = params.toString();
 	history.pushState(null, "", query ? `?${query}${location.hash}` : `${location.pathname}${location.hash}`);
+	persistToStorage(query);
 }
 
 function onPopState() {
 	applySearchParams(new URLSearchParams(location.search));
 }
 
-/** Leest de URL in de store en houdt beide daarna in sync. Bedoeld als één
- * aanroep bij het opzetten van de pagina, maar idempotent: HMR of een
- * hermontage van het island mag geen tweede popstate-listener opleveren, want
- * dan zou elke URL-wijziging dubbel verwerkt worden. */
+// --- persistentie over paginanavigaties heen -------------------------------
+
+// Deze site is een klassieke multi-page Astro-app (volle paginaladingen, geen
+// client-router), dus de reactive store zelf overleeft geen navigatie. Om
+// filters toch "autoscout24-achtig" over pagina's heen te laten gelden, bewaren
+// we de laatste querystring in localStorage en lezen we hem terug zodra een
+// nieuwe pagina met een lege URL start. Een pagina met een eigen querystring
+// (bv. een expliciete "?persoon=..."-link) is een bewuste keuze en overschrijft
+// de bewaarde filters volledig -- geen samenvoegen.
+const STORAGE_KEY = "bipolariteit-filters";
+
+function persistToStorage(query: string) {
+	if (typeof window === "undefined") return;
+	try {
+		if (query) window.localStorage.setItem(STORAGE_KEY, query);
+		else window.localStorage.removeItem(STORAGE_KEY);
+	} catch {
+		// localStorage kan ontbreken/geblokkeerd zijn (bv. privénavigatie); dan
+		// werkt filteren nog gewoon, alleen zonder persistentie.
+	}
+}
+
+function loadFromStorage(): string | null {
+	if (typeof window === "undefined") return null;
+	try {
+		return window.localStorage.getItem(STORAGE_KEY);
+	} catch {
+		return null;
+	}
+}
+
+/** Leest de URL (of, bij een lege URL, de bewaarde filters) in de store en
+ * houdt beide daarna in sync. Bedoeld als één aanroep bij het opzetten van de
+ * pagina, maar idempotent: HMR of een hermontage van het island mag geen
+ * tweede popstate-listener opleveren, want dan zou elke URL-wijziging dubbel
+ * verwerkt worden. */
 export function initFiltersFromUrl(argumentList: Argument[]) {
 	knownValues = new Map(
 		DIMENSIONS.map((dimension) => [
@@ -266,7 +299,17 @@ export function initFiltersFromUrl(argumentList: Argument[]) {
 			new Set(argumentList.flatMap((argument) => dimension.valuesOf(argument))),
 		]),
 	);
-	applySearchParams(new URLSearchParams(location.search));
+
+	if (location.search) {
+		applySearchParams(new URLSearchParams(location.search));
+	} else {
+		const stored = loadFromStorage();
+		if (stored) {
+			applySearchParams(new URLSearchParams(stored));
+			if (isActive()) syncToUrl();
+		}
+	}
+
 	// Zelfde functiereferentie, dus een tweede registratie is een no-op.
 	window.removeEventListener("popstate", onPopState);
 	window.addEventListener("popstate", onPopState);

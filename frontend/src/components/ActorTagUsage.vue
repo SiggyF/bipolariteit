@@ -12,6 +12,8 @@ import { slugify } from "../lib/slug";
 import { PERSPECTIEVEN } from "../lib/tagIcons.generated";
 import PartyLogo from "./PartyLogo.vue";
 import ArgumentCard from "./ArgumentCard.vue";
+import FilterBar from "./FilterBar.vue";
+import { initFiltersFromUrl, matches } from "../lib/filters";
 import type { Argument } from "../lib/types";
 
 use([CanvasRenderer, BarChart, TooltipComponent, GridComponent]);
@@ -27,6 +29,10 @@ const props = defineProps<{
 	argumentList: TopicTaggedArgument[];
 }>();
 
+initFiltersFromUrl(props.argumentList);
+
+const filteredList = computed(() => props.argumentList.filter(matches));
+
 // Zie issue #5: bij deze taggingvolumes heeft een individuele spreker vaak
 // maar 1-3 toekenningen van een tag. Op persoonsniveau vouwen we die samen
 // i.p.v. ze als ranglijst te tonen -- op partijniveau is het volume hoog
@@ -34,7 +40,7 @@ const props = defineProps<{
 const PERSON_TAG_THRESHOLD = 3;
 
 const tagRows = computed(() => {
-	const rows = deriveTagUsage(props.argumentList);
+	const rows = deriveTagUsage(filteredList.value);
 	return props.mode === "persoon" ? bucketSmallCounts(rows, PERSON_TAG_THRESHOLD) : rows;
 });
 
@@ -94,11 +100,11 @@ const chartOption = computed(() => ({
 
 const chartHeight = computed(() => `${Math.max(160, chartRows.value.length * 28 + 24)}px`);
 
-const totalArguments = computed(() => props.argumentList.length);
+const totalArguments = computed(() => filteredList.value.length);
 
 const perTopic = computed(() => {
 	const byTopic = new Map<string, { topicSlug: string; topicName: string; count: number }>();
-	for (const argument of props.argumentList) {
+	for (const argument of filteredList.value) {
 		const existing = byTopic.get(argument.topicSlug);
 		if (existing) existing.count += 1;
 		else byTopic.set(argument.topicSlug, { topicSlug: argument.topicSlug, topicName: argument.topicName, count: 1 });
@@ -114,12 +120,12 @@ function topicLink(topicSlug: string): string {
 const persons = computed(() => {
 	if (props.mode !== "partij") return [];
 	const counts = new Map<string, number>();
-	for (const argument of props.argumentList) counts.set(argument.actor.name, (counts.get(argument.actor.name) ?? 0) + 1);
+	for (const argument of filteredList.value) counts.set(argument.actor.name, (counts.get(argument.actor.name) ?? 0) + 1);
 	return [...counts.entries()].map(([person, count]) => ({ person, count })).sort((a, b) => b.count - a.count);
 });
 
 const exampleArguments = computed(() =>
-	[...props.argumentList]
+	[...filteredList.value]
 		.sort((a, b) => (b.document.published_at ?? "").localeCompare(a.document.published_at ?? ""))
 		.slice(0, 5),
 );
@@ -131,46 +137,55 @@ const exampleArguments = computed(() =>
 			<PartyLogo v-if="mode === 'partij'" :party="name" />
 			<h1>{{ mode === "partij" ? displayPartyName(name) : name }}</h1>
 		</header>
-		<p class="panel-note">{{ totalArguments }} argumenten in totaal, over {{ perTopic.length }} onderwerp(en).</p>
 
-		<section class="stats-panel">
-			<h2>Tags</h2>
-			<p class="panel-note">
-				Alleen LLM-toegekende tags.
-				<template v-if="mode === 'persoon'">
-					Tags met minder dan {{ PERSON_TAG_THRESHOLD }} toekenningen zijn samengevoegd tot "overig" -- bij deze
-					volumes zegt een enkele toekenning weinig.
-				</template>
-			</p>
-			<p v-if="!tagRows.length" class="panel-note">Geen getagde argumenten.</p>
-			<VChart v-else class="tag-usage-chart" :option="chartOption" :style="{ height: chartHeight }" autoresize />
-		</section>
+		<FilterBar :argumentList="argumentList" :matchCount="filteredList.length" />
 
-		<section class="stats-panel">
-			<h2>Per onderwerp</h2>
-			<ul class="card-grid">
-				<li v-for="topic in perTopic" :key="topic.topicSlug">
-					<a :href="topicLink(topic.topicSlug)" class="card-tile">
-						<span class="card-tile-name">{{ topic.topicName }}</span>
-						<span class="card-tile-count">{{ topic.count }} argumenten</span>
-					</a>
-				</li>
-			</ul>
-		</section>
+		<p v-if="!filteredList.length" class="no-results">
+			Geen argumenten voldoen aan dit filter. Verwijder een filter hierboven om er meer te zien.
+		</p>
 
-		<section v-if="mode === 'partij'" class="stats-panel">
-			<h2>Personen</h2>
-			<ul class="topic-breakdown">
-				<li v-for="row in persons" :key="row.person">
-					<a :href="`/persoon/${slugify(row.person)}/`">{{ row.person }}</a>
-					<span class="topic-count">{{ row.count }} argumenten</span>
-				</li>
-			</ul>
-		</section>
+		<template v-else>
+			<p class="panel-note">{{ totalArguments }} argumenten in totaal, over {{ perTopic.length }} onderwerp(en).</p>
 
-		<section class="stats-panel">
-			<h2>Voorbeeldargumenten</h2>
-			<ArgumentCard v-for="argument in exampleArguments" :key="argument.id" :argument="argument" :topic-slug="argument.topicSlug" />
-		</section>
+			<section class="stats-panel">
+				<h2>Tags</h2>
+				<p class="panel-note">
+					Alleen LLM-toegekende tags.
+					<template v-if="mode === 'persoon'">
+						Tags met minder dan {{ PERSON_TAG_THRESHOLD }} toekenningen zijn samengevoegd tot "overig" -- bij deze
+						volumes zegt een enkele toekenning weinig.
+					</template>
+				</p>
+				<p v-if="!tagRows.length" class="panel-note">Geen getagde argumenten.</p>
+				<VChart v-else class="tag-usage-chart" :option="chartOption" :style="{ height: chartHeight }" autoresize />
+			</section>
+
+			<section class="stats-panel">
+				<h2>Per onderwerp</h2>
+				<ul class="card-grid">
+					<li v-for="topic in perTopic" :key="topic.topicSlug">
+						<a :href="topicLink(topic.topicSlug)" class="card-tile">
+							<span class="card-tile-name">{{ topic.topicName }}</span>
+							<span class="card-tile-count">{{ topic.count }} argumenten</span>
+						</a>
+					</li>
+				</ul>
+			</section>
+
+			<section v-if="mode === 'partij'" class="stats-panel">
+				<h2>Personen</h2>
+				<ul class="topic-breakdown">
+					<li v-for="row in persons" :key="row.person">
+						<a :href="`/persoon/${slugify(row.person)}/`">{{ row.person }}</a>
+						<span class="topic-count">{{ row.count }} argumenten</span>
+					</li>
+				</ul>
+			</section>
+
+			<section class="stats-panel">
+				<h2>Voorbeeldargumenten</h2>
+				<ArgumentCard v-for="argument in exampleArguments" :key="argument.id" :argument="argument" :topic-slug="argument.topicSlug" />
+			</section>
+		</template>
 	</section>
 </template>
