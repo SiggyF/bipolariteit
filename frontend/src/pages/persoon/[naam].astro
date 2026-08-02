@@ -29,16 +29,21 @@ export function getStaticPaths() {
 	}));
 }
 
-const { name } = Astro.props;
-const argumentList = allArguments().filter((a: any) => a.actor.name === name);
+const { naam } = Astro.params;
+const allArgs = allArguments();
+const name =
+	Astro.props.name ??
+	allArgs.find((a: any) => slugify(a.actor.name) === naam)?.actor.name;
+
+const argumentList = allArgs.filter((a: any) => a.actor.name === name);
 const party = argumentList.find((a: any) => a.actor.party)?.actor.party ?? null;
 ---
 
-<BaseLayout title={`${name} — Bipolariteit`}>
+<BaseLayout title={`${name || "Persoon"} — Bipolariteit`}>
 	{party && party !== NO_PARTY ? (
 		<a href={`/partij/${slugify(party)}/`} class="back-link">&larr; {displayPartyName(party)}</a>
 	) : (
 		<a href="/persoon/" class="back-link">&larr; alle personen</a>
 	)}
-	<ActorTagUsage name={name} mode="persoon" argumentList={argumentList} client:only="vue" />
+	{name && <ActorTagUsage name={name} mode="persoon" argumentList={argumentList} client:only="vue" />}
 </BaseLayout>
