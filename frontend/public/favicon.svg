@@ -9,6 +9,6 @@
 	</style>
 	<ellipse cx="35" cy="30" rx="30" ry="13" transform="rotate(-15 35 30)" class="bipolar-stroke" stroke-width="2.5" />
 	<ellipse cx="65" cy="30" rx="30" ry="13" transform="rotate(15 65 30)" class="bipolar-stroke" stroke-width="2.5" />
-	<circle cx="6" cy="22.25" r="5" class="bipolar-fill" />
-	<circle cx="94" cy="37.75" r="5" class="bipolar-fill" />
+	<circle cx="7" cy="39" r="5" class="bipolar-fill" />
+	<circle cx="93" cy="39" r="5" class="bipolar-fill" />
 </svg>
