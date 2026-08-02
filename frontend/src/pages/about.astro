@@ -1,5 +1,107 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import { deriveTagUsage, type TagUsageRow } from "../lib/aggregate";
+import { analyseTable, canonicalSigns } from "../lib/correspondence";
+import { ICOON_PAD, PERSPECTIEVEN } from "../lib/tagIcons.generated";
+import { tagIconPath } from "../lib/tagIcon";
+import type { Argument } from "../lib/types";
+
+// Alle argumenten over alle onderwerpen heen, alleen om het taxonomie-
+// overzicht hieronder te vullen -- zelfde bron en aggregatiefunctie als de
+// tag-grafieken elders op de site (deriveTagUsage telt alleen LLM-toegekende
+// tags, zie aggregate.ts).
+const topicModules = import.meta.glob("../../../data/export/topics/*.json", { eager: true }) as Record<
+	string,
+	{ default: { arguments: Argument[] } }
+>;
+const allArguments = Object.values(topicModules).flatMap((mod) => mod.default.arguments);
+const tagUsage = new Map(deriveTagUsage(allArguments).map((row) => [row.sleutel, row]));
+
+// Labelgroep-volgorde per perspectief herleiden uit de taxonomie-volgorde in
+// tagIcons.generated.ts (zelf gegenereerd uit data/tags.toml) i.p.v. die
+// groepering nog een keer los te dupliceren -- de frontend leest tags.toml
+// bewust niet rechtstreeks (zie lib/types.ts). Tags zonder toekenning in de
+// huidige data blijven buiten beeld: dit overzicht toont de taxonomie zoals
+// ze daadwerkelijk gebruikt wordt, niet als lege belofte.
+const taxonomie = PERSPECTIEVEN.map((perspectief) => {
+	const labelgroepOrder: string[] = [];
+	const labelgroepTags = new Map<string, TagUsageRow[]>();
+	for (const sleutel of Object.keys(perspectief.tags)) {
+		const row = tagUsage.get(sleutel);
+		if (!row) continue;
+		if (!labelgroepTags.has(row.labelgroep)) {
+			labelgroepTags.set(row.labelgroep, []);
+			labelgroepOrder.push(row.labelgroep);
+		}
+		labelgroepTags.get(row.labelgroep)!.push(row);
+	}
+	return {
+		naam: perspectief.naam,
+		kleur: perspectief.kleur,
+		icoon: perspectief.icoon,
+		labelgroepen: labelgroepOrder.map((naam) => ({ naam, tags: labelgroepTags.get(naam)! })),
+	};
+}).filter((p) => p.labelgroepen.length > 0);
+
+// Mini-CA-voorbeeld bij de uitleg hieronder: een echte 3x3-uitsnede uit de
+// huidige data (zie de aantallen in de tabel), met dezelfde wiskunde als de
+// kaart zelf (lib/correspondence.ts) i.p.v. een los plaatje -- verandert de
+// data, dan verschuift dit voorbeeld gewoon mee bij de volgende build.
+const caExampleRows = ["BBB", "D66", "SGP"];
+const caExampleTags = ["Ideologie-GAL", "Ideologie-TAN", "Moraliteit-Autoriteit"];
+const caExampleCounts = [
+	[7, 146, 87],
+	[166, 0, 42],
+	[1, 85, 19],
+];
+const caExampleKleur =
+	PERSPECTIEVEN.find((p) => caExampleTags.every((t) => t in p.tags))?.kleur ?? "#B15E4A";
+
+const caExampleResult = analyseTable(caExampleCounts, 2)!;
+const caExample = canonicalSigns({
+	inertiaPct: caExampleResult.inertiaPct,
+	nComponents: caExampleResult.nComponents,
+	unit: "partij",
+	rows: caExampleRows.map((label, i) => ({
+		label,
+		coords: caExampleResult.F[i],
+		n: caExampleCounts[i].reduce((a, b) => a + b, 0),
+	})),
+	tags: caExampleTags.map((sleutel, j) => ({
+		sleutel,
+		beschrijving: "",
+		labelgroep: "",
+		perspectief: "",
+		coords: caExampleResult.G[j],
+		n: 0,
+	})),
+});
+
+// Vaste, gelijke schaal op beide assen (geen aparte x/y-stretch) -- dat toont
+// eerlijk dat dim. 2 hier nauwelijks meetelt (3,4% inertie), i.p.v. de tweede
+// as kunstmatig op te blazen tot iets wat evenveel gewicht lijkt te hebben.
+const CA_SCALE = 130;
+const CA_CX = 180;
+const CA_CY = 150;
+function caPoint(coords: number[]) {
+	return { x: CA_CX + coords[0] * CA_SCALE, y: CA_CY - coords[1] * CA_SCALE };
+}
+
+// Handmatige labelposities: bij deze specifieke tabel liggen Ideologie-TAN
+// vlak bij SGP en Moraliteit-Autoriteit vlak bij BBB (zie de toelichting
+// erboven), dus een vaste "boven het punt"/"onder het punt"-regel voor alle
+// labels zou twee paren over elkaar heen leggen.
+type CaLabelOffset = { dx: number; dy: number; anchor: "start" | "middle" | "end" };
+const CA_TAG_LABEL_OFFSET: Record<string, CaLabelOffset> = {
+	"Ideologie-GAL": { dx: 0, dy: -11, anchor: "middle" },
+	"Ideologie-TAN": { dx: 0, dy: 18, anchor: "middle" },
+	"Moraliteit-Autoriteit": { dx: 9, dy: 18, anchor: "start" },
+};
+const CA_ROW_LABEL_OFFSET: Record<string, CaLabelOffset> = {
+	BBB: { dx: -9, dy: 4, anchor: "end" },
+	D66: { dx: 0, dy: 20, anchor: "middle" },
+	SGP: { dx: 0, dy: -12, anchor: "middle" },
+};
 ---
 
 <BaseLayout title="Over dit platform — Bipolariteit" class="about">
@@ -62,12 +164,60 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 				verbetert nog met de tijd, en je kunt op elke kaart feedback geven als iets niet klopt.
 			</p>
 
-			<div class="pipeline-diagram">
-				<img
-					src="/pipeline-workflow.svg"
-					alt="Workflow: Tweede Kamer-bron → crawlen → segmenteren → Stage 1 argumenten extraheren → tags toekennen → Stage 2 redactie-check → steekproefcontrole en validatierapport → export → frontend-build → bipolariteit.org, met de About-pagina die per stap het gebruikte model en de promptversie toont."
-				/>
-			</div>
+			<ol class="workflow" role="list">
+				<li class="workflow-step">
+					<p class="workflow-step-title"><span class="workflow-step-index">1</span> Crawlen</p>
+					<p class="workflow-step-detail">
+						Debatverslagen worden opgehaald bij de open data van de Tweede Kamer. Geen LLM, dus dit mag
+						altijd draaien.
+					</p>
+				</li>
+				<li class="workflow-arrow" aria-hidden="true">↓</li>
+				<li class="workflow-step">
+					<p class="workflow-step-title"><span class="workflow-step-index">2</span> Segmenteren</p>
+					<p class="workflow-step-detail">Eén verslag (een heel debat) wordt opgeknipt per sprekerbeurt.</p>
+				</li>
+				<li class="workflow-arrow" aria-hidden="true">↓</li>
+				<li class="workflow-step">
+					<p class="workflow-step-title"><span class="workflow-step-index">3</span> Stage 1 — argumenten extraheren</p>
+					<p class="workflow-step-detail">
+						Een lokaal LLM haalt per sprekerbeurt 0 of meer argumenten eruit: standpunt, typologie,
+						citaat, eventuele claims.
+					</p>
+				</li>
+				<li class="workflow-arrow" aria-hidden="true">↓</li>
+				<li class="workflow-step">
+					<p class="workflow-step-title"><span class="workflow-step-index">3b</span> Tags toekennen</p>
+					<p class="workflow-step-detail">
+						Tags uit de taxonomie hieronder worden toegekend — drie labelgroepen deterministisch, de
+						rest via hetzelfde lokale LLM.
+					</p>
+				</li>
+				<li class="workflow-arrow" aria-hidden="true">↓</li>
+				<li class="workflow-step">
+					<p class="workflow-step-title"><span class="workflow-step-index">4</span> Stage 2 — redactie-check</p>
+					<p class="workflow-step-detail">
+						Een bias-balanssnapshot per document plus een koppeling naar tegenargumenten. Geen
+						feitelijke-juistheidscheck.
+					</p>
+				</li>
+				<li class="workflow-arrow" aria-hidden="true">↓</li>
+				<li class="workflow-step">
+					<p class="workflow-step-title"><span class="workflow-step-index">5</span> Steekproefcontrole</p>
+					<p class="workflow-step-detail">
+						Vóór elke publicatieronde herbeoordelen een mens en Gemini een representatieve
+						steekproef; de resultaten staan in de <a href="/validatie-rapportage">validatie-rapportage</a>.
+					</p>
+				</li>
+				<li class="workflow-arrow" aria-hidden="true">↓</li>
+				<li class="workflow-step">
+					<p class="workflow-step-title"><span class="workflow-step-index">6</span> Export &amp; publicatie</p>
+					<p class="workflow-step-detail">
+						De resultaten worden geëxporteerd en de site wordt daarop statisch gebouwd, zonder server of
+						eigen database.
+					</p>
+				</li>
+			</ol>
 
 			<h2>Beschrijvende tags, geen oordeel</h2>
 			<p>
@@ -79,6 +229,274 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 				stance/typologie en kan foutgevoeliger zijn bij subtiele gevallen — zie de validatie-rapportage
 				hieronder voor de laatste steekproefresultaten.
 			</p>
+			<p>
+				De taxonomie is verdeeld in vier perspectieven, elk met een eigen kleur die overal op de site
+				hetzelfde blijft (correspondentiekaart, tag-grafieken, hieronder). Dit overzicht toont elke tag die
+				op dit moment ergens is toegekend, met beschrijving en het aantal toekenningen over alle
+				onderwerpen heen.
+			</p>
+
+			<div class="tag-taxonomy">
+				{
+					taxonomie.map((perspectief) => (
+						<div class="tag-taxonomy-perspectief" style={`--tag-taxonomy-accent: ${perspectief.kleur}`}>
+							<div class="tag-taxonomy-perspectief-header">
+								<svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke={perspectief.kleur} stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+									<path d={ICOON_PAD[perspectief.icoon]} />
+								</svg>
+								<h3>{perspectief.naam}</h3>
+							</div>
+							{perspectief.labelgroepen.map((labelgroep) => (
+								<div class="tag-taxonomy-labelgroep">
+									<span class="tag-taxonomy-labelgroep-name">{labelgroep.naam}</span>
+									<div class="tag-taxonomy-tags">
+										{labelgroep.tags.map((tag) => (
+											<div class="tag-card">
+												{tagIconPath(tag.sleutel) && (
+													<svg
+														class="tag-card-icon"
+														viewBox="0 0 24 24"
+														width="20"
+														height="20"
+														fill="none"
+														stroke={perspectief.kleur}
+														stroke-width="2"
+														stroke-linecap="round"
+														stroke-linejoin="round"
+													>
+														<path d={tagIconPath(tag.sleutel)!} />
+													</svg>
+												)}
+												<div class="tag-card-body">
+													<div class="tag-card-head">
+														<span class="tag-card-sleutel">{tag.sleutel}</span>
+														<span class="tag-card-count">{tag.count}x</span>
+													</div>
+													<span class="tag-card-beschrijving">{tag.beschrijving}</span>
+												</div>
+											</div>
+										))}
+									</div>
+								</div>
+							))}
+						</div>
+					))
+				}
+			</div>
+
+			<h2 id="correspondentiekaart-methode">Wat is een correspondentiekaart?</h2>
+			<p>
+				Elke topicpagina toont een <strong>correspondentiekaart</strong>: partijen (of personen) en tags
+				samen in één plaatje. Punten die dicht bij elkaar staan, horen bij elkaar — twee partijen dicht bij
+				elkaar gebruiken vergelijkbare soorten argumenten, twee tags dicht bij elkaar worden vaak samen
+				toegekend. Een tag dicht bij een partij betekent dat die partij die tag relatief vaak gebruikt, niet
+				per se vaker dan andere partijen in absolute aantallen, maar relatief tot haar eigen totaal.
+			</p>
+			<p>
+				De kaart is interactief: klik op een punt om erop te filteren, of wissel bovenaan de kaart tussen
+				partijen en personen als rijen. Ze draait volledig in de browser (de techniek heet <em>correspondentieanalyse</em>,
+				afgekort CA), zodat ze live meebeweegt met het filter bovenaan de pagina.
+			</p>
+
+			<h3>Hoe de kaart tot stand komt</h3>
+			<p>
+				We beginnen met een voorbeeld: een echte uitsnede uit de huidige data (drie partijen, drie tags — de
+				volledige kaart gebruikt alle partijen/personen en alle toegekende tags tegelijk). Deze drie tags:
+			</p>
+
+			<div class="ca-example-tag-chips">
+				{
+					caExampleTags.map((sleutel) => (
+						<div class="tag-card">
+							{tagIconPath(sleutel) && (
+								<svg
+									class="tag-card-icon"
+									viewBox="0 0 24 24"
+									width="20"
+									height="20"
+									fill="none"
+									stroke={caExampleKleur}
+									stroke-width="2"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+								>
+									<path d={tagIconPath(sleutel)!} />
+								</svg>
+							)}
+							<div class="tag-card-body">
+								<span class="tag-card-sleutel">{sleutel}</span>
+								<span class="tag-card-beschrijving">{tagUsage.get(sleutel)?.beschrijving}</span>
+							</div>
+						</div>
+					))
+				}
+			</div>
+
+			<div class="table-scroll">
+				<table class="party-table ca-example-table">
+					<thead>
+						<tr>
+							<th scope="col">Partij</th>
+							<th scope="col">Ideologie-GAL</th>
+							<th scope="col">Ideologie-TAN</th>
+							<th scope="col">Moraliteit-Autoriteit</th>
+							<th scope="col">Rijtotaal</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<th scope="row">BBB</th>
+							<td>7</td>
+							<td>146</td>
+							<td>87</td>
+							<td>240</td>
+						</tr>
+						<tr>
+							<th scope="row">D66</th>
+							<td>166</td>
+							<td>0</td>
+							<td>42</td>
+							<td>208</td>
+						</tr>
+						<tr>
+							<th scope="row">SGP</th>
+							<td>1</td>
+							<td>85</td>
+							<td>19</td>
+							<td>105</td>
+						</tr>
+						<tr>
+							<th scope="row">Tagtotaal</th>
+							<td>174</td>
+							<td>231</td>
+							<td>148</td>
+							<td>553</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<p>
+				D66 gebruikt Ideologie-GAL in 166 van de 208 toekenningen (80%) en Ideologie-TAN vrijwel nooit. BBB
+				en SGP zijn het spiegelbeeld: samen goed voor 231 van de 231 Ideologie-TAN-toekenningen en nauwelijks
+				Ideologie-GAL. Moraliteit-Autoriteit wijst niet zomaar naar dezelfde plek als Ideologie-TAN: BBB
+				gebruikt die tag relatief vaker (87 van de 240, 36%) dan SGP (19 van de 105, 18%) — een nuance die in
+				een kale TAN/GAL-indeling verloren zou gaan.
+			</p>
+
+			<p>
+				Correspondentieanalyse (CA) zet dat soort verschil om in een positie op de kaart. Toegepast op precies
+				deze tabel (zonder de weergave-compressie uit de laatste stap hieronder — bij drie rijen en drie tags
+				is er nog niets te comprimeren):
+			</p>
+
+			<div class="ca-example-chart">
+				<svg viewBox="0 0 460 300" role="img" aria-label={`Correspondentiekaart van het voorbeeld: D66 (${caExample.rows[1].coords[0].toFixed(2)}, ${caExample.rows[1].coords[1].toFixed(2)}) staat ver van BBB (${caExample.rows[0].coords[0].toFixed(2)}, ${caExample.rows[0].coords[1].toFixed(2)}) en SGP (${caExample.rows[2].coords[0].toFixed(2)}, ${caExample.rows[2].coords[1].toFixed(2)}), die dicht bij elkaar en bij Ideologie-TAN clusteren; D66 staat dicht bij Ideologie-GAL.`}>
+					<line x1={CA_CX} y1="10" x2={CA_CX} y2="290" class="ca-example-axis" />
+					<line x1="10" y1={CA_CY} x2="450" y2={CA_CY} class="ca-example-axis" />
+					<text x={CA_CX + 4} y="22" class="ca-example-axis-label">dim. 2 ({caExample.inertiaPct[1]}%)</text>
+					<text x="446" y={CA_CY - 6} class="ca-example-axis-label" text-anchor="end">dim. 1 ({caExample.inertiaPct[0]}%)</text>
+
+					{
+						caExample.tags.map((tag) => {
+							const p = caPoint(tag.coords);
+							// Labels met de hand gepositioneerd (niet één uniforme "boven het
+							// punt"-regel): Ideologie-TAN en Moraliteit-Autoriteit liggen zo dicht
+							// bij respectievelijk SGP en BBB dat een vaste regel de labels over
+							// elkaar heen zou leggen.
+							const label = CA_TAG_LABEL_OFFSET[tag.sleutel] ?? { dx: 0, dy: -11, anchor: "middle" as const };
+							return (
+								<g>
+									<rect x={p.x - 5} y={p.y - 5} width="10" height="10" transform={`rotate(45 ${p.x} ${p.y})`} fill={caExampleKleur} />
+									<text x={p.x + label.dx} y={p.y + label.dy} class="ca-example-point-label ca-example-tag-label" text-anchor={label.anchor}>
+										{tag.sleutel}
+									</text>
+								</g>
+							);
+						})
+					}
+					{
+						caExample.rows.map((row) => {
+							const p = caPoint(row.coords);
+							const label = CA_ROW_LABEL_OFFSET[row.label] ?? { dx: 0, dy: 20, anchor: "middle" as const };
+							return (
+								<g>
+									<circle cx={p.x} cy={p.y} r="6" class="ca-example-row-point" />
+									<text x={p.x + label.dx} y={p.y + label.dy} class="ca-example-point-label" text-anchor={label.anchor}>
+										{row.label}
+									</text>
+								</g>
+							);
+						})
+					}
+				</svg>
+				<p class="ca-example-chart-caption">
+					Ruit = tag, cirkel = partij. Resultaat: D66 komt ver van BBB en SGP te liggen, dicht bij
+					Ideologie-GAL; BBB en SGP clusteren aan de Ideologie-TAN-kant, met BBB net iets dichter bij
+					Moraliteit-Autoriteit dan SGP.
+				</p>
+			</div>
+
+			<p>Dat gebeurt in zes stappen:</p>
+
+			<ol class="workflow" role="list">
+				<li class="workflow-step">
+					<p class="workflow-step-title"><span class="workflow-step-index">1</span> Tellen</p>
+					<p class="workflow-step-detail">
+						Voor elke combinatie van rij (partij of persoon) en tag: hoeveel argumenten hebben die
+						combinatie? Dat leverde de tabel hierboven op. Alleen LLM-toegekende tags tellen mee — de
+						drie deterministisch afgeleide labelgroepen staan bij vrijwel elk argument en zouden geen
+						signaal toevoegen. Rijen en tags met te weinig toekenningen vallen weg; onder drie rijen of
+						drie tags stopt de analyse (te weinig voor een zinnige uitspraak).
+					</p>
+				</li>
+				<li class="workflow-arrow" aria-hidden="true">↓</li>
+				<li class="workflow-step">
+					<p class="workflow-step-title"><span class="workflow-step-index">2</span> Afwijking van "geen verband"</p>
+					<p class="workflow-step-detail">
+						Elke cel wordt vergeleken met wat je zou verwachten als rij en tag niets met elkaar te
+						maken hadden (rijgrootte × tagpopulariteit). Wat overblijft is een tabel met residuen: hoe
+						sterk, en in welke richting, wijkt elke combinatie af van dat neutrale nulpunt.
+					</p>
+				</li>
+				<li class="workflow-arrow" aria-hidden="true">↓</li>
+				<li class="workflow-step">
+					<p class="workflow-step-title"><span class="workflow-step-index">3</span> Assen zoeken (SVD)</p>
+					<p class="workflow-step-detail">
+						Een singuliere-waardenontbinding vindt de assen waarlangs die afwijkingen het sterkst
+						uiteenlopen. De eerste assen vangen het meeste patroon — hun aandeel staat als
+						percentage (verklaarde inertie) bij elke as op de kaart.
+					</p>
+				</li>
+				<li class="workflow-arrow" aria-hidden="true">↓</li>
+				<li class="workflow-step">
+					<p class="workflow-step-title"><span class="workflow-step-index">4</span> Coördinaten</p>
+					<p class="workflow-step-detail">
+						Rijen én tags krijgen allebei een positie op diezelfde assen. Daardoor is de afstand
+						tussen twee rijen onderling, en tussen twee tags onderling, interpreteerbaar — maar de
+						afstand van een rij tot een tag alleen richtinggewijs, niet als letterlijke maat.
+					</p>
+				</li>
+				<li class="workflow-arrow" aria-hidden="true">↓</li>
+				<li class="workflow-step">
+					<p class="workflow-step-title"><span class="workflow-step-index">5</span> Tekenconventie</p>
+					<p class="workflow-step-detail">
+						De ontbinding uit stap 3 legt geen teken vast: een as mag zonder betekenisverschil
+						spiegelen. Zonder correctie zou de kaart dus willekeurig links-rechts of boven-onder
+						omklappen zodra er nieuwe data bijkomt. Een vaste oriëntatieregel voorkomt dat.
+					</p>
+				</li>
+				<li class="workflow-arrow" aria-hidden="true">↓</li>
+				<li class="workflow-step">
+					<p class="workflow-step-title"><span class="workflow-step-index">6</span> Weergave-compressie</p>
+					<p class="workflow-step-detail">
+						Eén zeldzame tag kan een afstand tot de kern hebben die de rest van de puntenwolk tot een
+						vlekje samenperst. Vlak vóór het tekenen worden dat soort uitschieters radiaal naar de
+						kern getrokken (richting blijft gelijk). Dit is puur een weergavetruc, ná de echte
+						analyse: afstanden op de kaart zijn daardoor geen letterlijke chi-kwadraatafstanden meer —
+						alleen richting en relatieve volgorde blijven behouden.
+					</p>
+				</li>
+			</ol>
 
 			<h2>Transparantie &amp; reproduceerbaarheid</h2>
 			<p>
@@ -88,21 +506,19 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 			<ul>
 				<li>
 					<strong>Modellen &amp; promptversies.</strong> Extractie (Stage 1), tagging (Stage 1b) en de
-					redactie-balanscheck (Stage 2) draaien lokaal via een open-source model (momenteel
-					<code>qwen/qwen3.6-27b</code>); validatiesteekproeven gebruiken daarnaast Gemini als tweede
-					beoordelaar. Elke prompt-versie wordt gehasht en per document/argument opgeslagen
-					(<code>extraction_prompt_version</code>/<code>prompt_version</code> in de database), zodat
-					een prompt- of modelwijziging altijd traceerbaar is.
+					redactie-balanscheck (Stage 2) draaien lokaal via een open-source model (momenteel <code>qwen/qwen3.6-27b</code>);
+					validatiesteekproeven gebruiken daarnaast Gemini als tweede beoordelaar. Van elk argument wordt
+					bijgehouden met welke promptversie het gemaakt is, zodat een prompt- of modelwijziging altijd
+					traceerbaar is.
 				</li>
 				<li>
 					<strong>Validatie-rapportage.</strong> Vóór elke publicatieronde wordt een representatieve
-					steekproef per onderwerp handmatig + door een tweede LLM herbeoordeeld. Zie de
-					<a href="/validatie-rapportage">validatie-rapportage</a> voor de laatste resultaten
-					(foutpercentage en systematische patronen per stage).
+					steekproef per onderwerp handmatig + door een tweede LLM herbeoordeeld. Zie de <a href="/validatie-rapportage">validatie-rapportage</a> voor
+					de laatste resultaten (foutpercentage en systematische patronen per stage).
 				</li>
 				<li>
-					<strong>Open werkwijze.</strong> De volledige pipeline, prompts en taxonomie zijn onderdeel
-					van de broncode van dit platform — niets hiervan is een black box.
+					<strong>Open werkwijze.</strong> De volledige pipeline, prompts en taxonomie staan in de broncode
+					van dit platform, niet alleen in deze uitleg. Zie de <a href="https://github.com/SiggyF/bipolariteit">broncode op GitHub</a>.
 				</li>
 			</ul>
 </BaseLayout>

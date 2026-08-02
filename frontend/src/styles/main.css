@@ -275,6 +275,15 @@ h2 {
 	text-wrap: balance;
 }
 
+h3 {
+	font-family: var(--font-heading);
+	font-weight: 700;
+	font-size: var(--step-1);
+	line-height: 1.3;
+	text-wrap: balance;
+	margin: var(--space-3) 0 var(--space-1);
+}
+
 .intro {
 	color: var(--color-muted);
 	font-size: var(--step-1);
@@ -353,10 +362,9 @@ h2 {
 	font-family: var(--font-heading);
 	font-style: italic;
 	font-size: var(--step-2);
-	max-width: 40ch;
-	margin: var(--space-3) auto;
+	max-width: 65ch;
+	margin: var(--space-3) 0;
 	padding: var(--space-2) 0;
-	text-align: center;
 	border-top: 1px solid var(--color-border);
 	border-bottom: 1px solid var(--color-border);
 }
@@ -606,6 +614,30 @@ h2 {
 .stats-panel h2 {
 	font-size: var(--step-1);
 	margin: 0 0 var(--space-1);
+}
+
+/* Klein rondje naast een kaarttitel, linkt naar de methode-uitleg op de
+   About-pagina i.p.v. die uitleg (opnieuw) op de topicpagina zelf te zetten. */
+.info-link {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 1.1rem;
+	height: 1.1rem;
+	margin-left: 0.3rem;
+	border: 1px solid var(--color-border);
+	border-radius: 50%;
+	color: var(--color-muted);
+	font-family: var(--font-body);
+	font-size: 0.7rem;
+	font-weight: 700;
+	text-decoration: none;
+	vertical-align: middle;
+}
+
+.info-link:hover {
+	border-color: var(--color-accent);
+	color: var(--color-accent);
 }
 
 .claims-highlights {
@@ -1457,19 +1489,238 @@ h2 {
 	cursor: not-allowed;
 }
 
-.pipeline-diagram {
+/* Stap-voor-stap workflow ("hoe komt dit tot stand"), voor de About-pagina.
+   Vervangt een eerder d2-gerenderde SVG: die had eigen kleuren en een vaste
+   pixelbreedte die niet meebogen met het newsprint-thema of donkere modus, en
+   was op mobiel nauwelijks leesbaar. Platte HTML/CSS met dezelfde kaart- en
+   typografiestijl als de rest van de site schaalt wel mee. */
+/* .about li::before draws a dash marker for regular body lists; the workflow
+   is its own list type (numbered step boxes + arrows) and opts out of both
+   that marker and the browser's own <ol> numbering/indent. */
+.workflow {
+	list-style: none;
 	margin: var(--space-3) 0;
-	padding: var(--space-2);
-	background: var(--color-card-bg);
-	border: 1px solid var(--color-border);
-	overflow-x: auto;
+	padding: 0;
+	max-width: 65ch;
+	display: flex;
+	flex-direction: column;
 }
 
-.pipeline-diagram img {
+.about .workflow-step::before,
+.about .workflow-arrow::before {
+	content: none;
+}
+
+/* Zelfde leesbreedte als de rest van de lopende tekst op de About-pagina --
+   zonder dit trekt .table-scroll (elders bewust edge-to-edge binnen een
+   bredere pagina) breder dan de omringende alinea's. */
+.about .table-scroll {
+	max-width: 65ch;
+}
+
+/* Statisch, uitgerekend kaartje bij het CA-voorbeeld -- platte SVG i.p.v. een
+   ECharts-island, want de data staat vast (drie rijen, drie tags) en hoeft
+   niet interactief te zijn zoals de echte kaart op de topicpagina's. */
+.ca-example-chart {
+	max-width: 65ch;
+	margin: var(--space-3) 0;
+	padding: var(--space-2);
+	border: 1px solid var(--color-border);
+	background: var(--color-card-bg);
+}
+
+.ca-example-chart svg {
 	display: block;
-	max-width: 100%;
+	width: 100%;
 	height: auto;
-	margin: 0 auto;
+}
+
+.ca-example-axis {
+	stroke: var(--color-border);
+	stroke-width: 1;
+}
+
+.ca-example-axis-label {
+	fill: var(--color-muted);
+	font-family: var(--font-mono);
+	font-size: 10px;
+}
+
+.ca-example-row-point {
+	fill: var(--color-accent);
+}
+
+.ca-example-point-label {
+	fill: var(--color-text);
+	font-family: var(--font-body);
+	font-size: 12px;
+	font-weight: 600;
+}
+
+.ca-example-tag-label {
+	font-family: var(--font-mono);
+	font-size: 10px;
+	font-weight: 400;
+}
+
+.about .ca-example-chart-caption {
+	margin: var(--space-1) 0 0;
+	color: var(--color-muted);
+	font-size: var(--step--1);
+}
+
+.workflow-step {
+	padding: var(--space-2) var(--space-3);
+	border: 1px solid var(--color-border);
+	border-left: 4px solid var(--color-accent);
+	background: var(--color-card-bg);
+}
+
+.workflow-step-title {
+	display: flex;
+	align-items: baseline;
+	gap: var(--space-1);
+	margin: 0 0 0.3rem;
+	font-family: var(--font-heading);
+	font-weight: 700;
+}
+
+.workflow-step-index {
+	font-family: var(--font-mono);
+	font-weight: 400;
+	color: var(--color-muted);
+	font-size: var(--step--1);
+}
+
+.workflow-step-detail {
+	margin: 0;
+	font-size: var(--step--1);
+	line-height: 1.5;
+}
+
+.workflow-step-detail code {
+	font-family: var(--font-mono);
+	font-size: 0.9em;
+	background: var(--color-border);
+	padding: 0.05em 0.35em;
+}
+
+.workflow-arrow {
+	align-self: center;
+	color: var(--color-muted);
+	font-size: var(--step-1);
+	line-height: 1.4;
+}
+
+/* Kleine cijfervoorbeeld-tabel bij de CA-uitleg -- zelfde tabelstijl als
+   party-table, alleen zonder partijlogo-kolom. */
+.ca-example-table td,
+.ca-example-table th {
+	font-variant-numeric: tabular-nums;
+}
+
+.ca-example-table td:not(:first-child),
+.ca-example-table th:not(:first-child) {
+	font-family: var(--font-mono);
+	text-align: right;
+}
+
+/* Getaxonomeerde tag-overzicht: perspectief -> labelgroep -> tags, zelfde
+   groepering en kleuren/iconen als de correspondentiekaart en de
+   perspectiefkaarten op de hoofdpagina (docs/design/tag-iconografie). */
+.tag-taxonomy {
+	margin: var(--space-3) 0;
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-3);
+}
+
+.tag-taxonomy-perspectief {
+	padding: var(--space-3);
+	border: 1px solid var(--color-border);
+	border-top: 4px solid var(--tag-taxonomy-accent, var(--color-accent));
+	background: var(--color-card-bg);
+}
+
+.tag-taxonomy-perspectief-header {
+	display: flex;
+	align-items: center;
+	gap: var(--space-2);
+	margin-bottom: var(--space-2);
+}
+
+.tag-taxonomy-perspectief-header h3 {
+	margin: 0;
+	font-family: var(--font-heading);
+	font-size: var(--step-0);
+}
+
+.tag-taxonomy-labelgroep {
+	margin-top: var(--space-2);
+}
+
+.tag-taxonomy-labelgroep:first-of-type {
+	margin-top: 0;
+}
+
+.tag-taxonomy-labelgroep-name {
+	display: block;
+	margin-bottom: 0.4rem;
+	color: var(--color-muted);
+	font-size: var(--step--1);
+	font-weight: 600;
+}
+
+.tag-taxonomy-tags {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+	gap: var(--space-1);
+}
+
+.tag-card {
+	display: flex;
+	gap: 0.5rem;
+	padding: 0.5rem 0.65rem;
+	border: 1px solid var(--color-border);
+	background: var(--color-bg);
+}
+
+.tag-card-icon {
+	flex: none;
+	margin-top: 0.15rem;
+}
+
+.tag-card-body {
+	min-width: 0;
+}
+
+.tag-card-head {
+	display: flex;
+	align-items: baseline;
+	gap: 0.5rem;
+}
+
+.tag-card-sleutel {
+	font-family: var(--font-mono);
+	font-weight: 600;
+	font-size: var(--step--1);
+}
+
+.tag-card-count {
+	margin-left: auto;
+	flex: none;
+	color: var(--color-muted);
+	font-family: var(--font-mono);
+	font-size: 0.75rem;
+	white-space: nowrap;
+}
+
+.tag-card-beschrijving {
+	display: block;
+	margin-top: 0.15rem;
+	color: var(--color-muted);
+	font-size: 0.8rem;
+	line-height: 1.4;
 }
 
 .status-topic {
