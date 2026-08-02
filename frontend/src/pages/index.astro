@@ -11,10 +11,17 @@ import { ICOON_PAD, PERSPECTIEVEN } from "../lib/tagIcons.generated";
 const topicModules = import.meta.glob("../../../data/export/topics/*.json", { eager: true });
 
 const partyCounts = new Map<string, number>();
+const perspectiefCounts = new Map<string, number>();
+
 for (const mod of Object.values(topicModules) as any[]) {
 	for (const argument of mod.default.arguments) {
-		if (!argument.actor.party || argument.actor.party === NO_PARTY) continue;
-		partyCounts.set(argument.actor.party, (partyCounts.get(argument.actor.party) ?? 0) + 1);
+		if (argument.actor.party && argument.actor.party !== NO_PARTY) {
+			partyCounts.set(argument.actor.party, (partyCounts.get(argument.actor.party) ?? 0) + 1);
+		}
+		for (const tag of argument.tags) {
+			if (tag.created_by !== "llm") continue;
+			perspectiefCounts.set(tag.perspectief, (perspectiefCounts.get(tag.perspectief) ?? 0) + 1);
+		}
 	}
 }
 const parties = [...partyCounts.entries()].sort((a, b) => b[1] - a[1]);
@@ -56,6 +63,7 @@ for (const mod of Object.values(topicModules) as any[]) {
 					</li>
 				))}
 			</ul>
+
 			<h2>Perspectieven</h2>
 			<p class="intro">Welke partij welke tags gebruikt en hoe vaak, per perspectief uit de taxonomie.</p>
 			<ul class="card-grid card-grid--perspectieven">
@@ -76,6 +84,7 @@ for (const mod of Object.values(topicModules) as any[]) {
 								<path d={ICOON_PAD[p.icoon]} />
 							</svg>
 							<span class="card-tile-name">{p.naam}</span>
+							<span class="card-tile-count">{perspectiefCounts.get(p.naam) ?? 0} toekenningen</span>
 						</a>
 					</li>
 				))}
