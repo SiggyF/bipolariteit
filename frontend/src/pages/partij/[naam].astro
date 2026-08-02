@@ -1,6 +1,7 @@
 ---
 import ActorTagUsage from "../../components/ActorTagUsage.vue";
 import SiteNav from "../../components/SiteNav.astro";
+import GoogleAnalytics from "../../components/GoogleAnalytics.astro";
 import { NO_PARTY } from "../../lib/types";
 import { slugify } from "../../lib/slug";
 import "../../styles/main.css";
@@ -41,6 +42,7 @@ const argumentList = allArguments().filter((a: any) => a.actor.party === party);
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="viewport" content="width=device-width" />
 		<title>{party} — Bipolariteit</title>
+		<GoogleAnalytics />
 	</head>
 	<body>
 		<SiteNav />

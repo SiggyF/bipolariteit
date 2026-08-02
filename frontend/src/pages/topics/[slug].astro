@@ -2,6 +2,7 @@
 import TopicView from "../../components/TopicView.vue";
 import FeedbackExport from "../../components/FeedbackExport.vue";
 import SiteNav from "../../components/SiteNav.astro";
+import GoogleAnalytics from "../../components/GoogleAnalytics.astro";
 import "../../styles/main.css";
 
 const topicModules = import.meta.glob("../../../../data/export/topics/*.json", { eager: true });
@@ -24,6 +25,7 @@ const topic = mod.default;
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="viewport" content="width=device-width" />
 		<title>{topic.name} — Bipolariteit</title>
+		<GoogleAnalytics />
 	</head>
 	<body>
 		<SiteNav />

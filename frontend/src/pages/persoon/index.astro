@@ -1,5 +1,6 @@
 ---
 import SiteNav from "../../components/SiteNav.astro";
+import GoogleAnalytics from "../../components/GoogleAnalytics.astro";
 import PartyIcon from "../../components/PartyIcon.astro";
 import { displayPartyName } from "../../lib/parties";
 import { slugify } from "../../lib/slug";
@@ -44,6 +45,7 @@ const persons = [...counts.entries()].sort((a, b) => b[1] - a[1]);
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="viewport" content="width=device-width" />
 		<title>Personen — Bipolariteit</title>
+		<GoogleAnalytics />
 	</head>
 	<body>
 		<SiteNav />

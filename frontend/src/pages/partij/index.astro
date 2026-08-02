@@ -1,5 +1,6 @@
 ---
 import SiteNav from "../../components/SiteNav.astro";
+import GoogleAnalytics from "../../components/GoogleAnalytics.astro";
 import { displayPartyName } from "../../lib/parties";
 import { slugify } from "../../lib/slug";
 import { NO_PARTY } from "../../lib/types";
@@ -23,6 +24,7 @@ const parties = [...counts.entries()].sort((a, b) => b[1] - a[1]);
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="viewport" content="width=device-width" />
 		<title>Partijen — Bipolariteit</title>
+		<GoogleAnalytics />
 	</head>
 	<body>
 		<SiteNav />

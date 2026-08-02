@@ -1,5 +1,6 @@
 ---
 import SiteNav from "../../components/SiteNav.astro";
+import GoogleAnalytics from "../../components/GoogleAnalytics.astro";
 import { PERSPECTIEVEN } from "../../lib/tagIcons.generated";
 import { slugify } from "../../lib/slug";
 import "../../styles/main.css";
@@ -34,6 +35,7 @@ const perspectieven = PERSPECTIEVEN.map((p) => ({
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="viewport" content="width=device-width" />
 		<title>Perspectieven — Bipolariteit</title>
+		<GoogleAnalytics />
 	</head>
 	<body>
 		<SiteNav />

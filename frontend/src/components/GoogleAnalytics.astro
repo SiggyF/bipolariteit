@@ -1,0 +1,26 @@
+---
+interface Props {
+	id?: string;
+}
+
+const { id = "G-H8EQB2F673" } = Astro.props;
+---
+
+<!-- Google tag (gtag.js) - Privacy-friendly cookieless setup (geen cookiebanner of melding nodig) -->
+<script async src={`https://www.googletagmanager.com/gtag/js?id=${id}`}></script>
+<script is:inline define:vars={{ id }}>
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	gtag("js", new Date());
+
+	gtag("config", id, {
+		anonymize_ip: true,
+		client_storage: "none",
+		cookie_expires: 0,
+		allow_google_signals: false,
+		allow_ad_personalization_signals: false,
+		restricted_data_processing: true,
+	});
+</script>

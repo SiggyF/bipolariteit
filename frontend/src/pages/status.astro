@@ -1,6 +1,7 @@
 ---
 import status from "../../../data/export/status.json";
 import SiteNav from "../components/SiteNav.astro";
+import GoogleAnalytics from "../components/GoogleAnalytics.astro";
 import "../styles/main.css";
 
 function pct(done: number, total: number) {
@@ -19,6 +20,7 @@ const generated = new Date(status.generated_at).toLocaleString("nl-NL", {
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="viewport" content="width=device-width" />
 		<title>Status &mdash; Bipolariteit</title>
+		<GoogleAnalytics />
 	</head>
 	<body>
 		<SiteNav />
