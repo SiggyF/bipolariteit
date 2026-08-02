@@ -34,14 +34,20 @@ ODATA_BASE = "https://gegevensmagazijn.tweedekamer.nl/OData/v4/2.0"
 def activiteit_website_url(nummer, soort):
     """Zelfde logica als crawlers/tweede_kamer/tweede_kamer/odata.py:activiteit_website_url
     -- bewust gedupliceerd i.p.v. cross-package geïmporteerd (het scrapy-project
-    en de pipeline hebben elk hun eigen sys.path-root, zie docs/plan.md)."""
+    en de pipeline hebben elk hun eigen sys.path-root, zie docs/plan.md).
+
+    Elke bekende, niet-Plenair Soort (dus ook "Notaoverleg", niet alleen Soort-
+    waarden die letterlijk "Commissie" bevatten) valt terug op de
+    commissievergaderingen-pagina -- geverifieerd doordat die pagina voor een
+    Notaoverleg-Nummer exact de juiste titel toont. Bij ontbrekende Soort
+    blijft het resultaat bewust None: niet getest, dus geen aanname."""
     if not nummer:
         return None
-    if soort and soort.startswith("Plenair"):
+    if not soort:
+        return None
+    if soort.startswith("Plenair"):
         return f"https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id={nummer}"
-    if soort and "Commissie" in soort:
-        return f"https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id={nummer}"
-    return None
+    return f"https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id={nummer}"
 
 
 def fetch_activiteit(activiteit_id):
@@ -55,7 +61,9 @@ def main():
     parser.add_argument("--dry-run", action="store_true", help="niets naar de database schrijven, alleen printen")
     args = parser.parse_args()
 
-    meta_files = sorted(RAW_DIR.glob("*.json"))
+    # rglob i.p.v. glob: de crawler schrijft per topic-subdir
+    # (data/raw/tweede_kamer/<topic>/*.json), niet plat in RAW_DIR zelf.
+    meta_files = sorted(RAW_DIR.rglob("*.json"))
     if not meta_files:
         logger.info("Geen raw metadata-bestanden gevonden in %s.", RAW_DIR)
         return
@@ -66,8 +74,9 @@ def main():
     for meta_path in meta_files:
         metadata = json.loads(meta_path.read_text())
         activiteit_id = metadata.get("activiteit_id")
-        verslag_id = metadata.get("verslag_id")
-        raw_ref = f"{verslag_id}.xml"
+        # relatief aan RAW_DIR, incl. topic-subdir (bv. "abortus/<verslag_id>.xml")
+        # -- documents.raw_ref slaat dat pad zo op (zie ingest_tk.py:ingest_file).
+        raw_ref = str(meta_path.with_suffix(".xml").relative_to(RAW_DIR))
         if not activiteit_id:
             logger.warning("%s: geen activiteit_id in metadata, overgeslagen.", meta_path.name)
             continue
