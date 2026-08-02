@@ -1,8 +1,6 @@
 ---
 import status from "../../../data/export/status.json";
-import SiteNav from "../components/SiteNav.astro";
-import GoogleAnalytics from "../components/GoogleAnalytics.astro";
-import "../styles/main.css";
+import BaseLayout from "../layouts/BaseLayout.astro";
 
 function pct(done: number, total: number) {
 	return total ? Math.round((100 * done) / total) : 0;
@@ -14,63 +12,51 @@ const generated = new Date(status.generated_at).toLocaleString("nl-NL", {
 });
 ---
 
-<html lang="nl">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<title>Status &mdash; Bipolariteit</title>
-		<GoogleAnalytics />
-	</head>
-	<body>
-		<SiteNav />
-		<main class="about status-page">
-			<a href="/" class="back-link">&larr; alle onderwerpen</a>
-			<h1>Pipeline-status</h1>
-			<p class="panel-note">
-				Zie de <a href="/validatie-rapportage">validatie-rapportage</a> voor steekproefresultaten.
-				Laatst bijgewerkt: {generated}.
-			</p>
+<BaseLayout title="Status — Bipolariteit" class="about status-page">
+	<a href="/" class="back-link">&larr; alle onderwerpen</a>
+	<h1>Pipeline-status</h1>
+	<p class="panel-note">
+		Zie de <a href="/validatie-rapportage">validatie-rapportage</a> voor steekproefresultaten.
+		Laatst bijgewerkt: {generated}.
+	</p>
 
-			{status.topics.map((topic) => (
-				<section class="status-topic">
-					<h2>{topic.name}</h2>
-					<p class="panel-note">
-						Telt vanaf {topic.vanaf}, de start van de vorige kamerperiode. Oudere debatten zitten wel in de database,
-						maar worden niet geanalyseerd en niet getoond.
-					</p>
-					<ul class="status-bars">
-						<li>
-							<div class="status-bar-label">
-								<span>Documenten geëxtraheerd (Stage 1)</span>
-								<span class="status-bar-count">{topic.documents_extracted} / {topic.documents_total}</span>
-							</div>
-							<div class="status-bar-track">
-								<div class="status-bar-fill" style={`width: ${pct(topic.documents_extracted, topic.documents_total)}%`} />
-							</div>
-						</li>
-						<li>
-							<div class="status-bar-label">
-								<span>Argumenten getagd (Stage 1b)</span>
-								<span class="status-bar-count">{topic.arguments_tagged} / {topic.arguments_total}</span>
-							</div>
-							<div class="status-bar-track">
-								<div class="status-bar-fill" style={`width: ${pct(topic.arguments_tagged, topic.arguments_total)}%`} />
-							</div>
-						</li>
-						<li>
-							<div class="status-bar-label">
-								<span>Documenten redactie-gecheckt (Stage 2)</span>
-								<span class="status-bar-count">{topic.documents_redactie_checked} / {topic.documents_total}</span>
-							</div>
-							<div class="status-bar-track">
-								<div class="status-bar-fill" style={`width: ${pct(topic.documents_redactie_checked, topic.documents_total)}%`} />
-							</div>
-						</li>
-					</ul>
-					<p class="status-total">{topic.arguments_total} argumenten in {topic.documents_total} documenten.</p>
-				</section>
-			))}
-		</main>
-	</body>
-</html>
+	{status.topics.map((topic) => (
+		<section class="status-topic">
+			<h2>{topic.name}</h2>
+			<p class="panel-note">
+				Telt vanaf {topic.vanaf}, de start van de vorige kamerperiode. Oudere debatten zitten wel in de database,
+				maar worden niet geanalyseerd en niet getoond.
+			</p>
+			<ul class="status-bars">
+				<li>
+					<div class="status-bar-label">
+						<span>Documenten geëxtraheerd (Stage 1)</span>
+						<span class="status-bar-count">{topic.documents_extracted} / {topic.documents_total}</span>
+					</div>
+					<div class="status-bar-track">
+						<div class="status-bar-fill" style={`width: ${pct(topic.documents_extracted, topic.documents_total)}%`} />
+					</div>
+				</li>
+				<li>
+					<div class="status-bar-label">
+						<span>Argumenten getagd (Stage 1b)</span>
+						<span class="status-bar-count">{topic.arguments_tagged} / {topic.arguments_total}</span>
+					</div>
+					<div class="status-bar-track">
+						<div class="status-bar-fill" style={`width: ${pct(topic.arguments_tagged, topic.arguments_total)}%`} />
+					</div>
+				</li>
+				<li>
+					<div class="status-bar-label">
+						<span>Documenten redactie-gecheckt (Stage 2)</span>
+						<span class="status-bar-count">{topic.documents_redactie_checked} / {topic.documents_total}</span>
+					</div>
+					<div class="status-bar-track">
+						<div class="status-bar-fill" style={`width: ${pct(topic.documents_redactie_checked, topic.documents_total)}%`} />
+					</div>
+				</li>
+			</ul>
+			<p class="status-total">{topic.arguments_total} argumenten in {topic.documents_total} documenten.</p>
+		</section>
+	))}
+</BaseLayout>

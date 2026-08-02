@@ -1,10 +1,8 @@
 ---
-import SiteNav from "../../components/SiteNav.astro";
-import GoogleAnalytics from "../../components/GoogleAnalytics.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
 import { displayPartyName } from "../../lib/parties";
 import { slugify } from "../../lib/slug";
 import { NO_PARTY } from "../../lib/types";
-import "../../styles/main.css";
 
 const topicModules = import.meta.glob("../../../../data/export/topics/*.json", { eager: true });
 
@@ -18,30 +16,18 @@ for (const mod of Object.values(topicModules) as any[]) {
 const parties = [...counts.entries()].sort((a, b) => b[1] - a[1]);
 ---
 
-<html lang="nl">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<title>Partijen — Bipolariteit</title>
-		<GoogleAnalytics />
-	</head>
-	<body>
-		<SiteNav />
-		<main>
-			<a href="/" class="back-link">&larr; alle onderwerpen</a>
-			<h1>Partijen</h1>
-			<p class="intro">Welke tags een partij gebruikt en hoe vaak, over alle onderwerpen heen.</p>
-			<ul class="topic-list">
-				{parties.map(([party, count]) => (
-					<li>
-						<a href={`/partij/${slugify(party)}/`}>
-							<span class="topic-name">{displayPartyName(party)}</span>
-							<span class="topic-count">{count} argumenten</span>
-						</a>
-					</li>
-				))}
-			</ul>
-		</main>
-	</body>
-</html>
+<BaseLayout title="Partijen — Bipolariteit">
+	<a href="/" class="back-link">&larr; alle onderwerpen</a>
+	<h1>Partijen</h1>
+	<p class="intro">Welke tags een partij gebruikt en hoe vaak, over alle onderwerpen heen.</p>
+	<ul class="topic-list">
+		{parties.map(([party, count]) => (
+			<li>
+				<a href={`/partij/${slugify(party)}/`}>
+					<span class="topic-name">{displayPartyName(party)}</span>
+					<span class="topic-count">{count} argumenten</span>
+				</a>
+			</li>
+		))}
+	</ul>
+</BaseLayout>

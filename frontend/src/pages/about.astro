@@ -1,20 +1,8 @@
 ---
-import SiteNav from "../components/SiteNav.astro";
-import GoogleAnalytics from "../components/GoogleAnalytics.astro";
-import "../styles/main.css";
+import BaseLayout from "../layouts/BaseLayout.astro";
 ---
 
-<html lang="nl">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<title>Over dit platform — Bipolariteit</title>
-		<GoogleAnalytics />
-	</head>
-	<body>
-		<SiteNav />
-		<main class="about">
+<BaseLayout title="Over dit platform — Bipolariteit" class="about">
 			<a href="/" class="back-link">&larr; alle onderwerpen</a>
 			<h1>Over dit platform</h1>
 
@@ -117,6 +105,4 @@ import "../styles/main.css";
 					van de broncode van dit platform — niets hiervan is een black box.
 				</li>
 			</ul>
-		</main>
-	</body>
-</html>
+</BaseLayout>

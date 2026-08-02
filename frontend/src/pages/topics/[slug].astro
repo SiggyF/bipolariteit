@@ -1,9 +1,7 @@
 ---
 import TopicView from "../../components/TopicView.vue";
 import FeedbackExport from "../../components/FeedbackExport.vue";
-import SiteNav from "../../components/SiteNav.astro";
-import GoogleAnalytics from "../../components/GoogleAnalytics.astro";
-import "../../styles/main.css";
+import BaseLayout from "../../layouts/BaseLayout.astro";
 
 const topicModules = import.meta.glob("../../../../data/export/topics/*.json", { eager: true });
 
@@ -19,17 +17,7 @@ const mod: any = Object.values(topicModules).find((m: any) => m.default.slug ===
 const topic = mod.default;
 ---
 
-<html lang="nl">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<title>{topic.name} — Bipolariteit</title>
-		<GoogleAnalytics />
-	</head>
-	<body>
-		<SiteNav />
-		<main>
+<BaseLayout title={`${topic.name} — Bipolariteit`} description={topic.description}>
 			<a href="/" class="back-link">&larr; alle onderwerpen</a>
 			<div class="topic-header">
 				<h1>{topic.name}</h1>
@@ -48,6 +36,4 @@ const topic = mod.default;
 			/>
 
 			<FeedbackExport client:load />
-		</main>
-	</body>
-</html>
+</BaseLayout>

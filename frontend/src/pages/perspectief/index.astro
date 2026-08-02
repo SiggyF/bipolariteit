@@ -1,9 +1,7 @@
 ---
-import SiteNav from "../../components/SiteNav.astro";
-import GoogleAnalytics from "../../components/GoogleAnalytics.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
 import { PERSPECTIEVEN } from "../../lib/tagIcons.generated";
 import { slugify } from "../../lib/slug";
-import "../../styles/main.css";
 
 const topicModules = import.meta.glob("../../../../data/export/topics/*.json", { eager: true });
 
@@ -29,35 +27,23 @@ const perspectieven = PERSPECTIEVEN.map((p) => ({
 }));
 ---
 
-<html lang="nl">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<title>Perspectieven — Bipolariteit</title>
-		<GoogleAnalytics />
-	</head>
-	<body>
-		<SiteNav />
-		<main>
-			<a href="/" class="back-link">&larr; alle onderwerpen</a>
-			<h1>Perspectieven</h1>
-			<p class="intro">
-				Welke partij welke tags gebruikt en hoe vaak, per perspectief uit de taxonomie, over alle onderwerpen heen.
-			</p>
-			<ul class="topic-list">
-				{perspectieven.map((p) => (
-					<li>
-						<a href={`/perspectief/${slugify(p.naam)}/`}>
-							<span class="perspectief-list-name">
-								<span class="perspectief-swatch" style={`background:${p.kleur}`}></span>
-								<span class="topic-name">{p.naam}</span>
-							</span>
-							<span class="topic-count">{p.count} toekenningen</span>
-						</a>
-					</li>
-				))}
-			</ul>
-		</main>
-	</body>
-</html>
+<BaseLayout title="Perspectieven — Bipolariteit">
+	<a href="/" class="back-link">&larr; alle onderwerpen</a>
+	<h1>Perspectieven</h1>
+	<p class="intro">
+		Welke partij welke tags gebruikt en hoe vaak, per perspectief uit de taxonomie, over alle onderwerpen heen.
+	</p>
+	<ul class="topic-list">
+		{perspectieven.map((p) => (
+			<li>
+				<a href={`/perspectief/${slugify(p.naam)}/`}>
+					<span class="perspectief-list-name">
+						<span class="perspectief-swatch" style={`background:${p.kleur}`}></span>
+						<span class="topic-name">{p.naam}</span>
+					</span>
+					<span class="topic-count">{p.count} toekenningen</span>
+				</a>
+			</li>
+		))}
+	</ul>
+</BaseLayout>
