@@ -912,6 +912,35 @@ h2 {
 	color: var(--color-muted);
 }
 
+/* Mobiele filterknop en -paneel: op desktop verborgen/inline, zie media query
+   hieronder voor het oproepbare bottom-sheet-gedrag. */
+.filter-mobile-toggle {
+	display: none;
+	align-items: center;
+	gap: 0.3rem;
+	font-size: var(--step--1);
+	padding: 0.2rem 0.7rem;
+	border: 1px solid var(--color-border);
+	border-radius: 999px;
+	background: var(--color-card-bg);
+	color: inherit;
+	cursor: pointer;
+}
+
+.filter-mobile-toggle.has-selection {
+	border-color: var(--color-accent);
+	color: var(--color-accent);
+	font-weight: 500;
+}
+
+.filter-scrim {
+	display: none;
+}
+
+.facet-sheet-header {
+	display: none;
+}
+
 .no-results {
 	padding: var(--space-4) 0;
 	text-align: center;
@@ -1132,6 +1161,71 @@ h2 {
 	.column:first-child {
 		border-top: none;
 		padding-top: 0;
+	}
+
+	.filter-mobile-toggle {
+		display: inline-flex;
+	}
+
+	/* Facetknoppen en -paneel verhuizen op mobiel naar een oproepbaar
+	   bottom-sheet in plaats van de permanent zichtbare balk. */
+	.filter-facets {
+		display: none;
+	}
+
+	.facet-sheet {
+		position: fixed;
+		inset: auto 0 0 0;
+		z-index: 20;
+		max-height: 80vh;
+		overflow-y: auto;
+		background: var(--color-bg);
+		border-top: 1px solid var(--color-border);
+		padding: var(--space-3);
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-2);
+		transform: translateY(100%);
+		transition: transform 0.2s ease-out;
+	}
+
+	.facet-sheet.is-open {
+		transform: translateY(0);
+	}
+
+	.facet-sheet.is-open .filter-facets {
+		display: flex;
+	}
+
+	.facet-sheet-header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+	}
+
+	.facet-sheet-title {
+		font-weight: 500;
+	}
+
+	.facet-sheet-close {
+		border: none;
+		background: none;
+		color: inherit;
+		font-size: var(--step-1);
+		line-height: 1;
+		cursor: pointer;
+	}
+
+	.facet-sheet .facet-panel {
+		margin-top: 0;
+	}
+
+	.filter-scrim {
+		display: block;
+		position: fixed;
+		inset: 0;
+		z-index: 19;
+		background: rgb(0 0 0 / 40%);
 	}
 }
 
