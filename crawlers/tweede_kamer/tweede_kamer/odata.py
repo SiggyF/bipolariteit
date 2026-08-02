@@ -159,11 +159,19 @@ def activiteit_website_url(nummer, soort):
     Zie docs/tk-data-sources-overview.md sectie 11: officieel gedocumenteerd
     via de OData-FAQ, geverifieerd voor zowel gecorrigeerde als nog niet
     gecorrigeerde debatten (werkt dus ook vlak na een recent debat). Geen
-    HTTP hier, puur URL-opbouw -- zelfde stijl als de rest van deze module."""
+    HTTP hier, puur URL-opbouw -- zelfde stijl als de rest van deze module.
+
+    Elke bekende, niet-Plenair Soort valt terug op de commissievergaderingen-
+    pagina, niet alleen Soort-waarden die letterlijk "Commissie" bevatten: de
+    tweedekamer.nl-route zoekt kennelijk gewoon op Nummer, ongeacht het
+    URL-pad -- geverifieerd doordat "Notaoverleg" (dat niet met "Commissie"
+    matcht en voorheen dus None opleverde) op deze pagina exact de juiste
+    titel toont. Bij ontbrekende Soort blijft het resultaat bewust None: dat
+    is niet getest, dus geen aanname."""
     if not nummer:
         return None
-    if soort and soort.startswith("Plenair"):
+    if not soort:
+        return None
+    if soort.startswith("Plenair"):
         return f"https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id={nummer}"
-    if soort and "Commissie" in soort:
-        return f"https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id={nummer}"
-    return None
+    return f"https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id={nummer}"
