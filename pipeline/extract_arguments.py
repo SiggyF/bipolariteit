@@ -29,6 +29,7 @@ import re
 import time
 from datetime import datetime, timezone
 from pathlib import Path
+from typing import NamedTuple
 
 import requests
 
@@ -85,12 +86,28 @@ def _extract_json(raw_text):
     return json.loads(candidate)
 
 
-def call_llm(base_url, model, prompt, reasoning_effort, timeout):
+class LLMResponse(NamedTuple):
+    content: str
+    usage: dict
+    finish_reason: str | None
+
+
+def _extract_arguments(parsed):
+    """Sommige modellen geven de argumentenlijst kaal terug in plaats van
+    ingepakt in {"arguments": [...]}, zoals de prompt vraagt."""
+    if isinstance(parsed, list):
+        return parsed
+    if isinstance(parsed, dict):
+        return parsed.get("arguments", [])
+    raise ValueError(f"onverwachte JSON-vorm: {type(parsed).__name__}")
+
+
+def call_llm(base_url, model, prompt, reasoning_effort, timeout, max_tokens):
     payload = {
         "model": model,
         "messages": [{"role": "user", "content": prompt}],
         "temperature": 0.1,
-        "max_tokens": 2000,
+        "max_tokens": max_tokens,
     }
     if reasoning_effort:
         payload["reasoning_effort"] = reasoning_effort
@@ -98,12 +115,16 @@ def call_llm(base_url, model, prompt, reasoning_effort, timeout):
     resp = requests.post(f"{base_url}/chat/completions", json=payload, timeout=timeout)
     resp.raise_for_status()
     data = resp.json()
-    message = data["choices"][0]["message"]
+    choice = data["choices"][0]
+    content = choice["message"].get("content", "")
     usage = data.get("usage", {})
-    return message.get("content", ""), usage
+    finish_reason = choice.get("finish_reason")
+    return LLMResponse(content, usage, finish_reason)
 
 
 def _validate_argument(arg):
+    if not isinstance(arg, dict):
+        raise ValueError(f"argument is geen object maar {type(arg).__name__}")
     if arg.get("stance") not in VALID_STANCE:
         raise ValueError(f"ongeldige stance: {arg.get('stance')!r}")
     if arg.get("typology") not in VALID_TYPOLOGY:
@@ -175,7 +196,19 @@ def main():
         default="none",
         help="LM Studio reasoning_effort ('none' om denkstappen uit te schakelen; leeg om het veld weg te laten)",
     )
-    parser.add_argument("--timeout", type=float, default=120.0, help="request-timeout in seconden per document")
+    parser.add_argument(
+        "--max-tokens",
+        type=int,
+        default=4000,
+        help="max_tokens per document (default 4000; 2000 kapte lange Kamerbeurten af)",
+    )
+    parser.add_argument(
+        "--timeout",
+        type=float,
+        default=400.0,
+        help="request-timeout in seconden per document (default 400: 4000 tokens tegen ~16 tok/s "
+             "duurt ruim 250s, dus 120s was structureel te krap voor lange beurten)",
+    )
     parser.add_argument(
         "--vanaf",
         default=None,
@@ -215,8 +248,15 @@ def main():
         prompt = _build_prompt(topic_name, topic_description, doc["actor_name"], doc["actor_party"], doc["content"])
         start = time.monotonic()
         try:
-            raw_content, usage = call_llm(args.base_url, args.model, prompt, args.reasoning_effort, args.timeout)
+            raw_content, usage, finish_reason = call_llm(
+                args.base_url, args.model, prompt, args.reasoning_effort, args.timeout, args.max_tokens
+            )
+            if finish_reason == "length":
+                # Afgekapt antwoord levert ongeldige JSON op; melden waaróm het misging,
+                # anders lijkt het op een willekeurige parse-fout.
+                raise ValueError(f"antwoord afgekapt op max_tokens={args.max_tokens} (verhoog --max-tokens)")
             parsed = _extract_json(raw_content)
+            arguments = _extract_arguments(parsed)
         except Exception as exc:
             elapsed = time.monotonic() - start
             logger.error("[doc %5d] %-25s FOUT na %5.1fs: %s", doc["id"], doc["actor_name"], elapsed, exc)
@@ -225,7 +265,6 @@ def main():
         elapsed = time.monotonic() - start
         latencies.append(elapsed)
 
-        arguments = parsed.get("arguments", [])
         n_valid = 0
         n_claims = 0
 
