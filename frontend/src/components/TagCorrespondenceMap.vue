@@ -48,11 +48,17 @@ const filtered = computed(() => props.argumentList.filter(matches));
 //   vast te lopen.
 const analysisMode = ref<"focus" | "detail">("focus");
 
-// In "detail" filtert `filtered` al welke argumenten meedoen (een argument
-// telt mee zodra één van zijn tags aan een tag-dimensie voldoet), maar zonder
-// deze stap zou elk tag/labelgroep/perspectief van zo'n argument alsnog een
-// kolom worden -- ook tags buiten de selectie. Een labelgroep-filter moet de
-// kolommen dus ook tot die labelgroep(en) beperken, niet alleen de rijen.
+// BELANGRIJKE INVARIANT, niet opnieuw laten wegglippen (zie #39): `matches()`
+// (lib/filters.ts) telt een argument al mee zodra één van zijn tags aan een
+// tag-dimensie (tag/labelgroep/perspectief) voldoet -- OR binnen de dimensie.
+// Zo'n argument kan dus best nog andere, niet-geselecteerde tags dragen. Voor
+// de rijen (personen/partijen) is dat correct: het argument telt terecht mee.
+// Voor de kolommen (tags) is het dat niet -- die andere tags horen zelf niet
+// bij de selectie en mogen dus geen kolom worden (sourceList/detail) én niet
+// als "in selectie" (dus onopvallend/niet-gedimd) getoond worden in "focus"
+// (tagsInSelection). Beide plekken moeten daarom per tag filteren, niet per
+// argument -- gebruik hiervoor altijd deze functie, nooit een kale
+// `argument.tags.map(...)`/`.flatMap(...)`.
 function tagMatchesTagFilters(tag: Argument["tags"][number]): boolean {
 	const { tag: tagSel, labelgroep: labelgroepSel, perspectief: perspectiefSel } = filters.values;
 	if (tagSel.length && !tagSel.includes(tag.sleutel)) return false;
@@ -229,7 +235,10 @@ const partyOfRow = computed(() => {
 const rowsInSelection = computed(
 	() => new Set(filtered.value.map((a) => (unit.value === "persoon" ? a.actor.name : a.actor.party ?? NO_PARTY))),
 );
-const tagsInSelection = computed(() => new Set(filtered.value.flatMap((a) => a.tags.map((t) => t.sleutel))));
+// Zie de invariant bij tagMatchesTagFilters hierboven.
+const tagsInSelection = computed(
+	() => new Set(filtered.value.flatMap((a) => a.tags.filter(tagMatchesTagFilters).map((t) => t.sleutel))),
+);
 
 const DIM = 0.15;
 
