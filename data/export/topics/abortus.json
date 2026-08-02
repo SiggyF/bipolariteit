@@ -13163,7 +13163,88 @@
           "attributed_source_text": "Handvest van de grondrechten van de Europese Unie"
         }
       ],
-      "tags": [],
+      "tags": [
+        {
+          "sleutel": "Arena-Parlement",
+          "beschrijving": "Debat of uitspraak afkomstig uit de Eerste of Tweede Kamer.",
+          "labelgroep": "Issue Arena",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Bron is een Tweede Kamer-debat (documents.source.type = 'tweede_kamer')."
+        },
+        {
+          "sleutel": "Actor-Politicus",
+          "beschrijving": "Een gekozen volksvertegenwoordiger, bewindspersoon of partijvertegenwoordiger.",
+          "labelgroep": "Actor Type",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Spreker heeft een geregistreerde partij (SGP)."
+        },
+        {
+          "sleutel": "Walton-Regel",
+          "beschrijving": "Het argument beroept zich op een reeds gevestigde wet, formele regel of breed geaccepteerde maatschappelijke norm.",
+          "labelgroep": "Redeneerschema",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het argument leunt op de toepassing van een formele regel (artikelen 1 en 2 van het Handvest van de grondrechten) om tot een conclusie te komen."
+        },
+        {
+          "sleutel": "Drogreden-Stropop",
+          "beschrijving": "Het vertekenen of overdrijven van het standpunt van de opponent om dit makkelijker te kunnen aanvallen.",
+          "labelgroep": "Dialectische Kwaliteit",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Stoffer presenteert het standpunt van de initiatiefneemster als 'radicaal', 'onthutsend' en 'de werkelijkheid op z'n kop zetten', wat een overdreven en vertekende weergave is om het makkelijker aan te vallen."
+        },
+        {
+          "sleutel": "Frame-Thematisch",
+          "beschrijving": "Het benaderen van de kwestie vanuit een breder maatschappelijk, statistisch of historisch kader.",
+          "labelgroep": "Framing-Focus",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "Het betoog richt zich op algemene juridische principes en grondrechten (Handvest EU) in plaats van op een specifiek individueel abortusgeval."
+        },
+        {
+          "sleutel": "Frame-Moraliteit",
+          "beschrijving": "Inbranding vanuit ethische plichten, spirituele of religieuze principes.",
+          "labelgroep": "Generieke Nieuwsframes",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "De argumentatie draait om ethische principes zoals menselijke waardigheid en het recht op leven, verankerd in fundamentele rechten."
+        },
+        {
+          "sleutel": "Ideologie-TAN",
+          "beschrijving": "Conservatief, traditioneel, nationalistisch (Traditional, Authoritarian, Nationalist).",
+          "labelgroep": "Cultureel-Ideologische Breuklijn",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "De SGP-spreker beroept zich op traditionele waarden en de fundamentele bescherming van het leven, wat past binnen het conservatieve en traditionele spectrum."
+        },
+        {
+          "sleutel": "Moraliteit-Zorg",
+          "beschrijving": "Gericht op empathie, compassie en het voorkomen van leed en schade bij kwetsbaren.",
+          "labelgroep": "Morele Fundamenten",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "Er wordt nadrukkelijk gewezen op het beschermen van het leven van de 'ongeboren mens' en het voorkomen van doden, wat neerkomt op zorg voor kwetsbaren."
+        },
+        {
+          "sleutel": "Moraliteit-Autoriteit",
+          "beschrijving": "Gericht op respect voor traditie, legitieme hiërarchie, wetten en maatschappelijke orde.",
+          "labelgroep": "Morele Fundamenten",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "Er wordt beroep gedaan op de autoriteit van het Handvest van de grondrechten van de Europese Unie als bindende norm."
+        },
+        {
+          "sleutel": "Bewijs-Causaal",
+          "beschrijving": "Onderbouwd met een heldere, mechanistische of logische verklaring van oorzaak en gevolg.",
+          "labelgroep": "Type Bewijsvoering",
+          "perspectief": "Methodologisch & Contextueel",
+          "created_by": "llm",
+          "reden": "Er wordt een logische verklaring gegeven dat abortus per definitie het doden van een ongeboren mens inhoudt, waardoor het in strijd is met het recht op leven."
+        }
+      ],
       "oppositions": []
     },
     {
@@ -13196,7 +13277,80 @@
           "attributed_source_text": "biologen"
         }
       ],
-      "tags": [],
+      "tags": [
+        {
+          "sleutel": "Arena-Parlement",
+          "beschrijving": "Debat of uitspraak afkomstig uit de Eerste of Tweede Kamer.",
+          "labelgroep": "Issue Arena",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Bron is een Tweede Kamer-debat (documents.source.type = 'tweede_kamer')."
+        },
+        {
+          "sleutel": "Actor-Politicus",
+          "beschrijving": "Een gekozen volksvertegenwoordiger, bewindspersoon of partijvertegenwoordiger.",
+          "labelgroep": "Actor Type",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Spreker heeft een geregistreerde partij (SGP)."
+        },
+        {
+          "sleutel": "Walton-Regel",
+          "beschrijving": "Het argument beroept zich op een reeds gevestigde wet, formele regel of breed geaccepteerde maatschappelijke norm.",
+          "labelgroep": "Redeneerschema",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het argument leidt af van een algemene regel (het fundamentele recht op leven voor alle mensen) naar een specifiek geval (ongeboren leven bij bevruchting) om tot een conclusie te komen."
+        },
+        {
+          "sleutel": "Frame-Thematisch",
+          "beschrijving": "Het benaderen van de kwestie vanuit een breder maatschappelijk, statistisch of historisch kader.",
+          "labelgroep": "Framing-Focus",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "Het betoog richt zich op algemene principes (biologische consensus, mensenrechten) en bredere maatschappelijke consequenties in plaats van op een specifiek individueel incident."
+        },
+        {
+          "sleutel": "Frame-Moraliteit",
+          "beschrijving": "Inbranding vanuit ethische plichten, spirituele of religieuze principes.",
+          "labelgroep": "Generieke Nieuwsframes",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "De spreker frameert abortus als een ethische schending van mensenrechten en noemt expliciet dat leven een 'geschenk van God' is."
+        },
+        {
+          "sleutel": "Ideologie-TAN",
+          "beschrijving": "Conservatief, traditioneel, nationalistisch (Traditional, Authoritarian, Nationalist).",
+          "labelgroep": "Cultureel-Ideologische Breuklijn",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "Het argument beroept zich op conservatieve waarden door leven te definiëren vanaf de bevruchting en verwijst naar God als bron van leven, wat past binnen het traditionele en autoritaire spectrum."
+        },
+        {
+          "sleutel": "Moraliteit-Zorg",
+          "beschrijving": "Gericht op empathie, compassie en het voorkomen van leed en schade bij kwetsbaren.",
+          "labelgroep": "Morele Fundamenten",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "Het argument benadrukt het beschermen van het kwetsbare ongeboren leven tegen schade (doodslag), wat neerkomt op zorg voor de zwakste partij."
+        },
+        {
+          "sleutel": "Moraliteit-Autoriteit",
+          "beschrijving": "Gericht op respect voor traditie, legitieme hiërarchie, wetten en maatschappelijke orde.",
+          "labelgroep": "Morele Fundamenten",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "Er wordt gerefereerd aan de biologische consensus als autoriteit en aan God als ultieme bron van levensrecht, wat respect voor hiërarchie en traditie impliceert."
+        },
+        {
+          "sleutel": "Bewijs-Expert",
+          "beschrijving": "Onderbouwd met de consensus, verklaring of het oordeel van een erkend specialist.",
+          "labelgroep": "Type Bewijsvoering",
+          "perspectief": "Methodologisch & Contextueel",
+          "created_by": "llm",
+          "reden": "De claim dat leven bij bevruchting begint wordt onderbouwd met de verwijzing naar de 'zeer brede consensus onder biologen'."
+        }
+      ],
       "oppositions": []
     },
     {
@@ -13224,7 +13378,72 @@
         "regering": "Kabinet-Schoof"
       },
       "claims": [],
-      "tags": [],
+      "tags": [
+        {
+          "sleutel": "Arena-Parlement",
+          "beschrijving": "Debat of uitspraak afkomstig uit de Eerste of Tweede Kamer.",
+          "labelgroep": "Issue Arena",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Bron is een Tweede Kamer-debat (documents.source.type = 'tweede_kamer')."
+        },
+        {
+          "sleutel": "Actor-Politicus",
+          "beschrijving": "Een gekozen volksvertegenwoordiger, bewindspersoon of partijvertegenwoordiger.",
+          "labelgroep": "Actor Type",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Spreker heeft een geregistreerde partij (SGP)."
+        },
+        {
+          "sleutel": "Walton-Analogie",
+          "beschrijving": "Er wordt een vergelijking getrokken met een historische gebeurtenis, een andere specifieke casus of een precedent.",
+          "labelgroep": "Redeneerschema",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Stoffer trekt een vergelijking tussen een ongeboren kind en een geboren kind om te betogen dat er geen principiël verschil is dat abortus zou rechtvaardigen."
+        },
+        {
+          "sleutel": "Frame-Thematisch",
+          "beschrijving": "Het benaderen van de kwestie vanuit een breder maatschappelijk, statistisch of historisch kader.",
+          "labelgroep": "Framing-Focus",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "Het argument richt zich op de bredere maatschappelijke staat ('cultuur', 'verval') en principiële vragen over menselijke waardigheid, in plaats van op een specifiek individueel incident."
+        },
+        {
+          "sleutel": "Frame-Moraliteit",
+          "beschrijving": "Inbranding vanuit ethische plichten, spirituele of religieuze principes.",
+          "labelgroep": "Generieke Nieuwsframes",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "De spreker frameert abortus als een ethisch probleem door te vragen naar het 'recht op leven' en de morele rechtvaardiging van het doden van een mens."
+        },
+        {
+          "sleutel": "Ideologie-TAN",
+          "beschrijving": "Conservatief, traditioneel, nationalistisch (Traditional, Authoritarian, Nationalist).",
+          "labelgroep": "Cultureel-Ideologische Breuklijn",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "Stoffer betoogt vanuit een conservatief standpunt dat de huidige cultuur in 'diep verval' verkeert en pleit voor de bescherming van het ongeboren leven als traditionele waarde."
+        },
+        {
+          "sleutel": "Moraliteit-Zorg",
+          "beschrijving": "Gericht op empathie, compassie en het voorkomen van leed en schade bij kwetsbaren.",
+          "labelgroep": "Morele Fundamenten",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "Het argument benadrukt het voorkomen van schade (doden) aan een kwetsbare partij (het ongeboren kind) door te vragen hoe leeftijd rechtvaardiging kan zijn voor doden."
+        },
+        {
+          "sleutel": "Moraliteit-Autoriteit",
+          "beschrijving": "Gericht op respect voor traditie, legitieme hiërarchie, wetten en maatschappelijke orde.",
+          "labelgroep": "Morele Fundamenten",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "De verwijzing naar 'diep verval' en de vraag naar het 'principiële verschil' impliceert een beroep op een vaste, traditionele morele orde en hiërarchie van waarden."
+        }
+      ],
       "oppositions": []
     },
     {
@@ -13252,7 +13471,88 @@
         "regering": "Kabinet-Schoof"
       },
       "claims": [],
-      "tags": [],
+      "tags": [
+        {
+          "sleutel": "Arena-Parlement",
+          "beschrijving": "Debat of uitspraak afkomstig uit de Eerste of Tweede Kamer.",
+          "labelgroep": "Issue Arena",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Bron is een Tweede Kamer-debat (documents.source.type = 'tweede_kamer')."
+        },
+        {
+          "sleutel": "Actor-Politicus",
+          "beschrijving": "Een gekozen volksvertegenwoordiger, bewindspersoon of partijvertegenwoordiger.",
+          "labelgroep": "Actor Type",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Spreker heeft een geregistreerde partij (D66)."
+        },
+        {
+          "sleutel": "Walton-Consequentie",
+          "beschrijving": "Het verdedigen of aanvallen van een standpunt op basis van de verwachte praktische (voordelige of nadelige) gevolgen.",
+          "labelgroep": "Redeneerschema",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het argument stelt dat het weigeren van hulp (gevolg van het tegenstandersstandpunt) leidt tot een schending van mensenrechten, wat een nadelige ethische consequentie is."
+        },
+        {
+          "sleutel": "Frame-Thematisch",
+          "beschrijving": "Het benaderen van de kwestie vanuit een breder maatschappelijk, statistisch of historisch kader.",
+          "labelgroep": "Framing-Focus",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "Het argument spreekt over een algemene groep ('vrouwen die daarvan slachtoffer worden') en een structureel probleem (mensenrechten in noodsituaties) in plaats van één specifiek individueel incident."
+        },
+        {
+          "sleutel": "Frame-Menselijk-Belang",
+          "beschrijving": "De focus ligt op de menselijke kant, de emoties of het individuele leed (Human Interest).",
+          "labelgroep": "Generieke Nieuwsframes",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "De focus ligt op het leed en de kwetsbaarheid van vrouwen die slachtoffer zijn geworden van seksueel geweld."
+        },
+        {
+          "sleutel": "Frame-Moraliteit",
+          "beschrijving": "Inbranding vanuit ethische plichten, spirituele of religieuze principes.",
+          "labelgroep": "Generieke Nieuwsframes",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "Het argument beroept zich op ethische principes, specifiek de mensenrechten en de plicht om hulp te bieden in noodsituaties."
+        },
+        {
+          "sleutel": "Ideologie-GAL",
+          "beschrijving": "Progressief, ecologisch, kosmopolitisch (Green, Alternative, Libertarian).",
+          "labelgroep": "Cultureel-Ideologische Breuklijn",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "Het argument benadrukt vrouwenrechten, autonomie en hulp in noodsituaties, wat kernwaarden zijn van de progressieve (GAL) politieke stroming."
+        },
+        {
+          "sleutel": "Moraliteit-Zorg",
+          "beschrijving": "Gericht op empathie, compassie en het voorkomen van leed en schade bij kwetsbaren.",
+          "labelgroep": "Morele Fundamenten",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "Het argument richt zich op het voorkomen van leed en het bieden van hulp aan kwetsbare vrouwen in een noodsituatie."
+        },
+        {
+          "sleutel": "Moraliteit-Vrijheid",
+          "beschrijving": "Gericht op individuele autonomie en weerstand tegen dwang of onderdrukking door dominante actoren.",
+          "labelgroep": "Morele Fundamenten",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "Er wordt verwezen naar mensenrechten en de afwezigheid van dwang, wat wijst op het belang van individuele autonomie en bescherming tegen onderdrukking."
+        },
+        {
+          "sleutel": "Bewijs-Anekdotisch",
+          "beschrijving": "Onderbouwd met één specifiek praktijkgeval, incident, exemplar of persoonlijk verhaal.",
+          "labelgroep": "Type Bewijsvoering",
+          "perspectief": "Methodologisch & Contextueel",
+          "created_by": "llm",
+          "reden": "Het argument schetst een representatief scenario ('vrouwen die... gedwongen zwanger zijn geworden') als illustratief voorbeeld om het punt te maken, zonder statistische data of expertreferenties."
+        }
+      ],
       "oppositions": []
     },
     {
@@ -13285,7 +13585,80 @@
           "attributed_source_text": "de initiatiefnemer ... in de nota"
         }
       ],
-      "tags": [],
+      "tags": [
+        {
+          "sleutel": "Arena-Parlement",
+          "beschrijving": "Debat of uitspraak afkomstig uit de Eerste of Tweede Kamer.",
+          "labelgroep": "Issue Arena",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Bron is een Tweede Kamer-debat (documents.source.type = 'tweede_kamer')."
+        },
+        {
+          "sleutel": "Actor-Politicus",
+          "beschrijving": "Een gekozen volksvertegenwoordiger, bewindspersoon of partijvertegenwoordiger.",
+          "labelgroep": "Actor Type",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Spreker heeft een geregistreerde partij (SGP)."
+        },
+        {
+          "sleutel": "Walton-Regel",
+          "beschrijving": "Het argument beroept zich op een reeds gevestigde wet, formele regel of breed geaccepteerde maatschappelijke norm.",
+          "labelgroep": "Redeneerschema",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het argument beroept zich op de fundamentele norm of regel dat het leven begint bij de bevruchting en dat dit leven bescherming verdient."
+        },
+        {
+          "sleutel": "Frame-Thematisch",
+          "beschrijving": "Het benaderen van de kwestie vanuit een breder maatschappelijk, statistisch of historisch kader.",
+          "labelgroep": "Framing-Focus",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "Het argument richt zich op de algemene principiële vraag of abortus een mensenrecht is en de definitie van menselijk leven, in plaats van te focussen op één specifiek individueel incident."
+        },
+        {
+          "sleutel": "Frame-Moraliteit",
+          "beschrijving": "Inbranding vanuit ethische plichten, spirituele of religieuze principes.",
+          "labelgroep": "Generieke Nieuwsframes",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "De spreker baseert zijn betoog op ethische principes, namelijk dat het leven al begint bij de bevruchting en dat het ongeboren kind bescherming verdient."
+        },
+        {
+          "sleutel": "Frame-Conflict",
+          "beschrijving": "De nadruk ligt op de felle strijd of meningsverschillen tussen personen, partijen of groepen.",
+          "labelgroep": "Generieke Nieuwsframes",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "De spreker schetst de situatie als een conflict tussen het recht van de ene mens (de zwangere vrouw) en het recht van de andere mens (het ongeboren kind)."
+        },
+        {
+          "sleutel": "Ideologie-TAN",
+          "beschrijving": "Conservatief, traditioneel, nationalistisch (Traditional, Authoritarian, Nationalist).",
+          "labelgroep": "Cultureel-Ideologische Breuklijn",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "De spreker benadrukt het traditionele morele standpunt dat het leven begint bij de bevruchting en dat abortus onaanvaardbaar is, wat past binnen het conservatieve en traditionele spectrum."
+        },
+        {
+          "sleutel": "Moraliteit-Zorg",
+          "beschrijving": "Gericht op empathie, compassie en het voorkomen van leed en schade bij kwetsbaren.",
+          "labelgroep": "Morele Fundamenten",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "De spreker pleit voor het beschermen van het kwetsbare ongeboren leven om leed en schade (het kostend van een mensenleven) te voorkomen."
+        },
+        {
+          "sleutel": "Moraliteit-Zuiverheid",
+          "beschrijving": "Gericht op het vermijden van morele of fysieke besmetting; streven naar het schone, natuurlijke of verhevene.",
+          "labelgroep": "Morele Fundamenten",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "De nadruk op het begin van het leven bij de bevruchting en het niet 'wegpoetsen' van het probleem suggereert een focus op de natuurlijke orde en de heiligheid van het leven."
+        }
+      ],
       "oppositions": []
     },
     {
@@ -13318,7 +13691,72 @@
           "attributed_source_text": "preambule van het Internationaal verdrag inzake de rechten van het kind"
         }
       ],
-      "tags": [],
+      "tags": [
+        {
+          "sleutel": "Arena-Parlement",
+          "beschrijving": "Debat of uitspraak afkomstig uit de Eerste of Tweede Kamer.",
+          "labelgroep": "Issue Arena",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Bron is een Tweede Kamer-debat (documents.source.type = 'tweede_kamer')."
+        },
+        {
+          "sleutel": "Actor-Politicus",
+          "beschrijving": "Een gekozen volksvertegenwoordiger, bewindspersoon of partijvertegenwoordiger.",
+          "labelgroep": "Actor Type",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Spreker heeft een geregistreerde partij (SGP)."
+        },
+        {
+          "sleutel": "Walton-Regel",
+          "beschrijving": "Het argument beroept zich op een reeds gevestigde wet, formele regel of breed geaccepteerde maatschappelijke norm.",
+          "labelgroep": "Redeneerschema",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het argument beroept zich op een bestaande formele regel, namelijk de bepalingen in de preambule van het Internationaal verdrag inzake de rechten van het kind."
+        },
+        {
+          "sleutel": "Frame-Thematisch",
+          "beschrijving": "Het benaderen van de kwestie vanuit een breder maatschappelijk, statistisch of historisch kader.",
+          "labelgroep": "Framing-Focus",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "Het argument benadert de kwestie vanuit een breed juridisch en internationaal kader (verdragen) in plaats van een specifiek individueel incident."
+        },
+        {
+          "sleutel": "Frame-Moraliteit",
+          "beschrijving": "Inbranding vanuit ethische plichten, spirituele of religieuze principes.",
+          "labelgroep": "Generieke Nieuwsframes",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "De spreker beroept zich op ethische en juridische principes uit de preambule van het verdrag inzake de rechten van het kind om de bescherming van het ongeboren kind te onderbouwen."
+        },
+        {
+          "sleutel": "Ideologie-TAN",
+          "beschrijving": "Conservatief, traditioneel, nationalistisch (Traditional, Authoritarian, Nationalist).",
+          "labelgroep": "Cultureel-Ideologische Breuklijn",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "De SGP is een traditioneel-christelijke partij die hier beroep doet op conservatieve waarden en internationale verdragen om abortus tegen te houden, wat past binnen de Traditional, Authoritarian, Nationalist (TAN) dimensie."
+        },
+        {
+          "sleutel": "Moraliteit-Zorg",
+          "beschrijving": "Gericht op empathie, compassie en het voorkomen van leed en schade bij kwetsbaren.",
+          "labelgroep": "Morele Fundamenten",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "Er wordt nadrukkelijk verwezen naar de 'bijzondere bescherming en zorg' die nodig is voor het kind vanwege zijn kwetsbaarheid ('onrijpheid')."
+        },
+        {
+          "sleutel": "Moraliteit-Autoriteit",
+          "beschrijving": "Gericht op respect voor traditie, legitieme hiërarchie, wetten en maatschappelijke orde.",
+          "labelgroep": "Morele Fundamenten",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "Het argument leunt op de autoriteit van het 'Internationaal verdrag inzake de rechten van het kind' als bindende norm."
+        }
+      ],
       "oppositions": []
     },
     {
@@ -13351,7 +13789,64 @@
           "attributed_source_text": null
         }
       ],
-      "tags": [],
+      "tags": [
+        {
+          "sleutel": "Arena-Parlement",
+          "beschrijving": "Debat of uitspraak afkomstig uit de Eerste of Tweede Kamer.",
+          "labelgroep": "Issue Arena",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Bron is een Tweede Kamer-debat (documents.source.type = 'tweede_kamer')."
+        },
+        {
+          "sleutel": "Actor-Politicus",
+          "beschrijving": "Een gekozen volksvertegenwoordiger, bewindspersoon of partijvertegenwoordiger.",
+          "labelgroep": "Actor Type",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Spreker heeft een geregistreerde partij (SGP)."
+        },
+        {
+          "sleutel": "Walton-Regel",
+          "beschrijving": "Het argument beroept zich op een reeds gevestigde wet, formele regel of breed geaccepteerde maatschappelijke norm.",
+          "labelgroep": "Redeneerschema",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het argument beroept zich op de bestaande juridische status en normen door te stellen dat het kabinet terecht het pleidooi voor een nieuwe classificatie (mensenrecht) niet overneemt."
+        },
+        {
+          "sleutel": "Frame-Thematisch",
+          "beschrijving": "Het benaderen van de kwestie vanuit een breder maatschappelijk, statistisch of historisch kader.",
+          "labelgroep": "Framing-Focus",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "Het argument richt zich op een abstract beleidsbesluit van het kabinet en de juridische classificatie van abortus als mensenrecht, niet op een specifiek individueel incident."
+        },
+        {
+          "sleutel": "Frame-Moraliteit",
+          "beschrijving": "Inbranding vanuit ethische plichten, spirituele of religieuze principes.",
+          "labelgroep": "Generieke Nieuwsframes",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "De uitspraak 'Het is goed dat...' duidt op een ethisch oordeel over de juiste houding ten opzichte van het beschouwen van abortus als mensenrecht."
+        },
+        {
+          "sleutel": "Ideologie-TAN",
+          "beschrijving": "Conservatief, traditioneel, nationalistisch (Traditional, Authoritarian, Nationalist).",
+          "labelgroep": "Cultureel-Ideologische Breuklijn",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "De SGP is een traditioneel-christelijke partij die abortus afwijst op basis van conservatieve en religieuze waarden, wat past binnen de Traditional-Authoritarian-Nationalist dimensie."
+        },
+        {
+          "sleutel": "Moraliteit-Autoriteit",
+          "beschrijving": "Gericht op respect voor traditie, legitieme hiërarchie, wetten en maatschappelijke orde.",
+          "labelgroep": "Morele Fundamenten",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "Het argument steunt op het respecteren van de bestaande juridische en maatschappelijke orde door abortus niet te verheffen tot een mensenrecht, in lijn met traditionele normen."
+        }
+      ],
       "oppositions": []
     },
     {
@@ -13404,7 +13899,56 @@
           "attributed_source_text": "The Lancet uit 2014"
         }
       ],
-      "tags": [],
+      "tags": [
+        {
+          "sleutel": "Arena-Parlement",
+          "beschrijving": "Debat of uitspraak afkomstig uit de Eerste of Tweede Kamer.",
+          "labelgroep": "Issue Arena",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Bron is een Tweede Kamer-debat (documents.source.type = 'tweede_kamer')."
+        },
+        {
+          "sleutel": "Actor-Politicus",
+          "beschrijving": "Een gekozen volksvertegenwoordiger, bewindspersoon of partijvertegenwoordiger.",
+          "labelgroep": "Actor Type",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Spreker heeft een geregistreerde partij (FVD)."
+        },
+        {
+          "sleutel": "Walton-Expertise",
+          "beschrijving": "Het argument leunt op de autoriteit, bevindingen of de verklaring van een specialist of expert.",
+          "labelgroep": "Redeneerschema",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het argument leunt op de kritische analyse van de bronnen en methodologie van een expertinstantie (WHO) en een wetenschappelijk tijdschrift (The Lancet)."
+        },
+        {
+          "sleutel": "Frame-Thematisch",
+          "beschrijving": "Het benaderen van de kwestie vanuit een breder maatschappelijk, statistisch of historisch kader.",
+          "labelgroep": "Framing-Focus",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "Het argument richt zich op brede statistische cijfers, percentages en de methodologie van een internationale organisatie in plaats van op een individueel incident."
+        },
+        {
+          "sleutel": "Ideologie-TAN",
+          "beschrijving": "Conservatief, traditioneel, nationalistisch (Traditional, Authoritarian, Nationalist).",
+          "labelgroep": "Cultureel-Ideologische Breuklijn",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "De spreker (FVD) betwist de autoriteit en betrouwbaarheid van een internationale instelling (WHO), wat past bij een sceptische houding tegenover kosmopolitische instituties."
+        },
+        {
+          "sleutel": "Bewijs-Statistisch",
+          "beschrijving": "Onderbouwd met kwantitatieve gegevens, cijfers, percentages of grootschalig representatief onderzoek.",
+          "labelgroep": "Type Bewijsvoering",
+          "perspectief": "Methodologisch & Contextueel",
+          "created_by": "llm",
+          "reden": "De onderbouwing bestaat uit het citeren en analyseren van specifieke percentages (4,7%, 13,2%) en absolute aantallen (39.000, 13.000) uit wetenschappelijke literatuur."
+        }
+      ],
       "oppositions": []
     },
     {
@@ -13445,7 +13989,80 @@
           "attributed_source_text": "het artikel van The Lancet"
         }
       ],
-      "tags": [],
+      "tags": [
+        {
+          "sleutel": "Arena-Parlement",
+          "beschrijving": "Debat of uitspraak afkomstig uit de Eerste of Tweede Kamer.",
+          "labelgroep": "Issue Arena",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Bron is een Tweede Kamer-debat (documents.source.type = 'tweede_kamer')."
+        },
+        {
+          "sleutel": "Actor-Politicus",
+          "beschrijving": "Een gekozen volksvertegenwoordiger, bewindspersoon of partijvertegenwoordiger.",
+          "labelgroep": "Actor Type",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Spreker heeft een geregistreerde partij (FVD)."
+        },
+        {
+          "sleutel": "Walton-Expertise",
+          "beschrijving": "Het argument leunt op de autoriteit, bevindingen of de verklaring van een specialist of expert.",
+          "labelgroep": "Redeneerschema",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het argument leunt volledig op de autoriteit en bevindingen van een specifiek wetenschappelijk artikel (The Lancet) en de WHO om de feitelijke claim te staven."
+        },
+        {
+          "sleutel": "Drogreden-Stropop",
+          "beschrijving": "Het vertekenen of overdrijven van het standpunt van de opponent om dit makkelijker te kunnen aanvallen.",
+          "labelgroep": "Dialectische Kwaliteit",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De spreker stelt dat de tegenstander 'klakkeloos' uitgaat van WHO-informatie zonder controle, terwijl de eigen interpretatie van de bron (The Lancet) wordt gepresenteerd als de enige juiste feitelijke basis, hiermee het standpunt van de opponent vertekend om het aan te vallen."
+        },
+        {
+          "sleutel": "Frame-Thematisch",
+          "beschrijving": "Het benaderen van de kwestie vanuit een breder maatschappelijk, statistisch of historisch kader.",
+          "labelgroep": "Framing-Focus",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "Het argument beroept zich op brede statistische gegevens (wereldwijde moedersterfte, percentages) en wetenschappelijke artikelen in plaats van op een individueel incident of persoonlijk verhaal."
+        },
+        {
+          "sleutel": "Frame-Conflict",
+          "beschrijving": "De nadruk ligt op de felle strijd of meningsverschillen tussen personen, partijen of groepen.",
+          "labelgroep": "Generieke Nieuwsframes",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "De tekst benadrukt het meningsverschil en de onmogelijkheid van een eerlijke gedachtenwisseling tussen de spreker en de heer Paternotte."
+        },
+        {
+          "sleutel": "Bewijs-Expert",
+          "beschrijving": "Onderbouwd met de consensus, verklaring of het oordeel van een erkend specialist.",
+          "labelgroep": "Type Bewijsvoering",
+          "perspectief": "Methodologisch & Contextueel",
+          "created_by": "llm",
+          "reden": "Er wordt verwezen naar een artikel in The Lancet en informatie van de WHO als onderbouwing."
+        },
+        {
+          "sleutel": "Bewijs-Statistisch",
+          "beschrijving": "Onderbouwd met kwantitatieve gegevens, cijfers, percentages of grootschalig representatief onderzoek.",
+          "labelgroep": "Type Bewijsvoering",
+          "perspectief": "Methodologisch & Contextueel",
+          "created_by": "llm",
+          "reden": "Er worden specifieke cijfers en percentages genoemd (295 miljoen, 4,7% tot 13,2%) om de claim te kwantificeren."
+        },
+        {
+          "sleutel": "Meta-Reikwijdte",
+          "beschrijving": "Uitingen over de thematische grenzen van het debat, de toelaatbaarheid van specifieke beweringen, of de legitimiteit van bepaalde linguïstische framings.",
+          "labelgroep": "Metadiscussie",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De spreker bekritiseert de bronkeuze van de opponent en stelt dat dit de legitimiteit en eerlijkheid van de inhoudelijke discussie over de feiten ondermijnt."
+        }
+      ],
       "oppositions": []
     },
     {
@@ -13482,7 +14099,96 @@
           "attributed_source_text": "Time Magazine"
         }
       ],
-      "tags": [],
+      "tags": [
+        {
+          "sleutel": "Arena-Parlement",
+          "beschrijving": "Debat of uitspraak afkomstig uit de Eerste of Tweede Kamer.",
+          "labelgroep": "Issue Arena",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Bron is een Tweede Kamer-debat (documents.source.type = 'tweede_kamer')."
+        },
+        {
+          "sleutel": "Actor-Politicus",
+          "beschrijving": "Een gekozen volksvertegenwoordiger, bewindspersoon of partijvertegenwoordiger.",
+          "labelgroep": "Actor Type",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Spreker heeft een geregistreerde partij (D66)."
+        },
+        {
+          "sleutel": "Walton-Consequentie",
+          "beschrijving": "Het verdedigen of aanvallen van een standpunt op basis van de verwachte praktische (voordelige of nadelige) gevolgen.",
+          "labelgroep": "Redeneerschema",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De spreker verdedigt het standpunt door te wijzen op de nadelige praktische gevolgen (tragedies, levensgevaar) van het tegenovergestelde beleid (abortusverbod)."
+        },
+        {
+          "sleutel": "Drogreden-Bespelen-Publiek",
+          "beschrijving": "Emotioneel argumenteren gericht op het oproepen van angst, woede of medelijden bij de toehoorder.",
+          "labelgroep": "Dialectische Kwaliteit",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De spreker gebruikt emotioneel geladen termen als 'tragedies', 'absurde tragedies' en beeldende voorbeelden (helikopter) om medelijden en angst op te roepen bij de toehoorder."
+        },
+        {
+          "sleutel": "Frame-Episodisch",
+          "beschrijving": "Inzoomen op een specifiek, individueel incident, persoonlijk verhaal of een concrete casus.",
+          "labelgroep": "Framing-Focus",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "De argumentatie focust op specifieke, individuele incidenten en casussen (vrouwen in Polen en Amerika) in plaats van op brede statistische trends."
+        },
+        {
+          "sleutel": "Frame-Menselijk-Belang",
+          "beschrijving": "De focus ligt op de menselijke kant, de emoties of het individuele leed (Human Interest).",
+          "labelgroep": "Generieke Nieuwsframes",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "De nadruk ligt op het individuele leed, de emotionele impact en de menselijke kant van de abortusdebatten, zoals beschreven in het Time Magazine-artikel."
+        },
+        {
+          "sleutel": "Frame-Moraliteit",
+          "beschrijving": "Inbranding vanuit ethische plichten, spirituele of religieuze principes.",
+          "labelgroep": "Generieke Nieuwsframes",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "De spreker frameert de situatie als een morele plicht ('Daarom moeten wij iets doen') om onrecht en leed tegen te gaan."
+        },
+        {
+          "sleutel": "Ideologie-GAL",
+          "beschrijving": "Progressief, ecologisch, kosmopolitisch (Green, Alternative, Libertarian).",
+          "labelgroep": "Cultureel-Ideologische Breuklijn",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "Het betoog voor het recht van vrouwen op zelfbeschikking en kritiek op conservatieve abortusverboden sluit aan bij progressieve, libertaire waarden binnen de GAL-dimensie."
+        },
+        {
+          "sleutel": "Moraliteit-Vrijheid",
+          "beschrijving": "Gericht op individuele autonomie en weerstand tegen dwang of onderdrukking door dominante actoren.",
+          "labelgroep": "Morele Fundamenten",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "Het argument beroept zich expliciet op het recht van individuen om over hun eigen lichaam te beslissen, wat kernachtig is voor autonomie en weerstand tegen dwang."
+        },
+        {
+          "sleutel": "Moraliteit-Zorg",
+          "beschrijving": "Gericht op empathie, compassie en het voorkomen van leed en schade bij kwetsbaren.",
+          "labelgroep": "Morele Fundamenten",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "De focus op 'tragedies', 'ernstige problemen' en het redden van levens benadrukt empathie en het voorkomen van leed bij kwetsbare vrouwen."
+        },
+        {
+          "sleutel": "Bewijs-Anekdotisch",
+          "beschrijving": "Onderbouwd met één specifiek praktijkgeval, incident, exemplar of persoonlijk verhaal.",
+          "labelgroep": "Type Bewijsvoering",
+          "perspectief": "Methodologisch & Contextueel",
+          "created_by": "llm",
+          "reden": "De onderbouwing bestaat uit specifieke voorbeelden en verhalen (Polen, Amerikaanse vrouwen met helikopter) in plaats van statistische data."
+        }
+      ],
       "oppositions": []
     },
     {
@@ -23454,62 +24160,62 @@
   "argument_count": 439,
   "tag_correspondence": {
     "inertia_pct": [
-      44.8,
-      18.0
+      44.1,
+      17.1
     ],
     "parties": [
       {
         "party": "BBB",
-        "x": 0.41637062265617586,
-        "y": -0.07674055362840677,
+        "x": 0.4198135540994105,
+        "y": 0.1630253010917424,
         "n": 63
       },
       {
         "party": "ChristenUnie",
-        "x": 0.5103602573362545,
-        "y": 0.15345527427272979,
+        "x": 0.44280794627575465,
+        "y": -0.2362922213629644,
         "n": 220
       },
       {
         "party": "D66",
-        "x": -0.3419243889467572,
-        "y": -0.2790416337702663,
-        "n": 61
+        "x": -0.3600667025189309,
+        "y": -0.318889087590049,
+        "n": 78
       },
       {
         "party": "FVD",
-        "x": 0.6365607344637603,
-        "y": -0.05085177645508416,
-        "n": 10
+        "x": 0.48510003344996927,
+        "y": 0.5033201189716818,
+        "n": 21
       },
       {
         "party": "GroenLinks-PvdA",
-        "x": -0.5136766518511247,
-        "y": 0.39323931195830286,
+        "x": -0.6079926734877587,
+        "y": -0.4256762413699122,
         "n": 80
       },
       {
         "party": "PVV",
-        "x": 0.056189098597656494,
-        "y": -0.6168305577678256,
+        "x": 0.012827445192440785,
+        "y": 0.3786563475525549,
         "n": 5
       },
       {
         "party": "SGP",
-        "x": 0.6896367350610164,
-        "y": -0.09992380823242555,
-        "n": 71
+        "x": 0.6873697218935518,
+        "y": 0.08985555255945633,
+        "n": 110
       },
       {
         "party": "SP",
-        "x": -0.6240401019915962,
-        "y": 0.6417278948107905,
+        "x": -0.6743124795557862,
+        "y": -0.22505745757571036,
         "n": 69
       },
       {
         "party": "VVD",
-        "x": -0.36672591091162715,
-        "y": -0.31443777767864206,
+        "x": -0.35654698102056265,
+        "y": 0.38337869944432923,
         "n": 244
       }
     ],
@@ -23518,257 +24224,257 @@
         "sleutel": "Bewijs-Anekdotisch",
         "beschrijving": "Onderbouwd met één specifiek praktijkgeval, incident, exemplar of persoonlijk verhaal.",
         "labelgroep": "Type Bewijsvoering",
-        "x": 0.29803983921745064,
-        "y": 0.5036701158867103,
-        "n": 8
+        "x": -0.016062272814893336,
+        "y": -0.7509470553822652,
+        "n": 10
       },
       {
         "sleutel": "Bewijs-Causaal",
         "beschrijving": "Onderbouwd met een heldere, mechanistische of logische verklaring van oorzaak en gevolg.",
         "labelgroep": "Type Bewijsvoering",
-        "x": -0.20295727977356118,
-        "y": -0.18124458380946296,
-        "n": 44
+        "x": -0.21666504964876435,
+        "y": 0.09367563339562525,
+        "n": 45
       },
       {
         "sleutel": "Bewijs-Expert",
         "beschrijving": "Onderbouwd met de consensus, verklaring of het oordeel van een erkend specialist.",
         "labelgroep": "Type Bewijsvoering",
-        "x": -0.3540064927891961,
-        "y": -0.08728056693639276,
-        "n": 14
+        "x": -0.17574964020817826,
+        "y": 0.5707232589265642,
+        "n": 16
       },
       {
         "sleutel": "Bewijs-Statistisch",
         "beschrijving": "Onderbouwd met kwantitatieve gegevens, cijfers, percentages of grootschalig representatief onderzoek.",
         "labelgroep": "Type Bewijsvoering",
-        "x": 0.1156258652353982,
-        "y": -0.24477434645542034,
-        "n": 27
+        "x": 0.12883266712633212,
+        "y": 0.21601452388200723,
+        "n": 29
       },
       {
         "sleutel": "Drogreden-Bespelen-Publiek",
         "beschrijving": "Emotioneel argumenteren gericht op het oproepen van angst, woede of medelijden bij de toehoorder.",
         "labelgroep": "Dialectische Kwaliteit",
-        "x": 0.23756518741817736,
-        "y": -0.11446454447488537,
-        "n": 6
+        "x": 0.03775067091905911,
+        "y": -0.6749050830165723,
+        "n": 7
       },
       {
         "sleutel": "Drogreden-Stropop",
         "beschrijving": "Het vertekenen of overdrijven van het standpunt van de opponent om dit makkelijker te kunnen aanvallen.",
         "labelgroep": "Dialectische Kwaliteit",
-        "x": 0.4126013805723283,
-        "y": -0.2513187819171538,
-        "n": 5
+        "x": 0.592094363128713,
+        "y": 0.12895461420361043,
+        "n": 7
       },
       {
         "sleutel": "Drogreden-Vals-Dilemma",
         "beschrijving": "Zwart-wit denken; de situatie voorstellen alsof er slechts twee uiterste, elkaar uitsluitende opties bestaan.",
         "labelgroep": "Dialectische Kwaliteit",
-        "x": 1.420300962347502,
-        "y": -0.3248797667455365,
+        "x": 1.4042072298389716,
+        "y": 0.29501738875255307,
         "n": 2
       },
       {
         "sleutel": "Frame-Conflict",
         "beschrijving": "De nadruk ligt op de felle strijd of meningsverschillen tussen personen, partijen of groepen.",
         "labelgroep": "Generieke Nieuwsframes",
-        "x": 0.5421057245268367,
-        "y": 0.012244543790455434,
-        "n": 14
+        "x": 0.5570052840291639,
+        "y": -0.06086797076961742,
+        "n": 16
       },
       {
         "sleutel": "Frame-Economisch",
         "beschrijving": "De focus ligt op de financiële kosten, baten of budgettaire gevolgen van een kwestie.",
         "labelgroep": "Generieke Nieuwsframes",
-        "x": -0.6510269869517297,
-        "y": 0.619030241741187,
+        "x": -0.7243055429354575,
+        "y": -0.1631322478808173,
         "n": 16
       },
       {
         "sleutel": "Frame-Episodisch",
         "beschrijving": "Inzoomen op een specifiek, individueel incident, persoonlijk verhaal of een concrete casus.",
         "labelgroep": "Framing-Focus",
-        "x": 0.34808416745853354,
-        "y": 0.7587932158546659,
-        "n": 3
+        "x": -0.04210533714009038,
+        "y": -0.9990488543430256,
+        "n": 4
       },
       {
         "sleutel": "Frame-Menselijk-Belang",
         "beschrijving": "De focus ligt op de menselijke kant, de emoties of het individuele leed (Human Interest).",
         "labelgroep": "Generieke Nieuwsframes",
-        "x": 0.23088153651889082,
-        "y": 0.26450564879465727,
-        "n": 21
+        "x": 0.06233301373033724,
+        "y": -0.5585861307138223,
+        "n": 23
       },
       {
         "sleutel": "Frame-Moraliteit",
         "beschrijving": "Inbranding vanuit ethische plichten, spirituele of religieuze principes.",
         "labelgroep": "Generieke Nieuwsframes",
-        "x": 0.5365026124919864,
-        "y": 0.04563969285989409,
-        "n": 47
+        "x": 0.5145342702081871,
+        "y": -0.1207670353970148,
+        "n": 55
       },
       {
         "sleutel": "Frame-Thematisch",
         "beschrijving": "Het benaderen van de kwestie vanuit een breder maatschappelijk, statistisch of historisch kader.",
         "labelgroep": "Framing-Focus",
-        "x": -0.06101029740112058,
-        "y": -0.0993926668240137,
-        "n": 116
+        "x": -0.03290451895468192,
+        "y": 0.12321569274982085,
+        "n": 125
       },
       {
         "sleutel": "Frame-Verantwoordelijkheid",
         "beschrijving": "De nadruk ligt op de schuldvraag of de plicht tot het oplossen van het probleem.",
         "labelgroep": "Generieke Nieuwsframes",
-        "x": -0.2273179873410426,
-        "y": -0.06840248419176306,
+        "x": -0.28119501078536546,
+        "y": 0.1490427852958795,
         "n": 49
       },
       {
         "sleutel": "Ideologie-GAL",
         "beschrijving": "Progressief, ecologisch, kosmopolitisch (Green, Alternative, Libertarian).",
         "labelgroep": "Cultureel-Ideologische Breuklijn",
-        "x": -0.8812895734915902,
-        "y": -0.0848722283713106,
-        "n": 48
+        "x": -0.9208671879201505,
+        "y": -0.07264051239761488,
+        "n": 50
       },
       {
         "sleutel": "Ideologie-Links-Economisch",
         "beschrijving": "Gericht op herverdeling van welvaart, sterke collectieve voorzieningen en overheidsingrijpen.",
         "labelgroep": "Cultureel-Ideologische Breuklijn",
-        "x": -0.6799479990963327,
-        "y": 1.0228255636232104,
+        "x": -0.7854373763187564,
+        "y": -0.5786998515760545,
         "n": 20
       },
       {
         "sleutel": "Ideologie-Rechts-Economisch",
         "beschrijving": "Gericht op de vrije markt, deregulering en individuele verantwoordelijkheid.",
         "labelgroep": "Cultureel-Ideologische Breuklijn",
-        "x": -0.7552688795492672,
-        "y": -1.0223236451377797,
+        "x": -0.7283792587591849,
+        "y": 1.2587244704613747,
         "n": 7
       },
       {
         "sleutel": "Ideologie-TAN",
         "beschrijving": "Conservatief, traditioneel, nationalistisch (Traditional, Authoritarian, Nationalist).",
         "labelgroep": "Cultureel-Ideologische Breuklijn",
-        "x": 0.9403929410821354,
-        "y": 0.058932671464442914,
-        "n": 53
+        "x": 0.9040526764286636,
+        "y": -0.04258949636334982,
+        "n": 60
       },
       {
         "sleutel": "Meta-Agenda-Tijdigheid",
         "beschrijving": "Uitingen over de chronologische geschiktheid, de prioriteitstelling of de urgentie van de discussie op dit specifieke moment.",
         "labelgroep": "Metadiscussie",
-        "x": 0.1479068544942018,
-        "y": -0.26169918401715664,
+        "x": 0.08810998448589506,
+        "y": 0.24146014046077569,
         "n": 4
       },
       {
         "sleutel": "Meta-Reikwijdte",
         "beschrijving": "Uitingen over de thematische grenzen van het debat, de toelaatbaarheid van specifieke beweringen, of de legitimiteit van bepaalde linguïstische framings.",
         "labelgroep": "Metadiscussie",
-        "x": -0.028327756102288135,
-        "y": -0.35863740833965013,
-        "n": 15
+        "x": 0.009942244132542606,
+        "y": 0.4672224027856351,
+        "n": 16
       },
       {
         "sleutel": "Meta-Vorm-Setting",
         "beschrijving": "Uitingen over de formele procedure, de interactieve spelregels, het vergaderformat of de fysieke en institutionele context van de uitwisseling.",
         "labelgroep": "Metadiscussie",
-        "x": 0.22162600238463362,
-        "y": -0.36687566406312505,
+        "x": 0.1913300014702936,
+        "y": 0.4707239389155329,
         "n": 7
       },
       {
         "sleutel": "Moraliteit-Autoriteit",
         "beschrijving": "Gericht op respect voor traditie, legitieme hiërarchie, wetten en maatschappelijke orde.",
         "labelgroep": "Morele Fundamenten",
-        "x": 0.3390879210460267,
-        "y": -0.4020126071989543,
-        "n": 22
+        "x": 0.5045457699905994,
+        "y": 0.5038209063931497,
+        "n": 27
       },
       {
         "sleutel": "Moraliteit-Eerlijkheid",
         "beschrijving": "Gericht op gelijke kansen, gelijke rechten en onpartijdige behandeling (equality).",
         "labelgroep": "Morele Fundamenten",
-        "x": -0.6794066192831415,
-        "y": 0.9357043291141368,
+        "x": -0.7673108763972636,
+        "y": -0.39109884434343256,
         "n": 15
       },
       {
         "sleutel": "Moraliteit-Loyaliteit",
         "beschrijving": "Gericht op groeps-solidariteit, vaderlandsliefde en trouw aan de eigen gemeenschap (in-group).",
         "labelgroep": "Morele Fundamenten",
-        "x": 1.1741553798076145,
-        "y": 0.2243235958204654,
+        "x": 1.0711352284336404,
+        "y": -0.4188636634423645,
         "n": 3
       },
       {
         "sleutel": "Moraliteit-Vrijheid",
         "beschrijving": "Gericht op individuele autonomie en weerstand tegen dwang of onderdrukking door dominante actoren.",
         "labelgroep": "Morele Fundamenten",
-        "x": -0.5919802665407895,
-        "y": -0.16627442092980618,
-        "n": 44
+        "x": -0.6484590600865859,
+        "y": -0.0500168450902716,
+        "n": 46
       },
       {
         "sleutel": "Moraliteit-Zorg",
         "beschrijving": "Gericht op empathie, compassie en het voorkomen van leed en schade bij kwetsbaren.",
         "labelgroep": "Morele Fundamenten",
-        "x": 0.16664882483799134,
-        "y": 0.16332257813856382,
-        "n": 74
+        "x": 0.14865293715289282,
+        "y": -0.1995678610012247,
+        "n": 81
       },
       {
         "sleutel": "Moraliteit-Zuiverheid",
         "beschrijving": "Gericht op het vermijden van morele of fysieke besmetting; streven naar het schone, natuurlijke of verhevene.",
         "labelgroep": "Morele Fundamenten",
-        "x": 1.0982489541704947,
-        "y": 0.2073194924950656,
-        "n": 19
+        "x": 1.0224550439314024,
+        "y": -0.31144047602793673,
+        "n": 20
       },
       {
         "sleutel": "Walton-Analogie",
         "beschrijving": "Er wordt een vergelijking getrokken met een historische gebeurtenis, een andere specifieke casus of een precedent.",
         "labelgroep": "Redeneerschema",
-        "x": 0.11111932154345888,
-        "y": 0.2448670272538253,
-        "n": 8
+        "x": 0.12899467985572932,
+        "y": -0.32925935829590897,
+        "n": 9
       },
       {
         "sleutel": "Walton-Causaal",
         "beschrijving": "Argumentatie gebaseerd op een directe oorzaak-gevolgrelatie.",
         "labelgroep": "Redeneerschema",
-        "x": -0.31269239294610035,
-        "y": -0.6584909208062074,
+        "x": -0.3418924552600279,
+        "y": 0.25330572209957886,
         "n": 13
       },
       {
         "sleutel": "Walton-Consequentie",
         "beschrijving": "Het verdedigen of aanvallen van een standpunt op basis van de verwachte praktische (voordelige of nadelige) gevolgen.",
         "labelgroep": "Redeneerschema",
-        "x": 0.06311385216335398,
-        "y": 0.11747199458812548,
-        "n": 50
+        "x": -0.04034595308520287,
+        "y": -0.1685292499085358,
+        "n": 52
       },
       {
         "sleutel": "Walton-Expertise",
         "beschrijving": "Het argument leunt op de autoriteit, bevindingen of de verklaring van een specialist of expert.",
         "labelgroep": "Redeneerschema",
-        "x": -0.2918490252998991,
-        "y": -0.1919916881872077,
-        "n": 11
+        "x": -0.1100257584748033,
+        "y": 0.7072141451021475,
+        "n": 13
       },
       {
         "sleutel": "Walton-Regel",
         "beschrijving": "Het argument beroept zich op een reeds gevestigde wet, formele regel of breed geaccepteerde maatschappelijke norm.",
         "labelgroep": "Redeneerschema",
-        "x": -0.08851607140171332,
-        "y": -0.1682861926538333,
-        "n": 35
+        "x": 0.05885670083535989,
+        "y": 0.25407357104296385,
+        "n": 40
       }
     ]
   }
