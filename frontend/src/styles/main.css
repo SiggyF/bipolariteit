@@ -311,6 +311,34 @@ h3 {
 	margin: 0;
 }
 
+/* De d2-boom bakt zijn kleuren (en een witte achtergrond) letterlijk in de
+   SVG in -- reageert dus nog niet op data-theme="dark" (zie
+   pipeline/render_argument_tree.py D2_CLASSES). De kaart eromheen blijft
+   daarom bewust licht, zodat de SVG er niet als een losse witte vlek in
+   een donkere pagina bij staat. */
+.argument-tree {
+	max-width: 100%;
+	margin: 0 0 var(--space-4);
+	padding: var(--space-3);
+	background: #f2efe7;
+	border: 1px solid var(--color-border);
+}
+
+.argument-tree-note {
+	color: #221f1b;
+	font-size: var(--step-0);
+	margin: 0 0 var(--space-2);
+}
+
+.argument-tree-svg {
+	overflow-x: auto;
+}
+
+.argument-tree-svg svg {
+	max-width: none;
+	height: auto;
+}
+
 /* Long-form article text (About, validation report): give body copy the same
    paper-and-ink treatment as the rest of the page -- a readable measure,
    newspaper-style section rules above headings, dash-marked lists, and a

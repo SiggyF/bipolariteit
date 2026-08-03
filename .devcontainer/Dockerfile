@@ -8,3 +8,9 @@ FROM mcr.microsoft.com/devcontainers/base:ubuntu
 RUN apt-get update \
 	&& apt-get install -y --no-install-recommends python3.14 \
 	&& rm -rf /var/lib/apt/lists/*
+
+# d2 (declaratieve diagramtaal, https://d2lang.com) -- rendert de
+# argumentenboom (pipeline/render_argument_tree.py) naar SVG. Systeembreed
+# geïnstalleerd (i.p.v. --prefix in $HOME) zodat het ook werkt los van het
+# vscode-gebruikersprofiel.
+RUN curl -fsSL https://d2lang.com/install.sh | sh -s -- --prefix /usr/local --force

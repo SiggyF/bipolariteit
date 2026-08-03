@@ -5,6 +5,15 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 
 const topicModules = import.meta.glob("../../../../data/export/topics/*.json", { eager: true });
 
+// Losse map (niet data/export/topics/ zelf): de argumentenboom is een
+// experimentele, aparte export (pipeline/build_argument_tree.py +
+// render_argument_tree.py) en bestaat niet per se voor elk topic.
+const treeSvgModules = import.meta.glob("../../../../data/export/argument-trees/*.svg", {
+	eager: true,
+	query: "?raw",
+	import: "default",
+});
+
 export function getStaticPaths() {
 	const modules = import.meta.glob("../../../../data/export/topics/*.json", { eager: true });
 	return Object.values(modules).map((mod: any) => ({
@@ -15,6 +24,8 @@ export function getStaticPaths() {
 const { slug } = Astro.params;
 const mod: any = Object.values(topicModules).find((m: any) => m.default.slug === slug);
 const topic = mod.default;
+const treeSvgEntry = Object.entries(treeSvgModules).find(([path]) => path.endsWith(`/${slug}.svg`));
+const treeSvg = treeSvgEntry ? (treeSvgEntry[1] as string) : null;
 ---
 
 <BaseLayout title={`${topic.name} — Bipolariteit`} description={topic.description}>
@@ -23,6 +34,17 @@ const topic = mod.default;
 				<h1>{topic.name}</h1>
 				{topic.description && <p class="topic-description">{topic.description}</p>}
 			</div>
+
+			{treeSvg && (
+				<section class="argument-tree">
+					<h2>Argumentenboom</h2>
+					<p class="argument-tree-note">
+						Experimenteel: elk vak is een letterlijk argument; pijlen naar boven onderbouwen het standpunt erboven,
+						rode pijlen weerleggen een argument aan de andere kant.
+					</p>
+					<div class="argument-tree-svg" set:html={treeSvg} />
+				</section>
+			)}
 
 			{/* Eén island voor alles wat op het filter reageert: de grafieken en de
 			    kolommen delen zo dezelfde argumentenlijst en filterstore. Ook
