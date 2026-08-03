@@ -7,6 +7,7 @@ import { slugify } from "../lib/slug";
 import { NO_PARTY } from "../lib/types";
 import { TEGENSTELLING } from "../lib/topics";
 import { ICOON_PAD, PERSPECTIEVEN } from "../lib/tagIcons.generated";
+import { ALLE_TAGS } from "../lib/taxonomy";
 
 const topicModules = import.meta.glob("../../../data/export/topics/*.json", { eager: true });
 
@@ -88,6 +89,17 @@ for (const mod of Object.values(topicModules) as any[]) {
 						</a>
 					</li>
 				))}
+			</ul>
+
+			<h2>Tags</h2>
+			<p class="intro">De volledige taxonomie, wie welke tag gebruikt en hoe vaak.</p>
+			<ul class="card-grid">
+				<li>
+					<a href="/tags/" class="card-tile">
+						<span class="card-tile-name">Alle tags</span>
+						<span class="card-tile-count">{ALLE_TAGS.length} tags in de taxonomie</span>
+					</a>
+				</li>
 			</ul>
 
 			<h2>Personen</h2>

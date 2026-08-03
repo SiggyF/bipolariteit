@@ -11,7 +11,7 @@ else
   RESOLVE_BASE_URL = scripts/detect_llm_base_url.sh
 endif
 
-.PHONY: help test test-js test-frontend ca-fixture status build dev dev-stop extract extract-agy tag tag-agy redactie export db-init pipeline-status backup-db release release-dry
+.PHONY: help test test-js test-frontend ca-fixture status build dev dev-stop extract extract-agy tag tag-agy redactie export tags-taxonomy db-init pipeline-status backup-db release release-dry
 
 help: ## Toon deze lijst
 	@grep -E '^[a-zA-Z_-]+:.*## ' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*## "}; {printf "  \033[36m%-16s\033[0m %s\n", $$1, $$2}'
@@ -62,6 +62,9 @@ redactie: ## Stage 2 -- redactie-check/opposition-linking (LLM, alleen op netstr
 
 export: ## SQLite -> data/export/topics/<slug>.json + topics-index.json, voor alle topics
 	uv run python -m pipeline.build_static_data
+
+tags-taxonomy: ## data/tags.toml -> frontend/src/lib/tagsTaxonomy.generated.ts
+	PYTHONPATH=. uv run python scripts/export_tags_taxonomy.py
 
 build: ## Frontend production build (frontend/dist/)
 	cd frontend && npm run build

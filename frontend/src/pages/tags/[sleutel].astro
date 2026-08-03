@@ -1,0 +1,41 @@
+---
+import TagDetail from "../../components/TagDetail.vue";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { ALLE_TAGS } from "../../lib/taxonomy";
+import { slugify } from "../../lib/slug";
+
+const topicModules = import.meta.glob("../../../../data/export/topics/*.json", { eager: true });
+
+function allArguments() {
+	return Object.values(topicModules).flatMap((mod: any) =>
+		mod.default.arguments.map((argument: any) => ({
+			...argument,
+			topicSlug: mod.default.slug,
+			topicName: mod.default.name,
+		})),
+	);
+}
+
+export function getStaticPaths() {
+	return ALLE_TAGS.map((tag) => ({
+		params: { sleutel: slugify(tag.sleutel) },
+		props: { tag },
+	}));
+}
+
+const { tag } = Astro.props;
+const argumentList = allArguments();
+---
+
+<BaseLayout title={`${tag.sleutel} — Bipolariteit`}>
+	<a href="/tags/" class="back-link">&larr; alle tags</a>
+	<TagDetail
+		sleutel={tag.sleutel}
+		beschrijving={tag.beschrijving}
+		labelgroep={tag.labelgroep}
+		perspectief={tag.perspectief}
+		deterministic={tag.deterministic}
+		argumentList={argumentList}
+		client:only="vue"
+	/>
+</BaseLayout>
