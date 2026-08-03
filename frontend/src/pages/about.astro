@@ -17,6 +17,15 @@ const topicModules = import.meta.glob("../../../data/export/topics/*.json", { ea
 const allArguments = Object.values(topicModules).flatMap((mod) => mod.default.arguments);
 const tagUsage = new Map(deriveTagUsage(allArguments).map((row) => [row.sleutel, row]));
 
+// Aantal argumenten per standpunt/typologie, voor de tellers in de legenda
+// hieronder -- zelfde bron (allArguments) als de tag-taxonomie erboven.
+const stanceCounts = new Map<string, number>();
+const typologyCounts = new Map<string, number>();
+for (const argument of allArguments) {
+	stanceCounts.set(argument.stance, (stanceCounts.get(argument.stance) ?? 0) + 1);
+	typologyCounts.set(argument.typology, (typologyCounts.get(argument.typology) ?? 0) + 1);
+}
+
 // Labelgroep-volgorde per perspectief herleiden uit de taxonomie-volgorde in
 // tagIcons.generated.ts (zelf gegenereerd uit data/tags.toml) i.p.v. die
 // groepering nog een keer los te dupliceren -- de frontend leest tags.toml
@@ -317,7 +326,10 @@ const CA_ROW_LABEL_OFFSET: Record<string, CaLabelOffset> = {
 							STANCES.map((stance) => (
 								<div class="card-item card-item--accent" style={`--card-item-accent: var(--color-${stance === "unclear" ? "unclear" : stance})`}>
 									<div class="card-item-body">
-										<span class="card-item-title">{stanceLabel(stance)}</span>
+										<div class="card-item-head">
+											<span class="card-item-title">{stanceLabel(stance)}</span>
+											<span class="card-item-meta">{stanceCounts.get(stance) ?? 0}x</span>
+										</div>
 										<span class="card-item-description">{stanceDescription(stance)}</span>
 									</div>
 								</div>
@@ -334,7 +346,10 @@ const CA_ROW_LABEL_OFFSET: Record<string, CaLabelOffset> = {
 							TYPOLOGIES.map((typology) => (
 								<div class="card-item card-item--accent" style="--card-item-accent: var(--color-muted)">
 									<div class="card-item-body">
-										<span class="card-item-title">{typologyLabel(typology)}</span>
+										<div class="card-item-head">
+											<span class="card-item-title">{typologyLabel(typology)}</span>
+											<span class="card-item-meta">{typologyCounts.get(typology) ?? 0}x</span>
+										</div>
 										<span class="card-item-description">{typologyDescription(typology)}</span>
 									</div>
 								</div>
