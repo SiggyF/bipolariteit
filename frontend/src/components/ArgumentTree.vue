@@ -28,6 +28,27 @@
 			<ul v-if="selectedArgument.tags.length" class="argument-tree-detail-tags">
 				<li v-for="tag in selectedArgument.tags" :key="tag">{{ tag }}</li>
 			</ul>
+			<div
+				v-if="selectedArgument.tweedekamer_activiteit_url || selectedArgument.speaker_video_url"
+				class="argument-tree-detail-links"
+			>
+				<a
+					v-if="selectedArgument.tweedekamer_activiteit_url"
+					:href="selectedArgument.tweedekamer_activiteit_url"
+					target="_blank"
+					rel="noopener"
+					title="Officiële tweedekamer.nl-pagina van dit debat (Verslag/Handelingen + video)"
+					>bekijk in de Tweede Kamer</a
+				>
+				<a
+					v-if="selectedArgument.speaker_video_url"
+					:href="selectedArgument.speaker_video_url"
+					target="_blank"
+					rel="noopener"
+					title="Springt naar het moment dat deze spreker begint in het debat"
+					>video (dit moment)</a
+				>
+			</div>
 			<div v-if="selectedOppositions.length" class="argument-tree-detail-oppositions">
 				<p class="argument-tree-detail-oppositions-label">Weerlegd door:</p>
 				<ul>
@@ -47,9 +68,10 @@ import VChart from "vue-echarts";
 import { use } from "echarts/core";
 import { SVGRenderer } from "echarts/renderers";
 import { TreeChart } from "echarts/charts";
+import { TooltipComponent } from "echarts/components";
 import { useTheme } from "../lib/useTheme";
 
-use([SVGRenderer, TreeChart]);
+use([SVGRenderer, TreeChart, TooltipComponent]);
 
 interface TreeArgument {
 	id: number;
@@ -58,6 +80,8 @@ interface TreeArgument {
 	actor_name: string;
 	actor_party: string | null;
 	tags: string[];
+	tweedekamer_activiteit_url: string | null;
+	speaker_video_url: string | null;
 }
 
 type TreeNode =
@@ -139,13 +163,15 @@ function toEchartsNode(node: TreeNode, stanceColor: string): Record<string, unkn
 		const arg = props.tree.arguments[String(node.argument_id)];
 		return {
 			name: shortLabel(arg),
+			fullName: arg.quote_text,
 			argumentId: node.argument_id,
 			itemStyle: { color: stanceColor },
 			children: (node.children ?? []).map((child) => toEchartsNode(child, stanceColor)),
 		};
 	}
 	return {
-		name: `${node.label} (${node.argument_ids.length})`,
+		name: `${truncate(node.label, 38)} (${node.argument_ids.length})`,
+		fullName: node.label,
 		itemStyle: { color: groupColor.value },
 		children: [
 			...node.argument_ids.map((id) => toEchartsNode({ argument_id: id }, stanceColor)),
@@ -155,15 +181,27 @@ function toEchartsNode(node: TreeNode, stanceColor: string): Record<string, unkn
 }
 
 // Genoeg verticale ruimte per node zodat siblings (nu onder elkaar i.p.v.
-// naast elkaar, zie orient: "LR" hieronder) niet overlappen -- schaalt mee
-// met het aantal argumenten in dit standpunt.
+// naast elkaar, zie orient: "LR" hieronder) niet overlappen. Schaalt met het
+// aantal TOP-LEVEL knopen (wat je standaard ziet, initialTreeDepth: 1), niet
+// met het totaal aantal argumenten -- dat laatste gaf bij bv. 25 argumenten
+// in 5 groepen een veel te hoge, grotendeels lege box. Bij het uitklappen
+// van een tak herschikt ECharts zelf binnen deze hoogte (desnoods dichter op
+// elkaar); roam laat je dan in-/uitzoomen.
 function chartHeight(block: StanceBlock): string {
-	return `${Math.max(420, block.argument_count * 26)}px`;
+	return `${Math.max(200, block.nodes.length * 46)}px`;
 }
 
 function chartOption(block: StanceBlock) {
 	const stanceColor = colors.value[block.stance] ?? colors.value.unclear;
 	return {
+		tooltip: {
+			trigger: "item",
+			// Labels zijn afgekapt (zie truncate() in toEchartsNode/shortLabel)
+			// zodat ze nooit buiten de plot kunnen vallen -- de tooltip toont de
+			// volledige tekst on hover, zonder de layout te verstoren.
+			formatter: (params: { data?: { fullName?: string; name?: string } }) =>
+				(params.data?.fullName ?? params.data?.name ?? "").replace(/\n/g, "<br/>"),
+		},
 		series: [
 			{
 				type: "tree",
@@ -183,8 +221,11 @@ function chartOption(block: StanceBlock) {
 				layout: "orthogonal",
 				top: "3%",
 				bottom: "3%",
-				left: "2%",
-				right: "22%",
+				// Ruime marges: labels staan links (root) en rechts (children) van
+				// hun node, buiten de plot-area zelf -- te krap hier sneed de root-
+				// ("Contra" werd "tra") en de langste groep-labels gewoon af.
+				left: "14%",
+				right: "30%",
 				roam: true,
 				initialTreeDepth: 1,
 				expandAndCollapse: true,
@@ -280,6 +321,17 @@ function onNodeClick(params: { data?: { argumentId?: number } }) {
 	border: 1px solid var(--color-border);
 	padding: 0 0.4em;
 	font-size: var(--step--1);
+}
+
+.argument-tree-detail-links {
+	display: flex;
+	gap: 0.75rem;
+	font-size: 0.8rem;
+	margin: 0 0 var(--space-1);
+}
+
+.argument-tree-detail-links a {
+	color: var(--color-accent);
 }
 
 .argument-tree-detail-oppositions {

@@ -35,6 +35,7 @@ from pathlib import Path
 
 import requests
 
+from pipeline.build_static_data import _speaker_event_url
 from pipeline.db import db
 from pipeline.periodes import PeriodeIndex
 
@@ -95,7 +96,8 @@ def fetch_stance_arguments(conn, topic_id, stance, vanaf, limit):
     dus een eerste, bewust beperkte steekproef om op te experimenteren, geen
     representatieve full-corpus-boom."""
     rows = conn.execute(
-        """SELECT ar.id, ar.quote_text, ar.typology, ac.name AS actor_name, ac.party AS actor_party
+        """SELECT ar.id, ar.quote_text, ar.typology, ac.name AS actor_name, ac.party AS actor_party,
+                  d.tweedekamer_activiteit_url, d.video_url, d.published_at
            FROM arguments ar
            JOIN actors ac ON ac.id = ar.actor_id
            JOIN documents d ON d.id = ar.document_id
@@ -126,6 +128,12 @@ def fetch_stance_arguments(conn, topic_id, stance, vanaf, limit):
                 "actor_name": row["actor_name"],
                 "actor_party": row["actor_party"],
                 "tags": tags_by_argument.get(row["id"], []),
+                # Link naar het debat zelf, zelfde twee varianten als
+                # ArgumentCard.vue (.argument-links): de officiële tweedekamer.nl-
+                # pagina, en indien beschikbaar het moment waarop deze spreker
+                # begint in de video.
+                "tweedekamer_activiteit_url": row["tweedekamer_activiteit_url"],
+                "speaker_video_url": _speaker_event_url(row["video_url"], row["published_at"]),
             }
         )
     return arguments
