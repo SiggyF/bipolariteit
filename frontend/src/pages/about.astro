@@ -4,7 +4,7 @@ import { deriveTagUsage, type TagUsageRow } from "../lib/aggregate";
 import { analyseTable, canonicalSigns } from "../lib/correspondence";
 import { ICOON_PAD, PERSPECTIEVEN } from "../lib/tagIcons.generated";
 import { tagIconPath } from "../lib/tagIcon";
-import type { Argument } from "../lib/types";
+import { STANCES, stanceLabel, stanceDescription, TYPOLOGIES, typologyLabel, typologyDescription, type Argument } from "../lib/types";
 
 // Alle argumenten over alle onderwerpen heen, alleen om het taxonomie-
 // overzicht hieronder te vullen -- zelfde bron en aggregatiefunctie als de
@@ -218,6 +218,49 @@ const CA_ROW_LABEL_OFFSET: Record<string, CaLabelOffset> = {
 					</p>
 				</li>
 			</ol>
+
+			<h2 id="argumenttypen">Standpunt &amp; typologie</h2>
+			<p>
+				Elk argument krijgt in Stage 1 een <strong>standpunt</strong> (de kleur van de kaart) en een
+				<strong>typologie</strong> (het label bovenaan de kaart) mee. Standpunt en typologie zijn onafhankelijk
+				van elkaar: een moreel argument kan net zo goed vóór als tegen zijn.
+			</p>
+			<table class="party-table">
+				<thead>
+					<tr>
+						<th>Standpunt</th>
+						<th>Betekenis</th>
+					</tr>
+				</thead>
+				<tbody>
+					{
+						STANCES.map((stance) => (
+							<tr>
+								<td>{stanceLabel(stance)}</td>
+								<td>{stanceDescription(stance)}</td>
+							</tr>
+						))
+					}
+				</tbody>
+			</table>
+			<table class="party-table">
+				<thead>
+					<tr>
+						<th>Typologie</th>
+						<th>Betekenis</th>
+					</tr>
+				</thead>
+				<tbody>
+					{
+						TYPOLOGIES.map((typology) => (
+							<tr>
+								<td>{typologyLabel(typology)}</td>
+								<td>{typologyDescription(typology)}</td>
+							</tr>
+						))
+					}
+				</tbody>
+			</table>
 
 			<h2>Beschrijvende tags, geen oordeel</h2>
 			<p>

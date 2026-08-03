@@ -5,7 +5,7 @@ import { displayPartyName } from "../lib/parties";
 import { filters, toggleValue } from "../lib/filters";
 import { scrollTarget } from "../lib/scrollTarget";
 import { slugify } from "../lib/slug";
-import type { Argument, Tag } from "../lib/types";
+import { typologyLabel, typologyDescription, type Argument, type Tag } from "../lib/types";
 import PartyLogo from "./PartyLogo.vue";
 
 function tagTooltip(tag: Tag): string {
@@ -73,7 +73,7 @@ watch(
 <template>
 	<article ref="cardEl" class="argument-card" :class="[`stance-${argument.stance}`, { 'is-highlighted': justHighlighted }]">
 		<div class="argument-meta">
-			<span class="typology-badge">{{ argument.typology }}</span>
+			<span class="typology-badge" :title="typologyDescription(argument.typology)">{{ typologyLabel(argument.typology) }}</span>
 		</div>
 		<blockquote class="quote">"{{ argument.quote_text }}"</blockquote>
 		<p v-if="argument.quote_context" class="quote-context">{{ argument.quote_context }}</p>
