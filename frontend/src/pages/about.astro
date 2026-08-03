@@ -201,7 +201,7 @@ const CA_ROW_LABEL_OFFSET: Record<string, CaLabelOffset> = {
 				</li>
 				<li class="workflow-arrow" aria-hidden="true">↓</li>
 				<li class="workflow-step">
-					<p class="workflow-step-title"><span class="workflow-step-index">3</span> Stage 1 — argumenten extraheren</p>
+					<p class="workflow-step-title"><span class="workflow-step-index">3</span> Argumenten-extractie</p>
 					<p class="workflow-step-detail">
 						Een lokaal LLM haalt per sprekerbeurt 0 of meer argumenten eruit: standpunt, typologie,
 						citaat, eventuele claims.
@@ -209,7 +209,7 @@ const CA_ROW_LABEL_OFFSET: Record<string, CaLabelOffset> = {
 				</li>
 				<li class="workflow-arrow" aria-hidden="true">↓</li>
 				<li class="workflow-step">
-					<p class="workflow-step-title"><span class="workflow-step-index">3b</span> Tags toekennen</p>
+					<p class="workflow-step-title"><span class="workflow-step-index">4</span> Tags toekennen</p>
 					<p class="workflow-step-detail">
 						Tags uit de taxonomie hieronder worden toegekend — drie labelgroepen deterministisch, de
 						rest via hetzelfde lokale LLM.
@@ -217,7 +217,7 @@ const CA_ROW_LABEL_OFFSET: Record<string, CaLabelOffset> = {
 				</li>
 				<li class="workflow-arrow" aria-hidden="true">↓</li>
 				<li class="workflow-step">
-					<p class="workflow-step-title"><span class="workflow-step-index">4</span> Stage 2 — redactie-check</p>
+					<p class="workflow-step-title"><span class="workflow-step-index">5</span> Bias-check</p>
 					<p class="workflow-step-detail">
 						Een bias-balanssnapshot per document plus een koppeling naar tegenargumenten. Geen
 						feitelijke-juistheidscheck.
@@ -225,7 +225,7 @@ const CA_ROW_LABEL_OFFSET: Record<string, CaLabelOffset> = {
 				</li>
 				<li class="workflow-arrow" aria-hidden="true">↓</li>
 				<li class="workflow-step">
-					<p class="workflow-step-title"><span class="workflow-step-index">5</span> Steekproefcontrole</p>
+					<p class="workflow-step-title"><span class="workflow-step-index">6</span> Steekproefcontrole</p>
 					<p class="workflow-step-detail">
 						Vóór elke publicatieronde herbeoordelen een mens en Gemini een representatieve
 						steekproef; de resultaten staan in de <a href="/validatie-rapportage">validatie-rapportage</a>.
@@ -233,7 +233,7 @@ const CA_ROW_LABEL_OFFSET: Record<string, CaLabelOffset> = {
 				</li>
 				<li class="workflow-arrow" aria-hidden="true">↓</li>
 				<li class="workflow-step">
-					<p class="workflow-step-title"><span class="workflow-step-index">6</span> Export &amp; publicatie</p>
+					<p class="workflow-step-title"><span class="workflow-step-index">7</span> Export &amp; publicatie</p>
 					<p class="workflow-step-detail">
 						De resultaten worden geëxporteerd en de site wordt daarop statisch gebouwd, zonder server of
 						eigen database.
@@ -243,7 +243,7 @@ const CA_ROW_LABEL_OFFSET: Record<string, CaLabelOffset> = {
 
 			<h2 id="argumenttypen">Standpunt &amp; typologie</h2>
 			<p>
-				Elk argument krijgt in Stage 1 een <strong>standpunt</strong> (de kleur van de kaart) en een <strong>typologie</strong> (het
+				Elk argument krijgt tijdens de argumenten-extractie een <strong>standpunt</strong> (de kleur van de kaart) en een <strong>typologie</strong> (het
 				label bovenaan de kaart) mee. Standpunt en typologie zijn onafhankelijk van elkaar: een moreel argument kan net zo goed
 				vóór als tegen zijn. Wat "pro" en "contra" concreet betekenen is per onderwerp gedefinieerd en staat toegelicht
 				bovenaan elke topicpagina.
@@ -555,8 +555,8 @@ const CA_ROW_LABEL_OFFSET: Record<string, CaLabelOffset> = {
 			</p>
 			<ul>
 				<li>
-					<strong>Modellen &amp; promptversies.</strong> Extractie (Stage 1), tagging (Stage 1b) en de
-					redactie-balanscheck (Stage 2) draaien lokaal via een open-source model (momenteel <code>qwen/qwen3.6-27b</code>);
+					<strong>Modellen &amp; promptversies.</strong> Argumenten-extractie, tagging en de bias-check draaien lokaal
+					via een open-source model (momenteel <code>qwen/qwen3.6-27b</code>);
 					validatiesteekproeven gebruiken daarnaast Gemini als tweede beoordelaar. Van elk argument wordt
 					bijgehouden met welke promptversie het gemaakt is, zodat een prompt- of modelwijziging altijd
 					traceerbaar is.
