@@ -1,0 +1,315 @@
+<template>
+	<div class="argument-tree">
+		<div class="argument-tree-charts">
+			<div v-for="block in visibleStances" :key="block.stance" class="argument-tree-chart-wrap">
+				<h3 class="argument-tree-chart-title">
+					{{ stanceLabel(block.stance) }} <span class="argument-tree-count">({{ block.argument_count }})</span>
+				</h3>
+				<VChart
+					class="argument-tree-chart"
+					:option="chartOption(block)"
+					:style="{ height: chartHeight(block) }"
+					autoresize
+					@click="onNodeClick"
+				/>
+			</div>
+		</div>
+
+		<div v-if="selectedArgument" class="argument-tree-detail">
+			<button type="button" class="argument-tree-detail-close" aria-label="Sluiten" @click="selectedArgumentId = null">
+				×
+			</button>
+			<blockquote>&ldquo;{{ selectedArgument.quote_text }}&rdquo;</blockquote>
+			<p class="argument-tree-detail-meta">
+				— {{ selectedArgument.actor_name
+				}}<template v-if="selectedArgument.actor_party"> ({{ selectedArgument.actor_party }})</template>
+				· typologie: {{ selectedArgument.typology }}
+			</p>
+			<ul v-if="selectedArgument.tags.length" class="argument-tree-detail-tags">
+				<li v-for="tag in selectedArgument.tags" :key="tag">{{ tag }}</li>
+			</ul>
+			<div v-if="selectedOppositions.length" class="argument-tree-detail-oppositions">
+				<p class="argument-tree-detail-oppositions-label">Weerlegd door:</p>
+				<ul>
+					<li v-for="opp in selectedOppositions" :key="opp.id">
+						&ldquo;{{ truncate(opp.quote_text) }}&rdquo; — {{ opp.actor_name
+						}}<template v-if="opp.actor_party"> ({{ opp.actor_party }})</template>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</template>
+
+<script setup lang="ts">
+import { computed, ref } from "vue";
+import VChart from "vue-echarts";
+import { use } from "echarts/core";
+import { SVGRenderer } from "echarts/renderers";
+import { TreeChart } from "echarts/charts";
+import { useTheme } from "../lib/useTheme";
+
+use([SVGRenderer, TreeChart]);
+
+interface TreeArgument {
+	id: number;
+	quote_text: string;
+	typology: string;
+	actor_name: string;
+	actor_party: string | null;
+	tags: string[];
+}
+
+type TreeNode =
+	| { argument_id: number; children?: TreeNode[] }
+	| { label: string; argument_ids: number[]; children?: TreeNode[] };
+
+interface StanceBlock {
+	stance: "pro" | "contra" | "unclear";
+	argument_count: number;
+	nodes: TreeNode[];
+}
+
+interface Opposition {
+	argument_a_id: number;
+	argument_b_id: number;
+	confidence: number | null;
+}
+
+interface ArgumentTreeData {
+	slug: string;
+	name: string;
+	stances: StanceBlock[];
+	arguments: Record<string, TreeArgument>;
+	oppositions: Opposition[];
+}
+
+const props = defineProps<{ tree: ArgumentTreeData }>();
+
+const STANCE_LABELS: Record<string, string> = { pro: "Pro", contra: "Contra", unclear: "Onduidelijk" };
+
+// "Ink & Rust" -- mirrors --color-pro/--color-contra/--color-unclear in
+// main.css (ECharts can't read CSS custom properties, so this stays a
+// manual mirror, same pattern as StatsPanel.vue).
+const COLORS = {
+	light: { pro: "#1f6f66", contra: "#9c3b32", unclear: "#948a79" },
+	dark: { pro: "#4fa89b", contra: "#cf6b5f", unclear: "#a89e8c" },
+};
+const GROUP_COLOR = { light: "#948a79", dark: "#a89e8c" };
+
+const isDark = useTheme();
+const colors = computed(() => (isDark.value ? COLORS.dark : COLORS.light));
+const groupColor = computed(() => (isDark.value ? GROUP_COLOR.dark : GROUP_COLOR.light));
+
+const visibleStances = computed(() => props.tree.stances.filter((block) => block.nodes.length > 0));
+
+// Oppositions (direct_rebuttal) kunnen geen boom-edge zijn -- het zijn per
+// definitie links tussen twee verschillende standpunt-bomen. In plaats van
+// een losse graph-overlay te bouwen, tonen we ze als tekst in het
+// detailpaneel van het argument dat weerlegd wordt.
+const oppositionsByArgument = computed(() => {
+	const map = new Map<number, number[]>();
+	for (const opp of props.tree.oppositions ?? []) {
+		if (!map.has(opp.argument_a_id)) map.set(opp.argument_a_id, []);
+		if (!map.has(opp.argument_b_id)) map.set(opp.argument_b_id, []);
+		map.get(opp.argument_a_id)!.push(opp.argument_b_id);
+		map.get(opp.argument_b_id)!.push(opp.argument_a_id);
+	}
+	return map;
+});
+
+function stanceLabel(stance: string): string {
+	return STANCE_LABELS[stance] ?? stance;
+}
+
+function truncate(text: string, maxLength = 60): string {
+	return text.length <= maxLength ? text : `${text.slice(0, maxLength).trimEnd()}…`;
+}
+
+// Korte node-labels i.p.v. de volledige quote (die was op deze schaal
+// onleesbaar in de vorige, d2-gebaseerde weergave) -- de volledige tekst
+// staat in het detailpaneel na een klik.
+function shortLabel(arg: TreeArgument): string {
+	const party = arg.actor_party ? ` (${arg.actor_party})` : "";
+	return `${truncate(arg.quote_text, 32)}\n${arg.actor_name}${party}`;
+}
+
+function toEchartsNode(node: TreeNode, stanceColor: string): Record<string, unknown> {
+	if ("argument_id" in node) {
+		const arg = props.tree.arguments[String(node.argument_id)];
+		return {
+			name: shortLabel(arg),
+			argumentId: node.argument_id,
+			itemStyle: { color: stanceColor },
+			children: (node.children ?? []).map((child) => toEchartsNode(child, stanceColor)),
+		};
+	}
+	return {
+		name: `${node.label} (${node.argument_ids.length})`,
+		itemStyle: { color: groupColor.value },
+		children: [
+			...node.argument_ids.map((id) => toEchartsNode({ argument_id: id }, stanceColor)),
+			...(node.children ?? []).map((child) => toEchartsNode(child, stanceColor)),
+		],
+	};
+}
+
+// Genoeg verticale ruimte per node zodat siblings (nu onder elkaar i.p.v.
+// naast elkaar, zie orient: "LR" hieronder) niet overlappen -- schaalt mee
+// met het aantal argumenten in dit standpunt.
+function chartHeight(block: StanceBlock): string {
+	return `${Math.max(420, block.argument_count * 26)}px`;
+}
+
+function chartOption(block: StanceBlock) {
+	const stanceColor = colors.value[block.stance] ?? colors.value.unclear;
+	return {
+		series: [
+			{
+				type: "tree",
+				data: [
+					{
+						name: stanceLabel(block.stance),
+						itemStyle: { color: stanceColor },
+						children: block.nodes.map((node) => toEchartsNode(node, stanceColor)),
+					},
+				],
+				// Links-rechts i.p.v. boven-onder: bij tekstzware labels (citaten,
+				// groep-namen) geeft dat elke laag zijn eigen kolom, en staan
+				// broer/zus-nodes onder elkaar (verticale ruimte schaalt mee met het
+				// aantal nodes) i.p.v. naast elkaar in een vaste breedte, waar
+				// labels bij >5 siblings al over elkaar heen vielen.
+				orient: "LR",
+				layout: "orthogonal",
+				top: "3%",
+				bottom: "3%",
+				left: "2%",
+				right: "22%",
+				roam: true,
+				initialTreeDepth: 1,
+				expandAndCollapse: true,
+				symbol: "circle",
+				symbolSize: 9,
+				label: { fontSize: 12, position: "left", verticalAlign: "middle", align: "right", lineHeight: 14 },
+				leaves: { label: { position: "right", verticalAlign: "middle", align: "left" } },
+				emphasis: { focus: "descendant" },
+				animationDurationUpdate: 300,
+			},
+		],
+	};
+}
+
+const selectedArgumentId = ref<number | null>(null);
+
+const selectedArgument = computed(() =>
+	selectedArgumentId.value === null ? null : (props.tree.arguments[String(selectedArgumentId.value)] ?? null)
+);
+
+const selectedOppositions = computed(() => {
+	if (selectedArgumentId.value === null) return [];
+	const ids = oppositionsByArgument.value.get(selectedArgumentId.value) ?? [];
+	return ids.map((id) => props.tree.arguments[String(id)]).filter((arg): arg is TreeArgument => Boolean(arg));
+});
+
+function onNodeClick(params: { data?: { argumentId?: number } }) {
+	if (typeof params?.data?.argumentId === "number") {
+		selectedArgumentId.value = params.data.argumentId;
+	}
+}
+</script>
+
+<style scoped>
+.argument-tree-charts {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-3);
+}
+
+.argument-tree-chart-wrap {
+	min-width: 0;
+}
+
+.argument-tree-chart-title {
+	margin: 0 0 var(--space-1);
+	font-size: var(--step-0);
+}
+
+.argument-tree-count {
+	color: var(--color-muted);
+	font-weight: normal;
+}
+
+.argument-tree-chart {
+	width: 100%;
+	height: 480px;
+	border: 1px solid var(--color-border);
+	background: var(--color-bg);
+}
+
+.argument-tree-detail {
+	position: relative;
+	margin-top: var(--space-3);
+	padding: var(--space-3);
+	background: var(--color-card-bg);
+	border: 1px solid var(--color-border);
+	border-left: 4px solid var(--color-accent);
+	max-width: 65ch;
+}
+
+.argument-tree-detail blockquote {
+	margin: 0 0 var(--space-1);
+	font-size: var(--step-0);
+}
+
+.argument-tree-detail-meta {
+	margin: 0 0 var(--space-1);
+	color: var(--color-muted);
+	font-size: var(--step--1);
+}
+
+.argument-tree-detail-tags {
+	list-style: none;
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--space-1);
+	padding: 0;
+	margin: 0 0 var(--space-1);
+}
+
+.argument-tree-detail-tags li {
+	border: 1px solid var(--color-border);
+	padding: 0 0.4em;
+	font-size: var(--step--1);
+}
+
+.argument-tree-detail-oppositions {
+	margin-top: var(--space-1);
+	padding-top: var(--space-1);
+	border-top: 1px dashed var(--color-border);
+}
+
+.argument-tree-detail-oppositions-label {
+	margin: 0 0 var(--space-1);
+	color: var(--color-contra);
+	font-weight: bold;
+	font-size: var(--step--1);
+}
+
+.argument-tree-detail-oppositions ul {
+	margin: 0;
+	padding-left: 1.2em;
+	font-size: var(--step--1);
+}
+
+.argument-tree-detail-close {
+	position: absolute;
+	top: var(--space-1);
+	right: var(--space-1);
+	border: none;
+	background: none;
+	font-size: 1.4em;
+	line-height: 1;
+	cursor: pointer;
+	color: var(--color-muted);
+}
+</style>

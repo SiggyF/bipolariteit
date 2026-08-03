@@ -1,18 +1,15 @@
 ---
 import TopicView from "../../components/TopicView.vue";
+import ArgumentTree from "../../components/ArgumentTree.vue";
 import FeedbackExport from "../../components/FeedbackExport.vue";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 
 const topicModules = import.meta.glob("../../../../data/export/topics/*.json", { eager: true });
 
 // Losse map (niet data/export/topics/ zelf): de argumentenboom is een
-// experimentele, aparte export (pipeline/build_argument_tree.py +
-// render_argument_tree.py) en bestaat niet per se voor elk topic.
-const treeSvgModules = import.meta.glob("../../../../data/export/argument-trees/*.svg", {
-	eager: true,
-	query: "?raw",
-	import: "default",
-});
+// experimentele, aparte export (pipeline/build_argument_tree.py) en bestaat
+// niet per se voor elk topic.
+const treeModules = import.meta.glob("../../../../data/export/argument-trees/*.json", { eager: true });
 
 export function getStaticPaths() {
 	const modules = import.meta.glob("../../../../data/export/topics/*.json", { eager: true });
@@ -24,8 +21,8 @@ export function getStaticPaths() {
 const { slug } = Astro.params;
 const mod: any = Object.values(topicModules).find((m: any) => m.default.slug === slug);
 const topic = mod.default;
-const treeSvgEntry = Object.entries(treeSvgModules).find(([path]) => path.endsWith(`/${slug}.svg`));
-const treeSvg = treeSvgEntry ? (treeSvgEntry[1] as string) : null;
+const treeMod: any = Object.values(treeModules).find((m: any) => m.default.slug === slug);
+const argumentTree = treeMod ? treeMod.default : null;
 ---
 
 <BaseLayout title={`${topic.name} — Bipolariteit`} description={topic.description}>
@@ -35,14 +32,14 @@ const treeSvg = treeSvgEntry ? (treeSvgEntry[1] as string) : null;
 				{topic.description && <p class="topic-description">{topic.description}</p>}
 			</div>
 
-			{treeSvg && (
-				<section class="argument-tree">
+			{argumentTree && (
+				<section class="argument-tree-section">
 					<h2>Argumentenboom</h2>
 					<p class="argument-tree-note">
-						Experimenteel: elk vak is een letterlijk argument; pijlen naar boven onderbouwen het standpunt erboven,
-						rode pijlen weerleggen een argument aan de andere kant.
+						Experimenteel: elk knooppunt is een letterlijk argument. Klik op een node om te vouwen/ontvouwen; klik op
+						een argument-node voor het volledige citaat en eventuele weerleggingen.
 					</p>
-					<div class="argument-tree-svg" set:html={treeSvg} />
+					<ArgumentTree tree={argumentTree} client:only="vue" />
 				</section>
 			)}
 

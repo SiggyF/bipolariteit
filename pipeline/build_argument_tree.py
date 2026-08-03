@@ -1,7 +1,8 @@
 """
 Argumentenboom: groepeert de reeds geëxtraheerde argumenten van één topic per
 standpunt (pro/contra/unclear) in een klein aantal inhoudelijke clusters,
-als voorbereiding op een d2-diagram (zie render_argument_tree.py).
+als input voor een uitklapbare boomweergave in de frontend
+(frontend/src/components/ArgumentTree.vue, een ECharts tree-series).
 
 De boom-top (topic -> standpunt) staat al vast uit het bestaande datamodel
 (`arguments.stance`) en wordt hier NIET door een LLM bedacht -- alleen de
@@ -81,19 +82,27 @@ def call_llm(base_url, model, prompt, reasoning_effort, timeout, max_tokens):
     return content, usage, finish_reason
 
 
-def fetch_stance_arguments(conn, topic_id, stance, vanaf):
-    """Argumenten van dit topic+standpunt, met alles wat de d2-render nodig
-    heeft (quote_text, actor) zodat build_argument_tree.py en
-    render_argument_tree.py niet allebei los de database hoeven te lezen --
-    de boom-JSON is zelf de volledige input voor de render-stap."""
+def fetch_stance_arguments(conn, topic_id, stance, vanaf, limit):
+    """Argumenten van dit topic+standpunt, met alles wat de frontend-boom
+    nodig heeft (quote_text, actor) zodat de JSON-export zelf de volledige
+    input is voor ArgumentTree.vue -- geen aparte databaseronde nodig om de
+    boom te tonen.
+
+    `limit` is bewust nodig, geen kosmetische default: een groot topic zoals
+    stikstof heeft ~1000 contra-argumenten, en de hele lijst in één prompt
+    stoppen overschrijdt de context van het lokale model (400 Bad Request).
+    Batchen/map-reduce over de volle corpus is nog niet gebouwd -- dit is
+    dus een eerste, bewust beperkte steekproef om op te experimenteren, geen
+    representatieve full-corpus-boom."""
     rows = conn.execute(
         """SELECT ar.id, ar.quote_text, ar.typology, ac.name AS actor_name, ac.party AS actor_party
            FROM arguments ar
            JOIN actors ac ON ac.id = ar.actor_id
            JOIN documents d ON d.id = ar.document_id
            WHERE ar.topic_id = ? AND ar.stance = ? AND d.published_at >= ?
-           ORDER BY ar.id""",
-        (topic_id, stance, vanaf),
+           ORDER BY ar.id
+           LIMIT ?""",
+        (topic_id, stance, vanaf, limit),
     ).fetchall()
 
     tags_by_argument = {}
@@ -233,13 +242,13 @@ def fetch_oppositions(conn, argument_ids):
     ]
 
 
-def build_topic_tree(base_url, model, reasoning_effort, timeout, max_tokens, conn, topic_row, vanaf, stances):
+def build_topic_tree(base_url, model, reasoning_effort, timeout, max_tokens, conn, topic_row, vanaf, stances, limit):
     topic_id, topic_name = topic_row["id"], topic_row["name"]
     arguments_by_id = {}
     stance_results = []
 
     for stance in stances:
-        arguments = fetch_stance_arguments(conn, topic_id, stance, vanaf)
+        arguments = fetch_stance_arguments(conn, topic_id, stance, vanaf, limit)
         for arg in arguments:
             arguments_by_id[arg["id"]] = arg
 
@@ -273,6 +282,14 @@ def main():
     parser.add_argument(
         "--stances", default="pro,contra", help="kommagescheiden lijst uit pro,contra,unclear (default pro,contra)"
     )
+    parser.add_argument(
+        "--limit", type=int, default=60,
+        help="max aantal argumenten per standpunt in de prompt (default 60) -- een groot topic heeft "
+             "honderden argumenten per standpunt, wat de context van het lokale model overschrijdt "
+             "(400 Bad Request); dit is dus een bewust beperkte steekproef, geen full-corpus-boom. "
+             "Zie fetch_stance_arguments() en overweeg scripts/agy_run_argument_tree_batch.py (grotere "
+             "context via Gemini) voor een representatievere boom.",
+    )
     parser.add_argument("--model", default="qwen/qwen3.6-27b")
     parser.add_argument("--base-url", default="http://localhost:1234/v1")
     parser.add_argument("--reasoning-effort", default="none")
@@ -299,7 +316,7 @@ def main():
     start = time.monotonic()
     tree = build_topic_tree(
         args.base_url, args.model, args.reasoning_effort, args.timeout, args.max_tokens,
-        conn, topic_row, vanaf, stances,
+        conn, topic_row, vanaf, stances, args.limit,
     )
     conn.close()
     elapsed = time.monotonic() - start
