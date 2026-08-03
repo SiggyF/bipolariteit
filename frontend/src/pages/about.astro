@@ -177,32 +177,37 @@ const CA_ROW_LABEL_OFFSET: Record<string, CaLabelOffset> = {
 						{
 							stelling: "Ik strijd hier tot de laatste dag om desastreus beleid voor onze boeren en het platteland",
 							bron: "Caroline van der Plas, BBB",
-							onderbouwing: "Een intentie, geen reden.",
+							label: "Geen onderbouwing",
+							toelichting: "een intentie, geen reden.",
 						},
 						{
 							stelling: "De motie op stuk nr. 470 zou ik willen ontraden",
 							bron: "minister Van Essen",
-							onderbouwing: "Een kaal standpunt zonder reden.",
+							label: "Geen onderbouwing",
+							toelichting: "een kaal standpunt zonder reden.",
 						},
 						{
 							stelling: "Zones rondom Natura 2000-gebieden vinden wij een goed idee; dat is duidelijk",
 							bron: "Laura Bromet, GroenLinks-PvdA",
-							onderbouwing: "Instemming zonder reden.",
-						},
-						{
-							stelling: "Vind ik het belangrijk dat de minister begrijpt...",
-							bron: "Renate den Hollander, VVD",
-							onderbouwing: "Een waardestelling zonder reden.",
+							label: "Geen onderbouwing",
+							toelichting: "instemming zonder reden.",
 						},
 						{
 							stelling:
 								"Het flauwe antwoord is dat het bij de Raad van State ligt. En het is geen afkapgrens, om even scherp te zijn; het is een rekengrens",
 							bron: "minister Van der Wal-Zeggelink",
-							onderbouwing: "Een feitelijke verduidelijking, maar geen standpunt.",
+							label: "Geen stelling",
+							toelichting: "een feitelijke verduidelijking, geen standpunt.",
+						},
+						{
+							stelling: "De antwoorden op de advisering van de Raad van State zullen in het nader rapport, zoals dat heet, worden weerspiegeld",
+							bron: "minister Wiersma",
+							label: "Geen stelling",
+							toelichting: "een procedurele mededeling, geen standpunt.",
 						},
 					].map((voorbeeld) => (
 						<li>
-							<q><em>{voorbeeld.stelling}</em></q> — {voorbeeld.bron}. {voorbeeld.onderbouwing}
+							<q><em>{voorbeeld.stelling}</em></q> — {voorbeeld.bron}. <strong>{voorbeeld.label}</strong>: {voorbeeld.toelichting}
 						</li>
 					))
 				}
