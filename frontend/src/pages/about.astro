@@ -171,7 +171,7 @@ const CA_ROW_LABEL_OFFSET: Record<string, CaLabelOffset> = {
 				ook niet als de uitspraak stellig of politiek geladen klinkt. Dit wordt bijvoorbeeld <strong>niet</strong> geëxtraheerd, met echte citaten
 				uit de database:
 			</p>
-			<div class="argument-examples">
+			<div class="card-grid">
 				{
 					[
 						{
@@ -201,13 +201,19 @@ const CA_ROW_LABEL_OFFSET: Record<string, CaLabelOffset> = {
 							onderbouwing: "Een feitelijke verduidelijking, maar geen standpunt.",
 						},
 					].map((voorbeeld) => (
-						<div class="argument-example">
-							<blockquote class="argument-example-stelling">
-								<span class="argument-example-label">Stelling</span> "{voorbeeld.stelling}" — {voorbeeld.bron}
-							</blockquote>
-							<p class="argument-example-onderbouwing">
-								<span class="argument-example-label">Onderbouwing</span> {voorbeeld.onderbouwing}
-							</p>
+						<div class="card-group-item">
+							<div class="card-section">
+								<span class="card-section-title">Stelling</span>
+								<div class="card-item">
+									<span class="card-item-description">"{voorbeeld.stelling}" — {voorbeeld.bron}</span>
+								</div>
+							</div>
+							<div class="card-section">
+								<span class="card-section-title">Onderbouwing</span>
+								<div class="card-item">
+									<span class="card-item-description">{voorbeeld.onderbouwing}</span>
+								</div>
+							</div>
 						</div>
 					))
 				}
@@ -281,27 +287,41 @@ const CA_ROW_LABEL_OFFSET: Record<string, CaLabelOffset> = {
 				vóór als tegen zijn. Wat "pro" en "contra" concreet betekenen is per onderwerp gedefinieerd en staat toegelicht
 				bovenaan elke topicpagina.
 			</p>
-			<h3>Standpunt</h3>
-			<div class="legend-grid">
-				{
-					STANCES.map((stance) => (
-						<div class="legend-card" style={`--legend-accent: var(--color-${stance === "unclear" ? "unclear" : stance})`}>
-							<span class="legend-card-label">{stanceLabel(stance)}</span>
-							<span class="legend-card-beschrijving">{stanceDescription(stance)}</span>
-						</div>
-					))
-				}
-			</div>
-			<h3>Typologie</h3>
-			<div class="legend-grid">
-				{
-					TYPOLOGIES.map((typology) => (
-						<div class="legend-card">
-							<span class="typology-badge">{typologyLabel(typology)}</span>
-							<span class="legend-card-beschrijving">{typologyDescription(typology)}</span>
-						</div>
-					))
-				}
+			<div class="card-group">
+				<div class="card-group-item">
+					<div class="card-group-item-header">
+						<h3>Standpunt</h3>
+					</div>
+					<div class="card-grid">
+						{
+							STANCES.map((stance) => (
+								<div class="card-item card-item--accent" style={`--card-item-accent: var(--color-${stance === "unclear" ? "unclear" : stance})`}>
+									<div class="card-item-body">
+										<span class="card-item-title">{stanceLabel(stance)}</span>
+										<span class="card-item-description">{stanceDescription(stance)}</span>
+									</div>
+								</div>
+							))
+						}
+					</div>
+				</div>
+				<div class="card-group-item">
+					<div class="card-group-item-header">
+						<h3>Typologie</h3>
+					</div>
+					<div class="card-grid">
+						{
+							TYPOLOGIES.map((typology) => (
+								<div class="card-item">
+									<div class="card-item-body">
+										<span class="typology-badge">{typologyLabel(typology)}</span>
+										<span class="card-item-description">{typologyDescription(typology)}</span>
+									</div>
+								</div>
+							))
+						}
+					</div>
+				</div>
 			</div>
 
 			<h2>Tags beschrijven vorm, niet geldigheid</h2>
@@ -321,25 +341,25 @@ const CA_ROW_LABEL_OFFSET: Record<string, CaLabelOffset> = {
 				onderwerpen heen.
 			</p>
 
-			<div class="tag-taxonomy">
+			<div class="card-group">
 				{
 					taxonomie.map((perspectief) => (
-						<div class="tag-taxonomy-perspectief" style={`--tag-taxonomy-accent: ${perspectief.kleur}`}>
-							<div class="tag-taxonomy-perspectief-header">
+						<div class="card-group-item" style={`--card-group-item-accent: ${perspectief.kleur}`}>
+							<div class="card-group-item-header">
 								<svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke={perspectief.kleur} stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
 									<path d={ICOON_PAD[perspectief.icoon]} />
 								</svg>
 								<h3>{perspectief.naam}</h3>
 							</div>
 							{perspectief.labelgroepen.map((labelgroep) => (
-								<div class="tag-taxonomy-labelgroep">
-									<span class="tag-taxonomy-labelgroep-name">{labelgroep.naam}</span>
-									<div class="tag-taxonomy-tags">
+								<div class="card-section">
+									<span class="card-section-title">{labelgroep.naam}</span>
+									<div class="card-grid">
 										{labelgroep.tags.map((tag) => (
-											<div class="tag-card">
+											<div class="card-item">
 												{tagIconPath(tag.sleutel) && (
 													<svg
-														class="tag-card-icon"
+														class="card-item-icon"
 														viewBox="0 0 24 24"
 														width="20"
 														height="20"
@@ -352,12 +372,12 @@ const CA_ROW_LABEL_OFFSET: Record<string, CaLabelOffset> = {
 														<path d={tagIconPath(tag.sleutel)!} />
 													</svg>
 												)}
-												<div class="tag-card-body">
-													<div class="tag-card-head">
-														<span class="tag-card-sleutel">{tag.sleutel}</span>
-														<span class="tag-card-count">{tag.count}x</span>
+												<div class="card-item-body">
+													<div class="card-item-head">
+														<span class="card-item-title">{tag.sleutel}</span>
+														<span class="card-item-meta">{tag.count}x</span>
 													</div>
-													<span class="tag-card-beschrijving">{tag.beschrijving}</span>
+													<span class="card-item-description">{tag.beschrijving}</span>
 												</div>
 											</div>
 										))}
@@ -392,10 +412,10 @@ const CA_ROW_LABEL_OFFSET: Record<string, CaLabelOffset> = {
 			<div class="ca-example-tag-chips">
 				{
 					caExampleTags.map((sleutel) => (
-						<div class="tag-card">
+						<div class="card-item">
 							{tagIconPath(sleutel) && (
 								<svg
-									class="tag-card-icon"
+									class="card-item-icon"
 									viewBox="0 0 24 24"
 									width="20"
 									height="20"
@@ -408,9 +428,9 @@ const CA_ROW_LABEL_OFFSET: Record<string, CaLabelOffset> = {
 									<path d={tagIconPath(sleutel)!} />
 								</svg>
 							)}
-							<div class="tag-card-body">
-								<span class="tag-card-sleutel">{sleutel}</span>
-								<span class="tag-card-beschrijving">{tagUsage.get(sleutel)?.beschrijving}</span>
+							<div class="card-item-body">
+								<span class="card-item-title">{sleutel}</span>
+								<span class="card-item-description">{tagUsage.get(sleutel)?.beschrijving}</span>
 							</div>
 						</div>
 					))
