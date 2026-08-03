@@ -149,46 +149,68 @@ def _format_arguments_block(arguments):
     return "\n".join(lines) if lines else "(geen)"
 
 
+GIST_MAX_LEN = 60  # soft guard tegen "3-4 woorden" -- kan geen woordtelling afdwingen, wel een volzin afvangen
+
+
+def _validate_gist(gist, context):
+    if not isinstance(gist, str) or not gist.strip():
+        raise ValueError(f"ontbrekende of lege gist bij {context}: {gist!r}")
+    if len(gist) > GIST_MAX_LEN:
+        raise ValueError(f"gist te lang (>{GIST_MAX_LEN} tekens, moet 3-4 woorden zijn) bij {context}: {gist!r}")
+    return gist.strip()
+
+
 def _validate_node(node, valid_ids, seen_ids):
-    """Eén knoop is óf een los argument (`argument_id`) óf een coördinatieve
-    groep (`label` + >=2 `argument_ids`); beide mogen `children` hebben
-    (subordinatieve argumenten die dít specifieke argument/deze groep
-    verdedigen). `seen_ids` wordt gedeeld over de hele boom zodat een
-    argument-id nooit op twee plekken tegelijk kan opduiken (bv. als
-    top-level argument én als subordinatief kind elders)."""
+    """Eén knoop is óf een los argument (`argument_id` + `gist`) óf een
+    coördinatieve groep (`label` + >=2 `arguments`, elk met een eigen
+    `argument_id` + `gist`); beide mogen `children` hebben (subordinatieve
+    argumenten die dít specifieke argument/deze groep verdedigen).
+    `seen_ids` wordt gedeeld over de hele boom zodat een argument-id nooit op
+    twee plekken tegelijk kan opduiken (bv. als top-level argument én als
+    subordinatief kind elders)."""
     if not isinstance(node, dict):
         raise ValueError(f"knoop is geen object maar {type(node).__name__}")
 
     has_argument_id = "argument_id" in node
     has_label = "label" in node
     if has_argument_id == has_label:
-        raise ValueError(f"knoop moet óf 'argument_id' óf 'label'+'argument_ids' hebben, niet beide/geen: {node!r}")
+        raise ValueError(f"knoop moet óf 'argument_id' óf 'label'+'arguments' hebben, niet beide/geen: {node!r}")
 
     if has_argument_id:
-        ids = [node["argument_id"]]
-    else:
-        ids = node.get("argument_ids")
-        if not isinstance(ids, list) or len(ids) < 2:
-            raise ValueError(f"coördinatieve groep '{node.get('label')}' heeft geen >=2 argument_ids: {node!r}")
-
-    for argument_id in ids:
+        argument_id = node["argument_id"]
         if argument_id not in valid_ids:
             raise ValueError(f"onbekend argument_id {argument_id!r} in knoop {node!r}")
         if argument_id in seen_ids:
             raise ValueError(f"argument_id {argument_id} komt meer dan één keer voor in de boom")
         seen_ids.add(argument_id)
+        gist = _validate_gist(node.get("gist"), f"argument_id {argument_id}")
+        node_result = {"argument_id": argument_id, "gist": gist}
+    else:
+        label = node.get("label")
+        if not isinstance(label, str) or not label.strip():
+            raise ValueError(f"groep zonder (geldig) label: {node!r}")
+        members = node.get("arguments")
+        if not isinstance(members, list) or len(members) < 2:
+            raise ValueError(f"coördinatieve groep '{label}' heeft geen >=2 arguments: {node!r}")
+        validated_members = []
+        for member in members:
+            if not isinstance(member, dict) or "argument_id" not in member:
+                raise ValueError(f"groepslid zonder argument_id in groep '{label}': {member!r}")
+            argument_id = member["argument_id"]
+            if argument_id not in valid_ids:
+                raise ValueError(f"onbekend argument_id {argument_id!r} in groep '{label}'")
+            if argument_id in seen_ids:
+                raise ValueError(f"argument_id {argument_id} komt meer dan één keer voor in de boom")
+            seen_ids.add(argument_id)
+            gist = _validate_gist(member.get("gist"), f"argument_id {argument_id} in groep '{label}'")
+            validated_members.append({"argument_id": argument_id, "gist": gist})
+        node_result = {"label": label.strip(), "arguments": validated_members}
 
     children = node.get("children") or []
     if not isinstance(children, list):
         raise ValueError(f"'children' moet een lijst zijn: {node!r}")
-    validated_children = [_validate_node(child, valid_ids, seen_ids) for child in children]
-
-    result = {"argument_id": node["argument_id"]} if has_argument_id else {
-        "label": node["label"],
-        "argument_ids": list(ids),
-    }
-    result["children"] = validated_children
-    return result
+    node_result["children"] = [_validate_node(child, valid_ids, seen_ids) for child in children]
+    return node_result
 
 
 def _validate_tree(parsed, valid_ids):

@@ -15,49 +15,55 @@
 			</div>
 		</div>
 
-		<div v-if="selectedArgument" class="argument-tree-detail">
-			<button type="button" class="argument-tree-detail-close" aria-label="Sluiten" @click="selectedArgumentId = null">
-				×
-			</button>
-			<blockquote>&ldquo;{{ selectedArgument.quote_text }}&rdquo;</blockquote>
-			<p class="argument-tree-detail-meta">
-				— {{ selectedArgument.actor_name
-				}}<template v-if="selectedArgument.actor_party"> ({{ selectedArgument.actor_party }})</template>
-				· typologie: {{ selectedArgument.typology }}
-			</p>
-			<ul v-if="selectedArgument.tags.length" class="argument-tree-detail-tags">
-				<li v-for="tag in selectedArgument.tags" :key="tag">{{ tag }}</li>
-			</ul>
-			<div
-				v-if="selectedArgument.tweedekamer_activiteit_url || selectedArgument.speaker_video_url"
-				class="argument-tree-detail-links"
-			>
-				<a
-					v-if="selectedArgument.tweedekamer_activiteit_url"
-					:href="selectedArgument.tweedekamer_activiteit_url"
-					target="_blank"
-					rel="noopener"
-					title="Officiële tweedekamer.nl-pagina van dit debat (Verslag/Handelingen + video)"
-					>bekijk in de Tweede Kamer</a
-				>
-				<a
-					v-if="selectedArgument.speaker_video_url"
-					:href="selectedArgument.speaker_video_url"
-					target="_blank"
-					rel="noopener"
-					title="Springt naar het moment dat deze spreker begint in het debat"
-					>video (dit moment)</a
-				>
-			</div>
-			<div v-if="selectedOppositions.length" class="argument-tree-detail-oppositions">
-				<p class="argument-tree-detail-oppositions-label">Weerlegd door:</p>
-				<ul>
-					<li v-for="opp in selectedOppositions" :key="opp.id">
-						&ldquo;{{ truncate(opp.quote_text) }}&rdquo; — {{ opp.actor_name
-						}}<template v-if="opp.actor_party"> ({{ opp.actor_party }})</template>
-					</li>
+		<!-- Altijd zichtbaar (sticky), ook zonder selectie: boom en kaart moeten
+		     tegelijk in beeld blijven i.p.v. dat je naar een los blok eronder
+		     moet scrollen zodra je iets aanklikt. -->
+		<div class="argument-tree-detail">
+			<template v-if="selectedArgument">
+				<button type="button" class="argument-tree-detail-close" aria-label="Sluiten" @click="selectedArgumentId = null">
+					×
+				</button>
+				<blockquote>&ldquo;{{ selectedArgument.quote_text }}&rdquo;</blockquote>
+				<p class="argument-tree-detail-meta">
+					— {{ selectedArgument.actor_name
+					}}<template v-if="selectedArgument.actor_party"> ({{ selectedArgument.actor_party }})</template>
+					· typologie: {{ selectedArgument.typology }}
+				</p>
+				<ul v-if="selectedArgument.tags.length" class="argument-tree-detail-tags">
+					<li v-for="tag in selectedArgument.tags" :key="tag">{{ tag }}</li>
 				</ul>
-			</div>
+				<div
+					v-if="selectedArgument.tweedekamer_activiteit_url || selectedArgument.speaker_video_url"
+					class="argument-tree-detail-links"
+				>
+					<a
+						v-if="selectedArgument.tweedekamer_activiteit_url"
+						:href="selectedArgument.tweedekamer_activiteit_url"
+						target="_blank"
+						rel="noopener"
+						title="Officiële tweedekamer.nl-pagina van dit debat (Verslag/Handelingen + video)"
+						>bekijk in de Tweede Kamer</a
+					>
+					<a
+						v-if="selectedArgument.speaker_video_url"
+						:href="selectedArgument.speaker_video_url"
+						target="_blank"
+						rel="noopener"
+						title="Springt naar het moment dat deze spreker begint in het debat"
+						>video (dit moment)</a
+					>
+				</div>
+				<div v-if="selectedOppositions.length" class="argument-tree-detail-oppositions">
+					<p class="argument-tree-detail-oppositions-label">Weerlegd door:</p>
+					<ul>
+						<li v-for="opp in selectedOppositions" :key="opp.id">
+							&ldquo;{{ truncate(opp.quote_text) }}&rdquo; — {{ opp.actor_name
+							}}<template v-if="opp.actor_party"> ({{ opp.actor_party }})</template>
+						</li>
+					</ul>
+				</div>
+			</template>
+			<p v-else class="argument-tree-detail-placeholder">Klik op een argument in de boom voor het volledige citaat.</p>
 		</div>
 	</div>
 </template>
@@ -84,9 +90,14 @@ interface TreeArgument {
 	speaker_video_url: string | null;
 }
 
+interface GroupMember {
+	argument_id: number;
+	gist: string;
+}
+
 type TreeNode =
-	| { argument_id: number; children?: TreeNode[] }
-	| { label: string; argument_ids: number[]; children?: TreeNode[] };
+	| { argument_id: number; gist: string; children?: TreeNode[] }
+	| { label: string; arguments: GroupMember[]; children?: TreeNode[] };
 
 interface StanceBlock {
 	stance: "pro" | "contra" | "unclear";
@@ -150,31 +161,32 @@ function truncate(text: string, maxLength = 60): string {
 	return text.length <= maxLength ? text : `${text.slice(0, maxLength).trimEnd()}…`;
 }
 
-// Korte node-labels i.p.v. de volledige quote (die was op deze schaal
-// onleesbaar in de vorige, d2-gebaseerde weergave) -- de volledige tekst
-// staat in het detailpaneel na een klik.
-function shortLabel(arg: TreeArgument): string {
-	const party = arg.actor_party ? ` (${arg.actor_party})` : "";
-	return `${truncate(arg.quote_text, 32)}\n${arg.actor_name}${party}`;
+// Node-label is de door de LLM aangeleverde `gist` (max. 3-4 woorden, zie
+// pipeline/prompts/argument_tree.md + _validate_gist in build_argument_tree.py)
+// i.p.v. de volledige quote -- die was op deze schaal onleesbaar in de
+// vorige, d2-gebaseerde weergave. De volledige tekst staat in het
+// detailpaneel na een klik, en als tooltip on hover (zie `fullName`).
+function argumentNode(argumentId: number, gist: string, children: TreeNode[], stanceColor: string): Record<string, unknown> {
+	const arg = props.tree.arguments[String(argumentId)];
+	return {
+		name: gist,
+		fullName: arg.quote_text,
+		argumentId,
+		itemStyle: { color: stanceColor },
+		children: children.map((child) => toEchartsNode(child, stanceColor)),
+	};
 }
 
 function toEchartsNode(node: TreeNode, stanceColor: string): Record<string, unknown> {
 	if ("argument_id" in node) {
-		const arg = props.tree.arguments[String(node.argument_id)];
-		return {
-			name: shortLabel(arg),
-			fullName: arg.quote_text,
-			argumentId: node.argument_id,
-			itemStyle: { color: stanceColor },
-			children: (node.children ?? []).map((child) => toEchartsNode(child, stanceColor)),
-		};
+		return argumentNode(node.argument_id, node.gist, node.children ?? [], stanceColor);
 	}
 	return {
-		name: `${truncate(node.label, 38)} (${node.argument_ids.length})`,
+		name: `${truncate(node.label, 38)} (${node.arguments.length})`,
 		fullName: node.label,
 		itemStyle: { color: groupColor.value },
 		children: [
-			...node.argument_ids.map((id) => toEchartsNode({ argument_id: id }, stanceColor)),
+			...node.arguments.map((member) => argumentNode(member.argument_id, member.gist, [], stanceColor)),
 			...(node.children ?? []).map((child) => toEchartsNode(child, stanceColor)),
 		],
 	};
@@ -221,11 +233,15 @@ function chartOption(block: StanceBlock) {
 				layout: "orthogonal",
 				top: "3%",
 				bottom: "3%",
-				// Ruime marges: labels staan links (root) en rechts (children) van
-				// hun node, buiten de plot-area zelf -- te krap hier sneed de root-
-				// ("Contra" werd "tra") en de langste groep-labels gewoon af.
-				left: "14%",
-				right: "30%",
+				// Vaste pixelmarges i.p.v. percentages: Pro/Contra staan side-by-side
+				// (zie .argument-tree-chart-wrap), dus de containerbreedte -- en
+				// daarmee een %-marge -- varieert nogal, terwijl de labelbreedte dat
+				// niet doet (een gist is per definitie maar 3-4 woorden). Alleen
+				// blad-labels (leaves.label.position "right") vallen binnen de
+				// rechtermarge -- niet-blad-labels staan links van hun eigen node,
+				// dus al binnen de plot-area.
+				left: 70,
+				right: 240,
 				roam: true,
 				initialTreeDepth: 1,
 				expandAndCollapse: true,
@@ -260,13 +276,31 @@ function onNodeClick(params: { data?: { argumentId?: number } }) {
 </script>
 
 <style scoped>
+/* Twee kolommen: boom(en) links, detailkaart rechts, sticky -- zo blijven
+   structuur en kaart altijd samen in beeld i.p.v. dat je naar een blok
+   onderaan moet scrollen zodra je iets aanklikt. Op smalle schermen valt
+   dit terug naar één kolom (kaart onder de boom, niet meer sticky). */
+.argument-tree {
+	display: grid;
+	grid-template-columns: 1fr minmax(260px, 340px);
+	gap: var(--space-3);
+	align-items: start;
+}
+
+@media (max-width: 860px) {
+	.argument-tree {
+		grid-template-columns: 1fr;
+	}
+}
+
 .argument-tree-charts {
 	display: flex;
-	flex-direction: column;
+	flex-wrap: wrap;
 	gap: var(--space-3);
 }
 
 .argument-tree-chart-wrap {
+	flex: 1 1 320px;
 	min-width: 0;
 }
 
@@ -288,13 +322,24 @@ function onNodeClick(params: { data?: { argumentId?: number } }) {
 }
 
 .argument-tree-detail {
-	position: relative;
-	margin-top: var(--space-3);
+	position: sticky;
+	top: var(--space-3);
 	padding: var(--space-3);
 	background: var(--color-card-bg);
 	border: 1px solid var(--color-border);
 	border-left: 4px solid var(--color-accent);
-	max-width: 65ch;
+}
+
+@media (max-width: 860px) {
+	.argument-tree-detail {
+		position: static;
+	}
+}
+
+.argument-tree-detail-placeholder {
+	margin: 0;
+	color: var(--color-muted);
+	font-size: var(--step--1);
 }
 
 .argument-tree-detail blockquote {
