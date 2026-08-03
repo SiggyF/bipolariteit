@@ -158,10 +158,29 @@ const CA_ROW_LABEL_OFFSET: Record<string, CaLabelOffset> = {
 			<h2>Hoe de argumenten hier terechtkomen</h2>
 			<p>
 				Bronnen (op dit moment: Tweede Kamer-debatverslagen) worden per sprekerbeurt gesegmenteerd
-				en door een LLM geanalyseerd, dat per beurt 0 of meer argumenten extraheert: een standpunt
-				(pro/contra/onduidelijk t.o.v. het besproken beleid), een citaat, en eventueel genoemde
-				claims met hun bron. Dit is een geautomatiseerd, foutgevoelig proces — extractiekwaliteit
-				verbetert nog met de tijd, en je kunt op elke kaart feedback geven als iets niet klopt.
+				en door een LLM geanalyseerd, dat per beurt 0 of meer argumenten extraheert: een standpunt,
+				een citaat, en eventueel genoemde claims met hun bron. Dit is een geautomatiseerd,
+				foutgevoelig proces — extractiekwaliteit verbetert nog met de tijd, en je kunt op elke kaart
+				feedback geven als iets niet klopt.
+			</p>
+
+			<h3>Wat telt als argument?</h3>
+			<p>
+				Een argument heeft altijd twee delen, en beide moeten letterlijk in het citaat staan: een <strong>standpunt</strong> (pro/contra/onduidelijk)
+				én een <strong>reden of onderbouwing</strong> die dat standpunt ondersteunt. Geen onderbouwing betekent geen argument —
+				ook niet als de uitspraak stellig of politiek geladen klinkt. Dit wordt bijvoorbeeld <strong>niet</strong> geëxtraheerd:
+			</p>
+			<ul>
+				<li>"Ik strijd hier tot de laatste dag voor de boeren" — een intentie, geen reden.</li>
+				<li>"Afzwakking steunen we niet" — een kaal standpunt zonder reden.</li>
+				<li>"Dat vinden wij een goed idee" — instemming zonder reden.</li>
+				<li>"Wij vinden het natuurbelang heel erg zwaar wegen" — een waardestelling zonder reden.</li>
+			</ul>
+			<p>
+				Ook zuiver procedurele tekst (orde van de vergadering, spreektijd-afspraken, "ik geef het woord
+				aan...") levert nooit een argument op. Een uitspraak over de legitimiteit of spelregels van het
+				debat zelf telt wél mee als argument, mits onderbouwd — zie de <a href="#argumenttypen">typologie
+				"Overig"</a> hieronder.
 			</p>
 
 			<ol class="workflow" role="list">
