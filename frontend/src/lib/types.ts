@@ -52,10 +52,15 @@ export const NO_PARTY = "Onbekend";
 // data/tags.toml staat hier bewust *niet* in: tag/labelgroep/perspectief zijn
 // gewone strings en de filterfacetten worden uit de data afgeleid, zodat
 // tags.toml bewerkt kan worden zonder de frontend aan te raken.
+// Wat "pro" en "contra" concreet betekenen wordt per onderwerp apart
+// gedefinieerd (topics.description in de database, zichtbaar bovenaan elke
+// topicpagina) -- het is niet overal hetzelfde als "voor/tegen het beleid".
+// Bij stikstof is dat wel zo, bij abortus gaat de as bijvoorbeeld over
+// keuzevrijheid t.o.v. bescherming van het ongeboren kind.
 const STANCE_LABELS: Record<Stance, { label: string; beschrijving: string }> = {
-	pro: { label: "Pro", beschrijving: "Steunt het besproken beleid." },
-	contra: { label: "Contra", beschrijving: "Keert zich tegen het besproken beleid." },
-	unclear: { label: "Onduidelijk", beschrijving: "Richting t.o.v. het beleid is niet eenduidig, of het argument gaat over het debat zelf." },
+	pro: { label: "Pro", beschrijving: "De 'pro'-kant van de pro/contra-as die per onderwerp apart is gedefinieerd, zie de toelichting bovenaan de topicpagina." },
+	contra: { label: "Contra", beschrijving: "De 'contra'-kant van diezelfde onderwerpsspecifieke as." },
+	unclear: { label: "Onduidelijk", beschrijving: "Richting t.o.v. die as is niet eenduidig, of het argument gaat over het debat zelf." },
 };
 
 export const STANCES = Object.keys(STANCE_LABELS) as Stance[];
