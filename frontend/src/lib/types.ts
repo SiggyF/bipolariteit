@@ -52,10 +52,15 @@ export const NO_PARTY = "Onbekend";
 // data/tags.toml staat hier bewust *niet* in: tag/labelgroep/perspectief zijn
 // gewone strings en de filterfacetten worden uit de data afgeleid, zodat
 // tags.toml bewerkt kan worden zonder de frontend aan te raken.
-const STANCE_LABELS: Record<Stance, string> = {
-	pro: "Pro",
-	contra: "Contra",
-	unclear: "Onduidelijk",
+// Wat "pro" en "contra" concreet betekenen wordt per onderwerp apart
+// gedefinieerd (topics.description in de database, zichtbaar bovenaan elke
+// topicpagina) -- het is niet overal hetzelfde als "voor/tegen het beleid".
+// Bij stikstof is dat wel zo, bij abortus gaat de as bijvoorbeeld over
+// keuzevrijheid t.o.v. bescherming van het ongeboren kind.
+const STANCE_LABELS: Record<Stance, { label: string; beschrijving: string }> = {
+	pro: { label: "Pro", beschrijving: "De 'pro'-kant van de pro/contra-as die per onderwerp apart is gedefinieerd, zie de toelichting bovenaan de topicpagina." },
+	contra: { label: "Contra", beschrijving: "De 'contra'-kant van diezelfde onderwerpsspecifieke as." },
+	unclear: { label: "Onduidelijk", beschrijving: "Richting t.o.v. die as is niet eenduidig, of het argument gaat over het debat zelf." },
 };
 
 export const STANCES = Object.keys(STANCE_LABELS) as Stance[];
@@ -64,7 +69,47 @@ export const STANCES = Object.keys(STANCE_LABELS) as Stance[];
  * DB-schema, en dat willen we zien i.p.v. een rauwe waarde tonen alsof het een
  * label is. */
 export function stanceLabel(stance: string): string {
-	const label = STANCE_LABELS[stance as Stance];
-	if (!label) throw new Error(`onbekende stance: ${stance} (schema.sql gewijzigd?)`);
-	return label;
+	const entry = STANCE_LABELS[stance as Stance];
+	if (!entry) throw new Error(`onbekende stance: ${stance} (schema.sql gewijzigd?)`);
+	return entry.label;
+}
+
+export function stanceDescription(stance: string): string {
+	const entry = STANCE_LABELS[stance as Stance];
+	if (!entry) throw new Error(`onbekende stance: ${stance} (schema.sql gewijzigd?)`);
+	return entry.beschrijving;
+}
+
+// Weergavenamen en -omschrijvingen voor de vijf typology-waarden, zoals
+// gedefinieerd in pipeline/prompts/extract_argument.md.
+const TYPOLOGY_LABELS: Record<Typology, { label: string; beschrijving: string }> = {
+	factual: {
+		label: "Feitelijk",
+		beschrijving: "Feiten, cijfers, of beleidsinhoudelijke/bestuurlijke constateringen, zoals een norm, een fractiestandpunt, of wie iets wel/niet steunt.",
+	},
+	moral: { label: "Moreel", beschrijving: "Beroept zich op ethiek of waarden." },
+	economic: { label: "Economisch", beschrijving: "Gaat over kosten en baten." },
+	legal: {
+		label: "Juridisch",
+		beschrijving: "Verwijst naar een specifieke wet, regelgeving, of juridische toetsing/procedure.",
+	},
+	other: {
+		label: "Overig",
+		beschrijving: "Past niet in de andere categorieën, bijvoorbeeld metadiscours over het debat zelf.",
+	},
+};
+
+export const TYPOLOGIES = Object.keys(TYPOLOGY_LABELS) as Typology[];
+
+/** Faalt hard op een onbekende typology, om dezelfde reden als stanceLabel. */
+export function typologyLabel(typology: string): string {
+	const entry = TYPOLOGY_LABELS[typology as Typology];
+	if (!entry) throw new Error(`onbekende typology: ${typology} (schema.sql gewijzigd?)`);
+	return entry.label;
+}
+
+export function typologyDescription(typology: string): string {
+	const entry = TYPOLOGY_LABELS[typology as Typology];
+	if (!entry) throw new Error(`onbekende typology: ${typology} (schema.sql gewijzigd?)`);
+	return entry.beschrijving;
 }

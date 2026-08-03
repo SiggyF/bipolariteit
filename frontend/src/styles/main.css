@@ -1625,45 +1625,47 @@ h3 {
 	text-align: right;
 }
 
-/* Getaxonomeerde tag-overzicht: perspectief -> labelgroep -> tags, zelfde
-   groepering en kleuren/iconen als de correspondentiekaart en de
-   perspectiefkaarten op de hoofdpagina (docs/design/tag-iconografie). */
-.tag-taxonomy {
+/* Herbruikbare kaart-hiërarchie -- groep (accentkaart) -> sectie
+   (labelgroep-achtige subkop) -> grid van items -- gedeeld door de
+   tag-taxonomie, de standpunt/typologie-legenda, en de
+   niet-argument-voorbeelden op de about-pagina. Eén opmaakbron i.p.v.
+   drie losse kopieën, zodat een latere stijlwijziging overal meekomt. */
+.card-group {
 	margin: var(--space-3) 0;
 	display: flex;
 	flex-direction: column;
 	gap: var(--space-3);
 }
 
-.tag-taxonomy-perspectief {
+.card-group-item {
 	padding: var(--space-3);
 	border: 1px solid var(--color-border);
-	border-top: 4px solid var(--tag-taxonomy-accent, var(--color-accent));
+	border-top: 4px solid var(--card-group-item-accent, var(--color-accent));
 	background: var(--color-card-bg);
 }
 
-.tag-taxonomy-perspectief-header {
+.card-group-item-header {
 	display: flex;
 	align-items: center;
 	gap: var(--space-2);
 	margin-bottom: var(--space-2);
 }
 
-.tag-taxonomy-perspectief-header h3 {
+.card-group-item-header h3 {
 	margin: 0;
 	font-family: var(--font-heading);
 	font-size: var(--step-0);
 }
 
-.tag-taxonomy-labelgroep {
+.card-section {
 	margin-top: var(--space-2);
 }
 
-.tag-taxonomy-labelgroep:first-of-type {
+.card-section:first-of-type {
 	margin-top: 0;
 }
 
-.tag-taxonomy-labelgroep-name {
+.card-section-title {
 	display: block;
 	margin-bottom: 0.4rem;
 	color: var(--color-muted);
@@ -1671,13 +1673,13 @@ h3 {
 	font-weight: 600;
 }
 
-.tag-taxonomy-tags {
+.card-grid {
 	display: grid;
 	grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
 	gap: var(--space-1);
 }
 
-.tag-card {
+.card-item {
 	display: flex;
 	gap: 0.5rem;
 	padding: 0.5rem 0.65rem;
@@ -1685,28 +1687,32 @@ h3 {
 	background: var(--color-bg);
 }
 
-.tag-card-icon {
+.card-item--accent {
+	border-left: 4px solid var(--card-item-accent, var(--color-border));
+}
+
+.card-item-icon {
 	flex: none;
 	margin-top: 0.15rem;
 }
 
-.tag-card-body {
+.card-item-body {
 	min-width: 0;
 }
 
-.tag-card-head {
+.card-item-head {
 	display: flex;
 	align-items: baseline;
 	gap: 0.5rem;
 }
 
-.tag-card-sleutel {
+.card-item-title {
 	font-family: var(--font-mono);
 	font-weight: 600;
 	font-size: var(--step--1);
 }
 
-.tag-card-count {
+.card-item-meta {
 	margin-left: auto;
 	flex: none;
 	color: var(--color-muted);
@@ -1715,7 +1721,7 @@ h3 {
 	white-space: nowrap;
 }
 
-.tag-card-beschrijving {
+.card-item-description {
 	display: block;
 	margin-top: 0.15rem;
 	color: var(--color-muted);
