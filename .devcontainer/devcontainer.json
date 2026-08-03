@@ -26,6 +26,9 @@
       "onAutoForward": "openBrowser"
     }
   },
+  "otherPortsAttributes": {
+    "onAutoForward": "ignore"
+  },
   "runArgs": [
   "--env-file", "${localWorkspaceFolder}/.devcontainer/.env.local",
   // Maakt de host-machine bereikbaar als host.docker.internal vanuit de
@@ -36,6 +39,13 @@
   ],
   "containerEnv": {
     "CLAUDE_CONFIG_DIR": "/home/vscode/.claude"
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "Vue.volar"
+      ]
+    }
   },
   "postCreateCommand": "gpg --import .devcontainer/gpg-pubkey.asc && git config --global commit.gpgsign true && uv sync && cd frontend && npx playwright install --with-deps chromium",
   "postStartCommand": "sudo chown -R vscode:vscode ~/.claude"
