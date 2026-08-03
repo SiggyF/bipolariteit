@@ -1740,6 +1740,16 @@ a.card-item:hover {
 	white-space: nowrap;
 }
 
+/* Twee cijfers i.p.v. één (bv. "247x" + "18 partijen" op /tags) passen niet
+   naast een lange tagsleutel op één regel -- gestapeld i.p.v. met een
+   middot ertussen, anders knalt de kop op smallere kaarten uit elkaar. */
+.card-item-meta--stacked {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-end;
+	line-height: 1.3;
+}
+
 .card-item-description {
 	display: block;
 	margin-top: 0.15rem;

@@ -87,8 +87,9 @@ const totaalTags = TAXONOMIE.reduce((n, p) => n + p.labelgroepen.reduce((m, lg) 
 										<div class="card-item-body">
 											<div class="card-item-head">
 												<span class="card-item-title">{tag.sleutel}</span>
-												<span class="card-item-meta">
-													{counts.get(tag.sleutel) ?? 0}x &middot; {partiesPerTag.get(tag.sleutel)?.size ?? 0} partijen
+												<span class="card-item-meta card-item-meta--stacked">
+													<span>{counts.get(tag.sleutel) ?? 0}x</span>
+													<span>{partiesPerTag.get(tag.sleutel)?.size ?? 0} partijen</span>
 												</span>
 											</div>
 											<span class="card-item-description">{tag.beschrijving}</span>
