@@ -221,46 +221,30 @@ const CA_ROW_LABEL_OFFSET: Record<string, CaLabelOffset> = {
 
 			<h2 id="argumenttypen">Standpunt &amp; typologie</h2>
 			<p>
-				Elk argument krijgt in Stage 1 een <strong>standpunt</strong> (de kleur van de kaart) en een
-				<strong>typologie</strong> (het label bovenaan de kaart) mee. Standpunt en typologie zijn onafhankelijk
-				van elkaar: een moreel argument kan net zo goed vóór als tegen zijn.
+				Elk argument krijgt in Stage 1 een <strong>standpunt</strong> (de kleur van de kaart) en een <strong>typologie</strong> (het
+				label bovenaan de kaart) mee. Standpunt en typologie zijn onafhankelijk van elkaar: een moreel argument kan net zo goed
+				vóór als tegen zijn.
 			</p>
-			<table class="party-table">
-				<thead>
-					<tr>
-						<th>Standpunt</th>
-						<th>Betekenis</th>
-					</tr>
-				</thead>
-				<tbody>
-					{
-						STANCES.map((stance) => (
-							<tr>
-								<td>{stanceLabel(stance)}</td>
-								<td>{stanceDescription(stance)}</td>
-							</tr>
-						))
-					}
-				</tbody>
-			</table>
-			<table class="party-table">
-				<thead>
-					<tr>
-						<th>Typologie</th>
-						<th>Betekenis</th>
-					</tr>
-				</thead>
-				<tbody>
-					{
-						TYPOLOGIES.map((typology) => (
-							<tr>
-								<td>{typologyLabel(typology)}</td>
-								<td>{typologyDescription(typology)}</td>
-							</tr>
-						))
-					}
-				</tbody>
-			</table>
+			<div class="legend-grid">
+				{
+					STANCES.map((stance) => (
+						<div class="legend-card" style={`--legend-accent: var(--color-${stance === "unclear" ? "unclear" : stance})`}>
+							<span class="legend-card-label">{stanceLabel(stance)}</span>
+							<span class="legend-card-beschrijving">{stanceDescription(stance)}</span>
+						</div>
+					))
+				}
+			</div>
+			<div class="legend-grid">
+				{
+					TYPOLOGIES.map((typology) => (
+						<div class="legend-card">
+							<span class="typology-badge">{typologyLabel(typology)}</span>
+							<span class="legend-card-beschrijving">{typologyDescription(typology)}</span>
+						</div>
+					))
+				}
+			</div>
 
 			<h2>Beschrijvende tags, geen oordeel</h2>
 			<p>
