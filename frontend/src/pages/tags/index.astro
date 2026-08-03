@@ -1,0 +1,105 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { TAXONOMIE } from "../../lib/taxonomy";
+import { PERSPECTIEVEN, ICOON_PAD } from "../../lib/tagIcons.generated";
+import { tagIconPath } from "../../lib/tagIcon";
+import { slugify } from "../../lib/slug";
+
+const topicModules = import.meta.glob("../../../../data/export/topics/*.json", { eager: true }) as Record<
+	string,
+	{ default: { arguments: any[] } }
+>;
+
+const counts = new Map<string, number>();
+const partiesPerTag = new Map<string, Set<string>>();
+for (const mod of Object.values(topicModules)) {
+	for (const argument of mod.default.arguments) {
+		for (const tag of argument.tags) {
+			counts.set(tag.sleutel, (counts.get(tag.sleutel) ?? 0) + 1);
+			if (argument.actor.party) {
+				const set = partiesPerTag.get(tag.sleutel) ?? new Set<string>();
+				set.add(argument.actor.party);
+				partiesPerTag.set(tag.sleutel, set);
+			}
+		}
+	}
+}
+
+const kleurPerPerspectief = new Map(PERSPECTIEVEN.map((p) => [p.naam, p.kleur]));
+const icoonPerPerspectief = new Map(PERSPECTIEVEN.map((p) => [p.naam, p.icoon]));
+
+const totaalTags = TAXONOMIE.reduce((n, p) => n + p.labelgroepen.reduce((m, lg) => m + lg.tags.length, 0), 0);
+---
+
+<BaseLayout title="Tags — Bipolariteit">
+	<a href="/" class="back-link">&larr; alle onderwerpen</a>
+	<h1>Tags</h1>
+	<p class="intro">
+		Alle {totaalTags} tags uit de taxonomie, gegroepeerd per perspectief en labelgroep. Klik op een tag voor wie hem
+		gebruikt, hoe vaak en bij welk onderwerp.
+	</p>
+
+	<div class="card-group">
+		{
+			TAXONOMIE.map((perspectief) => (
+				<div class="card-group-item" style={`--card-group-item-accent: ${kleurPerPerspectief.get(perspectief.naam)}`}>
+					<div class="card-group-item-header">
+						<svg
+							viewBox="0 0 24 24"
+							width="28"
+							height="28"
+							fill="none"
+							stroke={kleurPerPerspectief.get(perspectief.naam)}
+							stroke-width="1.75"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+						>
+							<path d={ICOON_PAD[icoonPerPerspectief.get(perspectief.naam) ?? ""]} />
+						</svg>
+						<h3>{perspectief.naam}</h3>
+					</div>
+					{perspectief.labelgroepen.map((labelgroep) => (
+						<div class="card-section">
+							<span class="card-section-title">
+								{labelgroep.naam}
+								{labelgroep.deterministic && (
+									<span class="card-section-note">(automatisch toegekend, niet onderscheidend tussen partijen)</span>
+								)}
+							</span>
+							<div class="card-grid">
+								{labelgroep.tags.map((tag) => (
+									<a href={`/tags/${slugify(tag.sleutel)}/`} class="card-item">
+										{tagIconPath(tag.sleutel) && (
+											<svg
+												class="card-item-icon"
+												viewBox="0 0 24 24"
+												width="20"
+												height="20"
+												fill="none"
+												stroke={kleurPerPerspectief.get(perspectief.naam)}
+												stroke-width="2"
+												stroke-linecap="round"
+												stroke-linejoin="round"
+											>
+												<path d={tagIconPath(tag.sleutel)!} />
+											</svg>
+										)}
+										<div class="card-item-body">
+											<div class="card-item-head">
+												<span class="card-item-title">{tag.sleutel}</span>
+												<span class="card-item-meta">
+													{counts.get(tag.sleutel) ?? 0}x &middot; {partiesPerTag.get(tag.sleutel)?.size ?? 0} partijen
+												</span>
+											</div>
+											<span class="card-item-description">{tag.beschrijving}</span>
+										</div>
+									</a>
+								))}
+							</div>
+						</div>
+					))}
+				</div>
+			))
+		}
+	</div>
+</BaseLayout>

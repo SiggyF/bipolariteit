@@ -127,6 +127,16 @@ export function filterTagsByPerspectief<T extends Argument>(argumentList: T[], p
 	}));
 }
 
+/** Beperkt elk argument tot toekenningen van één tagsleutel, en laat alleen
+ * argumenten staan die de tag dragen. Filtert niet op created_by: een sleutel
+ * is per labelgroep altijd 'llm' óf altijd 'derived' (zie
+ * pipeline/tag_arguments.py), de aanroeper beslist zelf hoe daarmee om te gaan. */
+export function filterArgumentsByTag<T extends Argument>(argumentList: T[], sleutel: string): T[] {
+	return argumentList
+		.filter((a) => a.tags.some((t) => t.sleutel === sleutel))
+		.map((a) => ({ ...a, tags: a.tags.filter((t) => t.sleutel === sleutel) }));
+}
+
 export interface PartyTagIndexEntry {
 	party: string;
 	total: number;

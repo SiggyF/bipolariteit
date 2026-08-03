@@ -1673,6 +1673,13 @@ h3 {
 	font-weight: 600;
 }
 
+/* Kort label achter een card-section-title, bv. om deterministische
+   labelgroepen op /tags te markeren als niet-onderscheidend. */
+.card-section-note {
+	font-weight: 400;
+	font-style: italic;
+}
+
 .card-grid {
 	display: grid;
 	grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -1685,6 +1692,18 @@ h3 {
 	padding: 0.5rem 0.65rem;
 	border: 1px solid var(--color-border);
 	background: var(--color-bg);
+}
+
+/* .card-item is soms een <div> (about.astro, alleen-lezen legenda) en soms
+   een <a> (/tags, klikbaar naar de detailpagina) -- reset linkstijl alleen
+   waar nodig, zonder een aparte variant-klasse voor zo'n klein verschil. */
+a.card-item {
+	text-decoration: none;
+	color: inherit;
+}
+
+a.card-item:hover {
+	border-color: var(--color-accent);
 }
 
 .card-item--accent {
