@@ -1729,10 +1729,6 @@ h3 {
 	line-height: 1.4;
 }
 
-.card-item-body .typology-badge {
-	margin-bottom: 0.3rem;
-}
-
 .status-topic {
 	margin-bottom: var(--space-4);
 }

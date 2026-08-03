@@ -332,9 +332,9 @@ const CA_ROW_LABEL_OFFSET: Record<string, CaLabelOffset> = {
 					<div class="card-grid">
 						{
 							TYPOLOGIES.map((typology) => (
-								<div class="card-item">
+								<div class="card-item card-item--accent" style="--card-item-accent: var(--color-muted)">
 									<div class="card-item-body">
-										<span class="typology-badge">{typologyLabel(typology)}</span>
+										<span class="card-item-title">{typologyLabel(typology)}</span>
 										<span class="card-item-description">{typologyDescription(typology)}</span>
 									</div>
 								</div>
