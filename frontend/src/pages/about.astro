@@ -202,10 +202,12 @@ const CA_ROW_LABEL_OFFSET: Record<string, CaLabelOffset> = {
 						},
 					].map((voorbeeld) => (
 						<div class="argument-example">
-							<p class="argument-example-label">Stelling</p>
-							<blockquote class="argument-example-stelling">"{voorbeeld.stelling}" — {voorbeeld.bron}</blockquote>
-							<p class="argument-example-label">Onderbouwing</p>
-							<p class="argument-example-onderbouwing">{voorbeeld.onderbouwing}</p>
+							<blockquote class="argument-example-stelling">
+								<span class="argument-example-label">Stelling</span> "{voorbeeld.stelling}" — {voorbeeld.bron}
+							</blockquote>
+							<p class="argument-example-onderbouwing">
+								<span class="argument-example-label">Onderbouwing</span> {voorbeeld.onderbouwing}
+							</p>
 						</div>
 					))
 				}
@@ -279,6 +281,7 @@ const CA_ROW_LABEL_OFFSET: Record<string, CaLabelOffset> = {
 				vóór als tegen zijn. Wat "pro" en "contra" concreet betekenen is per onderwerp gedefinieerd en staat toegelicht
 				bovenaan elke topicpagina.
 			</p>
+			<h3>Standpunt</h3>
 			<div class="legend-grid">
 				{
 					STANCES.map((stance) => (
@@ -289,6 +292,7 @@ const CA_ROW_LABEL_OFFSET: Record<string, CaLabelOffset> = {
 					))
 				}
 			</div>
+			<h3>Typologie</h3>
 			<div class="legend-grid">
 				{
 					TYPOLOGIES.map((typology) => (

@@ -1658,27 +1658,25 @@ h3 {
 }
 
 .argument-example-label {
-	margin: 0;
+	display: inline;
+	margin-right: 0.35rem;
 	color: var(--color-muted);
 	font-size: 0.7rem;
+	font-style: normal;
 	font-weight: 600;
 	text-transform: uppercase;
 	letter-spacing: 0.03em;
 }
 
-.argument-example-label:not(:first-child) {
-	margin-top: 0.4rem;
-}
-
 .argument-example-stelling {
-	margin: 0.1rem 0 0;
+	margin: 0;
 	font-size: 0.85rem;
 	font-style: italic;
 	line-height: 1.35;
 }
 
 .argument-example-onderbouwing {
-	margin: 0.1rem 0 0;
+	margin: 0.3rem 0 0;
 	font-size: 0.8rem;
 	color: var(--color-muted);
 }
@@ -1775,7 +1773,7 @@ h3 {
 	padding: 0.5rem 0.65rem;
 	border: 1px solid var(--color-border);
 	border-left: 4px solid var(--legend-accent, var(--color-border));
-	background: var(--color-bg);
+	background: var(--color-card-bg);
 }
 
 .legend-card-label {
