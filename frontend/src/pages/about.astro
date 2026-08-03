@@ -171,7 +171,7 @@ const CA_ROW_LABEL_OFFSET: Record<string, CaLabelOffset> = {
 				ook niet als de uitspraak stellig of politiek geladen klinkt. Dit wordt bijvoorbeeld <strong>niet</strong> geëxtraheerd, met echte citaten
 				uit de database:
 			</p>
-			<div class="card-grid">
+			<ul>
 				{
 					[
 						{
@@ -201,23 +201,12 @@ const CA_ROW_LABEL_OFFSET: Record<string, CaLabelOffset> = {
 							onderbouwing: "Een feitelijke verduidelijking, maar geen standpunt.",
 						},
 					].map((voorbeeld) => (
-						<div class="card-group-item">
-							<div class="card-section">
-								<span class="card-section-title">Stelling</span>
-								<div class="card-item">
-									<span class="card-item-description">"{voorbeeld.stelling}" — {voorbeeld.bron}</span>
-								</div>
-							</div>
-							<div class="card-section">
-								<span class="card-section-title">Onderbouwing</span>
-								<div class="card-item">
-									<span class="card-item-description">{voorbeeld.onderbouwing}</span>
-								</div>
-							</div>
-						</div>
+						<li>
+							(Stelling) "{voorbeeld.stelling}" — {voorbeeld.bron}. (Onderbouwing) {voorbeeld.onderbouwing}
+						</li>
 					))
 				}
-			</div>
+			</ul>
 			<p>
 				Ook zuiver procedurele tekst (orde van de vergadering, spreektijd-afspraken, "ik geef het woord
 				aan...") levert nooit een argument op. Een uitspraak over de legitimiteit of spelregels van het
