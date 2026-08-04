@@ -228,6 +228,9 @@ TOPIC_EXCLUDE_ACTIVITEITEN = {
         # op een andere as: arbeidsmarktkrapte, uitbuiting en huisvesting van
         # arbeidsmigranten, niet toelating versus bescherming van asielzoekers.
         # PRO/CONTRA zou hier iets anders betekenen dan in de rest van het topic.
+        # Let op: exacte titelvergelijking, dus een toekomstig
+        # "Tweeminutendebat Arbeidsmigratie (CD 12/3)" valt hier niet onder en
+        # moet er los bij.
         "Arbeidsmigratie",
         "Wet toelating terbeschikkingstelling van arbeidskrachten",
     ],
