@@ -96,6 +96,31 @@ def test_find_matching_activiteiten_filters_on_topic_keyword():
     assert title_match is True
 
 
+TWEE_BENAMINGEN_ROOT = """<vlosCoreDocument xmlns="http://www.tweedekamer.nl/ggm/vergaderverslag/v1.0">
+  <vergadering>
+    <activiteit objectid="act-asiel">
+      <onderwerp>Debat over de asielketen</onderwerp>
+    </activiteit>
+    <activiteit objectid="act-migratie">
+      <onderwerp>Debat over arbeidsmigratie</onderwerp>
+    </activiteit>
+  </vergadering>
+</vlosCoreDocument>"""
+
+
+def test_also_keywords_widens_the_match_to_a_second_name_for_the_topic():
+    # Een topic met twee gangbare benamingen: zonder also_keywords blijft het
+    # migratiedebat buiten beeld, ook al staat het in dezelfde raw-map.
+    root = ET.fromstring(TWEE_BENAMINGEN_ROOT)
+
+    zonder = find_matching_activiteiten(root, "asiel")
+    assert [a.attrib["objectid"] for a, _ in zonder] == ["act-asiel"]
+
+    met = find_matching_activiteiten(root, "asiel", also_keywords=["migratie"])
+    assert [a.attrib["objectid"] for a, _ in met] == ["act-asiel", "act-migratie"]
+    assert all(title_match for _, title_match in met)
+
+
 def test_find_speaking_turns_includes_woordvoerder_and_interrumpant():
     root = ET.fromstring(VLOS_ROOT)
     activiteit, _title_match = find_matching_activiteiten(root, "stikstof")[0]

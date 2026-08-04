@@ -226,7 +226,7 @@ TOPIC_EXCLUDE_ACTIVITEITEN = {
 }
 
 
-def find_matching_activiteiten(root, topic_keyword):
+def find_matching_activiteiten(root, topic_keyword, also_keywords=()):
     """Retourneert (activiteit, title_match)-paren. title_match=True betekent
     dat het keyword in de onderwerp/titel van de activiteit zelf staat -- een
     overduidelijk op-topic debat, dus alle sprekerbeurten worden meegenomen.
@@ -234,8 +234,13 @@ def find_matching_activiteiten(root, topic_keyword):
     activiteit voor, maar de activiteit zelf gaat over iets anders (bv. het
     eufemisme "Vrouwengezondheid", of een incidentele motie over abortuscijfers
     in een medische-ethiekdebat) -- ingest_file neemt dan alleen de losse
-    sprekerbeurten mee die zelf het keyword bevatten, niet het hele debat."""
-    keyword = topic_keyword.lower()
+    sprekerbeurten mee die zelf het keyword bevatten, niet het hele debat.
+
+    also_keywords verbreedt waaróp gematcht wordt (bv. also_keywords=["migratie"]
+    bij topic "asiel"): een debat dat alleen het tweede woord noemt telt dan mee.
+    Net als --also-dir expliciet per geval, nooit impliciet -- een topic mag niet
+    stilzwijgend het net van een ander topic overnemen."""
+    keywords = [topic_keyword.lower(), *(k.lower() for k in also_keywords)]
     excludes = {x.lower() for x in TOPIC_EXCLUDE_ACTIVITEITEN.get(topic_keyword, [])}
     matches = []
     for activiteit in root.iter(NS + "activiteit"):
@@ -243,12 +248,13 @@ def find_matching_activiteiten(root, topic_keyword):
         titel = activiteit.findtext(NS + "titel") or ""
         if onderwerp.lower() in excludes or titel.lower() in excludes:
             continue
-        title_match = keyword in onderwerp.lower() or keyword in titel.lower()
+        kop = f"{onderwerp} {titel}".lower()
+        title_match = any(k in kop for k in keywords)
         if title_match:
             matches.append((activiteit, True))
             continue
-        activiteit_text = " ".join(activiteit.itertext())
-        if keyword in activiteit_text.lower():
+        activiteit_text = " ".join(activiteit.itertext()).lower()
+        if any(k in activiteit_text for k in keywords):
             matches.append((activiteit, False))
     return matches
 
@@ -333,7 +339,7 @@ def document_exists(conn, source_id, external_id):
     return row is not None
 
 
-def ingest_file(conn, xml_path, meta_path, topic_keyword):
+def ingest_file(conn, xml_path, meta_path, topic_keyword, also_keywords=()):
     metadata = json.loads(meta_path.read_text())
     tree = ET.parse(xml_path)
     root = tree.getroot()
@@ -342,9 +348,9 @@ def ingest_file(conn, xml_path, meta_path, topic_keyword):
     topic_id = get_or_create_topic(conn, topic_keyword)
     source_id = get_or_create_source(conn)
 
-    keyword = topic_keyword.lower()
+    keywords = [topic_keyword.lower(), *(k.lower() for k in also_keywords)]
     inserted = 0
-    for activiteit, title_match in find_matching_activiteiten(root, topic_keyword):
+    for activiteit, title_match in find_matching_activiteiten(root, topic_keyword, also_keywords):
         activiteit_titel = activiteit.findtext(NS + "titel") or metadata.get("activiteit_onderwerp")
         activiteit_soort = activiteit.attrib.get("soort")
         activiteit_aanvangstijd = activiteit.findtext(NS + "aanvangstijd") or metadata.get("activiteit_datum")
@@ -357,7 +363,7 @@ def ingest_file(conn, xml_path, meta_path, topic_keyword):
             # meenemen die zelf het keyword bevatten -- anders zou één incidentele
             # vermelding (bv. een motie over abortuscijfers in een stikstofdebat)
             # het hele, verder onrelateerde debat meeslepen.
-            if not title_match and keyword not in content.lower():
+            if not title_match and not any(k in content.lower() for k in keywords):
                 continue
 
             external_id = turn_el.attrib.get("objectid")
@@ -404,14 +410,19 @@ def ingest_file(conn, xml_path, meta_path, topic_keyword):
     return inserted
 
 
-def ingest(topic_keyword, raw_dir=RAW_DIR, also_dirs=()):
+def ingest(topic_keyword, raw_dir=RAW_DIR, also_dirs=(), also_keywords=()):
     """Scant standaard alleen raw_dir/<topic_keyword>/ -- de map waar de
     crawler onder dat exacte keyword naartoe schreef. also_dirs is de
     expliciete, per-geval-gekozen uitbreiding voor het ruime-net-criterium
     (bv. also_dirs=["vrouwengezondheid"] om een eufemisme-gecrawlde map ook
     op dit topic te doorzoeken) -- nooit een impliciete scan van de hele
     raw-boom, dat zou topics ongemerkt laten lekken (zie find_matching_activiteiten
-    voor de sprekerbeurt-niveau-filtering die dat soort kruisbestuiving afvangt)."""
+    voor de sprekerbeurt-niveau-filtering die dat soort kruisbestuiving afvangt).
+
+    also_dirs verbreedt wélke mappen gescand worden, also_keywords waaróp
+    gematcht wordt. Voor een topic met twee gangbare benamingen (bv. "asiel" en
+    "migratie") heb je beide nodig: zonder also_keywords levert een puur
+    migratiedebat uit de migratie-map nul sprekerbeurten op."""
     db_path = db.DEFAULT_DB_PATH
     if not db_path.exists():
         db.init_db(db_path)
@@ -426,7 +437,7 @@ def ingest(topic_keyword, raw_dir=RAW_DIR, also_dirs=()):
             if not meta_path.exists():
                 print(f"  overslaan (geen metadata): {xml_path.name}")
                 continue
-            count = ingest_file(conn, xml_path, meta_path, topic_keyword)
+            count = ingest_file(conn, xml_path, meta_path, topic_keyword, also_keywords)
             print(f"  {xml_path.parent.name}/{xml_path.name}: {count} sprekerbeurten geïmporteerd")
             total += count
         print(f"Klaar: {total} documenten geïmporteerd voor topic '{topic_keyword}'.")
@@ -443,5 +454,11 @@ if __name__ == "__main__":
         default=[],
         help="Extra raw_dir/<naam>/-map ook doorzoeken op dit topic (ruime-net-criterium, bv. --also-dir vrouwengezondheid). Herhaalbaar.",
     )
+    parser.add_argument(
+        "--also-keyword",
+        action="append",
+        default=[],
+        help="Extra trefwoord waarop activiteiten en sprekerbeurten matchen (bv. --also-keyword migratie bij --topic asiel). Herhaalbaar.",
+    )
     args = parser.parse_args()
-    ingest(args.topic, also_dirs=args.also_dir)
+    ingest(args.topic, also_dirs=args.also_dir, also_keywords=args.also_keyword)
