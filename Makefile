@@ -50,8 +50,8 @@ extract: ## Stage 1 -- argumenten extraheren (LLM, alleen op netstroom). Vars: T
 	@url=$$($(RESOLVE_BASE_URL)) || exit 1; \
 	uv run python -m pipeline.extract_arguments --topic $(TOPIC) --limit $(LIMIT) --base-url $$url
 
-extract-agy: ## Stage 1 -- argumenten extraheren via Docker agy (Gemini). Vars: TOPIC, LIMIT, MODEL
-	PYTHONPATH=. uv run python scripts/agy_run_extraction_batch.py --topic $(TOPIC) --limit $(LIMIT) $(if $(MODEL),--model $(MODEL),)
+extract-agy: ## Stage 1 -- argumenten extraheren via Docker agy (Gemini). Vars: TOPIC, LIMIT, MODEL, MIN_ID
+	PYTHONPATH=. uv run python scripts/agy_run_extraction_batch.py --topic $(TOPIC) --limit $(LIMIT) $(if $(MODEL),--model $(MODEL),) $(if $(MIN_ID),--min-id $(MIN_ID),)
 
 tag: ## Stage 1b -- tags toekennen (LLM, alleen op netstroom). Vars: TOPIC, LIMIT, BASE_URL
 	@url=$$($(RESOLVE_BASE_URL)) || exit 1; \
