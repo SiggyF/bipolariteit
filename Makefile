@@ -11,7 +11,7 @@ else
   RESOLVE_BASE_URL = scripts/detect_llm_base_url.sh
 endif
 
-.PHONY: help test test-js test-frontend ca-fixture status build dev dev-stop extract extract-agy tag tag-agy redactie export tags-taxonomy db-init pipeline-status backup-db release release-dry
+.PHONY: help probe test test-js test-frontend ca-fixture status build dev dev-stop extract extract-agy tag tag-agy redactie export tags-taxonomy db-init pipeline-status backup-db release release-dry
 
 help: ## Toon deze lijst
 	@grep -E '^[a-zA-Z_-]+:.*## ' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*## "}; {printf "  \033[36m%-16s\033[0m %s\n", $$1, $$2}'
@@ -31,6 +31,10 @@ test-frontend: ## Rooktest van de filterbalk in een echte browser (bouwt + serve
 		pid=$$!; sleep 4; \
 		(cd frontend && node tests/smoke-filters.mjs); status=$$?; \
 		kill $$pid 2>/dev/null; exit $$status
+
+probe: ## Tel TK-activiteiten per kandidaat-trefwoord, vóór een crawl. Vars: KEYWORDS
+	@test -n "$(KEYWORDS)" || { echo 'Gebruik: make probe KEYWORDS="asiel migratie"'; exit 1; }
+	PYTHONPATH=.:crawlers/tweede_kamer uv run python scripts/probe_topic_keywords.py $(KEYWORDS)
 
 status: ## Doorlopend overzicht van openstaand pipeline-werk per topic (scripts/pipeline_status.py)
 	PYTHONPATH=. uv run python scripts/pipeline_status.py

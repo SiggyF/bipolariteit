@@ -11,24 +11,20 @@ Doet zelf HTTP (in tegenstelling tot de spider), want dit is een eenmalige
 telling en geen crawl: geen items, geen pipelines, geen ruwe bestanden.
 
 Gebruik:
-    uv run python scripts/probe_topic_keywords.py asiel migratie asielbeleid
+    make probe KEYWORDS="asiel migratie asielbeleid"
 """
 
 import argparse
 import collections
 import logging
-import sys
-from pathlib import Path
 
 import requests
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
+from pipeline import periodes
 # odata.py woont in het crawler-pakket; dat is de enige plek met de
 # URL-bouwlogica, dus importeren in plaats van hier een tweede versie te maken.
-sys.path.insert(0, str(REPO_ROOT / "crawlers" / "tweede_kamer"))
-
-from pipeline import periodes  # noqa: E402
-from tweede_kamer import odata  # noqa: E402
+# Draaien via `make probe`, dat crawlers/tweede_kamer op PYTHONPATH zet.
+from tweede_kamer import odata
 
 logger = logging.getLogger(__name__)
 

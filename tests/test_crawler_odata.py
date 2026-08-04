@@ -1,12 +1,6 @@
 """Tests voor de URL-bouw en selectieheuristieken van de Tweede Kamer-crawler."""
 
-import sys
-from pathlib import Path
-
-REPO_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(REPO_ROOT / "crawlers" / "tweede_kamer"))
-
-from tweede_kamer import odata  # noqa: E402
+from tweede_kamer import odata
 
 
 def test_vragenuur_is_a_plenaire_vergadering():
