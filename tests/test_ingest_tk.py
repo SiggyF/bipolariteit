@@ -12,8 +12,10 @@ import xml.etree.ElementTree as ET
 from pipeline.ingest.ingest_tk import (
     NS,
     _speaker_name,
+    build_parent_map,
     find_matching_activiteiten,
     find_speaking_turns,
+    is_voorzitter_turn,
 )
 
 AANVANGSTIJD = "2026-07-01T10:00:00"
@@ -139,6 +141,19 @@ def test_exclude_titelwoorden_skips_ict_migration_but_not_words_containing_ict()
     root = ET.fromstring(ICT_MIGRATIE_ROOT)
     matches = find_matching_activiteiten(root, "asiel", also_keywords=["migratie"])
     assert [a.attrib["objectid"] for a, _ in matches] == ["act-conflict"]
+
+
+def test_voorzitter_turn_recognized_from_the_text_when_the_titel_is_missing():
+    # Bij commissiedebatten ontbreekt de <activiteitdeel>-titel vaak; de
+    # verslaglegging zet de rol dan alleen in de tekst zelf.
+    root = ET.fromstring(VLOS_ROOT)
+    activiteit, _title_match = find_matching_activiteiten(root, "stikstof")[0]
+    turn_el, _spreker, _tekst = find_speaking_turns(activiteit)[0]
+    parent_map = build_parent_map(root)
+
+    assert is_voorzitter_turn(turn_el, parent_map) is False
+    assert is_voorzitter_turn(turn_el, parent_map, "De voorzitter: Kort antwoord.") is True
+    assert is_voorzitter_turn(turn_el, parent_map, "Mevrouw Podt (D66): Voorzitter, ik ...") is False
 
 
 def test_find_speaking_turns_includes_woordvoerder_and_interrumpant():

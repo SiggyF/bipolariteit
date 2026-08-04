@@ -302,12 +302,20 @@ def build_parent_map(root):
     return {child: parent for parent in root.iter() for child in parent}
 
 
-def is_voorzitter_turn(turn_el, parent_map):
+def is_voorzitter_turn(turn_el, parent_map, content=None):
     """Een sprekerbeurt is een voorzitter-beurt als de dichtstbijzijnde
     omsluitende <activiteitdeel> een <titel> heeft die "voorzitter" bevat
     (bv. "Spreekbeurt - De voorzitter"). De <spreker> zelf draagt geen rol-
     markering -- <functie> blijft "lid Tweede Kamer", ook tijdens het
-    voorzitten -- dus dit is de enige betrouwbare marker in de brondata."""
+    voorzitten.
+
+    Die <titel> ontbreekt echter vaak bij commissiedebatten, waardoor
+    procedurele voorzitter-beurten alsnog als inhoudelijke beurt binnenkomen
+    (bij topic asiel 1902 van de openstaande documenten). De verslaglegging
+    zet de rol in zulke gevallen wél in de tekst zelf: "De voorzitter: ...".
+    Die tweede marker vangt de rest af."""
+    if content is not None and content.lstrip().lower().startswith("de voorzitter:"):
+        return True
     el = turn_el
     while el in parent_map:
         el = parent_map[el]
@@ -403,7 +411,7 @@ def ingest_file(conn, xml_path, meta_path, topic_keyword, also_keywords=()):
             actor_id = get_or_create_actor(conn, name, party)
 
             published_at = turn_el.findtext(NS + "markeertijdbegin") or metadata.get("activiteit_datum")
-            voorzitter_turn = is_voorzitter_turn(turn_el, parent_map)
+            voorzitter_turn = is_voorzitter_turn(turn_el, parent_map, content)
 
             conn.execute(
                 """
