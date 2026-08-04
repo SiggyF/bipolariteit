@@ -223,14 +223,16 @@ TOPIC_EXCLUDE_ACTIVITEITEN = {
         # Kamerlid markeert dit debat zelf expliciet als "geen abortusdebat".
         "Bestrijding conflict-gerelateerd seksueel geweld",
     ],
-    "asiel": [
-        # Twee ICT-debatten: "migratie" in de zin van datamigratie/cloudmigratie,
-        # niet van mensen. Ze komen binnen omdat het topic asiel het trefwoord
-        # "migratie" meeneemt (--also-keyword) -- inhoudelijk een compleet
-        # andere as.
-        "Verkoop cloudbedrijf dat DigiD en MijnOverheid host aan een buitenlandse techgigant en cloudmigraties naar Amerikaanse techgiganten",
-        "Migraties van overheids-ICT naar het buitenland",
-    ],
+}
+
+# Tweede exclusiegrond, naast de letterlijke titels hierboven: een woord in de
+# onderwerp/titel dat het debat als geheel diskwalificeert. Voor asiel is dat
+# de ICT-betekenis van "migratie" (datamigratie, cloudmigratie) -- die komt
+# binnen doordat het topic het trefwoord "migratie" meeneemt, maar gaat over
+# systemen in plaats van mensen. Als woord, niet als substring: "ict" zit ook
+# in "conflict" en "restrictief".
+TOPIC_EXCLUDE_TITELWOORDEN = {
+    "asiel": ["ict", "cloud", "cloudbedrijf", "cloudmigraties", "digid"],
 }
 
 
@@ -250,6 +252,8 @@ def find_matching_activiteiten(root, topic_keyword, also_keywords=()):
     stilzwijgend het net van een ander topic overnemen."""
     keywords = [topic_keyword.lower(), *(k.lower() for k in also_keywords)]
     excludes = {x.lower() for x in TOPIC_EXCLUDE_ACTIVITEITEN.get(topic_keyword, [])}
+    exclude_woorden = TOPIC_EXCLUDE_TITELWOORDEN.get(topic_keyword, [])
+    exclude_patroon = re.compile(r"\b(" + "|".join(exclude_woorden) + r")\b") if exclude_woorden else None
     matches = []
     for activiteit in root.iter(NS + "activiteit"):
         onderwerp = activiteit.findtext(NS + "onderwerp") or ""
@@ -257,6 +261,8 @@ def find_matching_activiteiten(root, topic_keyword, also_keywords=()):
         if onderwerp.lower() in excludes or titel.lower() in excludes:
             continue
         kop = f"{onderwerp} {titel}".lower()
+        if exclude_patroon is not None and exclude_patroon.search(kop):
+            continue
         title_match = any(k in kop for k in keywords)
         if title_match:
             matches.append((activiteit, True))

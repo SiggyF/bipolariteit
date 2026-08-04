@@ -121,6 +121,26 @@ def test_also_keywords_widens_the_match_to_a_second_name_for_the_topic():
     assert all(title_match for _, title_match in met)
 
 
+ICT_MIGRATIE_ROOT = """<vlosCoreDocument xmlns="http://www.tweedekamer.nl/ggm/vergaderverslag/v1.0">
+  <vergadering>
+    <activiteit objectid="act-ict">
+      <onderwerp>Migraties van overheids-ICT naar het buitenland</onderwerp>
+    </activiteit>
+    <activiteit objectid="act-conflict">
+      <onderwerp>Conflict en restrictief migratiebeleid</onderwerp>
+    </activiteit>
+  </vergadering>
+</vlosCoreDocument>"""
+
+
+def test_exclude_titelwoorden_skips_ict_migration_but_not_words_containing_ict():
+    # "ict" als woord sluit het datamigratie-debat uit; als substring zou het
+    # ook "conflict" en "restrictief" raken -- precies de debatten die we willen.
+    root = ET.fromstring(ICT_MIGRATIE_ROOT)
+    matches = find_matching_activiteiten(root, "asiel", also_keywords=["migratie"])
+    assert [a.attrib["objectid"] for a, _ in matches] == ["act-conflict"]
+
+
 def test_find_speaking_turns_includes_woordvoerder_and_interrumpant():
     root = ET.fromstring(VLOS_ROOT)
     activiteit, _title_match = find_matching_activiteiten(root, "stikstof")[0]
