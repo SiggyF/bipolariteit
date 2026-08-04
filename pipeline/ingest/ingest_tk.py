@@ -223,6 +223,14 @@ TOPIC_EXCLUDE_ACTIVITEITEN = {
         # Kamerlid markeert dit debat zelf expliciet als "geen abortusdebat".
         "Bestrijding conflict-gerelateerd seksueel geweld",
     ],
+    "asiel": [
+        # Twee ICT-debatten: "migratie" in de zin van datamigratie/cloudmigratie,
+        # niet van mensen. Ze komen binnen omdat het topic asiel het trefwoord
+        # "migratie" meeneemt (--also-keyword) -- inhoudelijk een compleet
+        # andere as.
+        "Verkoop cloudbedrijf dat DigiD en MijnOverheid host aan een buitenlandse techgigant en cloudmigraties naar Amerikaanse techgiganten",
+        "Migraties van overheids-ICT naar het buitenland",
+    ],
 }
 
 
