@@ -142140,9 +142140,167 @@
       "claims": [],
       "tags": [],
       "oppositions": []
+    },
+    {
+      "id": 2055,
+      "stance": "contra",
+      "typology": "legal",
+      "quote_text": "Voor PAS-melders en interimmers is het al jarenlang uitzichtloos. Het ondernemen is hun onmogelijk gemaakt. Door overheidsfalen zitten zij in een juridisch moeras waar niemand hen uit kan helpen.",
+      "quote_context": "Kritiek op de gevolgen van het stikstofbeleid/overheidsfalen voor PAS-melders en interimmers.",
+      "prompt_version": "3d3ad8b6052c",
+      "actor": {
+        "name": "Rosanne Hertzberger",
+        "party": "NSC",
+        "role_title": null
+      },
+      "document": {
+        "url": "https://gegevensmagazijn.tweedekamer.nl/OData/v4/2.0/Verslag/fecbfec7-c374-471d-88c9-5bf865e126b3/resource",
+        "video_url": "https://debatdirect.tweedekamer.nl/2024-06-20/natuur-en-milieu/plenaire-zaal/debat-over-versoepeling-van-de-bestaande-stikstofregels-voor-schiphol-11-00/video",
+        "published_at": "2024-06-20T11:56:47",
+        "speaker_video_url": "https://debatdirect.tweedekamer.nl/2024-06-20/natuur-en-milieu/plenaire-zaal/debat-over-versoepeling-van-de-bestaande-stikstofregels-voor-schiphol-11-00?event=speaker2024-06-20T11%3A56%3A47%2B0200",
+        "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2024A04121",
+        "redactie_review": null
+      },
+      "periode": {
+        "kamer": "Tweede Kamer 2023-2025",
+        "regering": "Kabinet-Rutte IV"
+      },
+      "claims": [],
+      "tags": [],
+      "oppositions": []
+    },
+    {
+      "id": 2056,
+      "stance": "contra",
+      "typology": "factual",
+      "quote_text": "De luchthavens van Eindhoven en Rotterdam blijken niet eens een vergunning nodig te hebben, volgens de minister. Iedereen in dit land heeft een vergunning nodig, maar twee behoorlijk omvangrijke luchthavens met zo'n 100.000 vliegwegingen in totaal per jaar niet. Het is niet uit te leggen. Dit beleid is niet uit te leggen.",
+      "quote_context": "Kritiek op het stikstofbeleid vanwege de uitzonderingspositie voor luchthavens.",
+      "prompt_version": "3d3ad8b6052c",
+      "actor": {
+        "name": "Rosanne Hertzberger",
+        "party": "NSC",
+        "role_title": null
+      },
+      "document": {
+        "url": "https://gegevensmagazijn.tweedekamer.nl/OData/v4/2.0/Verslag/fecbfec7-c374-471d-88c9-5bf865e126b3/resource",
+        "video_url": "https://debatdirect.tweedekamer.nl/2024-06-20/natuur-en-milieu/plenaire-zaal/debat-over-versoepeling-van-de-bestaande-stikstofregels-voor-schiphol-11-00/video",
+        "published_at": "2024-06-20T11:56:47",
+        "speaker_video_url": "https://debatdirect.tweedekamer.nl/2024-06-20/natuur-en-milieu/plenaire-zaal/debat-over-versoepeling-van-de-bestaande-stikstofregels-voor-schiphol-11-00?event=speaker2024-06-20T11%3A56%3A47%2B0200",
+        "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2024A04121",
+        "redactie_review": null
+      },
+      "periode": {
+        "kamer": "Tweede Kamer 2023-2025",
+        "regering": "Kabinet-Rutte IV"
+      },
+      "claims": [
+        {
+          "claim_text": "De luchthavens van Eindhoven en Rotterdam blijken niet eens een vergunning nodig te hebben",
+          "attributed_source_text": "de minister"
+        },
+        {
+          "claim_text": "twee behoorlijk omvangrijke luchthavens met zo'n 100.000 vliegwegingen in totaal per jaar",
+          "attributed_source_text": null
+        }
+      ],
+      "tags": [],
+      "oppositions": []
+    },
+    {
+      "id": 2057,
+      "stance": "contra",
+      "typology": "factual",
+      "quote_text": "Wie onder de motorkap van de modellen van de vergunningverlening en de gehanteerde voortoets kijkt, ziet hoe scheef het is en hoe onbegrijpelijk.",
+      "quote_context": "Kritiek op het stikstofbeleid en de gehanteerde rekenmodellen.",
+      "prompt_version": "3d3ad8b6052c",
+      "actor": {
+        "name": "Rosanne Hertzberger",
+        "party": "NSC",
+        "role_title": null
+      },
+      "document": {
+        "url": "https://gegevensmagazijn.tweedekamer.nl/OData/v4/2.0/Verslag/fecbfec7-c374-471d-88c9-5bf865e126b3/resource",
+        "video_url": "https://debatdirect.tweedekamer.nl/2024-06-20/natuur-en-milieu/plenaire-zaal/debat-over-versoepeling-van-de-bestaande-stikstofregels-voor-schiphol-11-00/video",
+        "published_at": "2024-06-20T11:56:47",
+        "speaker_video_url": "https://debatdirect.tweedekamer.nl/2024-06-20/natuur-en-milieu/plenaire-zaal/debat-over-versoepeling-van-de-bestaande-stikstofregels-voor-schiphol-11-00?event=speaker2024-06-20T11%3A56%3A47%2B0200",
+        "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2024A04121",
+        "redactie_review": null
+      },
+      "periode": {
+        "kamer": "Tweede Kamer 2023-2025",
+        "regering": "Kabinet-Rutte IV"
+      },
+      "claims": [],
+      "tags": [],
+      "oppositions": []
+    },
+    {
+      "id": 2058,
+      "stance": "contra",
+      "typology": "factual",
+      "quote_text": "Denk aan een afstandsgrens van 25 kilometer, waardoor de chemie en de infrastructuur in de modellenwerkelijkheid veel minder stikstof deponeren dan ze in werkelijkheid doen. Of denk aan een hoogtegrens van 900 meter, waardoor Schiphol maar voor 10% tot 20% van de 54 miljoen kilo stikstof verantwoording hoeft af te leggen. 80% wordt buiten beschouwing gelaten, terwijl we voor boeren doorrekenen tot drie getallen achter de komma en er voor hen helemaal geen kortingen zijn.",
+      "quote_context": "Kritiek op de methodologische en statistische grenzen in de AERIUS-modellen.",
+      "prompt_version": "3d3ad8b6052c",
+      "actor": {
+        "name": "Rosanne Hertzberger",
+        "party": "NSC",
+        "role_title": null
+      },
+      "document": {
+        "url": "https://gegevensmagazijn.tweedekamer.nl/OData/v4/2.0/Verslag/fecbfec7-c374-471d-88c9-5bf865e126b3/resource",
+        "video_url": "https://debatdirect.tweedekamer.nl/2024-06-20/natuur-en-milieu/plenaire-zaal/debat-over-versoepeling-van-de-bestaande-stikstofregels-voor-schiphol-11-00/video",
+        "published_at": "2024-06-20T11:56:47",
+        "speaker_video_url": "https://debatdirect.tweedekamer.nl/2024-06-20/natuur-en-milieu/plenaire-zaal/debat-over-versoepeling-van-de-bestaande-stikstofregels-voor-schiphol-11-00?event=speaker2024-06-20T11%3A56%3A47%2B0200",
+        "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2024A04121",
+        "redactie_review": null
+      },
+      "periode": {
+        "kamer": "Tweede Kamer 2023-2025",
+        "regering": "Kabinet-Rutte IV"
+      },
+      "claims": [
+        {
+          "claim_text": "afstandsgrens van 25 kilometer, waardoor de chemie en de infrastructuur in de modellenwerkelijkheid veel minder stikstof deponeren dan ze in werkelijkheid doen",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "hoogtegrens van 900 meter, waardoor Schiphol maar voor 10% tot 20% van de 54 miljoen kilo stikstof verantwoording hoeft af te leggen. 80% wordt buiten beschouwing gelaten",
+          "attributed_source_text": null
+        }
+      ],
+      "tags": [],
+      "oppositions": []
+    },
+    {
+      "id": 2059,
+      "stance": "contra",
+      "typology": "legal",
+      "quote_text": "Het is hoognodig dat de minister nu duidelijk maakt wat mag, want er is er maar één die de wet maakt, en die wet werkt op dit moment niet.",
+      "quote_context": "Kritiek op het huidige juridische kader en de wetgeving inzake stikstof.",
+      "prompt_version": "3d3ad8b6052c",
+      "actor": {
+        "name": "Rosanne Hertzberger",
+        "party": "NSC",
+        "role_title": null
+      },
+      "document": {
+        "url": "https://gegevensmagazijn.tweedekamer.nl/OData/v4/2.0/Verslag/fecbfec7-c374-471d-88c9-5bf865e126b3/resource",
+        "video_url": "https://debatdirect.tweedekamer.nl/2024-06-20/natuur-en-milieu/plenaire-zaal/debat-over-versoepeling-van-de-bestaande-stikstofregels-voor-schiphol-11-00/video",
+        "published_at": "2024-06-20T11:56:47",
+        "speaker_video_url": "https://debatdirect.tweedekamer.nl/2024-06-20/natuur-en-milieu/plenaire-zaal/debat-over-versoepeling-van-de-bestaande-stikstofregels-voor-schiphol-11-00?event=speaker2024-06-20T11%3A56%3A47%2B0200",
+        "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2024A04121",
+        "redactie_review": null
+      },
+      "periode": {
+        "kamer": "Tweede Kamer 2023-2025",
+        "regering": "Kabinet-Rutte IV"
+      },
+      "claims": [],
+      "tags": [],
+      "oppositions": []
     }
   ],
-  "argument_count": 1551,
+  "argument_count": 1556,
   "tag_correspondence": {
     "inertia_pct": [
       40.4,

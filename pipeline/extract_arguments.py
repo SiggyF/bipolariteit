@@ -44,7 +44,7 @@ PROMPT_VERSION = hashlib.sha256(PROMPT_TEMPLATE.encode()).hexdigest()[:12]
 BATCH_PROMPT_TEMPLATE = (Path(__file__).parent / "prompts" / "extract_argument_batch.md").read_text()
 BATCH_PROMPT_VERSION = hashlib.sha256(BATCH_PROMPT_TEMPLATE.encode()).hexdigest()[:12]
 
-VALID_STANCE = {"pro", "contra", "unclear"}
+VALID_STANCE = {"pro", "contra", "unclear", "ander_onderwerp"}
 VALID_TYPOLOGY = {"factual", "moral", "economic", "legal", "other"}
 
 _JSON_FENCE_RE = re.compile(r"```(?:json)?\s*(.*?)\s*```", re.DOTALL)
@@ -131,13 +131,17 @@ def _validate_argument(arg):
         raise ValueError(f"ongeldige typology: {arg.get('typology')!r}")
     if not arg.get("quote_text"):
         raise ValueError("quote_text ontbreekt of is leeg")
+    # Zonder onderwerp is 'ander_onderwerp' net zo weinig zeggend als 'unclear' --
+    # de hele reden voor dit label is dat je kunt zien wát het ruime net binnenhaalt.
+    if arg["stance"] == "ander_onderwerp" and not arg.get("ander_onderwerp"):
+        raise ValueError("stance 'ander_onderwerp' zonder ingevuld veld ander_onderwerp")
 
 
 def insert_argument(conn, document_id, topic_id, actor_id, arg, model):
     conn.execute(
         """INSERT INTO arguments
-           (document_id, topic_id, actor_id, stance, typology, quote_text, quote_context, extracted_at, prompt_version, extraction_model)
-           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+           (document_id, topic_id, actor_id, stance, typology, quote_text, quote_context, extracted_at, prompt_version, extraction_model, ander_onderwerp)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
         (
             document_id,
             topic_id,
@@ -149,6 +153,7 @@ def insert_argument(conn, document_id, topic_id, actor_id, arg, model):
             datetime.now(timezone.utc).isoformat(),
             PROMPT_VERSION,
             model,
+            arg.get("ander_onderwerp"),
         ),
     )
     argument_id = conn.execute("SELECT last_insert_rowid() AS id").fetchone()["id"]

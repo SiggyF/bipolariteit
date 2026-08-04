@@ -104,6 +104,7 @@ def fetch_arguments(conn, topic_id, periode_index):
            JOIN documents d ON d.id = ar.document_id
            WHERE ar.topic_id = ?
              AND d.published_at >= ?
+             AND ar.stance != 'ander_onderwerp'
            ORDER BY ar.id""",
         (topic_id, periode_index.drempel),
     ).fetchall()
@@ -275,6 +276,18 @@ def fetch_pipeline_status(conn, topic_row, drempel):
         (topic_id, drempel),
     ).fetchone()
 
+    # Argumenten die de LLM als 'ander onderwerp' bestempelde vallen buiten de
+    # export (ze horen niet bij dit topic), maar de telling en de onderwerpen
+    # zelf blijven zichtbaar -- anders is niet te zien wat het ruime
+    # ingest-criterium binnenhaalt.
+    ander_onderwerp_rows = conn.execute(
+        """SELECT ar.ander_onderwerp AS onderwerp, COUNT(*) AS aantal FROM arguments ar
+           JOIN documents d ON d.id = ar.document_id
+           WHERE ar.topic_id = ? AND d.published_at >= ? AND ar.stance = 'ander_onderwerp'
+           GROUP BY ar.ander_onderwerp ORDER BY aantal DESC""",
+        (topic_id, drempel),
+    ).fetchall()
+
     documents_with_redactie = conn.execute(
         """SELECT COUNT(DISTINCT rr.document_id)
            FROM redactie_reviews rr JOIN documents d ON d.id = rr.document_id
@@ -291,6 +304,10 @@ def fetch_pipeline_status(conn, topic_row, drempel):
         "arguments_total": arguments_total,
         "arguments_tagged": arguments_tagged,
         "documents_redactie_checked": documents_with_redactie,
+        "arguments_ander_onderwerp": sum(row["aantal"] for row in ander_onderwerp_rows),
+        "ander_onderwerp_top": [
+            {"onderwerp": row["onderwerp"], "aantal": row["aantal"]} for row in ander_onderwerp_rows[:10]
+        ],
     }
 
 
