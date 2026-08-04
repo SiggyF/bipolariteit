@@ -96,6 +96,10 @@ def main():
         elapsed = time.monotonic() - start
         latencies.append(elapsed)
 
+        # Per document opnieuw op nul: hieronder tellen total_arguments/total_claims
+        # deze twee bij elkaar op, dus doorlopende tellers zouden dubbel tellen.
+        n_valid = 0
+        n_claims = 0
         with conn:
             for arg in parsed.get("arguments", []):
                 try:
