@@ -223,6 +223,14 @@ TOPIC_EXCLUDE_ACTIVITEITEN = {
         # Kamerlid markeert dit debat zelf expliciet als "geen abortusdebat".
         "Bestrijding conflict-gerelateerd seksueel geweld",
     ],
+    "asiel": [
+        # Arbeidsmigratie is beleidsmatig verwant (zelfde ministerie) maar ligt
+        # op een andere as: arbeidsmarktkrapte, uitbuiting en huisvesting van
+        # arbeidsmigranten, niet toelating versus bescherming van asielzoekers.
+        # PRO/CONTRA zou hier iets anders betekenen dan in de rest van het topic.
+        "Arbeidsmigratie",
+        "Wet toelating terbeschikkingstelling van arbeidskrachten",
+    ],
 }
 
 # Tweede exclusiegrond, naast de letterlijke titels hierboven: een woord in de
