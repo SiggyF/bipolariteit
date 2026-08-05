@@ -183,7 +183,7 @@ TOPIC_TITLE_KEYWORDS = {
 EXCLUDED_ACTIVITEIT_SOORTEN = ["Regeling van werkzaamheden", "Stemmingen"]
 
 
-def fetch_pending_documents(conn, topic_id, topic_slug, limit, min_id=0, vanaf=None):
+def fetch_pending_documents(conn, topic_slug, limit, min_id=0, vanaf=None):
     """`vanaf` is een ISO-datum; oudere documenten blijven in de database maar
     komen hier niet uit. Default is [verwerking].vanaf uit
     data/politieke-periodes.toml -- we analyseren de huidige en de vorige
@@ -192,14 +192,14 @@ def fetch_pending_documents(conn, topic_id, topic_slug, limit, min_id=0, vanaf=N
         vanaf = PeriodeIndex().drempel
 
     conditions = [
-        "d.topic_id = ?",
+        "t.slug = ?",
         "d.id >= ?",
         "d.published_at >= ?",
         "d.extraction_attempted_at IS NULL",
         "d.is_voorzitter_turn = 0",
         f"d.activiteit_soort NOT IN ({','.join('?' * len(EXCLUDED_ACTIVITEIT_SOORTEN))})",
     ]
-    params = [topic_id, min_id, vanaf, *EXCLUDED_ACTIVITEIT_SOORTEN]
+    params = [topic_slug, min_id, vanaf, *EXCLUDED_ACTIVITEIT_SOORTEN]
 
     title_keywords = TOPIC_TITLE_KEYWORDS.get(topic_slug, [])
     if title_keywords:
@@ -211,6 +211,7 @@ def fetch_pending_documents(conn, topic_id, topic_slug, limit, min_id=0, vanaf=N
         f"""SELECT d.id, d.content, d.actor_id, a.name AS actor_name, a.party AS actor_party
             FROM documents d
             JOIN actors a ON a.id = d.actor_id
+            JOIN topics t ON t.id = d.topic_id
             WHERE {' AND '.join(conditions)}
             ORDER BY d.id
             LIMIT ?""",
@@ -263,7 +264,7 @@ def main():
             "zet dit eerst via UPDATE topics SET description = ... (zie docs/handoff.md)"
         )
 
-    documents = fetch_pending_documents(conn, topic_id, args.topic, args.limit, args.min_id, args.vanaf)
+    documents = fetch_pending_documents(conn, args.topic, args.limit, args.min_id, args.vanaf)
     if not documents:
         logger.info("Geen openstaande documenten (al verwerkt, of geen documenten voor deze topic).")
         return

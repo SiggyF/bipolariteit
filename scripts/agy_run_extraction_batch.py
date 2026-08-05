@@ -70,7 +70,7 @@ def main():
             "zet dit eerst via UPDATE topics SET description = ... (zie docs/handoff.md)"
         )
 
-    documents = fetch_pending_documents(conn, topic_id, args.topic, args.limit, args.min_id)
+    documents = fetch_pending_documents(conn, args.topic, args.limit, args.min_id)
     if not documents:
         logger.info("Geen openstaande documenten (al verwerkt, of geen documenten voor deze topic).")
         return
