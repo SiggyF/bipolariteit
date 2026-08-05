@@ -167,25 +167,54 @@ def insert_argument(conn, document_id, topic_id, actor_id, arg, model):
     return argument_id
 
 
-def fetch_pending_documents(conn, topic_id, limit, min_id=0, vanaf=None):
+# De ingest matcht ruim (keyword ergens in de activiteit, niet alleen in de
+# titel, zie ingest_tk.py:250-259) -- dat trekt debatten binnen die het
+# keyword maar incidenteel noemen op een heel andere as (bv. arbeidsmigratie,
+# faunabeheer/wolf, ruimtelijke ordening bij asiel). TOPIC_TITLE_KEYWORDS
+# dwingt bij extractie af dat de titel zelf over het onderwerp gaat, om die
+# ander_onderwerp-ruis te verminderen. Topics die hier niet in staan (abortus,
+# stikstof) krijgen geen titelfilter -- hun ingest-net is al smal genoeg.
+TOPIC_TITLE_KEYWORDS = {
+    "asiel": ["asiel", "vreemdeling", "migratie", "immigratie"],
+}
+
+# Procedurele activiteitsoorten bevatten geen inhoudelijke standpunten
+# (agendabeheer resp. stemuitslagen), dus altijd uitsluiten, ongeacht topic.
+EXCLUDED_ACTIVITEIT_SOORTEN = ["Regeling van werkzaamheden", "Stemmingen"]
+
+
+def fetch_pending_documents(conn, topic_id, limit, min_id=0, vanaf=None, topic_slug=None):
     """`vanaf` is een ISO-datum; oudere documenten blijven in de database maar
     komen hier niet uit. Default is [verwerking].vanaf uit
     data/politieke-periodes.toml -- we analyseren de huidige en de vorige
     Kamer, en dat scheelt aanzienlijk LLM-werk."""
     if vanaf is None:
         vanaf = PeriodeIndex().drempel
+
+    conditions = [
+        "d.topic_id = ?",
+        "d.id >= ?",
+        "d.published_at >= ?",
+        "d.extraction_attempted_at IS NULL",
+        "d.is_voorzitter_turn = 0",
+        f"d.activiteit_soort NOT IN ({','.join('?' * len(EXCLUDED_ACTIVITEIT_SOORTEN))})",
+    ]
+    params = [topic_id, min_id, vanaf, *EXCLUDED_ACTIVITEIT_SOORTEN]
+
+    title_keywords = TOPIC_TITLE_KEYWORDS.get(topic_slug, [])
+    if title_keywords:
+        conditions.append("(" + " OR ".join("LOWER(d.title) LIKE ?" for _ in title_keywords) + ")")
+        params.extend(f"%{keyword.lower()}%" for keyword in title_keywords)
+
+    params.append(limit)
     return conn.execute(
-        """SELECT d.id, d.content, d.actor_id, a.name AS actor_name, a.party AS actor_party
-           FROM documents d
-           JOIN actors a ON a.id = d.actor_id
-           WHERE d.topic_id = ?
-             AND d.id >= ?
-             AND d.published_at >= ?
-             AND d.extraction_attempted_at IS NULL
-             AND d.is_voorzitter_turn = 0
-           ORDER BY d.id
-           LIMIT ?""",
-        (topic_id, min_id, vanaf, limit),
+        f"""SELECT d.id, d.content, d.actor_id, a.name AS actor_name, a.party AS actor_party
+            FROM documents d
+            JOIN actors a ON a.id = d.actor_id
+            WHERE {' AND '.join(conditions)}
+            ORDER BY d.id
+            LIMIT ?""",
+        params,
     ).fetchall()
 
 
@@ -234,7 +263,7 @@ def main():
             "zet dit eerst via UPDATE topics SET description = ... (zie docs/handoff.md)"
         )
 
-    documents = fetch_pending_documents(conn, topic_id, args.limit, args.min_id, args.vanaf)
+    documents = fetch_pending_documents(conn, topic_id, args.limit, args.min_id, args.vanaf, args.topic)
     if not documents:
         logger.info("Geen openstaande documenten (al verwerkt, of geen documenten voor deze topic).")
         return
