@@ -34,6 +34,7 @@ from typing import NamedTuple
 import requests
 
 from pipeline.db import db
+from pipeline.llm_log import record_llm_call
 from pipeline.periodes import PeriodeIndex
 
 logger = logging.getLogger(__name__)
@@ -282,6 +283,7 @@ def main():
     for doc in documents:
         prompt = _build_prompt(topic_name, topic_description, doc["actor_name"], doc["actor_party"], doc["content"])
         start = time.monotonic()
+        started_at = datetime.now(timezone.utc).isoformat()
         try:
             raw_content, usage, finish_reason = call_llm(
                 args.base_url, args.model, prompt, args.reasoning_effort, args.timeout, args.max_tokens
@@ -296,9 +298,21 @@ def main():
             elapsed = time.monotonic() - start
             logger.error("[doc %5d] %-25s FOUT na %5.1fs: %s", doc["id"], doc["actor_name"], elapsed, exc)
             total_errors += 1
+            if not args.dry_run:
+                record_llm_call(
+                    conn, stage="extraction", topic_id=topic_id, document_id=doc["id"], model=args.model,
+                    prompt_version=PROMPT_VERSION, started_at=started_at, duration_s=elapsed,
+                    status="error", error_message=str(exc),
+                )
             continue
         elapsed = time.monotonic() - start
         latencies.append(elapsed)
+        if not args.dry_run:
+            record_llm_call(
+                conn, stage="extraction", topic_id=topic_id, document_id=doc["id"], model=args.model,
+                prompt_version=PROMPT_VERSION, started_at=started_at, duration_s=elapsed,
+                response=raw_content, status="ok", usage=usage,
+            )
 
         n_valid = 0
         n_claims = 0

@@ -28,6 +28,7 @@ from pathlib import Path
 import requests
 
 from pipeline.db import db
+from pipeline.llm_log import record_llm_call
 from pipeline.periodes import PeriodeIndex
 from pipeline.taxonomy import DERIVED_LABELGROEPEN, field_name_for
 
@@ -318,6 +319,7 @@ def main():
             arg["quote_text"], arg["quote_context"], tag_catalogue, tag_json_skeleton,
         )
         start = time.monotonic()
+        started_at = datetime.now(timezone.utc).isoformat()
         llm_tags = []
         try:
             raw_content, usage = call_llm(args.base_url, args.model, prompt, args.reasoning_effort, args.timeout)
@@ -327,9 +329,21 @@ def main():
             elapsed = time.monotonic() - start
             logger.error("[arg %5d] %-25s FOUT na %5.1fs: %s", arg["id"], arg["actor_name"], elapsed, exc)
             total_errors += 1
+            if not args.dry_run:
+                record_llm_call(
+                    conn, stage="tagging", topic_id=topic_id, document_id=arg["document_id"], argument_id=arg["id"],
+                    model=args.model, prompt_version=PROMPT_VERSION, started_at=started_at, duration_s=elapsed,
+                    status="error", error_message=str(exc),
+                )
             continue
         elapsed = time.monotonic() - start
         latencies.append(elapsed)
+        if not args.dry_run:
+            record_llm_call(
+                conn, stage="tagging", topic_id=topic_id, document_id=arg["document_id"], argument_id=arg["id"],
+                model=args.model, prompt_version=PROMPT_VERSION, started_at=started_at, duration_s=elapsed,
+                response=raw_content, status="ok", usage=usage,
+            )
 
         if not args.dry_run:
             with conn:

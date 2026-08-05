@@ -1810,6 +1810,76 @@ a.card-item:hover {
 	margin-top: var(--space-1);
 }
 
+.llm-call-list {
+	list-style: none;
+	margin: var(--space-2) 0 0;
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-2);
+}
+
+.llm-call-item {
+	border: 1px solid var(--color-border);
+	background: var(--color-card-bg);
+	padding: 0.6rem 0.8rem;
+}
+
+.llm-call-meta {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0.6rem;
+	font-size: var(--step--1);
+	color: var(--color-muted);
+	font-family: var(--font-mono);
+}
+
+.llm-call-stage {
+	text-transform: uppercase;
+	font-size: 0.7rem;
+	letter-spacing: 0.03em;
+	color: var(--color-text);
+}
+
+.llm-call-status {
+	margin-left: auto;
+	text-transform: uppercase;
+	font-size: 0.7rem;
+}
+
+.llm-call-status--ok {
+	color: var(--color-pro);
+}
+
+.llm-call-status--error {
+	color: var(--color-contra);
+}
+
+.llm-call-outdated {
+	color: var(--color-contra);
+}
+
+.llm-call-error {
+	color: var(--color-contra);
+	font-size: var(--step--1);
+	margin: 0.4rem 0 0;
+}
+
+.llm-call-text {
+	white-space: pre-wrap;
+	word-break: break-word;
+	font-family: var(--font-mono);
+	font-size: 0.75rem;
+	line-height: 1.5;
+	background: var(--color-bg);
+	border: 1px solid var(--color-border);
+	padding: 0.6rem;
+	margin: 0.4rem 0 0;
+	max-height: 400px;
+	overflow-y: auto;
+}
+
 .perspectief-swatch {
 	display: inline-block;
 	width: 14px;

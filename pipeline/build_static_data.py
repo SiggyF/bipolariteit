@@ -34,7 +34,15 @@ import pandas as pd
 import prince
 
 from pipeline.db import db
+from pipeline.extract_arguments import PROMPT_VERSION as EXTRACT_PROMPT_VERSION
+from pipeline.extract_arguments import _build_prompt as _build_extraction_prompt
 from pipeline.periodes import PeriodeIndex
+from pipeline.redactie_check import PROMPT_TEMPLATE as REDACTIE_PROMPT_TEMPLATE
+from pipeline.redactie_check import PROMPT_VERSION as REDACTIE_PROMPT_VERSION
+from pipeline.redactie_check import _format_arguments_block
+from pipeline.tag_arguments import PROMPT_VERSION as TAG_PROMPT_VERSION
+from pipeline.tag_arguments import _build_prompt as _build_tagging_prompt
+from pipeline.tag_arguments import build_tag_catalogue
 
 logger = logging.getLogger(__name__)
 
@@ -311,6 +319,140 @@ def fetch_pipeline_status(conn, topic_row, drempel):
     }
 
 
+def fetch_llm_call_stats(conn, topic_id):
+    """Geaggregeerde aantal/tijd-cijfers per (stage, model) uit `llm_calls`,
+    voor de publieke /status-pagina -- puur telwerk, zelfde stijl als
+    fetch_pipeline_status hierboven. Dekt de hele geschiedenis (geen
+    datumdrempel): dit gaat over pipeline-doorlooptijd, niet over welke
+    argumenten getoond worden."""
+    rows = conn.execute(
+        """SELECT stage, model,
+                  COUNT(*) AS n_calls,
+                  SUM(duration_s) AS total_duration_s,
+                  AVG(duration_s) AS avg_duration_s,
+                  SUM(CASE WHEN status = 'error' THEN 1 ELSE 0 END) AS n_errors,
+                  SUM(COALESCE(completion_tokens, 0)) AS total_completion_tokens,
+                  MIN(started_at) AS first_call_at,
+                  MAX(started_at) AS last_call_at
+           FROM llm_calls
+           WHERE topic_id = ?
+           GROUP BY stage, model
+           ORDER BY stage, model""",
+        (topic_id,),
+    ).fetchall()
+    return [dict(row) for row in rows]
+
+
+_STAGE_CURRENT_PROMPT_VERSION = {
+    "extraction": EXTRACT_PROMPT_VERSION,
+    "tagging": TAG_PROMPT_VERSION,
+    "redactie": REDACTIE_PROMPT_VERSION,
+}
+
+
+def _reconstruct_prompt(conn, call, topic_name, topic_description):
+    """Bouwt de prompt-tekst van één llm_calls-rij terug op, met de
+    _build_prompt-functie van de bijbehorende stage-module en de nu nog
+    bestaande document/argument-data (zie schema.sql: prompt-tekst zelf
+    wordt niet opgeslagen). Retourneert None als het brondocument/-argument
+    inmiddels weg is."""
+    if call["stage"] == "extraction":
+        doc = conn.execute(
+            """SELECT d.content, a.name AS actor_name, a.party AS actor_party
+               FROM documents d JOIN actors a ON a.id = d.actor_id
+               WHERE d.id = ?""",
+            (call["document_id"],),
+        ).fetchone()
+        if doc is None:
+            return None
+        return _build_extraction_prompt(
+            topic_name, topic_description, doc["actor_name"], doc["actor_party"], doc["content"]
+        )
+
+    if call["stage"] == "tagging":
+        arg = conn.execute(
+            """SELECT ar.stance, ar.typology, ar.quote_text, ar.quote_context,
+                      a.name AS actor_name, a.party AS actor_party
+               FROM arguments ar JOIN actors a ON a.id = ar.actor_id
+               WHERE ar.id = ?""",
+            (call["argument_id"],),
+        ).fetchone()
+        if arg is None:
+            return None
+        tag_catalogue, tag_json_skeleton = build_tag_catalogue(conn)
+        return _build_tagging_prompt(
+            topic_name, arg["actor_name"], arg["actor_party"], arg["stance"], arg["typology"],
+            arg["quote_text"], arg["quote_context"], tag_catalogue, tag_json_skeleton,
+        )
+
+    if call["stage"] == "redactie":
+        doc = conn.execute(
+            """SELECT a.name AS actor_name, a.party AS actor_party
+               FROM documents d JOIN actors a ON a.id = d.actor_id
+               WHERE d.id = ?""",
+            (call["document_id"],),
+        ).fetchone()
+        if doc is None:
+            return None
+        new_args = conn.execute(
+            """SELECT id, stance, quote_text FROM arguments
+               WHERE document_id = ? AND stance IN ('pro', 'contra') ORDER BY id""",
+            (call["document_id"],),
+        ).fetchall()
+        candidate_ids = json.loads(call["prompt_vars"])["candidate_argument_ids"] if call["prompt_vars"] else []
+        candidates = []
+        if candidate_ids:
+            placeholders = ",".join("?" * len(candidate_ids))
+            candidates = conn.execute(
+                f"""SELECT ar.id, ar.quote_text, a.name AS actor_name, a.party AS actor_party
+                    FROM arguments ar JOIN actors a ON a.id = ar.actor_id
+                    WHERE ar.id IN ({placeholders})""",
+                candidate_ids,
+            ).fetchall()
+        actor_party_suffix = f" ({doc['actor_party']})" if doc["actor_party"] else ""
+        return REDACTIE_PROMPT_TEMPLATE.format(
+            topic=topic_name,
+            actor_name=doc["actor_name"],
+            actor_party_suffix=actor_party_suffix,
+            new_arguments_block=_format_arguments_block(new_args),
+            candidates_block=_format_arguments_block(candidates),
+        )
+
+    return None
+
+
+def fetch_recent_llm_calls(conn, topic_row, limit=300):
+    """Meest recente `limit` LLM-calls van dit topic, mét gereconstrueerde
+    prompt-tekst -- voor de publieke "prompts teruglezen"-pagina. Bewust
+    begrensd (niet de hele `llm_calls`-tabel, die kan tienduizenden rijen
+    hebben): reconstructie kost per rij een paar extra queries, en de export
+    wordt in git gecommit (zie module-docstring)."""
+    topic_id, topic_name, topic_description = topic_row["id"], topic_row["name"], topic_row["description"]
+    rows = conn.execute(
+        """SELECT id, stage, document_id, argument_id, model, prompt_version, prompt_vars,
+                  response, status, error_message, started_at, duration_s,
+                  prompt_tokens, completion_tokens, reasoning_tokens
+           FROM llm_calls
+           WHERE topic_id = ?
+           ORDER BY id DESC
+           LIMIT ?""",
+        (topic_id, limit),
+    ).fetchall()
+
+    calls = []
+    for row in rows:
+        call = dict(row)
+        try:
+            call["prompt"] = _reconstruct_prompt(conn, call, topic_name, topic_description)
+        except Exception:
+            logger.warning("llm_calls id=%s: kon prompt niet reconstrueren", call["id"])
+            call["prompt"] = None
+        call["prompt_outdated"] = call["prompt_version"] != _STAGE_CURRENT_PROMPT_VERSION.get(call["stage"])
+        del call["prompt_vars"]
+        calls.append(call)
+    return calls
+
+
 def build_topic_export(conn, topic_row, periode_index):
     """Eén platte argumentenlijst, geen voorgeaggregeerde cijfers. De frontend
     leidt statistieken, tags-per-partij en de stance-kolommen zelf af uit deze
@@ -340,6 +482,8 @@ def main():
 
     topics_dir = EXPORT_DIR / "topics"
     topics_dir.mkdir(parents=True, exist_ok=True)
+    llm_calls_dir = EXPORT_DIR / "llm_calls"
+    llm_calls_dir.mkdir(parents=True, exist_ok=True)
 
     index = []
     status = {"generated_at": datetime.now(_AMSTERDAM).isoformat(timespec="seconds"), "topics": []}
@@ -353,7 +497,19 @@ def main():
             topic_row["slug"], export["argument_count"],
             stances["pro"], stances["contra"], stances["unclear"], out_path,
         )
-        status["topics"].append(fetch_pipeline_status(conn, topic_row, periode_index.drempel))
+        topic_status = fetch_pipeline_status(conn, topic_row, periode_index.drempel)
+        topic_status["llm_calls_by_model"] = fetch_llm_call_stats(conn, topic_row["id"])
+        status["topics"].append(topic_status)
+
+        llm_calls_export = {
+            "generated_at": status["generated_at"],
+            "topic": topic_row["slug"],
+            "calls": fetch_recent_llm_calls(conn, topic_row),
+        }
+        llm_calls_path = llm_calls_dir / f"{topic_row['slug']}.json"
+        llm_calls_path.write_text(json.dumps(llm_calls_export, ensure_ascii=False, indent=2))
+        logger.info("%s: %d llm_calls (recent) -> %s", topic_row["slug"], len(llm_calls_export["calls"]), llm_calls_path)
+
         index.append(
             {
                 "slug": topic_row["slug"],

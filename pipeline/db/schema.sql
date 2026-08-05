@@ -150,3 +150,31 @@ CREATE TABLE IF NOT EXISTS argument_tags (
 );
 CREATE INDEX IF NOT EXISTS idx_argument_tags_argument ON argument_tags(argument_id);
 CREATE INDEX IF NOT EXISTS idx_argument_tags_tag ON argument_tags(tag_sleutel);
+
+-- Eén rij per LLM-call in extract_arguments.py/tag_arguments.py/redactie_check.py:
+-- welk model, hoe lang de call duurde, en of hij slaagde. Bewust GEEN volledige
+-- prompt-tekst hier -- het template staat al versiebeheerd in pipeline/prompts/
+-- (prompt_version is er de hash van), en het ingevulde deel is voor extraction/
+-- tagging gewoon wat al in documents/arguments staat. Dat nogmaals opslaan zou
+-- deze tabel nodeloos laten groeien; de prompt wordt pas gereconstrueerd op het
+-- moment dat hij getoond moet worden (zie pipeline/build_static_data.py).
+CREATE TABLE IF NOT EXISTS llm_calls (
+    id INTEGER PRIMARY KEY,
+    stage TEXT NOT NULL CHECK (stage IN ('extraction', 'tagging', 'redactie')),
+    topic_id INTEGER NOT NULL REFERENCES topics(id),
+    document_id INTEGER REFERENCES documents(id),
+    argument_id INTEGER REFERENCES arguments(id),
+    model TEXT NOT NULL,
+    prompt_version TEXT NOT NULL,
+    prompt_vars TEXT, -- klein JSON-blok met invulwaarden die niet via document_id/argument_id terug te vinden zijn; alleen gebruikt door stage='redactie' (de willekeurige steekproef tegenargument-kandidaten, zie redactie_check.py:fetch_opposition_candidates), NULL voor extraction/tagging
+    response TEXT,
+    status TEXT NOT NULL CHECK (status IN ('ok', 'error')),
+    error_message TEXT,
+    started_at TEXT NOT NULL,
+    duration_s REAL NOT NULL,
+    prompt_tokens INTEGER,
+    completion_tokens INTEGER,
+    reasoning_tokens INTEGER
+);
+CREATE INDEX IF NOT EXISTS idx_llm_calls_topic_model ON llm_calls(topic_id, model);
+CREATE INDEX IF NOT EXISTS idx_llm_calls_stage ON llm_calls(stage);
