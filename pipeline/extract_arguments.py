@@ -183,7 +183,7 @@ TOPIC_TITLE_KEYWORDS = {
 EXCLUDED_ACTIVITEIT_SOORTEN = ["Regeling van werkzaamheden", "Stemmingen"]
 
 
-def fetch_pending_documents(conn, topic_id, limit, min_id=0, vanaf=None, topic_slug=None):
+def fetch_pending_documents(conn, topic_id, topic_slug, limit, min_id=0, vanaf=None):
     """`vanaf` is een ISO-datum; oudere documenten blijven in de database maar
     komen hier niet uit. Default is [verwerking].vanaf uit
     data/politieke-periodes.toml -- we analyseren de huidige en de vorige
@@ -263,7 +263,7 @@ def main():
             "zet dit eerst via UPDATE topics SET description = ... (zie docs/handoff.md)"
         )
 
-    documents = fetch_pending_documents(conn, topic_id, args.limit, args.min_id, args.vanaf, args.topic)
+    documents = fetch_pending_documents(conn, topic_id, args.topic, args.limit, args.min_id, args.vanaf)
     if not documents:
         logger.info("Geen openstaande documenten (al verwerkt, of geen documenten voor deze topic).")
         return
