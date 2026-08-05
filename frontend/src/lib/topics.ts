@@ -5,4 +5,5 @@
 export const TEGENSTELLING: Record<string, string> = {
 	stikstof: "Snel en streng stikstof terugdringen versus ruimte voor landbouw behouden.",
 	abortus: "Keuzevrijheid van de vrouw versus bescherming van het ongeboren kind.",
+	asiel: "Het recht op asiel en humane opvang versus beperking van de instroom.",
 };

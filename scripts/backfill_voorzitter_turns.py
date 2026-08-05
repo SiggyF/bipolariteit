@@ -24,6 +24,7 @@ import xml.etree.ElementTree as ET
 from pipeline.db import db
 from pipeline.ingest.ingest_tk import (
     NS,
+    _text_of,
     build_parent_map,
     find_matching_activiteiten,
     find_speaking_turns,
@@ -66,9 +67,9 @@ def backfill(topic_keyword, dry_run=False, purge_arguments=False):
             root = ET.parse(xml_path).getroot()
             parent_map = build_parent_map(root)
 
-            for activiteit in find_matching_activiteiten(root, topic_keyword):
-                for turn_el, _, _ in find_speaking_turns(activiteit):
-                    if not is_voorzitter_turn(turn_el, parent_map):
+            for activiteit, _title_match in find_matching_activiteiten(root, topic_keyword):
+                for turn_el, _, tekst_el in find_speaking_turns(activiteit):
+                    if not is_voorzitter_turn(turn_el, parent_map, _text_of(tekst_el)):
                         continue
                     external_id = turn_el.attrib.get("objectid")
                     if not external_id:

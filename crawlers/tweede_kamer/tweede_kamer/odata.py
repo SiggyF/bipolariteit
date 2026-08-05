@@ -23,6 +23,12 @@ import urllib.parse
 
 BASE_URL = "https://gegevensmagazijn.tweedekamer.nl/OData/v4/2.0"
 
+# Harde bovengrens van de API: een hogere $top geeft HTTP 400 ("The limit of
+# '250' for Top query has been exceeded"), en Scrapy laat zo'n foutrespons
+# stilzwijgend vallen -- de crawl levert dan nul resultaten zonder duidelijke
+# melding. Meer dan 250 rijen haal je op door @odata.nextLink te volgen.
+MAX_TOP = 250
+
 
 def build_url(entity, filter=None, select=None, expand=None, orderby=None, top=None):
     params = {}
@@ -58,8 +64,13 @@ def vergadering_soort_for_activiteit(activiteit_soort):
     varianten (bv. "Plenair debat (debat)", "Commissiedebat",
     "Plenair debat (tweeminutendebat)"). 'Commissie' als default voor niet-
     Plenair-activiteiten is een aanname (nog niet tegen elke activiteit_soort
-    getest, alleen tegen "Commissiedebat")."""
-    if activiteit_soort and activiteit_soort.startswith("Plenair"):
+    getest, alleen tegen "Commissiedebat").
+
+    "Vragenuur" heet in Activiteit.Soort niet "Plenair..." maar vindt wel
+    degelijk plenair plaats (de dinsdagmiddagvergadering), dus die uitzondering
+    staat hier expliciet -- zonder deze regel zoeken we naar een
+    Commissievergadering die er die dag niet is, en missen we het vragenuur."""
+    if activiteit_soort and (activiteit_soort.startswith("Plenair") or activiteit_soort == "Vragenuur"):
         return "Plenair"
     return "Commissie"
 

@@ -57,7 +57,7 @@ CREATE TABLE arguments (
     document_id INTEGER NOT NULL REFERENCES documents(id),
     topic_id INTEGER NOT NULL REFERENCES topics(id),
     actor_id INTEGER NOT NULL REFERENCES actors(id),
-    stance TEXT NOT NULL CHECK (stance IN ('pro', 'contra', 'unclear')),
+    stance TEXT NOT NULL CHECK (stance IN ('pro', 'contra', 'unclear', 'ander_onderwerp')),
     typology TEXT NOT NULL CHECK (typology IN ('factual', 'moral', 'economic', 'legal', 'other')),
     quote_text TEXT NOT NULL,
     quote_context TEXT,
@@ -68,7 +68,8 @@ CREATE TABLE arguments (
     prompt_version TEXT, -- hash van pipeline/prompts/extract_argument.md die dit specifieke argument opleverde; NULL = vóór versionering bestond
     extraction_model TEXT, -- LLM-modelnaam (bv. "qwen/qwen3.6-27b") die dit argument opleverde; NULL = vóór dit veld bestond
     tag_prompt_version TEXT, -- hash van pipeline/prompts/tag_argument.md t.t.v. de laatste tag_arguments.py-pass voor dit argument
-    tag_model TEXT -- LLM-modelnaam gebruikt door de tag_arguments.py-pass; NULL voor argumenten zonder LLM-tags of vóór dit veld bestond
+    tag_model TEXT, -- LLM-modelnaam gebruikt door de tag_arguments.py-pass; NULL voor argumenten zonder LLM-tags of vóór dit veld bestond
+    ander_onderwerp TEXT -- alleen gevuld bij stance = 'ander_onderwerp': waar het argument dan wél over gaat (bv. "arbeidsmigratie", "ICT-migratie"). Zulke argumenten vallen buiten de pro/contra-as en dus buiten de export; dit veld maakt zichtbaar wát het ruime net binnenhaalt, in plaats van het in 'unclear' te laten verdwijnen.
 );
 
 -- Genoemde getallen/claims en de bron die de spreker eraan toeschrijft.

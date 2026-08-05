@@ -15,4 +15,7 @@ dev = [
 ]
 
 [tool.pytest.ini_options]
-pythonpath = ["."]
+# crawlers/tweede_kamer is een eigen scrapy-project (scrapy.cfg) en geen
+# subpakket van de repo-root; erbij zetten maakt `from tweede_kamer import ...`
+# in tests mogelijk zonder sys.path-gefrommel.
+pythonpath = [".", "crawlers/tweede_kamer"]
