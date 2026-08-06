@@ -6,6 +6,22 @@ function pct(done: number, total: number) {
 	return total ? Math.round((100 * done) / total) : 0;
 }
 
+function formatDuration(seconds: number) {
+	const total = Math.round(seconds);
+	const h = Math.floor(total / 3600);
+	const m = Math.floor((total % 3600) / 60);
+	const s = total % 60;
+	if (h) return `${h}u ${m}m`;
+	if (m) return `${m}m ${s}s`;
+	return `${s}s`;
+}
+
+const STAGE_LABELS: Record<string, string> = {
+	extraction: "extractie",
+	tagging: "tagging",
+	redactie: "redactie",
+};
+
 const generated = new Date(status.generated_at).toLocaleString("nl-NL", {
 	dateStyle: "medium",
 	timeStyle: "short",
@@ -57,6 +73,41 @@ const generated = new Date(status.generated_at).toLocaleString("nl-NL", {
 				</li>
 			</ul>
 			<p class="status-total">{topic.arguments_total} argumenten in {topic.documents_total} documenten.</p>
+
+			{topic.llm_calls_by_model.length > 0 && (
+				<>
+					<h3>Verwerkingstijd per model</h3>
+					<div class="table-scroll">
+						<table class="party-table">
+							<thead>
+								<tr>
+									<th>Model</th>
+									<th>Stap</th>
+									<th>Calls</th>
+									<th>Totale duur</th>
+									<th>Gem. duur</th>
+									<th>Fouten</th>
+								</tr>
+							</thead>
+							<tbody>
+								{topic.llm_calls_by_model.map((row) => (
+									<tr>
+										<td>{row.model}</td>
+										<td>{STAGE_LABELS[row.stage] ?? row.stage}</td>
+										<td>{row.n_calls}</td>
+										<td>{formatDuration(row.total_duration_s)}</td>
+										<td>{row.avg_duration_s.toFixed(1)}s</td>
+										<td>{row.n_errors}</td>
+									</tr>
+								))}
+							</tbody>
+						</table>
+					</div>
+					<p class="panel-note">
+						<a href={`/prompts/${topic.slug}/`}>Bekijk de meest recente prompts &amp; respons per call &rarr;</a>
+					</p>
+				</>
+			)}
 		</section>
 	))}
 </BaseLayout>

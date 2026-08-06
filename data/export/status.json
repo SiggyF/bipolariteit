@@ -11,7 +11,8 @@
       "arguments_tagged": 1351,
       "documents_redactie_checked": 5,
       "arguments_ander_onderwerp": 0,
-      "ander_onderwerp_top": []
+      "ander_onderwerp_top": [],
+      "llm_calls_by_model": []
     },
     {
       "slug": "abortus",
@@ -23,7 +24,8 @@
       "arguments_tagged": 260,
       "documents_redactie_checked": 0,
       "arguments_ander_onderwerp": 0,
-      "ander_onderwerp_top": []
+      "ander_onderwerp_top": [],
+      "llm_calls_by_model": []
     },
     {
       "slug": "asiel",
@@ -35,7 +37,8 @@
       "arguments_tagged": 0,
       "documents_redactie_checked": 0,
       "arguments_ander_onderwerp": 0,
-      "ander_onderwerp_top": []
+      "ander_onderwerp_top": [],
+      "llm_calls_by_model": []
     }
   ]
 }
