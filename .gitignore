@@ -1,4 +1,9 @@
 data/raw/
+# Experimentele tussendocumenten, geen frontend-input (i.t.t. data/export/topics/):
+# lokale verificatie/input voor handmatig LLM-werk, bewust niet gecommit.
+data/export/argument-trees/
+data/export/argument-docs/
+data/export/design-handoff/
 data/*.db
 data/*.db-journal
 data/*.db-wal
