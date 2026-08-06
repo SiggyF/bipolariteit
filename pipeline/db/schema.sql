@@ -57,7 +57,7 @@ CREATE TABLE arguments (
     document_id INTEGER NOT NULL REFERENCES documents(id),
     topic_id INTEGER NOT NULL REFERENCES topics(id),
     actor_id INTEGER NOT NULL REFERENCES actors(id),
-    stance TEXT NOT NULL CHECK (stance IN ('pro', 'contra', 'unclear')),
+    stance TEXT NOT NULL CHECK (stance IN ('pro', 'contra', 'unclear', 'ander_onderwerp')),
     typology TEXT NOT NULL CHECK (typology IN ('factual', 'moral', 'economic', 'legal', 'other')),
     quote_text TEXT NOT NULL,
     quote_context TEXT,
@@ -68,7 +68,8 @@ CREATE TABLE arguments (
     prompt_version TEXT, -- hash van pipeline/prompts/extract_argument.md die dit specifieke argument opleverde; NULL = vóór versionering bestond
     extraction_model TEXT, -- LLM-modelnaam (bv. "qwen/qwen3.6-27b") die dit argument opleverde; NULL = vóór dit veld bestond
     tag_prompt_version TEXT, -- hash van pipeline/prompts/tag_argument.md t.t.v. de laatste tag_arguments.py-pass voor dit argument
-    tag_model TEXT -- LLM-modelnaam gebruikt door de tag_arguments.py-pass; NULL voor argumenten zonder LLM-tags of vóór dit veld bestond
+    tag_model TEXT, -- LLM-modelnaam gebruikt door de tag_arguments.py-pass; NULL voor argumenten zonder LLM-tags of vóór dit veld bestond
+    ander_onderwerp TEXT -- alleen gevuld bij stance = 'ander_onderwerp': waar het argument dan wél over gaat (bv. "arbeidsmigratie", "ICT-migratie"). Zulke argumenten vallen buiten de pro/contra-as en dus buiten de export; dit veld maakt zichtbaar wát het ruime net binnenhaalt, in plaats van het in 'unclear' te laten verdwijnen.
 );
 
 -- Genoemde getallen/claims en de bron die de spreker eraan toeschrijft.
@@ -149,3 +150,31 @@ CREATE TABLE IF NOT EXISTS argument_tags (
 );
 CREATE INDEX IF NOT EXISTS idx_argument_tags_argument ON argument_tags(argument_id);
 CREATE INDEX IF NOT EXISTS idx_argument_tags_tag ON argument_tags(tag_sleutel);
+
+-- Eén rij per LLM-call in extract_arguments.py/tag_arguments.py/redactie_check.py:
+-- welk model, hoe lang de call duurde, en of hij slaagde. Bewust GEEN volledige
+-- prompt-tekst hier -- het template staat al versiebeheerd in pipeline/prompts/
+-- (prompt_version is er de hash van), en het ingevulde deel is voor extraction/
+-- tagging gewoon wat al in documents/arguments staat. Dat nogmaals opslaan zou
+-- deze tabel nodeloos laten groeien; de prompt wordt pas gereconstrueerd op het
+-- moment dat hij getoond moet worden (zie pipeline/build_static_data.py).
+CREATE TABLE IF NOT EXISTS llm_calls (
+    id INTEGER PRIMARY KEY,
+    stage TEXT NOT NULL CHECK (stage IN ('extraction', 'tagging', 'redactie')),
+    topic_id INTEGER NOT NULL REFERENCES topics(id),
+    document_id INTEGER REFERENCES documents(id),
+    argument_id INTEGER REFERENCES arguments(id),
+    model TEXT NOT NULL,
+    prompt_version TEXT NOT NULL,
+    prompt_vars TEXT, -- klein JSON-blok met invulwaarden die niet via document_id/argument_id terug te vinden zijn; alleen gebruikt door stage='redactie' (de willekeurige steekproef tegenargument-kandidaten, zie redactie_check.py:fetch_opposition_candidates), NULL voor extraction/tagging
+    response TEXT,
+    status TEXT NOT NULL CHECK (status IN ('ok', 'error')),
+    error_message TEXT,
+    started_at TEXT NOT NULL,
+    duration_s REAL NOT NULL,
+    prompt_tokens INTEGER,
+    completion_tokens INTEGER,
+    reasoning_tokens INTEGER
+);
+CREATE INDEX IF NOT EXISTS idx_llm_calls_topic_model ON llm_calls(topic_id, model);
+CREATE INDEX IF NOT EXISTS idx_llm_calls_stage ON llm_calls(stage);

@@ -2,7 +2,53 @@
 
 Status per 2026-07-27. Zie `docs/plan.md` voor het volledige, goedgekeurde architectuurplan. Dit document is voor het vervolg: wat staat er al, wat is er onderweg ontdekt, en wat is de volgende concrete stap.
 
-## Stand bij einde sessie (2026-07-30, releasepad) — begin hier bij een nieuwe sessie
+## Stand bij einde sessie (2026-08-04, derde topic: asiel) — begin hier bij een nieuwe sessie
+
+Branch `topic-asiel`, nog geen PR. Doel was een derde onderwerp opzetten met de resterende Gemini-credits. Het onderwerp staat er (crawl, ingest, omschrijving, export), maar de **extractie is bewust teruggedraaid en moet opnieuw** — zie "Wat er nog moet".
+
+### Het onderwerp zelf
+
+`asiel` ("Asiel en migratie"), topic-id 3. Gecrawld op twee trefwoorden (`asiel`, `migratie`) over vijf debatsoorten: Plenair debat (debat/wetgeving/tweeminutendebat), Commissiedebat, Wetgevingsoverleg. Plus 100 plenaire dagverslagen via `-a topic=Vragenuur -a soort=Vragenuur`, want vragenuur-activiteiten heten in de brondata letterlijk "Vragenuur" en matchen dus nooit op een inhoudelijk trefwoord.
+
+Ingest: `--topic asiel --also-dir migratie --also-dir Vragenuur --also-keyword migratie`. Die laatste optie is nieuw (zie hieronder). Corpus na opschoning: **5.703 documenten binnen de cutoff**, na verwijdering van 1.238 arbeidsmigratie-documenten, 862 ICT-migratiedocumenten en het markeren van 5.154 voorzitter-beurten.
+
+### Wat er is geleerd over de pro/contra-as (het echte werk van deze sessie)
+
+Een eerste extractie van 267 argumenten legde drie structurele problemen bloot:
+
+1. **De as stond verkeerd om.** PRO was "beperking van de instroom" gezet; besloten is PRO = *bescherming van de asielzoeker*. De tiebreak-regel is: bij een willekeurige keuze noemen we de pool die het dichtst bij het huidige kabinetsbeleid ligt PRO — maar **die regel hoort niet in `topics.description`**, want dan gaat de LLM "steunt dit het kabinet?" afwegen in plaats van de inhoud.
+2. **Een mechanische omdraaiing (`pro` <-> `contra`) repareert dat niet.** De toenmalige prompt bevatte de regel "kritiek op het huidige/voorgestelde beleid is contra". Bij asiel wordt het kabinet van twee kanten bekritiseerd (te ver, of niet ver genoeg), dus een deel van de labels was via die vuistregel toegekend en niet via de as. Omdraaien maakt zulke labels zelfstandig fout in plaats van herkenbaar raar. Geverifieerd aan een steekproef: een PVV-uitspraak "is de wet wel streng genoeg?" stond na de omdraaiing als PRO.
+3. **Het corpus was te smal**: 145 van de 267 argumenten kwamen uit één wetsbehandeling (dwangsommen bij niet tijdig beslissen), omdat batches op `documents.id` lopen en dat debat het laagste id-bereik had. Gevolg: gezinshereniging 1 argument, terugkeer 6, tweestatusstelsel 3.
+
+De gebruiker heeft de 267 argumenten daarom zelf gewist (arguments + claims + tags, en `extraction_attempted_at` teruggezet).
+
+### Wijzigingen in de pipeline
+
+- **`--also-keyword`** in `ingest_tk.py`: verbreedt waaróp gematcht wordt, naast `--also-dir` dat verbreedt wélke mappen gescand worden. Zonder dit levert een puur migratiedebat uit de migratie-map nul sprekerbeurten op.
+- **Voorzitter-detectie op tekst**: de `<activiteitdeel><titel>`-heuristiek mist voorzitter-beurten bij commissiedebatten; content die met "De voorzitter:" begint telt nu ook. Dat markeerde 5.154 documenten over alle topics heen (asiel 3.418, stikstof 1.475, abortus 261), zonder verlies van bestaande argumenten (nul argumenten kwamen uit zulke beurten).
+- **Vierde standpunt `ander_onderwerp`** plus kolom `arguments.ander_onderwerp` (welk onderwerp het wél is). Migratie: `scripts/migrate_stance_ander_onderwerp.py` (tabelherbouw, want SQLite kan een CHECK niet wijzigen). Deze argumenten vallen uit de export; `status.json` toont aantal + top-10 onderwerpen. De frontend blijft dus op drie standpunten.
+- **Promptwijzigingen** in `extract_argument.md`: standpunt volgt de pool die de onderbouwing steunt (niet regering-vs-oppositie), onderbouwing zonder pool is `unclear`, uitspraken over de behandeling van een voorstel (stemgedrag, moties-appreciatie, debatverzoeken) leveren geen argument op, en de `ander_onderwerp`-instructie. Terminologie volgt bewust de about-pagina: *standpunt* en *onderbouwing*.
+
+### Vier bugs onderweg gevonden en gerepareerd
+
+1. `scripts/agy_run_extraction_batch.py` gooide `UnboundLocalError` op het eerste document van elke run (tellers niet geïnitialiseerd sinds commit `6775fa5`) — `make extract-agy` was dus volledig stuk.
+2. De crawler vroeg `$top = limit * 3`; boven 250 antwoordt de TK-API met HTTP 400 en laat Scrapy die respons stil vallen. Elke `-a limit=` boven 83 leverde dus geruisloos nul resultaten. Nu begrensd op `odata.MAX_TOP`.
+3. `vergadering_soort_for_activiteit` gokte "Commissie" voor "Vragenuur", dat plenair is — vragenuur was daardoor onvindbaar.
+4. `scripts/backfill_voorzitter_turns.py` pakte de tuple van `find_matching_activiteiten` niet uit (stuk sinds `title_match` erbij kwam).
+
+### Quota-ervaring (agy/Gemini)
+
+Bevestigt de eerdere kalibratie: **~0,1% dagquotum per document**, ~5-9s per call, ~6 documenten/minuut. `/usage` blijft alleen interactief uitleesbaar. Deze sessie verbruikt: ~37% (100% → 63%), waarvan een flink deel aan de teruggedraaide extractie.
+
+### Wat er nog moet
+
+1. **Extractie opnieuw draaien** met de nieuwe prompt en omschrijving, en **niet vanaf het laagste id**: de eerste 48 documenten van de nieuwe run leverden 39 argumenten op waarvan **32 `ander_onderwerp`** (arbeidsmigratie 14, faunabeheer/wolf 7, ruimtelijke ordening 3). Dat is de staart van losse beurten waarin "migratie" toevallig valt. Begin bij een echt asieldebat: `make extract-agy TOPIC=asiel LIMIT=300 MIN_ID=6542` (6542 = "Begroting Asiel en Migratie 2025"; 7860 = "Vreemdelingen- en asielbeleid"; 9213 = "Asielnoodmaatregelenwet en tweestatusstelsel"). `MIN_ID` is deze sessie aan het make-target toegevoegd. Een titelfilter is bewust *niet* toegevoegd.
+2. **Taggen** (`make tag-agy TOPIC=asiel`) — maar pas als de labels definitief zijn; bij een herextractie verdwijnen argumenten en dus hun tags.
+3. **Openstaand van vóór deze sessie**: 179 ongetagde abortus-argumenten, 206 ongetagde stikstof-argumenten.
+4. **Issue [#50](https://github.com/SiggyF/bipolariteit/issues/50)**: stance en typologie verplaatsen van Stage 1 naar Stage 1b, zodat een as-correctie voortaan een hertagging is in plaats van een volledige herextractie. Dit is precies wat deze sessie duur maakte.
+5. De teaser in `frontend/src/lib/topics.ts` staat er al; `data/export/topics/asiel.json` bestaat maar is momenteel leeg (0 argumenten).
+
+## Stand bij einde sessie (2026-07-30, releasepad)
 
 Losse sessie, eigen branch (`feature/preview-release`, PR [#15](https://github.com/SiggyF/bipolariteit/pull/15)). Ging alleen over publiceren; niets aan de pipeline of de kaart veranderd. Volledige documentatie staat in **`docs/release.md`** — hieronder alleen wat je daar niet uit afleidt.
 

@@ -34,6 +34,7 @@ from typing import NamedTuple
 import requests
 
 from pipeline.db import db
+from pipeline.llm_log import record_llm_call
 from pipeline.periodes import PeriodeIndex
 
 logger = logging.getLogger(__name__)
@@ -44,7 +45,7 @@ PROMPT_VERSION = hashlib.sha256(PROMPT_TEMPLATE.encode()).hexdigest()[:12]
 BATCH_PROMPT_TEMPLATE = (Path(__file__).parent / "prompts" / "extract_argument_batch.md").read_text()
 BATCH_PROMPT_VERSION = hashlib.sha256(BATCH_PROMPT_TEMPLATE.encode()).hexdigest()[:12]
 
-VALID_STANCE = {"pro", "contra", "unclear"}
+VALID_STANCE = {"pro", "contra", "unclear", "ander_onderwerp"}
 VALID_TYPOLOGY = {"factual", "moral", "economic", "legal", "other"}
 
 _JSON_FENCE_RE = re.compile(r"```(?:json)?\s*(.*?)\s*```", re.DOTALL)
@@ -131,13 +132,17 @@ def _validate_argument(arg):
         raise ValueError(f"ongeldige typology: {arg.get('typology')!r}")
     if not arg.get("quote_text"):
         raise ValueError("quote_text ontbreekt of is leeg")
+    # Zonder onderwerp is 'ander_onderwerp' net zo weinig zeggend als 'unclear' --
+    # de hele reden voor dit label is dat je kunt zien wát het ruime net binnenhaalt.
+    if arg["stance"] == "ander_onderwerp" and not arg.get("ander_onderwerp"):
+        raise ValueError("stance 'ander_onderwerp' zonder ingevuld veld ander_onderwerp")
 
 
 def insert_argument(conn, document_id, topic_id, actor_id, arg, model):
     conn.execute(
         """INSERT INTO arguments
-           (document_id, topic_id, actor_id, stance, typology, quote_text, quote_context, extracted_at, prompt_version, extraction_model)
-           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+           (document_id, topic_id, actor_id, stance, typology, quote_text, quote_context, extracted_at, prompt_version, extraction_model, ander_onderwerp)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
         (
             document_id,
             topic_id,
@@ -149,6 +154,7 @@ def insert_argument(conn, document_id, topic_id, actor_id, arg, model):
             datetime.now(timezone.utc).isoformat(),
             PROMPT_VERSION,
             model,
+            arg.get("ander_onderwerp"),
         ),
     )
     argument_id = conn.execute("SELECT last_insert_rowid() AS id").fetchone()["id"]
@@ -162,25 +168,55 @@ def insert_argument(conn, document_id, topic_id, actor_id, arg, model):
     return argument_id
 
 
-def fetch_pending_documents(conn, topic_id, limit, min_id=0, vanaf=None):
+# De ingest matcht ruim (keyword ergens in de activiteit, niet alleen in de
+# titel, zie ingest_tk.py:250-259) -- dat trekt debatten binnen die het
+# keyword maar incidenteel noemen op een heel andere as (bv. arbeidsmigratie,
+# faunabeheer/wolf, ruimtelijke ordening bij asiel). TOPIC_TITLE_KEYWORDS
+# dwingt bij extractie af dat de titel zelf over het onderwerp gaat, om die
+# ander_onderwerp-ruis te verminderen. Topics die hier niet in staan (abortus,
+# stikstof) krijgen geen titelfilter -- hun ingest-net is al smal genoeg.
+TOPIC_TITLE_KEYWORDS = {
+    "asiel": ["asiel", "vreemdeling", "migratie", "immigratie"],
+}
+
+# Procedurele activiteitsoorten bevatten geen inhoudelijke standpunten
+# (agendabeheer resp. stemuitslagen), dus altijd uitsluiten, ongeacht topic.
+EXCLUDED_ACTIVITEIT_SOORTEN = ["Regeling van werkzaamheden", "Stemmingen"]
+
+
+def fetch_pending_documents(conn, topic_slug, limit, min_id=0, vanaf=None):
     """`vanaf` is een ISO-datum; oudere documenten blijven in de database maar
     komen hier niet uit. Default is [verwerking].vanaf uit
     data/politieke-periodes.toml -- we analyseren de huidige en de vorige
     Kamer, en dat scheelt aanzienlijk LLM-werk."""
     if vanaf is None:
         vanaf = PeriodeIndex().drempel
+
+    conditions = [
+        "t.slug = ?",
+        "d.id >= ?",
+        "d.published_at >= ?",
+        "d.extraction_attempted_at IS NULL",
+        "d.is_voorzitter_turn = 0",
+        f"d.activiteit_soort NOT IN ({','.join('?' * len(EXCLUDED_ACTIVITEIT_SOORTEN))})",
+    ]
+    params = [topic_slug, min_id, vanaf, *EXCLUDED_ACTIVITEIT_SOORTEN]
+
+    title_keywords = TOPIC_TITLE_KEYWORDS.get(topic_slug, [])
+    if title_keywords:
+        conditions.append("(" + " OR ".join("LOWER(d.title) LIKE ?" for _ in title_keywords) + ")")
+        params.extend(f"%{keyword.lower()}%" for keyword in title_keywords)
+
+    params.append(limit)
     return conn.execute(
-        """SELECT d.id, d.content, d.actor_id, a.name AS actor_name, a.party AS actor_party
-           FROM documents d
-           JOIN actors a ON a.id = d.actor_id
-           WHERE d.topic_id = ?
-             AND d.id >= ?
-             AND d.published_at >= ?
-             AND d.extraction_attempted_at IS NULL
-             AND d.is_voorzitter_turn = 0
-           ORDER BY d.id
-           LIMIT ?""",
-        (topic_id, min_id, vanaf, limit),
+        f"""SELECT d.id, d.content, d.actor_id, a.name AS actor_name, a.party AS actor_party
+            FROM documents d
+            JOIN actors a ON a.id = d.actor_id
+            JOIN topics t ON t.id = d.topic_id
+            WHERE {' AND '.join(conditions)}
+            ORDER BY d.id
+            LIMIT ?""",
+        params,
     ).fetchall()
 
 
@@ -229,7 +265,7 @@ def main():
             "zet dit eerst via UPDATE topics SET description = ... (zie docs/handoff.md)"
         )
 
-    documents = fetch_pending_documents(conn, topic_id, args.limit, args.min_id, args.vanaf)
+    documents = fetch_pending_documents(conn, args.topic, args.limit, args.min_id, args.vanaf)
     if not documents:
         logger.info("Geen openstaande documenten (al verwerkt, of geen documenten voor deze topic).")
         return
@@ -247,6 +283,7 @@ def main():
     for doc in documents:
         prompt = _build_prompt(topic_name, topic_description, doc["actor_name"], doc["actor_party"], doc["content"])
         start = time.monotonic()
+        started_at = datetime.now(timezone.utc).isoformat()
         try:
             raw_content, usage, finish_reason = call_llm(
                 args.base_url, args.model, prompt, args.reasoning_effort, args.timeout, args.max_tokens
@@ -261,9 +298,21 @@ def main():
             elapsed = time.monotonic() - start
             logger.error("[doc %5d] %-25s FOUT na %5.1fs: %s", doc["id"], doc["actor_name"], elapsed, exc)
             total_errors += 1
+            if not args.dry_run:
+                record_llm_call(
+                    conn, stage="extraction", topic_id=topic_id, document_id=doc["id"], model=args.model,
+                    prompt_version=PROMPT_VERSION, started_at=started_at, duration_s=elapsed,
+                    status="error", error_message=str(exc),
+                )
             continue
         elapsed = time.monotonic() - start
         latencies.append(elapsed)
+        if not args.dry_run:
+            record_llm_call(
+                conn, stage="extraction", topic_id=topic_id, document_id=doc["id"], model=args.model,
+                prompt_version=PROMPT_VERSION, started_at=started_at, duration_s=elapsed,
+                response=raw_content, status="ok", usage=usage,
+            )
 
         n_valid = 0
         n_claims = 0

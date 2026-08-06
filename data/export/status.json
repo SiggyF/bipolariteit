@@ -1,15 +1,18 @@
 {
-  "generated_at": "2026-08-03T10:39:29+02:00",
+  "generated_at": "2026-08-04T20:55:44+02:00",
   "topics": [
     {
       "slug": "stikstof",
       "name": "stikstof",
       "vanaf": "2023-12-06",
       "documents_total": 4377,
-      "documents_extracted": 3158,
-      "arguments_total": 1551,
+      "documents_extracted": 3159,
+      "arguments_total": 1556,
       "arguments_tagged": 1351,
-      "documents_redactie_checked": 5
+      "documents_redactie_checked": 5,
+      "arguments_ander_onderwerp": 0,
+      "ander_onderwerp_top": [],
+      "llm_calls_by_model": []
     },
     {
       "slug": "abortus",
@@ -18,8 +21,24 @@
       "documents_total": 591,
       "documents_extracted": 586,
       "arguments_total": 439,
-      "arguments_tagged": 156,
-      "documents_redactie_checked": 0
+      "arguments_tagged": 260,
+      "documents_redactie_checked": 0,
+      "arguments_ander_onderwerp": 0,
+      "ander_onderwerp_top": [],
+      "llm_calls_by_model": []
+    },
+    {
+      "slug": "asiel",
+      "name": "Asiel en migratie",
+      "vanaf": "2023-12-06",
+      "documents_total": 7820,
+      "documents_extracted": 0,
+      "arguments_total": 0,
+      "arguments_tagged": 0,
+      "documents_redactie_checked": 0,
+      "arguments_ander_onderwerp": 0,
+      "ander_onderwerp_top": [],
+      "llm_calls_by_model": []
     }
   ]
 }

@@ -37,8 +37,11 @@ class VerslagenSpider(scrapy.Spider):
         self.fetched = 0
 
     async def start(self):
+        # `top` is hoeveel activiteiten we in totaal willen bekijken; de
+        # paginagrootte is los daarvan begrensd door de API (odata.MAX_TOP).
+        # Boven die grens vullen we het verschil aan via @odata.nextLink.
         top = self.limit * 3
-        url = odata.activiteiten_url(self.topic, self.soort, top=top)
+        url = odata.activiteiten_url(self.topic, self.soort, top=min(top, odata.MAX_TOP))
         yield scrapy.Request(url, callback=self.parse_activiteiten, cb_kwargs={"buffer": [], "top": top})
 
     def parse_activiteiten(self, response, buffer, top):

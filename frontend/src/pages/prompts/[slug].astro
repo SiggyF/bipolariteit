@@ -1,0 +1,61 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const llmCallModules = import.meta.glob("../../../../data/export/llm_calls/*.json", { eager: true });
+
+export function getStaticPaths() {
+	const modules = import.meta.glob("../../../../data/export/llm_calls/*.json", { eager: true });
+	return Object.values(modules).map((mod: any) => ({
+		params: { slug: mod.default.topic },
+	}));
+}
+
+const { slug } = Astro.params;
+const mod: any = Object.values(llmCallModules).find((m: any) => m.default.topic === slug);
+const { calls, generated_at } = mod.default;
+
+const STAGE_LABELS: Record<string, string> = {
+	extraction: "extractie",
+	tagging: "tagging",
+	redactie: "redactie",
+};
+
+const generated = new Date(generated_at).toLocaleString("nl-NL", { dateStyle: "medium", timeStyle: "short" });
+---
+
+<BaseLayout title={`Prompts — ${slug} — Bipolariteit`} class="about status-page">
+	<a href="/status/" class="back-link">&larr; status</a>
+	<h1>Prompts &amp; respons — {slug}</h1>
+	<p class="panel-note">
+		De {calls.length} meest recente LLM-calls voor dit onderwerp, met de gebruikte prompt en het ontvangen antwoord.
+		Dit is een steekproef, niet de volledige verwerkingsgeschiedenis. Laatst bijgewerkt: {generated}.
+	</p>
+
+	{calls.length === 0 && <p class="panel-note">Nog geen calls gelogd voor dit onderwerp.</p>}
+
+	<ul class="llm-call-list">
+		{calls.map((call: any) => (
+			<li class="llm-call-item">
+				<div class="llm-call-meta">
+					<span class="llm-call-stage">{STAGE_LABELS[call.stage] ?? call.stage}</span>
+					<span>{call.model}</span>
+					<span>{new Date(call.started_at).toLocaleString("nl-NL", { dateStyle: "short", timeStyle: "medium" })}</span>
+					<span>{call.duration_s.toFixed(1)}s</span>
+					<span class={`llm-call-status llm-call-status--${call.status}`}>{call.status}</span>
+					{call.prompt_outdated && <span class="llm-call-outdated">prompt-versie verouderd</span>}
+				</div>
+				{call.status === "error" && <p class="llm-call-error">{call.error_message}</p>}
+				<details>
+					<summary>Prompt</summary>
+					{call.prompt ? <pre class="llm-call-text">{call.prompt}</pre> : <p class="panel-note">Brondocument/-argument niet meer beschikbaar.</p>}
+				</details>
+				{call.response && (
+					<details>
+						<summary>Respons</summary>
+						<pre class="llm-call-text">{call.response}</pre>
+					</details>
+				)}
+			</li>
+		))}
+	</ul>
+</BaseLayout>

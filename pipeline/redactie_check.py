@@ -35,6 +35,7 @@ from pathlib import Path
 import requests
 
 from pipeline.db import db
+from pipeline.llm_log import record_llm_call
 
 logger = logging.getLogger(__name__)
 
@@ -138,7 +139,10 @@ def _format_arguments_block(rows):
     return "\n".join(lines) if lines else "(geen)"
 
 
-def find_oppositions(base_url, model, reasoning_effort, timeout, topic_name, actor_name, actor_party, new_args, candidates_by_id):
+def find_oppositions(
+    conn, topic_id, document_id, dry_run,
+    base_url, model, reasoning_effort, timeout, topic_name, actor_name, actor_party, new_args, candidates_by_id,
+):
     if not candidates_by_id:
         return [], {}
 
@@ -150,6 +154,8 @@ def find_oppositions(base_url, model, reasoning_effort, timeout, topic_name, act
         new_arguments_block=_format_arguments_block(new_args),
         candidates_block=_format_arguments_block(list(candidates_by_id.values())),
     )
+    start = time.monotonic()
+    started_at = datetime.now(timezone.utc).isoformat()
     raw_content, usage = call_llm(base_url, model, prompt, reasoning_effort, timeout)
     parsed = _extract_json(raw_content)
 
@@ -169,6 +175,14 @@ def find_oppositions(base_url, model, reasoning_effort, timeout, topic_name, act
             logger.warning("    overgeslagen: ongeldig relation_type %r", relation_type)
             continue
         accepted.append((new_id, existing_id, relation_type, item.get("confidence")))
+
+    if not dry_run:
+        record_llm_call(
+            conn, stage="redactie", topic_id=topic_id, document_id=document_id, model=model,
+            prompt_version=PROMPT_VERSION, started_at=started_at, duration_s=time.monotonic() - start,
+            prompt_vars={"candidate_argument_ids": list(candidates_by_id)},
+            response=raw_content, status="ok", usage=usage,
+        )
     return accepted, usage
 
 
@@ -251,8 +265,10 @@ def main():
                 candidates_by_id[row["id"]] = row
 
         start = time.monotonic()
+        started_at = datetime.now(timezone.utc).isoformat()
         try:
             oppositions, usage = find_oppositions(
+                conn, topic_id, doc["id"], args.dry_run,
                 args.base_url, args.model, args.reasoning_effort, args.timeout,
                 topic_name, doc["actor_name"], doc["actor_party"],
                 [dict(a) for a in new_args if a["stance"] in ("pro", "contra")],
@@ -262,6 +278,13 @@ def main():
             elapsed = time.monotonic() - start
             logger.error("[doc %5d] %-25s FOUT bij opposition-check na %5.1fs: %s", doc["id"], doc["actor_name"], elapsed, exc)
             total_errors += 1
+            if not args.dry_run and candidates_by_id:
+                record_llm_call(
+                    conn, stage="redactie", topic_id=topic_id, document_id=doc["id"], model=args.model,
+                    prompt_version=PROMPT_VERSION, started_at=started_at, duration_s=elapsed,
+                    prompt_vars={"candidate_argument_ids": list(candidates_by_id)},
+                    status="error", error_message=str(exc),
+                )
             # Document blijft pending (geen redactie_reviews-rij) zodat een
             # volgende run het opnieuw probeert -- zelfde patroon als
             # extract_arguments.py bij een mislukte LLM-call.
