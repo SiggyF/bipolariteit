@@ -38,5 +38,24 @@ waar dit schema uit gehaald is (open lokaal in een browser). `uploads/` is het
 originele ontwerpbrief-materiaal (`tags.toml` + een screenshot).
 
 Zie #3 (correspondentiekaart), #5 (tagoverzichtspagina's) en
-[#12](https://github.com/SiggyF/bipolariteit/issues/12) (paletvalidatie, nog
-open).
+[#12](https://github.com/SiggyF/bipolariteit/issues/12) (paletvalidatie).
+
+## `argumentenboom/`
+
+Ontwerpreferentie voor de confrontatie-as-argumentenboom
+(`frontend/src/components/ArgumentTree.vue` +
+`ArgumentConfrontatieKaart.vue`): `ontwerpgids-argumentenboom.md` is de
+functionele specificatie (bandopbouw, weerleggingslijnen, datamodel).
+`classical-tokens.css` + `classical-design-system-readme.md` zijn de
+kleur-/typografietokens van het "Classical" design system waarmee dit
+oorspronkelijk is opgeleverd -- de implementatie gebruikt die tokens
+uiteindelijk NIET: `ArgumentTree.vue` hergebruikt de bestaande site-tokens
+uit `frontend/src/styles/main.css` ("Ink & Rust"-kleuren, Libre Caslon/Work
+Sans) via een lokale `--confrontatie-*`-indirectielaag, zodat de boom
+visueel in lijn blijft met de rest van bipolariteit.nl (en donker thema
+automatisch meekomt) i.p.v. een eigen kleur-/lettertypesysteem te
+introduceren. Deze CSS-bestanden blijven als historische referentie staan.
+Het interactieve `.dc.html`-prototype waarmee dit is opgeleverd is niet
+overgenomen (eigen "dc-runtime", laadt React via een CDN — geen
+productiecode); deze map is wat overblijft nu de echte implementatie het
+heeft overgenomen.

@@ -311,6 +311,20 @@ h3 {
 	margin: 0;
 }
 
+.argument-tree-section {
+	max-width: 100%;
+	margin: 0 0 var(--space-4);
+	padding: var(--space-3);
+	background: var(--color-card-bg);
+	border: 1px solid var(--color-border);
+}
+
+.argument-tree-note {
+	color: var(--color-text);
+	font-size: var(--step-0);
+	margin: 0 0 var(--space-2);
+}
+
 /* Long-form article text (About, validation report): give body copy the same
    paper-and-ink treatment as the rest of the page -- a readable measure,
    newspaper-style section rules above headings, dash-marked lists, and a
