@@ -51,6 +51,25 @@ subordinatieve argumentatie:
 
 Elk argument krijgt een `gist` van **maximaal 3-4 woorden**.
 
+## 3. Benoem het geschilpunt en bundel gelijksoortige argumenten
+
+Naast de structuur uit stap 2 heb je twee extra velden nodig, omdat een
+mechanische samenvoeging van gists niet leesbaar genoeg is:
+
+- **`thema`** bij elke oppositie in `oppositions[]`: een korte (richtlijn:
+  max. ~8 woorden), scherpe, neutrale titel die het **daadwerkelijke
+  geschilpunt** benoemt — niet een onderwerplabel, en niet simpelweg de twee
+  gists achter elkaar. Formuleer het bij voorkeur als vraag of spanning.
+  Voorbeeld van het verschil: *niet* "reductie opent vergunningverlening weer
+  — economische lasten voor boeren" (mechanisch, twee gists aan elkaar
+  geplakt), *wel* "Moet de KDW-norm losgelaten worden om vergunningen weer te
+  verlenen?" (het echte geschilpunt).
+- **`samenvatting`** bij elke node met `children` en bij elke coördinatieve
+  `label`-groep in `pro.nodes`/`contra.nodes`: 1-2 zinnen (richtlijn: max.
+  ~30 woorden) die de gebundelde argumenten samen parafraseren tot één
+  leesbare, samenhangende stelling. Voor een los top-level argument zonder
+  kinderen is `samenvatting` niet nodig (het citaat is al kort genoeg).
+
 Regels (belangrijk, volg strikt):
 - Jij bent geen scheidsrechter. Beoordeel nooit of een argument klopt,
   terecht is, of overtuigend is. Geef nooit het ene argument gelijk boven
@@ -67,6 +86,12 @@ Regels (belangrijk, volg strikt):
   gaan. Wees terughoudend met diepte.
 - `label` (bij een coördinatieve groep) is een korte, neutrale samenvatting
   (max. ~6 woorden) van de gedeelde reden.
+- `thema` mag geen cijfers, bronnen of een eigen oordeel bevatten — puur het
+  geschilpunt zelf.
+- `samenvatting` mag, net als `gist`, GEEN feiten, cijfers of claims
+  bevatten die niet letterlijk in de geciteerde argumenten van die
+  node/groep staan. Het is een leesbare laag bovenop de citaten, geen
+  vervanging en geen nieuwe bewering.
 
 ## Output
 
@@ -80,7 +105,9 @@ een heldere, consistente structuur die in elk geval bevat:
   samen een groep vormen, welke argumenten onderbouwing zijn van welk ander
   argument);
 - de pro/contra-paren die je als elkaars scherpste tegenhanger hebt
-  gekozen;
+  gekozen, elk met een `thema` uit stap 3;
+- bij elke node met `children` en elke coördinatieve groep: een
+  `samenvatting` uit stap 3;
 - `twijfelachtige_classificaties`: argumenten die je bent tegengekomen met
   een overduidelijk verkeerde pro/contra-stance (uit stap 1), met hun `id`,
   de huidige (foute) stance, en een korte reden.
@@ -95,18 +122,23 @@ kies zelf betere veldnamen/vorm als dat logischer is):
 ```json
 {{
   "pro": {{"nodes": [
-    {{"argument_id": 12, "gist": "vergunningverlening loopt vast", "children": [
+    {{"argument_id": 12, "gist": "vergunningverlening loopt vast",
+      "samenvatting": "Vergunningverlening zit vast omdat natuurvergunningen niet meer afgegeven worden.",
+      "children": [
       {{"argument_id": 45, "gist": "ook natuurvergunningen vertraagd"}}
     ]}}
   ]}},
   "contra": {{"nodes": [
-    {{"label": "economische lasten voor boeren", "arguments": [
+    {{"label": "economische lasten voor boeren",
+      "samenvatting": "Boeren worden gedwongen te stoppen en biologische bedrijven zijn niet rendabel.",
+      "arguments": [
       {{"argument_id": 47, "gist": "duizenden boeren gedwongen stoppen"}},
       {{"argument_id": 103, "gist": "biologische boeren niet rendabel"}}
     ], "children": []}}
   ]}},
   "oppositions": [
-    {{"argument_a_id": 12, "argument_b_id": 47, "relation_type": "direct_rebuttal"}}
+    {{"argument_a_id": 12, "argument_b_id": 47, "relation_type": "direct_rebuttal",
+      "thema": "Moet vergunningverlening voorrang krijgen boven de gevolgen voor boeren?"}}
   ],
   "twijfelachtige_classificaties": [
     {{"argument_id": 88, "huidige_stance": "contra", "reden": "citaat pleit juist voor snellere reductie"}}

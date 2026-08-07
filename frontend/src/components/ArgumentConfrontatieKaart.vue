@@ -13,12 +13,13 @@
 			<span>{{ typeNl }}</span><span class="ack-id">#{{ argument.id }}</span>
 		</div>
 		<div class="ack-gist">{{ argument.gist }}</div>
+		<div v-if="argument.samenvatting" class="ack-samenvatting">{{ argument.samenvatting }}</div>
 		<div class="ack-speaker">{{ argument.spreker }}<template v-if="argument.partij"> ({{ argument.partij }})</template></div>
 		<div v-if="showCitaat" class="ack-quote">&ldquo;{{ quoteShort }}&rdquo;</div>
 		<div v-if="oppGist" class="ack-opp">↔ weerlegt {{ oppGist }}</div>
 	</div>
 	<div v-else class="ack ack-ref" :class="`ack-${side}`" @click="$emit('select', refId)">
-		Zie #{{ refId }} — hangt als onderbouwing onder een ander deelthema (band {{ refBandNummer }}).
+		Zie #{{ refId }} — hangt als onderbouwing onder een ander thema (band {{ refBandNummer }}).
 	</div>
 </template>
 
@@ -28,6 +29,7 @@ import { computed, ref } from "vue";
 interface CardArgument {
 	id: number;
 	gist: string;
+	samenvatting: string | null;
 	spreker: string;
 	partij: string | null;
 	typologie: string;
@@ -158,6 +160,7 @@ defineExpose({ rootEl });
 
 .ack-pro .ack-kicker,
 .ack-pro .ack-gist,
+.ack-pro .ack-samenvatting,
 .ack-pro .ack-speaker,
 .ack-pro .ack-quote {
 	text-align: right;
@@ -179,6 +182,13 @@ defineExpose({ rootEl });
 
 .ack-kid .ack-gist {
 	font-size: 1.02rem;
+}
+
+.ack-samenvatting {
+	font-size: 0.8rem;
+	line-height: 1.5;
+	color: var(--confrontatie-text-soft);
+	margin-top: 0.3rem;
 }
 
 .ack-speaker {
