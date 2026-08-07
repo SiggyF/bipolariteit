@@ -88,3 +88,18 @@ def test_band_thema_falls_back_to_mechanical_gist_join_when_absent():
     band = result["bands"][0]
     assert band["thema"] == "pro hoofdargument — contra hoofdargument"
     assert result["registry"][1]["samenvatting"] is None
+
+
+def test_opposed_group_member_gets_its_own_card_and_drops_out_of_losse_groepen():
+    tree = _tree()
+    tree["oppositions"].append({"argument_a_id": 4, "argument_b_id": 40, "relation_type": "direct_rebuttal"})
+    result = build_bands_and_losse(tree)
+    band = result["bands"][-1]
+    # groepslid 4 (pro) wordt hier los weersproken: het is zijn eigen
+    # top-level voorouder, dus een gewone "node"-kaart -- geen crash op een
+    # niet-bestaande synthetische groeps-id.
+    assert band["pro"] == {"type": "node", "id": 4, "kids": []}
+    assert band["contra"] == {"type": "node", "id": 40, "kids": []}
+    # de groep blijft niet ook nog los staan nu lid 4 al een band-kaart heeft.
+    assert result["losse_groepen"] == []
+    assert result["losse_argumenten"] == []

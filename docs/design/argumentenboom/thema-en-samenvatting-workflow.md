@@ -5,9 +5,8 @@ document beschrijft de workflow voor het laatste openstaande punt van die
 issue: "Betere compacte samenvatting". Het bouwt voort op de bestaande
 export-prompt-build-workflow uit PR #48 (zie ook de moduledocstring van
 `pipeline/build_confrontatie_export.py`): dezelfde Gemini-sessie levert nu
-ook twee extra outputvelden (`thema`, `samenvatting`), en de handmatige
-plak-stap (document + prompt in Gemini) kan optioneel vervangen worden door
-één niet-interactieve `agy`-call (`scripts/agy_run_confrontatie_tree.py`).
+ook twee extra outputvelden (`thema`, `samenvatting`), via één
+niet-interactieve `agy`-call (`scripts/agy_run_confrontatie_tree.py`).
 
 ## Wat dit oplost
 
@@ -32,76 +31,45 @@ proberen zonder dat een oudere export kapot gaat.
 
 ## De iteratieworkflow
 
-Stap 1-3 (document exporteren, in Gemini plakken, antwoord opslaan) kunnen
-handmatig, of automatisch via `agy` (Docker, zie
-`docs/handoff.md`, sectie "Antigravity CLI (agy) in Docker" — dezelfde
-container/auth die ook bij de extractie-/tagging-pipeline gebruikt wordt).
+Draait volledig via `agy` (Docker, zie `docs/handoff.md`, sectie
+"Antigravity CLI (agy) in Docker" — dezelfde container/auth die ook bij de
+extractie-/tagging-pipeline gebruikt wordt).
 
-### Optie A: automatisch via agy (aanbevolen als je agy al hebt ingericht)
-
-```
-docker build -t bipolariteit-agy docker/agy   # eenmalig, of na een Dockerfile-wijziging
-make confrontatie-tree-agy TOPIC=stikstof
-```
-Bouwt het argumentdocument in-memory (geen tussenbestand nodig) en stuurt het
-samen met `pipeline/prompts/argument_tree_gemini.md` naar `agy`, die het
-antwoord direct wegschrijft naar
-`data/export/argument-docs/stikstof-gemini-tree.json`. Default model:
-`gemini-3.6-flash-high` (één call per topic, dus de zwaarste flash-tier is
-het waard; `gemini-3.1-pro-*` bewust vermeden — bekend gevoelig voor
-verzonnen inhoud). Ander model proberen: `make confrontatie-tree-agy
-TOPIC=stikstof MODEL=gemini-3.6-flash-medium`. Ga daarna direct naar stap 4.
-
-**Technische achtergrond (voor als het misgaat):** bij een document van
-deze omvang (~1,5 MB) leest agy het NIET via zijn gewone file-tool, maar
-schrijft en draait hij zelf shell-scriptjes (`which`, `python3`, `perl`,
-`cat << EOF > script.py`) om het te parsen -- vandaar dat `docker/agy/
-Dockerfile` `python3` moet bevatten, en dat `scripts/
-agy_run_confrontatie_tree.py` zelf een gerichte `permissions.allow`-regel
-per ontdekt commando in agy's `settings.json` zet (zie
-`_ensure_read_permission()` in dat script). Faalt een run met een leeg
-antwoord en "a tool required the 'command' permission" in de output: de
-volledige (niet-afgeknotte) in- en output van elke poging, inclusief agy's
-eigen `--log-file`-debuglog, staat in `data/export/
-agy_confrontatie_tree.log` -- daar staat de precieze reden in (bv. een nog
-niet gewhitelist commando, of een verlopen/nog-niet-ververst OAuth-token
-als er toevallig ook een interactieve `agy`-sessie open stond op hetzelfde
-moment). Ontbreekt een specifiek commando nog, whitelist het gericht in
-`_ensure_read_permission()` i.p.v. `--dangerously-skip-permissions` te
-gebruiken.
-
-### Optie B: handmatig plakken in Gemini
-
-1. **Exporteer de brondata**:
+1. **Draai de tree + export**:
    ```
-   make argument-doc TOPIC=stikstof
+   docker build -t bipolariteit-agy docker/agy   # eenmalig, of na een Dockerfile-wijziging
+   make confrontatie-tree TOPIC=stikstof
    ```
-   Dit zet alle pro/contra-argumenten van het topic klaar als markdown in
-   `data/export/argument-docs/<topic>.md` — geen LLM-call.
+   Bouwt het argumentdocument in-memory (geen tussenbestand nodig) en stuurt
+   het samen met `pipeline/prompts/argument_tree_gemini.md` naar `agy`, die
+   het antwoord direct wegschrijft naar
+   `data/export/argument-docs/stikstof-gemini-tree.json`, en combineert dat
+   resultaat meteen (zonder verdere LLM-call) met de DB tot de
+   argumentenboom-export. Default model: `gemini-3.6-flash-high` (één call
+   per topic, dus de zwaarste flash-tier is het waard; `gemini-3.1-pro-*`
+   bewust vermeden — bekend gevoelig voor verzonnen inhoud). Ander model
+   proberen: `make confrontatie-tree TOPIC=stikstof
+   MODEL=gemini-3.6-flash-medium`.
 
-2. **Plak in Gemini**: het markdown-document + de volledige inhoud van
-   `pipeline/prompts/argument_tree_gemini.md` (stap 3 van die prompt vraagt
-   nu ook om `thema` en `samenvatting`, zie hieronder voor de precieze
-   regels; vervang `{topic}` handmatig door de topic-naam).
+   **Technische achtergrond:** bij een document van
+   deze omvang (~1,5 MB) leest agy het NIET via zijn gewone file-tool, maar
+   schrijft en draait hij zelf shell-scriptjes (`which`, `python3`, `perl`,
+   `cat << EOF > script.py`) om het te parsen -- vandaar dat `docker/agy/
+   Dockerfile` `python3` moet bevatten, en dat `scripts/
+   agy_run_confrontatie_tree.py` zelf een gerichte `permissions.allow`-regel
+   per ontdekt commando in agy's `settings.json` zet (zie
+   `_ensure_read_permission()` in dat script). Faalt een run met een leeg
+   antwoord en "a tool required the 'command' permission" in de output: de
+   volledige (niet-afgeknotte) in- en output van elke poging, inclusief agy's
+   eigen `--log-file`-debuglog, staat in `data/export/
+   agy_confrontatie_tree.log` -- daar staat de precieze reden in (bv. een nog
+   niet gewhitelist commando, of een verlopen/nog-niet-ververst OAuth-token
+   als er toevallig ook een interactieve `agy`-sessie open stond op hetzelfde
+   moment). Ontbreekt een specifiek commando nog, whitelist het gericht in
+   `_ensure_read_permission()` i.p.v. `--dangerously-skip-permissions` te
+   gebruiken.
 
-3. **Sla Gemini's antwoord op** als
-   `data/export/argument-docs/<topic>-gemini-tree.json` (ruwe JSON, geen
-   markdown-codeblok eromheen).
-
-### Verder (beide opties)
-
-4. **Bouw de export**:
-   ```
-   make confrontatie-export TOPIC=stikstof
-   ```
-   Puur mechanisch — geen LLM-call, er wordt geen tekst verzonnen. Wil je
-   eerst snel de ruwe JSON scannen zonder 'm weg te schrijven, gebruik
-   `--dry-run`:
-   ```
-   uv run python -m pipeline.build_confrontatie_export --topic stikstof --dry-run
-   ```
-
-5. **Bekijk het resultaat meteen op de site** — geen los reviewscript nodig,
+2. **Bekijk het resultaat meteen op de site** — geen los reviewscript nodig,
    de site zelf is de review-omgeving:
    ```
    make dev
@@ -115,10 +83,10 @@ gebruiken.
      onderliggende citaten (via "citaten tonen"/"onderbouwing tonen")
      daadwerkelijk zeggen — geen cijfers of claims die er niet staan?
 
-6. **Niet goed genoeg?** Verscherp de promptregels in
+3. **Niet goed genoeg?** Verscherp de promptregels in
    `pipeline/prompts/argument_tree_gemini.md` (bv. een striktere
    lengte-eis, of een explicietere "geen cijfers verzinnen"-regel) en herhaal
-   vanaf stap 2. Dit is dezelfde iteratieve aanpak die al gebruikt is om de
+   vanaf stap 1. Dit is dezelfde iteratieve aanpak die al gebruikt is om de
    boomstructuur zelf scherp te krijgen (zie PR #48).
 
 ## Wat Gemini precies levert (stap 3 van de prompt)

@@ -66,9 +66,13 @@ def _flatten_stance(nodes, stance, registry, top_level, group_index_start=0):
             member_ids = []
             for member in node.get("arguments", []):
                 mid = member["argument_id"]
+                # Een groepslid heeft geen eigen "kaart" op groepsniveau (de
+                # groep zelf leeft alleen in losse_groepen) -- wordt het lid
+                # los weersproken, dan is het lid zelf de top-level voorouder
+                # voor de band-opbouw, net als een gewoon top-level argument.
                 registry[mid] = {
                     "id": mid, "gist": member["gist"], "samenvatting": None, "stance": stance, "children": [],
-                    "top_id": f"group:{stance}:{group_index}",
+                    "top_id": mid,
                 }
                 member_ids.append(mid)
             top_level.append({
@@ -140,7 +144,11 @@ def build_bands_and_losse(gemini_tree):
         )
 
     banded_top_ids = {top_id for top_id, band_index in claimed.items()}
-    losse_groepen = [entry for entry in pro_top + contra_top if entry["kind"] == "group"]
+    losse_groepen = [
+        entry
+        for entry in pro_top + contra_top
+        if entry["kind"] == "group" and not any(mid in banded_top_ids for mid in entry["member_ids"])
+    ]
     losse_argumenten = [
         entry["id"]
         for entry in pro_top + contra_top

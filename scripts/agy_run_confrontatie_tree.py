@@ -5,9 +5,10 @@ argumentdocument + de prompt handmatig in een Gemini-chat te plakken.
 Bouwt het argumentdocument zelf op (dezelfde functies als
 pipeline/export_argument_doc.py -- geen tussenbestand nodig) en schrijft
 Gemini's ruwe structurering direct naar
-data/export/argument-docs/<topic>-gemini-tree.json, zodat
-`make confrontatie-export TOPIC=<topic>` daarna zonder handmatige tussenstap
-kan draaien.
+data/export/argument-docs/<topic>-gemini-tree.json. Wordt aangeroepen door
+`make confrontatie-tree TOPIC=<topic>`, dat er meteen ook
+pipeline.build_confrontatie_export achteraan plakt -- zonder handmatige
+tussenstap.
 
 In tegenstelling tot de extractie-/tagging-agy-scripts (honderden calls,
 dus een goedkoop `flash-low`-model) is dit één call per topic -- de default
