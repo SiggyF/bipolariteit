@@ -40,16 +40,35 @@ container/auth die ook bij de extractie-/tagging-pipeline gebruikt wordt).
 ### Optie A: automatisch via agy (aanbevolen als je agy al hebt ingericht)
 
 ```
+docker build -t bipolariteit-agy docker/agy   # eenmalig, of na een Dockerfile-wijziging
 make confrontatie-tree-agy TOPIC=stikstof
 ```
-Bouwt het argumentdocument in-memory (geen tussenbestand nodig), stuurt het
-samen met `pipeline/prompts/argument_tree_gemini.md` via `agy --print` naar
-Gemini, en schrijft het antwoord direct naar
+Bouwt het argumentdocument in-memory (geen tussenbestand nodig) en stuurt het
+samen met `pipeline/prompts/argument_tree_gemini.md` naar `agy`, die het
+antwoord direct wegschrijft naar
 `data/export/argument-docs/stikstof-gemini-tree.json`. Default model:
 `gemini-3.6-flash-high` (één call per topic, dus de zwaarste flash-tier is
 het waard; `gemini-3.1-pro-*` bewust vermeden — bekend gevoelig voor
 verzonnen inhoud). Ander model proberen: `make confrontatie-tree-agy
 TOPIC=stikstof MODEL=gemini-3.6-flash-medium`. Ga daarna direct naar stap 4.
+
+**Technische achtergrond (voor als het misgaat):** bij een document van
+deze omvang (~1,5 MB) leest agy het NIET via zijn gewone file-tool, maar
+schrijft en draait hij zelf shell-scriptjes (`which`, `python3`, `perl`,
+`cat << EOF > script.py`) om het te parsen -- vandaar dat `docker/agy/
+Dockerfile` `python3` moet bevatten, en dat `scripts/
+agy_run_confrontatie_tree.py` zelf een gerichte `permissions.allow`-regel
+per ontdekt commando in agy's `settings.json` zet (zie
+`_ensure_read_permission()` in dat script). Faalt een run met een leeg
+antwoord en "a tool required the 'command' permission" in de output: de
+volledige (niet-afgeknotte) in- en output van elke poging, inclusief agy's
+eigen `--log-file`-debuglog, staat in `data/export/
+agy_confrontatie_tree.log` -- daar staat de precieze reden in (bv. een nog
+niet gewhitelist commando, of een verlopen/nog-niet-ververst OAuth-token
+als er toevallig ook een interactieve `agy`-sessie open stond op hetzelfde
+moment). Ontbreekt een specifiek commando nog, whitelist het gericht in
+`_ensure_read_permission()` i.p.v. `--dangerously-skip-permissions` te
+gebruiken.
 
 ### Optie B: handmatig plakken in Gemini
 
