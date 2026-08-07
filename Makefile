@@ -11,7 +11,7 @@ else
   RESOLVE_BASE_URL = scripts/detect_llm_base_url.sh
 endif
 
-.PHONY: help probe test test-js test-frontend ca-fixture status build dev dev-stop extract extract-agy tag tag-agy redactie export tags-taxonomy db-init pipeline-status backup-db release release-dry argument-doc confrontatie-export
+.PHONY: help probe test test-js test-frontend ca-fixture status build dev dev-stop extract extract-agy tag tag-agy redactie export tags-taxonomy db-init pipeline-status backup-db release release-dry argument-doc confrontatie-tree
 
 help: ## Toon deze lijst
 	@grep -E '^[a-zA-Z_-]+:.*## ' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*## "}; {printf "  \033[36m%-16s\033[0m %s\n", $$1, $$2}'
@@ -70,7 +70,8 @@ export: ## SQLite -> data/export/topics/<slug>.json + topics-index.json, voor al
 argument-doc: ## Exporteert alle pro/contra-argumenten van TOPIC (met claims/opposities) als markdown, voor handmatig structureren via Gemini -- geen LLM-call
 	uv run python -m pipeline.export_argument_doc --topic $(TOPIC)
 
-confrontatie-export: ## Combineert data/export/argument-docs/<TOPIC>-gemini-tree.json (handmatig via Gemini gestructureerd) met de DB tot de argumentenboom-export -- geen LLM-call
+confrontatie-tree: ## Genereert data/export/argument-docs/<TOPIC>-gemini-tree.json via Docker agy (Gemini) en combineert die meteen met de DB tot de argumentenboom-export. Vars: TOPIC, MODEL (default gemini-3.6-flash-high)
+	PYTHONPATH=. uv run python scripts/agy_run_confrontatie_tree.py --topic $(TOPIC) $(if $(MODEL),--model $(MODEL),)
 	uv run python -m pipeline.build_confrontatie_export --topic $(TOPIC)
 
 tags-taxonomy: ## data/tags.toml -> frontend/src/lib/tagsTaxonomy.generated.ts

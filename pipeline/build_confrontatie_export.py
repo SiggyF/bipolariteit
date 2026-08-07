@@ -11,10 +11,13 @@ contextlimiet van een lokaal model bij grote topics, zie PR #48); het
 Gemini-traject via export_argument_doc.py + een handmatige Gemini-stap is de
 opvolger.
 
-De "deelthema"-titel per band is voor nu een neutrale placeholder
-("Confrontatie N") -- een echt inhoudelijke titel bedenken (en meerdere
-gelijkende argumenten samenvatten tot één leesbare, gebronde stelling) is
-een bewust apart, later traject; dit script verzint geen tekst.
+Het `thema` per band en de `samenvatting` per gebundelde node/groep komen,
+indien aanwezig, letterlijk uit de Gemini-tree (zie
+pipeline/prompts/argument_tree_gemini.md, stap 3) -- dit script verzint geen
+tekst, het geeft alleen door wat Gemini al leverde. Ontbreken deze velden
+(oudere gemini-tree.json zonder stap-3-output), dan valt `thema` terug op een
+mechanische samenvoeging van de twee gists ("Confrontatie N"-achtig
+placeholder-gedrag) en blijft `samenvatting` leeg.
 
 Gebruik:
     uv run python -m pipeline.build_confrontatie_export --topic stikstof
@@ -53,19 +56,29 @@ def _flatten_stance(nodes, stance, registry, top_level, group_index_start=0):
             nid = node["argument_id"]
             children = node.get("children") or []
             child_ids = [c["argument_id"] for c in children if "argument_id" in c]
-            registry[nid] = {"id": nid, "gist": node["gist"], "stance": stance, "children": child_ids, "top_id": nid}
+            registry[nid] = {
+                "id": nid, "gist": node["gist"], "samenvatting": node.get("samenvatting"),
+                "stance": stance, "children": child_ids, "top_id": nid,
+            }
             top_level.append({"kind": "argument", "id": nid})
             _mark_descendants(children, stance, registry, top_id=nid)
         elif "label" in node:
             member_ids = []
             for member in node.get("arguments", []):
                 mid = member["argument_id"]
+                # Een groepslid heeft geen eigen "kaart" op groepsniveau (de
+                # groep zelf leeft alleen in losse_groepen) -- wordt het lid
+                # los weersproken, dan is het lid zelf de top-level voorouder
+                # voor de band-opbouw, net als een gewoon top-level argument.
                 registry[mid] = {
-                    "id": mid, "gist": member["gist"], "stance": stance, "children": [],
-                    "top_id": f"group:{stance}:{group_index}",
+                    "id": mid, "gist": member["gist"], "samenvatting": None, "stance": stance, "children": [],
+                    "top_id": mid,
                 }
                 member_ids.append(mid)
-            top_level.append({"kind": "group", "label": node["label"], "member_ids": member_ids})
+            top_level.append({
+                "kind": "group", "label": node["label"], "samenvatting": node.get("samenvatting"),
+                "member_ids": member_ids,
+            })
             group_index += 1
         else:
             raise ValueError(f"onbekende knoopvorm in Gemini-tree: {node!r}")
@@ -79,7 +92,10 @@ def _mark_descendants(nodes, stance, registry, top_id):
         nid = node["argument_id"]
         children = node.get("children") or []
         child_ids = [c["argument_id"] for c in children if "argument_id" in c]
-        registry[nid] = {"id": nid, "gist": node["gist"], "stance": stance, "children": child_ids, "top_id": top_id}
+        registry[nid] = {
+            "id": nid, "gist": node["gist"], "samenvatting": None, "stance": stance,
+            "children": child_ids, "top_id": top_id,
+        }
         _mark_descendants(children, stance, registry, top_id)
 
 
@@ -112,13 +128,15 @@ def build_bands_and_losse(gemini_tree):
         band_index = len(bands)
         pro_slot = _resolve_slot(pro_side, claimed, band_index)
         contra_slot = _resolve_slot(contra_side, claimed, band_index)
-        # Mechanische beschrijving uit de twee gists die Gemini al gaf voor
-        # precies dít weersproken paar -- geen nieuwe tekst verzinnen (dat is
-        # het aparte, latere content-traject), puur hergebruiken wat er al is.
+        # `thema` komt idealiter van Gemini (het daadwerkelijke geschilpunt,
+        # zie argument_tree_gemini.md stap 3). Ontbreekt het (oudere
+        # gemini-tree.json zonder dit veld), val terug op de mechanische
+        # samenvoeging van de twee gists -- geen nieuwe tekst verzinnen.
+        thema = opp.get("thema") or f"{pro_side['gist']} — {contra_side['gist']}"
         bands.append(
             {
                 "nummer": band_index + 1,
-                "deelthema": f"{pro_side['gist']} — {contra_side['gist']}",
+                "thema": thema,
                 "pro": pro_slot,
                 "contra": contra_slot,
                 "oppositie": {"argument_a_id": a_id, "argument_b_id": b_id, "relation_type": opp["relation_type"]},
@@ -126,7 +144,11 @@ def build_bands_and_losse(gemini_tree):
         )
 
     banded_top_ids = {top_id for top_id, band_index in claimed.items()}
-    losse_groepen = [entry for entry in pro_top + contra_top if entry["kind"] == "group"]
+    losse_groepen = [
+        entry
+        for entry in pro_top + contra_top
+        if entry["kind"] == "group" and not any(mid in banded_top_ids for mid in entry["member_ids"])
+    ]
     losse_argumenten = [
         entry["id"]
         for entry in pro_top + contra_top
@@ -232,6 +254,7 @@ def build_export(conn, topic_row, gemini_tree, vanaf):
         if nid not in arguments:
             raise ValueError(f"argument_id {nid} uit de Gemini-tree niet gevonden in de database")
         arguments[nid]["gist"] = entry["gist"]
+        arguments[nid]["samenvatting"] = entry["samenvatting"]
 
     for band in bands:
         for side_key in ("pro", "contra"):

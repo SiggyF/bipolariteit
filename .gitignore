@@ -4,6 +4,7 @@ data/raw/
 data/export/argument-trees/
 data/export/argument-docs/
 data/export/design-handoff/
+data/export/agy_confrontatie_tree.log
 data/*.db
 data/*.db-journal
 data/*.db-wal

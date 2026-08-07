@@ -36,7 +36,7 @@
 
 			<div class="confrontatie-colheader">
 				<div class="confrontatie-colheader-pro">Pro</div>
-				<div class="confrontatie-colheader-mid">deelthema</div>
+				<div class="confrontatie-colheader-mid">thema</div>
 				<div class="confrontatie-colheader-contra">Contra</div>
 			</div>
 
@@ -113,8 +113,8 @@
 						<div class="confrontatie-band-mid">
 							<div class="confrontatie-band-rule"></div>
 							<div class="confrontatie-band-theme">
-								<div class="confrontatie-band-no">Deelthema {{ String(band.nummer).padStart(2, "0") }}</div>
-								<div class="confrontatie-band-label">{{ band.deelthema }}</div>
+								<div class="confrontatie-band-no">Thema {{ String(band.nummer).padStart(2, "0") }}</div>
+								<div class="confrontatie-band-label">{{ band.thema }}</div>
 							</div>
 							<div class="confrontatie-band-rule"></div>
 						</div>
@@ -172,6 +172,7 @@
 					<div class="confrontatie-band-side confrontatie-band-side-pro">
 						<div v-for="groep in losseGroepenPro" :key="groep.label" class="confrontatie-losse-groep">
 							<div class="confrontatie-losse-groep-label">coördinatief · {{ groep.label }}</div>
+							<div v-if="groep.samenvatting" class="confrontatie-losse-groep-samenvatting">{{ groep.samenvatting }}</div>
 							<ArgumentConfrontatieKaart
 								v-for="id in groep.member_ids"
 								:key="id"
@@ -206,6 +207,7 @@
 					<div class="confrontatie-band-side confrontatie-band-side-contra">
 						<div v-for="groep in losseGroepenContra" :key="groep.label" class="confrontatie-losse-groep">
 							<div class="confrontatie-losse-groep-label">coördinatief · {{ groep.label }}</div>
+							<div v-if="groep.samenvatting" class="confrontatie-losse-groep-samenvatting">{{ groep.samenvatting }}</div>
 							<ArgumentConfrontatieKaart
 								v-for="id in groep.member_ids"
 								:key="id"
@@ -318,6 +320,7 @@ interface ExportArgument {
 	tweedekamer_activiteit_url: string | null;
 	speaker_video_url: string | null;
 	gist: string;
+	samenvatting: string | null;
 }
 
 interface BandSlot {
@@ -330,7 +333,7 @@ interface BandSlot {
 
 interface Band {
 	nummer: number;
-	deelthema: string;
+	thema: string;
 	pro: BandSlot | null;
 	contra: BandSlot | null;
 	oppositie: { argument_a_id: number; argument_b_id: number; relation_type: string } | null;
@@ -339,6 +342,7 @@ interface Band {
 interface LosseGroep {
 	kind: "group";
 	label: string;
+	samenvatting: string | null;
 	member_ids: number[];
 }
 
@@ -477,7 +481,7 @@ function measure() {
 	const base = el.getBoundingClientRect();
 	wrapWidth.value = base.width;
 	wrapHeight.value = base.height;
-	// Spine = het echte midden van de "deelthema"-kolom, niet wrapWidth/2:
+	// Spine = het echte midden van de "thema"-kolom, niet wrapWidth/2:
 	// die twee zijn alleen gelijk als .confrontatie-bands-wrap precies zo
 	// breed is als de 3-koloms band-rij zelf, wat afhankelijk van
 	// paginabreedte/scroll niet altijd klopt.
@@ -1012,6 +1016,14 @@ const links = computed<LinkPath[]>(() => {
 	font-size: 0.9rem;
 	color: var(--confrontatie-text-soft);
 	margin-bottom: 0.2rem;
+}
+
+.confrontatie-losse-groep-samenvatting {
+	font-size: 0.8rem;
+	line-height: 1.5;
+	color: var(--confrontatie-text-soft);
+	margin-bottom: 0.4rem;
+	max-width: 336px;
 }
 
 .confrontatie-losse-mid-label {
