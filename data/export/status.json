@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-04T20:55:44+02:00",
+  "generated_at": "2026-08-07T13:56:33+02:00",
   "topics": [
     {
       "slug": "stikstof",
@@ -32,13 +32,77 @@
       "name": "Asiel en migratie",
       "vanaf": "2023-12-06",
       "documents_total": 7820,
-      "documents_extracted": 0,
-      "arguments_total": 0,
-      "arguments_tagged": 0,
+      "documents_extracted": 694,
+      "arguments_total": 632,
+      "arguments_tagged": 236,
       "documents_redactie_checked": 0,
-      "arguments_ander_onderwerp": 0,
-      "ander_onderwerp_top": [],
-      "llm_calls_by_model": []
+      "arguments_ander_onderwerp": 56,
+      "ander_onderwerp_top": [
+        {
+          "onderwerp": "arbeidsmigratie",
+          "aantal": 34
+        },
+        {
+          "onderwerp": "faunabeheer / de wolf",
+          "aantal": 7
+        },
+        {
+          "onderwerp": "ruimtelijke ordening en economie",
+          "aantal": 1
+        },
+        {
+          "onderwerp": "ruimtelijke ordening en Omgevingswet",
+          "aantal": 1
+        },
+        {
+          "onderwerp": "ruimtelijke ordening (logistieke centra)",
+          "aantal": 1
+        },
+        {
+          "onderwerp": "ruimte voor Defensie",
+          "aantal": 1
+        },
+        {
+          "onderwerp": "procedureaanvragen van niet-asielzoekers",
+          "aantal": 1
+        },
+        {
+          "onderwerp": "opvang van asielzoekers op Defensielocaties",
+          "aantal": 1
+        },
+        {
+          "onderwerp": "ongedocumenteerde Surinamers",
+          "aantal": 1
+        },
+        {
+          "onderwerp": "misstanden uitzendbranche en goed werkgeverschap",
+          "aantal": 1
+        }
+      ],
+      "llm_calls_by_model": [
+        {
+          "stage": "extraction",
+          "model": "qwen/qwen3.6-27b",
+          "n_calls": 551,
+          "total_duration_s": 12012.333705439261,
+          "avg_duration_s": 21.800968612412454,
+          "n_errors": 1,
+          "total_completion_tokens": 119442,
+          "first_call_at": "2026-08-05T16:50:43.369858+00:00",
+          "last_call_at": "2026-08-07T08:26:38.720417+00:00"
+        },
+        {
+          "stage": "tagging",
+          "model": "qwen/qwen3.6-27b",
+          "n_calls": 239,
+          "total_duration_s": 14340.70367983004,
+          "avg_duration_s": 60.00294426707129,
+          "n_errors": 3,
+          "total_completion_tokens": 138630,
+          "first_call_at": "2026-08-05T16:53:22.700983+00:00",
+          "last_call_at": "2026-08-07T11:54:56.755329+00:00"
+        }
+      ]
     }
   ]
 }
