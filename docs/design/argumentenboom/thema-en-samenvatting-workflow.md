@@ -4,8 +4,10 @@ Zie [issue #49](https://github.com/SiggyF/bipolariteit/issues/49) — dit
 document beschrijft de workflow voor het laatste openstaande punt van die
 issue: "Betere compacte samenvatting". Het bouwt voort op de bestaande
 export-prompt-build-workflow uit PR #48 (zie ook de moduledocstring van
-`pipeline/build_confrontatie_export.py`); er komt geen nieuwe stap of los
-script bij, alleen twee extra outputvelden in dezelfde Gemini-sessie.
+`pipeline/build_confrontatie_export.py`): dezelfde Gemini-sessie levert nu
+ook twee extra outputvelden (`thema`, `samenvatting`), en de handmatige
+plak-stap (document + prompt in Gemini) kan optioneel vervangen worden door
+één niet-interactieve `agy`-call (`scripts/agy_run_confrontatie_tree.py`).
 
 ## Wat dit oplost
 
@@ -30,7 +32,28 @@ proberen zonder dat een oudere export kapot gaat.
 
 ## De iteratieworkflow
 
-1. **Exporteer de brondata** (ongewijzigd):
+Stap 1-3 (document exporteren, in Gemini plakken, antwoord opslaan) kunnen
+handmatig, of automatisch via `agy` (Docker, zie
+`docs/handoff.md`, sectie "Antigravity CLI (agy) in Docker" — dezelfde
+container/auth die ook bij de extractie-/tagging-pipeline gebruikt wordt).
+
+### Optie A: automatisch via agy (aanbevolen als je agy al hebt ingericht)
+
+```
+make confrontatie-tree-agy TOPIC=stikstof
+```
+Bouwt het argumentdocument in-memory (geen tussenbestand nodig), stuurt het
+samen met `pipeline/prompts/argument_tree_gemini.md` via `agy --print` naar
+Gemini, en schrijft het antwoord direct naar
+`data/export/argument-docs/stikstof-gemini-tree.json`. Default model:
+`gemini-3.6-flash-high` (één call per topic, dus de zwaarste flash-tier is
+het waard; `gemini-3.1-pro-*` bewust vermeden — bekend gevoelig voor
+verzonnen inhoud). Ander model proberen: `make confrontatie-tree-agy
+TOPIC=stikstof MODEL=gemini-3.6-flash-medium`. Ga daarna direct naar stap 4.
+
+### Optie B: handmatig plakken in Gemini
+
+1. **Exporteer de brondata**:
    ```
    make argument-doc TOPIC=stikstof
    ```
@@ -40,11 +63,13 @@ proberen zonder dat een oudere export kapot gaat.
 2. **Plak in Gemini**: het markdown-document + de volledige inhoud van
    `pipeline/prompts/argument_tree_gemini.md` (stap 3 van die prompt vraagt
    nu ook om `thema` en `samenvatting`, zie hieronder voor de precieze
-   regels).
+   regels; vervang `{topic}` handmatig door de topic-naam).
 
 3. **Sla Gemini's antwoord op** als
    `data/export/argument-docs/<topic>-gemini-tree.json` (ruwe JSON, geen
    markdown-codeblok eromheen).
+
+### Verder (beide opties)
 
 4. **Bouw de export**:
    ```
