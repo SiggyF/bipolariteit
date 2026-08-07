@@ -53,16 +53,26 @@ AGY_GEMINI_CONFIG_DIR = str(Path.home() / ".bipolariteit" / "agy_gemini_config")
 DEFAULT_MODEL = "gemini-3.6-flash-high"
 
 
-def run_agy(prompt, model, timeout):
+def run_agy(document, instructions, model, timeout):
+    """`document` (het argumentexport-document, tot ~1,5 MB voor stikstof-
+    schaal topics) gaat over stdin i.p.v. als CLI-argument: een los
+    process-argument is op elk OS beperkt tot een fractie van dat formaat
+    (macOS execve faalt al met "Argument list too long" ruim onder 1,5 MB,
+    Linux' MAX_ARG_STRLEN ligt zelfs op 128 KB per argument) -- stdin heeft
+    die limiet niet. `instructions` (de prompt uit argument_tree_gemini.md,
+    een paar KB) blijft wel gewoon een `--print`-argument, zoals de andere
+    agy-scripts in dit project al doen voor hun (veel kleinere) per-document-
+    prompts."""
     result = subprocess.run(
         [
-            "docker", "run", "--rm",
+            "docker", "run", "--rm", "-i",
             "-v", f"{AGY_GEMINI_CONFIG_DIR}:/home/agy/.gemini",
             "bipolariteit-agy",
-            "agy", "--print", prompt,
+            "agy", "--print", instructions,
             "--model", model,
             "--sandbox",
         ],
+        input=document,
         capture_output=True,
         text=True,
         timeout=timeout,
@@ -75,9 +85,9 @@ def build_prompt(conn, topic_row, stances, vanaf):
         stance: fetch_stance_arguments(conn, topic_row["id"], stance, vanaf, limit=None) for stance in stances
     }
     document = build_document(topic_row, stances_by_name)
-    prompt_template = PROMPT_PATH.read_text()
+    instructions = PROMPT_PATH.read_text().format(topic=topic_row["name"])
     total = sum(len(v) for v in stances_by_name.values())
-    return f"{document}\n\n{prompt_template.format(topic=topic_row['name'])}", total
+    return document, instructions, total
 
 
 def main():
@@ -101,20 +111,24 @@ def main():
         raise SystemExit(f"onbekende topic-slug: {args.topic}")
 
     vanaf = args.vanaf if args.vanaf is not None else PeriodeIndex().drempel
-    prompt, total_args = build_prompt(conn, topic_row, stances, vanaf)
+    document, instructions, total_args = build_prompt(conn, topic_row, stances, vanaf)
     conn.close()
 
     logger.info(
-        "topic=%s model=%s %d argumenten, promptlengte %d tekens", topic_row["slug"], args.model, total_args, len(prompt)
+        "topic=%s model=%s %d argumenten, document %d tekens (stdin) + instructies %d tekens (--print)",
+        topic_row["slug"], args.model, total_args, len(document), len(instructions),
     )
 
     if args.dry_run:
-        print(prompt)
+        print("=== document (stdin) ===")
+        print(document)
+        print("=== instructies (--print) ===")
+        print(instructions)
         logger.info("(--dry-run: geen agy-call)")
         return
 
     start = time.monotonic()
-    stdout, stderr = run_agy(prompt, args.model, args.timeout)
+    stdout, stderr = run_agy(document, instructions, args.model, args.timeout)
     elapsed = time.monotonic() - start
     logger.info("agy-call klaar in %.1fs", elapsed)
 
