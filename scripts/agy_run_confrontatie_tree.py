@@ -148,18 +148,45 @@ def run_agy(document, instructions, model, timeout, skip_permissions=False):
             f"zijn geheel, voordat je de onderstaande opdracht uitvoert.\n\n{instructions}"
         )
 
+        # "$AGY_PRINT"/"$AGY_MODEL" -- met de dubbele aanhalingstekens
+        # letterlijk in de scripttekst -- zijn env-var-referenties, geen
+        # shell-interpolatie van de Python-strings zelf: sh voegt de waarde
+        # van de env var als één woord in, zonder 'm opnieuw te scannen op
+        # $/backticks/globs. Dat voorkomt shell-injectie via willekeurige
+        # tekens in `instructions_with_path` (quotes, `$`, `*`, ...) of een
+        # ongebruikelijke --model-waarde.
+        agy_args = ['agy', '--print', '"$AGY_PRINT"', '--add-dir', CONTAINER_INPUT_DIR, '--model', '"$AGY_MODEL"', '--sandbox']
+        if skip_permissions:
+            agy_args.append("--dangerously-skip-permissions")
+        # --rm gooit het containerbestandssysteem weg zodra dit script
+        # klaar is -- eventuele *.log-bestanden van agy zelf (bleken niet in
+        # de gemounte config-map te leven, zie de sessie die dit script
+        # debugde) moeten dus VOOR die opruiming naar stderr gedumpt worden,
+        # anders zijn ze nooit meer te zien.
+        diagnostic_script = (
+            f"{' '.join(agy_args)}; status=$?; "
+            'echo "--- diagnostic: HOME=$HOME ---" >&2; '
+            'logdir=$(find /home/agy /tmp /root -xdev -type d -iname "log" 2>/dev/null | head -n1); '
+            'if [ -n "$logdir" ]; then '
+            '  lastfile=$(ls -t "$logdir" 2>/dev/null | head -n1); '
+            '  if [ -n "$lastfile" ]; then '
+            '    echo "=== laatste logbestand: $logdir/$lastfile ===" >&2; '
+            '    tail -n 300 "$logdir/$lastfile" >&2; '
+            "  else echo \"--- diagnostic: logdir $logdir is leeg ---\" >&2; fi; "
+            'else echo "--- diagnostic: geen log-directory gevonden onder /home/agy /tmp /root ---" >&2; fi; '
+            "exit $status"
+        )
+
         cmd = [
             "docker", "run", "--rm",
             "-v", f"{AGY_GEMINI_CONFIG_DIR}:/home/agy/.gemini",
             "-v", f"{tmpdir}:{CONTAINER_INPUT_DIR}:ro",
+            "-e", f"AGY_PRINT={instructions_with_path}",
+            "-e", f"AGY_MODEL={model}",
+            "--entrypoint", "sh",
             "bipolariteit-agy",
-            "agy", "--print", instructions_with_path,
-            "--add-dir", CONTAINER_INPUT_DIR,
-            "--model", model,
-            "--sandbox",
+            "-c", diagnostic_script,
         ]
-        if skip_permissions:
-            cmd.append("--dangerously-skip-permissions")
 
         start = time.monotonic()
         result = subprocess.run(cmd, capture_output=True, text=True, timeout=timeout)
