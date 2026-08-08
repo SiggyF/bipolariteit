@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
+import ArgumentTimeline from "./ArgumentTimeline.vue";
 import TagCorrespondenceMap from "./TagCorrespondenceMap.vue";
 import PerspectiefTagHeatmap from "./PerspectiefTagHeatmap.vue";
 import TopPersonsPerTag, { type TagMeta } from "./TopPersonsPerTag.vue";
@@ -46,6 +47,8 @@ const personIndex = computed(() => derivePersonTagIndex(props.argumentList));
 			<h1>{{ perspectief }}</h1>
 		</header>
 		<p class="panel-note">{{ totalToekenningen }} tagtoekenningen in dit perspectief, over alle onderwerpen heen.</p>
+
+		<ArgumentTimeline :argumentList="scopedList" :interactive="false" />
 
 		<TagCorrespondenceMap :argument-list="scopedList" />
 

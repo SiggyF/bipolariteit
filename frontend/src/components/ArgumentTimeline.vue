@@ -1,19 +1,22 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { buildTimeline, yearTicks, type TimelineBucket } from "../lib/timeline";
-import { matchesExcept, setDateRange, toggleValue, DATE_FROM, DATE_TO } from "../lib/filters";
+import { setDateRange, toggleValue } from "../lib/filters";
 import { STANCES, TYPOLOGIES, stanceLabel, typologyLabel, type Argument, type Stance, type Typology } from "../lib/types";
 
-// Rekent op de ongefilterde topic-lijst en past zelf matchesExcept toe met het
-// datumbereik overgeslagen: klikken op een staaf zet het datumfilter, maar de
-// tijdlijn moet daarna alle debatdagen blijven tonen om te laten zien wélke
-// dag je selecteerde -- anders klapt de as in tot één staaf na de eerste klik.
-// Andere dimensies (partij, tag, ...) werken wel gewoon door.
-const props = defineProps<{ argumentList: Argument[] }>();
+// `interactive` staat aan op de topic-pagina (TopicView.vue): daar bestaat een
+// FilterBar/filterstore, dus klikken op een staaf om te filteren betekent iets.
+// De perspectiefpagina (PerspectiefView.vue) heeft geen filterstore -- daar zou
+// klikken alleen de URL wijzigen zonder dat er iets zichtbaars gebeurt, dus
+// staat interactive daar uit en toont de tijdlijn puur cijfers.
+//
+// Wie filtert, filtert vooraf: de topic-pagina rekent zelf `matchesExcept(a,
+// [DATE_FROM, DATE_TO])` uit voordat argumentList hier binnenkomt, zodat de
+// tijdlijn na een klik alle debatdagen blijft tonen i.p.v. in te klappen tot
+// de geselecteerde dag.
+const props = withDefaults(defineProps<{ argumentList: Argument[]; interactive?: boolean }>(), { interactive: true });
 
-const zichtbaar = computed(() => props.argumentList.filter((a) => matchesExcept(a, [DATE_FROM, DATE_TO])));
-
-const timeline = computed(() => buildTimeline(zichtbaar.value));
+const timeline = computed(() => buildTimeline(props.argumentList));
 const ticks = computed(() => (timeline.value ? yearTicks(timeline.value) : []));
 
 const TRACK_HEIGHT = 140;
@@ -114,13 +117,17 @@ function typologyTitle(bucket: TimelineBucket): string {
 }
 
 function onBarClick(bucket: TimelineBucket) {
-	setDateRange(bucket.van, bucket.tot);
+	if (props.interactive) setDateRange(bucket.van, bucket.tot);
+}
+
+function onLegendClick(typology: string) {
+	if (props.interactive) toggleValue("typologie", typology);
 }
 </script>
 
 <template>
 	<section v-if="timeline" class="stats-panel">
-		<h2>Tijdlijn <span class="panel-scope">({{ zichtbaar.length }} argumenten in selectie)</span></h2>
+		<h2>Tijdlijn <span class="panel-scope">({{ argumentList.length }} argumenten in selectie)</span></h2>
 		<p class="panel-note">
 			Argumenten komen uit Kamerdebatten en klonteren dus op debatdagen, niet gelijkmatig verspreid over de tijd. Elke
 			staaf is één debatdag; de witruimte ertussen is de tijd zonder debat.
@@ -134,7 +141,7 @@ function onBarClick(bucket: TimelineBucket) {
 				<span class="legend-swatch" :style="{ background: STANCE_COLORS[stance] }"></span>{{ stanceLabel(stance) }}
 			</li>
 		</ul>
-		<p class="panel-note">Klik op een staaf om op die debatdag te filteren.</p>
+		<p v-if="interactive" class="panel-note">Klik op een staaf om op die debatdag te filteren.</p>
 		<div class="timeline-panel">
 			<div class="timeline-track" :style="{ height: `${TRACK_HEIGHT}px` }">
 				<button
@@ -142,6 +149,7 @@ function onBarClick(bucket: TimelineBucket) {
 					:key="bucket.key"
 					type="button"
 					class="timeline-bar"
+					:class="{ 'timeline-bar-static': !interactive }"
 					:style="{ left: `${bucket.offset * 100}%` }"
 					:title="volumeTitle(bucket)"
 					@click="onBarClick(bucket)"
@@ -165,15 +173,18 @@ function onBarClick(bucket: TimelineBucket) {
 		<h3>Argumentvormen door de tijd</h3>
 		<ul class="chart-legend">
 			<li v-for="typology in TYPOLOGIES" :key="typology">
-				<button type="button" class="legend-swatch-btn" @click="toggleValue('typologie', typology)">
+				<button v-if="interactive" type="button" class="legend-swatch-btn" @click="onLegendClick(typology)">
 					<span class="legend-swatch" :style="{ background: TYPOLOGY_COLORS[typology] }"></span>{{ typologyLabel(typology) }}
 				</button>
+				<template v-else>
+					<span class="legend-swatch" :style="{ background: TYPOLOGY_COLORS[typology] }"></span>{{ typologyLabel(typology) }}
+				</template>
 			</li>
 		</ul>
 		<p class="panel-note">
 			Aandeel per typologie, genormaliseerd op 100% zodat stijlverschuiving los te zien is van debatvolume. Staven met
-			minder dan {{ MIN_TOTAL }} argumenten blijven leeg -- bij minder is een percentage schijnnauwkeurig. Klik op de
-			legenda om op een typologie te filteren.
+			minder dan {{ MIN_TOTAL }} argumenten blijven leeg -- bij minder is een percentage schijnnauwkeurig.
+			<template v-if="interactive">Klik op de legenda om op een typologie te filteren.</template>
 		</p>
 		<div class="timeline-panel">
 			<div class="timeline-track" :style="{ height: `${TRACK_HEIGHT}px` }">
@@ -182,7 +193,7 @@ function onBarClick(bucket: TimelineBucket) {
 					:key="bucket.key"
 					type="button"
 					class="timeline-bar"
-					:class="{ 'timeline-bar-empty': onderDrempel }"
+					:class="{ 'timeline-bar-empty': onderDrempel, 'timeline-bar-static': !interactive }"
 					:style="{ left: `${bucket.offset * 100}%` }"
 					:title="typologyTitle(bucket)"
 					@click="onBarClick(bucket)"

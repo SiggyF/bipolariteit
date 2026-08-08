@@ -1873,6 +1873,10 @@ a.card-item:hover {
 	cursor: default;
 }
 
+.timeline-bar-static {
+	cursor: default;
+}
+
 .timeline-segment {
 	position: absolute;
 	left: 0;
