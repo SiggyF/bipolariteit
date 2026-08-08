@@ -22,8 +22,8 @@ op?
   letterlijke substring zijn van de brontekst van het document waaronder het
   gerapporteerd wordt -- vangt grove cross-document misattributie af (citaat
   van document A onder document B gerapporteerd).
-- Output: `data/export/agy_batch_test_multidoc_results.md` (nieuw, batched),
-  vergeleken met `data/export/agy_batch_test_results.md` (bestaand, single-call,
+- Output: `data/export/batch-experiment/agy_batch_test_multidoc_results.md` (nieuw, batched),
+  vergeleken met `data/export/batch-experiment/agy_batch_test_results.md` (bestaand, single-call,
   van de eerdere kalibratie op 2026-07-24).
 
 ## Resultaten
@@ -84,7 +84,7 @@ en `scripts/agy_run_extraction_batch.py` blijven bij één document per call.
 De experiment-artefacten (`pipeline/prompts/extract_argument_batch.md`,
 `_build_batch_prompt()` in `pipeline/extract_arguments.py`,
 `scripts/agy_test_batch_extraction.py`,
-`data/export/agy_batch_test_multidoc_results.md`) blijven in de repo staan
+`data/export/batch-experiment/agy_batch_test_multidoc_results.md`) blijven in de repo staan
 als referentie, maar worden niet in de productiepipeline aangeroepen. Een
 mogelijke vervolgstap, mocht dit ooit opnieuw overwogen worden: eerst een
 schone same-day AB-test draaien (single vs. batched, beide vers, quota voor

@@ -11,7 +11,7 @@ Docker").
 Gebruik:
     PYTHONPATH=. uv run python scripts/agy_run_batch.py \
         --topic stikstof --model gemini-3.6-flash-low \
-        --output data/export/agy_batch_test_results.md
+        --output data/export/batch-experiment/agy_batch_test_results.md
 """
 
 import argparse
@@ -51,7 +51,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--topic", default="stikstof")
     parser.add_argument("--model", default="gemini-3.6-flash-low")
-    parser.add_argument("--output", default="data/export/agy_batch_test_results.md")
+    parser.add_argument("--output", default="data/export/batch-experiment/agy_batch_test_results.md")
     args = parser.parse_args()
 
     conn = db.connect()
