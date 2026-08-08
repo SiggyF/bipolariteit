@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import { buildTimeline, yearTicks, type TimelineBucket } from "../lib/timeline";
+import { buildTimeline, bucketLabel, type BucketUnit, type TimelineBucket } from "../lib/timeline";
 import { setDateRange, toggleValue } from "../lib/filters";
 import { STANCES, TYPOLOGIES, stanceLabel, typologyLabel, type Argument, type Stance, type Typology } from "../lib/types";
 
@@ -16,8 +16,12 @@ import { STANCES, TYPOLOGIES, stanceLabel, typologyLabel, type Argument, type St
 // de geselecteerde dag.
 const props = withDefaults(defineProps<{ argumentList: Argument[]; interactive?: boolean }>(), { interactive: true });
 
-const timeline = computed(() => buildTimeline(props.argumentList));
-const ticks = computed(() => (timeline.value ? yearTicks(timeline.value) : []));
+const UNIT: BucketUnit = "dag";
+const timeline = computed(() => buildTimeline(props.argumentList, { unit: UNIT }));
+
+function axisLabel(bucket: TimelineBucket): string {
+	return bucketLabel(bucket.key, UNIT);
+}
 
 const TRACK_HEIGHT = 140;
 
@@ -177,9 +181,13 @@ function onLegendClick(typology: string) {
 				</button>
 			</div>
 			<div class="timeline-axis">
-				<span v-for="tick in ticks" :key="tick.label" class="timeline-axis-tick" :style="{ left: `${tick.offset * 100}%` }">{{
-					tick.label
-				}}</span>
+				<span
+					v-for="{ bucket } in volumeBars"
+					:key="bucket.key"
+					class="timeline-axis-tick"
+					:style="{ left: `${bucket.offset * 100}%` }"
+					>{{ axisLabel(bucket) }}</span
+				>
 			</div>
 		</div>
 
@@ -221,9 +229,13 @@ function onLegendClick(typology: string) {
 				</button>
 			</div>
 			<div class="timeline-axis">
-				<span v-for="tick in ticks" :key="tick.label" class="timeline-axis-tick" :style="{ left: `${tick.offset * 100}%` }">{{
-					tick.label
-				}}</span>
+				<span
+					v-for="{ bucket } in typologyBars"
+					:key="bucket.key"
+					class="timeline-axis-tick"
+					:style="{ left: `${bucket.offset * 100}%` }"
+					>{{ axisLabel(bucket) }}</span
+				>
 			</div>
 		</div>
 

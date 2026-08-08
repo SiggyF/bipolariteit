@@ -1893,15 +1893,20 @@ a.card-item:hover {
 	border-bottom: 2px solid var(--color-card-bg);
 }
 
+/* Eén label per staaf i.p.v. een paar jaartallen -- te veel om horizontaal
+   naast elkaar te zetten zonder overlap, dus schuin, net als bij de meeste
+   datum-assen met veel ticks. */
 .timeline-axis {
 	position: relative;
-	height: 1.4rem;
+	height: 2.6rem;
 }
 
 .timeline-axis-tick {
 	position: absolute;
-	transform: translateX(-50%);
-	top: 0.2rem;
+	top: 0.3rem;
+	transform-origin: top left;
+	transform: rotate(45deg);
+	white-space: nowrap;
 	font-size: var(--step--1);
 	color: var(--color-muted);
 	font-family: var(--font-mono);

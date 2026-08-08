@@ -22,7 +22,8 @@ export interface TimelineBucket {
 	/** yyyy-mm-dd, inclusief -- voert direct setDateRange(). */
 	van: string;
 	tot: string;
-	/** Positie op de lineaire tijdas, 0..1. */
+	/** Positie op de as, 0..1. Ordinaal (elke bucket een vaste basiseenheid),
+	 * niet lineair op kalenderdagen -- zie buildOffsets(). */
 	offset: number;
 	total: number;
 	stance: StanceCounts;
@@ -80,6 +81,47 @@ function typologyShares(argumentList: Argument[]): TypologyShare[] {
 	});
 }
 
+// Een lineaire tijdas met écht kalenderdagen dringt debatdagen die kort na
+// elkaar liggen tot een onleesbare kluit samen, terwijl een stilte van twee
+// jaar de rest van de as tot bijna niets platdrukt. Ordinaal (elke bucket een
+// vaste basiseenheid) lost het eerste op, maar veegt dan de stilte zelf onder
+// tafel. Dit is de tussenweg: elke bucket krijgt sowieso 1 eenheid, en een
+// stilte van GAP_MAAND_DAGEN of meer voor die bucket koopt er per volle maand
+// stilte nog een eenheid bij -- geplafonneerd, zodat een stilte van een jaar
+// niet 12x zoveel plek claimt als een stilte van één maand.
+const GAP_MAAND_DAGEN = 30;
+const MAX_EXTRA_EENHEDEN = 3;
+
+function buildOffsets(ranges: { van: string; tot: string }[]): number[] {
+	if (ranges.length <= 1) return ranges.map(() => 0.5);
+
+	const posities = [0];
+	for (let i = 1; i < ranges.length; i++) {
+		const stilte = daysBetween(ranges[i - 1].tot, ranges[i].van);
+		const extra = stilte >= GAP_MAAND_DAGEN ? Math.min(MAX_EXTRA_EENHEDEN, Math.floor(stilte / GAP_MAAND_DAGEN)) : 0;
+		posities.push(posities[i - 1] + 1 + extra);
+	}
+	const maxPositie = posities[posities.length - 1];
+	return posities.map((p) => p / maxPositie);
+}
+
+const MAAND_KORT = ["jan", "feb", "mrt", "apr", "mei", "jun", "jul", "aug", "sep", "okt", "nov", "dec"];
+
+/** Korte aslabel voor onder een staaf, bv. "20 jun '24". Puur stringwerk op de
+ * bucketsleutel, geen Date-object nodig. */
+export function bucketLabel(key: string, unit: BucketUnit): string {
+	if (unit === "dag") {
+		const [year, month, day] = key.split("-").map(Number);
+		return `${day} ${MAAND_KORT[month - 1]} '${String(year).slice(2)}`;
+	}
+	if (unit === "maand") {
+		const [year, month] = key.split("-").map(Number);
+		return `${MAAND_KORT[month - 1]} '${String(year).slice(2)}`;
+	}
+	const [year, kwartaal] = key.split("-Q");
+	return `Q${kwartaal} '${year.slice(2)}`;
+}
+
 export function buildTimeline(argumentList: Argument[], options?: { unit?: BucketUnit }): Timeline | null {
 	const unit = options?.unit ?? "dag";
 
@@ -103,16 +145,17 @@ export function buildTimeline(argumentList: Argument[], options?: { unit?: Bucke
 	const sortedKeys = [...byBucket.keys()].sort();
 	const van = bucketRange(sortedKeys[0], unit).van;
 	const tot = bucketRange(sortedKeys[sortedKeys.length - 1], unit).tot;
-	const span = daysBetween(van, tot);
 
-	const buckets: TimelineBucket[] = sortedKeys.map((key) => {
+	const ranges = sortedKeys.map((key) => bucketRange(key, unit));
+	const offsets = buildOffsets(ranges);
+
+	const buckets: TimelineBucket[] = sortedKeys.map((key, i) => {
 		const argumentsOfBucket = byBucket.get(key)!;
-		const range = bucketRange(key, unit);
 		return {
 			key,
-			van: range.van,
-			tot: range.tot,
-			offset: span > 0 ? daysBetween(van, range.van) / span : 0.5,
+			van: ranges[i].van,
+			tot: ranges[i].tot,
+			offset: offsets[i],
 			total: argumentsOfBucket.length,
 			stance: stanceCounts(argumentsOfBucket),
 			typology: typologyShares(argumentsOfBucket),
@@ -126,19 +169,4 @@ export function buildTimeline(argumentList: Argument[], options?: { unit?: Bucke
 		maxTotal: Math.max(...buckets.map((b) => b.total)),
 		zonderDatum,
 	};
-}
-
-/** Jaartallen als aslabels op dezelfde lineaire schaal als bucket.offset,
- * geknipt tot het corpusbereik (een 1 januari buiten [van, tot] valt weg). */
-export function yearTicks(timeline: Timeline): { label: string; offset: number }[] {
-	const span = daysBetween(timeline.van, timeline.tot);
-	const startYear = Number(timeline.van.slice(0, 4));
-	const endYear = Number(timeline.tot.slice(0, 4));
-	const ticks: { label: string; offset: number }[] = [];
-	for (let year = startYear; year <= endYear; year++) {
-		const jan1 = `${year}-01-01`;
-		if (jan1 < timeline.van || jan1 > timeline.tot) continue;
-		ticks.push({ label: String(year), offset: span > 0 ? daysBetween(timeline.van, jan1) / span : 0 });
-	}
-	return ticks;
 }

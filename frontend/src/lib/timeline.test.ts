@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { buildTimeline, yearTicks } from "./timeline";
+import { buildTimeline, bucketLabel } from "./timeline";
 import { TYPOLOGIES, type Argument } from "./types";
 import topic from "../../../data/export/topics/stikstof.json";
 
@@ -51,14 +51,34 @@ describe("buildTimeline met kwartaalbuckets", () => {
 	});
 });
 
-describe("yearTicks", () => {
-	it("levert oplopende jaartallen binnen het corpusbereik van stikstof", () => {
-		const timeline = buildTimeline(argumenten)!;
-		const ticks = yearTicks(timeline);
-		// De eerste debatdag valt medio 2024, dus 1 januari 2024 valt buiten het
-		// bereik en hoort niet mee te tellen als aslabel.
-		expect(ticks.map((t) => t.label)).toEqual(["2025", "2026"]);
-		for (let i = 1; i < ticks.length; i++) expect(ticks[i].offset).toBeGreaterThan(ticks[i - 1].offset);
+describe("offset: ordinaal met extra ruimte bij stiltes van een maand of meer", () => {
+	const timeline = buildTimeline(argumenten)!;
+	const offsets = timeline.buckets.map((b) => b.offset);
+	const delta = (i: number) => offsets[i + 1] - offsets[i];
+
+	it("geeft twee debatdagen kort na elkaar een kleinere stap dan twee met maanden stilte ertussen", () => {
+		// 2025-05-22 -> 2025-06-18 is 27 dagen (geen extra eenheid); 2024-06-20
+		// -> 2024-12-04 is 167 dagen (wel, en tegen het plafond aan).
+		expect(delta(4)).toBeLessThan(delta(0));
+		// 2026-07-01 -> 2026-07-02 is 1 dag; 2025-06-18 -> 2026-07-01 is 378 dagen.
+		expect(delta(6)).toBeLessThan(delta(5));
+	});
+
+	it("plafonneert de extra ruimte: een stilte van een jaar claimt niet evenredig meer plek dan één van vijf maanden", () => {
+		// 2024-06-20 -> 2024-12-04 (167 dagen) en 2025-06-18 -> 2026-07-01 (378
+		// dagen) zitten beide tegen MAX_EXTRA_EENHEDEN aan en krijgen dus dezelfde
+		// stap, ook al is de tweede stilte ruim twee keer zo lang.
+		expect(delta(5)).toBeCloseTo(delta(0), 10);
+	});
+});
+
+describe("bucketLabel", () => {
+	it("formatteert een dagbucket als korte datum met tweecijferig jaar", () => {
+		expect(bucketLabel("2024-06-20", "dag")).toBe("20 jun '24");
+	});
+
+	it("formatteert een kwartaalbucket", () => {
+		expect(bucketLabel("2025-Q1", "kwartaal")).toBe("Q1 '25");
 	});
 });
 
