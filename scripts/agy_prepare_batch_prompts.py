@@ -9,7 +9,7 @@ Schrijft alleen weg, doet geen LLM-calls.
 
 Gebruik:
     PYTHONPATH=. uv run python scripts/agy_prepare_batch_prompts.py \
-        --topic stikstof --output data/export/agy_batch_test_prompts.md
+        --topic stikstof --output data/export/batch-experiment/agy_batch_test_prompts.md
     PYTHONPATH=. uv run python scripts/agy_prepare_batch_prompts.py \
         --topic stikstof --doc-ids 56,95,103,150
 """
@@ -25,7 +25,7 @@ DEFAULT_DOC_IDS = [37, 40, 41, 42, 45, 50, 51, 56, 101, 107, 116, 122, 129, 133,
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--topic", default="stikstof")
-    parser.add_argument("--output", default="data/export/agy_batch_test_prompts.md")
+    parser.add_argument("--output", default="data/export/batch-experiment/agy_batch_test_prompts.md")
     parser.add_argument("--doc-ids", default=None, help="komma-gescheiden document-ids, bv. 56,95,103,150")
     args = parser.parse_args()
     doc_ids = [int(x) for x in args.doc_ids.split(",")] if args.doc_ids else DEFAULT_DOC_IDS

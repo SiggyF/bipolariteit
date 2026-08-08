@@ -4,7 +4,7 @@ draait dezelfde 20 doc-ids als de eerdere quota-kalibratie
 (agy_prepare_batch_prompts.DEFAULT_DOC_IDS), maar nu N per agy-call in plaats
 van 1 per call, om te zien of het model documenten door elkaar haalt en of
 het tokens/calls bespaart t.o.v. de bekende resultaten in
-data/export/agy_batch_test_results.md.
+data/export/batch-experiment/agy_batch_test_results.md.
 
 Schrijft geen data naar de database -- puur een kwaliteitscheck.
 
@@ -56,7 +56,7 @@ def main():
     parser.add_argument("--topic", default="stikstof")
     parser.add_argument("--model", default="gemini-3.6-flash-low")
     parser.add_argument("--group-size", type=int, default=5)
-    parser.add_argument("--output", default="data/export/agy_batch_test_multidoc_results.md")
+    parser.add_argument("--output", default="data/export/batch-experiment/agy_batch_test_multidoc_results.md")
     args = parser.parse_args()
 
     conn = db.connect()
@@ -131,7 +131,7 @@ def main():
     if latencies:
         avg = sum(latencies) / len(latencies)
         logger.info("Latency per call: gem=%.1fs min=%.1fs max=%.1fs (%.1fs/doc effectief)", avg, min(latencies), max(latencies), sum(latencies) / len(docs))
-    logger.info("Ruwe output -> %s (vergelijk handmatig met data/export/agy_batch_test_results.md)", args.output)
+    logger.info("Ruwe output -> %s (vergelijk handmatig met data/export/batch-experiment/agy_batch_test_results.md)", args.output)
 
 
 if __name__ == "__main__":
