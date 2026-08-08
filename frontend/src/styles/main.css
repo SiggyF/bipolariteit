@@ -738,7 +738,8 @@ h3 {
 .chart-legend {
 	list-style: none;
 	display: flex;
-	gap: var(--space-2);
+	flex-wrap: wrap;
+	gap: var(--space-1) var(--space-2);
 	padding: 0;
 	margin: 0 0 var(--space-1);
 	font-size: var(--step--1);
@@ -1839,6 +1840,93 @@ a.card-item:hover {
 	color: var(--color-muted);
 	font-size: var(--step--1);
 	margin-top: var(--space-1);
+}
+
+/* --- argumententijdlijn (issue #54) ------------------------------------ */
+
+/* Argumenten klonteren op debatdagen; de as is daarom lineair op tijd, met
+   staven op hun echte datum-offset in plaats van gelijk verdeeld -- de
+   witruimte ertussen is inhoudelijk (geen debat) en moet zichtbaar blijven. */
+.timeline-panel {
+	position: relative;
+	margin-bottom: var(--space-3);
+}
+
+.timeline-track {
+	position: relative;
+	border-bottom: 1px solid var(--color-border);
+}
+
+.timeline-bar {
+	position: absolute;
+	bottom: 0;
+	width: 14px;
+	height: 100%;
+	transform: translateX(-50%);
+	background: none;
+	border: none;
+	padding: 0;
+	cursor: pointer;
+}
+
+.timeline-bar-empty {
+	cursor: default;
+}
+
+.timeline-bar-static {
+	cursor: default;
+}
+
+.timeline-segment {
+	position: absolute;
+	left: 0;
+	width: 100%;
+}
+
+/* Afgerond bovenaan de stapel, net als de rest van de site z'n staafdiagrammen
+   -- geen ronding tussen segmenten, wel een dunne rand als scheiding. */
+.timeline-segment-top {
+	border-radius: 4px 4px 0 0;
+}
+
+.timeline-segment:not(.timeline-segment-top) {
+	border-bottom: 2px solid var(--color-card-bg);
+}
+
+/* Eén label per staaf i.p.v. een paar jaartallen -- te veel om horizontaal
+   naast elkaar te zetten zonder overlap, dus schuin, net als bij de meeste
+   datum-assen met veel ticks. */
+.timeline-axis {
+	position: relative;
+	height: 2.6rem;
+	padding-bottom: var(--space-2);
+}
+
+.timeline-axis-tick {
+	position: absolute;
+	top: 0.3rem;
+	transform-origin: top left;
+	transform: rotate(45deg);
+	white-space: nowrap;
+	font-size: var(--step--1);
+	color: var(--color-muted);
+	font-family: var(--font-mono);
+}
+
+.legend-swatch-btn {
+	display: flex;
+	align-items: center;
+	gap: 0.35rem;
+	background: none;
+	border: none;
+	padding: 0;
+	font: inherit;
+	color: inherit;
+	cursor: pointer;
+}
+
+.legend-swatch-btn:hover {
+	text-decoration: underline;
 }
 
 .llm-call-list {

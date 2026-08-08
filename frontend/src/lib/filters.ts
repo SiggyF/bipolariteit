@@ -104,13 +104,19 @@ export function matches(argument: Argument): boolean {
 	return matchesExcept(argument, []);
 }
 
-/** Als `matches`, maar met een paar dimensies overgeslagen.
+/** Als `matches`, maar met een paar dimensies overgeslagen. `skipKeys` mag
+ * naast dimensiesleutels ook `DATE_FROM`/`DATE_TO` bevatten om het datumbereik
+ * over te slaan.
  *
  * Bestaat voor de correspondentiekaart: die rekent zichzelf uit op de selectie,
  * maar haar hoofdactie is klikken op een tag om erop te filteren. Zou ze op de
  * volledig gefilterde lijst rekenen, dan bleef er na één klik één kolom over en
  * stortte de analyse in. De kaart slaat daarom `tag` en `partij` over bij het
- * rekenen en gebruikt die twee alleen nog om punten te dimmen. */
+ * rekenen en gebruikt die twee alleen nog om punten te dimmen.
+ *
+ * De argumententijdlijn slaat op dezelfde manier `DATE_FROM`/`DATE_TO` over:
+ * klikken op een staaf zet het datumfilter, maar de tijdlijn moet alle
+ * debatdagen blijven tonen om te laten zien wélke dag je selecteerde. */
 export function matchesExcept(argument: Argument, skipKeys: string[]): boolean {
 	for (const dimension of DIMENSIONS) {
 		if (skipKeys.includes(dimension.key)) continue;
@@ -123,8 +129,8 @@ export function matchesExcept(argument: Argument, skipKeys: string[]): boolean {
 	// published_at is naive lokale tijd; het datumdeel volstaat en vergelijkt
 	// als string correct omdat ISO-8601 lexicografisch op datum sorteert.
 	const date = argument.document.published_at?.slice(0, 10);
-	if (filters.van && (!date || date < filters.van)) return false;
-	if (filters.tot && (!date || date > filters.tot)) return false;
+	if (!skipKeys.includes(DATE_FROM) && filters.van && (!date || date < filters.van)) return false;
+	if (!skipKeys.includes(DATE_TO) && filters.tot && (!date || date > filters.tot)) return false;
 	return true;
 }
 

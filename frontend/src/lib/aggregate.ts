@@ -19,11 +19,11 @@ export interface PartyStats extends StanceCounts {
 	party: string;
 }
 
-function pct(n: number, total: number): number {
+export function pct(n: number, total: number): number {
 	return total ? Math.round((1000 * n) / total) / 10 : 0;
 }
 
-function stanceCounts(argumentList: Argument[]): StanceCounts {
+export function stanceCounts(argumentList: Argument[]): StanceCounts {
 	const count = (stance: Stance) => argumentList.filter((a) => a.stance === stance).length;
 	const total = argumentList.length;
 	const pro = count("pro");
