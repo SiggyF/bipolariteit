@@ -1410,6 +1410,23 @@ h3 {
 	text-decoration: none;
 }
 
+.tag-item {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.15rem;
+}
+
+.tag-link {
+	font-size: 0.65rem;
+	color: var(--color-muted);
+	text-decoration: none;
+	line-height: 1;
+}
+
+.tag-link:hover {
+	color: var(--color-accent);
+}
+
 .argument-links {
 	display: flex;
 	gap: 0.75rem;

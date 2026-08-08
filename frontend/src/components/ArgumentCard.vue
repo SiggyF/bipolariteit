@@ -89,7 +89,7 @@ watch(
 			</li>
 		</ul>
 		<ul v-if="argument.tags.length" class="tags">
-			<li v-for="tag in argument.tags" :key="tag.sleutel">
+			<li v-for="tag in argument.tags" :key="tag.sleutel" class="tag-item">
 				<button
 					type="button"
 					class="tag-badge"
@@ -100,6 +100,7 @@ watch(
 				>
 					{{ tag.sleutel }}
 				</button>
+				<a class="tag-link" :href="`/tags/${slugify(tag.sleutel)}/`" title="Bekijk tagpagina">↗</a>
 			</li>
 		</ul>
 

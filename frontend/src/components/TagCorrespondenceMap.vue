@@ -3,6 +3,7 @@ import { computed, onMounted, onUnmounted, ref, watch } from "vue";
 import { useTheme } from "../lib/useTheme";
 import { displayPartyName, partyInitial } from "../lib/parties";
 import { logoSprite } from "../lib/partyLogoSprite";
+import { slugify } from "../lib/slug";
 import { PERSPECTIEVEN } from "../lib/tagIcons.generated";
 import { filters, isActive, matches, toggleValue } from "../lib/filters";
 import { NO_PARTY, type Argument } from "../lib/types";
@@ -849,7 +850,7 @@ const chartOption = computed(() => {
 			extraCssText: "max-width: 240px; white-space: normal; line-height: 1.35;",
 			formatter: (p: any) => {
 				if (p.data.rowLabel !== undefined) return `<strong>${p.data.name}</strong><br/>${p.data.n} tags`;
-				return `<strong>${p.data.name}</strong><br/><span style="opacity:0.7">${p.data.perspectief} &middot; ${p.data.labelgroep}</span><br/>${p.data.beschrijving}<br/><span style="opacity:0.7">${p.data.n}x toegekend</span>`;
+				return `<strong>${p.data.name}</strong><br/><span style="opacity:0.7">${p.data.perspectief} &middot; ${p.data.labelgroep}</span><br/>${p.data.beschrijving}<br/><span style="opacity:0.7">${p.data.n}x toegekend</span><br/><span style="opacity:0.7">klik: filter &middot; ctrl/cmd-klik: tagpagina</span>`;
 			},
 		},
 		legend: {
@@ -945,7 +946,14 @@ function onChartClick(p: any) {
 		else toggleValue("persoon", p.data.rowLabel);
 		return;
 	}
-	if (p.data?.name) toggleValue("tag", p.data.name);
+	if (p.data?.name) {
+		const native = p.event?.event ?? p.event;
+		if (native?.ctrlKey || native?.metaKey || native?.button === 1) {
+			window.open(`/tags/${slugify(p.data.name)}/`, "_blank", "noopener");
+			return;
+		}
+		toggleValue("tag", p.data.name);
+	}
 }
 
 // Legendaklik verbergt hier bewust geen series lokaal (dat zou een tweede,
