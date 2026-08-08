@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import FilterBar from "./FilterBar.vue";
+import ArgumentTimeline from "./ArgumentTimeline.vue";
 import ClaimsHighlights from "./ClaimsHighlights.vue";
 import StatsPanel from "./StatsPanel.vue";
 import TagsPerParty from "./TagsPerParty.vue";
@@ -35,6 +36,8 @@ const columns = computed(() =>
 
 <template>
 	<FilterBar :argumentList="argumentList" :matchCount="filtered.length" />
+
+	<ArgumentTimeline :argumentList="argumentList" />
 
 	<TagCorrespondenceMap :argumentList="argumentList" />
 
