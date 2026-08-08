@@ -53,19 +53,32 @@ interface Segment {
 	pct: number;
 }
 
+// Een aandeel van een paar procent zou zonder ondergrens als een lijn van
+// minder dan 1px renderen -- geen eigen kleurvlak meer, maar een vage rand
+// tussen zijn buren. Zulke segmenten krijgen een leesbare minimumhoogte; de
+// ruimte daarvoor komt uit de segmenten die toch al ruim boven het minimum
+// zitten (evenredig aan hun eigen aandeel), zodat de stapel nog steeds precies
+// de volledige stackHeight vult.
+const MIN_SEGMENT_HEIGHT = 6;
+
 function stackSegments(
-	bucket: TimelineBucket,
 	shares: { key: string; n: number; pct: number; label: string; color: string }[],
 	stackHeight: number,
 ): Segment[] {
+	const aanwezig = shares.filter((s) => s.n > 0);
+	const natural = aanwezig.map((s) => (s.pct / 100) * stackHeight);
+	const klein = natural.map((h) => h < MIN_SEGMENT_HEIGHT);
+	const reserved = klein.filter(Boolean).length * MIN_SEGMENT_HEIGHT;
+	const remaining = Math.max(0, stackHeight - reserved);
+	const sumGroot = natural.reduce((sum, h, i) => sum + (klein[i] ? 0 : h), 0);
+
 	let bottom = 0;
 	const segments: Segment[] = [];
-	for (const share of shares) {
-		if (!share.n) continue;
-		const height = (share.pct / 100) * stackHeight;
+	aanwezig.forEach((share, i) => {
+		const height = klein[i] ? MIN_SEGMENT_HEIGHT : sumGroot ? (natural[i] / sumGroot) * remaining : 0;
 		segments.push({ key: share.key, color: share.color, bottom, height, label: share.label, n: share.n, pct: share.pct });
 		bottom += height;
-	}
+	});
 	return segments;
 }
 
@@ -81,7 +94,7 @@ const volumeBars = computed(() => {
 			label: stanceLabel(stance),
 			color: STANCE_COLORS[stance],
 		}));
-		return { bucket, segments: stackSegments(bucket, shares, stackHeight) };
+		return { bucket, segments: stackSegments(shares, stackHeight) };
 	});
 });
 
@@ -96,7 +109,7 @@ const typologyBars = computed(() => {
 			label: typologyLabel(t.typology),
 			color: TYPOLOGY_COLORS[t.typology],
 		}));
-		return { bucket, segments: stackSegments(bucket, shares, TRACK_HEIGHT), onderDrempel: false };
+		return { bucket, segments: stackSegments(shares, TRACK_HEIGHT), onderDrempel: false };
 	});
 });
 
