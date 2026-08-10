@@ -126,6 +126,14 @@ def build_records(speeches: list[dict], relations: list[dict], fallacies: list[d
     spans_by_speech: dict[int, set] = defaultdict(set)
     fallacies_by_speech: dict[int, set] = defaultdict(set)
 
+    # Eén argument = claim + ALLE premisses die 'm steunen, samengevoegd tot
+    # ÉÉN span (min start, max end) -- niet losse claim- en premisse-spans,
+    # anders krijg je precies de kale-stellingname/onderbouwing-zonder-claim
+    # fragmenten die onze eigen extractie ook zou afwijzen. Groeperen op
+    # (beurt, letterlijke governor-tekst): meerdere Support-rijen met
+    # dezelfde Governor zijn meerdere premisses voor diezelfde claim.
+    argument_groups: dict[tuple[int, str], dict] = {}
+
     n_relation_not_found = n_relation_ambiguous = n_relation_cross_speaker = 0
     for row in relations:
         if row["RelationType"] != "Support" or row["G_type"] != "Claim":
@@ -155,9 +163,16 @@ def build_records(speeches: list[dict], relations: list[dict], fallacies: list[d
             n_relation_ambiguous += 1
         idx = matches[0]
         text = speeches[idx]["text"]
-        for snippet in (dependent, governor):
-            span = _find_span(text, snippet)
-            spans_by_speech[idx].add(span)
+        dep_span = _find_span(text, dependent)
+        gov_span = _find_span(text, governor)
+
+        key = (idx, governor)
+        group = argument_groups.setdefault(key, {"idx": idx, "starts": [], "ends": []})
+        group["starts"].extend([dep_span[0], gov_span[0]])
+        group["ends"].extend([dep_span[1], gov_span[1]])
+
+    for group in argument_groups.values():
+        spans_by_speech[group["idx"]].add((min(group["starts"]), max(group["ends"])))
 
     n_fallacy_not_found = n_fallacy_ambiguous = 0
     for row in fallacies:

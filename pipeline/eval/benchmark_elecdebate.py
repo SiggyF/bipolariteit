@@ -83,15 +83,19 @@ TOPIC_NAME = "Amerikaans verkiezingsdebat"
 # Eerdere versie deed alsof er één vaste pro/contra-as voor het hele debat
 # bestond ("Generieke pro/contra-as: steunt de spreker het beleid..."), maar
 # die is er niet: elk argument kan over een ander specifiek beleidsonderwerp
-# gaan (NAFTA nu, Iran zo), dus doen alsof er één as is is net zo misleidend
-# als er geen omschrijving geven. Nu eerlijk: leid de as per argument af.
+# gaan (NAFTA nu, Iran zo). De "leid de as per argument zelf af"-poging
+# daarna was zelf ook fout: "bekritiseert het beleid" is geen pool (een
+# maatregel kan volgens de spreker te ver gaan óf juist niet ver genoeg --
+# exact de valkuil waar pipeline/prompts/extract_argument.md elders expliciet
+# voor waarschuwt), en het is sowieso een zware, niet-triviale secundaire
+# taak per argument voor een veld dat deze eval NIET scoort (zie
+# docs/eval-elecdebate.md). Daarom nu simpelweg: altijd "unclear".
 TOPIC_DESCRIPTION = (
-    "Dit debat behandelt uiteenlopende specifieke beleidskwesties (bijvoorbeeld "
-    "economie, immigratie, buitenlands beleid) die per fragment kunnen "
-    "verschillen -- er is dus geen vaste pro/contra-as voor het hele debat. "
-    "Bepaal per argument zelf waar het inhoudelijk over gaat, en leid de "
-    "pro/contra-richting daaruit af: steunt de spreker het besproken beleid "
-    "(pro), of bekritiseert/verwerpt de spreker het (contra)?"
+    "Dit debat behandelt uiteenlopende specifieke beleidskwesties die per "
+    "fragment kunnen verschillen. Stance wordt in deze evaluatie niet "
+    "beoordeeld: kies altijd \"unclear\", ook als een pro/contra-richting "
+    "evident lijkt. Besteed je aandacht aan het correct afbakenen van "
+    "standpunt + onderbouwing zelf, niet aan de pro/contra-richting."
 )
 
 # Placeholder stance/typology voor de tagging-eval: de tag-prompt verwacht

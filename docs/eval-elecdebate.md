@@ -1,8 +1,10 @@
 # Evalharnas: ELECDEBATE60TO16 (issue #62)
 
-**Status**: eerste echte resultaat binnen (20 sprekersbeurten, zie
-"Eerste resultaat" hieronder). `make validate` maakt herhaalbare steekproeven
-mogelijk; resultaten landen op `/validatie-rapportage`.
+**Status**: harnas + gouden-datareconstructie werken correct (span-merge- en
+dedup-fixes verwerkt); eerdere resultaten waren gemeten op nog-foutieve
+gouden data en zijn ongeldig verklaard (zie "Eerste resultaten" hieronder).
+`make validate` maakt herhaalbare, cumulatieve steekproeven mogelijk;
+resultaten landen op `/validatie-rapportage`.
 
 ## Waarom
 
@@ -104,9 +106,20 @@ alleen nog als referentiemateriaal dienen.
   waarvan de Governor een Claim is en `Speaker1 == Speaker2` (relaties die
   over sprekersbeurten heen lopen vallen buiten onze per-beurt eenheid).
   Eerst matchen op (spreker, exacte datum), met terugval op (spreker, jaar)
-  als de datum niet uniek matcht.
+  als de datum niet uniek matcht. **Alle premisses die dezelfde claim
+  steunen worden samengevoegd tot ÉÉN span** (min start, max end over
+  Dependent + Governor van alle bijbehorende rijen), gegroepeerd op
+  (sprekersbeurt, letterlijke Governor-tekst) -- niet losse claim- en
+  premisse-fragmenten. Een eerdere versie voegde ze abusievelijk apart toe,
+  wat kale stellingnames zonder onderbouwing en onderbouwingen zonder claim
+  als afzonderlijke "argumenten" opleverde (bij handmatige review van
+  `/validatie-rapportage` ontdekt).
 - **Drogredenen** (`fallacy_second_version.csv`): zelfde matchstrategie,
-  (spreker, datum) met terugval op (spreker, jaar).
+  (spreker, datum) met terugval op (spreker, jaar). Genest-dubbele
+  annotaties (dezelfde drogreden op twee granulariteiten, bv. een volledige
+  twee-zinsuiting én een aparte rij voor alleen de tweede zin) worden
+  verwijderd via `_drop_nested_fallacies()`: een kortere span die volledig
+  binnen een langere met hetzelfde label valt, vervalt.
 - Bij een niet-unieke match wordt de eerste kandidaat gebruikt; aantallen
   niet-gevonden/ambigue/sprekersoverschrijdende matches worden bij het
   draaien geprint (geen giswerk, wel zichtbaar wat niet oplosbaar was).
@@ -119,7 +132,7 @@ uv run python scripts/convert_elecdebate.py            # jaren 2016,2020 (defaul
 uv run python scripts/convert_elecdebate.py --years all # volledige dataset
 ```
 
-Resultaat (2016+2020): 318 records, 999 argument-spans, 336 drogreden-citaten.
+Resultaat (2016+2020): 318 records, 627 argument-spans, 324 drogreden-citaten.
 
 Output (`data/raw/elecdebate60to16/test.jsonl`) blijft, net als de brondata,
 onder `data/raw/` (gitignored) -- we distribueren de dataset zelf niet mee.
@@ -210,22 +223,31 @@ geven de extractieprompt context. Twee dingen zijn hierin gecorrigeerd:
   hier `DEBATE_CONTEXT = "Amerikaans presidentsverkiezingsdebat"` mee. Dit is
   wél een wijziging aan de productieprompt zelf (`extract_argument.md`),
   bewust en beperkt tot het parametriseren van deze ene aanname.
-- **`TOPIC_DESCRIPTION` deed eerder alsof er één vaste pro/contra-as voor het
-  hele debat was** ("Generieke pro/contra-as: steunt de spreker het
-  beleid..."). Die is er niet: elk argument kan over een ander specifiek
-  onderwerp gaan (NAFTA nu, Iran zo). Nu eerlijk: de tekst legt uit dat de as
-  per argument bepaald moet worden op basis van het specifieke onderwerp dat
-  op dat moment besproken wordt, in plaats van te doen alsof er één
-  overkoepelende as bestaat.
+- **`TOPIC_DESCRIPTION` is door twee versies heen gegaan.** Eerst deed die
+  alsof er één vaste pro/contra-as voor het hele debat was ("Generieke
+  pro/contra-as: steunt de spreker het beleid..."). Die is er niet: elk
+  argument kan over een ander specifiek onderwerp gaan (NAFTA nu, Iran zo).
+  De vervolgpoging ("leid de as per argument zelf af") was zelf ook fout:
+  "bekritiseert het beleid" is geen pool op zich (een maatregel kan te ver
+  gaan óf juist niet ver genoeg -- exact de valkuil waar
+  `extract_argument.md` elders expliciet voor waarschuwt), en het is
+  sowieso een zware secundaire taak per argument voor een veld dat deze
+  eval niet scoort. Nu simpelweg: het model wordt geïnstrueerd altijd
+  `"unclear"` te kiezen, zodat er geen reasoning-capaciteit verspild wordt
+  aan een dimensie die toch niet meetelt.
 
-## Eerste resultaat (2026-08-10, 5-20 sprekersbeurten)
+## Eerste resultaten -- ACHTERHAALD (2026-08-10, vóór de span-fix)
 
-Onderstaande cijfers zijn van vóór de cumulatieve `evaluated_indices`-aanpak
-hierboven (elke run was toen nog een losse, geïsoleerde steekproef van de
-eerste N records, niet optellend). Het gecommitte
-`data/export/eval/elecdebate60to16.json` bevat inmiddels een kleine
-cumulatieve verificatiesteekproef (6 records); grotere cumulatieve runs
-volgen via `make validate`.
+**De cijfers hieronder zijn ongeldig en blijven alleen als geschiedenis
+staan.** Ze zijn gemeten vóór twee fixes die de gouden data zelf
+veranderden: (1) claim+premisse werden niet samengevoegd tot één
+argument-span (zie "Conversie" hierboven) -- veel getoonde "argumenten"
+waren kale stellingnames of losse onderbouwingen, precies wat onze eigen
+extractie ook zou afwijzen; (2) geneste dubbele drogreden-annotaties waren
+nog niet verwijderd. Beide ontdekt bij handmatige review van
+`/validatie-rapportage` -- zie de git-historie van dit bestand voor de
+motivatie per fix. Een nieuwe, geldige eerste meting volgt hieronder zodra
+die gedraaid is.
 
 | Model | Metriek | precision | recall | F1 | detail |
 |---|---|---|---|---|---|
@@ -234,19 +256,13 @@ volgen via `make validate`.
 | `google/gemma-4-e4b` (n=5) | Argumentherkenning | 0.34 | 0.60 | 0.44 | tp=913 fp=1743 fn=611 (tekens) |
 | `google/gemma-4-e4b` (n=5) | Drogreden-tags | 1.00 | 0.10 | 0.18 | tp=1 fp=0 fn=9 |
 
-Interpretatie (qwen, n=20): de tagger is niet overijverig (0 valse
-positieven), maar mist het merendeel van de daadwerkelijke Ad Hominem/Appeal
-to Emotion-instanties zelfs met de exact juiste tekstspan gegeven -- dat is
-een recall-probleem in de tagprompt zelf, niet (meer) een gevolg van gemiste
-extractie. Zeer kleine steekproeven; geen conclusie voor productiegebruik,
-wel een eerste concreet signaal. Herhaalbaar via `make validate`.
-
-Kanttekening: tijdens verificatie gaf `qwen/qwen3.6-27b` op een ander moment
-(zelfde prompts, zelfde LM Studio-instance) consistent lege extracties (6
-completion-tokens, geen redenering) waar `google/gemma-4-e4b` normaal
-reageerde -- lijkt een lokale model-state-kwestie in LM Studio, geen bug in
-het harnas. Bij vreemde resultaten: eerst het model in LM Studio herladen
-voor verder te zoeken in de code.
+Kanttekening die wel blijft staan: tijdens verificatie gaf
+`qwen/qwen3.6-27b` op een ander moment (zelfde prompts, zelfde LM
+Studio-instance) consistent lege extracties (6 completion-tokens, geen
+redenering) waar `google/gemma-4-e4b` normaal reageerde -- lijkt een lokale
+model-state-kwestie in LM Studio, geen bug in het harnas. Bij vreemde
+resultaten: eerst het model in LM Studio herladen voor verder te zoeken in
+de code.
 
 ## Nog te doen
 
