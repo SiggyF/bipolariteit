@@ -155,6 +155,19 @@ Zie `pipeline/eval/label_mapping.py` voor de mapping zelf.
   stdout-rapport ook `data/export/eval/<dataset>.json` weg (samenvatting +
   per-voorbeeld items voor `/validatie-rapportage`).
 
+**Elke run bouwt voort op de vorige**, net als `extraction_attempted_at`/
+`tagged_at` dat doen in de productiepipeline: de export bevat
+`evaluated_indices` (welke regels van `<dataset>.jsonl` al gescoord zijn),
+en `--limit` selecteert steeds de eerstvolgende, nog niet gescoorde records
+i.p.v. telkens dezelfde eerste N. tp/fp/fn-tellingen en items worden
+opgeteld bij de vorige run. Bij een ander model dan de vorige run begint de
+telling voor dat model opnieuw (modellen door elkaar optellen zou een
+misleidend gemiddelde geven); `--fresh` forceert dat ook expliciet, bv. na
+een prompt-wijziging. Kanttekening: dit steunt op een stabiele
+recordvolgorde in `<dataset>.jsonl` -- bij een andere `--years`-selectie of
+bijgewerkte brondata kan record-index N iets anders zijn gaan betekenen dan
+bij de vorige run.
+
 Draaien via `make validate` (root-`Makefile`, vars `DATASET`/`LIMIT`/`MODEL`/
 `BASE_URL`, zelfde vorm als `make extract`/`make tag`):
 
@@ -188,6 +201,13 @@ ongewijzigd, zie boven) -- die mismatch valt niet te verhelpen zonder de
 productieprompt aan te passen.
 
 ## Eerste resultaat (2026-08-10, 5-20 sprekersbeurten)
+
+Onderstaande cijfers zijn van vóór de cumulatieve `evaluated_indices`-aanpak
+hierboven (elke run was toen nog een losse, geïsoleerde steekproef van de
+eerste N records, niet optellend). Het gecommitte
+`data/export/eval/elecdebate60to16.json` bevat inmiddels een kleine
+cumulatieve verificatiesteekproef (6 records); grotere cumulatieve runs
+volgen via `make validate`.
 
 | Model | Metriek | precision | recall | F1 | detail |
 |---|---|---|---|---|---|

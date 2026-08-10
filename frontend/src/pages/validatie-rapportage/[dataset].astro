@@ -43,9 +43,10 @@ function pct(value: number) {
 	<a href="/validatie-rapportage" class="back-link">&larr; validatie-rapportage</a>
 	<h1>Validatie — {dataset}</h1>
 	<p class="panel-note">
-		Steekproef van {data.n_records} sprekersbeurten, model {data.model}
-		({data.n_extract_errors} extractiefouten, {data.n_tag_errors} tagfouten). Laatst bijgewerkt: {generated}.
-		Zie <code>docs/eval-elecdebate.md</code> in de repository voor de volledige methodologie.
+		Cumulatief {data.n_records} van {data.total_records} sprekersbeurten gescoord, model {data.model}
+		({data.n_extract_errors} extractiefouten, {data.n_tag_errors} tagfouten totaal). Laatst bijgewerkt: {generated}.
+		Elke <code>make validate</code>-run scoort de eerstvolgende, nog niet gescoorde beurten en telt op bij deze
+		cijfers. Zie <code>docs/eval-elecdebate.md</code> in de repository voor de volledige methodologie.
 	</p>
 
 	<section class="validation-summary">

@@ -36,7 +36,7 @@ const datasets = Object.values(evalModules)
 				{" — "}
 				argumentherkenning F1 {Math.round(data.summary.argument_detection.f1 * 100)}%,
 				drogreden-tags F1 {Math.round(data.summary.fallacy_tags.f1 * 100)}%
-				({data.n_records} sprekersbeurten, model {data.model})
+				({data.n_records}/{data.total_records} sprekersbeurten, model {data.model})
 			</li>
 		))}
 	</ul>

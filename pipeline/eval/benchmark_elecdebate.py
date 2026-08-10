@@ -15,6 +15,22 @@ niet op wat onze eigen extractie heeft gevonden (evaluate_extraction) --
 anders werkt een extractiefout door in de tag-score en meet die niet meer
 de tagkwaliteit op zich.
 
+Elke run bouwt VOORT op de vorige: data/export/eval/<dataset>.json bevat
+welke record-indices al gescoord zijn (`evaluated_indices`), en --limit
+selecteert steeds de eerstvolgende, nog niet gescoorde records i.p.v.
+telkens dezelfde eerste N -- zelfde idee als extraction_attempted_at/
+tagged_at in de productiepipeline (extract_arguments.py/tag_arguments.py),
+maar zonder DB: de voortgang staat in de export zelf. Resultaten
+(tp/fp/fn-tellingen, items) worden opgeteld bij de vorige run, niet
+overschreven. Bij een ander model dan de vorige run (of --fresh) begint de
+telling opnieuw -- modellen door elkaar optellen zou een misleidend
+gemiddelde geven.
+
+Kanttekening: de recordvolgorde in <dataset>.jsonl moet stabiel blijven
+(zelfde `--years`, ongewijzigde brondata) wil index-gebaseerde voortgang
+kloppen; bij een andere `--years`-selectie of bijgewerkte brondata kan
+record-index N iets anders zijn gaan betekenen dan bij de vorige run.
+
 Schrijft naast het stdout-rapport ook data/export/eval/<dataset>.json weg
 (samenvatting + per-voorbeeld items), voor de /validatie-rapportage-pagina
 in de frontend.
@@ -22,6 +38,7 @@ in de frontend.
 Gebruik (of via `make validate`, zie root-Makefile):
     uv run python -m pipeline.eval.benchmark_elecdebate <pad-naar-jsonl> <model>
     uv run python -m pipeline.eval.benchmark_elecdebate <pad-naar-jsonl> <model> --limit 20 --base-url http://localhost:1234/v1
+    uv run python -m pipeline.eval.benchmark_elecdebate <pad-naar-jsonl> <model> --fresh
 """
 
 import argparse
@@ -170,7 +187,22 @@ def evaluate_tagging(record: EvalRecord, model, base_url, timeout, tag_catalogue
     return results, items, n_errors
 
 
-def run(records, model, base_url, timeout=120.0):
+def select_unevaluated(records: list[EvalRecord], evaluated_indices: set[int], limit: int) -> list[tuple[int, EvalRecord]]:
+    """Volgende `limit` records (met hun index in `records`) die nog niet in
+    `evaluated_indices` zitten, in volgorde."""
+    selected = []
+    for i, record in enumerate(records):
+        if len(selected) >= limit:
+            break
+        if i in evaluated_indices:
+            continue
+        selected.append((i, record))
+    return selected
+
+
+def run(indexed_records: list[tuple[int, EvalRecord]], model, base_url, timeout=120.0):
+    """Scoort precies de meegegeven (index, record)-paren -- de aanroeper
+    bepaalt via select_unevaluated welke dat zijn."""
     conn = db.connect()
     tag_catalogue, tag_skeleton = build_tag_catalogue(conn)
     valid_tags = load_valid_tags(conn)
@@ -181,8 +213,10 @@ def run(records, model, base_url, timeout=120.0):
     tagging_items = []
     n_extract_errors = 0
     n_tag_errors = 0
+    new_indices = []
 
-    for i, record in enumerate(records):
+    for n, (i, record) in enumerate(indexed_records):
+        new_indices.append(i)
         try:
             span_prf, record_extraction_items = evaluate_extraction(record, model, base_url, timeout)
             span_results.append(span_prf)
@@ -197,10 +231,11 @@ def run(records, model, base_url, timeout=120.0):
         fallacy_results.extend(record_fallacy_results)
         tagging_items.extend(record_tagging_items)
         n_tag_errors += record_tag_errors
-        logger.info("[record %d/%d] klaar (%d gouden drogreden-spans getagd)", i + 1, len(records), len(record_fallacy_results))
+        logger.info("[record %d/%d, index %d] klaar (%d gouden drogreden-spans getagd)",
+                    n + 1, len(indexed_records), i, len(record_fallacy_results))
 
     return {
-        "n_records": len(records),
+        "new_indices": new_indices,
         "n_extract_errors": n_extract_errors,
         "n_tag_errors": n_tag_errors,
         "span_overlap": aggregate(span_results),
@@ -210,14 +245,15 @@ def run(records, model, base_url, timeout=120.0):
     }
 
 
-def print_report(model, stats):
-    print(f"Model: {model} | {stats['n_records']} records "
-          f"({stats['n_extract_errors']} extractiefouten, {stats['n_tag_errors']} tagfouten)\n")
-    span = stats["span_overlap"]
+def print_report(model, merged, total_records):
+    n_scored = len(merged["evaluated_indices"])
+    print(f"Model: {model} | {n_scored}/{total_records} records ooit gescoord "
+          f"({merged['n_extract_errors']} extractiefouten, {merged['n_tag_errors']} tagfouten totaal)\n")
+    span = merged["span_overlap"]
     print(f"Argumentherkenning (tekenniveau span-overlap): "
           f"precision={span.precision:.2f} recall={span.recall:.2f} f1={span.f1:.2f} "
           f"(tp={span.true_positives} fp={span.false_positives} fn={span.false_negatives})")
-    fallacy = stats["fallacy_tags"]
+    fallacy = merged["fallacy_tags"]
     print(f"Drogreden-tags ({', '.join(FALLACY_TAG_MAP.values())}): "
           f"precision={fallacy.precision:.2f} recall={fallacy.recall:.2f} f1={fallacy.f1:.2f} "
           f"(tp={fallacy.true_positives} fp={fallacy.false_positives} fn={fallacy.false_negatives})")
@@ -230,25 +266,80 @@ def _prf_to_dict(r: PrecisionRecallF1) -> dict:
     }
 
 
-def write_export(dataset: str, model: str, stats: dict) -> Path:
+def _prf_from_dict(d: dict) -> PrecisionRecallF1:
+    """Reconstrueert een PrecisionRecallF1 puur voor de tp/fp/fn-tellingen
+    (precision/recall/f1 worden altijd herberekend via aggregate(), nooit
+    los ingelezen) -- zo kan een vorige run gecombineerd worden met een
+    nieuwe via dezelfde aggregate()-functie die ook meerdere records
+    binnen één run samenvoegt."""
+    return PrecisionRecallF1(0.0, 0.0, 0.0, d["tp"], d["fp"], d["fn"])
+
+
+def load_previous(export_path: Path, model: str, fresh: bool) -> dict:
+    """Eerder geaccumuleerde voortgang voor dit dataset+model, of een lege
+    staat als er niets is, --fresh is gevraagd, of het model afwijkt van de
+    vorige run (modellen door elkaar optellen zou een misleidend gemiddelde
+    geven -- dan begint de telling voor dit model opnieuw)."""
+    empty = {
+        "evaluated_indices": set(), "n_extract_errors": 0, "n_tag_errors": 0,
+        "span_overlap": PrecisionRecallF1(0.0, 0.0, 0.0, 0, 0, 0),
+        "fallacy_tags": PrecisionRecallF1(0.0, 0.0, 0.0, 0, 0, 0),
+        "extraction_items": [], "tagging_items": [],
+    }
+    if fresh or not export_path.exists():
+        return empty
+    try:
+        prev = json.loads(export_path.read_text())
+    except (json.JSONDecodeError, OSError):
+        return empty
+    if prev.get("model") != model:
+        logger.info("Vorige run gebruikte een ander model (%s -> %s), telling begint opnieuw voor dit model.",
+                    prev.get("model"), model)
+        return empty
+    return {
+        "evaluated_indices": set(prev.get("evaluated_indices", [])),
+        "n_extract_errors": prev.get("n_extract_errors", 0),
+        "n_tag_errors": prev.get("n_tag_errors", 0),
+        "span_overlap": _prf_from_dict(prev["summary"]["argument_detection"]),
+        "fallacy_tags": _prf_from_dict(prev["summary"]["fallacy_tags"]),
+        "extraction_items": prev.get("extraction_items", []),
+        "tagging_items": prev.get("tagging_items", []),
+    }
+
+
+def merge(previous: dict, new: dict) -> dict:
+    return {
+        "evaluated_indices": sorted(set(previous["evaluated_indices"]) | set(new["new_indices"])),
+        "n_extract_errors": previous["n_extract_errors"] + new["n_extract_errors"],
+        "n_tag_errors": previous["n_tag_errors"] + new["n_tag_errors"],
+        "span_overlap": aggregate([previous["span_overlap"], new["span_overlap"]]),
+        "fallacy_tags": aggregate([previous["fallacy_tags"], new["fallacy_tags"]]),
+        "extraction_items": previous["extraction_items"] + new["extraction_items"],
+        "tagging_items": previous["tagging_items"] + new["tagging_items"],
+    }
+
+
+def write_export(dataset: str, model: str, merged: dict, total_records: int) -> Path:
     """Schrijft data/export/eval/<dataset>.json -- vast pad, overschreven per
-    run, zelfde patroon als pipeline/build_static_data.py/scripts/
-    dump_ca_fixture.py (provenance inline via generated_at, geen
-    bestandsnaam-versienummer)."""
+    run maar met CUMULATIEVE inhoud (zie module-docstring): bevat
+    evaluated_indices zodat een volgende run weet welke records al gedaan
+    zijn, i.p.v. steeds dezelfde eerste --limit records te herscoren."""
     EXPORT_DIR.mkdir(parents=True, exist_ok=True)
     export = {
         "dataset": dataset,
         "model": model,
         "generated_at": datetime.now(timezone.utc).isoformat(),
-        "n_records": stats["n_records"],
-        "n_extract_errors": stats["n_extract_errors"],
-        "n_tag_errors": stats["n_tag_errors"],
+        "n_records": len(merged["evaluated_indices"]),
+        "total_records": total_records,
+        "evaluated_indices": merged["evaluated_indices"],
+        "n_extract_errors": merged["n_extract_errors"],
+        "n_tag_errors": merged["n_tag_errors"],
         "summary": {
-            "argument_detection": _prf_to_dict(stats["span_overlap"]),
-            "fallacy_tags": _prf_to_dict(stats["fallacy_tags"]),
+            "argument_detection": _prf_to_dict(merged["span_overlap"]),
+            "fallacy_tags": _prf_to_dict(merged["fallacy_tags"]),
         },
-        "extraction_items": stats["extraction_items"],
-        "tagging_items": stats["tagging_items"],
+        "extraction_items": merged["extraction_items"],
+        "tagging_items": merged["tagging_items"],
     }
     out_path = EXPORT_DIR / f"{dataset}.json"
     out_path.write_text(json.dumps(export, ensure_ascii=False, indent=2))
@@ -260,19 +351,33 @@ def main():
     parser.add_argument("jsonl_path", help="pad naar genormaliseerde JSONL (zie pipeline/eval/schema.py)")
     parser.add_argument("model")
     parser.add_argument("--dataset", default="elecdebate60to16", help="datasetnaam voor de export (default: %(default)s)")
-    parser.add_argument("--limit", type=int, default=15, help="max aantal records deze run (default 15)")
+    parser.add_argument("--limit", type=int, default=15, help="max aantal NIEUWE records deze run (default 15)")
+    parser.add_argument("--fresh", action="store_true", help="negeer eerder geaccumuleerde voortgang en begin opnieuw")
     parser.add_argument("--base-url", default="http://localhost:1234/v1")
     parser.add_argument("--timeout", type=float, default=120.0)
     args = parser.parse_args()
 
     logging.basicConfig(level=logging.INFO, format="%(message)s")
     records = load_jsonl(args.jsonl_path)
-    if args.limit:
-        records = records[:args.limit]
-    stats = run(records, args.model, args.base_url, args.timeout)
-    print_report(args.model, stats)
-    out_path = write_export(args.dataset, args.model, stats)
-    print(f"\nExport geschreven naar {out_path}")
+    export_path = EXPORT_DIR / f"{args.dataset}.json"
+    previous = load_previous(export_path, args.model, args.fresh)
+
+    indexed_records = select_unevaluated(records, previous["evaluated_indices"], args.limit)
+    if not indexed_records:
+        print(f"Alle {len(records)} records al gescoord voor model {args.model} -- geen nieuwe steekproef "
+              f"(gebruik --fresh om opnieuw te beginnen).\n")
+        merged = merge(previous, {"new_indices": [], "n_extract_errors": 0, "n_tag_errors": 0,
+                                   "span_overlap": PrecisionRecallF1(0.0, 0.0, 0.0, 0, 0, 0),
+                                   "fallacy_tags": PrecisionRecallF1(0.0, 0.0, 0.0, 0, 0, 0),
+                                   "extraction_items": [], "tagging_items": []})
+        print_report(args.model, merged, len(records))
+        return
+
+    new = run(indexed_records, args.model, args.base_url, args.timeout)
+    merged = merge(previous, new)
+    print_report(args.model, merged, len(records))
+    out_path = write_export(args.dataset, args.model, merged, len(records))
+    print(f"\nExport geschreven naar {out_path} ({len(merged['evaluated_indices'])}/{len(records)} records ooit gescoord)")
 
 
 if __name__ == "__main__":
