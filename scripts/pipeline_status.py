@@ -27,7 +27,12 @@ import argparse
 import logging
 
 from pipeline.db import db
-from pipeline.extract_arguments import PROMPT_VERSION as EXTRACT_PROMPT_VERSION
+from pipeline.extract_arguments import (
+    EXCLUDED_ACTIVITEIT_SOORTEN,
+    PROMPT_VERSION as EXTRACT_PROMPT_VERSION,
+    TOPIC_TITLE_KEYWORDS,
+)
+from pipeline.periodes import PeriodeIndex
 from pipeline.redactie_check import PROMPT_VERSION as REDACTIE_PROMPT_VERSION
 from pipeline.tag_arguments import PROMPT_VERSION as TAG_PROMPT_VERSION
 
@@ -38,17 +43,33 @@ def _count(conn, query, params=()):
     return conn.execute(query, params).fetchone()[0]
 
 
-def topic_status(conn, topic_id, topic_slug):
+def _count_pending_extraction(conn, topic_id, topic_slug, vanaf):
+    """Zelfde filters als fetch_pending_documents in extract_arguments.py,
+    anders telt dit mee wat make extract nooit oppakt (documenten van vóór
+    de kamerperiode-drempel, procedurele activiteitsoorten, titelfilter)."""
+    conditions = [
+        "topic_id = ?",
+        "extraction_attempted_at IS NULL",
+        "is_voorzitter_turn = 0",
+        "published_at >= ?",
+        f"activiteit_soort NOT IN ({','.join('?' * len(EXCLUDED_ACTIVITEIT_SOORTEN))})",
+    ]
+    params = [topic_id, vanaf, *EXCLUDED_ACTIVITEIT_SOORTEN]
+
+    title_keywords = TOPIC_TITLE_KEYWORDS.get(topic_slug, [])
+    if title_keywords:
+        conditions.append("(" + " OR ".join("LOWER(title) LIKE ?" for _ in title_keywords) + ")")
+        params.extend(f"%{keyword.lower()}%" for keyword in title_keywords)
+
+    return _count(conn, f"SELECT COUNT(*) FROM documents WHERE {' AND '.join(conditions)}", params)
+
+
+def topic_status(conn, topic_id, topic_slug, vanaf):
     total_documents = _count(conn, "SELECT COUNT(*) FROM documents WHERE topic_id = ?", (topic_id,))
     voorzitter_turns = _count(
         conn, "SELECT COUNT(*) FROM documents WHERE topic_id = ? AND is_voorzitter_turn = 1", (topic_id,)
     )
-    pending_extraction = _count(
-        conn,
-        """SELECT COUNT(*) FROM documents
-           WHERE topic_id = ? AND extraction_attempted_at IS NULL AND is_voorzitter_turn = 0""",
-        (topic_id,),
-    )
+    pending_extraction = _count_pending_extraction(conn, topic_id, topic_slug, vanaf)
     outdated_extraction = _count(
         conn,
         """SELECT COUNT(*) FROM documents
@@ -108,12 +129,14 @@ def fetch_topics(conn, topic_slug=None):
 
 
 def print_report(conn, topics):
+    vanaf = PeriodeIndex().drempel
     logger.info(
         "Huidige promptversies: extract=%s tag=%s redactie=%s",
         EXTRACT_PROMPT_VERSION, TAG_PROMPT_VERSION, REDACTIE_PROMPT_VERSION,
     )
+    logger.info("Verwerkingsdrempel (publicatiedatum): vanaf %s", vanaf)
     for topic in topics:
-        status = topic_status(conn, topic["id"], topic["slug"])
+        status = topic_status(conn, topic["id"], topic["slug"], vanaf)
         missing_description = " ⚠️ GEEN description (extractie faalt hard)" if not topic["description"] else ""
         logger.info("")
         logger.info("=== %s (%s)%s ===", topic["name"], topic["slug"], missing_description)
