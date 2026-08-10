@@ -1,0 +1,109 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const evalModules = import.meta.glob("../../../../data/export/eval/*.json", { eager: true });
+
+export function getStaticPaths() {
+	const modules = import.meta.glob("../../../../data/export/eval/*.json", { eager: true });
+	return Object.values(modules).map((mod: any) => ({
+		params: { dataset: mod.default.dataset },
+	}));
+}
+
+const { dataset } = Astro.params;
+const mod: any = Object.values(evalModules).find((m: any) => m.default.dataset === dataset);
+const data = mod.default;
+
+const generated = new Date(data.generated_at).toLocaleString("nl-NL", { dateStyle: "medium", timeStyle: "short" });
+
+const EXTRACTION_OUTCOME_LABELS: Record<string, string> = {
+	gevonden: "Gevonden",
+	gemist: "Gemist",
+	hallucinatie: "Hallucinatie (niet in de gouden data)",
+};
+const TAGGING_OUTCOME_LABELS: Record<string, string> = {
+	correct: "Correct",
+	gemist: "Gemist",
+	onterecht: "Onterecht toegekend",
+};
+
+function groupBy<T extends { outcome: string }>(items: T[], order: string[]) {
+	return order.map((outcome) => ({ outcome, items: items.filter((item) => item.outcome === outcome) }));
+}
+
+const extractionGroups = groupBy(data.extraction_items, ["gevonden", "gemist", "hallucinatie"]);
+const taggingGroups = groupBy(data.tagging_items, ["correct", "gemist", "onterecht"]);
+
+function pct(value: number) {
+	return `${Math.round(value * 100)}%`;
+}
+---
+
+<BaseLayout title={`Validatie — ${dataset} — Bipolariteit`} class="about status-page">
+	<a href="/validatie-rapportage" class="back-link">&larr; validatie-rapportage</a>
+	<h1>Validatie — {dataset}</h1>
+	<p class="panel-note">
+		Steekproef van {data.n_records} sprekersbeurten, model {data.model}
+		({data.n_extract_errors} extractiefouten, {data.n_tag_errors} tagfouten). Laatst bijgewerkt: {generated}.
+		Zie <code>docs/eval-elecdebate.md</code> in de repository voor de volledige methodologie.
+	</p>
+
+	<section class="validation-summary">
+		<div class="validation-summary-card">
+			<h2>Argumentherkenning</h2>
+			<p class="panel-note">Vindt onze extractie dezelfde tekstspannen als de dataset (standpunt + onderbouwing)?</p>
+			<dl>
+				<dt>Precision</dt><dd>{pct(data.summary.argument_detection.precision)}</dd>
+				<dt>Recall</dt><dd>{pct(data.summary.argument_detection.recall)}</dd>
+				<dt>F1</dt><dd>{pct(data.summary.argument_detection.f1)}</dd>
+			</dl>
+		</div>
+		<div class="validation-summary-card">
+			<h2>Drogreden-tags</h2>
+			<p class="panel-note">Kent onze tagprompt de juiste drogreden toe op de gouden spans van de dataset?</p>
+			<dl>
+				<dt>Precision</dt><dd>{pct(data.summary.fallacy_tags.precision)}</dd>
+				<dt>Recall</dt><dd>{pct(data.summary.fallacy_tags.recall)}</dd>
+				<dt>F1</dt><dd>{pct(data.summary.fallacy_tags.f1)}</dd>
+			</dl>
+		</div>
+	</section>
+
+	<h2>Argumentherkenning — voorbeelden</h2>
+	{extractionGroups.map(({ outcome, items }) => (
+		<details open={outcome !== "gevonden"}>
+			<summary>{EXTRACTION_OUTCOME_LABELS[outcome]} ({items.length})</summary>
+			<ul class="llm-call-list">
+				{items.map((item: any) => (
+					<li class={`llm-call-item validation-outcome--${outcome}`}>
+						<div class="llm-call-meta">
+							<span>{item.speaker ?? "onbekend"}</span>
+						</div>
+						<p class="llm-call-text">{item.text}</p>
+					</li>
+				))}
+			</ul>
+			{items.length === 0 && <p class="panel-note">Geen voorbeelden in deze categorie.</p>}
+		</details>
+	))}
+
+	<h2>Drogreden-tags — voorbeelden</h2>
+	{taggingGroups.map(({ outcome, items }) => (
+		<details open={outcome !== "correct"}>
+			<summary>{TAGGING_OUTCOME_LABELS[outcome]} ({items.length})</summary>
+			<ul class="llm-call-list">
+				{items.map((item: any) => (
+					<li class={`llm-call-item validation-outcome--${outcome}`}>
+						<div class="llm-call-meta">
+							<span>{item.speaker ?? "onbekend"}</span>
+							<span>verwacht: {item.verwacht.length ? item.verwacht.join(", ") : "—"}</span>
+							<span>voorspeld: {item.voorspeld.length ? item.voorspeld.join(", ") : "—"}</span>
+						</div>
+						<p class="llm-call-text">{item.quote_text}</p>
+					</li>
+				))}
+			</ul>
+			{items.length === 0 && <p class="panel-note">Geen voorbeelden in deze categorie.</p>}
+		</details>
+	))}
+</BaseLayout>

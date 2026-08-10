@@ -1999,6 +1999,51 @@ a.card-item:hover {
 	overflow-y: auto;
 }
 
+.validation-summary {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--space-2);
+	margin: var(--space-2) 0;
+}
+
+.validation-summary-card {
+	flex: 1 1 240px;
+	border: 1px solid var(--color-border);
+	background: var(--color-card-bg);
+	padding: 0.8rem 1rem;
+}
+
+.validation-summary-card dl {
+	display: grid;
+	grid-template-columns: auto auto;
+	gap: 0.2rem 0.8rem;
+	margin: 0.4rem 0 0;
+}
+
+.validation-summary-card dt {
+	color: var(--color-muted);
+}
+
+.validation-summary-card dd {
+	margin: 0;
+	font-family: var(--font-mono);
+	text-align: right;
+}
+
+.validation-outcome--gevonden,
+.validation-outcome--correct {
+	border-left: 4px solid var(--color-pro);
+}
+
+.validation-outcome--gemist {
+	border-left: 4px solid var(--color-unclear);
+}
+
+.validation-outcome--hallucinatie,
+.validation-outcome--onterecht {
+	border-left: 4px solid var(--color-contra);
+}
+
 .perspectief-swatch {
 	display: inline-block;
 	width: 14px;

@@ -172,19 +172,43 @@ uv run python -m pipeline.eval.benchmark_elecdebate \
     --base-url http://localhost:1234/v1 --limit 20
 ```
 
-## Eerste resultaat (2026-08-10, 20 sprekersbeurten, `qwen/qwen3.6-27b`)
+Resultaten bekijken (samenvatting + per-voorbeeld items, gegroepeerd op
+gevonden/gemist/hallucinatie resp. correct/gemist/onterecht):
+`make dev`, dan `/validatie-rapportage/<dataset>` in de browser.
 
-| Metriek | precision | recall | F1 | detail |
-|---|---|---|---|---|
-| Argumentherkenning | 0.41 | 0.54 | 0.47 | tp=2566 fp=3692 fn=2169 (tekens) |
-| Drogreden-tags | 1.00 | 0.17 | 0.29 | tp=2 fp=0 fn=10 |
+`TOPIC_NAME`/`TOPIC_DESCRIPTION` in `benchmark_elecdebate.py` geven de
+extractieprompt context (de prompt vraagt altijd om een onderwerpsnaam +
+pro/contra-as, ook al scoren we stance niet). Vroeger stond hier
+zelf-referentiële uitleg over onze evalmethodologie ("stance en typology
+worden bewust niet vergeleken") -- dat is metadata voor ons, geen bruikbare
+context voor het model, en verwarde de extractie. Nu een generieke,
+inhoudelijke omschrijving van een Amerikaans verkiezingsdebat. Let op:
+`extract_argument.md` zelf blijft hardcoded op "Tweede Kamer-debat" (bewust
+ongewijzigd, zie boven) -- die mismatch valt niet te verhelpen zonder de
+productieprompt aan te passen.
 
-Interpretatie: de tagger is niet overijverig (0 valse positieven), maar mist
-het merendeel van de daadwerkelijke Ad Hominem/Appeal to Emotion-instanties
-zelfs met de exact juiste tekstspan gegeven -- dat is een recall-probleem in
-de tagprompt zelf, niet (meer) een gevolg van gemiste extractie. Zeer kleine
-steekproef (n=20); geen conclusie voor productiegebruik, wel een eerste
-concreet signaal. Herhaalbaar via `make validate`.
+## Eerste resultaat (2026-08-10, 5-20 sprekersbeurten)
+
+| Model | Metriek | precision | recall | F1 | detail |
+|---|---|---|---|---|---|
+| `qwen/qwen3.6-27b` (n=20) | Argumentherkenning | 0.41 | 0.54 | 0.47 | tp=2566 fp=3692 fn=2169 (tekens) |
+| `qwen/qwen3.6-27b` (n=20) | Drogreden-tags | 1.00 | 0.17 | 0.29 | tp=2 fp=0 fn=10 |
+| `google/gemma-4-e4b` (n=5) | Argumentherkenning | 0.34 | 0.60 | 0.44 | tp=913 fp=1743 fn=611 (tekens) |
+| `google/gemma-4-e4b` (n=5) | Drogreden-tags | 1.00 | 0.10 | 0.18 | tp=1 fp=0 fn=9 |
+
+Interpretatie (qwen, n=20): de tagger is niet overijverig (0 valse
+positieven), maar mist het merendeel van de daadwerkelijke Ad Hominem/Appeal
+to Emotion-instanties zelfs met de exact juiste tekstspan gegeven -- dat is
+een recall-probleem in de tagprompt zelf, niet (meer) een gevolg van gemiste
+extractie. Zeer kleine steekproeven; geen conclusie voor productiegebruik,
+wel een eerste concreet signaal. Herhaalbaar via `make validate`.
+
+Kanttekening: tijdens verificatie gaf `qwen/qwen3.6-27b` op een ander moment
+(zelfde prompts, zelfde LM Studio-instance) consistent lege extracties (6
+completion-tokens, geen redenering) waar `google/gemma-4-e4b` normaal
+reageerde -- lijkt een lokale model-state-kwestie in LM Studio, geen bug in
+het harnas. Bij vreemde resultaten: eerst het model in LM Studio herladen
+voor verder te zoeken in de code.
 
 ## Nog te doen
 

@@ -1,0 +1,317 @@
+{
+  "dataset": "elecdebate60to16",
+  "model": "google/gemma-4-e4b",
+  "generated_at": "2026-08-10T21:05:26.210393+00:00",
+  "n_records": 5,
+  "n_extract_errors": 0,
+  "n_tag_errors": 0,
+  "summary": {
+    "argument_detection": {
+      "precision": 0.344,
+      "recall": 0.599,
+      "f1": 0.437,
+      "tp": 913,
+      "fp": 1743,
+      "fn": 611
+    },
+    "fallacy_tags": {
+      "precision": 1.0,
+      "recall": 0.1,
+      "f1": 0.182,
+      "tp": 1,
+      "fp": 0,
+      "fn": 9
+    }
+  },
+  "extraction_items": [
+    {
+      "speaker": "CLINTON",
+      "text": "we have to build an economy that works for everyone, not just those at the top",
+      "outcome": "gevonden"
+    },
+    {
+      "speaker": "CLINTON",
+      "text": "we need new jobs, good jobs, with rising incomes",
+      "outcome": "gevonden"
+    },
+    {
+      "speaker": "CLINTON",
+      "text": "I want us to invest in you",
+      "outcome": "gemist"
+    },
+    {
+      "speaker": "CLINTON",
+      "text": "I want us to invest in your future",
+      "outcome": "gemist"
+    },
+    {
+      "speaker": "CLINTON",
+      "text": "That means jobs in infrastructure, in advanced manufacturing, innovation and technology, clean, renewable energy, and small business",
+      "outcome": "gevonden"
+    },
+    {
+      "speaker": "CLINTON",
+      "text": "most of the new jobs will come from small business",
+      "outcome": "gevonden"
+    },
+    {
+      "speaker": "CLINTON",
+      "text": "I also want to see more companies do profit-sharing",
+      "outcome": "gevonden"
+    },
+    {
+      "speaker": "CLINTON",
+      "text": "If you help create the profits, you should be able to share in them, not just the executives at the top",
+      "outcome": "gevonden"
+    },
+    {
+      "speaker": "CLINTON",
+      "text": "We also have to make the economy fairer. That starts with raising the national minimum wage and also guarantee, finally, equal pay for women’s work.",
+      "outcome": "hallucinatie"
+    },
+    {
+      "speaker": "CLINTON",
+      "text": "How are we going to do it? We’re going to do it by having the wealthy pay their fair share and close the corporate loopholes.",
+      "outcome": "hallucinatie"
+    },
+    {
+      "speaker": "CLINTON",
+      "text": "We’re going to have a debate where we are talking about the important issues facing our country. You have to judge us, who can shoulder the immense, awesome responsibilities of the presidency, who can put into action the plans that will make your life better.",
+      "outcome": "hallucinatie"
+    },
+    {
+      "speaker": "TRUMP",
+      "text": "Our jobs are fleeing the country",
+      "outcome": "gemist"
+    },
+    {
+      "speaker": "TRUMP",
+      "text": "You look at what China is doing to our country in terms of making our product",
+      "outcome": "gevonden"
+    },
+    {
+      "speaker": "TRUMP",
+      "text": "we have a very good fight",
+      "outcome": "gemist"
+    },
+    {
+      "speaker": "TRUMP",
+      "text": "we have a winning fight",
+      "outcome": "gemist"
+    },
+    {
+      "speaker": "TRUMP",
+      "text": "we have to stop our jobs from being stolen from us",
+      "outcome": "gemist"
+    },
+    {
+      "speaker": "TRUMP",
+      "text": "We have to stop our companies from leaving the United States and, with it, firing all of their people",
+      "outcome": "gemist"
+    },
+    {
+      "speaker": "TRUMP",
+      "text": "All you have to do is take a look at Carrier air conditioning in Indianapolis",
+      "outcome": "gemist"
+    },
+    {
+      "speaker": "TRUMP",
+      "text": "So many hundreds and hundreds of companies are doing this",
+      "outcome": "gemist"
+    },
+    {
+      "speaker": "TRUMP",
+      "text": "We cannot let it happen",
+      "outcome": "gemist"
+    },
+    {
+      "speaker": "TRUMP",
+      "text": "We have to renegotiate our trade deals",
+      "outcome": "gevonden"
+    },
+    {
+      "speaker": "TRUMP",
+      "text": "we have to stop these countries from stealing our companies and our jobs",
+      "outcome": "gevonden"
+    },
+    {
+      "speaker": "TRUMP",
+      "text": "Because they’re using our country as a piggy bank to rebuild China, and many other countries are doing the same thing. So we’re losing our good jobs, so many of them.",
+      "outcome": "hallucinatie"
+    },
+    {
+      "speaker": "TRUMP",
+      "text": "Ford is leaving. You see that, their small car division leaving. Thousands of jobs leaving Michigan, leaving Ohio. They’re all leaving.",
+      "outcome": "hallucinatie"
+    },
+    {
+      "speaker": "TRUMP",
+      "text": "Under my plan, I’ll be reducing taxes tremendously, from 35 percent to 15 percent for companies, small and big businesses. That’s going to be a job creator like we haven’t seen since Ronald Reagan.",
+      "outcome": "hallucinatie"
+    },
+    {
+      "speaker": "CLINTON",
+      "text": "I think that trade is an important issue",
+      "outcome": "gemist"
+    },
+    {
+      "speaker": "CLINTON",
+      "text": "we have to trade with the other 95 percent",
+      "outcome": "gemist"
+    },
+    {
+      "speaker": "CLINTON",
+      "text": "we need to have smart, fair trade deals",
+      "outcome": "gemist"
+    },
+    {
+      "speaker": "CLINTON",
+      "text": "the kind of plan that Donald has put forth would be trickle-down economics all over again",
+      "outcome": "gevonden"
+    },
+    {
+      "speaker": "CLINTON",
+      "text": "it would be the most extreme version",
+      "outcome": "gevonden"
+    },
+    {
+      "speaker": "CLINTON",
+      "text": "That is not how we grow the economy",
+      "outcome": "gevonden"
+    },
+    {
+      "speaker": "TRUMP",
+      "text": "So we have to do that",
+      "outcome": "gevonden"
+    },
+    {
+      "speaker": "TRUMP",
+      "text": "We have to renegotiate our trade deals",
+      "outcome": "gevonden"
+    },
+    {
+      "speaker": "TRUMP",
+      "text": "I say that only because that’s the kind of thinking that our country needs.",
+      "outcome": "hallucinatie"
+    },
+    {
+      "speaker": "TRUMP",
+      "text": "When they sell into us, there’s no tax. It’s a defective agreement.",
+      "outcome": "hallucinatie"
+    },
+    {
+      "speaker": "TRUMP",
+      "text": "The NAFTA agreement is defective. Just because of the tax and many other reasons, but just because of the fact…",
+      "outcome": "hallucinatie"
+    },
+    {
+      "speaker": "TRUMP",
+      "text": "They should have been doing this for years",
+      "outcome": "gemist"
+    },
+    {
+      "speaker": "TRUMP",
+      "text": "we owe $20 trillion",
+      "outcome": "gevonden"
+    },
+    {
+      "speaker": "TRUMP",
+      "text": "We cannot do it any longer",
+      "outcome": "gevonden"
+    }
+  ],
+  "tagging_items": [
+    {
+      "speaker": "CLINTON",
+      "quote_text": "I want us to invest in you. I want us to invest in your future.",
+      "verwacht": [
+        "Drogreden-Bespelen-Publiek"
+      ],
+      "voorspeld": [],
+      "outcome": "gemist"
+    },
+    {
+      "speaker": "CLINTON",
+      "quote_text": "I want us to invest in your future.",
+      "verwacht": [
+        "Drogreden-Bespelen-Publiek"
+      ],
+      "voorspeld": [],
+      "outcome": "gemist"
+    },
+    {
+      "speaker": "TRUMP",
+      "quote_text": "stolen",
+      "verwacht": [
+        "Drogreden-Bespelen-Publiek"
+      ],
+      "voorspeld": [
+        "Drogreden-Bespelen-Publiek"
+      ],
+      "outcome": "correct"
+    },
+    {
+      "speaker": "TRUMP",
+      "quote_text": "tremendous",
+      "verwacht": [
+        "Drogreden-Bespelen-Publiek"
+      ],
+      "voorspeld": [],
+      "outcome": "gemist"
+    },
+    {
+      "speaker": "TRUMP",
+      "quote_text": "tremendously",
+      "verwacht": [
+        "Drogreden-Bespelen-Publiek"
+      ],
+      "voorspeld": [],
+      "outcome": "gemist"
+    },
+    {
+      "speaker": "TRUMP",
+      "quote_text": "a beautiful thing",
+      "verwacht": [
+        "Drogreden-Bespelen-Publiek"
+      ],
+      "voorspeld": [],
+      "outcome": "gemist"
+    },
+    {
+      "speaker": "TRUMP",
+      "quote_text": "a beautiful thing to watch",
+      "verwacht": [
+        "Drogreden-Bespelen-Publiek"
+      ],
+      "voorspeld": [],
+      "outcome": "gemist"
+    },
+    {
+      "speaker": "TRUMP",
+      "quote_text": "stealing",
+      "verwacht": [
+        "Drogreden-Bespelen-Publiek"
+      ],
+      "voorspeld": [],
+      "outcome": "gemist"
+    },
+    {
+      "speaker": "CLINTON",
+      "quote_text": "trumped-up trickle-down",
+      "verwacht": [
+        "Drogreden-Ad-Hominem"
+      ],
+      "voorspeld": [],
+      "outcome": "gemist"
+    },
+    {
+      "speaker": "CLINTON",
+      "quote_text": "trumped-up trickle-down",
+      "verwacht": [
+        "Drogreden-Bespelen-Publiek"
+      ],
+      "voorspeld": [],
+      "outcome": "gemist"
+    }
+  ]
+}

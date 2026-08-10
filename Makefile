@@ -2,6 +2,8 @@
 
 TOPIC ?= stikstof
 LIMIT ?= 15
+DATASET ?= elecdebate60to16
+MODEL ?= qwen/qwen3.6-27b
 # Zonder expliciete BASE_URL=... op de command line wordt scripts/detect_llm_base_url.sh
 # gebruikt: probeert localhost:1234 en host.docker.internal:1234 (devcontainer),
 # en stopt met een foutmelding als geen van beide een LM Studio-instance heeft.
@@ -11,7 +13,7 @@ else
   RESOLVE_BASE_URL = scripts/detect_llm_base_url.sh
 endif
 
-.PHONY: help probe test test-js test-frontend ca-fixture status build dev dev-stop extract extract-agy tag tag-agy redactie export tags-taxonomy db-init pipeline-status backup-db release release-dry argument-doc confrontatie-tree
+.PHONY: help probe test test-js test-frontend ca-fixture status build dev dev-stop extract extract-agy tag tag-agy redactie validate export tags-taxonomy db-init pipeline-status backup-db release release-dry argument-doc confrontatie-tree
 
 help: ## Toon deze lijst
 	@grep -E '^[a-zA-Z_-]+:.*## ' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*## "}; {printf "  \033[36m%-16s\033[0m %s\n", $$1, $$2}'
@@ -63,6 +65,11 @@ tag-agy: ## Stage 1b -- tags toekennen via Docker agy (Gemini). Vars: TOPIC, LIM
 redactie: ## Stage 2 -- redactie-check/opposition-linking (LLM, alleen op netstroom). Vars: TOPIC, LIMIT, BASE_URL
 	@url=$$($(RESOLVE_BASE_URL)) || exit 1; \
 	uv run python -m pipeline.redactie_check --topic $(TOPIC) --limit $(LIMIT) --base-url $$url
+
+validate: ## Evalharnas draaien tegen een gouden validatiedataset (issue #62), zie docs/eval-elecdebate.md. Vars: DATASET, LIMIT, MODEL, BASE_URL
+	uv run python scripts/convert_elecdebate.py
+	@url=$$($(RESOLVE_BASE_URL)) || exit 1; \
+	uv run python -m pipeline.eval.benchmark_elecdebate data/raw/$(DATASET)/test.jsonl $(MODEL) --dataset $(DATASET) --base-url $$url --limit $(LIMIT)
 
 export: ## SQLite -> data/export/topics/<slug>.json + topics-index.json, voor alle topics
 	uv run python -m pipeline.build_static_data

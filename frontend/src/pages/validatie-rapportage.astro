@@ -1,5 +1,10 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+
+const evalModules = import.meta.glob("../../../data/export/eval/*.json", { eager: true });
+const datasets = Object.values(evalModules)
+	.map((mod: any) => mod.default)
+	.sort((a: any, b: any) => a.dataset.localeCompare(b.dataset));
 ---
 
 <BaseLayout title="Validatie-rapportage — Bipolariteit" class="about">
@@ -13,4 +18,26 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 		About-pagina. De resultaten (foutpercentage, systematische patronen per stage) komen hier
 		per onderwerp te staan zodra die steekproefronde is afgerond.
 	</p>
+
+	<p>
+		Daarnaast draaien we het evalharnas (issue #62) periodiek tegen externe, publiek
+		gouden-gelabelde datasets, om extractie- en tagkwaliteit onafhankelijk van onze eigen
+		Kamerdebat-data te meten.
+	</p>
+
+	{datasets.length === 0 && (
+		<p class="panel-note">Nog geen datasetvalidatie gedraaid. Zie <code>docs/eval-elecdebate.md</code> in de repository.</p>
+	)}
+
+	<ul>
+		{datasets.map((data: any) => (
+			<li>
+				<a href={`/validatie-rapportage/${data.dataset}`}>{data.dataset}</a>
+				{" — "}
+				argumentherkenning F1 {Math.round(data.summary.argument_detection.f1 * 100)}%,
+				drogreden-tags F1 {Math.round(data.summary.fallacy_tags.f1 * 100)}%
+				({data.n_records} sprekersbeurten, model {data.model})
+			</li>
+		))}
+	</ul>
 </BaseLayout>
