@@ -189,16 +189,24 @@ Resultaten bekijken (samenvatting + per-voorbeeld items, gegroepeerd op
 gevonden/gemist/hallucinatie resp. correct/gemist/onterecht):
 `make dev`, dan `/validatie-rapportage/<dataset>` in de browser.
 
-`TOPIC_NAME`/`TOPIC_DESCRIPTION` in `benchmark_elecdebate.py` geven de
-extractieprompt context (de prompt vraagt altijd om een onderwerpsnaam +
-pro/contra-as, ook al scoren we stance niet). Vroeger stond hier
-zelf-referentiële uitleg over onze evalmethodologie ("stance en typology
-worden bewust niet vergeleken") -- dat is metadata voor ons, geen bruikbare
-context voor het model, en verwarde de extractie. Nu een generieke,
-inhoudelijke omschrijving van een Amerikaans verkiezingsdebat. Let op:
-`extract_argument.md` zelf blijft hardcoded op "Tweede Kamer-debat" (bewust
-ongewijzigd, zie boven) -- die mismatch valt niet te verhelpen zonder de
-productieprompt aan te passen.
+`TOPIC_NAME`/`TOPIC_DESCRIPTION`/`DEBATE_CONTEXT` in `benchmark_elecdebate.py`
+geven de extractieprompt context. Twee dingen zijn hierin gecorrigeerd:
+
+- **`extract_argument.md` beweerde altijd "Tweede Kamer-debat"** te zijn,
+  feitelijk onjuist voor deze dataset (Amerikaanse verkiezingsdebatten) en
+  dus verwarrend voor het model. `_build_prompt()` in `extract_arguments.py`
+  heeft nu een `debate_context`-parameter (default `"Tweede Kamer-debat"`,
+  dus alle productie-aanroepen blijven ongewijzigd); het evalharnas geeft
+  hier `DEBATE_CONTEXT = "Amerikaans presidentsverkiezingsdebat"` mee. Dit is
+  wél een wijziging aan de productieprompt zelf (`extract_argument.md`),
+  bewust en beperkt tot het parametriseren van deze ene aanname.
+- **`TOPIC_DESCRIPTION` deed eerder alsof er één vaste pro/contra-as voor het
+  hele debat was** ("Generieke pro/contra-as: steunt de spreker het
+  beleid..."). Die is er niet: elk argument kan over een ander specifiek
+  onderwerp gaan (NAFTA nu, Iran zo). Nu eerlijk: de tekst legt uit dat de as
+  per argument bepaald moet worden op basis van het specifieke onderwerp dat
+  op dat moment besproken wordt, in plaats van te doen alsof er één
+  overkoepelende as bestaat.
 
 ## Eerste resultaat (2026-08-10, 5-20 sprekersbeurten)
 

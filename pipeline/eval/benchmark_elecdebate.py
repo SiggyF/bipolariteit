@@ -63,18 +63,29 @@ logger = logging.getLogger(__name__)
 
 EXPORT_DIR = Path(__file__).parent.parent.parent / "data" / "export" / "eval"
 
-# extract_argument.md verwacht een echt onderwerp + pro/contra-as als context
-# (het is hardcoded op "Tweede Kamer-debat", wat we bewust niet aanpassen --
-# we hergebruiken de productieprompt ongewijzigd, zie docs/eval-elecdebate.md).
-# Eerdere versie zette hier zelf-referentiële uitleg over de evalmethodologie
-# neer ("stance en typology worden niet vergeleken") -- dat is metadata voor
-# ons, geen bruikbare context voor het model, en verwarde de extractie.
+# extract_argument.md verwachtte tot voor kort altijd "Tweede Kamer-debat"
+# (hardcoded) -- feitelijk onjuist voor deze dataset (Amerikaanse
+# presidentsverkiezingsdebatten) en dus verwarrend voor het model. Dat stond
+# in de weg van "we hergebruiken de productieprompt ongewijzigd": het was
+# geen keuze om het te laten staan, het kon simpelweg niet anders zonder de
+# prompt aan te passen. Nu geparametriseerd (_build_prompt's
+# debate_context-argument, default blijft "Tweede Kamer-debat" voor
+# productie) zodat het evalharnas een eigen, kloppende waarde meegeeft.
+DEBATE_CONTEXT = "Amerikaans presidentsverkiezingsdebat"
+
 TOPIC_NAME = "Amerikaans verkiezingsdebat"
+# Eerdere versie deed alsof er één vaste pro/contra-as voor het hele debat
+# bestond ("Generieke pro/contra-as: steunt de spreker het beleid..."), maar
+# die is er niet: elk argument kan over een ander specifiek beleidsonderwerp
+# gaan (NAFTA nu, Iran zo), dus doen alsof er één as is is net zo misleidend
+# als er geen omschrijving geven. Nu eerlijk: leid de as per argument af.
 TOPIC_DESCRIPTION = (
-    "Twee presidentskandidaten debatteren over uiteenlopende beleidsonderwerpen "
-    "(economie, immigratie, buitenlands beleid, etc.). Generieke pro/contra-as: "
-    "steunt de spreker het huidige/voorgestelde beleid (pro), of bekritiseert/"
-    "verwerpt de spreker het (contra)?"
+    "Dit debat behandelt uiteenlopende specifieke beleidskwesties (bijvoorbeeld "
+    "economie, immigratie, buitenlands beleid) die per fragment kunnen "
+    "verschillen -- er is dus geen vaste pro/contra-as voor het hele debat. "
+    "Bepaal per argument zelf waar het inhoudelijk over gaat, en leid de "
+    "pro/contra-richting daaruit af: steunt de spreker het besproken beleid "
+    "(pro), of bekritiseert/verwerpt de spreker het (contra)?"
 )
 
 # Placeholder stance/typology voor de tagging-eval: de tag-prompt verwacht
@@ -101,7 +112,9 @@ def evaluate_extraction(record: EvalRecord, model, base_url, timeout):
     items is een simpele per-span classificatie (gevonden/gemist/
     hallucinatie) voor menselijke inspectie, los van de tekenniveau-PRF die
     de samenvatting voedt."""
-    prompt = build_extract_prompt(TOPIC_NAME, TOPIC_DESCRIPTION, record.speaker or "onbekend", None, record.text)
+    prompt = build_extract_prompt(
+        TOPIC_NAME, TOPIC_DESCRIPTION, record.speaker or "onbekend", None, record.text, debate_context=DEBATE_CONTEXT,
+    )
     response = call_extract_llm(base_url, model, prompt, "none", timeout, 4000)
     parsed = extract_json(response.content)
     arguments = _extract_arguments(parsed)
