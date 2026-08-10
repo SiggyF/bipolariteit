@@ -2,6 +2,81 @@
 
 Status per 2026-07-27. Zie `docs/plan.md` voor het volledige, goedgekeurde architectuurplan. Dit document is voor het vervolg: wat staat er al, wat is er onderweg ontdekt, en wat is de volgende concrete stap.
 
+## Stand bij einde sessie (2026-08-10, evalharnas ELECDEBATE60TO16 issue #62) — begin hier bij een nieuwe sessie
+
+**PR #66 (branch `eval/elecdebate-harness-issue-62`) staat op WIP** — bewust
+niet als "af" gemarkeerd. De onderliggende logica/databugs zijn deze sessie
+echt gefixt (zie hieronder), maar de `/validatie-rapportage/<dataset>`-pagina
+zelf ziet er niet uit en de resultaten zijn niet te doorgronden — dat is
+zelf vastgesteld bij het bekijken van de live pagina, geen slag om de arm.
+Eerste concrete vervolgstap voor een nieuwe sessie: een eigen UI/UX-ronde op
+die pagina, los van de backend-logica.
+
+Losse PR's die er ook nog liggen:
+- **PR #65 (gemerged)**: bugfix `_GEEN_TAG`-sentinel in `tag_arguments.py` +
+  correcte `pending_extraction`-telling in `scripts/pipeline_status.py`.
+- **PR #68 (open)**: onderzoeksdocument `docs/Taxonomie Stijlmiddelen
+  Politieke Debatten.md` voor issue #67 (nieuw labelgroep "Stijlmiddelen",
+  ontdekt tijdens dit werk toen bleek dat "Slogan" noch drogreden noch frame
+  is). Puur documentatie, geen implementatie, losstaand van #66.
+
+### Wat er gebouwd is (PR #66, issue #62)
+
+Evalharnas dat de extractie-/tagpipeline valideert tegen de externe
+`ElecDeb60to20`-dataset (Amerikaanse presidentsverkiezingsdebatten), als
+kwantitatieve aanvulling op de steekproefsgewijze experimenten op #50 (zie
+de two-turn-sectie hieronder). Twee assen, onafhankelijk gescoord:
+argumentherkenning (span-overlap tegen `final_relation_graph.csv`) en
+2-van-de-6-drogredenen-tags (`Drogreden-Ad-Hominem`/`Drogreden-Bespelen-
+Publiek` tegen `fallacy_second_version.csv` — de overige 4 vereisen een
+inhoudelijk oordeel over of de redenering klopt, principieel buiten scope).
+`make validate` (vars `DATASET`/`LIMIT`/`MODEL`/`BASE_URL`) maakt
+cumulatieve, herhaalbare steekproeven; resultaten landen in
+`data/export/eval/<dataset>.json` en op `/validatie-rapportage/<dataset>`.
+Volledige methodologie en motivatie: `docs/eval-elecdebate.md`.
+
+### Reële bugs gevonden tijdens het werk (niet alleen framing/tekst)
+
+Ontdekt door zelf voorbeelden uit de gouden data te lezen, niet door de
+scores te vertrouwen — dat bleek herhaaldelijk nodig:
+
+1. **Claim+premisse werden niet samengevoegd.** `scripts/convert_elecdebate.py`
+   voegde de twee helften van een Support-relatie als losse spans toe i.p.v.
+   als één argument-eenheid, met kale stellingnames en losse onderbouwingen
+   zonder claim als resultaat — precies wat onze eigen extractieprompt zou
+   afwijzen. Gefixt: groeperen op (sprekersbeurt, Governor-tekst), min-start/
+   max-end samenvoegen. 999 → 627 argument-spans.
+2. **Geneste dubbele drogreden-annotaties** (dezelfde fallacie op twee
+   granulariteiten in de brondata, bv. een volledige twee-zinsuiting én een
+   losse rij voor alleen de tweede zin) werden niet gededupliceerd.
+   `_drop_nested_fallacies()` toegevoegd. 336 → 324 drogreden-citaten.
+3. **Tagprompt kreeg geen context bij korte citaten.** Een deel van de
+   gouden drogreden-citaten is maar één woord ("Loaded Language"-stijl
+   annotatie in de brondataset, bv. "disaster", "stolen"). Die kaal aan de
+   tagprompt geven (`quote_context=None`) is geen eerlijke test. Gefixt
+   (`_context_window`, ±200 tekens rond het citaat). Op een verse 10-record
+   qwen-steekproef: drogreden-tag-recall 0.00 → 0.25, F1 0.00 → 0.40.
+4. **Prompt-instructies waren zelf misleidend**: beweerde "Tweede Kamer-debat"
+   (feitelijk onjuist voor deze dataset — `_build_prompt()` kreeg een
+   `debate_context`-parameter, default blijft "Tweede Kamer-debat" voor
+   productie), en vroeg het model om zelf een pro/contra-as per argument af
+   te leiden voor een veld dat de eval niet eens scoort. Nu: stance staat
+   altijd op `"unclear"`.
+5. **"Span"-terminologie lekte in de tagging-taal** terwijl tagging geen
+   eigen spandetectie doet (het classificeert een compleet citaat, net als
+   `tag_arguments.py` in productie) — hernoemd naar "citaten" waar van
+   toepassing.
+
+### Volgende stap
+
+UI/UX-ronde op `/validatie-rapportage/<dataset>` (leesbaarheid, layout,
+hoe voorbeelden gepresenteerd worden) — de backend/databugs zijn opgelost,
+de pagina zelf niet. Daarna: grotere `make validate`-steekproef (nu maar
+10/318 records) voor een betrouwbaarder beeld, en uitzoeken waarom
+`qwen/qwen3.6-27b` op een eerder moment deze sessie consistent lege
+completions gaf (leek een lokale LM Studio-model-state-kwestie, niet
+gereproduceerd na herladen).
+
 ## Stand bij einde sessie (2026-08-10, two-turn-tagging-experiment voor issue #50)
 
 Voordat issue #50 ("stance/typology loskoppelen van Stage 1 naar Stage 1b")
