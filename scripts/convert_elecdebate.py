@@ -45,6 +45,26 @@ def _find_span(text: str, snippet: str) -> tuple[int, int] | None:
     return idx, idx + len(snippet)
 
 
+def _drop_nested_fallacies(fallacy_tuples: set[tuple[int, int, str]]) -> set[tuple[int, int, str]]:
+    """De brondata annoteert soms dezelfde drogreden op twee granulariteiten
+    -- bv. een volledige twee-zinsuiting én, als aparte rij, alleen de
+    tweede zin ("I want us to invest in you. I want us to invest in your
+    future." vs. losstaand "I want us to invest in your future.", beide
+    Appeal to Emotion). Dat levert een geïsoleerde, zwakker ogende deelzin
+    op als los "gouden" voorbeeld terwijl het dezelfde fallacie is. Behoudt
+    per (label, positie) alleen de langste variant als een kortere span
+    volledig binnen een langere met hetzelfde label valt."""
+    tuples = list(fallacy_tuples)
+    return {
+        (start, end, label)
+        for start, end, label in tuples
+        if not any(
+            (s2, e2) != (start, end) and s2 <= start and end <= e2 and (e2 - s2) > (end - start)
+            for s2, e2, l2 in tuples if l2 == label
+        )
+    }
+
+
 def _parse_date(date_str: str, sep: str) -> tuple[int, int, int] | None:
     """DD<sep>MM<sep>YYYY -> (dag, maand, jaar), of None. Losstaand van
     zero-padding (bv. "9/10/2016" en "09-10-2016" geven hetzelfde resultaat)."""
@@ -170,7 +190,10 @@ def build_records(speeches: list[dict], relations: list[dict], fallacies: list[d
             "text": speeches[i]["text"],
             "speaker": speeches[i]["speaker"] or None,
             "spans": [{"start": s, "end": e} for s, e in sorted(spans_by_speech.get(i, set()))],
-            "fallacies": [{"start": s, "end": e, "label": label} for s, e, label in sorted(fallacies_by_speech.get(i, set()))],
+            "fallacies": [
+                {"start": s, "end": e, "label": label}
+                for s, e, label in sorted(_drop_nested_fallacies(fallacies_by_speech.get(i, set())))
+            ],
         }
         for i in sorted(touched)
     ]
