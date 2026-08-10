@@ -2,6 +2,27 @@
 
 Status per 2026-07-27. Zie `docs/plan.md` voor het volledige, goedgekeurde architectuurplan. Dit document is voor het vervolg: wat staat er al, wat is er onderweg ontdekt, en wat is de volgende concrete stap.
 
+## Stand bij einde sessie (2026-08-10, two-turn-tagging-experiment voor issue #50)
+
+Voordat issue #50 ("stance/typology loskoppelen van Stage 1 naar Stage 1b")
+daadwerkelijk gebouwd werd, eerst getest of extractie+tagging als twee turns
+binnen één LM Studio-sessie (messages-array met turn-1-antwoord als
+voorgeschiedenis) sneller is dan de huidige aanpak, in de hoop dat de
+brontekst-context "warm" zou blijven en niet opnieuw geprocessed hoeft te
+worden. Volledig uitgeschreven in nieuw `docs/two-turn-tagging-experiment.md`.
+Kort: **verworpen** — op 10 testdocumenten (topic `stikstof`) was de
+two-turn-aanpak gemiddeld ~2,5x langzamer dan de bestaande single-call
+baseline (geen aanwijzing voor prefix-caching-winst; turn 2 was steevast de
+traagste stap), én leverde het een kwaliteitsregressie op de argumentgrenzen
+zelf op (andere opknipping/hallucinatie zodra stance/typology-framing uit
+turn 1 werd weggelaten). Issue #50's oorspronkelijke doel (goedkope
+hertagging zonder herextractie) blijft overeind, maar dan via de
+oorspronkelijk voorgestelde route van twee écht onafhankelijke
+stages/prompts, niet via sessie-chaining voor snelheidswinst. Experiment-
+artefact `scripts/experiment_two_turn_tagging.py` blijft in de repo als
+referentie, niet in productie gebruikt. Geen schema-, pipeline- of
+prompt-wijzigingen; issue #50 zelf staat nog open.
+
 ## Stand bij einde sessie (2026-08-04, derde topic: asiel) — begin hier bij een nieuwe sessie
 
 Branch `topic-asiel`, nog geen PR. Doel was een derde onderwerp opzetten met de resterende Gemini-credits. Het onderwerp staat er (crawl, ingest, omschrijving, export), maar de **extractie is bewust teruggedraaid en moet opnieuw** — zie "Wat er nog moet".
