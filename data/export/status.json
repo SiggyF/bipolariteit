@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-08-08T13:49:31+02:00",
+  "generated_at": "2026-08-09T13:35:54+02:00",
   "topics": [
     {
       "slug": "stikstof",
       "name": "stikstof",
       "vanaf": "2023-12-06",
       "documents_total": 4377,
-      "documents_extracted": 3758,
-      "arguments_total": 1930,
-      "arguments_tagged": 1453,
+      "documents_extracted": 3885,
+      "arguments_total": 1986,
+      "arguments_tagged": 1537,
       "documents_redactie_checked": 5,
       "arguments_ander_onderwerp": 10,
       "ander_onderwerp_top": [
@@ -33,24 +33,24 @@
         {
           "stage": "extraction",
           "model": "qwen/qwen3.6-27b",
-          "n_calls": 600,
-          "total_duration_s": 8678.350083607598,
-          "avg_duration_s": 14.463916806012664,
+          "n_calls": 727,
+          "total_duration_s": 10634.821207828354,
+          "avg_duration_s": 14.628364797563073,
           "n_errors": 1,
-          "total_completion_tokens": 91479,
+          "total_completion_tokens": 106968,
           "first_call_at": "2026-08-07T20:19:55.234257+00:00",
-          "last_call_at": "2026-08-08T09:18:02.667939+00:00"
+          "last_call_at": "2026-08-09T09:55:19.713882+00:00"
         },
         {
           "stage": "tagging",
           "model": "qwen/qwen3.6-27b",
-          "n_calls": 103,
-          "total_duration_s": 6549.692320158123,
-          "avg_duration_s": 63.58924582677789,
+          "n_calls": 187,
+          "total_duration_s": 11768.766140326916,
+          "avg_duration_s": 62.93457829051827,
           "n_errors": 1,
-          "total_completion_tokens": 59197,
+          "total_completion_tokens": 104064,
           "first_call_at": "2026-08-08T09:19:34.005336+00:00",
-          "last_call_at": "2026-08-08T11:07:51.850271+00:00"
+          "last_call_at": "2026-08-09T11:34:36.557095+00:00"
         }
       ]
     },
@@ -61,22 +61,34 @@
       "documents_total": 591,
       "documents_extracted": 586,
       "arguments_total": 439,
-      "arguments_tagged": 260,
+      "arguments_tagged": 439,
       "documents_redactie_checked": 0,
       "arguments_ander_onderwerp": 0,
       "ander_onderwerp_top": [],
-      "llm_calls_by_model": []
+      "llm_calls_by_model": [
+        {
+          "stage": "tagging",
+          "model": "qwen/qwen3.6-27b",
+          "n_calls": 185,
+          "total_duration_s": 10104.307077183272,
+          "avg_duration_s": 54.61787609288255,
+          "n_errors": 6,
+          "total_completion_tokens": 97372,
+          "first_call_at": "2026-08-09T06:03:09.580620+00:00",
+          "last_call_at": "2026-08-09T09:19:10.869868+00:00"
+        }
+      ]
     },
     {
       "slug": "asiel",
       "name": "Asiel en migratie",
       "vanaf": "2023-12-06",
       "documents_total": 7820,
-      "documents_extracted": 694,
-      "arguments_total": 632,
-      "arguments_tagged": 236,
+      "documents_extracted": 994,
+      "arguments_total": 859,
+      "arguments_tagged": 338,
       "documents_redactie_checked": 0,
-      "arguments_ander_onderwerp": 56,
+      "arguments_ander_onderwerp": 57,
       "ander_onderwerp_top": [
         {
           "onderwerp": "arbeidsmigratie",
@@ -115,7 +127,7 @@
           "aantal": 1
         },
         {
-          "onderwerp": "misstanden uitzendbranche en goed werkgeverschap",
+          "onderwerp": "onderwijsbeleid",
           "aantal": 1
         }
       ],
@@ -123,24 +135,24 @@
         {
           "stage": "extraction",
           "model": "qwen/qwen3.6-27b",
-          "n_calls": 551,
-          "total_duration_s": 12012.333705439261,
-          "avg_duration_s": 21.800968612412454,
+          "n_calls": 851,
+          "total_duration_s": 17121.217975216656,
+          "avg_duration_s": 20.118940041382675,
           "n_errors": 1,
-          "total_completion_tokens": 119442,
+          "total_completion_tokens": 170752,
           "first_call_at": "2026-08-05T16:50:43.369858+00:00",
-          "last_call_at": "2026-08-07T08:26:38.720417+00:00"
+          "last_call_at": "2026-08-08T19:45:01.640843+00:00"
         },
         {
           "stage": "tagging",
           "model": "qwen/qwen3.6-27b",
-          "n_calls": 239,
-          "total_duration_s": 14340.70367983004,
-          "avg_duration_s": 60.00294426707129,
-          "n_errors": 3,
-          "total_completion_tokens": 138630,
+          "n_calls": 342,
+          "total_duration_s": 19982.337646276894,
+          "avg_duration_s": 58.4278878546108,
+          "n_errors": 4,
+          "total_completion_tokens": 196667,
           "first_call_at": "2026-08-05T16:53:22.700983+00:00",
-          "last_call_at": "2026-08-07T11:54:56.755329+00:00"
+          "last_call_at": "2026-08-08T21:52:04.330492+00:00"
         }
       ]
     }

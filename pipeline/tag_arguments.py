@@ -155,15 +155,31 @@ def call_llm(base_url, model, prompt, reasoning_effort, timeout):
     return message.get("content", ""), usage
 
 
+# Sentinel voor "het model bedoelde hier expliciet geen tag" -- onderscheiden
+# van een echt onherkenbare vorm, want dat eerste is geen fout en verdient
+# geen waarschuwing (zie _coerce_tag_entry).
+_GEEN_TAG = object()
+
+# Vormen waarin het model "geen tag van toepassing" verpakt in plaats van het
+# skeleton-veld gewoon leeg te laten: een lege lijst, JSON null, of (geplakt)
+# de string "null". Alle drie gezien in de praktijk voor dezelfde intentie.
+_GEEN_TAG_WAARDEN = (None, [], "null")
+
+
 def _coerce_tag_entry(entry):
     """Accepteert zowel het nieuwe {sleutel, reden}-object als (voor
     achterwaartse compatibiliteit met oudere geplakte Gemini-antwoorden) een
-    kale sleutel-string zonder reden. Retourneert (sleutel, reden) of None
-    bij een onherkenbare vorm."""
+    kale sleutel-string zonder reden. Retourneert (sleutel, reden), _GEEN_TAG
+    als het model expliciet "geen tag" bedoelde, of None bij een echt
+    onherkenbare vorm."""
     if isinstance(entry, str):
         return entry, None
     if isinstance(entry, dict) and "sleutel" in entry:
-        return entry["sleutel"], entry.get("reden")
+        sleutel = entry["sleutel"]
+        if sleutel in _GEEN_TAG_WAARDEN:
+            return _GEEN_TAG
+        if isinstance(sleutel, str):
+            return sleutel, entry.get("reden")
     return None
 
 
@@ -182,6 +198,8 @@ def _validate_tags(parsed, valid_tags):
         coerced = []
         for entry in entries:
             result = _coerce_tag_entry(entry)
+            if result is _GEEN_TAG:
+                continue
             if result is None:
                 logger.warning("    overgeslagen onherkenbaar tag-item in %r: %r", field, entry)
                 continue
@@ -321,6 +339,7 @@ def main():
         start = time.monotonic()
         started_at = datetime.now(timezone.utc).isoformat()
         llm_tags = []
+        raw_content = None
         try:
             raw_content, usage = call_llm(args.base_url, args.model, prompt, args.reasoning_effort, args.timeout)
             parsed = _extract_json(raw_content)
@@ -333,7 +352,7 @@ def main():
                 record_llm_call(
                     conn, stage="tagging", topic_id=topic_id, document_id=arg["document_id"], argument_id=arg["id"],
                     model=args.model, prompt_version=PROMPT_VERSION, started_at=started_at, duration_s=elapsed,
-                    status="error", error_message=str(exc),
+                    response=raw_content, status="error", error_message=str(exc),
                 )
             continue
         elapsed = time.monotonic() - start
