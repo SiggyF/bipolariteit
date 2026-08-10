@@ -6,9 +6,14 @@ Drie bronbestanden, elk uit pierpaologoffredo/ElecDeb60to20:
 - full_speeches_new.csv: één rij per sprekersbeurt (datum, spreker, tekst).
   Dit is de eenheid die een EvalRecord wordt -- vergelijkbaar met een rij in
   onze eigen `documents`-tabel.
-- full_components.csv: elke geannoteerde claim/premise-zin, ONGEACHT of hij
-  ook een drogreden is (44k+ rijen) -- alleen een `Year`-kolom, geen
-  spreker/datum, dus een zin wordt gezocht binnen alle beurten van dat jaar.
+- final_relation_graph.csv: Support/Attack/Equivalent-relaties tussen
+  Claim/Premise-componenten (Dependent -> Governor). We gebruiken alleen de
+  Support-relaties waarvan de Governor een Claim is: dat is precies een
+  standpunt MET onderbouwing, dezelfde eenheid als wat onze eigen extractie
+  als "argument" beschouwt (zie docs/eval-elecdebate.md, "Definitieverschil
+  argument"). Een kale Claim zonder Support-relatie wordt bewust NIET
+  meegenomen: onze extractie zou zo'n kale stellingname ook afwijzen
+  ("geen onderbouwing = geen argument").
 - fallacy_second_version.csv: drogreden-annotaties MET spreker+datum, dus
   hier kan wel exact op (jaar, spreker) gematcht worden voor we op tekst
   zoeken.
@@ -32,8 +37,6 @@ from pathlib import Path
 RAW_DIR = Path(__file__).parent.parent / "data" / "raw" / "elecdebate60to16"
 DEFAULT_YEARS = {"2016", "2020"}
 
-ARGUMENT_COMPONENT_TAGS = {"Claim", "Premise"}
-
 
 def _find_span(text: str, snippet: str) -> tuple[int, int] | None:
     idx = text.find(snippet)
@@ -42,19 +45,36 @@ def _find_span(text: str, snippet: str) -> tuple[int, int] | None:
     return idx, idx + len(snippet)
 
 
-def _year_of(date: str) -> str | None:
-    """full_speeches_new.csv se `date`-kolom is DD/MM/YYYY."""
-    parts = date.split("/")
-    return parts[-1] if len(parts) == 3 else None
+def _parse_date(date_str: str, sep: str) -> tuple[int, int, int] | None:
+    """DD<sep>MM<sep>YYYY -> (dag, maand, jaar), of None. Losstaand van
+    zero-padding (bv. "9/10/2016" en "09-10-2016" geven hetzelfde resultaat)."""
+    parts = date_str.split(sep)
+    if len(parts) != 3:
+        return None
+    try:
+        day, month, year = (int(p) for p in parts)
+    except ValueError:
+        return None
+    return day, month, year
 
 
 def load_speeches(path: Path) -> list[dict]:
+    """full_speeches_new.csv se `date`-kolom is DD/MM/YYYY."""
     with open(path, newline="", encoding="utf-8") as f:
         rows = list(csv.DictReader(f))
-    return [{"speaker": r["speaker"], "year": _year_of(r["date"]), "text": r["concatenated_speech"]} for r in rows]
+    speeches = []
+    for r in rows:
+        date = _parse_date(r["date"], "/")
+        speeches.append({
+            "speaker": r["speaker"],
+            "date": date,
+            "year": str(date[2]) if date else None,
+            "text": r["concatenated_speech"],
+        })
+    return speeches
 
 
-def load_components(path: Path) -> list[dict]:
+def load_relations(path: Path) -> list[dict]:
     with open(path, newline="", encoding="utf-8") as f:
         return list(csv.DictReader(f))
 
@@ -64,28 +84,60 @@ def load_fallacies(path: Path) -> list[dict]:
         return list(csv.DictReader(f, delimiter=";"))
 
 
-def build_records(speeches: list[dict], components: list[dict], fallacies: list[dict], years: set[str] | None) -> list[dict]:
-    by_year: dict[str, list[int]] = defaultdict(list)
+def _index_by_speaker_date(speeches: list[dict]) -> dict:
+    index = defaultdict(list)
     for i, s in enumerate(speeches):
-        by_year[s["year"]].append(i)
+        if s["date"] is not None:
+            index[(s["speaker"], s["date"])].append(i)
+    return index
+
+
+def _index_by_speaker_year(speeches: list[dict]) -> dict:
+    index = defaultdict(list)
+    for i, s in enumerate(speeches):
+        index[(s["speaker"], s["year"])].append(i)
+    return index
+
+
+def build_records(speeches: list[dict], relations: list[dict], fallacies: list[dict], years: set[str] | None) -> list[dict]:
+    by_speaker_date = _index_by_speaker_date(speeches)
+    by_speaker_year = _index_by_speaker_year(speeches)
 
     spans_by_speech: dict[int, set] = defaultdict(set)
     fallacies_by_speech: dict[int, set] = defaultdict(set)
 
-    n_component_not_found = n_component_ambiguous = 0
-    for row in components:
+    n_relation_not_found = n_relation_ambiguous = n_relation_cross_speaker = 0
+    for row in relations:
+        if row["RelationType"] != "Support" or row["G_type"] != "Claim":
+            continue
+        if row["Speaker1"] != row["Speaker2"]:
+            # Relatie loopt over sprekersbeurten heen (bv. een premisse van
+            # spreker A die een claim van spreker B aanvalt/steunt) -- valt
+            # buiten onze per-beurt EvalRecord-eenheid.
+            n_relation_cross_speaker += 1
+            continue
         year = row["Year"]
         if years is not None and year not in years:
             continue
-        sentence = row["Sentence"]
-        candidates = [i for i in by_year.get(year, []) if sentence in speeches[i]["text"]]
+
+        speaker = row["Speaker1"]
+        date = _parse_date(row["long_date"], "-")
+        candidates = by_speaker_date.get((speaker, date), []) if date else []
         if not candidates:
-            n_component_not_found += 1
+            candidates = by_speaker_year.get((speaker, year), [])
+
+        dependent, governor = row["Dependent"], row["Governor"]
+        matches = [i for i in candidates if dependent in speeches[i]["text"] and governor in speeches[i]["text"]]
+        if not matches:
+            n_relation_not_found += 1
             continue
-        if len(candidates) > 1:
-            n_component_ambiguous += 1
-        span = _find_span(speeches[candidates[0]]["text"], sentence)
-        spans_by_speech[candidates[0]].add(span)
+        if len(matches) > 1:
+            n_relation_ambiguous += 1
+        idx = matches[0]
+        text = speeches[idx]["text"]
+        for snippet in (dependent, governor):
+            span = _find_span(text, snippet)
+            spans_by_speech[idx].add(span)
 
     n_fallacy_not_found = n_fallacy_ambiguous = 0
     for row in fallacies:
@@ -93,17 +145,23 @@ def build_records(speeches: list[dict], components: list[dict], fallacies: list[
         if years is not None and year not in years:
             continue
         speaker, text = row["Speaker"], row["text"]
-        candidates = [i for i in by_year.get(year, []) if speeches[i]["speaker"] == speaker and text in speeches[i]["text"]]
+        date = _parse_date(row["real_date"], " ")
+        candidates = by_speaker_date.get((speaker, date), []) if date else []
         if not candidates:
+            candidates = by_speaker_year.get((speaker, year), [])
+        matches = [i for i in candidates if text in speeches[i]["text"]]
+        if not matches:
             n_fallacy_not_found += 1
             continue
-        if len(candidates) > 1:
+        if len(matches) > 1:
             n_fallacy_ambiguous += 1
-        idx = candidates[0]
+        idx = matches[0]
         start, end = _find_span(speeches[idx]["text"], text)
         fallacies_by_speech[idx].add((start, end, row["fallacy"]))
 
-    print(f"  componenten: {n_component_not_found} niet gevonden, {n_component_ambiguous} ambigu (eerste match gebruikt)")
+    print(f"  claim+onderbouwing-relaties: {n_relation_not_found} niet gevonden, "
+          f"{n_relation_ambiguous} ambigu (eerste match gebruikt), "
+          f"{n_relation_cross_speaker} sprekersoverschrijdend (overgeslagen)")
     print(f"  drogredenen: {n_fallacy_not_found} niet gevonden, {n_fallacy_ambiguous} ambigu (eerste match gebruikt)")
 
     touched = set(spans_by_speech) | set(fallacies_by_speech)
@@ -128,10 +186,10 @@ def main():
     years = None if args.years == "all" else set(args.years.split(","))
 
     speeches = load_speeches(RAW_DIR / "full_speeches_new.csv")
-    components = load_components(RAW_DIR / "full_components.csv")
+    relations = load_relations(RAW_DIR / "final_relation_graph.csv")
     fallacies = load_fallacies(RAW_DIR / "fallacy_second_version.csv")
 
-    records = build_records(speeches, components, fallacies, years)
+    records = build_records(speeches, relations, fallacies, years)
 
     out_path = RAW_DIR / "test.jsonl"
     with open(out_path, "w", encoding="utf-8") as f:

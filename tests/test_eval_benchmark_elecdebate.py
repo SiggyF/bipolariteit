@@ -1,5 +1,5 @@
 """Tests voor de pure hulpfuncties in pipeline/eval/benchmark_elecdebate.py
-(issue #62). De volledige runner (evaluate_record/run) roept een LLM en de
+(issue #62). De volledige runner (evaluate_extraction/evaluate_tagging/run) roept een LLM en de
 database aan en wordt daarom niet hier maar handmatig geverifieerd, zie
 docs/eval-elecdebate.md."""
 

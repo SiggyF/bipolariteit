@@ -2,10 +2,17 @@
 
 # Haalt de brondata voor het ELECDEBATE-evalharnas op (issue #62, zie
 # docs/eval-elecdebate.md). Primaire bron: pierpaologoffredo/ElecDeb60to20 --
-# de canonieke, volledige annotaties: full_components.csv dekt ALLE
-# claim/premise-zinnen (niet alleen fallacieuze), full_speeches_new.csv geeft
-# echte sprekersbeurten, fallacy_second_version.csv de drogreden-labels MET
-# spreker+datum. scripts/convert_elecdebate.py gebruikt precies deze drie.
+# de canonieke, volledige annotaties. scripts/convert_elecdebate.py gebruikt
+# full_speeches_new.csv (sprekersbeurten), final_relation_graph.csv
+# (Support/Attack-relaties tussen Claim/Premise-componenten -- daaruit
+# reconstrueren we "claim MET onderbouwing", dezelfde eenheid als onze eigen
+# extractie) en fallacy_second_version.csv (drogreden-labels MET
+# spreker+datum).
+#
+# `components` (full_components.csv, alle Claim/Premise-zinnen los van elkaar)
+# wordt niet meer gebruikt door de converter -- dat matcht niet op onze eigen
+# argumentdefinitie (stance + onderbouwing in één eenheid), zie
+# docs/eval-elecdebate.md. Blijft als los, niet-gebruikt referentietarget.
 #
 # pierpaologoffredo/FallacyDetection (`pos`/`conll`-targets) was de eerst
 # gevonden bron, beperkter (alleen fallacieuze spans, geen sprekersbeurten) --
@@ -19,21 +26,24 @@ FALLACYDETECTION := https://raw.githubusercontent.com/pierpaologoffredo/FallacyD
 CONLL_FILES := train.conll dev.conll test.conll
 POS_FILES := pos_train_set.csv pos_test_set.csv
 
-.PHONY: help all components speeches fallacies pos conll paper clean
+.PHONY: help all speeches relations fallacies components pos conll paper clean
 
 help: ## Toon deze lijst
 	@grep -E '^[a-zA-Z_-]+:.*## ' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*## "}; {printf "  %-12s %s\n", $$1, $$2}'
 
-all: components speeches fallacies ## Haal op wat scripts/convert_elecdebate.py gebruikt
-
-components: ## Alle claim/premise-zinnen, ongeacht fallacy (full_components.csv, 44k+ rijen)
-	curl -sSL -o full_components.csv "$(ELECDEB60TO20)/data/component_data/full_components.csv"
+all: speeches relations fallacies ## Haal op wat scripts/convert_elecdebate.py gebruikt
 
 speeches: ## Volledige sprekersbeurten: datum, spreker, tekst (full_speeches_new.csv)
 	curl -sSL -o full_speeches_new.csv "$(ELECDEB60TO20)/data/debates/full_speeches_new.csv"
 
+relations: ## Support/Attack/Equivalent-relaties tussen componenten (final_relation_graph.csv)
+	curl -sSL -o final_relation_graph.csv "$(ELECDEB60TO20)/data/final_relation_graph.csv"
+
 fallacies: ## Drogreden-annotaties met spreker+datum (fallacy_second_version.csv)
 	curl -sSL -o fallacy_second_version.csv "$(ELECDEB60TO20)/data/fallacy_second_version.csv"
+
+components: ## (referentie, niet gebruikt door de converter) alle claim/premise-zinnen los (full_components.csv)
+	curl -sSL -o full_components.csv "$(ELECDEB60TO20)/data/component_data/full_components.csv"
 
 paper: ## Goffredo et al. 2023 (EMNLP), ACL Anthology
 	curl -sSL -o paper-goffredo-2023.pdf "https://aclanthology.org/2023.emnlp-main.684.pdf"
@@ -51,5 +61,5 @@ conll: ## (legacy, niet meer gebruikt door de converter) token-level BIO-fallacy
 	done
 
 clean: ## Verwijder alle opgehaalde/gegenereerde bestanden (behalve dit Makefile)
-	rm -f full_components.csv full_speeches_new.csv fallacy_second_version.csv \
+	rm -f full_speeches_new.csv final_relation_graph.csv fallacy_second_version.csv full_components.csv \
 		$(POS_FILES) $(CONLL_FILES) paper-goffredo-2023.pdf test.jsonl train.jsonl
