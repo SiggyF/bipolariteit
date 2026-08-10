@@ -71,6 +71,10 @@ function pct(value: number) {
 	</section>
 
 	<h2>Argumentherkenning — voorbeelden</h2>
+	<p class="panel-note">
+		Verwacht/voorspeld staat er alleen bij als dit argument overlapt met een gouden drogreden-citaat
+		(zie "Drogreden-tags" hieronder) -- de meeste argumenten zijn geen drogreden en tonen dus geen tags.
+	</p>
 	{extractionGroups.map(({ outcome, items }) => (
 		<details open={outcome !== "gevonden"}>
 			<summary>{EXTRACTION_OUTCOME_LABELS[outcome]} ({items.length})</summary>
@@ -79,6 +83,12 @@ function pct(value: number) {
 					<li class={`llm-call-item validation-outcome--${outcome}`}>
 						<div class="llm-call-meta">
 							<span>{item.speaker ?? "onbekend"}</span>
+							{((item.verwacht?.length ?? 0) > 0 || (item.voorspeld?.length ?? 0) > 0) && (
+								<>
+									<span>verwacht: {item.verwacht.length ? item.verwacht.join(", ") : "—"}</span>
+									<span>voorspeld: {item.voorspeld.length ? item.voorspeld.join(", ") : "—"}</span>
+								</>
+							)}
 						</div>
 						<p class="llm-call-text">{item.text}</p>
 					</li>

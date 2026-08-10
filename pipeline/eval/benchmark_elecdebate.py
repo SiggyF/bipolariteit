@@ -146,6 +146,8 @@ def evaluate_extraction(record: EvalRecord, model, base_url, timeout):
         items.append({
             "speaker": record.speaker,
             "text": record.text[gold.start:gold.end],
+            "start": gold.start,
+            "end": gold.end,
             "outcome": "gevonden" if found else "gemist",
         })
     for pred in predicted_spans:
@@ -153,6 +155,8 @@ def evaluate_extraction(record: EvalRecord, model, base_url, timeout):
             items.append({
                 "speaker": record.speaker,
                 "text": record.text[pred.start:pred.end],
+                "start": pred.start,
+                "end": pred.end,
                 "outcome": "hallucinatie",
             })
 
@@ -203,12 +207,26 @@ def evaluate_tagging(record: EvalRecord, model, base_url, timeout, tag_catalogue
         items.append({
             "speaker": record.speaker,
             "quote_text": quote_text,
+            "start": fallacy_span.start,
+            "end": fallacy_span.end,
             "verwacht": sorted(expected),
             "voorspeld": sorted(predicted),
             "outcome": outcome,
         })
 
     return results, items, n_errors
+
+
+def _attach_tags_to_extraction_items(extraction_items: list[dict], tagging_items: list[dict]) -> None:
+    """Verrijkt elk argumentherkenning-item (in-place) met de gouden/
+    voorspelde drogreden-tags van eventueel overlappende getagde citaten van
+    hetzelfde record. Puur voor weergave op /validatie-rapportage -- geen
+    nieuwe LLM-calls, hergebruikt alleen wat evaluate_tagging al berekende
+    voor de gouden drogreden-citaten (record.fallacies)."""
+    for item in extraction_items:
+        overlapping = [t for t in tagging_items if t["start"] < item["end"] and item["start"] < t["end"]]
+        item["verwacht"] = sorted({v for t in overlapping for v in t["verwacht"]})
+        item["voorspeld"] = sorted({v for t in overlapping for v in t["voorspeld"]})
 
 
 def select_unevaluated(records: list[EvalRecord], evaluated_indices: set[int], limit: int) -> list[tuple[int, EvalRecord]]:
@@ -241,10 +259,10 @@ def run(indexed_records: list[tuple[int, EvalRecord]], model, base_url, timeout=
 
     for n, (i, record) in enumerate(indexed_records):
         new_indices.append(i)
+        record_extraction_items = []
         try:
             span_prf, record_extraction_items = evaluate_extraction(record, model, base_url, timeout)
             span_results.append(span_prf)
-            extraction_items.extend(record_extraction_items)
         except Exception as exc:
             logger.warning("[record %d] extractie mislukt: %s", i, exc)
             n_extract_errors += 1
@@ -253,8 +271,15 @@ def run(indexed_records: list[tuple[int, EvalRecord]], model, base_url, timeout=
             record, model, base_url, timeout, tag_catalogue, tag_skeleton, valid_tags
         )
         fallacy_results.extend(record_fallacy_results)
-        tagging_items.extend(record_tagging_items)
         n_tag_errors += record_tag_errors
+
+        # Geen extra LLM-calls: hergebruikt gewoon wat evaluate_tagging al
+        # berekende voor de gouden drogreden-citaten van dit record, om de
+        # argumentherkenning-voorbeelden ook met tag-info te tonen.
+        _attach_tags_to_extraction_items(record_extraction_items, record_tagging_items)
+        extraction_items.extend(record_extraction_items)
+        tagging_items.extend(record_tagging_items)
+
         logger.info("[record %d/%d, index %d] klaar (%d gouden drogreden-citaten getagd)",
                     n + 1, len(indexed_records), i, len(record_fallacy_results))
 

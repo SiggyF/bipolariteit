@@ -6,7 +6,7 @@ docs/eval-elecdebate.md."""
 import json
 
 from pipeline.eval.benchmark_elecdebate import (
-    _find_span, _overlaps, load_previous, merge, select_unevaluated, write_export,
+    _attach_tags_to_extraction_items, _find_span, _overlaps, load_previous, merge, select_unevaluated, write_export,
 )
 import pipeline.eval.benchmark_elecdebate as benchmark_elecdebate
 from pipeline.eval.metrics import PrecisionRecallF1
@@ -33,6 +33,32 @@ def test_overlaps_false_for_disjoint_spans():
 
 def test_overlaps_true_when_one_contains_the_other():
     assert _overlaps(Span(0, 20), Span(5, 10)) is True
+
+
+def test_attach_tags_to_extraction_items_copies_overlapping_tags():
+    extraction_items = [
+        {"start": 0, "end": 20, "outcome": "gevonden"},
+        {"start": 50, "end": 60, "outcome": "gemist"},
+    ]
+    tagging_items = [
+        {"start": 5, "end": 10, "verwacht": ["Drogreden-Ad-Hominem"], "voorspeld": []},
+    ]
+
+    _attach_tags_to_extraction_items(extraction_items, tagging_items)
+
+    assert extraction_items[0]["verwacht"] == ["Drogreden-Ad-Hominem"]
+    assert extraction_items[0]["voorspeld"] == []
+    assert extraction_items[1]["verwacht"] == []
+    assert extraction_items[1]["voorspeld"] == []
+
+
+def test_attach_tags_to_extraction_items_no_llm_call_needed():
+    """Zuiver een in-memory merge -- geen call_llm-mocking nodig, bewijst
+    dat dit puur weergavelogica is, geen extra evaluatie."""
+    extraction_items = [{"start": 0, "end": 5, "outcome": "gevonden"}]
+    _attach_tags_to_extraction_items(extraction_items, tagging_items=[])
+    assert extraction_items[0]["verwacht"] == []
+    assert extraction_items[0]["voorspeld"] == []
 
 
 def _sample_merged():
