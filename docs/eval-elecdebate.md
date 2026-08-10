@@ -23,10 +23,20 @@ two-turn-experiment, `docs/two-turn-tagging-experiment.md`).
 
 Verder niets: geen stance, geen typology, geen van de overige 4 drogreden-
 typen (zie "Scope drogredenen" hieronder). En expliciet: **tagging draait op
-de gouden drogreden-spans van de dataset, niet op wat onze eigen extractie
+de gouden drogreden-citaten van de dataset, niet op wat onze eigen extractie
 toevallig vond** (`benchmark_elecdebate.evaluate_tagging`) -- anders werkt een
 extractiefout door in de tag-score en meet die niet meer de tagkwaliteit op
 zich.
+
+**"Span" (tekstgrenzen) is alleen relevant voor de argumentherkenning-as.**
+Daar vergelijken we letterlijk óf onze extractie dezelfde tekstgrenzen vindt
+als de dataset -- dat is inherent een vraag over begin/eind. Tagging kent
+geen eigen spandetectie: net als de productie-tagprompt (`tag_arguments.py`)
+classificeert de tag-stap één compleet, al afgebakend citaat in één keer, met
+een reden. De start/end-tekenposities die de brondataset bij een drogreden
+opslaat, gebruiken we uitsluitend om dat citaat uit de brontekst te snijden
+vóórdat we het aan de tagprompt geven -- ze spelen daarna geen rol meer in
+de classificatie of de score.
 
 ## Definitieverschil "argument": waarom dit niet triviaal is
 
@@ -109,7 +119,7 @@ uv run python scripts/convert_elecdebate.py            # jaren 2016,2020 (defaul
 uv run python scripts/convert_elecdebate.py --years all # volledige dataset
 ```
 
-Resultaat (2016+2020): 318 records, 999 argument-spans, 336 drogreden-spans.
+Resultaat (2016+2020): 318 records, 999 argument-spans, 336 drogreden-citaten.
 
 Output (`data/raw/elecdebate60to16/test.jsonl`) blijft, net als de brondata,
 onder `data/raw/` (gitignored) -- we distribueren de dataset zelf niet mee.
@@ -147,7 +157,7 @@ Zie `pipeline/eval/label_mapping.py` voor de mapping zelf.
 - `load_elecdebate.py` -- laadt het JSONL-tussenformaat.
 - `benchmark_elecdebate.py` -- CLI-runner: `evaluate_extraction` (onze
   extractieprompt tegen de gouden argument-spans) en `evaluate_tagging` (onze
-  tagprompt tegen de gouden drogreden-spans) draaien onafhankelijk van
+  tagprompt tegen de gouden drogreden-citaten) draaien onafhankelijk van
   elkaar, puur lezend, geen DB-writes -- zelfde patroon als
   `scripts/compare_models.py`. `--limit` (default 15, zelfde conventie als
   `extract_arguments.py`/`tag_arguments.py`) en `--dataset` (default

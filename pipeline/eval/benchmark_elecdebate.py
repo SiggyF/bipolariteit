@@ -10,10 +10,16 @@ typology en de overige 4 ELECDEBATE-fallacy-typen worden bewust niet
 vergeleken.
 
 Extractie en tagging worden ONAFHANKELIJK van elkaar gescoord: tagging
-draait op de gouden drogreden-spans van de dataset zelf (evaluate_tagging),
+draait op de gouden drogreden-citaten van de dataset zelf (evaluate_tagging),
 niet op wat onze eigen extractie heeft gevonden (evaluate_extraction) --
 anders werkt een extractiefout door in de tag-score en meet die niet meer
-de tagkwaliteit op zich.
+de tagkwaliteit op zich. "Span" (start/end-tekenposities) is alleen relevant
+voor de EXTRACTIE-as: daar vergelijken we of onze extractie dezelfde
+tekstgrenzen vindt als de dataset. Tagging kent geen eigen spandetectie --
+net als de productie-tagprompt (tag_arguments.py) classificeert het een
+compleet, al afgebakend citaat in één keer; de start/end uit de dataset
+gebruiken we hier alleen om dat citaat uit de brontekst te snijden, niet om
+te scoren.
 
 Elke run bouwt VOORT op de vorige: data/export/eval/<dataset>.json bevat
 welke record-indices al gescoord zijn (`evaluated_indices`), en --limit
@@ -154,15 +160,20 @@ def evaluate_extraction(record: EvalRecord, model, base_url, timeout):
 
 
 def evaluate_tagging(record: EvalRecord, model, base_url, timeout, tag_catalogue, tag_skeleton, valid_tags):
-    """Tagt de GOUDEN drogreden-spans van de dataset zelf (niet onze eigen
+    """Tagt de GOUDEN drogreden-citaten van de dataset zelf (niet onze eigen
     extractie) -- zo blijft deze score onafhankelijk van extractiefouten:
     een gemiste extractie mag de tag-score niet laten meezakken (en
-    omgekeerd). Retourneert (lijst van per-span label_set_prf, items,
-    n_tag_errors)."""
+    omgekeerd). Elk citaat wordt als geheel geclassificeerd, precies zoals
+    de productie-tagprompt met een compleet argument-citaat werkt -- geen
+    eigen spandetectie hier. Retourneert (lijst van per-citaat
+    label_set_prf, items, n_tag_errors)."""
     results = []
     items = []
     n_errors = 0
     for fallacy_span in record.fallacies:
+        # fallacy_span.start/.end zijn de tekenposities zoals de brondataset
+        # ze opslaat -- gebruikt om precies dit citaat uit record.text te
+        # snijden, verder speelt de positie geen rol meer in deze functie.
         quote_text = record.text[fallacy_span.start:fallacy_span.end]
         expected = {FALLACY_TAG_MAP[fallacy_span.label]} if fallacy_span.label in FALLACY_TAG_MAP else set()
         try:
@@ -244,7 +255,7 @@ def run(indexed_records: list[tuple[int, EvalRecord]], model, base_url, timeout=
         fallacy_results.extend(record_fallacy_results)
         tagging_items.extend(record_tagging_items)
         n_tag_errors += record_tag_errors
-        logger.info("[record %d/%d, index %d] klaar (%d gouden drogreden-spans getagd)",
+        logger.info("[record %d/%d, index %d] klaar (%d gouden drogreden-citaten getagd)",
                     n + 1, len(indexed_records), i, len(record_fallacy_results))
 
     return {
