@@ -6,7 +6,8 @@ docs/eval-elecdebate.md."""
 import json
 
 from pipeline.eval.benchmark_elecdebate import (
-    _attach_tags_to_extraction_items, _find_span, _overlaps, load_previous, merge, select_unevaluated, write_export,
+    _attach_tags_to_extraction_items, _context_window, _find_span, _overlaps,
+    load_previous, merge, select_unevaluated, write_export,
 )
 import pipeline.eval.benchmark_elecdebate as benchmark_elecdebate
 from pipeline.eval.metrics import PrecisionRecallF1
@@ -33,6 +34,34 @@ def test_overlaps_false_for_disjoint_spans():
 
 def test_overlaps_true_when_one_contains_the_other():
     assert _overlaps(Span(0, 20), Span(5, 10)) is True
+
+
+def test_context_window_includes_surrounding_text():
+    text = "Eerste zin hier. Het woord is een drogreden. Laatste zin hier."
+    start = text.index("drogreden")
+    end = start + len("drogreden")
+    context = _context_window(text, start, end, radius=50)
+    assert "Eerste zin" in context
+    assert "Laatste zin" in context
+    assert "drogreden" in context
+
+
+def test_context_window_marks_truncation_with_ellipsis():
+    text = "a" * 500 + " target " + "b" * 500
+    start = text.index("target")
+    end = start + len("target")
+    context = _context_window(text, start, end, radius=50)
+    assert context.startswith("…")
+    assert context.endswith("…")
+
+
+def test_context_window_no_ellipsis_when_covers_whole_text():
+    text = "Kort tekstje met een woord erin."
+    start = text.index("woord")
+    end = start + len("woord")
+    context = _context_window(text, start, end, radius=1000)
+    assert context == text
+    assert "…" not in context
 
 
 def test_attach_tags_to_extraction_items_copies_overlapping_tags():

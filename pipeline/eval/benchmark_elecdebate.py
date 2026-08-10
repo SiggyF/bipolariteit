@@ -117,6 +117,24 @@ def _overlaps(a: Span, b: Span) -> bool:
     return a.start < b.end and b.start < a.end
 
 
+def _context_window(text: str, start: int, end: int, radius: int = 200) -> str:
+    """Tekst rond [start, end) om als quote_context aan de tagprompt mee te
+    geven. Een deel van de gouden drogreden-citaten is maar één woord of een
+    korte frase (het brondataset annoteert "Loaded Language"-drogredenen op
+    dat niveau) -- zonder de zin eromheen is dat voor een tagger niet te
+    beoordelen, en het is ook niet hoe tag_arguments.py in productie werkt
+    (daar is quote_text altijd al een compleet argument-citaat met context
+    ingebakken)."""
+    window_start = max(0, start - radius)
+    window_end = min(len(text), end + radius)
+    context = text[window_start:window_end]
+    if window_start > 0:
+        context = "…" + context
+    if window_end < len(text):
+        context = context + "…"
+    return context
+
+
 def evaluate_extraction(record: EvalRecord, model, base_url, timeout):
     """Draait alleen de extractiestap. Retourneert (span_prf, items) --
     items is een simpele per-span classificatie (gevonden/gemist/
@@ -181,13 +199,17 @@ def evaluate_tagging(record: EvalRecord, model, base_url, timeout, tag_catalogue
     for fallacy_span in record.fallacies:
         # fallacy_span.start/.end zijn de tekenposities zoals de brondataset
         # ze opslaat -- gebruikt om precies dit citaat uit record.text te
-        # snijden, verder speelt de positie geen rol meer in deze functie.
+        # snijden, EN om de omringende context op te halen (_context_window):
+        # een deel van de gouden citaten is maar één woord ("Loaded
+        # Language"-stijl), en dat kan een tagger niet zonder de zin
+        # eromheen beoordelen.
         quote_text = record.text[fallacy_span.start:fallacy_span.end]
+        quote_context = _context_window(record.text, fallacy_span.start, fallacy_span.end)
         expected = {FALLACY_TAG_MAP[fallacy_span.label]} if fallacy_span.label in FALLACY_TAG_MAP else set()
         try:
             tag_prompt = build_tag_prompt(
                 TOPIC_NAME, record.speaker or "onbekend", None,
-                _PLACEHOLDER_STANCE, _PLACEHOLDER_TYPOLOGY, quote_text, None,
+                _PLACEHOLDER_STANCE, _PLACEHOLDER_TYPOLOGY, quote_text, quote_context,
                 tag_catalogue, tag_skeleton,
             )
             tag_content, _usage = call_tag_llm(base_url, model, tag_prompt, "none", timeout)
