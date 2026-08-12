@@ -13,7 +13,7 @@ else
   RESOLVE_BASE_URL = scripts/detect_llm_base_url.sh
 endif
 
-.PHONY: help probe test test-js test-frontend ca-fixture status build dev dev-stop extract extract-agy tag tag-agy redactie validate export tags-taxonomy db-init pipeline-status backup-db release release-dry argument-doc confrontatie-tree
+.PHONY: help probe test test-js test-frontend ca-fixture status build dev dev-stop extract extract-agy tag tag-agy redactie validate export tags-taxonomy db-init pipeline-status backup-db release release-dry release-www release-www-dry check-public-exposure argument-doc confrontatie-tree
 
 help: ## Toon deze lijst
 	@grep -E '^[a-zA-Z_-]+:.*## ' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*## "}; {printf "  \033[36m%-16s\033[0m %s\n", $$1, $$2}'
@@ -106,3 +106,15 @@ release-dry: ## Zelfde als release, maar toont alleen hostnaam + config. Vars: T
 	@test -n "$(TAG)" || { echo "Gebruik: make release-dry TAG=v0.3.0"; exit 1; }
 	cd frontend && PUBLIC_RELEASE_TAG="$(TAG)" npm run build
 	uv run python scripts/release_preview.py "$(TAG)" --dry-run
+
+release-www: ## Publiceer main naar www.bipolariteit.org (zie docs/release.md)
+	cd frontend && PUBLIC_RELEASE_OFFICIEEL=true npm run build
+	uv run python scripts/release_www.py
+
+release-www-dry: ## Zelfde als release-www, maar toont alleen de config
+	cd frontend && PUBLIC_RELEASE_OFFICIEEL=true npm run build
+	uv run python scripts/release_www.py --dry-run
+
+check-public-exposure: ## Controleer dat er geen gevoelige bestanden publiek staan. Vars: HOST
+	@test -n "$(HOST)" || { echo "Gebruik: make check-public-exposure HOST=www.bipolariteit.org"; exit 1; }
+	uv run python scripts/check_public_exposure.py "$(HOST)"
