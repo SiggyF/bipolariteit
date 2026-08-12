@@ -1,4 +1,4 @@
-Je analyseert één sprekerbeurt uit een Tweede Kamer-debat over het onderwerp "{topic}". Spreker: {actor_name}{actor_party_suffix}.
+Je analyseert één sprekerbeurt uit een {debate_context} over het onderwerp "{topic}". Spreker: {actor_name}{actor_party_suffix}.
 
 Context over de pro/contra-dimensie van dit onderwerp:
 {topic_description}

@@ -1,4 +1,14 @@
-data/raw/
+# let op: `data/raw/*` i.p.v. `data/raw/` -- met een dichte directory-regel
+# kan git een negation-regel op een bestand daaronder niet meer toepassen
+# (git doorzoekt een uitgesloten directory dan niet meer), zie de
+# uitzondering hieronder voor elecdebate60to16/Makefile.
+data/raw/*
+# Uitzondering: het fetch-Makefile voor ELECDEBATE60TO16 (issue #62) is wel
+# ingecheckt, de rest van data/raw/elecdebate60to16/ (dataset, paper, derived
+# JSONL) niet -- zie dat Makefile.
+!data/raw/elecdebate60to16/
+data/raw/elecdebate60to16/*
+!data/raw/elecdebate60to16/Makefile
 # Experimentele tussendocumenten, geen frontend-input (i.t.t. data/export/topics/):
 # lokale verificatie/input voor handmatig LLM-werk, bewust niet gecommit.
 data/export/argument-trees/

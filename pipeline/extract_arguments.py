@@ -51,7 +51,12 @@ VALID_TYPOLOGY = {"factual", "moral", "economic", "legal", "other"}
 _JSON_FENCE_RE = re.compile(r"```(?:json)?\s*(.*?)\s*```", re.DOTALL)
 
 
-def _build_prompt(topic_name, topic_description, actor_name, actor_party, content):
+def _build_prompt(topic_name, topic_description, actor_name, actor_party, content, debate_context="Tweede Kamer-debat"):
+    """debate_context: het soort debat waar de sprekerbeurt uit komt (bv.
+    "Tweede Kamer-debat" in productie). Default blijft de Kamerdebat-
+    framing zodat alle bestaande aanroepen ongewijzigd werken; het
+    evalharnas (pipeline/eval/benchmark_elecdebate.py) geeft hier een eigen
+    waarde voor mee, want ELECDEBATE60TO16 is geen Kamerdebat."""
     actor_party_suffix = f" ({actor_party})" if actor_party else ""
     return PROMPT_TEMPLATE.format(
         topic=topic_name,
@@ -59,6 +64,7 @@ def _build_prompt(topic_name, topic_description, actor_name, actor_party, conten
         actor_name=actor_name,
         actor_party_suffix=actor_party_suffix,
         content=content,
+        debate_context=debate_context,
     )
 
 

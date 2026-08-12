@@ -1,0 +1,148 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const evalModules = import.meta.glob("../../../../data/export/eval/*.json", { eager: true });
+
+export function getStaticPaths() {
+	const modules = import.meta.glob("../../../../data/export/eval/*.json", { eager: true });
+	return Object.values(modules).map((mod: any) => ({
+		params: { dataset: mod.default.dataset },
+	}));
+}
+
+const { dataset } = Astro.params;
+const mod: any = Object.values(evalModules).find((m: any) => m.default.dataset === dataset);
+const data = mod.default;
+
+const generated = new Date(data.generated_at).toLocaleString("nl-NL", { dateStyle: "medium", timeStyle: "short" });
+
+const EXTRACTION_OUTCOME_LABELS: Record<string, string> = {
+	gevonden: "Gevonden",
+	gemist: "Gemist",
+	hallucinatie: "Hallucinatie (niet in de gouden data)",
+};
+const TAGGING_OUTCOME_LABELS: Record<string, string> = {
+	correct: "Correct",
+	gemist: "Gemist",
+	onterecht: "Onterecht toegekend",
+};
+
+function groupBy<T extends { outcome: string }>(items: T[], order: string[]) {
+	return order.map((outcome) => ({ outcome, items: items.filter((item) => item.outcome === outcome) }));
+}
+
+const extractionGroups = groupBy(data.extraction_items, ["gevonden", "gemist", "hallucinatie"]);
+const taggingGroups = groupBy(data.tagging_items, ["correct", "gemist", "onterecht"]);
+
+function pct(value: number) {
+	return `${Math.round(value * 100)}%`;
+}
+
+// Eén badge per unieke tag uit verwacht+voorspeld, zodat een lezer in één
+// oogopslag ziet welke tags matchen (groen) i.p.v. een kale komma-lijst
+// twee keer te moeten vergelijken.
+function tagPills(verwacht: string[] = [], voorspeld: string[] = []) {
+	const verwachtSet = new Set(verwacht);
+	const voorspeldSet = new Set(voorspeld);
+	const alle = [...new Set([...verwacht, ...voorspeld])];
+	return alle.map((tag) => {
+		const inVerwacht = verwachtSet.has(tag);
+		const inVoorspeld = voorspeldSet.has(tag);
+		const kind = inVerwacht && inVoorspeld ? "match" : inVerwacht ? "gemist" : "onterecht";
+		return { tag, kind };
+	});
+}
+---
+
+<BaseLayout title={`Validatie — ${dataset} — Bipolariteit`} class="about status-page">
+	<a href="/validatie-rapportage" class="back-link">&larr; validatie-rapportage</a>
+	<h1>Validatie — {dataset}</h1>
+	<p class="panel-note">
+		Cumulatief {data.n_records} van {data.total_records} sprekersbeurten gescoord, model {data.model}
+		({data.n_extract_errors} extractiefouten, {data.n_tag_errors} tagfouten totaal). Laatst bijgewerkt: {generated}.
+		Elke <code>make validate</code>-run scoort de eerstvolgende, nog niet gescoorde beurten en telt op bij deze
+		cijfers. Zie <code>docs/eval-elecdebate.md</code> in de repository voor de volledige methodologie.
+	</p>
+
+	<section class="validation-summary">
+		<div class="validation-summary-card">
+			<h2>Argumentherkenning</h2>
+			<p class="panel-note">Vindt onze extractie dezelfde tekstspannen als de dataset (standpunt + onderbouwing)?</p>
+			<dl>
+				<dt>Precision</dt><dd>{pct(data.summary.argument_detection.precision)}</dd>
+				<dt>Recall</dt><dd>{pct(data.summary.argument_detection.recall)}</dd>
+				<dt>F1</dt><dd>{pct(data.summary.argument_detection.f1)}</dd>
+			</dl>
+			<p class="validation-summary-caption">
+				Gemeten op tekenniveau ({data.summary.argument_detection.tp} overlappende, {data.summary.argument_detection.fp} te
+				veel, {data.summary.argument_detection.fn} gemiste tekens) — niet per argument geteld, dus deze aantallen zijn
+				geen argumenttelling.
+			</p>
+		</div>
+		<div class="validation-summary-card">
+			<h2>Drogreden-tags</h2>
+			<p class="panel-note">Kent onze tagprompt de juiste drogreden toe op de gouden citaten van de dataset?</p>
+			<dl>
+				<dt>Precision</dt><dd>{pct(data.summary.fallacy_tags.precision)}</dd>
+				<dt>Recall</dt><dd>{pct(data.summary.fallacy_tags.recall)}</dd>
+				<dt>F1</dt><dd>{pct(data.summary.fallacy_tags.f1)}</dd>
+			</dl>
+			<p class="validation-summary-caption">
+				{data.summary.fallacy_tags.tp} correct, {data.summary.fallacy_tags.fp} onterecht, {data.summary.fallacy_tags.fn}{" "}
+				gemist — per drogreden-citaat geteld.
+			</p>
+		</div>
+	</section>
+
+	<h2>Argumentherkenning — voorbeelden</h2>
+	<p class="panel-note">
+		Verwacht/voorspeld staat er alleen bij als dit argument overlapt met een gouden drogreden-citaat
+		(zie "Drogreden-tags" hieronder) -- de meeste argumenten zijn geen drogreden en tonen dus geen tags.
+	</p>
+	{extractionGroups.map(({ outcome, items }) => (
+		<details open={outcome !== "gevonden"}>
+			<summary>{EXTRACTION_OUTCOME_LABELS[outcome]} ({items.length})</summary>
+			<ul class="validation-item-list">
+				{items.map((item: any) => (
+					<li class={`validation-item validation-outcome--${outcome}`}>
+						<div class="validation-item-meta">
+							<span class="validation-item-speaker">{item.speaker ?? "onbekend"}</span>
+							{tagPills(item.verwacht, item.voorspeld).length > 0 && (
+								<span class="validation-pills">
+									{tagPills(item.verwacht, item.voorspeld).map(({ tag, kind }) => (
+										<span class={`validation-pill validation-pill--${kind}`}>{tag}</span>
+									))}
+								</span>
+							)}
+						</div>
+						<blockquote class="validation-quote">{item.text}</blockquote>
+					</li>
+				))}
+			</ul>
+			{items.length === 0 && <p class="panel-note">Geen voorbeelden in deze categorie.</p>}
+		</details>
+	))}
+
+	<h2>Drogreden-tags — voorbeelden</h2>
+	{taggingGroups.map(({ outcome, items }) => (
+		<details open={outcome !== "correct"}>
+			<summary>{TAGGING_OUTCOME_LABELS[outcome]} ({items.length})</summary>
+			<ul class="validation-item-list">
+				{items.map((item: any) => (
+					<li class={`validation-item validation-outcome--${outcome}`}>
+						<div class="validation-item-meta">
+							<span class="validation-item-speaker">{item.speaker ?? "onbekend"}</span>
+							<span class="validation-pills">
+								{tagPills(item.verwacht, item.voorspeld).map(({ tag, kind }) => (
+									<span class={`validation-pill validation-pill--${kind}`}>{tag}</span>
+								))}
+							</span>
+						</div>
+						<blockquote class="validation-quote">{item.quote_text}</blockquote>
+					</li>
+				))}
+			</ul>
+			{items.length === 0 && <p class="panel-note">Geen voorbeelden in deze categorie.</p>}
+		</details>
+	))}
+</BaseLayout>
