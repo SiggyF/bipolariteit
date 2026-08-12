@@ -37,6 +37,16 @@
             { "sleutel": "Meta-Vorm-Setting", "icon": "layout-template" },
             { "sleutel": "Meta-Deelnemers", "icon": "users" }
           ]
+        },
+        {
+          "naam": "Stijlmiddelen",
+          "tags": [
+            { "sleutel": "Stijl-Slogan", "icon": "slogan-banner" },
+            { "sleutel": "Stijl-Herhaling", "icon": "herhaling" },
+            { "sleutel": "Stijl-Aangekondigde-Opsomming", "icon": "aangekondigde-opsomming" },
+            { "sleutel": "Stijl-Antithese", "icon": "antithese" },
+            { "sleutel": "Stijl-Retorische-Vraag", "icon": "retorische-vraag" }
+          ]
         }
       ]
     },
