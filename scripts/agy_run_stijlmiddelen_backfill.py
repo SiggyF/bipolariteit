@@ -16,6 +16,7 @@ Gebruik (eerst een kleine steekproef, NIET meteen de volle batch):
 
 import argparse
 import json
+import logging
 import time
 from datetime import datetime, timezone
 
@@ -29,6 +30,8 @@ from pipeline.tag_arguments import (
     load_valid_tags,
 )
 from scripts.agy_run_tagging_batch import run_agy
+
+logger = logging.getLogger(__name__)
 
 STIJLMIDDELEN_LABELGROEP = "Stijlmiddelen"
 STIJLMIDDELEN_FIELD = "stijlmiddelen"
@@ -76,10 +79,10 @@ def main():
 
     arguments = fetch_backfill_candidates(conn, topic_id, args.limit, args.min_id)
     if not arguments:
-        print("Geen kandidaten (alles al gecontroleerd, of geen getagde argumenten voor deze topic).")
+        logger.info("Geen kandidaten (alles al gecontroleerd, of geen getagde argumenten voor deze topic).")
         return
 
-    print(f"Model: {args.model} | {len(arguments)} argumenten\n")
+    logger.info("Model: %s | %d argumenten", args.model, len(arguments))
 
     total_tags = total_errors = 0
     latencies = []
@@ -98,7 +101,7 @@ def main():
             accepted = _validate_tags(parsed, valid_tags)
         except Exception as exc:
             elapsed = time.monotonic() - start
-            print(f"[arg {arg['id']:>5}] {arg['actor_name']:<25} FOUT na {elapsed:5.1f}s: {exc}")
+            logger.error("[arg %5d] %-25s FOUT na %5.1fs: %s", arg["id"], arg["actor_name"], elapsed, exc)
             total_errors += 1
             continue
         elapsed = time.monotonic() - start
@@ -112,15 +115,18 @@ def main():
             )
 
         total_tags += len(accepted)
-        print(f"[arg {arg['id']:>5}] {arg['actor_name']:<25} {elapsed:5.1f}s | stijl: {[s for s, _ in accepted]}")
+        logger.info(
+            "[arg %5d] %-25s %5.1fs | stijl: %s",
+            arg["id"], arg["actor_name"], elapsed, [s for s, _ in accepted],
+        )
 
     conn.close()
-    print()
-    print(f"Klaar: {len(arguments)} argumenten, {total_errors} fout(en), {total_tags} stijltags toegekend.")
+    logger.info("Klaar: %d argumenten, %d fout(en), %d stijltags toegekend.", len(arguments), total_errors, total_tags)
     if latencies:
         avg = sum(latencies) / len(latencies)
-        print(f"Latency: gem={avg:.1f}s min={min(latencies):.1f}s max={max(latencies):.1f}s")
+        logger.info("Latency: gem=%.1fs min=%.1fs max=%.1fs", avg, min(latencies), max(latencies))
 
 
 if __name__ == "__main__":
+    logging.basicConfig(level=logging.INFO)
     main()
