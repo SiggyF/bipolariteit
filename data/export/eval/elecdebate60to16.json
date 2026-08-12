@@ -1,8 +1,8 @@
 {
   "dataset": "elecdebate60to16",
   "model": "qwen/qwen3.6-27b",
-  "generated_at": "2026-08-10T22:43:28.601631+00:00",
-  "n_records": 10,
+  "generated_at": "2026-08-12T11:04:27.673302+00:00",
+  "n_records": 50,
   "total_records": 318,
   "evaluated_indices": [
     0,
@@ -14,26 +14,66 @@
     6,
     7,
     8,
-    9
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49
   ],
   "n_extract_errors": 0,
   "n_tag_errors": 0,
   "summary": {
     "argument_detection": {
-      "precision": 0.396,
-      "recall": 0.578,
-      "f1": 0.47,
-      "tp": 2405,
-      "fp": 3667,
-      "fn": 1759
+      "precision": 0.356,
+      "recall": 0.607,
+      "f1": 0.449,
+      "tp": 11208,
+      "fp": 20290,
+      "fn": 7266
     },
     "fallacy_tags": {
-      "precision": 1.0,
-      "recall": 0.25,
-      "f1": 0.4,
-      "tp": 2,
-      "fp": 0,
-      "fn": 6
+      "precision": 0.789,
+      "recall": 0.484,
+      "f1": 0.6,
+      "tp": 15,
+      "fp": 4,
+      "fn": 16
     }
   },
   "extraction_items": [
@@ -450,6 +490,1200 @@
       "outcome": "gevonden",
       "verwacht": [],
       "voorspeld": []
+    },
+    {
+      "speaker": "CLINTON",
+      "text": "that is just not accurate. I was against it once it was finally negotiated and the terms were laid out",
+      "start": 6,
+      "end": 108,
+      "outcome": "gemist",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "TRUMP",
+      "text": "You called it the gold standard of trade deals",
+      "start": 0,
+      "end": 46,
+      "outcome": "gemist",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "CLINTON",
+      "text": "you live in your own reality, but that is not the facts",
+      "start": 21,
+      "end": 76,
+      "outcome": "gemist",
+      "verwacht": [
+        "Drogreden-Ad-Hominem"
+      ],
+      "voorspeld": [
+        "Drogreden-Ad-Hominem"
+      ]
+    },
+    {
+      "speaker": "CLINTON",
+      "text": "that is not the facts. The facts are—I did say I hoped it would be a good deal",
+      "start": 55,
+      "end": 133,
+      "outcome": "gemist",
+      "verwacht": [
+        "Drogreden-Ad-Hominem"
+      ],
+      "voorspeld": [
+        "Drogreden-Ad-Hominem"
+      ]
+    },
+    {
+      "speaker": "CLINTON",
+      "text": "new jobs with rising incomes, investments, not in more tax cuts that would add $5 trillion to the debt",
+      "start": 214,
+      "end": 316,
+      "outcome": "gemist",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "CLINTON",
+      "text": "we need to have strong growth, fair growth, sustained growth. We also have to look at how we help families balance the responsibilities at home and the responsibilities at business. So we have a very robust set of plans",
+      "start": 28,
+      "end": 247,
+      "outcome": "gevonden",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "CLINTON",
+      "text": "We also have to look at how we help families balance the responsibilities at home and the responsibilities at business. So we have a very robust set of plans",
+      "start": 90,
+      "end": 247,
+      "outcome": "gevonden",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "CLINTON",
+      "text": "we have a very robust set of plans. And people have looked at both of our plans, have concluded that mine would create 10 million jobs and yours would lose us 3.5 million jobs, and explode the debt which would have a recession",
+      "start": 213,
+      "end": 439,
+      "outcome": "gevonden",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "TRUMP",
+      "text": "Your regulations are a disaster, and you’re going to increase regulations all over the place. And by the way, my tax cut is the biggest since Ronald Reagan. I’m very proud of it. It will create tremendous numbers of new jobs. But regulations, you are going to regulate these businesses out of existence",
+      "start": 172,
+      "end": 474,
+      "outcome": "gevonden",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "TRUMP",
+      "text": "Your regulations are a disaster, and you’re going to increase regulations all over the place. And by the way, my tax cut is the biggest since Ronald Reagan. I’m very proud of it. It will create tremendous numbers of new jobs. But regulations, you are going to regulate these businesses out of existence. When I go around—Lester, I tell you this, I’ve been all over. And when I go around, despite the tax cut, the thing—the things that business as in people like the most is the fact that I’m cutting regulation. You have regulations on top of regulations, and new companies cannot form and old companies are going out of business. And you want to increase the regulations and make them even worse",
+      "start": 172,
+      "end": 868,
+      "outcome": "gevonden",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "TRUMP",
+      "text": "you are going to regulate these businesses out of existence. When I go around—Lester, I tell you this, I’ve been all over. And when I go around, despite the tax cut, the thing—the things that business as in people like the most is the fact that I’m cutting regulation. You have regulations on top of regulations, and new companies cannot form and old companies are going out of business",
+      "start": 415,
+      "end": 801,
+      "outcome": "gevonden",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "TRUMP",
+      "text": "You are going to approve one of the biggest tax cuts in history. You are going to approve one of the biggest tax increases in history.",
+      "start": 0,
+      "end": 134,
+      "outcome": "hallucinatie",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "TRUMP",
+      "text": "I’m going to cut taxes big league, and you’re going to raise taxes big league, end of story.",
+      "start": 900,
+      "end": 992,
+      "outcome": "hallucinatie",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "CLINTON",
+      "text": "What I have proposed would cut regulations and streamline them for small businesses. What I have proposed would be paid for by raising taxes on the wealthy",
+      "start": 87,
+      "end": 242,
+      "outcome": "gevonden",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "CLINTON",
+      "text": "What I have proposed would be paid for by raising taxes on the wealthy, because they have made all the gains in the economy",
+      "start": 172,
+      "end": 295,
+      "outcome": "gevonden",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "TRUMP",
+      "text": "we have no leadership. And honestly, that starts with Secretary Clinton",
+      "start": 1769,
+      "end": 1840,
+      "outcome": "gevonden",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "CLINTON",
+      "text": "when I look at what you have proposed, you have what is called now the Trump loophole, because it would so advantage you and the business you do",
+      "start": 90,
+      "end": 234,
+      "outcome": "gemist",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "CLINTON",
+      "text": "Trickle-down did not work. It got us into the mess we were in, in 2008 and 2009",
+      "start": 38,
+      "end": 117,
+      "outcome": "gevonden",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "CLINTON",
+      "text": "building the middle class, investing in the middle class, making college debt-free so more young people can get their education, helping people refinance their—their debt from college at a lower rate. Those are the kinds of things that will really boost the economy",
+      "start": 386,
+      "end": 651,
+      "outcome": "gevonden",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "CLINTON",
+      "text": "investing in the middle class, making college debt-free so more young people can get their education, helping people refinance their—their debt from college at a lower rate. Those are the kinds of things that will really boost the economy",
+      "start": 413,
+      "end": 651,
+      "outcome": "gevonden",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "CLINTON",
+      "text": "making college debt-free so more young people can get their education, helping people refinance their—their debt from college at a lower rate. Those are the kinds of things that will really boost the economy",
+      "start": 444,
+      "end": 651,
+      "outcome": "gevonden",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "CLINTON",
+      "text": "helping people refinance their—their debt from college at a lower rate. Those are the kinds of things that will really boost the economy",
+      "start": 515,
+      "end": 651,
+      "outcome": "gevonden",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "TRUMP",
+      "text": "Typical politician. All talk, no action",
+      "start": 0,
+      "end": 39,
+      "outcome": "gemist",
+      "verwacht": [
+        "Drogreden-Ad-Hominem"
+      ],
+      "voorspeld": [
+        "Drogreden-Ad-Hominem"
+      ]
+    },
+    {
+      "speaker": "TRUMP",
+      "text": "Typical politician. All talk, no action. Sounds good, doesn’t work. Never going to happen",
+      "start": 0,
+      "end": 89,
+      "outcome": "gemist",
+      "verwacht": [
+        "Drogreden-Ad-Hominem"
+      ],
+      "voorspeld": [
+        "Drogreden-Ad-Hominem"
+      ]
+    },
+    {
+      "speaker": "TRUMP",
+      "text": "Our country is suffering because people like Secretary Clinton have made such bad decisions in terms of our jobs and in terms of what’s going on. Now, look, we have the worst revival of an economy since the Great Depression. And believe me: We’re in a bubble right now. And the only thing that looks good is the stock market, but if you raise interest rates even a little bit, that’s going to come crashing down. We are in a big, fat, ugly bubble. And we better be awfully careful. And we have a Fed that’s doing political things. This Janet Yellen of the Fed. The Fed is doing political—by keeping the interest rates at this level. And believe me: The day Obama goes off, and he leaves, and goes out to the golf course for the rest of his life to play golf, when they raise interest rates, you’re going to see some very bad things happen, because the Fed is not doing their job. The Fed is being more political than Secretary Clinton.",
+      "start": 91,
+      "end": 1026,
+      "outcome": "hallucinatie",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "TRUMP",
+      "text": "When we have a country that’s doing so badly, that’s being ripped off by every single country in the world, it’s the kind of thinking that our country needs, because everybody—Lester, we have a trade deficit with all of the countries that we do business with, of almost $800 billion a year. You know what that is? That means, who’s negotiating these trade deals? We have people that are political hacks negotiating our trade deals.",
+      "start": 594,
+      "end": 1025,
+      "outcome": "hallucinatie",
+      "verwacht": [
+        "Drogreden-Bespelen-Publiek"
+      ],
+      "voorspeld": []
+    },
+    {
+      "speaker": "TRUMP",
+      "text": "I will release my tax returns—against my lawyer’s wishes—when she releases her 33,000 e-mails that have been deleted. As soon as she releases them, I will release",
+      "start": 480,
+      "end": 642,
+      "outcome": "gemist",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "TRUMP",
+      "text": "That was more than a mistake. That was done purposely",
+      "start": 0,
+      "end": 53,
+      "outcome": "gemist",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "TRUMP",
+      "text": "Our country has tremendous problems. We’re a debtor nation. We’re a serious debtor nation. And we have a country that needs new roads, new tunnels, new bridges, new airports, new schools, new hospitals",
+      "start": 2399,
+      "end": 2600,
+      "outcome": "gevonden",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "TRUMP",
+      "text": "When you have your staff taking the Fifth Amendment, taking the Fifth so they’re not prosecuted, when you have the man that set up the illegal server taking the Fifth, I think it’s disgraceful. And believe me, this country thinks it’s—really thinks it’s disgraceful, also.",
+      "start": 108,
+      "end": 380,
+      "outcome": "hallucinatie",
+      "verwacht": [
+        "Drogreden-Bespelen-Publiek"
+      ],
+      "voorspeld": [
+        "Drogreden-Bespelen-Publiek"
+      ]
+    },
+    {
+      "speaker": "TRUMP",
+      "text": "As far as my tax returns, you don’t learn that much from tax returns. That I can tell you. You learn a lot from financial disclosure. And you should go down and take a look at that.",
+      "start": 381,
+      "end": 562,
+      "outcome": "hallucinatie",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "TRUMP",
+      "text": "The other thing, I’m extremely underleveraged. The report that said $650—which, by the way, a lot of friends of mine that know my business say, boy, that’s really not a lot of money. It’s not a lot of money relative to what I had. The buildings that were in question, they said in the same report, which was—actually, it wasn’t even a bad story, to be honest with you, but the buildings are worth $3.9 billion. And the $650 isn’t even on that. But it’s not $650. It’s much less than that. But I could give you a list of banks, I would—if that would help you, I would give you a list of banks. These are very fine institutions, very fine banks. I could do that very quickly. I am very underleveraged. I have a great company. I have a tremendous income. And the reason I say that is not in a braggadocios way. It’s because it’s about time that this country had somebody running it that has an idea about money.",
+      "start": 563,
+      "end": 1471,
+      "outcome": "hallucinatie",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "TRUMP",
+      "text": "I built an unbelievable company. Some of the greatest assets anywhere in the world, real estate assets anywhere in the world, beyond the United States, in Europe, lots of different places",
+      "start": 84,
+      "end": 271,
+      "outcome": "gemist",
+      "verwacht": [
+        "Drogreden-Bespelen-Publiek"
+      ],
+      "voorspeld": []
+    },
+    {
+      "speaker": "TRUMP",
+      "text": "The Trump International is way under budget and way ahead of schedule. And we should be able to do that for our country",
+      "start": 1662,
+      "end": 1781,
+      "outcome": "gevonden",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "CLINTON",
+      "text": "Race remains a significant challenge in our country. Unfortunately, race still determines too much",
+      "start": 20,
+      "end": 118,
+      "outcome": "gevonden",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "CLINTON",
+      "text": "Unfortunately, race still determines too much, often determines where people live",
+      "start": 73,
+      "end": 154,
+      "outcome": "gevonden",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "CLINTON",
+      "text": "Unfortunately, race still determines too much, often determines where people live, determines what kind of education in their public schools they can get",
+      "start": 73,
+      "end": 226,
+      "outcome": "gevonden",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "CLINTON",
+      "text": "We have to restore trust between communities and the police. We have to work to make sure that our police are using the best training, the best techniques, that they’re well prepared to use force only when necessary. Everyone should be respected by the law, and everyone should respect the law. Right now, that’s not the case in a lot of our neighborhoods. So I have, ever since the first day of my campaign, called for criminal justice reform. I’ve laid out a platform that I think would begin to remedy some of the problems we have in the criminal justice system. But we also have to recognize, in addition to the challenges that we face with policing, there are so many good, brave police officers who equally want reform. So we have to bring communities together in order to begin working on that as a mutual goal. And we’ve got to get guns out of the hands of people who should not have them. The gun epidemic is the leading cause of death of young African- American men, more than the next nine causes put together. So we have to do two things, as I said",
+      "start": 428,
+      "end": 1488,
+      "outcome": "gevonden",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "CLINTON",
+      "text": "Everyone should be respected by the law, and everyone should respect the law. Right now, that’s not the case in a lot of our neighborhoods. So I have, ever since the first day of my campaign, called for criminal justice reform",
+      "start": 645,
+      "end": 871,
+      "outcome": "gevonden",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "CLINTON",
+      "text": "we also have to recognize, in addition to the challenges that we face with policing, there are so many good, brave police officers who equally want reform. So we have to bring communities together in order to begin working on that as a mutual goal",
+      "start": 998,
+      "end": 1245,
+      "outcome": "gemist",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "CLINTON",
+      "text": "So we have to do two things, as I said. We have to restore trust. We have to work with the police",
+      "start": 1450,
+      "end": 1547,
+      "outcome": "gemist",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "CLINTON",
+      "text": "So we have to do two things, as I said. We have to restore trust. We have to work with the police. We have to make sure they respect the communities and the communities respect them. And we have to tackle the plague of gun violence",
+      "start": 1450,
+      "end": 1681,
+      "outcome": "gemist",
+      "verwacht": [
+        "Drogreden-Bespelen-Publiek"
+      ],
+      "voorspeld": [
+        "Drogreden-Bespelen-Publiek"
+      ]
+    },
+    {
+      "speaker": "CLINTON",
+      "text": "We have to work with the police. We have to make sure they respect the communities and the communities respect them",
+      "start": 1516,
+      "end": 1631,
+      "outcome": "gemist",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "CLINTON",
+      "text": "We’ve just seen those two tragic examples in both Tulsa and Charlotte.",
+      "start": 304,
+      "end": 374,
+      "outcome": "hallucinatie",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "TRUMP",
+      "text": "Thousands of shootings. And I’m saying, where is this? Is this a war-torn country? What are we doing? And we have to stop the violence",
+      "start": 932,
+      "end": 1066,
+      "outcome": "gevonden",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "TRUMP",
+      "text": "we have to stop the violence. We have to bring back law and order",
+      "start": 1038,
+      "end": 1103,
+      "outcome": "gevonden",
+      "verwacht": [],
+      "voorspeld": [
+        "Drogreden-Bespelen-Publiek"
+      ]
+    },
+    {
+      "speaker": "TRUMP",
+      "text": "We have to bring back law and order. In a place like Chicago, where thousands of people have been killed, thousands over the last number of years, in fact, almost 4,000 have been killed since Barack Obama became president, over—almost 4,000 people in Chicago have been killed",
+      "start": 1068,
+      "end": 1343,
+      "outcome": "gevonden",
+      "verwacht": [],
+      "voorspeld": [
+        "Drogreden-Bespelen-Publiek"
+      ]
+    },
+    {
+      "speaker": "TRUMP",
+      "text": "We have to bring back law and order. In a place like Chicago, where thousands of people have been killed, thousands over the last number of years, in fact, almost 4,000 have been killed since Barack Obama became president, over—almost 4,000 people in Chicago have been killed. We have to bring back law and order. Now, whether or not in a place like Chicago you do stop and frisk, which worked very well, Mayor Giuliani is here, worked very well in New York. It brought the crime rate way down. But you take the gun away from criminals that shouldn’t be having it. We have gangs roaming the street. And in many cases, they’re illegally here, illegal immigrants. And they have guns",
+      "start": 1068,
+      "end": 1748,
+      "outcome": "gevonden",
+      "verwacht": [],
+      "voorspeld": [
+        "Drogreden-Bespelen-Publiek"
+      ]
+    },
+    {
+      "speaker": "TRUMP",
+      "text": "We have to bring back law and order. In a place like Chicago, where thousands of people have been killed, thousands over the last number of years, in fact, almost 4,000 have been killed since Barack Obama became president, over—almost 4,000 people in Chicago have been killed. We have to bring back law and order. Now, whether or not in a place like Chicago you do stop and frisk, which worked very well, Mayor Giuliani is here, worked very well in New York. It brought the crime rate way down. But you take the gun away from criminals that shouldn’t be having it. We have gangs roaming the street. And in many cases, they’re illegally here, illegal immigrants. And they have guns. And they shoot people",
+      "start": 1068,
+      "end": 1771,
+      "outcome": "gevonden",
+      "verwacht": [],
+      "voorspeld": [
+        "Drogreden-Bespelen-Publiek"
+      ]
+    },
+    {
+      "speaker": "TRUMP",
+      "text": "we have to be very vigilant. We have to be—we have to know what we’re doing. Right now, our police, in many cases, are afraid to do anything",
+      "start": 1808,
+      "end": 1948,
+      "outcome": "gevonden",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "TRUMP",
+      "text": "We have to protect our inner cities, because African-American communities are being decimated by crime, decimated",
+      "start": 1950,
+      "end": 2063,
+      "outcome": "gevonden",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "TRUMP",
+      "text": "These are people that are bad people that shouldn’t be—when you have 3,000 shootings in Chicago from January 1st, when you have 4,000 people killed in Chicago by guns, from the beginning of the presidency of Barack Obama, his hometown, you have to have stop-and-frisk",
+      "start": 156,
+      "end": 423,
+      "outcome": "gevonden",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "TRUMP",
+      "text": "when you have 3,000 shootings in Chicago from January 1st, when you have 4,000 people killed in Chicago by guns, from the beginning of the presidency of Barack Obama, his hometown, you have to have stop-and-frisk",
+      "start": 211,
+      "end": 423,
+      "outcome": "gevonden",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "CLINTON",
+      "text": "Stop-and-frisk was found to be unconstitutional and, in part, because it was ineffective. It did not do what it needed to do",
+      "start": 397,
+      "end": 521,
+      "outcome": "gevonden",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "CLINTON",
+      "text": "We cannot just say law and order. We have to say—we have to come forward with a plan that is going to divert people from the criminal justice system",
+      "start": 1161,
+      "end": 1309,
+      "outcome": "gemist",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "CLINTON",
+      "text": "deal with mandatory minimum sentences, which have put too many people away for too long for doing too little",
+      "start": 1311,
+      "end": 1419,
+      "outcome": "gemist",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "CLINTON",
+      "text": "I believe strongly that commonsense gun safety measures would assist us. Right now—and this is something Donald has supported, along with the gun lobby—right now, we’ve got too many military-style weapons on the streets. In a lot of places, our police are outgunned",
+      "start": 1717,
+      "end": 1982,
+      "outcome": "gevonden",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "CLINTON",
+      "text": "I believe strongly that commonsense gun safety measures would assist us. Right now—and this is something Donald has supported, along with the gun lobby—right now, we’ve got too many military-style weapons on the streets. In a lot of places, our police are outgunned. We need comprehensive background checks",
+      "start": 1717,
+      "end": 2023,
+      "outcome": "gevonden",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "CLINTON",
+      "text": "In a lot of places, our police are outgunned. We need comprehensive background checks, and we need to keep guns out of the hands of those who will do harm",
+      "start": 1938,
+      "end": 2092,
+      "outcome": "gevonden",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "CLINTON",
+      "text": "Now, I believe in community policing. And, in fact, violent crime is one-half of what it was in 1991. Property crime is down 40 percent.",
+      "start": 523,
+      "end": 659,
+      "outcome": "hallucinatie",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "CLINTON",
+      "text": "Too many young African-American and Latino men ended up in jail for nonviolent offenses. And it’s just a fact that if you’re a young African-American man and you do the same thing as a young white man, you are more likely to be arrested, charged, convicted, and incarcerated.",
+      "start": 809,
+      "end": 1084,
+      "outcome": "hallucinatie",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "CLINTON",
+      "text": "You shouldn’t have a profit motivation to fill prison cells with young Americans.",
+      "start": 1578,
+      "end": 1659,
+      "outcome": "hallucinatie",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "CLINTON",
+      "text": "If you’re too dangerous to fly, you are too dangerous to buy a gun.",
+      "start": 2225,
+      "end": 2292,
+      "outcome": "hallucinatie",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "CLINTON",
+      "text": "I think implicit bias is a problem for everyone, not just police. I think, unfortunately, too many of us in our great country jump to conclusions about each other",
+      "start": 8,
+      "end": 170,
+      "outcome": "gemist",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "CLINTON",
+      "text": "when it comes to policing, since it can have literally fatal consequences, I have said, in my first budget, we would put money into that budget to help us deal with implicit bias by retraining a lot of our police officers",
+      "start": 289,
+      "end": 510,
+      "outcome": "gevonden",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "CLINTON",
+      "text": "in my first budget, we would put money into that budget to help us deal with implicit bias by retraining a lot of our police officers. I’ve met with a group of very distinguished, experienced police chiefs a few weeks ago. They admit it’s an issue. They’ve got a lot of concerns. Mental health is one of the biggest concerns, because now police are having to handle a lot of really difficult mental health problems on the street. They want support",
+      "start": 377,
+      "end": 824,
+      "outcome": "gevonden",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "CLINTON",
+      "text": "in my first budget, we would put money into that budget to help us deal with implicit bias by retraining a lot of our police officers. I’ve met with a group of very distinguished, experienced police chiefs a few weeks ago. They admit it’s an issue. They’ve got a lot of concerns. Mental health is one of the biggest concerns, because now police are having to handle a lot of really difficult mental health problems on the street. They want support, they want more training",
+      "start": 377,
+      "end": 849,
+      "outcome": "gevonden",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "CLINTON",
+      "text": "in my first budget, we would put money into that budget to help us deal with implicit bias by retraining a lot of our police officers. I’ve met with a group of very distinguished, experienced police chiefs a few weeks ago. They admit it’s an issue. They’ve got a lot of concerns. Mental health is one of the biggest concerns, because now police are having to handle a lot of really difficult mental health problems on the street. They want support, they want more training, they want more assistance",
+      "start": 377,
+      "end": 876,
+      "outcome": "gevonden",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "CLINTON",
+      "text": "Mental health is one of the biggest concerns, because now police are having to handle a lot of really difficult mental health problems on the street",
+      "start": 657,
+      "end": 805,
+      "outcome": "gevonden",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "TRUMP",
+      "text": "I agree with you. When a person is on a watch list or a no-fly list, and I have the endorsement of the NRA, which I’m very proud of. These are very, very good people, and they’re protecting the Second Amendment. But I think we have to look very strongly at no-fly lists and watch lists",
+      "start": 139,
+      "end": 424,
+      "outcome": "gemist",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "TRUMP",
+      "text": "I do want to bring up the fact that you were the one that brought up the words super-predator about young black youth. And that’s a term that I think was a—it’s—it’s been horribly met, as you know. I think you’ve apologized for it. But I think it was a terrible thing to say",
+      "start": 605,
+      "end": 879,
+      "outcome": "gemist",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "TRUMP",
+      "text": "we went from 2,200 to 500. And it was continued on by Mayor Bloomberg. And it was terminated by current mayor. But stop-and-frisk had a tremendous impact on the safety of New York City",
+      "start": 1443,
+      "end": 1627,
+      "outcome": "gevonden",
+      "verwacht": [
+        "Drogreden-Bespelen-Publiek"
+      ],
+      "voorspeld": []
+    },
+    {
+      "speaker": "TRUMP",
+      "text": "stop-and-frisk had a tremendous impact on the safety of New York City. Tremendous beyond belief",
+      "start": 1558,
+      "end": 1653,
+      "outcome": "gevonden",
+      "verwacht": [
+        "Drogreden-Bespelen-Publiek"
+      ],
+      "voorspeld": []
+    },
+    {
+      "speaker": "CLINTON",
+      "text": "it is important that we learn about what has been effective. And not go to things that sound good that really did not have the kind of impact that we would want",
+      "start": 268,
+      "end": 428,
+      "outcome": "gevonden",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "CLINTON",
+      "text": "no one should disagree about respecting the rights of young men who live in those neighborhoods. And so we need to do a better job of working, again, with the communities, faith communities, business communities, as well as the police to try to deal with this problem",
+      "start": 497,
+      "end": 764,
+      "outcome": "gevonden",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "TRUMP",
+      "text": "I was the one that got him to produce the birth certificate. And I think I did a good job",
+      "start": 157,
+      "end": 246,
+      "outcome": "gemist",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "TRUMP",
+      "text": "I say nothing. I say nothing, because I was able to get him to produce it",
+      "start": 18,
+      "end": 91,
+      "outcome": "gemist",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "CLINTON",
+      "text": "Donald started his career back in 1973 being sued by the Justice Department for racial discrimination because he would not rent apartments in one of his developments to African-Americans, and he made sure that the people who worked for him understood that was the policy. He actually was sued twice by the Justice Department. So he has a long record of engaging in racist behavior",
+      "start": 650,
+      "end": 1030,
+      "outcome": "gevonden",
+      "verwacht": [
+        "Drogreden-Ad-Hominem"
+      ],
+      "voorspeld": [
+        "Drogreden-Ad-Hominem"
+      ]
+    },
+    {
+      "speaker": "CLINTON",
+      "text": "he made sure that the people who worked for him understood that was the policy. He actually was sued twice by the Justice Department. So he has a long record of engaging in racist behavior",
+      "start": 842,
+      "end": 1030,
+      "outcome": "gevonden",
+      "verwacht": [
+        "Drogreden-Ad-Hominem"
+      ],
+      "voorspeld": [
+        "Drogreden-Ad-Hominem"
+      ]
+    },
+    {
+      "speaker": "CLINTON",
+      "text": "He actually was sued twice by the Justice Department. So he has a long record of engaging in racist behavior",
+      "start": 922,
+      "end": 1030,
+      "outcome": "gevonden",
+      "verwacht": [
+        "Drogreden-Ad-Hominem"
+      ],
+      "voorspeld": [
+        "Drogreden-Ad-Hominem"
+      ]
+    },
+    {
+      "speaker": "CLINTON",
+      "text": "the birther lie was a very hurtful one. You know, Barack Obama is a man of great dignity",
+      "start": 1036,
+      "end": 1124,
+      "outcome": "gemist",
+      "verwacht": [
+        "Drogreden-Ad-Hominem"
+      ],
+      "voorspeld": [
+        "Drogreden-Ad-Hominem"
+      ]
+    },
+    {
+      "speaker": "CLINTON",
+      "text": "the birther lie was a very hurtful one. You know, Barack Obama is a man of great dignity. And I could tell how much it bothered him and annoyed him that this was being touted and used against him",
+      "start": 1036,
+      "end": 1231,
+      "outcome": "gemist",
+      "verwacht": [
+        "Drogreden-Ad-Hominem"
+      ],
+      "voorspeld": [
+        "Drogreden-Ad-Hominem"
+      ]
+    },
+    {
+      "speaker": "CLINTON",
+      "text": "But it can’t be dismissed that easily. He has really started his political activity based on this racist lie that our first black president was not an American citizen. There was absolutely no evidence for it, but he persisted, he persisted year after year, because some of his supporters, people that he was trying to bring into his fold, apparently believed it or wanted to believe it.",
+      "start": 247,
+      "end": 634,
+      "outcome": "hallucinatie",
+      "verwacht": [
+        "Drogreden-Ad-Hominem"
+      ],
+      "voorspeld": [
+        "Drogreden-Ad-Hominem"
+      ]
+    },
+    {
+      "speaker": "TRUMP",
+      "text": "I got to watch in preparing for this some of your debates against Barack Obama. You treated him with terrible disrespect",
+      "start": 39,
+      "end": 159,
+      "outcome": "gemist",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "TRUMP",
+      "text": "You were after him, you were trying to—you even sent out or your campaign sent out pictures of him in a certain garb, very famous pictures",
+      "start": 280,
+      "end": 418,
+      "outcome": "gemist",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "CLINTON",
+      "text": "I think cyber security, cyber warfare will be one of the biggest challenges facing the next president, because clearly we’re facing at this point two different kinds of adversaries. There are the independent hacking groups that do it mostly for commercial reasons to try to steal information that they then can use to make money. But increasingly, we are seeing cyber attacks coming from states, organs of states. The most recent and troubling of these has been Russia. There’s no doubt now that Russia has used cyber attacks against all kinds of organizations in our country, and I am deeply concerned about this",
+      "start": 6,
+      "end": 619,
+      "outcome": "gevonden",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "CLINTON",
+      "text": "I was so—I was so shocked when Donald publicly invited Putin to hack into Americans. That is just unacceptable",
+      "start": 1686,
+      "end": 1796,
+      "outcome": "gevonden",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "CLINTON",
+      "text": "We need to make it very clear—whether it’s Russia, China, Iran or anybody else—the United States has much greater capacity. And we are not going to sit idly by and permit state actors to go after our information, our private-sector information or our public-sector information. And we’re going to have to make it clear that we don’t want to use the kinds of tools that we have. We don’t want to engage in a different kind of warfare. But we will defend the citizens of this country. And the Russians need to understand that. I think they’ve been treating it as almost a probing, how far would we go, how much would we do.",
+      "start": 1049,
+      "end": 1670,
+      "outcome": "hallucinatie",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "TRUMP",
+      "text": "I was just endorsed—and more are coming next week—it will be over 200 admirals, many of them here—admirals and generals endorsed me to lead this country. That just happened, and many more are coming",
+      "start": 22,
+      "end": 220,
+      "outcome": "gevonden",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "TRUMP",
+      "text": "That just happened, and many more are coming. And I’m very proud of it. In addition, I was just endorsed by ICE",
+      "start": 176,
+      "end": 287,
+      "outcome": "gevonden",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "TRUMP",
+      "text": "I agree to parts of what Secretary Clinton said. We should be better than anybody else",
+      "start": 758,
+      "end": 844,
+      "outcome": "gemist",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "TRUMP",
+      "text": "we have to get very, very tough on cyber and cyber warfare. It is—it is a huge problem",
+      "start": 1863,
+      "end": 1949,
+      "outcome": "gevonden",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "TRUMP",
+      "text": "we have to get very, very tough on cyber and cyber warfare. It is—it is a huge problem. I have a son. He’s 10 years old. He has computers. He is so good with these computers, it’s unbelievable. The security aspect of cyber is very, very tough",
+      "start": 1863,
+      "end": 2105,
+      "outcome": "gevonden",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "TRUMP",
+      "text": "we are not doing the job we should be doing. But that’s true throughout our whole governmental society. We have so many things that we have to do better",
+      "start": 2153,
+      "end": 2305,
+      "outcome": "gevonden",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "TRUMP",
+      "text": "We have so many things that we have to do better, Lester, and certainly cyber is one of them",
+      "start": 2257,
+      "end": 2349,
+      "outcome": "gevonden",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "TRUMP",
+      "text": "I don’t think anybody knows it was Russia that broke into the DNC. She’s saying Russia, Russia, Russia, but I don’t—maybe it was. I mean, it could be Russia, but it could also be China. It could also be lots of other people. It also could be somebody sitting on their bed that weighs 400 pounds, OK? You don’t know who broke in to DNC.",
+      "start": 869,
+      "end": 1204,
+      "outcome": "hallucinatie",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "TRUMP",
+      "text": "But what did we learn with DNC? We learned that Bernie Sanders was taken advantage of by your people, by Debbie Wasserman Schultz. Look what happened to her. But Bernie Sanders was taken advantage of. That’s what we learned.",
+      "start": 1205,
+      "end": 1429,
+      "outcome": "hallucinatie",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "TRUMP",
+      "text": "Now, whether that was Russia, whether that was China, whether it was another country, we don’t know, because the truth is, under President Obama we’ve lost control of things that we used to have control over.",
+      "start": 1430,
+      "end": 1638,
+      "outcome": "hallucinatie",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "CLINTON",
+      "text": "I think there are a number of issues that we should be addressing. I have put forth a plan to defeat ISIS",
+      "start": 6,
+      "end": 111,
+      "outcome": "gemist",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "CLINTON",
+      "text": "I think there are a number of issues that we should be addressing. I have put forth a plan to defeat ISIS. It does involve going after them online. I think we need to do much more with our tech companies to prevent ISIS and their operatives from being able to use the Internet to radicalize, even direct people in our country and Europe and elsewhere",
+      "start": 6,
+      "end": 356,
+      "outcome": "gemist",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "CLINTON",
+      "text": "I think there are a number of issues that we should be addressing. I have put forth a plan to defeat ISIS. It does involve going after them online. I think we need to do much more with our tech companies to prevent ISIS and their operatives from being able to use the Internet to radicalize, even direct people in our country and Europe and elsewhere. But we also have to intensify our air strikes against ISIS and eventually support our Arab and Kurdish partners to be able to actually take out ISIS in Raqqa, end their claim of being a Caliphate",
+      "start": 6,
+      "end": 553,
+      "outcome": "gemist",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "CLINTON",
+      "text": "we have to make this the top priority. And I would also do everything possible to take out their leadership",
+      "start": 879,
+      "end": 986,
+      "outcome": "gemist",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "CLINTON",
+      "text": "I would also do everything possible to take out their leadership. I was involved in a number of efforts to take out Al Qaida leadership when I was secretary of state, including, of course, taking out bin Laden",
+      "start": 922,
+      "end": 1131,
+      "outcome": "gemist",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "TRUMP",
+      "text": "we should have taken the oil—ISIS would not have been able to form",
+      "start": 758,
+      "end": 824,
+      "outcome": "gevonden",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "TRUMP",
+      "text": "we should have taken the oil—ISIS would not have been able to form either, because the oil was their primary source of income",
+      "start": 758,
+      "end": 883,
+      "outcome": "gevonden",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "CLINTON",
+      "text": "I was so proud of law enforcement in New York, in Minnesota, in New Jersey. You know, they responded so quickly, so professionally to the attacks that occurred by Rahami",
+      "start": 821,
+      "end": 990,
+      "outcome": "gevonden",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "CLINTON",
+      "text": "we may find out more information because he is still alive",
+      "start": 1023,
+      "end": 1081,
+      "outcome": "gevonden",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "CLINTON",
+      "text": "we need to be cooperating with Muslim nations and with the American Muslim community. They’re on the front lines. They can provide information to us that we might not get anywhere else",
+      "start": 1655,
+      "end": 1839,
+      "outcome": "gevonden",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "TRUMP",
+      "text": "NATO could be obsolete, because—and I was very strong on this, and it was actually covered very accurately in the New York Times, which is unusual for the New York Times, to be honest—but I said, they do not focus on terror",
+      "start": 1120,
+      "end": 1343,
+      "outcome": "gevonden",
+      "verwacht": [
+        "Drogreden-Ad-Hominem"
+      ],
+      "voorspeld": []
+    },
+    {
+      "speaker": "TRUMP",
+      "text": "I think we have to get NATO to go into the Middle East with us, in addition to surrounding nations, and we have to knock the hell out of ISIS",
+      "start": 1927,
+      "end": 2068,
+      "outcome": "gevonden",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "TRUMP",
+      "text": "I think we have to get NATO to go into the Middle East with us, in addition to surrounding nations, and we have to knock the hell out of ISIS, and we have to do it fast",
+      "start": 1927,
+      "end": 2095,
+      "outcome": "gevonden",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "TRUMP",
+      "text": "Number one, the 28 countries of NATO, many of them aren’t paying their fair share. Number two—and that bothers me, because we should be asking—we’re defending them, and they should at least be paying us what they’re supposed to be paying by treaty and contract.",
+      "start": 814,
+      "end": 1075,
+      "outcome": "hallucinatie",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "TRUMP",
+      "text": "And I think that’s great. And I think we should get—because we pay approximately 73 percent of the cost of NATO. It’s a lot of money to protect other people.",
+      "start": 1526,
+      "end": 1683,
+      "outcome": "hallucinatie",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "TRUMP",
+      "text": "I was against the war. He said, you used to have fights with me, because Sean was in favor of the war. And I understand that side, also, not very much, because we should have never been there. But nobody called Sean Hannity. And then they did an article in a major magazine, shortly after the war started. I think in ’04. But they did an article which had me totally against the war in Iraq",
+      "start": 169,
+      "end": 559,
+      "outcome": "gevonden",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "TRUMP",
+      "text": "I also have a much better temperament than she has, you know? [laughter] I have a much better—she spent—let me tell you—she spent hundreds of millions of dollars on an advertising—you know, they get Madison Avenue into a room, they put names—oh, temperament, let’s go after—I think my strongest asset, maybe by far, is my temperament",
+      "start": 81,
+      "end": 414,
+      "outcome": "gemist",
+      "verwacht": [
+        "Drogreden-Ad-Hominem"
+      ],
+      "voorspeld": [
+        "Drogreden-Ad-Hominem"
+      ]
+    },
+    {
+      "speaker": "TRUMP",
+      "text": "I also have a much better temperament than she has, you know? [laughter] I have a much better—she spent—let me tell you—she spent hundreds of millions of dollars on an advertising—you know, they get Madison Avenue into a room, they put names—oh, temperament, let’s go after—I think my strongest asset, maybe by far, is my temperament. I have a winning temperament",
+      "start": 81,
+      "end": 444,
+      "outcome": "gemist",
+      "verwacht": [
+        "Drogreden-Ad-Hominem"
+      ],
+      "voorspeld": [
+        "Drogreden-Ad-Hominem"
+      ]
+    },
+    {
+      "speaker": "TRUMP",
+      "text": "I have a winning temperament. I know how to win",
+      "start": 416,
+      "end": 463,
+      "outcome": "gemist",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "CLINTON",
+      "text": "his cavalier attitude about nuclear weapons is so deeply troubling. That is the number-one threat we face in the world",
+      "start": 14,
+      "end": 132,
+      "outcome": "gevonden",
+      "verwacht": [
+        "Drogreden-Ad-Hominem"
+      ],
+      "voorspeld": [
+        "Drogreden-Ad-Hominem"
+      ]
+    },
+    {
+      "speaker": "CLINTON",
+      "text": "a man who can be provoked by a tweet should not have his fingers anywhere near the nuclear codes, as far as I think anyone with any sense about this should be concerned",
+      "start": 237,
+      "end": 405,
+      "outcome": "gevonden",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "TRUMP",
+      "text": "Just to go down the list, we defend Japan, we defend Germany, we defend South Korea, we defend Saudi Arabia, we defend countries. They do not pay us. But they should be paying us, because we are providing tremendous service and we’re losing a fortune. That’s why we’re losing—we’re losing—we lose on everything",
+      "start": 336,
+      "end": 646,
+      "outcome": "gevonden",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "TRUMP",
+      "text": "They do not pay us. But they should be paying us, because we are providing tremendous service and we’re losing a fortune. That’s why we’re losing—we’re losing—we lose on everything",
+      "start": 466,
+      "end": 646,
+      "outcome": "gevonden",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "TRUMP",
+      "text": "they should be paying us, because we are providing tremendous service and we’re losing a fortune. That’s why we’re losing—we’re losing—we lose on everything",
+      "start": 490,
+      "end": 646,
+      "outcome": "gevonden",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "TRUMP",
+      "text": "The single greatest problem the world has is nuclear armament, nuclear weapons, not global warming, like you think and your—your president thinks. Nuclear is the single greatest threat.",
+      "start": 150,
+      "end": 335,
+      "outcome": "hallucinatie",
+      "verwacht": [],
+      "voorspeld": []
+    },
+    {
+      "speaker": "TRUMP",
+      "text": "All I said was, they may have to defend themselves or they have to help us out. We’re a country that owes $20 trillion. They have to help us out",
+      "start": 37,
+      "end": 181,
+      "outcome": "gemist",
+      "verwacht": [],
+      "voorspeld": []
     }
   ],
   "tagging_items": [
@@ -544,6 +1778,320 @@
       ],
       "voorspeld": [],
       "outcome": "gemist"
+    },
+    {
+      "speaker": "CLINTON",
+      "quote_text": "Donald, I know you live in your own reality, but that is not the facts.",
+      "start": 6,
+      "end": 77,
+      "verwacht": [
+        "Drogreden-Ad-Hominem"
+      ],
+      "voorspeld": [
+        "Drogreden-Ad-Hominem"
+      ],
+      "outcome": "correct"
+    },
+    {
+      "speaker": "TRUMP",
+      "quote_text": "Typical politician. All talk, no action.",
+      "start": 0,
+      "end": 40,
+      "verwacht": [
+        "Drogreden-Ad-Hominem"
+      ],
+      "voorspeld": [
+        "Drogreden-Ad-Hominem"
+      ],
+      "outcome": "correct"
+    },
+    {
+      "speaker": "TRUMP",
+      "quote_text": "ripped off",
+      "start": 653,
+      "end": 663,
+      "verwacht": [
+        "Drogreden-Bespelen-Publiek"
+      ],
+      "voorspeld": [],
+      "outcome": "gemist"
+    },
+    {
+      "speaker": "TRUMP",
+      "quote_text": "disgraceful",
+      "start": 289,
+      "end": 300,
+      "verwacht": [
+        "Drogreden-Bespelen-Publiek"
+      ],
+      "voorspeld": [
+        "Drogreden-Bespelen-Publiek"
+      ],
+      "outcome": "correct"
+    },
+    {
+      "speaker": "TRUMP",
+      "quote_text": "mess",
+      "start": 1527,
+      "end": 1531,
+      "verwacht": [
+        "Drogreden-Bespelen-Publiek"
+      ],
+      "voorspeld": [],
+      "outcome": "gemist"
+    },
+    {
+      "speaker": "CLINTON",
+      "quote_text": "the King of Debt",
+      "start": 617,
+      "end": 633,
+      "verwacht": [
+        "Drogreden-Ad-Hominem"
+      ],
+      "voorspeld": [
+        "Drogreden-Ad-Hominem"
+      ],
+      "outcome": "correct"
+    },
+    {
+      "speaker": "TRUMP",
+      "quote_text": "an unbelievable company",
+      "start": 92,
+      "end": 115,
+      "verwacht": [
+        "Drogreden-Bespelen-Publiek"
+      ],
+      "voorspeld": [],
+      "outcome": "gemist"
+    },
+    {
+      "speaker": "CLINTON",
+      "quote_text": "the plague of gun violence",
+      "start": 1655,
+      "end": 1681,
+      "verwacht": [
+        "Drogreden-Bespelen-Publiek"
+      ],
+      "voorspeld": [
+        "Drogreden-Bespelen-Publiek"
+      ],
+      "outcome": "correct"
+    },
+    {
+      "speaker": "TRUMP",
+      "quote_text": "We have to bring back law and order.",
+      "start": 1068,
+      "end": 1104,
+      "verwacht": [],
+      "voorspeld": [
+        "Drogreden-Bespelen-Publiek"
+      ],
+      "outcome": "onterecht"
+    },
+    {
+      "speaker": "TRUMP",
+      "quote_text": "In a place like Chicago, where thousands of people have been killed, thousands over the last number of years, in fact, almost 4,000 have been killed since Barack Obama became president, over—almost 4,000 people in Chicago have been killed.",
+      "start": 1105,
+      "end": 1344,
+      "verwacht": [],
+      "voorspeld": [
+        "Drogreden-Bespelen-Publiek"
+      ],
+      "outcome": "onterecht"
+    },
+    {
+      "speaker": "TRUMP",
+      "quote_text": "a tremendous impact",
+      "start": 1577,
+      "end": 1596,
+      "verwacht": [
+        "Drogreden-Bespelen-Publiek"
+      ],
+      "voorspeld": [],
+      "outcome": "gemist"
+    },
+    {
+      "speaker": "TRUMP",
+      "quote_text": "Tremendous beyond belief.",
+      "start": 1629,
+      "end": 1654,
+      "verwacht": [
+        "Drogreden-Bespelen-Publiek"
+      ],
+      "voorspeld": [],
+      "outcome": "gemist"
+    },
+    {
+      "speaker": "CLINTON",
+      "quote_text": "the whole racist birther lie",
+      "start": 210,
+      "end": 238,
+      "verwacht": [
+        "Drogreden-Ad-Hominem"
+      ],
+      "voorspeld": [
+        "Drogreden-Ad-Hominem"
+      ],
+      "outcome": "correct"
+    },
+    {
+      "speaker": "CLINTON",
+      "quote_text": "this racist lie",
+      "start": 340,
+      "end": 355,
+      "verwacht": [
+        "Drogreden-Ad-Hominem"
+      ],
+      "voorspeld": [
+        "Drogreden-Ad-Hominem"
+      ],
+      "outcome": "correct"
+    },
+    {
+      "speaker": "CLINTON",
+      "quote_text": "he has a long record of engaging in racist behavior.",
+      "start": 979,
+      "end": 1031,
+      "verwacht": [
+        "Drogreden-Ad-Hominem"
+      ],
+      "voorspeld": [
+        "Drogreden-Ad-Hominem"
+      ],
+      "outcome": "correct"
+    },
+    {
+      "speaker": "CLINTON",
+      "quote_text": "the birther lie",
+      "start": 1036,
+      "end": 1051,
+      "verwacht": [
+        "Drogreden-Ad-Hominem"
+      ],
+      "voorspeld": [
+        "Drogreden-Ad-Hominem"
+      ],
+      "outcome": "correct"
+    },
+    {
+      "speaker": "TRUMP",
+      "quote_text": "a tremendously successful club",
+      "start": 1682,
+      "end": 1712,
+      "verwacht": [
+        "Drogreden-Bespelen-Publiek"
+      ],
+      "voorspeld": [],
+      "outcome": "gemist"
+    },
+    {
+      "speaker": "CLINTON",
+      "quote_text": "have said that Donald is unfit to be the commander- in-chief.",
+      "start": 2,
+      "end": 63,
+      "verwacht": [],
+      "voorspeld": [
+        "Drogreden-Bespelen-Publiek"
+      ],
+      "outcome": "onterecht"
+    },
+    {
+      "speaker": "TRUMP",
+      "quote_text": "another one of her disasters",
+      "start": 986,
+      "end": 1014,
+      "verwacht": [
+        "Drogreden-Bespelen-Publiek"
+      ],
+      "voorspeld": [
+        "Drogreden-Ad-Hominem"
+      ],
+      "outcome": "gemist"
+    },
+    {
+      "speaker": "TRUMP",
+      "quote_text": "a total mess",
+      "start": 181,
+      "end": 193,
+      "verwacht": [
+        "Drogreden-Bespelen-Publiek"
+      ],
+      "voorspeld": [
+        "Drogreden-Bespelen-Publiek"
+      ],
+      "outcome": "correct"
+    },
+    {
+      "speaker": "TRUMP",
+      "quote_text": "beauty",
+      "start": 311,
+      "end": 317,
+      "verwacht": [
+        "Drogreden-Bespelen-Publiek"
+      ],
+      "voorspeld": [],
+      "outcome": "gemist"
+    },
+    {
+      "speaker": "TRUMP",
+      "quote_text": "choking",
+      "start": 411,
+      "end": 418,
+      "verwacht": [
+        "Drogreden-Bespelen-Publiek"
+      ],
+      "voorspeld": [],
+      "outcome": "gemist"
+    },
+    {
+      "speaker": "TRUMP",
+      "quote_text": "it was actually covered very accurately in the New York Times, which is unusual for the New York Times",
+      "start": 1187,
+      "end": 1289,
+      "verwacht": [
+        "Drogreden-Ad-Hominem"
+      ],
+      "voorspeld": [],
+      "outcome": "gemist"
+    },
+    {
+      "speaker": "TRUMP",
+      "quote_text": "I also have a much better temperament than she has",
+      "start": 81,
+      "end": 131,
+      "verwacht": [
+        "Drogreden-Ad-Hominem"
+      ],
+      "voorspeld": [
+        "Drogreden-Ad-Hominem"
+      ],
+      "outcome": "correct"
+    },
+    {
+      "speaker": "TRUMP",
+      "quote_text": "you were totally out of control",
+      "start": 118,
+      "end": 149,
+      "verwacht": [
+        "Drogreden-Ad-Hominem"
+      ],
+      "voorspeld": [
+        "Drogreden-Ad-Hominem"
+      ],
+      "outcome": "correct"
+    },
+    {
+      "speaker": "CLINTON",
+      "quote_text": "his cavalier attitude",
+      "start": 14,
+      "end": 35,
+      "verwacht": [
+        "Drogreden-Ad-Hominem"
+      ],
+      "voorspeld": [
+        "Drogreden-Ad-Hominem"
+      ],
+      "outcome": "correct"
     }
   ]
 }

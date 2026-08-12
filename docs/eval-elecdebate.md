@@ -264,10 +264,29 @@ model-state-kwestie in LM Studio, geen bug in het harnas. Bij vreemde
 resultaten: eerst het model in LM Studio herladen voor verder te zoeken in
 de code.
 
+## Resultaten (2026-08-12, na span-fix + context-fix, 50/318 records)
+
+Cumulatief opgebouwd via twee `make validate`-runs (10 records op 2026-08-10
+na de claim+premisse- en context-fixes, plus 40 nieuwe records op
+2026-08-12) tegen `qwen/qwen3.6-27b`, lokaal via LM Studio. 0 extractie- en
+0 tagfouten over de volle 50 records -- de hieronder genoemde
+qwen-flakiness trad deze keer niet op.
+
+| Model | Metriek | precision | recall | F1 | detail |
+|---|---|---|---|---|---|
+| `qwen/qwen3.6-27b` (n=50) | Argumentherkenning | 0.36 | 0.61 | 0.45 | tp=11208 fp=20290 fn=7266 (tekens) |
+| `qwen/qwen3.6-27b` (n=50) | Drogreden-tags | 0.79 | 0.48 | 0.60 | tp=15 fp=4 fn=16 |
+
+Drogreden-tag-F1 steeg van 0.40 (n=10, direct na de context-fix) naar 0.60
+(n=50) -- consistent met een kleine-steekproefartefact in de eerdere meting,
+niet met een nieuwe wijziging. Argumentherkenning blijft rond F1 0.45,
+stabiel t.o.v. de eerdere n=10-meting.
+
 ## Nog te doen
 
 - Grotere steekproef (`make validate LIMIT=...` met hoger getal) voor een
-  betrouwbaarder beeld.
+  nog betrouwbaarder beeld -- nu 50/318, dus nog altijd een minderheid van
+  de test-split.
 - Eventueel `data/ann/*.ann` (brat-standoff, bevat discontinue spans) direct
   parsen voor nog nauwkeurigere spans -- vereist opnieuw tekstsearch tegen
   `full_speeches_new.csv` (de `.ann`-offsets zelf zijn niet herbruikbaar, zie
