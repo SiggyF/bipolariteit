@@ -36,10 +36,14 @@ const description = topic.description ? parseTopicDescription(topic.description)
 						{description.intro.map((paragraph) => <p>{paragraph}</p>)}
 						{description.pro && description.contra && (
 							<dl class="topic-pro-contra">
-								<dt class="is-pro">Pro</dt>
-								<dd>{description.pro}</dd>
-								<dt class="is-contra">Contra</dt>
-								<dd>{description.contra}</dd>
+								<div class="topic-pro-contra-item is-pro">
+									<dt>Pro</dt>
+									<dd>{description.pro}</dd>
+								</div>
+								<div class="topic-pro-contra-item is-contra">
+									<dt>Contra</dt>
+									<dd>{description.contra}</dd>
+								</div>
 							</dl>
 						)}
 						{description.note && <p class="topic-description-note">{description.note}</p>}
