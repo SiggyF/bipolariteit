@@ -26,6 +26,7 @@ from __future__ import annotations
 import argparse
 import fnmatch
 import logging
+import socket
 import sys
 import urllib.error
 import urllib.request
@@ -91,6 +92,25 @@ def scan_dist(dist: Path) -> list[Path]:
     return treffers
 
 
+def controleer_bereikbaarheid(hostnaam: str) -> None:
+    """Faalt hard als de hostnaam niet oplost, in plaats van dat elk pad los
+    stil overgeslagen wordt.
+
+    Een DNS-fout op één pad betekent een DNS-fout op alle paden (zelfde host),
+    dus alle paden gewoon los af laten schieten geeft een misleidend groen
+    eindresultaat: "geen 200'en gevonden" terwijl er in werkelijkheid geen
+    enkele check heeft plaatsgevonden.
+    """
+    try:
+        socket.getaddrinfo(hostnaam, 443)
+    except OSError as exc:
+        raise SystemExit(
+            f"{hostnaam} lost niet op ({exc}) -- de live-probe kan zo niets "
+            "controleren. Gebruik een resolver die het domein kent (bv. "
+            "`--resolve` of een andere DNS-server), of los de DNS-fout eerst op."
+        ) from exc
+
+
 def probeer_paden(hostnaam: str) -> list[str]:
     bereikbaar = []
     for pad in GEVOELIGE_PADEN:
@@ -101,8 +121,7 @@ def probeer_paden(hostnaam: str) -> list[str]:
         except urllib.error.HTTPError as exc:
             status = exc.code
         except urllib.error.URLError as exc:
-            logger.warning("kon %s niet bereiken (%s), overgeslagen", url, exc)
-            continue
+            raise SystemExit(f"kon {url} niet bereiken ({exc})") from exc
 
         if status == 200:
             bereikbaar.append(url)
@@ -122,6 +141,8 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
+
+    controleer_bereikbaarheid(args.hostnaam)
 
     fout = False
 
