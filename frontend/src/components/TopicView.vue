@@ -44,9 +44,9 @@ const columns = computed(() =>
 <template>
 	<FilterBar :argumentList="argumentList" :matchCount="filtered.length" />
 
-	<ArgumentTimeline :argumentList="timelineList" />
-
 	<TagCorrespondenceMap :argumentList="argumentList" />
+
+	<ArgumentTimeline :argumentList="timelineList" />
 
 	<ClaimsHighlights :argumentList="filtered" />
 
