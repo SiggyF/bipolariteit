@@ -37,6 +37,21 @@ const taggingGroups = groupBy(data.tagging_items, ["correct", "gemist", "onterec
 function pct(value: number) {
 	return `${Math.round(value * 100)}%`;
 }
+
+// Eén badge per unieke tag uit verwacht+voorspeld, zodat een lezer in één
+// oogopslag ziet welke tags matchen (groen) i.p.v. een kale komma-lijst
+// twee keer te moeten vergelijken.
+function tagPills(verwacht: string[] = [], voorspeld: string[] = []) {
+	const verwachtSet = new Set(verwacht);
+	const voorspeldSet = new Set(voorspeld);
+	const alle = [...new Set([...verwacht, ...voorspeld])];
+	return alle.map((tag) => {
+		const inVerwacht = verwachtSet.has(tag);
+		const inVoorspeld = voorspeldSet.has(tag);
+		const kind = inVerwacht && inVoorspeld ? "match" : inVerwacht ? "gemist" : "onterecht";
+		return { tag, kind };
+	});
+}
 ---
 
 <BaseLayout title={`Validatie — ${dataset} — Bipolariteit`} class="about status-page">
@@ -58,6 +73,11 @@ function pct(value: number) {
 				<dt>Recall</dt><dd>{pct(data.summary.argument_detection.recall)}</dd>
 				<dt>F1</dt><dd>{pct(data.summary.argument_detection.f1)}</dd>
 			</dl>
+			<p class="validation-summary-caption">
+				Gemeten op tekenniveau ({data.summary.argument_detection.tp} overlappende, {data.summary.argument_detection.fp} te
+				veel, {data.summary.argument_detection.fn} gemiste tekens) — niet per argument geteld, dus deze aantallen zijn
+				geen argumenttelling.
+			</p>
 		</div>
 		<div class="validation-summary-card">
 			<h2>Drogreden-tags</h2>
@@ -67,6 +87,10 @@ function pct(value: number) {
 				<dt>Recall</dt><dd>{pct(data.summary.fallacy_tags.recall)}</dd>
 				<dt>F1</dt><dd>{pct(data.summary.fallacy_tags.f1)}</dd>
 			</dl>
+			<p class="validation-summary-caption">
+				{data.summary.fallacy_tags.tp} correct, {data.summary.fallacy_tags.fp} onterecht, {data.summary.fallacy_tags.fn}{" "}
+				gemist — per drogreden-citaat geteld.
+			</p>
 		</div>
 	</section>
 
@@ -78,19 +102,20 @@ function pct(value: number) {
 	{extractionGroups.map(({ outcome, items }) => (
 		<details open={outcome !== "gevonden"}>
 			<summary>{EXTRACTION_OUTCOME_LABELS[outcome]} ({items.length})</summary>
-			<ul class="llm-call-list">
+			<ul class="validation-item-list">
 				{items.map((item: any) => (
-					<li class={`llm-call-item validation-outcome--${outcome}`}>
-						<div class="llm-call-meta">
-							<span>{item.speaker ?? "onbekend"}</span>
-							{((item.verwacht?.length ?? 0) > 0 || (item.voorspeld?.length ?? 0) > 0) && (
-								<>
-									<span>verwacht: {item.verwacht.length ? item.verwacht.join(", ") : "—"}</span>
-									<span>voorspeld: {item.voorspeld.length ? item.voorspeld.join(", ") : "—"}</span>
-								</>
+					<li class={`validation-item validation-outcome--${outcome}`}>
+						<div class="validation-item-meta">
+							<span class="validation-item-speaker">{item.speaker ?? "onbekend"}</span>
+							{tagPills(item.verwacht, item.voorspeld).length > 0 && (
+								<span class="validation-pills">
+									{tagPills(item.verwacht, item.voorspeld).map(({ tag, kind }) => (
+										<span class={`validation-pill validation-pill--${kind}`}>{tag}</span>
+									))}
+								</span>
 							)}
 						</div>
-						<p class="llm-call-text">{item.text}</p>
+						<blockquote class="validation-quote">{item.text}</blockquote>
 					</li>
 				))}
 			</ul>
@@ -102,15 +127,18 @@ function pct(value: number) {
 	{taggingGroups.map(({ outcome, items }) => (
 		<details open={outcome !== "correct"}>
 			<summary>{TAGGING_OUTCOME_LABELS[outcome]} ({items.length})</summary>
-			<ul class="llm-call-list">
+			<ul class="validation-item-list">
 				{items.map((item: any) => (
-					<li class={`llm-call-item validation-outcome--${outcome}`}>
-						<div class="llm-call-meta">
-							<span>{item.speaker ?? "onbekend"}</span>
-							<span>verwacht: {item.verwacht.length ? item.verwacht.join(", ") : "—"}</span>
-							<span>voorspeld: {item.voorspeld.length ? item.voorspeld.join(", ") : "—"}</span>
+					<li class={`validation-item validation-outcome--${outcome}`}>
+						<div class="validation-item-meta">
+							<span class="validation-item-speaker">{item.speaker ?? "onbekend"}</span>
+							<span class="validation-pills">
+								{tagPills(item.verwacht, item.voorspeld).map(({ tag, kind }) => (
+									<span class={`validation-pill validation-pill--${kind}`}>{tag}</span>
+								))}
+							</span>
 						</div>
-						<p class="llm-call-text">{item.quote_text}</p>
+						<blockquote class="validation-quote">{item.quote_text}</blockquote>
 					</li>
 				))}
 			</ul>

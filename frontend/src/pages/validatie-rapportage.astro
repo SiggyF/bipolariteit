@@ -29,15 +29,18 @@ const datasets = Object.values(evalModules)
 		<p class="panel-note">Nog geen datasetvalidatie gedraaid. Zie <code>docs/eval-elecdebate.md</code> in de repository.</p>
 	)}
 
-	<ul>
+	<section class="validation-summary">
 		{datasets.map((data: any) => (
-			<li>
-				<a href={`/validatie-rapportage/${data.dataset}`}>{data.dataset}</a>
-				{" — "}
-				argumentherkenning F1 {Math.round(data.summary.argument_detection.f1 * 100)}%,
-				drogreden-tags F1 {Math.round(data.summary.fallacy_tags.f1 * 100)}%
-				({data.n_records}/{data.total_records} sprekersbeurten, model {data.model})
-			</li>
+			<a class="validation-summary-card validation-dataset-card" href={`/validatie-rapportage/${data.dataset}`}>
+				<h2>{data.dataset}</h2>
+				<dl>
+					<dt>Argumentherkenning F1</dt><dd>{Math.round(data.summary.argument_detection.f1 * 100)}%</dd>
+					<dt>Drogreden-tags F1</dt><dd>{Math.round(data.summary.fallacy_tags.f1 * 100)}%</dd>
+				</dl>
+				<p class="validation-summary-caption">
+					{data.n_records}/{data.total_records} sprekersbeurten gescoord, model {data.model}
+				</p>
+			</a>
 		))}
-	</ul>
+	</section>
 </BaseLayout>
