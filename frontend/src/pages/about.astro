@@ -3,7 +3,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import { deriveTagUsage, type TagUsageRow } from "../lib/aggregate";
 import { analyseTable, canonicalSigns } from "../lib/correspondence";
 import { ICOON_PAD, PERSPECTIEVEN } from "../lib/tagIcons.generated";
-import { tagIconPath } from "../lib/tagIcon";
+import { tagIconPath, perspectiefWeergaveNaam } from "../lib/tagIcon";
 import { STANCES, stanceLabel, stanceDescription, TYPOLOGIES, typologyLabel, typologyDescription, type Argument } from "../lib/types";
 
 // Alle argumenten over alle onderwerpen heen, alleen om het taxonomie-
@@ -384,7 +384,7 @@ const CA_ROW_LABEL_OFFSET: Record<string, CaLabelOffset> = {
 								<svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke={perspectief.kleur} stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
 									<path d={ICOON_PAD[perspectief.icoon]} />
 								</svg>
-								<h3>{perspectief.naam}</h3>
+								<h3>{perspectiefWeergaveNaam(perspectief.naam)}</h3>
 							</div>
 							{perspectief.labelgroepen.map((labelgroep) => (
 								<div class="card-section">

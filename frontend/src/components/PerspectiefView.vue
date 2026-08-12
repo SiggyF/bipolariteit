@@ -6,6 +6,7 @@ import PerspectiefTagHeatmap from "./PerspectiefTagHeatmap.vue";
 import TopPersonsPerTag, { type TagMeta } from "./TopPersonsPerTag.vue";
 import { PERSPECTIEVEN } from "../lib/tagIcons.generated";
 import { filterTagsByPerspectief, derivePartyTagIndex, derivePersonTagIndex } from "../lib/aggregate";
+import { perspectiefWeergaveNaam } from "../lib/tagIcon";
 import type { Argument } from "../lib/types";
 
 const props = defineProps<{ perspectief: string; argumentList: Argument[] }>();
@@ -44,7 +45,7 @@ const personIndex = computed(() => derivePersonTagIndex(props.argumentList));
 	<section class="perspectief-view">
 		<header class="actor-header">
 			<span class="perspectief-swatch" :style="{ background: kleur }"></span>
-			<h1>{{ perspectief }}</h1>
+			<h1>{{ perspectiefWeergaveNaam(perspectief) }}</h1>
 		</header>
 		<p class="panel-note">{{ totalToekenningen }} tagtoekenningen in dit perspectief, over alle onderwerpen heen.</p>
 
