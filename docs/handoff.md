@@ -2,7 +2,61 @@
 
 Status per 2026-07-27. Zie `docs/plan.md` voor het volledige, goedgekeurde architectuurplan. Dit document is voor het vervolg: wat staat er al, wat is er onderweg ontdekt, en wat is de volgende concrete stap.
 
-## Stand bij einde sessie (2026-08-10, evalharnas ELECDEBATE60TO16 issue #62) — begin hier bij een nieuwe sessie
+## Stand bij einde sessie (2026-08-12, validatie-experiment stijlmiddelen issue #67 + afsluiting #50) — begin hier bij een nieuwe sessie
+
+**Issue #50** (stance/typology van Stage 1 naar Stage 1b verplaatsen) **gesloten**
+met een tegenvoorstel-comment: bewijslast omgedraaid, want het bestaande
+two-turn-experiment (sectie hieronder) suggereert dat classificatie-context
+tijdens extractie juist kán helpen bij het herkennen van argumentgrenzen —
+het omgekeerde van de aanname achter #50. Voorstel in de comment: eerst een
+kleine, goedkope validatie via de bestaande ElecDeb60to20-evalharness
+(`span_overlap_prf`, dezelfde 50/318-steekproef) die single-pass-extractie
+vergelijkt met een variant zonder stance/typology, vóórdat dit weer wordt
+opgepakt. Heropenen zodra die er is.
+
+**Issue #67** (nieuw labelgroep "Stijlmiddelen", zie PR #68's onderzoeksrapport
+`docs/Taxonomie Stijlmiddelen Politieke Debatten.md` met 10 kandidaat-tags):
+kritisch doorgenomen en empirisch gevalideerd vóór opname in `data/tags.toml`.
+
+- **Twee tags afgevallen** vóór validatie: "Dooddoener/Cliché" (te
+  interpretatief, model waarschijnlijk niet sterk genoeg — zelfde soort twijfel
+  als bij Slogan bleek terecht) en "Groepsidentiteit-appèl" (overlapt met de
+  al bestaande `Moraliteit-Loyaliteit`-tag in Morele Fundamenten).
+- **5 overgebleven kandidaten empirisch gevalideerd**: Slogan, Herhaling,
+  Aangekondigde Opsomming (hernoemd van "Drieledige Opsomming" — gaat om
+  vooraf een aantal aankondigen + gevolgd door precies dat aantal, niet per se
+  drie), Antithese, Retorische Vraag. Nieuw, read-only experiment (geen
+  DB-writes): `scripts/experiment_stijlmiddelen_validatie.py` +
+  `scripts/stijlvalidatie.json` (20 fictieve testargumenten, 4 per
+  stijlmiddel), branch `experiment/stijlmiddelen-validatie-issue-67`.
+- **Onderweg ontdekt** (leerzamer dan de eindscore):
+  1. Kale, geïsoleerde stijlmiddel-zinnen zonder onderbouwing worden door de
+     extractiestap zelf al afgewezen ("geen onderbouwing = geen argument",
+     `extract_argument.md`) — geen tagging-fout maar een architectuurbotsing:
+     stijlmiddelen worden pas getagd ná een geslaagde extractie.
+  2. Meerdere stijlmiddel-zinnen met "want..."-redenen in dezelfde paragraaf
+     worden door de extractor samengevoegd tot minder/grotere argumenten
+     (bedoeld gedrag: "één punt = één argument"). Fix: elk testitem in een
+     eigen paragraaf.
+  3. Definities zijn allesbepalend. De Slogan-definitie uit de issue-comments
+     ("repeterende, herkenbare frase") is een **corpus-eigenschap**, niet op
+     één los fragment te beoordelen — teruggegrepen op de brondefinitie
+     (Da San Martino et al. 2019: "a brief and striking phrase ... tend to
+     act as emotional appeals"). Retorische Vraag scherper gedefinieerd via
+     Ad Herennium/Silva Rhetoricae: "een vraag waarvan het antwoord al
+     besloten ligt in de formulering zelf" (i.p.v. "geen antwoord verwacht").
+- **Eindresultaat na correcties: 20/20 correct herkend (4/4 per
+  stijlmiddel)** — bevestigt dat de eerdere missers aan testopzet/definities
+  lagen, niet aan het concept of het model.
+- **Nog niet gedaan**: de daadwerkelijke opname in `data/tags.toml` (+
+  `pipeline/taxonomy.py` `LABELGROEP_SELECTIE`, `seed_tags.py`,
+  `export_tags_taxonomy.py`, iconen in `docs/design/tag-iconografie/`). Open
+  vraag: onder welk perspectief — aanbeveling "Filosofisch &
+  Argumentatietheoretisch" naast Dialectische Kwaliteit (retorica en
+  dialectiek zijn klassiek verwante disciplines binnen argumentatietheorie),
+  met een kleine herformulering van de perspectief-beschrijving.
+
+## Stand bij einde sessie (2026-08-10, evalharnas ELECDEBATE60TO16 issue #62)
 
 **PR #66 (branch `eval/elecdebate-harness-issue-62`) staat op WIP** — bewust
 niet als "af" gemarkeerd. De onderliggende logica/databugs zijn deze sessie
