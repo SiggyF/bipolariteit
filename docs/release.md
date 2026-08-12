@@ -211,3 +211,84 @@ npx wrangler delete --name bipolariteit-v0-3-0-preview
 
 Dat verwijdert de Worker; het DNS-record moet je in het dashboard opruimen
 (**DNS** → **Records**).
+
+# Publieke release naar www.bipolariteit.org
+
+Naast de tag-previews hierboven is er één vaste publicatie:
+`www.bipolariteit.org`, de publieke site. Zie [issue #44](https://github.com/SiggyF/bipolariteit/issues/44).
+
+Belangrijkste verschillen met een preview:
+
+| | Preview | www |
+| --- | --- | --- |
+| Trigger | git-tag push | elke push naar `main` |
+| Hostnaam | `<tag>-preview.bipolariteit.org` | vast: `www.bipolariteit.org` |
+| Worker | `deploy/worker.js`, zet `X-Robots-Tag: noindex` | geen Worker-script, alleen statische assets |
+| `robots.txt` | schrijft `Disallow: /` | geen `robots.txt` — indexeerbaar |
+| Build-vlag | `PUBLIC_RELEASE_TAG=<tag>` | `PUBLIC_RELEASE_OFFICIEEL=true` |
+| Ontwikkelbalk | zichtbaar | verborgen (zie `PUBLIC_RELEASE_OFFICIEEL` bij [De vlaggen](#de-vlaggen)) |
+
+`www` volgt dus automatisch elke push naar `main` — er is bewust geen aparte
+tag- of releasestap. Dat betekent dat wat er live staat op
+`www.bipolariteit.org` altijd gelijk is aan de laatste commit op `main`.
+
+## Eenmalige inrichting
+
+Bovenop de token/account-ID-stappen hierboven ([Eenmalige
+inrichting](#eenmalige-inrichting)), die voor beide releasepaden gelden, is er
+één extra handmatige stap: een redirect van de kale apex naar `www`.
+
+1. Ga naar <https://dash.cloudflare.com> → `bipolariteit.org` → **Rules** →
+   **Redirect Rules** → **Create rule**.
+2. Match: hostname equals `bipolariteit.org` (zonder `www`).
+3. Then: **Dynamic** → `concat("https://www.bipolariteit.org", http.request.uri.path)`,
+   status **301**.
+4. Deploy.
+
+Zonder deze stap serveert de kale apex niets (er is geen Worker-route voor
+`bipolariteit.org` zelf, alleen voor `www`), en krijgt een bezoeker die naar
+`bipolariteit.org` gaat een foutpagina in plaats van een redirect.
+
+## Een release uitbrengen
+
+Gebeurt automatisch bij elke push naar `main` via
+`.github/workflows/release-www.yml`. Handmatig, bijvoorbeeld om te testen:
+
+```sh
+export CLOUDFLARE_API_TOKEN=...
+export CLOUDFLARE_ACCOUNT_ID=...
+
+make release-www-dry   # bouwt en toont de config, publiceert niet
+make release-www       # bouwt en publiceert naar www.bipolariteit.org
+```
+
+## Toegang
+
+De site is bij deze eerste release meteen publiek, zonder wachtwoord — net
+als de previews, maar dan wél indexeerbaar. Toegangscontrole kan later nog
+toegevoegd worden op dezelfde plek als bij de previews genoemd
+(`deploy/worker.js` resp. een eigen worker voor www).
+
+## Controle op publiek gelekte bestanden
+
+De site is volledig statisch: alles in `frontend/dist` wordt letterlijk
+geserveerd. `scripts/check_public_exposure.py` controleert na elke deploy
+(als stap in `release-www.yml`) twee dingen:
+
+1. Dat `frontend/dist` geen bestanden bevat die daar niet in horen —
+   `.env`-bestanden, databases, sleutels, `.git`, `.claude`, `.devcontainer`.
+2. Dat een lijst bekende gevoelige paden (`/.env`, `/.git/config`,
+   `/wrangler.generated.jsonc`, `/.claude/settings.json`, ...) op de live
+   hostnaam allemaal 404 geven.
+
+Los draaien, tegen een willekeurige hostnaam (ook een preview):
+
+```sh
+uv run python scripts/check_public_exposure.py www.bipolariteit.org
+# of, zonder frontend/dist lokaal:
+uv run python scripts/check_public_exposure.py www.bipolariteit.org --skip-dist-scan
+```
+
+Dit is een sanity-check, geen volledige security-audit: de lijst gevoelige
+paden is niet uitputtend, en een `200` op een pad dat er niet op staat wordt
+niet gedetecteerd.

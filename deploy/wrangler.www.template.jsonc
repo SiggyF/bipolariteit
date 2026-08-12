@@ -1,0 +1,33 @@
+// Sjabloon voor de wrangler-configuratie van de publieke www-release.
+//
+// scripts/release_www.py vult __NAAM__ in en schrijft het resultaat naar
+// wrangler.generated.jsonc in de repo-root (ongetrackt).
+//
+// In tegenstelling tot deploy/wrangler.template.jsonc (de tag-previews) heeft
+// dit sjabloon geen "main"/Worker-script: de publieke site heeft geen
+// X-Robots-Tag: noindex nodig (die is er juist voor previews, om ze uit
+// zoekresultaten te houden), dus is er niets dat elk antwoord moet
+// onderscheppen. Cloudflare serveert de assets dan rechtstreeks.
+{
+	"name": "__NAAM__",
+	"compatibility_date": "2026-07-30",
+	"assets": {
+		"directory": "frontend/dist",
+		// Serveert dist/404.html (uit frontend/src/pages/404.astro) bij een
+		// onbekende URL. Zie deploy/wrangler.template.jsonc voor de afweging
+		// tegen "single-page-application".
+		"not_found_handling": "404-page"
+	},
+	"routes": [
+		{
+			// custom_domain laat Cloudflare zelf het DNS-record aanmaken en het
+			// certificaat regelen. www zit één niveau onder het domein, dus
+			// gedekt door het gratis Universal SSL-certificaat.
+			"pattern": "www.bipolariteit.org",
+			"custom_domain": true
+		}
+	],
+	"observability": {
+		"enabled": true
+	}
+}
