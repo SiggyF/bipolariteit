@@ -26,7 +26,7 @@ export interface TaxonomiePerspectief {
 export const TAXONOMIE: TaxonomiePerspectief[] = [
 	{
 		"naam": "Filosofisch & Argumentatietheoretisch",
-		"beschrijving": "Legt de interne logica van het argument bloot en toetst de dialectische zuiverheid van het debat.",
+		"beschrijving": "Legt de interne logica en de retorische vormgeving van het argument bloot, en toetst de dialectische zuiverheid van het debat.",
 		"labelgroepen": [
 			{
 				"naam": "Redeneerschema",
@@ -79,6 +79,33 @@ export const TAXONOMIE: TaxonomiePerspectief[] = [
 					{
 						"sleutel": "Drogreden-Bespelen-Publiek",
 						"beschrijving": "Emotioneel argumenteren gericht op het oproepen van angst, woede of medelijden bij de toehoorder."
+					}
+				]
+			},
+			{
+				"naam": "Stijlmiddelen",
+				"beschrijving": "Vormelijke en retorische middelen in de presentatie van een argument; claimt geen redeneerfout en geen framing, uitsluitend de taalvorm.",
+				"deterministic": false,
+				"tags": [
+					{
+						"sleutel": "Stijl-Slogan",
+						"beschrijving": "Beknopte, pakkende frase."
+					},
+					{
+						"sleutel": "Stijl-Herhaling",
+						"beschrijving": "Herhaling van hetzelfde woord of dezelfde woordgroep binnen het fragment, ter nadruk."
+					},
+					{
+						"sleutel": "Stijl-Aangekondigde-Opsomming",
+						"beschrijving": "Vooraf het aantal elementen aankondigen (twee, drie, vijf, ...), gevolgd door een opsomming van precies dat aantal."
+					},
+					{
+						"sleutel": "Stijl-Antithese",
+						"beschrijving": "Het naast elkaar plaatsen van twee tegengestelde begrippen of ideeën."
+					},
+					{
+						"sleutel": "Stijl-Retorische-Vraag",
+						"beschrijving": "Een vraag waarvan het antwoord al besloten ligt in de formulering zelf."
 					}
 				]
 			},
