@@ -1,0 +1,1127 @@
+{
+  "slug": "asiel",
+  "name": "Asiel en migratie",
+  "topic_description": "Dit debat gaat over het Nederlandse asiel- en migratiebeleid: de omvang van de\ninstroom, de opvang en spreiding daarvan, de asielprocedure, gezinshereniging,\nterugkeer en uitzetting, remigratie, en de ruimte die Europese en\ninternationale verplichtingen laten.\n\nPRO = bescherming van de asielzoeker. Nederland heeft een opvangprobleem: te\nweinig plekken en haperende procedures. Kenmerkende onderbouwingen: wie te laat\neen besluit krijgt houdt een rechtsmiddel, zorgvuldigheid gaat boven snelheid,\nopvang hoort kleinschalig en eerlijk verdeeld te zijn, gedwongen terugkeer kan\nalleen als het land van herkomst veilig is, en internationale en Europese\nverplichtingen worden nageleefd. Deze pool bekritiseert maatregelen vaak vanuit\nde rechtsstaat, niet vanuit een pleidooi voor meer migratie.\n\nCONTRA = beperking van de instroom. Nederland heeft te veel asielzoekers: er\nwordt te weinig afgewezen en teruggestuurd, en meer opvangcapaciteit lost dat\nniet op. Oplossingen die deze pool aandraagt: strengere toelating, sneller\nafwijzen, actief terugsturen en remigratie stimuleren, voorzieningen versoberen\nomdat ze als aanzuigende prikkel werken, gemeenten vrijlaten om niet mee te\nwerken aan opvang, en niet ruimhartiger zijn dan Europa vereist. Verder: het\ndraagvlak in de samenleving brokkelt af.",
+  "generated_at": "2026-08-08T11:45:33.876189+00:00",
+  "stats": {
+    "totaal_argumenten": 576,
+    "aantal_pro": 218,
+    "aantal_contra": 328,
+    "aantal_geselecteerd": 39
+  },
+  "arguments": {
+    "2106": {
+      "id": 2106,
+      "citaat": "over de brief van negen landen, waaronder Polen en België, die aandacht vroegen voor een discussie over een andere interpretatie van het Europees Verdrag voor de Rechten van de Mens, zodat criminele asielzoekers gemakkelijker kunnen worden uitgezet. Nieuw Sociaal Contract deelt de intentie van die brief. We vinden het van groot belang om dit debat te voeren en dat de politieke ruimte niet te veel wordt ingeperkt door verdragen en jurisprudentie.",
+      "typologie": "legal",
+      "stance": "contra",
+      "spreker": "Diederik Boomsma",
+      "partij": "NSC",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Frame-Conflict",
+        "Frame-Thematisch",
+        "Ideologie-TAN",
+        "Meta-Bevoegdheid",
+        "Moraliteit-Autoriteit",
+        "Walton-Regel"
+      ],
+      "claims": [
+        {
+          "claim_text": "negen landen, waaronder Polen en België, vroegen aandacht voor een discussie over een andere interpretatie van het Europees Verdrag voor de Rechten van de Mens, zodat criminele asielzoekers gemakkelijker kunnen worden uitgezet",
+          "attributed_source_text": "brief van negen landen"
+        }
+      ],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2025A04881",
+      "speaker_video_url": null,
+      "gist": "Verdragen inperken voor snellere uitzetting",
+      "samenvatting": null
+    },
+    "2109": {
+      "id": 2109,
+      "citaat": "Naar aanleiding van de gebeurtenissen in Syrië kunnen we concluderen dat Syrië in ieder geval niet veilig is om mensen naar terug te sturen en dat we geen asielaanvragen kunnen weigeren.",
+      "typologie": "factual",
+      "stance": "pro",
+      "spreker": "Stephan van Baarle",
+      "partij": "DENK",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Causaal",
+        "Frame-Moraliteit",
+        "Frame-Thematisch",
+        "Ideologie-GAL",
+        "Moraliteit-Zorg",
+        "Walton-Causaal"
+      ],
+      "claims": [],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08687",
+      "speaker_video_url": null,
+      "gist": "Syrië is onveilig voor terugkeer",
+      "samenvatting": "Terugsturen naar Syrië is onveilig en schendt internationale verplichtingen zolang foltering en oorlog dreigen."
+    },
+    "2111": {
+      "id": 2111,
+      "citaat": "In de begroting zien we dat de bekostiging van de IND met 85% keldert, terwijl de prognose van het ministerie laat zien dat de werkvoorraad juist elk jaar verder oploopt. In de begroting keldert het aantal asielverzoeken binnen twee jaar plots met 66%. Daarmee keldert ook de financiering van de opvang door het COA. Waar zijn deze aannames op gebaseerd? Van een minister die medeverantwoordelijk is voor het landsbestuur mag je als Kamer verwachten dat zij de problemen die er zijn in de opvangketen oplost, of dat in ieder geval serieus poogt te doen.",
+      "typologie": "factual",
+      "stance": "pro",
+      "spreker": "Kati Piri",
+      "partij": "GroenLinks-PvdA",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Statistisch",
+        "Context-Plenair",
+        "Frame-Economisch",
+        "Frame-Thematisch",
+        "Frame-Verantwoordelijkheid",
+        "Ideologie-Links-Economisch",
+        "Moraliteit-Zorg",
+        "Walton-Consequentie"
+      ],
+      "claims": [
+        {
+          "claim_text": "de bekostiging van de IND met 85% keldert",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "de prognose van het ministerie laat zien dat de werkvoorraad juist elk jaar verder oploopt",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "In de begroting keldert het aantal asielverzoeken binnen twee jaar plots met 66%",
+          "attributed_source_text": null
+        }
+      ],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A07626",
+      "speaker_video_url": null,
+      "gist": "IND-bezuiniging veroorzaakt langere wachttijden",
+      "samenvatting": "Kortingen op de IND-financiering verergeren de achterstanden en verlengen het verblijf in de opvang."
+    },
+    "2112": {
+      "id": 2112,
+      "citaat": "Dat er ongerustheid is bij mensen in een kleine gemeente wanneer ze opeens te maken krijgen met een grote noodopvanglocatie voor honderden asielzoekers, is goed voor te stellen. De frustratie bij met name de noordelijke gemeenten omdat zij telkens weer moeten bijspringen, terwijl andere bestuurders structureel weigeren om verantwoordelijkheid te nemen, is volkomen begrijpelijk. Dat er inmiddels meer noodopvanglocaties zijn in sporthallen en voormalige paardenstallen dan in reguliere azc's, is beschamend voor een rijk land als Nederland. Een meerderheid in dit land is namelijk nog steeds van mening dat we mensen die vluchten voor oorlog of vervolging fatsoenlijk moeten opvangen.",
+      "typologie": "moral",
+      "stance": "pro",
+      "spreker": "Kati Piri",
+      "partij": "GroenLinks-PvdA",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Anekdotisch",
+        "Context-Plenair",
+        "Frame-Moraliteit",
+        "Frame-Thematisch",
+        "Frame-Verantwoordelijkheid",
+        "Ideologie-GAL",
+        "Ideologie-Links-Economisch",
+        "Moraliteit-Eerlijkheid",
+        "Moraliteit-Zorg",
+        "Walton-Regel"
+      ],
+      "claims": [
+        {
+          "claim_text": "er inmiddels meer noodopvanglocaties zijn in sporthallen en voormalige paardenstallen dan in reguliere azc's",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "Een meerderheid in dit land is namelijk nog steeds van mening dat we mensen die vluchten voor oorlog of vervolging fatsoenlijk moeten opvangen",
+          "attributed_source_text": null
+        }
+      ],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A07626",
+      "speaker_video_url": null,
+      "gist": "Noodopvang in paardenstallen beschamend",
+      "samenvatting": null
+    },
+    "2113": {
+      "id": 2113,
+      "citaat": "Eindelijk was er een structurele oplossing: de Spreidingswet moest zorgen voor meer voorspelbaarheid bij gemeenten, rust in de keten, een einde aan de mensonterende crisisnoodopvang en een eerlijkere spreiding over gemeenten in het land. Maar juist die wet wil dit kabinet nu intrekken.",
+      "typologie": "factual",
+      "stance": "pro",
+      "spreker": "Kati Piri",
+      "partij": "GroenLinks-PvdA",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Causaal",
+        "Context-Plenair",
+        "Frame-Moraliteit",
+        "Frame-Thematisch",
+        "Frame-Verantwoordelijkheid",
+        "Ideologie-GAL",
+        "Ideologie-Links-Economisch",
+        "Moraliteit-Eerlijkheid",
+        "Moraliteit-Zorg",
+        "Walton-Consequentie"
+      ],
+      "claims": [],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A07626",
+      "speaker_video_url": null,
+      "gist": "Spreidingswet biedt structurele oplossing",
+      "samenvatting": null
+    },
+    "2114": {
+      "id": 2114,
+      "citaat": "Voorzitter. De asielketen zit in een constante crisisstand. Een gewone asielprocedure duurt inmiddels 61 weken. Asielzoekers zitten daarom vijftien maanden langer in de opvang dan voorzien. De prognose is dat eind dit jaar 30.000 statushouders vastzitten in azc's omdat ze niet kunnen doorstromen. De IND heeft nog 70.000 asielverzoeken op de plank liggen en 64.000 nareisverzoeken, met een wachttijd van 73 weken. Er zijn meer noodopvanglocaties die ondermaats zijn dan reguliere plekken. 6.140 kinderen in de noodopvang worden van hot naar her gesleept en moeten telkens afscheid nemen van de school waar ze net nieuwe klasgenoten hebben ontmoet. 15.600 asielzoekers en 1.700 statushouders kunnen niet aan het werk omdat ze nog geen bsn-nummer hebben; de wachttijd is inmiddels opgelopen tot negentien maanden.",
+      "typologie": "factual",
+      "stance": "pro",
+      "spreker": "Kati Piri",
+      "partij": "GroenLinks-PvdA",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Statistisch",
+        "Context-Plenair",
+        "Frame-Menselijk-Belang",
+        "Frame-Thematisch",
+        "Frame-Verantwoordelijkheid",
+        "Ideologie-GAL",
+        "Ideologie-Links-Economisch",
+        "Moraliteit-Eerlijkheid",
+        "Moraliteit-Zorg",
+        "Walton-Consequentie"
+      ],
+      "claims": [
+        {
+          "claim_text": "Een gewone asielprocedure duurt inmiddels 61 weken",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "Asielzoekers zitten daarom vijftien maanden langer in de opvang dan voorzien",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "De prognose is dat eind dit jaar 30.000 statushouders vastzitten in azc's omdat ze niet kunnen doorstromen",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "De IND heeft nog 70.000 asielverzoeken op de plank liggen en 64.000 nareisverzoeken, met een wachttijd van 73 weken",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "Er zijn meer noodopvanglocaties die ondermaats zijn dan reguliere plekken",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "6.140 kinderen in de noodopvang worden van hot naar her gesleept",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "15.600 asielzoekers en 1.700 statushouders kunnen niet aan het werk omdat ze nog geen bsn-nummer hebben; de wachttijd is inmiddels opgelopen tot negentien maanden",
+          "attributed_source_text": null
+        }
+      ],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A07626",
+      "speaker_video_url": null,
+      "gist": "Asielprocedure duurt gemiddeld 61 weken",
+      "samenvatting": null
+    },
+    "2115": {
+      "id": 2115,
+      "citaat": "Het is onverantwoord om geen plan van aanpak te hebben voor het wegwerken van de achterstanden en het verkorten van de doorlooptijden bij de IND.",
+      "typologie": "factual",
+      "stance": "pro",
+      "spreker": "Kati Piri",
+      "partij": "GroenLinks-PvdA",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Context-Plenair",
+        "Frame-Thematisch",
+        "Frame-Verantwoordelijkheid",
+        "Ideologie-GAL",
+        "Moraliteit-Autoriteit",
+        "Moraliteit-Zorg",
+        "Walton-Consequentie"
+      ],
+      "claims": [],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A07626",
+      "speaker_video_url": null,
+      "gist": "Achterstanden bij IND wegwerken is noodzaak",
+      "samenvatting": null
+    },
+    "2125": {
+      "id": 2125,
+      "citaat": "Als het gaat om dat kleine percentage mensen die een asielverzoek indienen, uit een veilig land komen en geen reden hebben voor bescherming, ben ik altijd bereid om te kijken hoe we die mensen kunnen ontmoedigen om hierheen te komen.",
+      "typologie": "factual",
+      "stance": "pro",
+      "spreker": "Kati Piri",
+      "partij": "GroenLinks-PvdA",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Statistisch",
+        "Context-Plenair",
+        "Frame-Thematisch",
+        "Frame-Verantwoordelijkheid",
+        "Ideologie-GAL",
+        "Moraliteit-Autoriteit",
+        "Walton-Consequentie"
+      ],
+      "claims": [
+        {
+          "claim_text": "klein percentage mensen die een asielverzoek indienen, uit een veilig land komen en geen reden hebben voor bescherming",
+          "attributed_source_text": null
+        }
+      ],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A07626",
+      "speaker_video_url": null,
+      "gist": "Kanslozen vereisen zorgvuldige toets",
+      "samenvatting": "Ook bij kansloze aanvragen is een individuele toets nodig en is gedwongen terugkeer gebonden aan feitelijke veiligheid."
+    },
+    "2140": {
+      "id": 2140,
+      "citaat": "Maak werk van de uitvoering van het Europees Migratiepact in plaats van kansloze briefjes over opt-outs sturen waardoor de minister niet meer serieus wordt genomen in Brussel.",
+      "typologie": "legal",
+      "stance": "pro",
+      "spreker": "Kati Piri",
+      "partij": "GroenLinks-PvdA",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Causaal",
+        "Context-Plenair",
+        "Frame-Thematisch",
+        "Frame-Verantwoordelijkheid",
+        "Ideologie-GAL",
+        "Moraliteit-Autoriteit",
+        "Walton-Consequentie"
+      ],
+      "claims": [],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A07626",
+      "speaker_video_url": null,
+      "gist": "Opt-outbriefjes belemmeren Europees Migratiepact",
+      "samenvatting": "Nationale uitzonderingsverzoeken en grenscontroles ondermijnen Europese afspraken en berokkenen de economie schade."
+    },
+    "2172": {
+      "id": 2172,
+      "citaat": "Ook het intrekken van de Spreidingswet kan niet op onze steun rekenen. Vorige week hebben de provincies laten zien wat wél kan. Iets weggooien wat werkt en gewenst is, zorgt alleen maar voor meer chaos.",
+      "typologie": "factual",
+      "stance": "pro",
+      "spreker": "Anne-Marijke Podt",
+      "partij": "D66",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Causaal",
+        "Context-Plenair",
+        "Frame-Thematisch",
+        "Frame-Verantwoordelijkheid",
+        "Ideologie-GAL",
+        "Moraliteit-Autoriteit",
+        "Walton-Consequentie"
+      ],
+      "claims": [
+        {
+          "claim_text": "Vorige week hebben de provincies laten zien wat wél kan.",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "Iets weggooien wat werkt en gewenst is, zorgt alleen maar voor meer chaos.",
+          "attributed_source_text": null
+        }
+      ],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A07626",
+      "speaker_video_url": null,
+      "gist": "Provincies steunen Spreidingswet massaal",
+      "samenvatting": null
+    },
+    "2183": {
+      "id": 2183,
+      "citaat": "Maar als ik het goed begrijp, zijn er dus een heleboel maatregelen die de echte vluchtelingen raken. Dat ongehuwde partners niet meer zouden mogen komen, dat meerderjarige kinderen die afhankelijk zijn omdat ze bijvoorbeeld een beperking hebben niet meer mogen komen en dat vluchtelingen die vluchten vanwege religieuze overtuigingen of hun geaardheid niet meer mogen komen, gaat allemaal nog steeds door. Dat deel van het pakket kunnen we dus afserveren.",
+      "typologie": "factual",
+      "stance": "pro",
+      "spreker": "Marieke Koekkoek",
+      "partij": "Volt",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Anekdotisch",
+        "Context-Plenair",
+        "Drogreden-Stropop",
+        "Frame-Moraliteit",
+        "Frame-Thematisch",
+        "Ideologie-GAL",
+        "Moraliteit-Eerlijkheid",
+        "Moraliteit-Zorg",
+        "Walton-Consequentie"
+      ],
+      "claims": [],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A07626",
+      "speaker_video_url": null,
+      "gist": "Nareisbeperking treft echte vluchtelingen",
+      "samenvatting": "Beperken van nareis treft echte vluchtelingen en sluit ongehuwde en afhankelijke gezinsleden onrechtmatig uit."
+    },
+    "2189": {
+      "id": 2189,
+      "citaat": "Uw partijleider zegt altijd dat iedereen zichzelf moet kunnen zijn. Dat is volledig terecht. U heeft als partij ook verschillende voorstellen gedaan om de lhbti-gemeenschap te beschermen. Nu zegt mevrouw Rajkowski hier: echte vluchtelingen moeten wel een plek krijgen. Maar het kabinet komt met een hele concrete maatregel, namelijk het beperken van gezinshereniging, waarbij ongehuwde partners uit onveilige landen hier niet meer heen mogen komen. Dat betekent dus dat homostellen, die niet mogen trouwen in bepaalde landen, hier niet meer herenigd kunnen worden.",
+      "typologie": "moral",
+      "stance": "pro",
+      "spreker": "Christine Teunissen",
+      "partij": "PvdD",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Anekdotisch",
+        "Context-Plenair",
+        "Frame-Episodisch",
+        "Frame-Menselijk-Belang",
+        "Frame-Moraliteit",
+        "Ideologie-GAL",
+        "Moraliteit-Vrijheid",
+        "Moraliteit-Zorg",
+        "Walton-Consequentie"
+      ],
+      "claims": [],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A07626",
+      "speaker_video_url": null,
+      "gist": "Nareisstop treft lhbti-partners onevenredig",
+      "samenvatting": null
+    },
+    "2191": {
+      "id": 2191,
+      "citaat": "In de asieldeal kunnen we lezen dat het landenbeleid voor Syrië aanzienlijk wordt aangescherpt. Dat is de eerste zin. Ik was ook bij die demonstratie van Syrische Nederlanders. Daar heb ik gezien dat mensen zich zorgen maken over hun veiligheid, over hun voortbestaan, over wat de toekomst hun gaat brengen. Ik vraag mij af of mevrouw Rajkowski beseft wat de politieke afspraak die zij met de VVD en met deze coalitie in die brief heeft gemaakt, zonder enige vorm van onderbouwing, doet met die mensen, die nu in angst en onzekerheid zijn gestort.",
+      "typologie": "moral",
+      "stance": "pro",
+      "spreker": "Stephan van Baarle",
+      "partij": "DENK",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Anekdotisch",
+        "Context-Plenair",
+        "Drogreden-Bespelen-Publiek",
+        "Frame-Episodisch",
+        "Frame-Menselijk-Belang",
+        "Frame-Moraliteit",
+        "Ideologie-GAL",
+        "Moraliteit-Zorg",
+        "Walton-Consequentie"
+      ],
+      "claims": [],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A07626",
+      "speaker_video_url": null,
+      "gist": "Gezinshereniging is fundamenteel mensenrecht",
+      "samenvatting": null
+    },
+    "2194": {
+      "id": 2194,
+      "citaat": "Waar haalt de VVD überhaupt het idee vandaan dat Syrië een veilig land zou kunnen zijn? We zien het reisadvies: donkerrood. We zien de berichten van mensenrechtenorganisaties waarin wordt verteld dat mensen die vanuit Europa in Syrië zijn teruggekomen, worden gefolterd en gemarteld. In het ambtsbericht dat we nu hebben, staat dat er meer dan 200 gevallen waren van foltering en marteling. Als je dan in een brief schrijft dat je het landenbeleid gaat aanscherpen, sta je toch compleet buiten de werkelijkheid? Assad zwaait nog steeds de scepter in Syrië en zorgt voor een levensbedreiging voor al die mensen.",
+      "typologie": "factual",
+      "stance": "pro",
+      "spreker": "Stephan van Baarle",
+      "partij": "DENK",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Expert",
+        "Bewijs-Statistisch",
+        "Context-Plenair",
+        "Frame-Conflict",
+        "Frame-Menselijk-Belang",
+        "Frame-Thematisch",
+        "Ideologie-GAL",
+        "Moraliteit-Vrijheid",
+        "Moraliteit-Zorg",
+        "Walton-Expertise"
+      ],
+      "claims": [
+        {
+          "claim_text": "het reisadvies is donkerrood",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "mensen die vanuit Europa in Syrië zijn teruggekomen, worden gefolterd en gemarteld",
+          "attributed_source_text": "berichten van mensenrechtenorganisaties"
+        },
+        {
+          "claim_text": "er waren meer dan 200 gevallen van foltering en marteling",
+          "attributed_source_text": "het ambtsbericht"
+        },
+        {
+          "claim_text": "Assad zorgt voor een levensbedreiging voor al die mensen",
+          "attributed_source_text": null
+        }
+      ],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A07626",
+      "speaker_video_url": null,
+      "gist": "Terugkeerders riskeren foltering in Syrië",
+      "samenvatting": null
+    },
+    "2247": {
+      "id": 2247,
+      "citaat": "Alleen als het feitelijk veilig is, kan het asielbeleid worden aangepast.",
+      "typologie": "factual",
+      "stance": "pro",
+      "spreker": "Diederik Boomsma",
+      "partij": "NSC",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Context-Plenair",
+        "Frame-Thematisch",
+        "Moraliteit-Zorg",
+        "Walton-Consequentie"
+      ],
+      "claims": [],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A07626",
+      "speaker_video_url": null,
+      "gist": "Veiligheid moet feitelijk vaststaan",
+      "samenvatting": null
+    },
+    "2248": {
+      "id": 2248,
+      "citaat": "Het is inderdaad zo dat als er geen diplomatieke banden zijn, het moeilijk is om iemand gedwongen terug te sturen, want dan is daar niemand om diegene in ontvangst te nemen. Dat zal dan dus niet kunnen.",
+      "typologie": "factual",
+      "stance": "pro",
+      "spreker": "Diederik Boomsma",
+      "partij": "NSC",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Causaal",
+        "Context-Plenair",
+        "Frame-Thematisch",
+        "Walton-Causaal"
+      ],
+      "claims": [],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A07626",
+      "speaker_video_url": null,
+      "gist": "Terugkeer onmogelijk zonder diplomatieke banden",
+      "samenvatting": null
+    },
+    "2340": {
+      "id": 2340,
+      "citaat": "We raken ons vrij verkeer van personen, een van de vrijheden van Europa, kwijt door grenscontroles. Duitsland ging ons voor. Ik wil de minister vragen hoeveel Dublinners door de interne grenscontroles niet door die nationale procedure gingen. En weegt dit op tegen de kosten van 75 miljoen per maand voor ondernemers, voor mensen die dagelijks de grens over moeten voor werk, studie of school?",
+      "typologie": "economic",
+      "stance": "pro",
+      "spreker": "Marieke Koekkoek",
+      "partij": "Volt",
+      "tags": [],
+      "claims": [
+        {
+          "claim_text": "kosten van 75 miljoen per maand voor ondernemers, voor mensen die dagelijks de grens over moeten voor werk, studie of school",
+          "attributed_source_text": null
+        }
+      ],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A07626",
+      "speaker_video_url": null,
+      "gist": "Grenscontroles schaden economie en vrijheden",
+      "samenvatting": null
+    },
+    "2341": {
+      "id": 2341,
+      "citaat": "We raken ook onze waarden kwijt, namelijk de bescherming van mensenrechten, die we zo hoog in het vaandel hebben. Dit kabinet heeft zich voorgenomen om delen van Syrië veilig te verklaren, om zogenaamd mensen terug te kunnen sturen. Maar zoals vandaag al veel vaker is gezegd: op dit moment is daar het regime van Assad. Gaat de minister om tafel met dat regime om een relatie op te bouwen? Wat vindt de minister ervan dat Syriërs die nu Libanon ontvluchten door ditzelfde regime opgepakt, gemarteld en vermoord worden? Is het volgens de minister een veilig land?",
+      "typologie": "moral",
+      "stance": "pro",
+      "spreker": "Marieke Koekkoek",
+      "partij": "Volt",
+      "tags": [],
+      "claims": [
+        {
+          "claim_text": "Syriërs die nu Libanon ontvluchten door ditzelfde regime opgepakt, gemarteld en vermoord worden",
+          "attributed_source_text": null
+        }
+      ],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A07626",
+      "speaker_video_url": null,
+      "gist": "Samenwerking met Assad schendt waarden",
+      "samenvatting": null
+    },
+    "2364": {
+      "id": 2364,
+      "citaat": "Als het gaat om statushouders kan eenieder, van de voorzitter tot de staatssecretaris, van mevrouw Keijzer tot het COA of van meneer Ceder tot het Rode Kruis, besluiten om hotelkamers te huren voor medewerkers van Philips, voor medewerkers van de BBB-fractie of voor statushouders. Daar is in geen van de gevallen toestemming van gemeenteraad, college, burgemeester, staatssecretaris of deze Tweede Kamer voor nodig, conform de wet- en regelgeving vastgesteld door deze Kamer.",
+      "typologie": "legal",
+      "stance": "contra",
+      "spreker": "Eric van der Burg",
+      "partij": "VVD",
+      "tags": [],
+      "claims": [],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A02468",
+      "speaker_video_url": null,
+      "gist": "Nationale autonomie boven Europese richtlijnen",
+      "samenvatting": null
+    },
+    "2419": {
+      "id": 2419,
+      "citaat": "65 miljoen euro, dat is het omvangrijke bedrag dat in de afgelopen twaalf jaar is uitgekeerd aan asieldwangsommen. Sinds 2012 kent de wet een boeteregeling voor de overheid voor het geval er niet tijdig wordt beslist in vreemdelingenzaken. Nu de wachttijden bij de IND steeds verder oplopen, kost dat de overheid dus niet alleen veel tijd maar ook veel geld. De IND keerde in de eerste vier maanden van dit jaar al bijna evenveel dwangsommen uit als in het afgelopen jaar: 10 miljoen euro. We hebben het dus niet over een kleinigheid. Daarom ben ik blij dat we over dit wetsvoorstel kunnen spreken.",
+      "typologie": "economic",
+      "stance": "contra",
+      "spreker": "Diederik van Dijk",
+      "partij": "SGP",
+      "tags": [],
+      "claims": [
+        {
+          "claim_text": "65 miljoen euro is in de afgelopen twaalf jaar uitgekeerd aan asieldwangsommen",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "De IND keerde in de eerste vier maanden van dit jaar al bijna evenveel dwangsommen uit als in het afgelopen jaar: 10 miljoen euro",
+          "attributed_source_text": null
+        }
+      ],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A04848",
+      "speaker_video_url": null,
+      "gist": "Dwangsommen kosten miljoenen zonder effect",
+      "samenvatting": "Miljoenen euro’s aan dwangsommen prikkelen de IND niet om sneller te werken en verlagen het maatschappelijk draagvlak."
+    },
+    "2482": {
+      "id": 2482,
+      "citaat": "De praktijk is dat de IND keihard werkt om zo snel mogelijk een besluit te nemen. Als de IND dat besluit niet neemt, krijgen mensen vervolgens geld, wat geen enkele stimulans is voor de IND om sneller te gaan leveren. De IND zegt ook niet: o, zodra er sprake is van het feit dat iemand een dwangsom dreigt te krijgen, leggen we die bovenop de stapel. Dat zou ook weer de verkeerde prikkel geven. De dwangsom is niet bedoeld om asielzoekers te belonen, maar om de IND, of in dit geval de overheid, te stimuleren. Die stimulans werkt alleen niet. Wel zien heel veel Nederlanders asielzoekers geld krijgen vanuit de dwangsomregeling. Dat verlaagt in veel gevallen weer het draagvlak voor het systeem als geheel, terwijl we er toch belang bij hebben om ervoor te zorgen dat er groot draagvlak blijft voor de opvang van asielzoekers in Nederland.",
+      "typologie": "factual",
+      "stance": "contra",
+      "spreker": "Eric van der Burg",
+      "partij": "VVD",
+      "tags": [],
+      "claims": [
+        {
+          "claim_text": "Dwangsommen werken niet als stimulans voor de IND om sneller te leveren.",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "Het feit dat Nederlanders zien dat asielzoekers geld krijgen via dwangsommen verlaagt het draagvlak voor het systeem.",
+          "attributed_source_text": null
+        }
+      ],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A04848",
+      "speaker_video_url": null,
+      "gist": "Dwangsom beloont procederen en verlaagt draagvlak",
+      "samenvatting": null
+    },
+    "2484": {
+      "id": 2484,
+      "citaat": "Op het moment dat het niet werkt, moet je het afschaffen. Dat kan je natuurlijk redeneren naar andere onderdelen van het recht, maar daar doen we het niet. Ik gebruik hier steeds de toeslagenaffaire als voorbeeld, maar ik kan ook bijvoorbeeld Woo-verzoeken noemen. Dan hebben we toch in Nederland besloten dat dwangsommen als middel ergens zinnig voor zijn, aangezien we het overal toepassen? Maar voor vreemdelingen- en asielrecht zouden we dat middel dan niet toepassen. Dat snap ik dan niet. Dat vind ik ongelijk.",
+      "typologie": "legal",
+      "stance": "pro",
+      "spreker": "Marieke Koekkoek",
+      "partij": "Volt",
+      "tags": [],
+      "claims": [
+        {
+          "claim_text": "dwangsommen worden in Nederland overal toegepast als middel",
+          "attributed_source_text": null
+        }
+      ],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A04848",
+      "speaker_video_url": null,
+      "gist": "Afschaffen dwangsom veroorzaakt rechtsongelijkheid",
+      "samenvatting": null
+    },
+    "2487": {
+      "id": 2487,
+      "citaat": "Ik vind het heel erg gevaarlijk als we in delen van het recht, gemaakt om een kwetsbare burger te beschermen tegen een overheid die per definitie veel meer macht heeft, andere principes gaan toepassen. Stel dat we constateren: het principe van een dwangsom is nuttig, want die beschermt een burger tegen een overheid die niet functioneert, dan moeten we dat bewaken, in alle vormen van het recht, dus ook in asiel- en vreemdelingenzaken.",
+      "typologie": "legal",
+      "stance": "pro",
+      "spreker": "Marieke Koekkoek",
+      "partij": "Volt",
+      "tags": [],
+      "claims": [],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A04848",
+      "speaker_video_url": null,
+      "gist": "Dwangsom beschermt kwetsbare burger",
+      "samenvatting": "Dwangsommen beschermen de burger tegen een trage overheid en horen op alle terreinen van het recht te gelden."
+    },
+    "2505": {
+      "id": 2505,
+      "citaat": "Mensen maanden- of jarenlang laten wachten op een levensbepalend besluit en dwangsommen betalen omdat je de boel niet op orde hebt, heb ik inderdaad \"overheidsfalen\" genoemd. Ik vind het ook echt slecht bestuur, dus niet zomaar matig bestuur, maar gewoon echt ronduit slecht bestuur. De reactie daarop van de regering hebben we enkele weken geleden behandeld, onder uw leiding, voorzitter, namelijk bij de wet om de termijnen te verlengen. En vanavond schaffen we de dwangsommen af. Dat is eigenlijk de reactie van de regering op het overheidsfalen. Ik vind dat, ook principieel, gewoon niet goed; je moet zorgen dat je de boel op orde hebt.",
+      "typologie": "factual",
+      "stance": "pro",
+      "spreker": "Michiel van Nispen",
+      "partij": "SP",
+      "tags": [],
+      "claims": [],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A04848",
+      "speaker_video_url": null,
+      "gist": "Afschaffen dwangsom verbergt overheidsfalen",
+      "samenvatting": null
+    },
+    "2516": {
+      "id": 2516,
+      "citaat": "Uitgeprocedeerde vreemdelingen moeten heel snel ons land uit. Nu gebeurt dit nog veel te weinig. Andere landen werken niet mee en nemen amper asielzoekers terug. Maar afgewezen asielzoekers worden in Nederland ook massaal geholpen onder te duiken. De PVV wil dat personen die het uitzetbeleid doelbewust saboteren, worden aangepakt.",
+      "typologie": "factual",
+      "stance": "contra",
+      "spreker": "Marina Vondeling",
+      "partij": "PVV",
+      "tags": [],
+      "claims": [
+        {
+          "claim_text": "Uitgeprocedeerde vreemdelingen worden nu veel te weinig snel uit het land gestuurd",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "Andere landen werken niet mee en nemen amper asielzoekers terug",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "Afgewezen asielzoekers worden in Nederland massaal geholpen onder te duiken",
+          "attributed_source_text": null
+        }
+      ],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2025A04080",
+      "speaker_video_url": null,
+      "gist": "Kanslozen direct afwijzen aan grens",
+      "samenvatting": null
+    },
+    "2555": {
+      "id": 2555,
+      "citaat": "Ik heb al eerder gezegd dat ik niet van heel Nederland één groot azc wil maken.",
+      "typologie": "factual",
+      "stance": "contra",
+      "spreker": "Marjolein Faber",
+      "partij": "PVV",
+      "tags": [],
+      "claims": [],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2025A04080",
+      "speaker_video_url": null,
+      "gist": "Nederland moet geen groot azc worden",
+      "samenvatting": null
+    },
+    "2589": {
+      "id": 2589,
+      "citaat": "In rap tempo verschijnen als gevolg van de Spreidingswet in het hele land azc's, waarvoor vaak geen draagvlak bestaat onder de lokale bevolking, terwijl datgene waar wel overweldigend draagvlak voor is, namelijk forse instroombeperking, al jarenlang niet van de grond komt.",
+      "typologie": "factual",
+      "stance": "contra",
+      "spreker": "Simon Ceulemans",
+      "partij": "JA21",
+      "tags": [],
+      "claims": [],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2025A07195",
+      "speaker_video_url": null,
+      "gist": "Azc-bouw mist maatschappelijk draagvlak",
+      "samenvatting": null
+    },
+    "2591": {
+      "id": 2591,
+      "citaat": "In het overzicht met wijzigingen in het asielbeleid in omringende landen lezen we over de dappere stappen van Oostenrijk om nareis zo veel mogelijk te beperken. Oostenrijk beroept zich daarbij op artikel 72 van het Verdrag betreffende de werking van de Europese Unie, net zoals Duitsland doet met betrekking tot de strikte grenscontroles. De Nederlandse reactie is echter weer erg afwerend: het is niet mogelijk, er is geen grond voor, het is onhoudbaar, et cetera, et cetera. Vraag aan de minister: waarom nou altijd die beren op de weg? Waarom jezelf bij voorbaat aan handen en voeten binden uit angst dat we een keer teruggefloten worden, terwijl andere lidstaten laten zien dat het wel kan?",
+      "typologie": "legal",
+      "stance": "contra",
+      "spreker": "Simon Ceulemans",
+      "partij": "JA21",
+      "tags": [],
+      "claims": [
+        {
+          "claim_text": "Oostenrijk beroept zich op artikel 72 van het Verdrag betreffende de werking van de Europese Unie om nareis te beperken",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "Duitsland beroept zich op artikel 72 van het Verdrag betreffende de werking van de Europese Unie met betrekking tot strikte grenscontroles",
+          "attributed_source_text": null
+        }
+      ],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2025A07195",
+      "speaker_video_url": null,
+      "gist": "Nareis beperken via Oostenrijks voorbeeld",
+      "samenvatting": "Ruime nareismogelijkheden leiden tot extra druk op de opvang en vereisen strengere wettelijke voorwaarden."
+    },
+    "2593": {
+      "id": 2593,
+      "citaat": "Als gevolg van het nieuwste ambtsbericht over Syrië en het daaruit voortvloeiende landenbeleid van juni, worden asielverzoeken van Syriërs weer in behandeling genomen. Wat JA21 betreft moeten echter ook zo snel en massaal mogelijk verstrekte verblijfsstatussen aan Syriërs herbeoordeeld worden, aangezien de grond waarop deze verstrekt zijn in veel gevallen is komen te vervallen door de gewijzigde situatie in Syrië. Het antwoord daarop is wat ons betreft terugkeer.",
+      "typologie": "factual",
+      "stance": "contra",
+      "spreker": "Simon Ceulemans",
+      "partij": "JA21",
+      "tags": [],
+      "claims": [],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2025A07195",
+      "speaker_video_url": null,
+      "gist": "Syrië-statussen herbeoordelen voor terugkeer",
+      "samenvatting": "Grote delen van Syrië zijn weer stabiel genoeg om verleende vergunningen te herbeoordelen en terugkeer te eisen."
+    },
+    "2633": {
+      "id": 2633,
+      "citaat": "Dat is, mijn laatste zin, inclusief de dwangsommen van de heer Diederik van Dijk. Daar hebben we tot en met augustus meer dan 40 miljoen aan uitgegeven. Dat is inmiddels nog meer en het loopt nog steeds op. Dat is zondegeld. Daar wordt echt geen asielzoeker sneller door behandeld en het is voor de IND zeer demotiverend.",
+      "typologie": "economic",
+      "stance": "contra",
+      "spreker": "David van Weel",
+      "partij": "VVD",
+      "tags": [],
+      "claims": [
+        {
+          "claim_text": "Er is tot en met augustus meer dan 40 miljoen uitgegeven aan dwangsommen",
+          "attributed_source_text": null
+        }
+      ],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2025A07195",
+      "speaker_video_url": null,
+      "gist": "Dwangsommen demotiverend voor IND-personeel",
+      "samenvatting": null
+    },
+    "2635": {
+      "id": 2635,
+      "citaat": "De minister zegt: we zijn er terughoudend in in verband met de mogelijke juridische onhoudbaarheid. Maar de hele discussie gaat nu juist over de vraag of het wel of niet juridisch houdbaar is. Ik zie dat Nederland bij voorbaat al besluit dat het misschien niet juridisch houdbaar is en het daarom niet gaat proberen, terwijl er wel routes zijn. Duitsland is vanwege die grenscontroles op basis van artikel 72 op individuele basis teruggefloten door de rechter, maar verzint dan gewoon geitenpaadjes om het te kunnen doorzetten. Waarom zoekt Nederland niet naar creatieve oplossingen om dergelijke nationale maatregelen toch door te kunnen voeren?",
+      "typologie": "legal",
+      "stance": "contra",
+      "spreker": "Simon Ceulemans",
+      "partij": "JA21",
+      "tags": [],
+      "claims": [
+        {
+          "claim_text": "Duitsland is vanwege die grenscontroles op basis van artikel 72 op individuele basis teruggefloten door de rechter",
+          "attributed_source_text": null
+        }
+      ],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2025A07195",
+      "speaker_video_url": null,
+      "gist": "Zoek nationale geitenpaadjes tegen instroom",
+      "samenvatting": "Nederland moet nationale beleidsruimte en uitzonderingen benutten om strenge toelatingsregels door te voeren."
+    },
+    "2638": {
+      "id": 2638,
+      "citaat": "Uiteindelijk is het idee van deze versobering niet alleen dat het goedkoper wordt, maar ook dat het de procedure efficiënter en effectiever maakt.",
+      "typologie": "factual",
+      "stance": "contra",
+      "spreker": "David van Weel",
+      "partij": "VVD",
+      "tags": [],
+      "claims": [],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2025A07195",
+      "speaker_video_url": null,
+      "gist": "Versobering maakt procedures efficiënter",
+      "samenvatting": "Het versoberen van voorzieningen en het inperken van instroom verlicht de opvangdruk effectiever dan geld bijpassen."
+    },
+    "2640": {
+      "id": 2640,
+      "citaat": "Het frustrerende is op dit moment dat bij een no-show, als dat vaker gebeurt en als het verwijtbaar wordt geacht, de procedure van de vreemdeling buiten behandeling kan worden geplaatst. Dan is de IND deze kwijt. Het probleem is echter dat als iemand daarna weer terugkomt, er een geheel nieuwe procedure kan worden gestart. Deze persoon moet inhoudelijk dan weer helemaal worden begeleid. Hier wordt door kwaadwillenden gebruik van gemaakt. Dat geldt niet voor mensen die daadwerkelijk recht denken te hebben op asiel, want die komen echt wel opdagen op hun afspraken; als ze er niet zijn, is daar vaak een goede reden voor. Het zijn de mensen die het systeem willen frustreren, die denken: ik kom in de buurt van een negatief besluit, dus nu verdwijn ik een tijdje van de radar; als ik dan weer terugkom, ga ik opnieuw door de molen. Dat is een van de dingen die we met de Asielnoodmaatregelenwet oplossen. Daarmee zorgen we ervoor dat bij een verwijtbare no-show, het niet meewerken of het verwijtbaar achterhouden van informatie die relevant had kunnen zijn, een negatief besluit kan worden genomen. Dat gaat ontzettend veel schelen voor de IND-medewerkers, die nu ontzettend veel tijd kwijt zijn aan mensen die uiteindelijk toch geen recht hebben op asiel.",
+      "typologie": "factual",
+      "stance": "contra",
+      "spreker": "David van Weel",
+      "partij": "VVD",
+      "tags": [],
+      "claims": [
+        {
+          "claim_text": "bij een no-show, als dat vaker gebeurt en als het verwijtbaar wordt geacht, de procedure van de vreemdeling buiten behandeling kan worden geplaatst",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "als iemand daarna weer terugkomt, er een geheel nieuwe procedure kan worden gestart",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "mensen die daadwerkelijk recht denken te hebben op asiel... komen echt wel opdagen op hun afspraken",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "IND-medewerkers... nu ontzettend veel tijd kwijt zijn aan mensen die uiteindelijk toch geen recht hebben op asiel",
+          "attributed_source_text": null
+        }
+      ],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2025A07195",
+      "speaker_video_url": null,
+      "gist": "No-shows misbruiken het asielsysteem",
+      "samenvatting": "Kansloze asielzoekers die de procedure frustreren moeten versneld worden afgewezen en direct uitgezet."
+    },
+    "2651": {
+      "id": 2651,
+      "citaat": "Maar op het moment dat je ruim 75.000 Syriërs met een tijdelijke verblijfsvergunning hebt, waarbij je weet dat het, door de gewijzigde veiligheidssituatie in Syrië, aannemelijk is dat we een heel groot deel van die mensen terug kunnen sturen, lijkt mij dat bij uitstek iets om met heel veel prioriteit op te pakken.",
+      "typologie": "factual",
+      "stance": "contra",
+      "spreker": "Simon Ceulemans",
+      "partij": "JA21",
+      "tags": [],
+      "claims": [
+        {
+          "claim_text": "ruim 75.000 Syriërs met een tijdelijke verblijfsvergunning",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "door de gewijzigde veiligheidssituatie in Syrië, aannemelijk is dat we een heel groot deel van die mensen terug kunnen sturen",
+          "attributed_source_text": null
+        }
+      ],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2025A07195",
+      "speaker_video_url": null,
+      "gist": "Gewijzigde situatie Syrië maakt terugkeer mogelijk",
+      "samenvatting": null
+    },
+    "2669": {
+      "id": 2669,
+      "citaat": "Het verminderen van de druk op de opvang is en blijft dus een grote inzet van dit kabinet. We werken dus echt aan het beperken van de instroom, het bevorderen van terugkeer, waar heel veel over is gezegd, en de doorstroom van statushouders.",
+      "typologie": "factual",
+      "stance": "contra",
+      "spreker": "Mona Keijzer",
+      "partij": "Lid Keijzer",
+      "tags": [],
+      "claims": [],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2025A07195",
+      "speaker_video_url": null,
+      "gist": "Instroombeperking verlicht opvangdruk het beste",
+      "samenvatting": null
+    },
+    "2670": {
+      "id": 2670,
+      "citaat": "Hoe langer je wacht met het aannemen van nieuw beleid, hoe langer het duurt voordat de IND verder kan gaan met het uitvoeren van die wetten. Ja, alle hoop van veel partijen is gericht op het Migratiepact, maar ook daarvoor geldt dat, als je die wetten aanneemt, de IND gewoon tijd nodig heeft om de uitvoering ter hand te nemen. Het is hier al gegaan om de dwangsommen, maar ook de voorwaarden ten aanzien van nareis zitten niet in het Migratiepact. Die zijn ongelofelijk belangrijk om de wetten uiteindelijk aan te nemen, zodat we echt iets kunnen doen aan de situatie waarmee wij te maken hebben.",
+      "typologie": "factual",
+      "stance": "contra",
+      "spreker": "Mona Keijzer",
+      "partij": "Lid Keijzer",
+      "tags": [],
+      "claims": [],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2025A07195",
+      "speaker_video_url": null,
+      "gist": "Nareisvoorwaarden noodzakelijk voor opvangdruk",
+      "samenvatting": null
+    },
+    "2671": {
+      "id": 2671,
+      "citaat": "Wanneer een vrouw in het kader van nareis met een of twee kinderen op Schiphol landt en de referent, vaak de vader, een eigen sociale huurwoning heeft, begrijp ik namelijk werkelijk niet waarom deze gezinsleden opgevangen moeten worden bij het COA, op ons aller kosten, terwijl het ons in de opvang over de schoenen loopt. Dus dat beleid blijf ik ook gewoon voeren.",
+      "typologie": "economic",
+      "stance": "contra",
+      "spreker": "Mona Keijzer",
+      "partij": "Lid Keijzer",
+      "tags": [],
+      "claims": [],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2025A07195",
+      "speaker_video_url": null,
+      "gist": "Nareizigers belasten COA-opvang onnodig",
+      "samenvatting": null
+    },
+    "2674": {
+      "id": 2674,
+      "citaat": "Het aantal reguliere opvangplekken neemt toe, van nu 40.000 naar 51.000 begin 2027. Hierdoor kunnen we dan de noodopvangplekken weer afbouwen.",
+      "typologie": "factual",
+      "stance": "contra",
+      "spreker": "Mona Keijzer",
+      "partij": "Lid Keijzer",
+      "tags": [],
+      "claims": [
+        {
+          "claim_text": "Het aantal reguliere opvangplekken neemt toe, van nu 40.000 naar 51.000 begin 2027",
+          "attributed_source_text": null
+        }
+      ],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2025A07195",
+      "speaker_video_url": null,
+      "gist": "Reguliere opvang bouwt noodopvang af",
+      "samenvatting": null
+    },
+    "2690": {
+      "id": 2690,
+      "citaat": "Ik blijf ervoor pleiten dat de tijdelijke vergunningen van Syriërs worden ingetrokken. Ik zal daartoe weer een motie indienen.",
+      "typologie": "factual",
+      "stance": "contra",
+      "spreker": "Marina Vondeling",
+      "partij": "PVV",
+      "tags": [],
+      "claims": [],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2025A07195",
+      "speaker_video_url": null,
+      "gist": "Tijdelijke Syrië-vergunningen actief intrekken",
+      "samenvatting": null
+    }
+  },
+  "bands": [
+    {
+      "nummer": 1,
+      "thema": "Moet de Spreidingswet gehandhaafd worden om opvang te verdelen?",
+      "pro": {
+        "type": "node",
+        "id": 2113,
+        "kids": []
+      },
+      "contra": {
+        "type": "node",
+        "id": 2589,
+        "kids": []
+      },
+      "oppositie": {
+        "argument_a_id": 2113,
+        "argument_b_id": 2589,
+        "relation_type": "direct_rebuttal"
+      }
+    },
+    {
+      "nummer": 2,
+      "thema": "Moeten dwangsommen bij trage asielprocedures worden afgeschaft?",
+      "pro": {
+        "type": "node",
+        "id": 2487,
+        "kids": [
+          2484,
+          2505
+        ]
+      },
+      "contra": {
+        "type": "node",
+        "id": 2419,
+        "kids": [
+          2482,
+          2633
+        ]
+      },
+      "oppositie": {
+        "argument_a_id": 2487,
+        "argument_b_id": 2419,
+        "relation_type": "direct_rebuttal"
+      }
+    },
+    {
+      "nummer": 3,
+      "thema": "Mag gezinshereniging worden beperkt om instroom te remmen?",
+      "pro": {
+        "type": "node",
+        "id": 2183,
+        "kids": [
+          2189,
+          2191
+        ]
+      },
+      "contra": {
+        "type": "node",
+        "id": 2591,
+        "kids": [
+          2670,
+          2671
+        ]
+      },
+      "oppositie": {
+        "argument_a_id": 2183,
+        "argument_b_id": 2591,
+        "relation_type": "direct_rebuttal"
+      }
+    },
+    {
+      "nummer": 4,
+      "thema": "Is Syrië veilig genoeg om asielzoekers terug te sturen?",
+      "pro": {
+        "type": "node",
+        "id": 2109,
+        "kids": [
+          2194,
+          2341
+        ]
+      },
+      "contra": {
+        "type": "node",
+        "id": 2593,
+        "kids": [
+          2651,
+          2690
+        ]
+      },
+      "oppositie": {
+        "argument_a_id": 2109,
+        "argument_b_id": 2593,
+        "relation_type": "direct_rebuttal"
+      }
+    },
+    {
+      "nummer": 5,
+      "thema": "Moet de procedure voor kansloze asielzoekers versneld afgewezen worden?",
+      "pro": {
+        "type": "node",
+        "id": 2125,
+        "kids": [
+          2247,
+          2248
+        ]
+      },
+      "contra": {
+        "type": "node",
+        "id": 2640,
+        "kids": [
+          2516
+        ]
+      },
+      "oppositie": {
+        "argument_a_id": 2125,
+        "argument_b_id": 2640,
+        "relation_type": "direct_rebuttal"
+      }
+    },
+    {
+      "nummer": 6,
+      "thema": "Moet Nederland EU-migratieregels volgen of een opt-out eisen?",
+      "pro": {
+        "type": "node",
+        "id": 2140,
+        "kids": [
+          2340
+        ]
+      },
+      "contra": {
+        "type": "node",
+        "id": 2635,
+        "kids": [
+          2106,
+          2364
+        ]
+      },
+      "oppositie": {
+        "argument_a_id": 2140,
+        "argument_b_id": 2635,
+        "relation_type": "direct_rebuttal"
+      }
+    },
+    {
+      "nummer": 7,
+      "thema": "Moet de IND meer budget krijgen of moeten voorzieningen versoberen?",
+      "pro": {
+        "type": "node",
+        "id": 2111,
+        "kids": [
+          2114,
+          2115
+        ]
+      },
+      "contra": {
+        "type": "node",
+        "id": 2638,
+        "kids": [
+          2669,
+          2674
+        ]
+      },
+      "oppositie": {
+        "argument_a_id": 2111,
+        "argument_b_id": 2638,
+        "relation_type": "direct_rebuttal"
+      }
+    }
+  ],
+  "losse_groepen": [],
+  "losse_argumenten": [],
+  "twijfelachtige_classificaties": [
+    {
+      "argument_id": 2282,
+      "huidige_stance": "contra",
+      "reden": "Bekritiseert het intrekken van de Spreidingswet en waarschuwt dat dit de opvangcrisis verergert; past volgens de definitie bij PRO (opvang/bescherming)."
+    },
+    {
+      "argument_id": 2284,
+      "huidige_stance": "contra",
+      "reden": "Bepleit dat de overvolle opvang door overheidsbeleid is gecreëerd en vraagt om meer middelen en gemeentelijke ruimte via de Spreidingswet; dit is een PRO-standpunt."
+    },
+    {
+      "argument_id": 2306,
+      "huidige_stance": "contra",
+      "reden": "Verdedigt de Spreidingswet als een werkende oplossing en bekritiseert de intrekking daarvan; hoort bij PRO."
+    },
+    {
+      "argument_id": 2311,
+      "huidige_stance": "contra",
+      "reden": "Stelt expliciet dat de Spreidingswet wél werkt en dat het stopzetten daarvan onverstandig is; hoort bij PRO."
+    },
+    {
+      "argument_id": 2317,
+      "huidige_stance": "contra",
+      "reden": "Bekritiseert het besluit van de minister om de goed functionerende Spreidingswet in te trekken; hoort bij PRO."
+    },
+    {
+      "argument_id": 2369,
+      "huidige_stance": "contra",
+      "reden": "Pleit voor het naleven van de Spreidingswet en uitbreiding van de COA-capaciteit in plaats van tijdelijke noodopvang; hoort bij PRO."
+    },
+    {
+      "argument_id": 2450,
+      "huidige_stance": "contra",
+      "reden": "Bekritiseert het afschaffen van dwangsommen voor asielzoekers als het creëren van rechtsongelijkheid en aantasting van het bestuursrecht; hoort bij PRO."
+    },
+    {
+      "argument_id": 2579,
+      "huidige_stance": "contra",
+      "reden": "Bekritiseert het kabinet omdat het de opvangproblemen verergert in plaats van oplost; past bij het PRO-standpunt over opvangtekorten."
+    }
+  ]
+}

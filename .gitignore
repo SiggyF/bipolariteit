@@ -9,9 +9,11 @@ data/raw/*
 !data/raw/elecdebate60to16/
 data/raw/elecdebate60to16/*
 !data/raw/elecdebate60to16/Makefile
-# Experimentele tussendocumenten, geen frontend-input (i.t.t. data/export/topics/):
-# lokale verificatie/input voor handmatig LLM-werk, bewust niet gecommit.
-data/export/argument-trees/
+# data/export/argument-trees/ is wél frontend-input (zie
+# frontend/src/pages/topics/[slug].astro) en wordt dus wel ingecheckt --
+# zonder die JSON's blijft de Argumentenboom-sectie op elk topic verborgen.
+# De rest hieronder is experimentele tussendocumentatie, lokale
+# verificatie/input voor handmatig LLM-werk, bewust niet gecommit.
 data/export/argument-docs/
 data/export/design-handoff/
 data/export/agy_confrontatie_tree.log
