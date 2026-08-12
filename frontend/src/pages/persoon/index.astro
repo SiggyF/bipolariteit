@@ -5,15 +5,28 @@ import { displayPartyName } from "../../lib/parties";
 import { slugify } from "../../lib/slug";
 import { NO_PARTY } from "../../lib/types";
 import { PERSPECTIEVEN } from "../../lib/tagIcons.generated";
+import { tagIconPath } from "../../lib/tagIcon";
 
 const topicModules = import.meta.glob("../../../../data/export/topics/*.json", { eager: true });
 
 const PERSPECTIEF_KLEUR = new Map(PERSPECTIEVEN.map((p) => [p.naam, p.kleur]));
+const TAG_PERSPECTIEF = new Map<string, string>();
+for (const perspectief of PERSPECTIEVEN) {
+	for (const sleutel of Object.keys(perspectief.tags)) TAG_PERSPECTIEF.set(sleutel, perspectief.naam);
+}
 const ONBEKENDE_KLEUR = "#6f6558";
 
 const counts = new Map<string, number>();
 const partyOf = new Map<string, string>();
-const perspectiefOf = new Map<string, Map<string, number>>();
+const tagBeschrijving = new Map<string, string>();
+
+// Alleen LLM-toegekende tags karakteriseren iemands eigen argumentatiestijl --
+// afgeleide tags (Arena-Parlement, Actor-Politicus, ...) volgen mechanisch uit
+// metadata en zeggen niets over wat iemand "kenmerkt", zie ook aggregate.ts.
+const tagCountByPerson = new Map<string, Map<string, number>>();
+const tagTotalByPerson = new Map<string, number>();
+const globalTagCount = new Map<string, number>();
+let globalTagTotal = 0;
 
 for (const mod of Object.values(topicModules) as any[]) {
 	for (const argument of mod.default.arguments) {
@@ -21,14 +34,63 @@ for (const mod of Object.values(topicModules) as any[]) {
 		counts.set(name, (counts.get(name) ?? 0) + 1);
 		if (argument.actor.party && !partyOf.has(name)) partyOf.set(name, argument.actor.party);
 
-		const perspectieven = perspectiefOf.get(name) ?? new Map<string, number>();
+		const personTagCount = tagCountByPerson.get(name) ?? new Map<string, number>();
 		for (const tag of argument.tags) {
 			if (tag.created_by !== "llm") continue;
-			perspectieven.set(tag.perspectief, (perspectieven.get(tag.perspectief) ?? 0) + 1);
+			if (!tagBeschrijving.has(tag.sleutel)) tagBeschrijving.set(tag.sleutel, tag.beschrijving);
+			personTagCount.set(tag.sleutel, (personTagCount.get(tag.sleutel) ?? 0) + 1);
+			tagTotalByPerson.set(name, (tagTotalByPerson.get(name) ?? 0) + 1);
+			globalTagCount.set(tag.sleutel, (globalTagCount.get(tag.sleutel) ?? 0) + 1);
+			globalTagTotal++;
 		}
-		perspectiefOf.set(name, perspectieven);
+		tagCountByPerson.set(name, personTagCount);
 	}
 }
+
+interface Signaal {
+	sleutel: string;
+	n: number;
+	ratio: number;
+}
+
+/** Per tag: hoe vaak deze persoon 'm gebruikt t.o.v. het gemiddelde aandeel
+ * over iedereen -- de tag met de hoogste ratio is waar iemand "bekend van"
+ * is, de laagste (vaak 0, bij een tag die verder gangbaar is) waar iemand
+ * "zelden" op grijpt. Geen ondergrens op volume: bij weinig getagde
+ * argumenten is de uitkomst minder betrouwbaar, maar dat is dan meteen
+ * zichtbaar aan het lage aantal in de tooltip. */
+function tagSignalen(name: string): { bekendVan: Signaal | null; zeldenGebruikt: Signaal | null } {
+	const personTagCount = tagCountByPerson.get(name);
+	const personTotal = tagTotalByPerson.get(name) ?? 0;
+	if (!personTotal) return { bekendVan: null, zeldenGebruikt: null };
+
+	let bekendVan: Signaal | null = null;
+	let zeldenGebruikt: Signaal | null = null;
+	for (const [sleutel, globalN] of globalTagCount) {
+		const n = personTagCount?.get(sleutel) ?? 0;
+		const ratio = n / personTotal / (globalN / globalTagTotal);
+		// Bij een ratio van 0 (tag nooit gebruikt) breekt globalN de gelijkstand:
+		// zelden-gebruikt is pas interessant bij een tag die anderen wél vaak
+		// gebruiken, niet bij een obscure tag die toch bijna niemand gebruikt.
+		if (!bekendVan || ratio > bekendVan.ratio || (ratio === bekendVan.ratio && n > bekendVan.n)) {
+			bekendVan = { sleutel, n, ratio };
+		}
+		if (!zeldenGebruikt || ratio < zeldenGebruikt.ratio || (ratio === zeldenGebruikt.ratio && globalN > (globalTagCount.get(zeldenGebruikt.sleutel) ?? 0))) {
+			zeldenGebruikt = { sleutel, n, ratio };
+		}
+	}
+	return { bekendVan, zeldenGebruikt };
+}
+
+function signaalTitle(name: string, signaal: Signaal): string {
+	const personTotal = tagTotalByPerson.get(name) ?? 0;
+	const globalN = globalTagCount.get(signaal.sleutel) ?? 0;
+	const beschrijving = tagBeschrijving.get(signaal.sleutel);
+	const factor = signaal.ratio >= 1 ? `${signaal.ratio.toFixed(1)}x vaker dan gemiddeld` : `${signaal.ratio.toFixed(1)}x zo vaak als gemiddeld`;
+	const cijfers = `${signaal.n} van ${personTotal} eigen getagde argumenten, tegenover ${globalN} van ${globalTagTotal} over iedereen heen`;
+	return [beschrijving, factor, cijfers].filter(Boolean).join(" — ");
+}
+
 const persons = [...counts.entries()].sort((a, b) => b[1] - a[1]);
 ---
 
@@ -39,8 +101,7 @@ const persons = [...counts.entries()].sort((a, b) => b[1] - a[1]);
 	<ul class="topic-list person-list">
 		{persons.map(([name, count]) => {
 			const party = partyOf.get(name);
-			const perspectieven = [...perspectiefOf.get(name)!.entries()];
-			const tagTotal = perspectieven.reduce((sum, [, n]) => sum + n, 0);
+			const { bekendVan, zeldenGebruikt } = tagSignalen(name);
 			return (
 				<li>
 					<a href={`/persoon/${slugify(name)}/`} class="person-row">
@@ -53,17 +114,36 @@ const persons = [...counts.entries()].sort((a, b) => b[1] - a[1]);
 							)}
 							<span class="topic-name">{name}</span>
 						</span>
-						<span
-							class="stance-bar"
-							title={perspectieven.map(([p, n]) => `${p}: ${n}`).join(", ") || "geen getagde argumenten"}
-						>
-							{tagTotal > 0 &&
-								perspectieven.map(([perspectief, n]) => (
-									<span
-										class="stance-bar-segment"
-										style={`width: ${(n / tagTotal) * 100}%; background: ${PERSPECTIEF_KLEUR.get(perspectief) ?? ONBEKENDE_KLEUR}`}
-									/>
-								))}
+						<span class="person-row-signalen">
+							{bekendVan && bekendVan.n > 0 ? (
+								<span
+									class="tag-signaal tag-signaal-bekend"
+									style={`--tag-signaal-accent: ${PERSPECTIEF_KLEUR.get(TAG_PERSPECTIEF.get(bekendVan.sleutel) ?? "") ?? ONBEKENDE_KLEUR}`}
+									title={signaalTitle(name, bekendVan)}
+								>
+									{tagIconPath(bekendVan.sleutel) && (
+										<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+											<path d={tagIconPath(bekendVan.sleutel)!} />
+										</svg>
+									)}
+									{bekendVan.sleutel}
+								</span>
+							) : (
+								<span class="tag-signaal tag-signaal-leeg">geen getagde argumenten</span>
+							)}
+							{zeldenGebruikt && (
+								<span
+									class="tag-signaal tag-signaal-zelden"
+									title={signaalTitle(name, zeldenGebruikt)}
+								>
+									{tagIconPath(zeldenGebruikt.sleutel) && (
+										<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+											<path d={tagIconPath(zeldenGebruikt.sleutel)!} />
+										</svg>
+									)}
+									{zeldenGebruikt.sleutel}
+								</span>
+							)}
 						</span>
 						<span class="topic-count">{count} argumenten</span>
 					</a>

@@ -483,10 +483,11 @@ h3 {
 }
 
 /* Grid i.p.v. flex space-between: bij een variabele naamlengte schuift de
-   balk anders mee, waardoor de balken niet in een rechte kolom staan. */
+   kolom ernaast anders mee, waardoor de signalen niet in een rechte kolom
+   staan. */
 .person-list a.person-row {
 	display: grid;
-	grid-template-columns: minmax(220px, 1fr) 80px auto;
+	grid-template-columns: minmax(200px, 1fr) minmax(260px, 2fr) auto;
 	align-items: center;
 	gap: var(--space-2);
 }
@@ -520,17 +521,42 @@ h3 {
 	font-size: var(--step--1);
 }
 
-.stance-bar {
+.person-row-signalen {
 	display: flex;
-	width: 80px;
-	height: 10px;
-	flex-shrink: 0;
-	overflow: hidden;
-	background: var(--color-border);
+	flex-wrap: wrap;
+	gap: var(--space-1);
+	min-width: 0;
 }
 
-.stance-bar-segment {
-	height: 100%;
+.tag-signaal {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.3rem;
+	padding: 0.15rem 0.5rem;
+	border-radius: 999px;
+	font-size: var(--step--1);
+	font-family: var(--font-mono);
+	white-space: nowrap;
+	border: 1px solid var(--color-border);
+}
+
+.tag-signaal-leeg {
+	color: var(--color-muted);
+}
+
+/* "Bekend van": gevulde badge in de kleur van het perspectief van de tag. */
+.tag-signaal-bekend {
+	color: var(--tag-signaal-accent, var(--color-text));
+	border-color: var(--tag-signaal-accent, var(--color-border));
+	background: color-mix(in srgb, var(--tag-signaal-accent, var(--color-border)) 12%, var(--color-card-bg));
+}
+
+/* "Zelden gebruikt": subtieler, neutraal -- dit is een afwezigheid, geen
+   kenmerk om uit te lichten zoals de "bekend van"-badge. */
+.tag-signaal-zelden {
+	color: var(--color-muted);
+	text-decoration: line-through;
+	text-decoration-color: var(--color-border);
 }
 
 .card-grid {
@@ -1903,6 +1929,10 @@ a.card-item:hover {
 .timeline-panel {
 	position: relative;
 	margin-bottom: var(--space-3);
+	/* Ruimte rechts zodat de laatste, schuin geroteerde as-labels niet buiten
+	   het paneel vallen -- ze staan op offset 100% en lopen daarna nog naar
+	   rechts uit. */
+	padding-right: 3.5rem;
 }
 
 .timeline-track {
@@ -1951,7 +1981,9 @@ a.card-item:hover {
    datum-assen met veel ticks. */
 .timeline-axis {
 	position: relative;
-	height: 2.6rem;
+	/* Hoog genoeg voor de langste labeltekst ("26 mrt '24") onder 45 graden --
+	   bij een kleinere hoogte liep de tekst door in de kop/tabel eronder. */
+	height: 4.4rem;
 	padding-bottom: var(--space-2);
 }
 

@@ -8,6 +8,7 @@ import { NO_PARTY } from "../lib/types";
 import { TEGENSTELLING } from "../lib/topics";
 import { ICOON_PAD, PERSPECTIEVEN } from "../lib/tagIcons.generated";
 import { ALLE_TAGS } from "../lib/taxonomy";
+import { perspectiefWeergaveNaam } from "../lib/tagIcon";
 
 const topicModules = import.meta.glob("../../../data/export/topics/*.json", { eager: true });
 
@@ -84,7 +85,7 @@ for (const mod of Object.values(topicModules) as any[]) {
 							>
 								<path d={ICOON_PAD[p.icoon]} />
 							</svg>
-							<span class="card-tile-name">{p.naam}</span>
+							<span class="card-tile-name">{perspectiefWeergaveNaam(p.naam)}</span>
 							<span class="card-tile-count">{perspectiefCounts.get(p.naam) ?? 0}x toegekend</span>
 						</a>
 					</li>

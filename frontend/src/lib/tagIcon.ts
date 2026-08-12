@@ -15,3 +15,15 @@ for (const perspectief of PERSPECTIEVEN) {
 export function tagIconPath(sleutel: string): string | null {
 	return TAG_ICOON_PAD.get(sleutel) ?? null;
 }
+
+// Alleen een leesbaardere weergavenaam -- de volledige naam blijft de
+// matchsleutel tegen `tag.perspectief` in de databestanden en de bron voor
+// slugs, dus die passen we hier bewust niet aan.
+const PERSPECTIEF_KORTE_NAAM: Record<string, string> = {
+	"Communicatiewetenschappelijk & Media": "Communicatie & Media",
+};
+
+/** Verkorte weergavenaam voor een perspectief, voor gebruik in koppen/kaarten. */
+export function perspectiefWeergaveNaam(naam: string): string {
+	return PERSPECTIEF_KORTE_NAAM[naam] ?? naam;
+}

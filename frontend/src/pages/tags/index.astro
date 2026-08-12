@@ -2,7 +2,7 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { TAXONOMIE } from "../../lib/taxonomy";
 import { PERSPECTIEVEN, ICOON_PAD } from "../../lib/tagIcons.generated";
-import { tagIconPath } from "../../lib/tagIcon";
+import { tagIconPath, perspectiefWeergaveNaam } from "../../lib/tagIcon";
 import { slugify } from "../../lib/slug";
 
 const topicModules = import.meta.glob("../../../../data/export/topics/*.json", { eager: true }) as Record<
@@ -56,7 +56,7 @@ const totaalTags = TAXONOMIE.reduce((n, p) => n + p.labelgroepen.reduce((m, lg) 
 						>
 							<path d={ICOON_PAD[icoonPerPerspectief.get(perspectief.naam) ?? ""]} />
 						</svg>
-						<h3>{perspectief.naam}</h3>
+						<h3>{perspectiefWeergaveNaam(perspectief.naam)}</h3>
 					</div>
 					{perspectief.labelgroepen.map((labelgroep) => (
 						<div class="card-section">
