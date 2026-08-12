@@ -1,11 +1,12 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import PartyIcon from "../../components/PartyIcon.astro";
-import { displayPartyName } from "../../lib/parties";
+import TagSignaalBadge from "../../components/TagSignaalBadge.astro";
+import { displayPartyName, canonicalParty } from "../../lib/parties";
 import { slugify } from "../../lib/slug";
 import { NO_PARTY } from "../../lib/types";
 import { PERSPECTIEVEN } from "../../lib/tagIcons.generated";
-import { tagIconPath } from "../../lib/tagIcon";
+import { berekenTagSignalen, signaalTitle } from "../../lib/tagSignalen";
 
 const topicModules = import.meta.glob("../../../../data/export/topics/*.json", { eager: true });
 
@@ -32,7 +33,7 @@ for (const mod of Object.values(topicModules) as any[]) {
 	for (const argument of mod.default.arguments) {
 		const name = argument.actor.name;
 		counts.set(name, (counts.get(name) ?? 0) + 1);
-		if (argument.actor.party && !partyOf.has(name)) partyOf.set(name, argument.actor.party);
+		if (argument.actor.party && !partyOf.has(name)) partyOf.set(name, canonicalParty(argument.actor.party));
 
 		const personTagCount = tagCountByPerson.get(name) ?? new Map<string, number>();
 		for (const tag of argument.tags) {
@@ -47,49 +48,7 @@ for (const mod of Object.values(topicModules) as any[]) {
 	}
 }
 
-interface Signaal {
-	sleutel: string;
-	n: number;
-	ratio: number;
-}
-
-/** Per tag: hoe vaak deze persoon 'm gebruikt t.o.v. het gemiddelde aandeel
- * over iedereen -- de tag met de hoogste ratio is waar iemand "bekend van"
- * is, de laagste (vaak 0, bij een tag die verder gangbaar is) waar iemand
- * "zelden" op grijpt. Geen ondergrens op volume: bij weinig getagde
- * argumenten is de uitkomst minder betrouwbaar, maar dat is dan meteen
- * zichtbaar aan het lage aantal in de tooltip. */
-function tagSignalen(name: string): { bekendVan: Signaal | null; zeldenGebruikt: Signaal | null } {
-	const personTagCount = tagCountByPerson.get(name);
-	const personTotal = tagTotalByPerson.get(name) ?? 0;
-	if (!personTotal) return { bekendVan: null, zeldenGebruikt: null };
-
-	let bekendVan: Signaal | null = null;
-	let zeldenGebruikt: Signaal | null = null;
-	for (const [sleutel, globalN] of globalTagCount) {
-		const n = personTagCount?.get(sleutel) ?? 0;
-		const ratio = n / personTotal / (globalN / globalTagTotal);
-		// Bij een ratio van 0 (tag nooit gebruikt) breekt globalN de gelijkstand:
-		// zelden-gebruikt is pas interessant bij een tag die anderen wél vaak
-		// gebruiken, niet bij een obscure tag die toch bijna niemand gebruikt.
-		if (!bekendVan || ratio > bekendVan.ratio || (ratio === bekendVan.ratio && n > bekendVan.n)) {
-			bekendVan = { sleutel, n, ratio };
-		}
-		if (!zeldenGebruikt || ratio < zeldenGebruikt.ratio || (ratio === zeldenGebruikt.ratio && globalN > (globalTagCount.get(zeldenGebruikt.sleutel) ?? 0))) {
-			zeldenGebruikt = { sleutel, n, ratio };
-		}
-	}
-	return { bekendVan, zeldenGebruikt };
-}
-
-function signaalTitle(name: string, signaal: Signaal): string {
-	const personTotal = tagTotalByPerson.get(name) ?? 0;
-	const globalN = globalTagCount.get(signaal.sleutel) ?? 0;
-	const beschrijving = tagBeschrijving.get(signaal.sleutel);
-	const factor = signaal.ratio >= 1 ? `${signaal.ratio.toFixed(1)}x vaker dan gemiddeld` : `${signaal.ratio.toFixed(1)}x zo vaak als gemiddeld`;
-	const cijfers = `${signaal.n} van ${personTotal} eigen getagde argumenten, tegenover ${globalN} van ${globalTagTotal} over iedereen heen`;
-	return [beschrijving, factor, cijfers].filter(Boolean).join(" — ");
-}
+const ICOON_STER = "M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14l-5-4.87 6.91-1.01L12 2z";
 
 const persons = [...counts.entries()].sort((a, b) => b[1] - a[1]);
 ---
@@ -97,11 +56,29 @@ const persons = [...counts.entries()].sort((a, b) => b[1] - a[1]);
 <BaseLayout title="Personen — Bipolariteit">
 	<a href="/" class="back-link">&larr; alle onderwerpen</a>
 	<h1>Personen</h1>
-	<p class="intro">Welke tags een spreker gebruikt en hoe vaak, over alle onderwerpen heen.</p>
+	<p class="intro">
+		Welke tags een spreker gebruikt en hoe vaak, over alle onderwerpen heen. Klik op een naam voor de top 3 favoriete
+		en top 3 minst favoriete tags.
+	</p>
+	<div class="person-list-head">
+		<span>Persoon</span>
+		<span class="person-list-head-signalen">
+			<svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" stroke="none"><path d={ICOON_STER} /></svg>
+			favoriet
+			<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.75"><path d={ICOON_STER} /></svg>
+			minst favoriet
+			<a href="/about/#favoriete-tags-methode" class="info-link" title="Hoe favoriet/minst favoriet bepaald wordt" aria-label="Uitleg: hoe favoriet en minst favoriet bepaald worden">?</a>
+		</span>
+		<span>Argumenten</span>
+	</div>
 	<ul class="topic-list person-list">
 		{persons.map(([name, count]) => {
 			const party = partyOf.get(name);
-			const { bekendVan, zeldenGebruikt } = tagSignalen(name);
+			const personTagCount = tagCountByPerson.get(name) ?? new Map<string, number>();
+			const personTotal = tagTotalByPerson.get(name) ?? 0;
+			const { favorieten, minstFavoriet } = berekenTagSignalen(personTagCount, personTotal, globalTagCount, globalTagTotal);
+			const favoriet = favorieten[0] ?? null;
+			const minFavoriet = minstFavoriet[0] ?? null;
 			return (
 				<li>
 					<a href={`/persoon/${slugify(name)}/`} class="person-row">
@@ -115,34 +92,22 @@ const persons = [...counts.entries()].sort((a, b) => b[1] - a[1]);
 							<span class="topic-name">{name}</span>
 						</span>
 						<span class="person-row-signalen">
-							{bekendVan && bekendVan.n > 0 ? (
-								<span
-									class="tag-signaal tag-signaal-bekend"
-									style={`--tag-signaal-accent: ${PERSPECTIEF_KLEUR.get(TAG_PERSPECTIEF.get(bekendVan.sleutel) ?? "") ?? ONBEKENDE_KLEUR}`}
-									title={signaalTitle(name, bekendVan)}
-								>
-									{tagIconPath(bekendVan.sleutel) && (
-										<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-											<path d={tagIconPath(bekendVan.sleutel)!} />
-										</svg>
-									)}
-									{bekendVan.sleutel}
-								</span>
+							{favoriet ? (
+								<TagSignaalBadge
+									signaal={favoriet}
+									soort="favoriet"
+									accentColor={PERSPECTIEF_KLEUR.get(TAG_PERSPECTIEF.get(favoriet.sleutel) ?? "") ?? ONBEKENDE_KLEUR}
+									title={signaalTitle(favoriet, "favoriet", personTotal, globalTagCount, globalTagTotal, tagBeschrijving)}
+								/>
 							) : (
-								<span class="tag-signaal tag-signaal-leeg">geen getagde argumenten</span>
+								<span class="tag-signaal tag-signaal-leeg">geen uitgesproken favoriet</span>
 							)}
-							{zeldenGebruikt && (
-								<span
-									class="tag-signaal tag-signaal-zelden"
-									title={signaalTitle(name, zeldenGebruikt)}
-								>
-									{tagIconPath(zeldenGebruikt.sleutel) && (
-										<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-											<path d={tagIconPath(zeldenGebruikt.sleutel)!} />
-										</svg>
-									)}
-									{zeldenGebruikt.sleutel}
-								</span>
+							{minFavoriet && (
+								<TagSignaalBadge
+									signaal={minFavoriet}
+									soort="minst-favoriet"
+									title={signaalTitle(minFavoriet, "minst favoriet", personTotal, globalTagCount, globalTagTotal, tagBeschrijving)}
+								/>
 							)}
 						</span>
 						<span class="topic-count">{count} argumenten</span>

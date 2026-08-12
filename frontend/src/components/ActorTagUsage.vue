@@ -10,11 +10,13 @@ import { displayPartyName } from "../lib/parties";
 import { deriveTagUsage, bucketSmallCounts } from "../lib/aggregate";
 import { slugify } from "../lib/slug";
 import { PERSPECTIEVEN } from "../lib/tagIcons.generated";
+import { tagIconPath } from "../lib/tagIcon";
 import PartyLogo from "./PartyLogo.vue";
 import ArgumentCard from "./ArgumentCard.vue";
 import FilterBar from "./FilterBar.vue";
 import { initFiltersFromUrl, matches } from "../lib/filters";
 import type { Argument } from "../lib/types";
+import type { TagSignaal } from "../lib/tagSignalen";
 
 use([CanvasRenderer, BarChart, TooltipComponent, GridComponent]);
 
@@ -23,10 +25,21 @@ export interface TopicTaggedArgument extends Argument {
 	topicName: string;
 }
 
+export interface TagSignaalWeergave extends TagSignaal {
+	beschrijving?: string;
+	accentColor?: string;
+	title: string;
+}
+
 const props = defineProps<{
 	name: string;
 	mode: "partij" | "persoon";
 	argumentList: TopicTaggedArgument[];
+	/** Top-N favoriete/minst favoriete tags -- al berekend door de aanroepende
+	 * pagina (zie lib/tagSignalen.ts), want dat vergt het volledige corpus
+	 * over alle personen heen, niet alleen deze persoon z'n argumentList. */
+	favorieteTags?: TagSignaalWeergave[];
+	minstFavorieteTags?: TagSignaalWeergave[];
 }>();
 
 initFiltersFromUrl(props.argumentList);
@@ -129,6 +142,11 @@ const exampleArguments = computed(() =>
 		.sort((a, b) => (b.document.published_at ?? "").localeCompare(a.document.published_at ?? ""))
 		.slice(0, 5),
 );
+
+// Zelfde ster voor favoriet/minst-favoriet, gevuld vs. omlijnd -- zie
+// TagSignaalBadge.astro (de Astro-tegenhanger op de personenlijst) voor de
+// volledige toelichting.
+const ICOON_STER = "M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14l-5-4.87 6.91-1.01L12 2z";
 </script>
 
 <template>
@@ -139,6 +157,52 @@ const exampleArguments = computed(() =>
 		</header>
 
 		<FilterBar :argumentList="argumentList" :matchCount="filteredList.length" />
+
+		<section v-if="(favorieteTags && favorieteTags.length) || (minstFavorieteTags && minstFavorieteTags.length)" class="stats-panel">
+			<h2>
+				Favoriete tags
+				<a href="/about/#favoriete-tags-methode" class="info-link" title="Hoe favoriet/minst favoriet bepaald wordt" aria-label="Uitleg: hoe favoriet en minst favoriet bepaald worden">?</a>
+			</h2>
+			<div class="tag-signalen-kolommen">
+				<div>
+					<h3>Top 3 favoriet</h3>
+					<p v-if="!favorieteTags || !favorieteTags.length" class="panel-note">
+						Geen tag met minstens 5% aandeel van de eigen getagde argumenten.
+					</p>
+					<ul v-else class="tag-signalen-lijst">
+						<li v-for="signaal in favorieteTags" :key="signaal.sleutel">
+							<span class="tag-signaal tag-signaal-favoriet" :style="{ '--tag-signaal-accent': signaal.accentColor }" :title="signaal.title">
+								<svg class="tag-signaal-icoon" viewBox="0 0 24 24" width="12" height="12" fill="currentColor" stroke="none">
+									<path :d="ICOON_STER" />
+								</svg>
+								<span class="tag-signaal-sleutel">{{ signaal.sleutel }}</span>
+								<svg v-if="tagIconPath(signaal.sleutel)" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+									<path :d="tagIconPath(signaal.sleutel)!" />
+								</svg>
+							</span>
+							<span class="tag-signalen-lijst-beschrijving">{{ signaal.beschrijving }}</span>
+						</li>
+					</ul>
+				</div>
+				<div>
+					<h3>Top 3 minst favoriet</h3>
+					<ul class="tag-signalen-lijst">
+						<li v-for="signaal in minstFavorieteTags" :key="signaal.sleutel">
+							<span class="tag-signaal tag-signaal-minst-favoriet" :title="signaal.title">
+								<svg class="tag-signaal-icoon" viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.75">
+									<path :d="ICOON_STER" />
+								</svg>
+								<span class="tag-signaal-sleutel">{{ signaal.sleutel }}</span>
+								<svg v-if="tagIconPath(signaal.sleutel)" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+									<path :d="tagIconPath(signaal.sleutel)!" />
+								</svg>
+							</span>
+							<span class="tag-signalen-lijst-beschrijving">{{ signaal.beschrijving }}</span>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</section>
 
 		<p v-if="!filteredList.length" class="no-results">
 			Geen argumenten voldoen aan dit filter. Verwijder een filter hierboven om er meer te zien.

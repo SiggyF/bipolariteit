@@ -1,0 +1,42 @@
+---
+import { tagIconPath } from "../lib/tagIcon";
+import type { TagSignaal } from "../lib/tagSignalen";
+
+interface Props {
+	signaal: TagSignaal;
+	soort: "favoriet" | "minst-favoriet";
+	title: string;
+	accentColor?: string;
+}
+
+const { signaal, soort, title, accentColor } = Astro.props;
+
+// Zelfde ster voor beide, gevuld vs. omlijnd -- favoriet/minst-favoriet is
+// een gradatie op dezelfde schaal, geen tegenstelling zoals goed/fout.
+const ICOON_STER = "M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14l-5-4.87 6.91-1.01L12 2z";
+const icoonPad = tagIconPath(signaal.sleutel);
+---
+
+<span
+	class={`tag-signaal tag-signaal-${soort}`}
+	style={soort === "favoriet" && accentColor ? `--tag-signaal-accent: ${accentColor}` : undefined}
+	title={title}
+>
+	<svg
+		class="tag-signaal-icoon"
+		viewBox="0 0 24 24"
+		width="12"
+		height="12"
+		fill={soort === "favoriet" ? "currentColor" : "none"}
+		stroke="currentColor"
+		stroke-width={soort === "favoriet" ? "0" : "1.75"}
+	>
+		<path d={ICOON_STER} />
+	</svg>
+	<span class="tag-signaal-sleutel">{signaal.sleutel}</span>
+	{icoonPad && (
+		<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+			<path d={icoonPad} />
+		</svg>
+	)}
+</span>

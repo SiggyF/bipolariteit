@@ -1,3 +1,18 @@
+// De brondata bevat voor sommige partijen zowel de afkorting als de voluit
+// geschreven naam (bv. "NSC" én "Nieuw Sociaal Contract") -- zonder
+// normalisatie splitst dat tellingen/logo-lookups in tweeën. Naar de
+// afkorting, want dat is de sleutel die de logo-/kleurenkaarten hieronder
+// gebruiken.
+const PARTY_ALIASSEN: Record<string, string> = {
+	"Nieuw Sociaal Contract": "NSC",
+};
+
+/** Normaliseert een partijnaam uit de brondata naar de canonieke afkorting,
+ * zodat aliassen niet als aparte partijen tellen. */
+export function canonicalParty(party: string): string {
+	return PARTY_ALIASSEN[party] ?? party;
+}
+
 // Disambiguatie voor partijnamen die zonder context verwarrend zijn.
 // "PRO" is zowel een partijnaam als de stance-waarde "Pro" (voorstander) --
 // overal "Partij PRO" tonen voorkomt die verwarring. Puur weergave -- de
