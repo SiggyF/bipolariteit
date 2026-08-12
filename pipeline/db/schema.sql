@@ -69,7 +69,8 @@ CREATE TABLE arguments (
     extraction_model TEXT, -- LLM-modelnaam (bv. "qwen/qwen3.6-27b") die dit argument opleverde; NULL = vóór dit veld bestond
     tag_prompt_version TEXT, -- hash van pipeline/prompts/tag_argument.md t.t.v. de laatste tag_arguments.py-pass voor dit argument
     tag_model TEXT, -- LLM-modelnaam gebruikt door de tag_arguments.py-pass; NULL voor argumenten zonder LLM-tags of vóór dit veld bestond
-    ander_onderwerp TEXT -- alleen gevuld bij stance = 'ander_onderwerp': waar het argument dan wél over gaat (bv. "arbeidsmigratie", "ICT-migratie"). Zulke argumenten vallen buiten de pro/contra-as en dus buiten de export; dit veld maakt zichtbaar wát het ruime net binnenhaalt, in plaats van het in 'unclear' te laten verdwijnen.
+    ander_onderwerp TEXT, -- alleen gevuld bij stance = 'ander_onderwerp': waar het argument dan wél over gaat (bv. "arbeidsmigratie", "ICT-migratie"). Zulke argumenten vallen buiten de pro/contra-as en dus buiten de export; dit veld maakt zichtbaar wát het ruime net binnenhaalt, in plaats van het in 'unclear' te laten verdwijnen.
+    stijl_tagged_at TEXT -- gezet zodra de losse Stijlmiddelen-backfill (scripts/agy_run_stijlmiddelen_backfill.py) voor dit argument compleet is, ook als dat 0 stijltags opleverde. Los van tagged_at omdat dit een aparte, smalle na-de-feiten-pass is voor argumenten die al vóór labelgroep "Stijlmiddelen" bestond volledig getagd waren.
 );
 
 -- Genoemde getallen/claims en de bron die de spreker eraan toeschrijft.
