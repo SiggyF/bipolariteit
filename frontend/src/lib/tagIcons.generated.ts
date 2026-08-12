@@ -5,6 +5,8 @@
 /** Iconen uit het ontwerpsysteem als ECharts-padstring. Lijntekeningen: teken
  *  ze met itemStyle.borderColor en een doorzichtige vulling, niet met .color. */
 export const ICOON_PAD: Record<string, string> = {
+	"aangekondigde-opsomming": "M0 0 M24 24 M3 5.5 5 4v6M10 7L21 7M3 15.5c0-1.1.9-2 2-2s2 .9 2 2c0 1.9-4 2.6-4 4.5h4M10 17L21 17",
+	"antithese": "M0 0 M24 24 M12 2L12 22M8 8H3M5.5 5.5 3 8l2.5 2.5M16 16h5M18.5 13.5 21 16l-2.5 2.5",
 	"arrow-left-right": "M0 0 M24 24 M3 12L21 12M7 8l-4 4 4 4M17 8l4 4-4 4",
 	"badge-check": "M0 0 M24 24 M12 2l2.2 1.6 2.7-.3 1 2.6 2.6 1-.3 2.7L22 12l-1.8 2.2.3 2.7-2.6 1-1 2.6-2.7-.3L12 22l-2.2-1.6-2.7.3-1-2.6-2.6-1 .3-2.7L2 12l1.8-2.2-.3-2.7 2.6-1 1-2.6 2.7.3zM9 12l2 2 4-4",
 	"banknote": "M0 0 M24 24 M4 6h16a2 2 0 0 1 2 2v8a2 2 0 0 1 -2 2h-16a2 2 0 0 1 -2 -2v-8a2 2 0 0 1 2 -2ZM9 12a3 3 0 1 0 6 0a3 3 0 1 0 -6 0M6 10L6 10.01M18 14L18 14.01",
@@ -29,6 +31,7 @@ export const ICOON_PAD: Record<string, string> = {
 	"hash": "M0 0 M24 24 M5 9L19 9M5 15L19 15M10 4L8 20M16 4L14 20",
 	"heart": "M0 0 M24 24 M12 21s-7-4.5-9.5-9C1 8 2 4 6 4c2.5 0 4 2 6 2s3.5-2 6-2c4 0 5 4 3.5 8-2.5 4.5-9.5 9-9.5 9z",
 	"heart-pulse": "M0 0 M24 24 M12 20s-7-4.3-9-8.5C1.3 8 2.5 5 6 5c2 0 3.5 1.3 4.5 2.8M12 20s7-4.3 9-8.5C21.7 8 20.5 5 17 5c-2 0-3.5 1.3-4.5 2.8M6 12h3l2 4 3-8 2 4h2",
+	"herhaling": "M0 0 M24 24 M17 2l4 4-4 4M3 11V9a4 4 0 0 1 4-4h14M7 22l-4-4 4-4M21 13v2a4 4 0 0 1-4 4H3",
 	"landmark": "M0 0 M24 24 M3 21L21 21M5 21L5 10M19 21L19 10M3 10l9-6 9 6M9 21L9 10M15 21L15 10",
 	"layout-template": "M0 0 M24 24 M4 3h16a1 1 0 0 1 1 1v5a1 1 0 0 1 -1 1h-16a1 1 0 0 1 -1 -1v-5a1 1 0 0 1 1 -1ZM4 14h7a1 1 0 0 1 1 1v5a1 1 0 0 1 -1 1h-7a1 1 0 0 1 -1 -1v-5a1 1 0 0 1 1 -1ZM16 14h4a1 1 0 0 1 1 1v5a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1v-5a1 1 0 0 1 1 -1Z",
 	"leaf": "M0 0 M24 24 M11 20A7 7 0 0 1 4 13c0-6 5-11 15-11 0 10-5 15-11 15zM4 20l7-7",
@@ -44,11 +47,13 @@ export const ICOON_PAD: Record<string, string> = {
 	"pie-chart": "M0 0 M24 24 M21.2 15.9A10 10 0 1 1 8 2.8M22 12A10 10 0 0 0 12 2v10z",
 	"radio": "M0 0 M24 24 M9 14a3 3 0 1 0 6 0a3 3 0 1 0 -6 0M6.5 10.5a7.5 7.5 0 0 1 11 0M3.5 7.5a12 12 0 0 1 17 0M12 17L12 21M8 21L16 21",
 	"resize-figure": "M0 0 M24 24 M6 6a2 2 0 1 0 4 0a2 2 0 1 0 -4 0M5 15c0-2.8 1.3-5 3-5s3 2.2 3 5M15 14a3 3 0 1 0 6 0a3 3 0 1 0 -6 0M13.5 21c0-3.9 2-7 4.5-7s4.5 3.1 4.5 7",
+	"retorische-vraag": "M0 0 M24 24 M4 7.5a3.5 3.5 0 1 1 5.6 2.8c-1 .8-1.6 1.4-1.6 2.7M8 17.5L8 17.6M16.5 4.5L16.5 13M16.5 17.5L16.5 17.6",
 	"round-table": "M0 0 M24 24 M4 13a8 4.5 0 1 0 16 0a8 4.5 0 1 0 -16 0M10.8 6a1.2 1.2 0 1 0 2.4 0a1.2 1.2 0 1 0 -2.4 0M18.3 9.5a1.2 1.2 0 1 0 2.4 0a1.2 1.2 0 1 0 -2.4 0M18.3 16.5a1.2 1.2 0 1 0 2.4 0a1.2 1.2 0 1 0 -2.4 0M10.8 20a1.2 1.2 0 1 0 2.4 0a1.2 1.2 0 1 0 -2.4 0M3.3 16.5a1.2 1.2 0 1 0 2.4 0a1.2 1.2 0 1 0 -2.4 0M3.3 9.5a1.2 1.2 0 1 0 2.4 0a1.2 1.2 0 1 0 -2.4 0",
 	"ruler": "M0 0 M24 24 M3.3 8.7 8.7 3.3a1 1 0 0 1 1.4 0l10.6 10.6a1 1 0 0 1 0 1.4l-5.4 5.4a1 1 0 0 1-1.4 0L3.3 10.1a1 1 0 0 1 0-1.4zM7 9l2-2M10 12l2-2M13 15l2-2",
 	"scale": "M0 0 M24 24 M12 3v18M5 7l-3 7a3 3 0 0 0 6 0zM19 7l-3 7a3 3 0 0 0 6 0zM3 7h18M9 21h6",
 	"shield": "M0 0 M24 24 M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z",
 	"shield-off": "M0 0 M24 24 M4 5v6c0 5 4 8 8 9 1.3-.3 2.5-.8 3.6-1.6M19.5 14c.3-1 .5-2 .5-3V5l-8-3-3.3 1.2M2 2L22 22",
+	"slogan-banner": "M0 0 M24 24 M4 3h16v18l-8-5-8 5zM8 8L16 8M9 12L15 12",
 	"sparkles": "M0 0 M24 24 M12 3l1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5zM19 15l.7 2.3L22 18l-2.3.7L19 21l-.7-2.3L16 18l2.3-.7z",
 	"swords": "M0 0 M24 24 M4 4l7 7M20 4l-7 7M4 20l6-6M20 20l-6-6M11 11l2 2",
 	"trending-up": "M0 0 M24 24 M3 17l6-6 4 4 8-9M17 6h4v4",
@@ -91,7 +96,12 @@ export const PERSPECTIEVEN: PerspectiefStijl[] = [
 			"Meta-Agenda-Tijdigheid": "calendar-clock",
 			"Meta-Reikwijdte": "crop",
 			"Meta-Vorm-Setting": "layout-template",
-			"Meta-Deelnemers": "users"
+			"Meta-Deelnemers": "users",
+			"Stijl-Slogan": "slogan-banner",
+			"Stijl-Herhaling": "herhaling",
+			"Stijl-Aangekondigde-Opsomming": "aangekondigde-opsomming",
+			"Stijl-Antithese": "antithese",
+			"Stijl-Retorische-Vraag": "retorische-vraag"
 		}
 	},
 	{
@@ -172,6 +182,11 @@ export const TAG_ICOON: Record<string, string> = {
 	"Meta-Reikwijdte": "crop",
 	"Meta-Vorm-Setting": "layout-template",
 	"Meta-Deelnemers": "users",
+	"Stijl-Slogan": "slogan-banner",
+	"Stijl-Herhaling": "herhaling",
+	"Stijl-Aangekondigde-Opsomming": "aangekondigde-opsomming",
+	"Stijl-Antithese": "antithese",
+	"Stijl-Retorische-Vraag": "retorische-vraag",
 	"Frame-Episodisch": "camera",
 	"Frame-Thematisch": "bar-chart-2",
 	"Frame-Conflict": "swords",
