@@ -292,6 +292,14 @@ h3 {
 	border-bottom: 1px solid var(--color-border);
 }
 
+/* Op de homepage volgt het motto direct op de intro -- dan zou de eigen
+   onder-rand van .intro vlak boven de boven-rand van .motto komen te staan
+   (twee lijnen kort na elkaar). De rand van .motto is dan al genoeg. */
+.intro:has(+ .motto) {
+	padding-bottom: 0;
+	border-bottom: none;
+}
+
 .topic-header {
 	max-width: 70ch;
 	margin: 0 0 var(--space-4);
@@ -428,7 +436,7 @@ h3 {
 .motto {
 	font-family: var(--font-heading);
 	font-style: italic;
-	font-size: var(--step-2);
+	font-size: var(--step-1);
 	max-width: 65ch;
 	margin: var(--space-3) 0;
 	padding: var(--space-2) 0;
