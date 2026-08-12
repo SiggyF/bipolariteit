@@ -424,6 +424,36 @@ const CA_ROW_LABEL_OFFSET: Record<string, CaLabelOffset> = {
 				}
 			</div>
 
+			<h2 id="favoriete-tags-methode">Hoe favoriete en minst favoriete tags worden bepaald</h2>
+			<p>
+				De <a href="/persoon/">personenlijst</a> toont per spreker een <strong>favoriet</strong> (★) en een{" "}
+				<strong>minst favoriet</strong> (☆) tag. Dit gaat alleen over de tags uit de argumentatietheoretische
+				taxonomie hierboven (LLM-toegekend); afgeleide tags als Arena-Parlement of Actor-Politicus volgen
+				mechanisch uit metadata en zeggen niets over iemands eigen argumentatiestijl, dus die tellen niet mee.
+			</p>
+			<p>
+				Voor elke tag vergelijken we het aandeel dat een spreker 'm zelf gebruikt (van hun eigen getagde
+				argumenten) met het aandeel over alle sprekers heen. Een <strong>ratio</strong> boven 1 betekent: deze
+				spreker gebruikt de tag vaker dan gemiddeld; onder 1 betekent minder vaak.
+			</p>
+			<ul>
+				<li>
+					<strong>Favoriet</strong> is de tag met de hoogste ratio — met als ondergrens dat de tag in
+					minstens 5% van iemands eigen getagde argumenten voorkomt. Zonder die ondergrens zou een enkele
+					toekenning op een klein volume al een torenhoge (maar betekenisloze) ratio geven.
+				</li>
+				<li>
+					<strong>Minst favoriet</strong> is de tag met de laagste ratio, vaak 0 (nooit gebruikt). Bij een
+					gelijke stand (meerdere tags die iemand nooit gebruikt) telt de tag die over alle sprekers heen
+					het vaakst voorkomt — een tag die verder gangbaar is maar deze spreker nooit gebruikt, is
+					interessanter dan een obscure tag die toch bijna niemand gebruikt.
+				</li>
+			</ul>
+			<p class="panel-note">
+				Bij weinig getagde argumenten is dit minder betrouwbaar; hover over een badge voor de exacte aantallen
+				en de ratio.
+			</p>
+
 			<h2 id="correspondentiekaart-methode">Wat is een correspondentiekaart?</h2>
 			<p>
 				Elke topicpagina toont een <strong>correspondentiekaart</strong>: partijen (of personen) en tags
