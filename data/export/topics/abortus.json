@@ -388,6 +388,14 @@
           "perspectief": "Politicologisch & Sociaal-Psychologisch",
           "created_by": "llm",
           "reden": "Het betogen dat zorg voor onverzekerden gelijkgesteld moet worden aan andere noodzakelijke zorg, roept op naar gelijke behandeling en rechten."
+        },
+        {
+          "sleutel": "Stijl-Antithese",
+          "beschrijving": "Het naast elkaar plaatsen van twee tegengestelde begrippen of ideeën.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het idee dat het probleem ingewikkeld is wordt rechtstreeks tegenover het idee geplaatst dat het eenvoudig oplosbaar is."
         }
       ],
       "oppositions": []
@@ -497,6 +505,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "Er wordt een causaal verband gelegd tussen de CAK-regeling (oorzaak) en het voorkomen van onveilige abortussen (gevolg)."
+        },
+        {
+          "sleutel": "Stijl-Retorische-Vraag",
+          "beschrijving": "Een vraag waarvan het antwoord al besloten ligt in de formulering zelf.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De spreker stelt een vraag waarop het verwachte antwoord ('ja') al besloten ligt in de formulering."
         }
       ],
       "oppositions": []
@@ -790,6 +806,14 @@
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker bekritiseert de thematische grenzen van het voorstel door te stellen dat een 'aparte regeling' te ver gaat binnen het bestaande beleidskader."
+        },
+        {
+          "sleutel": "Stijl-Herhaling",
+          "beschrijving": "Herhaling van hetzelfde woord of dezelfde woordgroep binnen het fragment, ter nadruk.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het woord 'oplossing' wordt tweemaal kort achter elkaar herhaald om de stelling kracht bij te zetten."
         }
       ],
       "oppositions": []
@@ -1456,6 +1480,14 @@
           "perspectief": "Politicologisch & Sociaal-Psychologisch",
           "created_by": "llm",
           "reden": "Door te spreken van 'beschermwaardigheid van leven' wordt ingegaan op de ethische plicht om schade of leed (aan het ongeboren leven) te voorkomen of af te wegen."
+        },
+        {
+          "sleutel": "Stijl-Antithese",
+          "beschrijving": "Het naast elkaar plaatsen van twee tegengestelde begrippen of ideeën.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De beschermwaardigheid van het leven en het recht op zelfbeschikking worden als twee tegengestelde waarden tegenover elkaar geplaatst."
         }
       ],
       "oppositions": []
@@ -1578,6 +1610,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "De verwijzing naar de 'stijging van het aantal ongewenste zwangerschappen' impliceert het gebruik van kwantitatieve gegevens of trends."
+        },
+        {
+          "sleutel": "Stijl-Herhaling",
+          "beschrijving": "Herhaling van hetzelfde woord of dezelfde woordgroep binnen het fragment, ter nadruk.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het woord 'zorg' wordt in opeenvolgende zinnen herhaald ter nadruk op de bezorgdheid."
         }
       ],
       "oppositions": []
@@ -1679,6 +1719,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "Er wordt een logisch verband gelegd tussen het gebruik van anticonceptie door beide partners en het resultaat van het voorkomen van ongewenste zwangerschap."
+        },
+        {
+          "sleutel": "Stijl-Antithese",
+          "beschrijving": "Het naast elkaar plaatsen van twee tegengestelde begrippen of ideeën.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De verantwoordelijkheid wordt afgezet tussen uitsluitend vrouwen enerzijds en beide partners anderzijds."
         }
       ],
       "oppositions": []
@@ -1801,6 +1849,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "Er wordt een mechanistische verklaring gegeven: minder bedenktijd leidt tot minder afwegen van mogelijkheden, wat een oorzaak kan zijn voor de stijging."
+        },
+        {
+          "sleutel": "Stijl-Retorische-Vraag",
+          "beschrijving": "Een vraag waarvan het antwoord al besloten ligt in de formulering zelf.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De vragen bevatten het door de spreker gewenste standpunt al in de formulering."
         }
       ],
       "oppositions": []
@@ -1910,6 +1966,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "Er wordt een causaal verband gelegd tussen het gebruik van anticonceptie en het voorkomen van ongewenste zwangerschappen."
+        },
+        {
+          "sleutel": "Stijl-Antithese",
+          "beschrijving": "Het naast elkaar plaatsen van twee tegengestelde begrippen of ideeën.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het laten dalen van het aantal abortussen wordt gecontrasteerd met het laten dalen van het aantal ongewenste zwangerschappen."
         }
       ],
       "oppositions": []
@@ -2003,6 +2067,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "De onderbouwing berust op een logische afleiding: als vrouwen in staat zijn om op dag één te beslissen, dan is een langere termijn causaal irrelevant voor de uiteindelijke keuze."
+        },
+        {
+          "sleutel": "Stijl-Herhaling",
+          "beschrijving": "Herhaling van hetzelfde woord of dezelfde woordgroep binnen het fragment, ter nadruk.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De woordgroep 'wel of niet' wordt direct herhaald ter benadrukking van de keuzemogelijkheid."
         }
       ],
       "oppositions": []
@@ -2307,6 +2379,14 @@
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker bekritiseert expliciet de linguïstische framing ('ongewenste zwangerschappen') en stelt een alternatieve terminologie ('ongeplande zwangerschappen') voor om de thematische grenzen van het debat te beïnvloeden."
+        },
+        {
+          "sleutel": "Stijl-Antithese",
+          "beschrijving": "Het naast elkaar plaatsen van twee tegengestelde begrippen of ideeën.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De term 'ongewenste zwangerschappen' wordt expliciet tegenover 'ongeplande zwangerschappen' geplaatst om het verschil in gevoelswaarde te benadrukken."
         }
       ],
       "oppositions": []
@@ -2769,6 +2849,14 @@
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker vraagt expliciet of er 'opnieuw zo'n motie komt' en spreekt over 'een nieuwe ronde en nieuwe kansen', waarmee de formele procedure en het debatformat zelf centraal staan."
+        },
+        {
+          "sleutel": "Stijl-Slogan",
+          "beschrijving": "Beknopte, pakkende frase.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De beknopte en pakkende uitdrukking 'nieuwe ronde en nieuwe kansen' wordt gebruikt."
         }
       ],
       "oppositions": []
@@ -3104,6 +3192,14 @@
           "perspectief": "Politicologisch & Sociaal-Psychologisch",
           "created_by": "llm",
           "reden": "Het leven wordt gepresenteerd als een 'prachtig geschenk van de schepper', wat wijst op een opvatting van het leven als iets heiligs, natuurgetrouws en moreel onbeschaamd."
+        },
+        {
+          "sleutel": "Stijl-Antithese",
+          "beschrijving": "Het naast elkaar plaatsen van twee tegengestelde begrippen of ideeën.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het 'prilste begin' wordt tegenover het 'fragielste einde' geplaatst."
         }
       ],
       "oppositions": []
@@ -3461,6 +3557,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "De onderbouwing bestaat uit het citeren van officiële adviezen van gespecialiseerde raden en instituten."
+        },
+        {
+          "sleutel": "Stijl-Antithese",
+          "beschrijving": "Het naast elkaar plaatsen van twee tegengestelde begrippen of ideeën.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het perspectief van de wensouders wordt gecontrasteerd met het maatschappelijke perspectief."
         }
       ],
       "oppositions": []
@@ -3570,6 +3674,14 @@
           "perspectief": "Politicologisch & Sociaal-Psychologisch",
           "created_by": "llm",
           "reden": "Door abortus expliciet te definiëren als 'zorg' en te koppelen aan het recht op zorg, wordt ingespeeld op compassie en het welzijn van de vrouw."
+        },
+        {
+          "sleutel": "Stijl-Herhaling",
+          "beschrijving": "Herhaling van hetzelfde woord of dezelfde woordgroep binnen het fragment, ter nadruk.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het woord 'zorg' wordt herhaald aan het begin en einde van het argument ter benadrukking."
         }
       ],
       "oppositions": []
@@ -3671,6 +3783,14 @@
           "perspectief": "Politicologisch & Sociaal-Psychologisch",
           "created_by": "llm",
           "reden": "Door te stellen dat artsen en vrouwen geen criminelen zijn, wordt verzet geboden tegen de onderdrukking en stigmatisering door het strafrecht."
+        },
+        {
+          "sleutel": "Stijl-Antithese",
+          "beschrijving": "Het naast elkaar plaatsen van twee tegengestelde begrippen of ideeën.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het idee van een misdaad/criminelen wordt rechtstreeks tegenover het begrip 'zorg' geplaatst."
         }
       ],
       "oppositions": []
@@ -3899,6 +4019,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "Er wordt een specifiek cijfer (€504) aangehaald als empirische onderbouwing van de financiële drempel."
+        },
+        {
+          "sleutel": "Stijl-Herhaling",
+          "beschrijving": "Herhaling van hetzelfde woord of dezelfde woordgroep binnen het fragment, ter nadruk.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De combinatie 'geen ... en geen ...' herhaalt de ontkenning ter benadrukking van de kwetsbare positie."
         }
       ],
       "oppositions": []
@@ -4041,6 +4169,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "Het argument leunt op kwantitatieve gegevens, specifiek de vermelding van '40.000 abortussen per jaar' en hypothetische drempels van 50.000 of 100.000."
+        },
+        {
+          "sleutel": "Stijl-Retorische-Vraag",
+          "beschrijving": "Een vraag waarvan het antwoord al besloten ligt in de formulering zelf.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De spreker stelt kritische vragen om een punt te maken, zonder een feitelijk antwoord af te wachten."
         }
       ],
       "oppositions": []
@@ -4134,6 +4270,14 @@
           "perspectief": "Politicologisch & Sociaal-Psychologisch",
           "created_by": "llm",
           "reden": "De kern van het argument is het recht van vrouwen om zelf de keuze te maken (autonomie) zonder externe dwang of drempels."
+        },
+        {
+          "sleutel": "Stijl-Herhaling",
+          "beschrijving": "Herhaling van hetzelfde woord of dezelfde woordgroep binnen het fragment, ter nadruk.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De zinsopbouw met 'Daar moet(en)...' wordt achtereenvolgens herhaald ter benadrukking."
         }
       ],
       "oppositions": []
@@ -4256,6 +4400,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "Er wordt een specifiek cijfer ('40.000 abortussen') aangehaald om de omvang van het fenomeen te illustreren."
+        },
+        {
+          "sleutel": "Stijl-Retorische-Vraag",
+          "beschrijving": "Een vraag waarvan het antwoord al besloten ligt in de formulering zelf.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De vraag dient om kritiek te uiten op het beleid van de tegenpartij in plaats van informatie in te winnen."
         }
       ],
       "oppositions": []
@@ -4451,6 +4603,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "De claim wordt onderbouwd met kwantitatieve gegevens over de wettelijke termijn (24 weken versus 10-12 weken) en de vergelijking met 'de meeste landen'."
+        },
+        {
+          "sleutel": "Stijl-Antithese",
+          "beschrijving": "Het naast elkaar plaatsen van twee tegengestelde begrippen of ideeën.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De Nederlandse termijn van 24 weken wordt tegenover de grens van 10 of 12 weken in omringende landen geplaatst."
         }
       ],
       "oppositions": []
@@ -4653,6 +4813,22 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "Er wordt een logische oorzaak-gevolgrelatie gelegd: betere toegang tot anticonceptie leidt tot minder ongewenste zwangerschappen en daardoor tot lagere maatschappelijke kosten."
+        },
+        {
+          "sleutel": "Stijl-Aangekondigde-Opsomming",
+          "beschrijving": "Vooraf het aantal elementen aankondigen (twee, drie, vijf, ...), gevolgd door een opsomming van precies dat aantal.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De spreker kondigt vooraf drie middelen aan ('de pil, het spiraaltje én condooms') en noemt ze vervolgens alle drie."
+        },
+        {
+          "sleutel": "Stijl-Antithese",
+          "beschrijving": "Het naast elkaar plaatsen van twee tegengestelde begrippen of ideeën.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De kosten van anticonceptie worden gecontrasteerd met de veel hogere kosten van abortus of soa's."
         }
       ],
       "oppositions": []
@@ -4778,6 +4954,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "Er wordt een logische oorzaak-gevolgrelatie gelegd: vergoeding voorkomt dat vrouwen tot gevaarlijke illegale abortus of ongewenste zwangerschap gedwongen worden."
+        },
+        {
+          "sleutel": "Stijl-Antithese",
+          "beschrijving": "Het naast elkaar plaatsen van twee tegengestelde begrippen of ideeën.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Een vergoede abortus wordt tegenover de gevaarlijke illegale optie of het voldragen onder kwetsbare omstandigheden geplaatst."
         }
       ],
       "oppositions": []
@@ -4879,6 +5063,14 @@
           "perspectief": "Politicologisch & Sociaal-Psychologisch",
           "created_by": "llm",
           "reden": "Door abortus te framen als iets dat niet 'zomaar een medische handeling' is maar 'ongeboren leven' betreft, wordt een morele grens getrokken rondom de heiligheid of natuurlijke orde van het leven."
+        },
+        {
+          "sleutel": "Stijl-Herhaling",
+          "beschrijving": "Herhaling van hetzelfde woord of dezelfde woordgroep binnen het fragment, ter nadruk.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De woordgroep 'ongeboren leven' wordt kort achter elkaar herhaald om de nadruk daarop te leggen."
         }
       ],
       "oppositions": []
@@ -5001,6 +5193,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "De argumentatie leunt op de verklaring van Monique Opheij van het Nederlands Genootschap van Abortusartsen als autoriteit over de mogelijke oorzaken."
+        },
+        {
+          "sleutel": "Stijl-Aangekondigde-Opsomming",
+          "beschrijving": "Vooraf het aantal elementen aankondigen (twee, drie, vijf, ...), gevolgd door een opsomming van precies dat aantal.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Er worden drie oorzaken vooraf gesuggereerd/opgesomd ('woningtekort, de economische situatie, maar ook desinformatie')."
         }
       ],
       "oppositions": []
@@ -5127,6 +5327,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "De betrouwbaarheid wordt gekoppeld aan de expertise van 'uitgebreid geschoold' vrouwen en professionals in de eerstelijnszorg."
+        },
+        {
+          "sleutel": "Stijl-Antithese",
+          "beschrijving": "Het naast elkaar plaatsen van twee tegengestelde begrippen of ideeën.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het lage risico bij uitgebreid geschoolde vrouwen wordt gecontrasteerd met het veel grotere risico bij vrouwen die zelf met een app werken."
         }
       ],
       "oppositions": []
@@ -5362,6 +5570,14 @@
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker vraagt naar de formele procedure en interactieve spelregels ('hoe we dat moeten doen', 'hoe we die dan gaan interpreteren') van het voorgestelde beleid."
+        },
+        {
+          "sleutel": "Stijl-Retorische-Vraag",
+          "beschrijving": "Een vraag waarvan het antwoord al besloten ligt in de formulering zelf.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De vragen zijn bedoeld om de onuitvoerbaarheid van het voorstel aan te tonen."
         }
       ],
       "oppositions": []
@@ -5564,6 +5780,22 @@
           "perspectief": "Politicologisch & Sociaal-Psychologisch",
           "created_by": "llm",
           "reden": "Door abortus te contrasteren met een 'technisch succesje', impliceert de spreker dat het handelen moreel 'besmet' of onnatuurlijk is in strijd met de heiligheid van het leven."
+        },
+        {
+          "sleutel": "Stijl-Herhaling",
+          "beschrijving": "Herhaling van hetzelfde woord of dezelfde woordgroep binnen het fragment, ter nadruk.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De frase 'We hebben het hier over...' wordt aan het begin van opeenvolgende beweringen herhaald."
+        },
+        {
+          "sleutel": "Stijl-Antithese",
+          "beschrijving": "Het naast elkaar plaatsen van twee tegengestelde begrippen of ideeën.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "'Een leuk technisch succesje' wordt rechtstreeks tegenover 'leven dat afgebroken wordt' geplaatst."
         }
       ],
       "oppositions": []
@@ -5670,6 +5902,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "De claim wordt onderbouwd met een kwantitatieve uitspraak ('meer dan driekwart') over de verdeling van abortussen."
+        },
+        {
+          "sleutel": "Stijl-Retorische-Vraag",
+          "beschrijving": "Een vraag waarvan het antwoord al besloten ligt in de formulering zelf.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De spreker stelt de vraag 'Is het ministerie met ons bezorgd, en waar blijkt dat uit?' om bezorgdheid en actie te suggereren in plaats van een feitelijk antwoord te verwachten."
         }
       ],
       "oppositions": []
@@ -5788,6 +6028,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "De spreker onderbouwt zijn punt met specifieke, lokale voorbeelden zoals 'De Regentes' in Gouda en 'Choice 4 Life' in Ede."
+        },
+        {
+          "sleutel": "Stijl-Herhaling",
+          "beschrijving": "Herhaling van hetzelfde woord of dezelfde woordgroep binnen het fragment, ter nadruk.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het woord 'moeten' wordt aan het einde ter nadruk herhaald ('zulke opvangplekken moeten er wel zijn. En ze moeten er voldoende zijn')."
         }
       ],
       "oppositions": []
@@ -6032,6 +6280,22 @@
           "perspectief": "Politicologisch & Sociaal-Psychologisch",
           "created_by": "llm",
           "reden": "Er wordt verwezen naar het 'advies' en de 'harde morele grens' van bewustzijn, waarbij bestaande normen en definities van het leven worden verdedigd tegen verandering."
+        },
+        {
+          "sleutel": "Stijl-Antithese",
+          "beschrijving": "Het naast elkaar plaatsen van twee tegengestelde begrippen of ideeën.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het idee van een embryo als 'het begin van menselijk leven' wordt tegenover 'enkel onderzoeksmaterie' geplaatst."
+        },
+        {
+          "sleutel": "Stijl-Herhaling",
+          "beschrijving": "Herhaling van hetzelfde woord of dezelfde woordgroep binnen het fragment, ter nadruk.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De zinsstructuur 'Ja, natuurlijk, ook ik... Natuurlijk wil ook ik...' herhaalt het woord 'natuurlijk' ter benadrukking."
         }
       ],
       "oppositions": []
@@ -6362,6 +6626,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "Er wordt een mechanistische verklaring gegeven voor de statistiek: de lage cijfers komen 'door' de goede voorlichting."
+        },
+        {
+          "sleutel": "Stijl-Retorische-Vraag",
+          "beschrijving": "Een vraag waarvan het antwoord al besloten ligt in de formulering zelf.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De spreker stelt de vraag 'En waar komt dat door?' om direct zelf het antwoord te geven ter benadrukking."
         }
       ],
       "oppositions": []
@@ -6572,6 +6844,14 @@
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De uiting stelt grenzen aan de discussie door te bepalen dat externe legitimatie of kwalificatie van de abortusbeslissing niet toelaatbaar is binnen het debat."
+        },
+        {
+          "sleutel": "Stijl-Herhaling",
+          "beschrijving": "Herhaling van hetzelfde woord of dezelfde woordgroep binnen het fragment, ter nadruk.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het woord 'argument' wordt kort achter elkaar herhaald ('het argument om te kiezen... is altijd het argument van vrouwen zelf')."
         }
       ],
       "oppositions": []
@@ -6666,6 +6946,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "De claim wordt onderbouwd met verwijzingen naar kwantitatieve gegevens ('de cijfers', 'aantal abortussen') en een vergelijking met Europese statistieken."
+        },
+        {
+          "sleutel": "Stijl-Herhaling",
+          "beschrijving": "Herhaling van hetzelfde woord of dezelfde woordgroep binnen het fragment, ter nadruk.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De zinsnede 'Dat zien we' wordt herhaald aan het begin van opeenvolgende zinnen ter nadruk."
         }
       ],
       "oppositions": []
@@ -6759,6 +7047,14 @@
           "perspectief": "Politicologisch & Sociaal-Psychologisch",
           "created_by": "llm",
           "reden": "Het argument draait volledig om het principe van individuele autonomie ('zelf kunnen maken van keuzes over het eigen lichaam', 'vrijheid en zonder intimidatie')."
+        },
+        {
+          "sleutel": "Stijl-Herhaling",
+          "beschrijving": "Herhaling van hetzelfde woord of dezelfde woordgroep binnen het fragment, ter nadruk.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het woord 'verworvenheid' ('verworvenheden') wordt meerdere malen herhaald ter benadrukking van de waarde ervan."
         }
       ],
       "oppositions": []
@@ -7091,6 +7387,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "De spreker gebruikt zijn eigen werkbezoek aan een specifieke kliniek als illustratief praktijkvoorbeeld."
+        },
+        {
+          "sleutel": "Stijl-Aangekondigde-Opsomming",
+          "beschrijving": "Vooraf het aantal elementen aankondigen (twee, drie, vijf, ...), gevolgd door een opsomming van precies dat aantal.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Er wordt een drie-opsomming van 'zorgvuldigheid, kwaliteit en toegankelijkheid' voorafgegaan door een inhoudelijke aankondiging van de kernwaarden."
         }
       ],
       "oppositions": []
@@ -7306,6 +7610,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "De spreker legt een mechanisch/causaal verband uit tussen gebrek aan geld of woningnood en het ervaren van een zware opgave bij het houden van een kind."
+        },
+        {
+          "sleutel": "Stijl-Herhaling",
+          "beschrijving": "Herhaling van hetzelfde woord of dezelfde woordgroep binnen het fragment, ter nadruk.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het woord 'ook' wordt herhaaldelijk achter elkaar gebruikt om alle facetten van uitbreiding te benadrukken."
         }
       ],
       "oppositions": []
@@ -7619,6 +7931,14 @@
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker verwijst naar de formele bestuurlijke afspraken en de institutionele context (het coalitieakkoord) waarin de besluitvorming heeft plaatsgevonden."
+        },
+        {
+          "sleutel": "Stijl-Herhaling",
+          "beschrijving": "Herhaling van hetzelfde woord of dezelfde woordgroep binnen het fragment, ter nadruk.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het aanwijzend voornaamwoord/bijwoord 'dit' wordt herhaald ('Dit is afgesproken... dit is de uitkomst')."
         }
       ],
       "oppositions": []
@@ -8054,6 +8374,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "Er wordt een expliciete aanbeveling uit een uitgevoerd onderzoek aangehaald om aan te tonen dat werken met vinklijstjes niet werkt."
+        },
+        {
+          "sleutel": "Stijl-Herhaling",
+          "beschrijving": "Herhaling van hetzelfde woord of dezelfde woordgroep binnen het fragment, ter nadruk.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De zin 'ga niet met vinklijstjes werken' wordt letterlijk herhaald ter benadrukking van de aanbeveling."
         }
       ],
       "oppositions": []
@@ -8363,6 +8691,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "De claim over het behoud van kwaliteit wordt onderbouwd door te verwijzen naar de inzet en uitwerking door de relevante beroepsgroepen uit de praktijk."
+        },
+        {
+          "sleutel": "Stijl-Aangekondigde-Opsomming",
+          "beschrijving": "Vooraf het aantal elementen aankondigen (twee, drie, vijf, ...), gevolgd door een opsomming van precies dat aantal.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De spreker kondigt vooraf aan dat de wet 'op twee punten' is gewijzigd en noemt daarna exact die twee punten (geen minimale beraadtermijn en toegankelijk via huisarts)."
         }
       ],
       "oppositions": []
@@ -8570,6 +8906,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "Het argument legt de logische oorzaak-gevolgrelatie uit dat preventie en anticonceptie ongewenste zwangerschappen en daarmee abortussen tegengaan."
+        },
+        {
+          "sleutel": "Stijl-Retorische-Vraag",
+          "beschrijving": "Een vraag waarvan het antwoord al besloten ligt in de formulering zelf.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De spreker sluit af met 'impliceert dat toch ook dat... ? Of zie ik dat verkeerd?' om de conclusie retorisch af te dwingen."
         }
       ],
       "oppositions": []
@@ -8663,6 +9007,14 @@
           "perspectief": "Politicologisch & Sociaal-Psychologisch",
           "created_by": "llm",
           "reden": "De uitspraak 'dat is het recht van een vrouw' stelt individuele autonomie en de eigen beschikkingsvrijheid van het lichaam centraal."
+        },
+        {
+          "sleutel": "Stijl-Slogan",
+          "beschrijving": "Beknopte, pakkende frase.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De korte uitspraak 'dat is het recht van een vrouw' fungeert als beknopte, krachtige slogan."
         }
       ],
       "oppositions": []
@@ -9015,6 +9367,14 @@
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker bekritiseert de gehanteerde bewoordingen ('gewone zorg', 'mensenrecht') en stelt de legitimiteit van deze linguïstische framing en de toelaatbaarheid van kritische vragen in het debat ter discussie."
+        },
+        {
+          "sleutel": "Stijl-Retorische-Vraag",
+          "beschrijving": "Een vraag waarvan het antwoord al besloten ligt in de formulering zelf.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De spreker vraagt 'Wat denkt de staatssecretaris dat het doet...?' om een waarschuwende stelling in te nemen zonder een echt antwoord af te wachten."
         }
       ],
       "oppositions": []
@@ -9380,6 +9740,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "Er wordt verwezen naar bevindingen uit de meest recente wetsevaluatie over de Nederlandse abortuspraktijk."
+        },
+        {
+          "sleutel": "Stijl-Antithese",
+          "beschrijving": "Het naast elkaar plaatsen van twee tegengestelde begrippen of ideeën.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het 'beschermen van het ongeboren leven enerzijds' wordt tegenover het 'zelfbeschikkingsrecht van de ongewenst zwangere vrouw anderzijds' geplaatst."
         }
       ],
       "oppositions": []
@@ -9734,6 +10102,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "Het standpunt wordt onderbouwd met de verklaring en bevindingen van Dokters van de Wereld."
+        },
+        {
+          "sleutel": "Stijl-Retorische-Vraag",
+          "beschrijving": "Een vraag waarvan het antwoord al besloten ligt in de formulering zelf.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De vraag 'Dus hoe zit dat dan? Zijn die financiële buffers er?' wordt gesteld om kritiek uit te oefenen op het bestaan van die buffers."
         }
       ],
       "oppositions": []
@@ -10034,6 +10410,14 @@
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker stelt dat het debat nu te eenzijdig is gericht op anticonceptie en verruimd moet worden naar andere onderwerpen zoals seksuele levensstijl."
+        },
+        {
+          "sleutel": "Stijl-Retorische-Vraag",
+          "beschrijving": "Een vraag waarvan het antwoord al besloten ligt in de formulering zelf.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De vraag 'Zijn we dus niet te eenzijdig hiermee bezig?' is gesteld om het eigen standpunt van eenzijdigheid te bevestigen."
         }
       ],
       "oppositions": []
@@ -10143,6 +10527,14 @@
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker maakt een expliciet onderscheid tussen twee concepten ('het aantal onbedoelde zwangerschappen en het aantal abortussen') om af te bakenen waar het beleid op moet sturen."
+        },
+        {
+          "sleutel": "Stijl-Aangekondigde-Opsomming",
+          "beschrijving": "Vooraf het aantal elementen aankondigen (twee, drie, vijf, ...), gevolgd door een opsomming van precies dat aantal.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De spreker kondigt aan 'twee zaken uit elkaar te houden' en somt vervolgens precies die twee op ('het aantal onbedoelde zwangerschappen en het aantal abortussen')."
         }
       ],
       "oppositions": []
@@ -10475,6 +10867,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "De spreker formuleert een logische inconsistentie in beleid ('want dan zeggen we: wel voor studenten, niet voor toeristen')."
+        },
+        {
+          "sleutel": "Stijl-Antithese",
+          "beschrijving": "Het naast elkaar plaatsen van twee tegengestelde begrippen of ideeën.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het vergoeden voor 'studenten uit het buitenland' wordt tegenover 'niet voor toeristen' geplaatst om de tegenstrijdigheid te tonen."
         }
       ],
       "oppositions": []
@@ -10584,6 +10984,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "De spreker beredeneert hoe een leidende rol voor persoonlijke autonomie in de praktijk leidt tot verwijzingen door artsen naar onomkeerbare ingrepen bij minderjarigen."
+        },
+        {
+          "sleutel": "Stijl-Retorische-Vraag",
+          "beschrijving": "Een vraag waarvan het antwoord al besloten ligt in de formulering zelf.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De vraag 'Is het niet uiterst zorgelijk dat...?' bevat de kritische stelling al in het antwoord besloten."
         }
       ],
       "oppositions": []
@@ -10701,6 +11109,22 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "De spreker legt logisch uit dat zonder het recht op leven als basis, alle andere mensenrechten waardeloos worden."
+        },
+        {
+          "sleutel": "Stijl-Retorische-Vraag",
+          "beschrijving": "Een vraag waarvan het antwoord al besloten ligt in de formulering zelf.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De vraag 'Waarom?' wordt door de spreker zelf meteen beantwoord ter inleiding van de argumentatie."
+        },
+        {
+          "sleutel": "Stijl-Antithese",
+          "beschrijving": "Het naast elkaar plaatsen van twee tegengestelde begrippen of ideeën.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De 'bescherming van het leven' wordt tegenover het 'recht om leven te beëindigen' gesteld."
         }
       ],
       "oppositions": []
@@ -10810,6 +11234,22 @@
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "Het argument draait expliciet om de vraag welke instantie (de Europese Unie of de nationale staat) de wettelijke autoriteit heeft om regels over abortus op te stellen."
+        },
+        {
+          "sleutel": "Stijl-Herhaling",
+          "beschrijving": "Herhaling van hetzelfde woord of dezelfde woordgroep binnen het fragment, ter nadruk.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De vraagconstructie met 'Wat als...' ('Wat zou mevrouw Paulusma ervan vinden...', 'Wat als Hongarije zoiets zou doen?') wordt herhaald ter nadruk."
+        },
+        {
+          "sleutel": "Stijl-Retorische-Vraag",
+          "beschrijving": "Een vraag waarvan het antwoord al besloten ligt in de formulering zelf.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Er worden meerdere vragen gesteld ('Wat als Hongarije zoiets zou doen?', 'Moeten we niet tevreden zijn...?') waar het antwoord al in besloten ligt."
         }
       ],
       "oppositions": []
@@ -10964,6 +11404,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "De spreker redeneert dat het abortusverbod er causaal toe leidt dat artsen geen ingrepen meer durven uit te voeren, wat weer leidt tot de dood van vrouwen."
+        },
+        {
+          "sleutel": "Stijl-Herhaling",
+          "beschrijving": "Herhaling van hetzelfde woord of dezelfde woordgroep binnen het fragment, ter nadruk.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De zinsnede 'We zien...' wordt aan het begin van meerdere achtereenvolgende zinnen herhaald."
         }
       ],
       "oppositions": []
@@ -11065,6 +11513,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "De spreker onderbouwt haar standpunt door te verwijzen naar haar eigen persoonlijke ervaring en acties van de afgelopen jaren."
+        },
+        {
+          "sleutel": "Stijl-Herhaling",
+          "beschrijving": "Herhaling van hetzelfde woord of dezelfde woordgroep binnen het fragment, ter nadruk.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het woord 'júíst' met de bepaling 'door' wordt drie opeenvolgende keren herhaald ter benadrukking."
         }
       ],
       "oppositions": []
@@ -11283,6 +11739,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "Er wordt redenerend gelegd dat betere ondersteuning en anticonceptie leidt tot minder noodzaak voor abortus."
+        },
+        {
+          "sleutel": "Stijl-Retorische-Vraag",
+          "beschrijving": "Een vraag waarvan het antwoord al besloten ligt in de formulering zelf.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De spreker stelt de vraag of we zullen proberen zo min mogelijk abortussen te hebben om de eigen voorgestelde aanpak te onderstrepen."
         }
       ],
       "oppositions": []
@@ -11607,6 +12071,22 @@
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "Bikker stelt de legitimiteit en thematische afbakening van D66's framing van abortus als 'mensenrecht' ter discussie."
+        },
+        {
+          "sleutel": "Stijl-Herhaling",
+          "beschrijving": "Herhaling van hetzelfde woord of dezelfde woordgroep binnen het fragment, ter nadruk.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het woord 'mensenrecht' en de zinsstructuur rondom wanneer een mens een mens is, wordt herhaald ter nadruk."
+        },
+        {
+          "sleutel": "Stijl-Retorische-Vraag",
+          "beschrijving": "Een vraag waarvan het antwoord al besloten ligt in de formulering zelf.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De vragen 'Wanneer begint het eigenlijk?' en 'Wanneer is een mens een mens?' worden gesteld om te benadrukken dat het antwoord volgens de spreker ontbreekt of onjuist is."
         }
       ],
       "oppositions": []
@@ -11834,6 +12314,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "Er wordt een causale keten geschetst waarin het afnemen van het recht leidt tot inperking van rechten, onveiligheid en tragedies."
+        },
+        {
+          "sleutel": "Stijl-Aangekondigde-Opsomming",
+          "beschrijving": "Vooraf het aantal elementen aankondigen (twee, drie, vijf, ...), gevolgd door een opsomming van precies dat aantal.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De spreker noemt expliciet een opsomming van drie specifieke locaties (Polen, de Verenigde Staten of Zuid-Amerika)."
         }
       ],
       "oppositions": []
@@ -12052,6 +12540,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "Er wordt verwezen naar een specifieke persoonlijke waarneming/ervaring in Amerika ('omstandigheden die ik ook in Amerika heb gezien')."
+        },
+        {
+          "sleutel": "Stijl-Herhaling",
+          "beschrijving": "Herhaling van hetzelfde woord of dezelfde woordgroep binnen het fragment, ter nadruk.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De frase 'Ik wil' en het idee van 'hulp blijven bieden / blijven benoemen' wordt herhaald om de eigen inzet kracht bij te zetten."
         }
       ],
       "oppositions": []
@@ -12158,6 +12654,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "De spreker legt een logisch oorzaak-gevolgverband uit tussen het ontbreken van abortusrechten en de gang naar onveilige illegaliteit."
+        },
+        {
+          "sleutel": "Stijl-Retorische-Vraag",
+          "beschrijving": "Een vraag waarvan het antwoord al besloten ligt in de formulering zelf.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De vraag waarom de spreker 'niet alleen in woorden, maar ook in daden' zegt, wordt door de spreker zelf meteen beantwoord."
         }
       ],
       "oppositions": []
@@ -12259,6 +12763,14 @@
           "perspectief": "Politicologisch & Sociaal-Psychologisch",
           "created_by": "llm",
           "reden": "De spreker verzet zich tegen het opdringen en afdwingen van Europese waarden aan andere landen."
+        },
+        {
+          "sleutel": "Stijl-Antithese",
+          "beschrijving": "Het naast elkaar plaatsen van twee tegengestelde begrippen of ideeën.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het opleggen van Europese waarden met 'morele zelfverheffing' wordt tegenover het lokaal versterken van christelijke of andere hulpverlening geplaatst."
         }
       ],
       "oppositions": []
@@ -12369,6 +12881,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "De onderbouwing leunt op de causale/feitelijke claim dat vrouwen nog steeds voor abortus kiezen, ongeacht of het een recht is."
+        },
+        {
+          "sleutel": "Stijl-Retorische-Vraag",
+          "beschrijving": "Een vraag waarvan het antwoord al besloten ligt in de formulering zelf.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De slotvraag hoe mevrouw Bikker kan volhouden te staan voor keuzevrijheid wordt gesteld om te laten zien dat dit onhoudbaar is."
         }
       ],
       "oppositions": []
@@ -12470,6 +12990,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "De spreker legt een logisch verband tussen de afwijkende weging van het ongeboren leven en de specifieke beleidskeuzes die daar volgens haar uit volgen."
+        },
+        {
+          "sleutel": "Stijl-Antithese",
+          "beschrijving": "Het naast elkaar plaatsen van twee tegengestelde begrippen of ideeën.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het 'niet inzetten op het verspreiden van de mogelijkheid om abortus te ondergaan' wordt rechtstreeks geplaatst tegenover 'wel op het verspreiden van andere vormen van hulp'."
         }
       ],
       "oppositions": []
@@ -12850,6 +13378,14 @@
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker gaat in op de legitimiteit van een specifieke framing ('zendingsdrang') en verduidelijkt hoe de nota inhoudelijk afgebakend moet worden qua universele waarden."
+        },
+        {
+          "sleutel": "Stijl-Antithese",
+          "beschrijving": "Het naast elkaar plaatsen van twee tegengestelde begrippen of ideeën.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Er wordt een tegenstelling gemaakt tussen het 'opleggen van waarden' en het principe dat 'mensenrechten universeel' zijn."
         }
       ],
       "oppositions": []
@@ -13020,6 +13556,14 @@
           "perspectief": "Politicologisch & Sociaal-Psychologisch",
           "created_by": "llm",
           "reden": "De nadruk ligt op de bescherming van het nog ongeboren kind als kwetsbaar menselijk leven."
+        },
+        {
+          "sleutel": "Stijl-Retorische-Vraag",
+          "beschrijving": "Een vraag waarvan het antwoord al besloten ligt in de formulering zelf.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De vraag 'Waar begint het menselijk leven?' wordt gesteld om direct het eigen standpunt erover toe te lichten."
         }
       ],
       "oppositions": []
@@ -13243,6 +13787,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "Er wordt een logische verklaring gegeven dat abortus per definitie het doden van een ongeboren mens inhoudt, waardoor het in strijd is met het recht op leven."
+        },
+        {
+          "sleutel": "Stijl-Antithese",
+          "beschrijving": "Het naast elkaar plaatsen van twee tegengestelde begrippen of ideeën.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het recht op leven uit het grondrechtenhandvest wordt geplaatst tegenover de stelling dat bij abortus een ongeboren mens wordt gedood."
         }
       ],
       "oppositions": []
@@ -13349,6 +13901,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "De claim dat leven bij bevruchting begint wordt onderbouwd met de verwijzing naar de 'zeer brede consensus onder biologen'."
+        },
+        {
+          "sleutel": "Stijl-Retorische-Vraag",
+          "beschrijving": "Een vraag waarvan het antwoord al besloten ligt in de formulering zelf.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Er worden meerdere achtereenvolgende retorische vragen gesteld (zoals 'dan kan abortus toch onmogelijk een mensenrecht zijn?') om de logica van de tegenpartij te bekritiseren."
         }
       ],
       "oppositions": []
@@ -13442,6 +14002,22 @@
           "perspectief": "Politicologisch & Sociaal-Psychologisch",
           "created_by": "llm",
           "reden": "De verwijzing naar 'diep verval' en de vraag naar het 'principiële verschil' impliceert een beroep op een vaste, traditionele morele orde en hiërarchie van waarden."
+        },
+        {
+          "sleutel": "Stijl-Antithese",
+          "beschrijving": "Het naast elkaar plaatsen van twee tegengestelde begrippen of ideeën.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het ongeboren kind wordt rechtstreeks tegenover het geboren kind geplaatst."
+        },
+        {
+          "sleutel": "Stijl-Retorische-Vraag",
+          "beschrijving": "Een vraag waarvan het antwoord al besloten ligt in de formulering zelf.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De vragen over het principiële verschil tussen geboren/ongeboren en het recht op doden gebaseerd op leeftijd zijn bedoeld als retorische kritiek."
         }
       ],
       "oppositions": []
@@ -13551,6 +14127,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "Het argument schetst een representatief scenario ('vrouwen die... gedwongen zwanger zijn geworden') als illustratief voorbeeld om het punt te maken, zonder statistische data of expertreferenties."
+        },
+        {
+          "sleutel": "Stijl-Retorische-Vraag",
+          "beschrijving": "Een vraag waarvan het antwoord al besloten ligt in de formulering zelf.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De vraag wat het zegt over mensenrechten als er geen hulp geboden kan worden aan verkrachtingsslachtoffers is retorisch geformuleerd."
         }
       ],
       "oppositions": []
@@ -13657,6 +14241,14 @@
           "perspectief": "Politicologisch & Sociaal-Psychologisch",
           "created_by": "llm",
           "reden": "De nadruk op het begin van het leven bij de bevruchting en het niet 'wegpoetsen' van het probleem suggereert een focus op de natuurlijke orde en de heiligheid van het leven."
+        },
+        {
+          "sleutel": "Stijl-Antithese",
+          "beschrijving": "Het naast elkaar plaatsen van twee tegengestelde begrippen of ideeën.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het recht van het ene mens wordt afgewogen tegen en geplaatst tegenover het recht van het andere mens."
         }
       ],
       "oppositions": []
@@ -13755,6 +14347,14 @@
           "perspectief": "Politicologisch & Sociaal-Psychologisch",
           "created_by": "llm",
           "reden": "Het argument leunt op de autoriteit van het 'Internationaal verdrag inzake de rechten van het kind' als bindende norm."
+        },
+        {
+          "sleutel": "Stijl-Retorische-Vraag",
+          "beschrijving": "Een vraag waarvan het antwoord al besloten ligt in de formulering zelf.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De spreker vraagt zich openlijk af hoe de initiatiefneemster haar voorstel kan rijmen met het kinderrechtenverdrag om aan te tonen dat het onverenigbaar is."
         }
       ],
       "oppositions": []
@@ -14601,6 +15201,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "Er wordt een causaal verband gelegd tussen het ontbreken van woning/geld en de toename van abortussen, waarbij het oplossen van de eerste het tweede zou voorkomen."
+        },
+        {
+          "sleutel": "Stijl-Retorische-Vraag",
+          "beschrijving": "Een vraag waarvan het antwoord al besloten ligt in de formulering zelf.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De vraag 'Dan had het toch een nota moeten zijn waarin staat...?' wordt gebruikt om de huidige nota af te keuren."
         }
       ],
       "oppositions": []
@@ -14829,6 +15437,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "Er wordt een mechanistische verklaring gegeven: het wegnemen van het recht leidt direct tot onveilige praktijken en daaruit voortvloeiende sterfte."
+        },
+        {
+          "sleutel": "Stijl-Antithese",
+          "beschrijving": "Het naast elkaar plaatsen van twee tegengestelde begrippen of ideeën.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het wegnemen van het recht bij de vrouw wordt tegenover het uitgangspunt van de vrije keuze met gepaste hulp geplaatst."
         }
       ],
       "oppositions": []
@@ -15053,6 +15669,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "Het argument leunt op het specifieke historische voorbeeld van de ontwikkelingen in de Verenigde Staten als onderbouwing."
+        },
+        {
+          "sleutel": "Stijl-Antithese",
+          "beschrijving": "Het naast elkaar plaatsen van twee tegengestelde begrippen of ideeën.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Wat hier in Nederland nog 'ver weg' of 'on denkbaar' lijkt, wordt afgezet tegen de werkelijkheid in Amerika waar het al verdwenen is."
         }
       ],
       "oppositions": []
@@ -15171,6 +15795,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "Er wordt een logische oorzaak-gevolgrelatie gelegd tussen het beperken van voorlichting/anticonceptie en het ontstaan van noodsituaties."
+        },
+        {
+          "sleutel": "Stijl-Antithese",
+          "beschrijving": "Het naast elkaar plaatsen van twee tegengestelde begrippen of ideeën.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het beleid van 'niet méér, maar juist veel minder' voorlichting en anticonceptie staat tegenover de negatieve gevolgen van vrouwen in nood."
         }
       ],
       "oppositions": []
@@ -15835,6 +16467,14 @@
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "Kahraman bekritiseert de framing van het debat door te stellen dat Paternotte het onderwerp onterecht beperkt tot noodgevallen, terwijl Kahraman het debat wil voeren over de nota als geheel."
+        },
+        {
+          "sleutel": "Stijl-Antithese",
+          "beschrijving": "Het naast elkaar plaatsen van twee tegengestelde begrippen of ideeën.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De minder dan 1% van gevallen van abortus wegens levensgevaar voor de moeder wordt scherp gecontrasteerd met álle andere gevallen waar de discussie over gaat."
         }
       ],
       "oppositions": []
@@ -16135,6 +16775,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "Er wordt een causaal verband gelegd tussen het beperken van abortusrechten en het gevaar voor de gezondheid van vrouwen."
+        },
+        {
+          "sleutel": "Stijl-Antithese",
+          "beschrijving": "Het naast elkaar plaatsen van twee tegengestelde begrippen of ideeën.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het promoten van abortus wordt tegenover het daadwerkelijk helpen van vrouwen ter ondersteuning van hun gezondheid geplaatst."
         }
       ],
       "oppositions": []
@@ -16366,6 +17014,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "De informatie wordt toegeschreven aan een 'medewerker', wat een beroep doet op de kennis of autoriteit van een specialist binnen de organisatie."
+        },
+        {
+          "sleutel": "Stijl-Retorische-Vraag",
+          "beschrijving": "Een vraag waarvan het antwoord al besloten ligt in de formulering zelf.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De vraag 'Wil de heer Paternotte zeggen dat hij die uit de nota wil halen?' wordt gesteld om te kritiseren dat de nota veel verder gaat dan enkel de 1% noodgevallen."
         }
       ],
       "oppositions": []
@@ -16606,6 +17262,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "De onderbouwing leunt volledig op de autoriteit en de juridische interpretatie van het Europees Hof."
+        },
+        {
+          "sleutel": "Stijl-Antithese",
+          "beschrijving": "Het naast elkaar plaatsen van twee tegengestelde begrippen of ideeën.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het fragment stelt het recht op abortus en toegang tot goede zorg tegenover artsen die zeggen daar niet bij te willen helpen."
         }
       ],
       "oppositions": []
@@ -16816,6 +17480,14 @@
           "perspectief": "Politicologisch & Sociaal-Psychologisch",
           "created_by": "llm",
           "reden": "Er wordt geïmpliceerd dat er een objectieve, hogere morele orde is (het recht op leven) die niet ondergeschikt mag zijn aan de subjectieve inschatting van de moeder."
+        },
+        {
+          "sleutel": "Stijl-Herhaling",
+          "beschrijving": "Herhaling van hetzelfde woord of dezelfde woordgroep binnen het fragment, ter nadruk.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het woord 'antwoord' en de zinsstructuur rond het geven van een antwoord worden ter benadrukking herhaald."
         }
       ],
       "oppositions": []
@@ -17047,6 +17719,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "De onderbouwing berust op een logische afleiding: als A (abortus is mensenrecht) dan volgt B (ongeboren leven heeft geen rechten), zonder empirische data of expertreferenties."
+        },
+        {
+          "sleutel": "Stijl-Herhaling",
+          "beschrijving": "Herhaling van hetzelfde woord of dezelfde woordgroep binnen het fragment, ter nadruk.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het begrip 'fundamentele moeite' en het motief van het hebben van een recht worden meerdere keren herhaald ter nadruk."
         }
       ],
       "oppositions": []
@@ -17254,6 +17934,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "Er wordt een causaal verband gelegd tussen restrictief abortusbeleid en de toename van babysterfte en tragedies."
+        },
+        {
+          "sleutel": "Stijl-Antithese",
+          "beschrijving": "Het naast elkaar plaatsen van twee tegengestelde begrippen of ideeën.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Twee uiterste uitkomsten, namelijk 'ofwel een totaalverbod ofwel hele vergaande beperkingen', worden tegenover elkaar geplaatst."
         }
       ],
       "oppositions": []
@@ -17502,6 +18190,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "De spreker onderbouwt het punt met specifieke voorbeelden van landen (staten in de VS, Scandinavië) die als illustratie dienen voor landen met liberalere wetgeving."
+        },
+        {
+          "sleutel": "Stijl-Retorische-Vraag",
+          "beschrijving": "Een vraag waarvan het antwoord al besloten ligt in de formulering zelf.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Er worden meerdere opeenvolgende vragen gesteld waarop de spreker geen inhoudelijk antwoord verwacht maar een punt maakt over het inperken van rechten."
         }
       ],
       "oppositions": []
@@ -17608,6 +18304,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "Er wordt een logische oorzaak-gevolgrelatie gelegd: zonder geld voor pleitbezorging is het moeilijker om de toegang tot abortus te verbeteren."
+        },
+        {
+          "sleutel": "Stijl-Antithese",
+          "beschrijving": "Het naast elkaar plaatsen van twee tegengestelde begrippen of ideeën.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het geven van geld voor abortuszorg wordt tegenover het verbieden van diezelfde zorg geplaatst."
         }
       ],
       "oppositions": []
@@ -17834,6 +18538,14 @@
           "perspectief": "Politicologisch & Sociaal-Psychologisch",
           "created_by": "llm",
           "reden": "Door de financiële drempel te verlagen, wordt gestreefd naar gelijke kansen en onpartijdige behandeling, zodat zorg niet afhankelijk is van iemands vermogen."
+        },
+        {
+          "sleutel": "Stijl-Retorische-Vraag",
+          "beschrijving": "Een vraag waarvan het antwoord al besloten ligt in de formulering zelf.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De spreker stelt de vraag of de staatssecretaris mogelijkheden ziet om de financiële drempel te verlagen als een suggestieve oproep."
         }
       ],
       "oppositions": []
@@ -17967,6 +18679,14 @@
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker verwijst naar de procedurele context van het stellen van vragen aan het kabinet ('Als u dan toch al die vragen stelt... kunt u dan... ook de vraag bij het kabinet neerleggen')."
+        },
+        {
+          "sleutel": "Stijl-Retorische-Vraag",
+          "beschrijving": "Een vraag waarvan het antwoord al besloten ligt in de formulering zelf.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De vraag om geld beschikbaar te stellen voor Nederlandse vrouwen wordt in de vorm van retorische vragen gegoten."
         }
       ],
       "oppositions": []
@@ -18077,6 +18797,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "Er wordt een logische oorzaak-gevolgrelatie gelegd tussen het beschikbaar stellen van anticonceptie/voorlichting en het dalen van het aantal abortussen."
+        },
+        {
+          "sleutel": "Stijl-Retorische-Vraag",
+          "beschrijving": "Een vraag waarvan het antwoord al besloten ligt in de formulering zelf.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Er wordt een vraag gesteld waarvan het antwoord besloten ligt in de redenering dat ontwikkelingssamenwerking in stand gehouden moet worden."
         }
       ],
       "oppositions": []
@@ -18324,6 +19052,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "Er wordt een causaal verband gelegd tussen het abortusbeleid (of de ideologie erachter) en de afname van kinderopvang en vrouwelijke arbeidsparticipatie."
+        },
+        {
+          "sleutel": "Stijl-Antithese",
+          "beschrijving": "Het naast elkaar plaatsen van twee tegengestelde begrippen of ideeën.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het SGP-ideaal van vrouwen die thuisblijven wordt direct tegenover het D66-standpunt van keuzevrijheid en gelijkwaardigheid geplaatst."
         }
       ],
       "oppositions": []
@@ -18449,6 +19185,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "Er wordt een causaal verband gelegd tussen de druk op abortuszorg en het levensgevaar voor vrouwen."
+        },
+        {
+          "sleutel": "Stijl-Antithese",
+          "beschrijving": "Het naast elkaar plaatsen van twee tegengestelde begrippen of ideeën.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het verschil tussen 'leven en dood' wordt als een scherpe tegenstelling gepresenteerd."
         }
       ],
       "oppositions": []
@@ -18754,6 +19498,14 @@
           "perspectief": "Politicologisch & Sociaal-Psychologisch",
           "created_by": "llm",
           "reden": "Door te pleiten voor een robuuste financieringsvorm wordt het voorkomen van leed bij kwetsbaren (onverzekerden) gegarandeerd."
+        },
+        {
+          "sleutel": "Stijl-Antithese",
+          "beschrijving": "Het naast elkaar plaatsen van twee tegengestelde begrippen of ideeën.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De onwenselijke financiering via het Mensenrechtenfonds wordt tegenover het alternatief van reguliere financiering van abortusklinieken geplaatst."
         }
       ],
       "oppositions": []
@@ -18880,6 +19632,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "De claim wordt onderbouwd met specifieke kwantitatieve gegevens, namelijk de bedragen van 43 miljoen en 100 miljoen euro."
+        },
+        {
+          "sleutel": "Stijl-Retorische-Vraag",
+          "beschrijving": "Een vraag waarvan het antwoord al besloten ligt in de formulering zelf.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De vraag hoe de regering kan volhouden dat de inzet blijft terwijl er bezuinigd wordt, bevat het antwoord over de lege woorden al in zich."
         }
       ],
       "oppositions": []
@@ -18981,6 +19741,14 @@
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker bekritiseert de gekozen procedurele aanpak (opname in internationale verdragen) als 'langdurig en kansarm', in plaats van de inhoudelijke vraag naar abortus zelf."
+        },
+        {
+          "sleutel": "Stijl-Antithese",
+          "beschrijving": "Het naast elkaar plaatsen van twee tegengestelde begrippen of ideeën.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het beoogde doel van verdragswijziging wordt afgezet tegen het risico dat bestaande verworvenheden juist worden teruggedraaid."
         }
       ],
       "oppositions": []
@@ -19265,6 +20033,14 @@
           "perspectief": "Politicologisch & Sociaal-Psychologisch",
           "created_by": "llm",
           "reden": "De stelling 'iedere abortus is er een te veel' impliceert een morele afkeer van de daad zelf, in lijn met het streven naar een 'schone' of natuurlijke orde."
+        },
+        {
+          "sleutel": "Stijl-Slogan",
+          "beschrijving": "Beknopte, pakkende frase.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De zin 'Want iedere abortus is er een te veel' is een beknopte, pakkende frase."
         }
       ],
       "oppositions": []
@@ -19448,6 +20224,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "Er worden specifieke landen (Polen en Malta) als concrete voorbeelden aangehaald om de inconsistentie in de tegenstanders' stelling te illustreren."
+        },
+        {
+          "sleutel": "Stijl-Retorische-Vraag",
+          "beschrijving": "Een vraag waarvan het antwoord al besloten ligt in de formulering zelf.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De vraag hoe het kan dat er landen met een totaalverbod zijn, dient om de bewering dat het al impliciet geregeld is te weerleggen."
         }
       ],
       "oppositions": []
@@ -19650,6 +20434,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "De onderbouwing rust op een hypothetisch specifiek voorbeeld (Amerikanen die een pistool naar Nederland sturen) in plaats van op statistische data of algemene wetenschappelijke consensus."
+        },
+        {
+          "sleutel": "Stijl-Antithese",
+          "beschrijving": "Het naast elkaar plaatsen van twee tegengestelde begrippen of ideeën.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het democratisch laten horen van een stem wordt tegenover het verstrekken van abortuspillen tegen de wet in (vergeleken met het sturen van een pistool) geplaatst."
         }
       ],
       "oppositions": []
@@ -19828,6 +20620,14 @@
           "perspectief": "Politicologisch & Sociaal-Psychologisch",
           "created_by": "llm",
           "reden": "Het argument pleit tegen dwang ('forceren', 'opleggen') door externe actoren, wat neerkomt op het verdedigen van de autonomie van landen om hun eigen keuzes te maken."
+        },
+        {
+          "sleutel": "Stijl-Herhaling",
+          "beschrijving": "Herhaling van hetzelfde woord of dezelfde woordgroep binnen het fragment, ter nadruk.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het woord 'respect' wordt meerdere keren direct achter elkaar herhaald ter nadruk."
         }
       ],
       "oppositions": []
@@ -20055,6 +20855,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "De claim wordt onderbouwd met specifieke kwantitatieve gegevens, zoals '73 miljoen' wereldwijd, '39.000' in Nederland en de frequentie 'iedere kwartier'."
+        },
+        {
+          "sleutel": "Stijl-Retorische-Vraag",
+          "beschrijving": "Een vraag waarvan het antwoord al besloten ligt in de formulering zelf.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De sluitvraag hoe het mogelijk is dat we kwetsbare levens minder goed beschermen is bedoeld om een moreel punt te maken."
         }
       ],
       "oppositions": []
@@ -20164,6 +20972,14 @@
           "perspectief": "Politicologisch & Sociaal-Psychologisch",
           "created_by": "llm",
           "reden": "Door het ongeboren kind te benoemen als slachtoffer dat wordt 'gedood', wordt ingespeeld op de zorg voor kwetsbaren en het voorkomen van schade."
+        },
+        {
+          "sleutel": "Stijl-Retorische-Vraag",
+          "beschrijving": "Een vraag waarvan het antwoord al besloten ligt in de formulering zelf.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De vraag 'Hoe verdorven kan een geest zijn' is een verontwaardigde vraag waar geen inhoudelijk antwoord op verwacht wordt."
         }
       ],
       "oppositions": []
@@ -20440,6 +21256,14 @@
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker benadrukt de actuele relevantie en urgentie van het debat door te stellen dat de kreet '25 jaar later... urgenter dan ooit' klinkt."
+        },
+        {
+          "sleutel": "Stijl-Slogan",
+          "beschrijving": "Beknopte, pakkende frase.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De frase 'baas in eigen buik' is een bekende, beknopte en pakkende leus."
         }
       ],
       "oppositions": []
@@ -20716,6 +21540,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "Er wordt een mechanistische verklaring gegeven voor het gedrag: verbod leidt niet tot minder abortus, maar tot gevaarlijke zelfbehandeling omdat de drang om de zwangerschap te beëindigen groot is."
+        },
+        {
+          "sleutel": "Stijl-Aangekondigde-Opsomming",
+          "beschrijving": "Vooraf het aantal elementen aankondigen (twee, drie, vijf, ...), gevolgd door een opsomming van precies dat aantal.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De spreker kondigt vooraf 'een levensgevaarlijke manier' aan en geeft daarna een opsomming van specifieke methoden."
         }
       ],
       "oppositions": []
@@ -20809,6 +21641,14 @@
           "perspectief": "Politicologisch & Sociaal-Psychologisch",
           "created_by": "llm",
           "reden": "Het argument beroept zich op mensenrechten en gelijke behandeling door het recht op abortus te verankeren in universele verdragen."
+        },
+        {
+          "sleutel": "Stijl-Antithese",
+          "beschrijving": "Het naast elkaar plaatsen van twee tegengestelde begrippen of ideeën.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het niet kunnen bepalen van wetten in andere landen wordt tegenover het wel kunnen stellen van een eigen norm geplaatst."
         }
       ],
       "oppositions": []
@@ -20915,6 +21755,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "De onderbouwing bestaat uit het citeren van een internationaal verdrag (VN), wat fungeert als autoritatieve bron voor de juridische interpretatie."
+        },
+        {
+          "sleutel": "Stijl-Retorische-Vraag",
+          "beschrijving": "Een vraag waarvan het antwoord al besloten ligt in de formulering zelf.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De openingsvraag of mensenrechten niet bedoeld waren om kwetsbaren te beschermen in plaats van te doden stelt het antwoord al vast."
         }
       ],
       "oppositions": []
@@ -21159,6 +22007,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "De spreker noemt specifieke, illustratieve voorbeelden van redenen voor abortus (verbouwing, geslachtskeuze) als representatief voor de praktijk, zonder statistische onderbouwing."
+        },
+        {
+          "sleutel": "Stijl-Aangekondigde-Opsomming",
+          "beschrijving": "Vooraf het aantal elementen aankondigen (twee, drie, vijf, ...), gevolgd door een opsomming van precies dat aantal.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Er wordt vooraf het hebben van 'alles erop en eraan' en specifieke kenmerken aangekondigd, gevolgd door een opsomming van fysiologische details van baby's."
         }
       ],
       "oppositions": []
@@ -21284,6 +22140,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "Er wordt een directe oorzaak-gevolgrelatie gelegd: restrictief beleid leidt tot onveilige abortus, wat op zijn beurt leidt tot gezondheidsgevaren en stigma."
+        },
+        {
+          "sleutel": "Stijl-Antithese",
+          "beschrijving": "Het naast elkaar plaatsen van twee tegengestelde begrippen of ideeën.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het recht op een veilige abortus wordt direct gezet tegenover het gedwongen worden tot een onveilige abortus."
         }
       ],
       "oppositions": []
@@ -21406,6 +22270,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "Er wordt expliciet verwezen naar de berekeningen en autoriteit van het Guttmacher Institute als bron van de feiten."
+        },
+        {
+          "sleutel": "Stijl-Herhaling",
+          "beschrijving": "Herhaling van hetzelfde woord of dezelfde woordgroep binnen het fragment, ter nadruk.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het bedrag en de frase van 'een bezuiniging van 10 miljoen' wordt ter benadrukking herhaald."
         }
       ],
       "oppositions": []
@@ -21609,6 +22481,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "De claim wordt onderbouwd met de algemene observatie van kwantitatieve gegevens, namelijk dat 'het aantal abortussen... is toegenomen'."
+        },
+        {
+          "sleutel": "Stijl-Antithese",
+          "beschrijving": "Het naast elkaar plaatsen van twee tegengestelde begrippen of ideeën.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De verwachting dat het aantal abortussen niet zou toenemen wordt afgezet tegen de realiteit dat het is toegenomen."
         }
       ],
       "oppositions": []
@@ -22308,6 +23188,14 @@
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker betoogt dat de nota op dit specifieke moment 'relevanter dan ooit' is, wat de urgentie en timing van de discussie benadrukt."
+        },
+        {
+          "sleutel": "Stijl-Slogan",
+          "beschrijving": "Beknopte, pakkende frase.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De uitspraak 'Al was het maar één vrouw per jaar: dat is er dan één te veel' is een beknopte, pakkende en herkenbare frase."
         }
       ],
       "oppositions": []
@@ -22637,6 +23525,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "De onderbouwing rust op de autoriteit en de specifieke uitspraken van een juridische instantie (het Europees Hof voor de Rechten van de Mens)."
+        },
+        {
+          "sleutel": "Stijl-Aangekondigde-Opsomming",
+          "beschrijving": "Vooraf het aantal elementen aankondigen (twee, drie, vijf, ...), gevolgd door een opsomming van precies dat aantal.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het Hof geeft twee eisen ('duidelijke, toegankelijke en voorzienbare wetgeving' en 'voldoende betrokkenheid van vrouwen'), waarna deze exact worden opgesomd."
         }
       ],
       "oppositions": []
@@ -22738,6 +23634,14 @@
           "perspectief": "Politicologisch & Sociaal-Psychologisch",
           "created_by": "llm",
           "reden": "Het pleit voor het 'recht op abortus', wat gericht is op individuele autonomie en bescherming tegen dwang door overheden of tradities."
+        },
+        {
+          "sleutel": "Stijl-Antithese",
+          "beschrijving": "Het naast elkaar plaatsen van twee tegengestelde begrippen of ideeën.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Er wordt een expliciete tegenstelling geplaatst tussen wat niet wordt gezegd ('dat zij hun wetgeving moeten aanpassen') en wat wel wordt gezegd ('in Europa zou het recht op abortus moeten gelden')."
         }
       ],
       "oppositions": []
@@ -23033,6 +23937,14 @@
           "perspectief": "Politicologisch & Sociaal-Psychologisch",
           "created_by": "llm",
           "reden": "Door abortus te framen als het 'doden' van een 'mens', wordt het handeling gepresenteerd als een morele besmetting of schending van de natuurlijke orde van het leven."
+        },
+        {
+          "sleutel": "Stijl-Retorische-Vraag",
+          "beschrijving": "Een vraag waarvan het antwoord al besloten ligt in de formulering zelf.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De vragen 'wat is nu het principiële verschil...?' en 'Wat geeft je het recht om een mens in wording te doden?' zijn gesteld om een standpunt kracht bij te zetten en bevatten het antwoord al in de formulering."
         }
       ],
       "oppositions": []
@@ -23126,6 +24038,14 @@
           "perspectief": "Politicologisch & Sociaal-Psychologisch",
           "created_by": "llm",
           "reden": "Door het afbreken van het leven als een fundamentele schending te framen ('breek je af'), wordt ingespeeld op het idee van het behouden van de natuurlijke orde en de onschendbaarheid van het leven."
+        },
+        {
+          "sleutel": "Stijl-Retorische-Vraag",
+          "beschrijving": "Een vraag waarvan het antwoord al besloten ligt in de formulering zelf.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De vraag 'Maar dit is toch niet een keuze tussen het ene of het andere leven?' bevat het verwachte antwoord al in de formulering."
         }
       ],
       "oppositions": []
@@ -23235,6 +24155,22 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "Het argument wordt onderbouwd met het persoonlijke voorbeeld van de moeder van de spreker en de eigen existentiële afhankelijkheid daarvan."
+        },
+        {
+          "sleutel": "Stijl-Herhaling",
+          "beschrijving": "Herhaling van hetzelfde woord of dezelfde woordgroep binnen het fragment, ter nadruk.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Woorden als 'ongeboren kind', 'geboren kind' en 'recht' worden binnen het fragment meerdere malen herhaald ter benadrukking."
+        },
+        {
+          "sleutel": "Stijl-Retorische-Vraag",
+          "beschrijving": "Een vraag waarvan het antwoord al besloten ligt in de formulering zelf.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Er worden meerdere vragen gesteld (zoals 'hoe zit het met dat ongeboren kind?' en 'Dat is toch ook een mensenrecht?') waarvan de antwoorden al besloten liggen in het argument."
         }
       ],
       "oppositions": []
@@ -23914,6 +24850,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "De claim wordt onderbouwd met specifieke kwantitatieve gegevens, namelijk 3,9 abortussen per 1.000 vrouwen in Mississippi versus 12,6 in Massachusetts."
+        },
+        {
+          "sleutel": "Stijl-Antithese",
+          "beschrijving": "Het naast elkaar plaatsen van twee tegengestelde begrippen of ideeën.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De situatie in de 'rode/Republikeinse staten' (zoals Mississippi) wordt rechtstreeks tegenover die in de 'blauwe/Democratische staten' (zoals Massachusetts) geplaatst."
         }
       ],
       "oppositions": []
@@ -24141,6 +25085,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "De spreker beroept zich expliciet op 'cijfers en feiten' die aantoonbaar een verband laten zien tussen preventiemaatregelen en minder abortussen."
+        },
+        {
+          "sleutel": "Stijl-Retorische-Vraag",
+          "beschrijving": "Een vraag waarvan het antwoord al besloten ligt in de formulering zelf.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De vraag aan mevrouw Paulusma is zo geformuleerd dat de veronderstelde conclusie er al in besloten ligt."
         }
       ],
       "oppositions": []
@@ -24857,6 +25809,14 @@
           "perspectief": "Politicologisch & Sociaal-Psychologisch",
           "created_by": "llm",
           "reden": "Er wordt nadrukkelijk verwezen naar het belang van het zich houden aan 'geldende wetten en regels' binnen de democratische rechtsstaat."
+        },
+        {
+          "sleutel": "Stijl-Herhaling",
+          "beschrijving": "Herhaling van hetzelfde woord of dezelfde woordgroep binnen het fragment, ter nadruk.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het woord 'vrijheid' wordt herhaaldelijk achter elkaar gebruikt ter nadruk."
         }
       ],
       "oppositions": []
@@ -25293,6 +26253,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "Er wordt een directe oorzaak-gevolgrelatie gelegd tussen het beperken van toegang en het ontstaan van onveilige abortussen en sterfgevallen."
+        },
+        {
+          "sleutel": "Stijl-Antithese",
+          "beschrijving": "Het naast elkaar plaatsen van twee tegengestelde begrippen of ideeën.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Er wordt een tegenstelling geplaatst tussen 'minder abortussen' en 'minder veilige abortussen'."
         }
       ],
       "oppositions": []
@@ -25816,6 +26784,14 @@
           "perspectief": "Politicologisch & Sociaal-Psychologisch",
           "created_by": "llm",
           "reden": "Het verdedigen van rechten impliceert een streven naar gelijke behandeling en onpartijdigheid voor vrouwen binnen de samenleving."
+        },
+        {
+          "sleutel": "Stijl-Herhaling",
+          "beschrijving": "Herhaling van hetzelfde woord of dezelfde woordgroep binnen het fragment, ter nadruk.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het woord 'nooit' wordt ter benadrukking direct herhaald ('Nooit! Nooit!')."
         }
       ],
       "oppositions": []
@@ -26081,6 +27057,14 @@
           "perspectief": "Politicologisch & Sociaal-Psychologisch",
           "created_by": "llm",
           "reden": "Door te verwijzen naar het 'recht' en het afwijzen van het 'opleggen' van ideeën, wordt ingespeeld op individuele autonomie en weerstand tegen dwang."
+        },
+        {
+          "sleutel": "Stijl-Antithese",
+          "beschrijving": "Het naast elkaar plaatsen van twee tegengestelde begrippen of ideeën.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het 'opleggen van een Westers idee' wordt tegenover het 'beschermen van universele mensenrechten' gezet."
         }
       ],
       "oppositions": []
@@ -26453,6 +27437,14 @@
           "perspectief": "Politicologisch & Sociaal-Psychologisch",
           "created_by": "llm",
           "reden": "Het verdedigen van abortuszorg en anticonceptie ondersteunt individuele autonomie en keuzevrijheid."
+        },
+        {
+          "sleutel": "Stijl-Aangekondigde-Opsomming",
+          "beschrijving": "Vooraf het aantal elementen aankondigen (twee, drie, vijf, ...), gevolgd door een opsomming van precies dat aantal.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De spreker bedient zich van een aangekondigde opsomming door vooraf 'én ... én ... én ...' te gebruiken bij het noemen van maatregelen."
         }
       ],
       "oppositions": []
@@ -27115,6 +28107,22 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "De spreker verwijst naar 'laatste wetenschappelijke inzichten omtrent pijnbeleving en levensvatbaarheid' als onderbouwing voor de morele conclusie."
+        },
+        {
+          "sleutel": "Stijl-Retorische-Vraag",
+          "beschrijving": "Een vraag waarvan het antwoord al besloten ligt in de formulering zelf.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De vraag 'Waar hebben we het dan over?' dient om direct het eigen standpunt krachtig in te luiden."
+        },
+        {
+          "sleutel": "Stijl-Herhaling",
+          "beschrijving": "Herhaling van hetzelfde woord of dezelfde woordgroep binnen het fragment, ter nadruk.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het woord 'baby'tjes' wordt herhaald ter benadrukking van het ongeboren kind."
         }
       ],
       "oppositions": []
@@ -27225,6 +28233,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "De claim wordt onderbouwd met een algemene, grootschalige observatie ('trend die we in de hele wereld zien') in plaats van een enkel anekdotisch voorbeeld."
+        },
+        {
+          "sleutel": "Stijl-Herhaling",
+          "beschrijving": "Herhaling van hetzelfde woord of dezelfde woordgroep binnen het fragment, ter nadruk.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het woord 'ongelofelijk' wordt herhaald ('ongelofelijk onder druk', 'ongelofelijk jammer', 'ongelofelijk belangrijk') ter benadrukking."
         }
       ],
       "oppositions": []
@@ -27690,6 +28706,14 @@
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker probeert de discussie af te bakenen door te pleiten voor het niet reduceren van het onderwerp tot simpele lijstjes of oorzaken."
+        },
+        {
+          "sleutel": "Stijl-Herhaling",
+          "beschrijving": "Herhaling van hetzelfde woord of dezelfde woordgroep binnen het fragment, ter nadruk.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De frasen 'het komt hierdoor' en 'Wat gaat er... goed' worden herhaald om de boodschap kracht bij te zetten."
         }
       ],
       "oppositions": []
@@ -27893,6 +28917,14 @@
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker betoogt dat noch zij noch de Kamer bevoegd zijn om in te grijpen op het domein van de medische beroepsgroep ('Ik ga daar niet eens over. De Kamer gaat daar ook niet over')."
+        },
+        {
+          "sleutel": "Stijl-Herhaling",
+          "beschrijving": "Herhaling van hetzelfde woord of dezelfde woordgroep binnen het fragment, ter nadruk.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De formulering 'gaat daar niet over' wordt kort achter elkaar herhaald voor nadruk."
         }
       ],
       "oppositions": []
@@ -28002,6 +29034,14 @@
           "perspectief": "Politicologisch & Sociaal-Psychologisch",
           "created_by": "llm",
           "reden": "Door abortus te framen als iets dat niet 'verdragen' kan worden en de 'werkelijkheid' verbergt, wordt het gepresenteerd als een morele besmetting of onreinheid die afgewezen moet worden."
+        },
+        {
+          "sleutel": "Stijl-Retorische-Vraag",
+          "beschrijving": "Een vraag waarvan het antwoord al besloten ligt in de formulering zelf.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De vraag stelt een voor de spreker vanzelfsprekende conclusie voor om de noodzaak tot stoppen met abortus te benadrukken."
         }
       ],
       "oppositions": []
@@ -28278,6 +29318,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "De claim wordt onderbouwd met kwantitatieve verwijzingen naar 'miljoenen extra' en 'geen cent extra'."
+        },
+        {
+          "sleutel": "Stijl-Antithese",
+          "beschrijving": "Het naast elkaar plaatsen van twee tegengestelde begrippen of ideeën.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Er wordt een contrast geplaatst tussen 'miljoenen extra gereserveerd om te financieren' en 'geen cent extra naar hulp'."
         }
       ],
       "oppositions": []
@@ -28638,6 +29686,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "Er wordt een logische relatie gelegd tussen het gebruik van anticonceptie en het vermijden van de financiële en emotionele consequenties van een zwangerschap."
+        },
+        {
+          "sleutel": "Stijl-Herhaling",
+          "beschrijving": "Herhaling van hetzelfde woord of dezelfde woordgroep binnen het fragment, ter nadruk.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het woord 'goed' en de opeenvolgende vergelijkingen met 'goedkoper' worden herhaald ter benadrukking."
         }
       ],
       "oppositions": []
@@ -29518,6 +30574,22 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "De spreker beroept zich op de bevestiging van abortusartsen die de regionale verschillen en problemen bevestigen."
+        },
+        {
+          "sleutel": "Stijl-Antithese",
+          "beschrijving": "Het naast elkaar plaatsen van twee tegengestelde begrippen of ideeën.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Er wordt een tegenstelling geplaatst tussen 'sommige klinieken wél een buffer' en 'andere klinieken niet'."
+        },
+        {
+          "sleutel": "Stijl-Retorische-Vraag",
+          "beschrijving": "Een vraag waarvan het antwoord al besloten ligt in de formulering zelf.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De slotvraag 'dat is toch eigenlijk incompleet, onverantwoord beleid?' bevat reeds de mening van de spreker."
         }
       ],
       "oppositions": []
@@ -29754,6 +30826,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "De claim dat de wet niet wordt nageleefd wordt onderbouwd met verwijzing naar de bevindingen van officiële wetsevaluaties."
+        },
+        {
+          "sleutel": "Stijl-Antithese",
+          "beschrijving": "Het naast elkaar plaatsen van twee tegengestelde begrippen of ideeën.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het idee dat een arts een 'formulierenverwerker' is wordt tegenover het idee gezet dat hij een 'toetser met eigen plichten' is."
         }
       ],
       "oppositions": []
@@ -29972,6 +31052,22 @@
           "perspectief": "Politicologisch & Sociaal-Psychologisch",
           "created_by": "llm",
           "reden": "Het argument benadrukt de bescherming van het kwetsbare 'ongeboren menselijk leven' tegen schade."
+        },
+        {
+          "sleutel": "Stijl-Retorische-Vraag",
+          "beschrijving": "Een vraag waarvan het antwoord al besloten ligt in de formulering zelf.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De vraag start met 'we zouden het toch met elkaar eens moeten zijn...' waar het verwachte antwoord al in besloten ligt."
+        },
+        {
+          "sleutel": "Stijl-Slogan",
+          "beschrijving": "Beknopte, pakkende frase.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "'verworden tot een dode letter' is een beknopte, vaste uitdrukking/frase die als stelling fungeert."
         }
       ],
       "oppositions": []
@@ -30094,6 +31190,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "De spreker citeert de mening van zorgprofessionals ('niemand die ik ken... in de zorg') en verwijst naar wetsevaluaties als onderbouwing voor de stelling dat de eisen zorgvuldig worden nageleefd."
+        },
+        {
+          "sleutel": "Stijl-Herhaling",
+          "beschrijving": "Herhaling van hetzelfde woord of dezelfde woordgroep binnen het fragment, ter nadruk.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het woord 'zorgvuldigheidseisen' wordt veelvuldig herhaald ter benadrukking van het belang ervan."
         }
       ],
       "oppositions": []
@@ -30541,6 +31645,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "De claim dat Thuisabortus.nl in strijd is met de wet wordt onderbouwd met de bewering van hoogleraar gezondheidsrecht Martin Buijsen."
+        },
+        {
+          "sleutel": "Stijl-Herhaling",
+          "beschrijving": "Herhaling van hetzelfde woord of dezelfde woordgroep binnen het fragment, ter nadruk.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De woorden 'minister' en 'handhaven'/'optreden' worden herhaaldelijk gebruikt om de vraag kracht bij te zetten."
         }
       ],
       "oppositions": []
@@ -31130,6 +32242,14 @@
           "perspectief": "Politicologisch & Sociaal-Psychologisch",
           "created_by": "llm",
           "reden": "De spreker benadrukt dat de zorg op een 'zorgvuldige, veilige manier' moet worden ingevuld, wat verwijst naar het voorkomen van schade en het bieden van zorg."
+        },
+        {
+          "sleutel": "Stijl-Herhaling",
+          "beschrijving": "Herhaling van hetzelfde woord of dezelfde woordgroep binnen het fragment, ter nadruk.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het woord 'recht' wordt meerdere keren herhaald ('verworven recht', 'recht te zijn van elke vrouw', 'recht op abortus')."
         }
       ],
       "oppositions": []
@@ -31717,6 +32837,14 @@
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker bekritiseert de reikwijdte van het Nederlandse beleid door te stellen dat we ons niet moeten mengen in de interne politieke processen van andere landen."
+        },
+        {
+          "sleutel": "Stijl-Retorische-Vraag",
+          "beschrijving": "Een vraag waarvan het antwoord al besloten ligt in de formulering zelf.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De vraag 'Waarom respecteren we niet dat die landen daarin ook een eigen proces voeren?' bevat het oordeel van de spreker al."
         }
       ],
       "oppositions": []
@@ -32123,6 +33251,14 @@
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker betwist de legitimiteit van het beleid door te stellen dat het versturen van pillen neerkomt op inmenging in de wetgeving van andere landen, waarmee de grenzen van nationale bevoegdheid en autoriteit centraal staan."
+        },
+        {
+          "sleutel": "Stijl-Slogan",
+          "beschrijving": "Beknopte, pakkende frase.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "'baas in eigen staat' is een beknopte, pakkende frase (afgeleid van 'baas in eigen buik')."
         }
       ],
       "oppositions": []
@@ -32641,6 +33777,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "Er wordt verwezen naar de specifieke groep vrouwen uit Europese landen die naar Nederland komen voor zorg als concreet voorbeeld van de huidige situatie."
+        },
+        {
+          "sleutel": "Stijl-Antithese",
+          "beschrijving": "Het naast elkaar plaatsen van twee tegengestelde begrippen of ideeën.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het fragment stelt 'zendingsdrang of met een verhaal naar die landen toe gaan' tegenover 'iets mogelijk maken voor vrouwen die voor een hele moeilijke en ingrijpende keuze staan'."
         }
       ],
       "oppositions": []
@@ -32734,6 +33878,14 @@
           "perspectief": "Politicologisch & Sociaal-Psychologisch",
           "created_by": "llm",
           "reden": "Het beschouwen van het afbreken van de zwangerschap als het 'afsnijden' van de toekomst en het benadrukken van het 'beschermen' van het ongeboren leven suggereert een focus op de onschendbaarheid en natuurlijke orde van het leven."
+        },
+        {
+          "sleutel": "Stijl-Antithese",
+          "beschrijving": "Het naast elkaar plaatsen van twee tegengestelde begrippen of ideeën.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het fragment zet 'een stap terug' direct tegenover 'een stap vooruit'."
         }
       ],
       "oppositions": []
@@ -32819,6 +33971,14 @@
           "perspectief": "Politicologisch & Sociaal-Psychologisch",
           "created_by": "llm",
           "reden": "De nadruk ligt expliciet op individuele autonomie en het recht om zelf te kiezen zonder dwang ('recht op een keuze')."
+        },
+        {
+          "sleutel": "Stijl-Antithese",
+          "beschrijving": "Het naast elkaar plaatsen van twee tegengestelde begrippen of ideeën.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het fragment stelt 'een beperking van een keuze' tegenover 'het recht op een keuze'."
         }
       ],
       "oppositions": []
@@ -32937,6 +34097,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "De claim wordt onderbouwd met kwantitatieve gegevens, namelijk de cijfers over 25 miljoen onveilige abortussen en 40.000 doden per jaar."
+        },
+        {
+          "sleutel": "Stijl-Retorische-Vraag",
+          "beschrijving": "Een vraag waarvan het antwoord al besloten ligt in de formulering zelf.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De spreker stelt de vraag 'over welke keuze heeft meneer Van Dijk het...?' om te benadrukken dat het in diens formulering geen echte keuze betreft."
         }
       ],
       "oppositions": []
@@ -33533,6 +34701,14 @@
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker betwist de interpretatie van de opponent door te stellen dat de feitelijke ontwikkelingen niet geduid kunnen worden als een 'conservatieve wind', waarmee de legitimiteit van die specifieke framing wordt aangevochten."
+        },
+        {
+          "sleutel": "Stijl-Herhaling",
+          "beschrijving": "Herhaling van hetzelfde woord of dezelfde woordgroep binnen het fragment, ter nadruk.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het woord 'daar' wordt kort achter elkaar herhaald ('Daar zitten wij...', 'Daar hebben wij...')."
         }
       ],
       "oppositions": []
@@ -35065,6 +36241,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "De claim wordt onderbouwd met kwantitatieve gegevens en schattingen ('cijfers', 'hoeveel', 'miljoenen')."
+        },
+        {
+          "sleutel": "Stijl-Herhaling",
+          "beschrijving": "Herhaling van hetzelfde woord of dezelfde woordgroep binnen het fragment, ter nadruk.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De woordgroep 'Ik schrik' wordt aan het begin van opeenvolgende zinnen herhaald ter benadrukking."
         }
       ],
       "oppositions": []
@@ -35167,6 +36351,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "De onderbouwing rust op een gestelde oorzaak-gevolgrelatie: het verbieden van abortus veroorzaakt onveilige abortussen zonder het aantal te verminderen."
+        },
+        {
+          "sleutel": "Stijl-Herhaling",
+          "beschrijving": "Herhaling van hetzelfde woord of dezelfde woordgroep binnen het fragment, ter nadruk.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De zinsconstructie 'We weten dus dat...' wordt ter benadrukking herhaald in het fragment."
         }
       ],
       "oppositions": []
@@ -35281,6 +36473,22 @@
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker afbakenen de discussie door te stellen dat het voorstel niet gaat om overheidsdistributie, maar puur om het wegnemen van een expliciet verbod op telemedicatie."
+        },
+        {
+          "sleutel": "Stijl-Antithese",
+          "beschrijving": "Het naast elkaar plaatsen van twee tegengestelde begrippen of ideeën.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Er wordt een tegenstelling gemaakt tussen de veronderstelling van overheidshandelen en het feitelijke wetsvoorstel."
+        },
+        {
+          "sleutel": "Stijl-Retorische-Vraag",
+          "beschrijving": "Een vraag waarvan het antwoord al besloten ligt in de formulering zelf.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De vraag 'Hoort dat niet bij de vrijheid van goederen en diensten binnen de EU...?' nodigt uit tot een vanzelfsprekend bevestigend antwoord."
         }
       ],
       "oppositions": []
@@ -35387,6 +36595,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "De claim wordt gesteund door het oordeel van de minister, die als autoriteit wordt aangehaald om de twijfel aan de haalbaarheid van de veiligheidseisen te onderbouwen."
+        },
+        {
+          "sleutel": "Stijl-Retorische-Vraag",
+          "beschrijving": "Een vraag waarvan het antwoord al besloten ligt in de formulering zelf.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De vraag 'Betekent dat dan niet al een no-go...?' wordt gesteld als een conclusie waarin het antwoord besloten ligt."
         }
       ],
       "oppositions": []
@@ -35598,6 +36814,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "De claims worden gesteund door het autoriteitsevenwicht van de 'vorige minister' wiens bedenkingen worden geciteerd."
+        },
+        {
+          "sleutel": "Stijl-Antithese",
+          "beschrijving": "Het naast elkaar plaatsen van twee tegengestelde begrippen of ideeën.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het fragment stelt wat in de ene samenleving als 'aanvaardbaar' geldt tegenover wat in een andere als 'immoreel' wordt beschouwd."
         }
       ],
       "oppositions": []
@@ -35691,6 +36915,14 @@
           "perspectief": "Politicologisch & Sociaal-Psychologisch",
           "created_by": "llm",
           "reden": "De nadruk op het 'waarborgen van de kwaliteit van zorg' en het zorgvuldig overwegen van interventies toont aandacht voor het welzijn en de veiligheid van de betrokkenen."
+        },
+        {
+          "sleutel": "Stijl-Herhaling",
+          "beschrijving": "Herhaling van hetzelfde woord of dezelfde woordgroep binnen het fragment, ter nadruk.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De zin 'Nieuw Sociaal Contract vindt het uitermate belangrijk om de reproductieve rechten van vrouwen te beschermen.' is letterlijk herhaald."
         }
       ],
       "oppositions": []
@@ -36471,6 +37703,14 @@
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker betoogt dat een parlement formeel niet bevoegd is om iets tot mensenrecht te verklaren zonder universele consensus, wat gaat over institutionele autoriteit en mandaat."
+        },
+        {
+          "sleutel": "Stijl-Retorische-Vraag",
+          "beschrijving": "Een vraag waarvan het antwoord al besloten ligt in de formulering zelf.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De vragen over wie een mensenrecht kan instellen worden gesteld om een absurditeit aan te tonen zonder dat een direct antwoord wordt verwacht."
         }
       ],
       "oppositions": []
@@ -36565,6 +37805,14 @@
           "perspectief": "Politicologisch & Sociaal-Psychologisch",
           "created_by": "llm",
           "reden": "De spreker benadrukt bezuinigingen op overheidsuitgaven (ontwikkelingssamenwerking), wat past bij de rechts-economische voorkeur voor beperking van de overheidsschuld en uitgaven."
+        },
+        {
+          "sleutel": "Stijl-Aangekondigde-Opsomming",
+          "beschrijving": "Vooraf het aantal elementen aankondigen (twee, drie, vijf, ...), gevolgd door een opsomming van precies dat aantal.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De spreker kondigt het aantal vooraf aan ('van de vier, de drie en de twee') en somt deze getallen vervolgens op."
         }
       ],
       "oppositions": []
@@ -36761,6 +38009,14 @@
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker vraagt naar het doel van het 'in kaart brengen' van standpunten, wat de legitimiteit en grenzen van de lopende discussie zelf ter discussie stelt."
+        },
+        {
+          "sleutel": "Stijl-Retorische-Vraag",
+          "beschrijving": "Een vraag waarvan het antwoord al besloten ligt in de formulering zelf.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Vragen zoals 'Leven we nu niet juist in een land...?' en 'Dus wat is het doel...?' worden gesteld om een eigen standpunt kracht bij te zetten."
         }
       ],
       "oppositions": []
@@ -36968,6 +38224,14 @@
           "perspectief": "Politicologisch & Sociaal-Psychologisch",
           "created_by": "llm",
           "reden": "Er wordt verwezen naar de bestaande wetgeving en de noodzaak om de daarin vastgelegde balans tussen waarden te respecteren en te herstellen."
+        },
+        {
+          "sleutel": "Stijl-Herhaling",
+          "beschrijving": "Herhaling van hetzelfde woord of dezelfde woordgroep binnen het fragment, ter nadruk.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het woord 'bijvoorbeeld' wordt drie keer achter elkaar herhaald om omstandigheden op te sommen."
         }
       ],
       "oppositions": []
@@ -37086,6 +38350,14 @@
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker betwist de legitimiteit van de linguïstische framing in de nota door te stellen dat abortus geen mensenrecht is, ondanks dat de nota dit als uitgangspunt neemt."
+        },
+        {
+          "sleutel": "Stijl-Retorische-Vraag",
+          "beschrijving": "Een vraag waarvan het antwoord al besloten ligt in de formulering zelf.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De vraag 'zou het dan niet zo kunnen zijn dat...' suggereert het antwoord al in de formulering zelf."
         }
       ],
       "oppositions": []
@@ -37419,6 +38691,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "Er wordt een logische oorzaak-gevolgrelatie gelegd: zonder echo (oorzaak) kan geen termijn bepaald of buitenbaarmoederlijke zwangerschap opgespoord worden (gevolg), waardoor het digitale consult onvoldoende is."
+        },
+        {
+          "sleutel": "Stijl-Retorische-Vraag",
+          "beschrijving": "Een vraag waarvan het antwoord al besloten ligt in de formulering zelf.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het fragment bevat vragen zoals 'hoe kan een arts de termijn bepalen zonder echo?' om een punt te maken over de onmogelijkheid van zorgvuldige termijnbepaling bij een digitaal consult."
         }
       ],
       "oppositions": []
@@ -37528,6 +38808,14 @@
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker betwist dat de beroepsgroep de bevoegdheid heeft om deze afweging te maken en stelt dat het een politieke afweging is die door de overheid geregeld moet worden."
+        },
+        {
+          "sleutel": "Stijl-Retorische-Vraag",
+          "beschrijving": "Een vraag waarvan het antwoord al besloten ligt in de formulering zelf.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De spreker stelt meerdere vragen over politieke/ethische keuzes en controle bij digitale consulten om bezwaren te onderstrepen."
         }
       ],
       "oppositions": []
@@ -37638,6 +38926,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "De claim over de risico's wordt onderbouwd door verwijzing naar de reactie van het kabinet en de inschatting van de minister."
+        },
+        {
+          "sleutel": "Stijl-Retorische-Vraag",
+          "beschrijving": "Een vraag waarvan het antwoord al besloten ligt in de formulering zelf.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De vragen over het dragen van consequenties en diplomatieke gevolgen zijn bedoeld om de risico's van het voorstel te benadrukken."
         }
       ],
       "oppositions": []
@@ -37747,6 +39043,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "Er wordt een logische verklaring gegeven dat betere ondersteuning (huisvesting, financiën) de keuze voor het uitdragen van de zwangerschap bevordert, waardoor het aantal abortussen daalt."
+        },
+        {
+          "sleutel": "Stijl-Herhaling",
+          "beschrijving": "Herhaling van hetzelfde woord of dezelfde woordgroep binnen het fragment, ter nadruk.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De uitdrukking 'We willen (ook) dat' wordt herhaald om de gezamenlijke wensen en doelen te benadrukken."
         }
       ],
       "oppositions": []
@@ -38212,6 +39516,14 @@
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De uiting verwijst naar de formele procedure en interactieve spelregels door te verwijzen naar een eerdere Kamerdebat en de vraag of de huidige weg de juiste is binnen het bestaande zorgkader."
+        },
+        {
+          "sleutel": "Stijl-Retorische-Vraag",
+          "beschrijving": "Een vraag waarvan het antwoord al besloten ligt in de formulering zelf.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De vragen 'Is dit nu de weg die we in moeten slaan?' en 'Bewegen we zo niet te ver weg van zorgvuldigheid?' worden gesteld om twijfel over het beleid te uiten."
         }
       ],
       "oppositions": []
@@ -38313,6 +39625,22 @@
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker vraagt expliciet hoe de inhoudelijke voorstellen zich verhouden tot de formele procedurele en wettelijke spelregels ('zorgvuldigheidseisen uit de wet') die de context van de discussie bepalen."
+        },
+        {
+          "sleutel": "Stijl-Aangekondigde-Opsomming",
+          "beschrijving": "Vooraf het aantal elementen aankondigen (twee, drie, vijf, ...), gevolgd door een opsomming van precies dat aantal.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De spreker kondigt aan de zorgvuldigheidseisen af te lopen en noemt er vervolgens exact vijf (bezoek aan arts, onontkoombare nood, voorlichting, vrijwilligheid, nazorg)."
+        },
+        {
+          "sleutel": "Stijl-Retorische-Vraag",
+          "beschrijving": "Een vraag waarvan het antwoord al besloten ligt in de formulering zelf.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De slotvraag 'Hoe kun je dit allemaal wegen in een digitaal consult?' benadrukt de onmogelijkheid hiervan volgens de spreker."
         }
       ],
       "oppositions": []
@@ -38631,6 +39959,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "Er wordt een logische keten gelegd tussen het verstrekken van de pil, het optreden van complicaties in het buitenland en het ontbreken van een duidelijk zorgpad."
+        },
+        {
+          "sleutel": "Stijl-Retorische-Vraag",
+          "beschrijving": "Een vraag waarvan het antwoord al besloten ligt in de formulering zelf.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De vragen over tot wie de vrouw zich moet wenden en hoe nazorg elders geregeld is, stellen de haalbaarheid van nazorg ter discussie."
         }
       ],
       "oppositions": []
@@ -38737,6 +40073,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "Er wordt verwezen naar een consultatieverslag waarin de mening van medische professionals (respondenten) wordt geciteerd als onderbouwing."
+        },
+        {
+          "sleutel": "Stijl-Retorische-Vraag",
+          "beschrijving": "Een vraag waarvan het antwoord al besloten ligt in de formulering zelf.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Er wordt een vraag gesteld aan de initiatiefnemer om kritisch te reflecteren op uitspraken van respondenten."
         }
       ],
       "oppositions": []
@@ -38822,6 +40166,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "Er wordt een logische verklaring gegeven waarbij twijfel over de zwangerschapsduur als oorzaak leidt tot de noodzaak van een fysiek consult als gevolg."
+        },
+        {
+          "sleutel": "Stijl-Herhaling",
+          "beschrijving": "Herhaling van hetzelfde woord of dezelfde woordgroep binnen het fragment, ter nadruk.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De zin 'Als er twijfel is bij de zorgverlener, is een fysiek consult op zijn plaats' herhaalt letterlijk de strekking van de voorgaande zin ter benadrukking."
         }
       ],
       "oppositions": []
@@ -39393,6 +40745,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "Er wordt een logische oorzaak-gevolgrelatie gelegd: geen toegang tot veilige zorg (oorzaak) resulteert in dwang tot uitdragen (gevolg)."
+        },
+        {
+          "sleutel": "Stijl-Antithese",
+          "beschrijving": "Het naast elkaar plaatsen van twee tegengestelde begrippen of ideeën.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het tegenhouden/voorkomen van het onder druk afbreken van de zwangerschap wordt tegenover het onder druk uitdragen van de zwangerschap geplaatst."
         }
       ],
       "oppositions": []
@@ -39869,6 +41229,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "De spreker citeert de standaardpraktijk in het medische veld en het gebruik van het professionele AMPLE-protocol als onderbouwing."
+        },
+        {
+          "sleutel": "Stijl-Aangekondigde-Opsomming",
+          "beschrijving": "Vooraf het aantal elementen aankondigen (twee, drie, vijf, ...), gevolgd door een opsomming van precies dat aantal.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De spreker kondigt aan dat er voorwaarden zijn ('Die voorwaarden zijn:') en somt daarna precies twee voorwaarden op (fysiek consult niet nodig, beschikken over actuele medicatiehistorie)."
         }
       ],
       "oppositions": []
@@ -41175,6 +42543,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "Er wordt een logische oorzaak-gevolgrelatie geschetst: digitale consulten kunnen stiekem worden opgenomen en verspreid, wat leidt tot veiligheidsrisico's."
+        },
+        {
+          "sleutel": "Stijl-Retorische-Vraag",
+          "beschrijving": "Een vraag waarvan het antwoord al besloten ligt in de formulering zelf.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De vraag over het stiekem opnemen van beelden wordt gebruikt om te wijzen op risico's voor de privacy en veiligheid van vrouwen."
         }
       ],
       "oppositions": []
@@ -41269,6 +42645,14 @@
           "perspectief": "Politicologisch & Sociaal-Psychologisch",
           "created_by": "llm",
           "reden": "Het argument legt nadruk op het respect voor bestaande wetgeving en de soevereiniteit van andere landen als legitieme autoriteit."
+        },
+        {
+          "sleutel": "Stijl-Retorische-Vraag",
+          "beschrijving": "Een vraag waarvan het antwoord al besloten ligt in de formulering zelf.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De vraag 'Dat is toch ook de definitie van inmenging?' dient om te stellen dat het handelen inderdaad inmenging inhoudt."
         }
       ],
       "oppositions": []
@@ -41540,6 +42924,14 @@
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker betwist de thematische grenzen van het debat door te stellen dat de claim dat het om 'abortuszorg in Nederland' gaat, niet klopt omdat de daadwerkelijke zorg in het buitenland plaatsvindt."
+        },
+        {
+          "sleutel": "Stijl-Retorische-Vraag",
+          "beschrijving": "Een vraag waarvan het antwoord al besloten ligt in de formulering zelf.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De spreker vraagt 'daar valt toch op z'n minst over te twisten?' en 'Denkt de initiatiefnemer niet dat een ander land dit heel anders kan opvatten...?' om het standpunt van de initiatiefnemer te bekritiseren."
         }
       ],
       "oppositions": []
@@ -41666,6 +43058,14 @@
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker betwist de thematische grenzen van het debat door te stellen dat de claim 'abortuszorg in Nederland' feitelijk niet opgaat omdat de handelingen elders plaatsvinden."
+        },
+        {
+          "sleutel": "Stijl-Retorische-Vraag",
+          "beschrijving": "Een vraag waarvan het antwoord al besloten ligt in de formulering zelf.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De vraag 'Vergt dit niet wat meer doordenken?' wordt gesteld om te concluderen dat het standpunt van de initiatiefnemer te kort door de bocht is."
         }
       ],
       "oppositions": []
@@ -41852,6 +43252,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "De onderbouwing bestaat uit persoonlijke observaties en specifieke voorbeelden uit de praktijkervaring van de spreker, niet uit statistieken of expertconsensus."
+        },
+        {
+          "sleutel": "Stijl-Antithese",
+          "beschrijving": "Het naast elkaar plaatsen van twee tegengestelde begrippen of ideeën.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De 'complicaties van een miskraam, van veilige abortuszorg' worden direct tegenover de 'afschuwelijke complicaties van een onveilige abortuszorg' geplaatst."
         }
       ],
       "oppositions": []
@@ -42391,6 +43799,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "De spreker vermeldt dat er 'voldoende bewijskracht' is, wat impliceert dat er onderliggende expertise of feitelijke onderbouwing bestaat die het nieuwe kader rechtvaardigt."
+        },
+        {
+          "sleutel": "Stijl-Herhaling",
+          "beschrijving": "Herhaling van hetzelfde woord of dezelfde woordgroep binnen het fragment, ter nadruk.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het woord 'denk' en de frase 'voldoende juridisch kader' worden herhaald binnen het argument ter benadrukking."
         }
       ],
       "oppositions": []
@@ -42781,6 +44197,14 @@
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker waarschuwt tegen het 'onmiddellijk' verder gaan met digitale consulten en benadrukt dat men niet 'meteen weer een stap verder' moet gaan, wat de chronologische volgorde en urgentie van beleidsstappen betwist."
+        },
+        {
+          "sleutel": "Stijl-Antithese",
+          "beschrijving": "Het naast elkaar plaatsen van twee tegengestelde begrippen of ideeën.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het zelfstandig toezicht van de IGJ wordt tegenover het meewegen van de Kameruitspraak bij de zoektocht geplaatst."
         }
       ],
       "oppositions": []
@@ -42887,6 +44311,14 @@
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker betwist de mogelijkheid van politieke uitspraken door te wijzen op de juridische onzekerheid en de institutionele taakverdeling tussen politiek en medische praktijk."
+        },
+        {
+          "sleutel": "Stijl-Retorische-Vraag",
+          "beschrijving": "Een vraag waarvan het antwoord al besloten ligt in de formulering zelf.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De vraag 'Dus we kunnen de zaak toch niet zomaar terugspelen?' heeft als impliciet antwoord dat dit inderdaad niet kan."
         }
       ],
       "oppositions": []
@@ -42972,6 +44404,14 @@
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker definieert de thematische grenzen van het debat door te stellen dat de kwestie niet apart aan de orde is gesteld omdat het onderdeel uitmaakt van een bredere wetgeving zonder onderscheid."
+        },
+        {
+          "sleutel": "Stijl-Antithese",
+          "beschrijving": "Het naast elkaar plaatsen van twee tegengestelde begrippen of ideeën.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Er wordt een tegenstelling gemaakt tussen de specifieke abortuszorg en heel veel andere medicijnen."
         }
       ],
       "oppositions": []
@@ -43150,6 +44590,14 @@
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker bekritiseert de formele procedure door te stellen dat de kwestie een 'expliciet apart debat' had moeten vergen, wat gaat over de interactieve spelregels en het vergaderformat."
+        },
+        {
+          "sleutel": "Stijl-Retorische-Vraag",
+          "beschrijving": "Een vraag waarvan het antwoord al besloten ligt in de formulering zelf.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De vraag of een expliciet apart debat niet vereist was stelt op retorische wijze dat dit wel het geval had moeten zijn."
         }
       ],
       "oppositions": []
@@ -43256,6 +44704,14 @@
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker bekritiseert de chronologische geschiktheid van het debat door te stellen dat de discussie 'achteraf' plaatsvindt terwijl de praktijk al gaande is."
+        },
+        {
+          "sleutel": "Stijl-Antithese",
+          "beschrijving": "Het naast elkaar plaatsen van twee tegengestelde begrippen of ideeën.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het 'aftrap voor de praktijk' zijn wordt afgezet tegen het feit dat het 'nu al gebeurt' en dat er achteraf gediscussieerd wordt."
         }
       ],
       "oppositions": []
@@ -43341,6 +44797,14 @@
           "perspectief": "Politicologisch & Sociaal-Psychologisch",
           "created_by": "llm",
           "reden": "Het argument beroept zich expliciet op individuele autonomie en de afwezigheid van dwang ('niemand ... gedwongen', 'keuzevrijheid')."
+        },
+        {
+          "sleutel": "Stijl-Herhaling",
+          "beschrijving": "Herhaling van hetzelfde woord of dezelfde woordgroep binnen het fragment, ter nadruk.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het woord 'niemand' wordt direct herhaald in 'Er is niemand, maar dan ook helemaal niemand' ter benadrukking."
         }
       ],
       "oppositions": []
@@ -43442,6 +44906,14 @@
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker bekritiseert de voorgestelde procedurele aanpassing (digitaal consult en postverzend) als onverenigbaar met de vereiste zorgvuldigheid binnen de huidige wettelijke setting."
+        },
+        {
+          "sleutel": "Stijl-Retorische-Vraag",
+          "beschrijving": "Een vraag waarvan het antwoord al besloten ligt in de formulering zelf.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De vraag of je de stap naar een digitaal consult en per post versturen moet maken bevat al de conclusie dat dit twijfelachtig is."
         }
       ],
       "oppositions": []
@@ -43654,6 +45126,14 @@
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De uiting beargumenteert waarom nieuw onderzoek op dit moment minder zinvol is dan het bekijken van bestaande handelingsperspectieven, wat de urgentie en prioriteitstelling van de discussie betreft."
+        },
+        {
+          "sleutel": "Stijl-Herhaling",
+          "beschrijving": "Herhaling van hetzelfde woord of dezelfde woordgroep binnen het fragment, ter nadruk.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De zinsstructuur 'Er is [...]' wordt herhaald in 'Er is namelijk al vastgesteld' en 'Er is juridisch onderzoek gedaan'."
         }
       ],
       "oppositions": []
@@ -43763,6 +45243,14 @@
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker definieert de grenzen van het debat door te stellen dat bepaalde vormen van ongemak en meningsuiting binnen de rechtsstaat moeten worden getolereerd, wat de toelaatbaarheid van discussiepunten afbakenen."
+        },
+        {
+          "sleutel": "Stijl-Herhaling",
+          "beschrijving": "Herhaling van hetzelfde woord of dezelfde woordgroep binnen het fragment, ter nadruk.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het begrip 'grondrechten' / 'grondrechtelijke' wordt binnen de passage herhaald om het centrale thema te benadrukken."
         }
       ],
       "oppositions": []
@@ -43957,6 +45445,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "De onderbouwing leunt op het oordeel en de routinepraktijk van specialisten (artsen/zorgverleners) die al met deze situatie omgaan."
+        },
+        {
+          "sleutel": "Stijl-Retorische-Vraag",
+          "beschrijving": "Een vraag waarvan het antwoord al besloten ligt in de formulering zelf.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De vraag hoe je kunt controleren of een vrouw niet onder dwang handelt dient als inleiding op de stelling dat dit nooit 100% zeker is."
         }
       ],
       "oppositions": []
@@ -44051,6 +45547,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "Er wordt verwezen naar de abortusrichtlijn van de WHO uit 2022 en algemene wetenschappelijke literatuur als onderbouwing."
+        },
+        {
+          "sleutel": "Stijl-Retorische-Vraag",
+          "beschrijving": "Een vraag waarvan het antwoord al besloten ligt in de formulering zelf.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De aangehaalde vraag hoe de duur van de zwangerschap zonder echo bepaald kan worden is een retorisch vertrekpunt om uit te leggen dat een echo niet altijd nodig is."
         }
       ],
       "oppositions": []
@@ -44319,6 +45823,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "De onderbouwing leunt op een algemene, niet-gestandaardiseerde observatie van de praktijk ('dagelijks bij de hand' versus 'een enkele keer') zonder specifieke statistische data of expertconsensus aan te halen."
+        },
+        {
+          "sleutel": "Stijl-Antithese",
+          "beschrijving": "Het naast elkaar plaatsen van twee tegengestelde begrippen of ideeën.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Er wordt een expliciete tegenstelling gemaakt tussen een abortuskliniek (die dit dagelijks doet) en een huisarts (een enkele keer)."
         }
       ],
       "oppositions": []
@@ -44420,6 +45932,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "Er wordt een causaal verband gelegd tussen het ontbreken van veilige zorg en het risico op 'illegale en onveilige praktijken' met gezondheidsrisico's."
+        },
+        {
+          "sleutel": "Stijl-Antithese",
+          "beschrijving": "Het naast elkaar plaatsen van twee tegengestelde begrippen of ideeën.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het recht op zelfbeschikking wordt geplaatst tegenover de nuance dat er geen absoluut recht op abortus bestaat."
         }
       ],
       "oppositions": []
@@ -44823,6 +46343,22 @@
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker bekritiseert de rol van de politiek door te stellen dat het besluit tot abortus niet aan de politiek toekomt, maar aan de zorgverlener en de vrouw, waarmee de institutionele taakverdeling wordt afgebakend."
+        },
+        {
+          "sleutel": "Stijl-Antithese",
+          "beschrijving": "Het naast elkaar plaatsen van twee tegengestelde begrippen of ideeën.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het besluit is 'niet aan ons/de politiek', maar juist 'iets tussen zorgverlener en de vrouw in nood'."
+        },
+        {
+          "sleutel": "Stijl-Herhaling",
+          "beschrijving": "Herhaling van hetzelfde woord of dezelfde woordgroep binnen het fragment, ter nadruk.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De frase 'zorgverlener en de vrouw in nood' wordt herhaaldelijk achter elkaar gebruikt ter benadrukking."
         }
       ],
       "oppositions": []
@@ -44916,6 +46452,14 @@
           "perspectief": "Politicologisch & Sociaal-Psychologisch",
           "created_by": "llm",
           "reden": "De verwijzing naar 'veilige' abortuszorg en het alertheid tonen op gebrek aan vertrouwen impliceert een zorgvuldigheidsplicht om schade of risico's voor betrokkenen te minimaliseren."
+        },
+        {
+          "sleutel": "Stijl-Antithese",
+          "beschrijving": "Het naast elkaar plaatsen van twee tegengestelde begrippen of ideeën.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het beogen van toegang tot veilige zorg wordt gezet tegenover het ontbreken van vertrouwen zolang waarborgen missen."
         }
       ],
       "oppositions": []
@@ -45026,6 +46570,14 @@
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker betoogt dat zorg een nationale competentie is en blijft, wat een uitspraak is over de institutionele taakverdeling en wettelijke autoriteit."
+        },
+        {
+          "sleutel": "Stijl-Herhaling",
+          "beschrijving": "Herhaling van hetzelfde woord of dezelfde woordgroep binnen het fragment, ter nadruk.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het woord 'juist' wordt kort achter elkaar herhaald ('juist ook kijken', 'Juist daarom')."
         }
       ],
       "oppositions": []
@@ -45217,6 +46769,14 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "Er wordt verwezen naar een specifiek voorbeeld (Hongarije en de Engelse taalvaardigheid daar) om de uitvoeringsproblemen te illustreren."
+        },
+        {
+          "sleutel": "Stijl-Retorische-Vraag",
+          "beschrijving": "Een vraag waarvan het antwoord al besloten ligt in de formulering zelf.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De vragen over taalvaardigheid van Hongaren en de inzet van tolken zijn bedoeld om de praktische bezwaren te onderstrepen."
         }
       ],
       "oppositions": []
@@ -45310,6 +46870,22 @@
           "perspectief": "Methodologisch & Contextueel",
           "created_by": "llm",
           "reden": "Er wordt een logisch verband gelegd tussen het handelen van de overheid (het juridische kader mogelijk maken) en de daadwerkelijke verstrekking van pillen."
+        },
+        {
+          "sleutel": "Stijl-Retorische-Vraag",
+          "beschrijving": "Een vraag waarvan het antwoord al besloten ligt in de formulering zelf.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De gestelde vragen over zorgvuldigheidseisen en gevolgen voor verhoudingen beargumenteren retorisch dat er grote knelpunten zijn."
+        },
+        {
+          "sleutel": "Stijl-Antithese",
+          "beschrijving": "Het naast elkaar plaatsen van twee tegengestelde begrippen of ideeën.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Er wordt een tegenstelling gemaakt tussen de overheid die niet verstrekt en de overheid die het wel juridisch mogelijk maakt."
         }
       ],
       "oppositions": []
@@ -45403,6 +46979,14 @@
           "perspectief": "Politicologisch & Sociaal-Psychologisch",
           "created_by": "llm",
           "reden": "De vraag 'moeten we wel willen' beroept zich op een maatschappelijke norm of traditie die de huidige ontwikkeling (digitalisering) als ongewenst of schending van orde beschouwt."
+        },
+        {
+          "sleutel": "Stijl-Retorische-Vraag",
+          "beschrijving": "Een vraag waarvan het antwoord al besloten ligt in de formulering zelf.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De principiële vraag of we moeten willen dat abortuszorg digitaal wordt verleend suggereert dat we dit niet moeten willen."
         }
       ],
       "oppositions": []
@@ -45590,6 +47174,22 @@
           "perspectief": "Politicologisch & Sociaal-Psychologisch",
           "created_by": "llm",
           "reden": "De nadruk ligt op het waarborgen van veiligheid, zorgvuldigheid en gegarandeerde nazorg om schade en leed bij patiënten te voorkomen."
+        },
+        {
+          "sleutel": "Stijl-Herhaling",
+          "beschrijving": "Herhaling van hetzelfde woord of dezelfde woordgroep binnen het fragment, ter nadruk.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het woord 'zorgvuldig' / 'superzorgvuldig' en de stam 'zorg'/'nazorg' worden intensief herhaald ter benadrukking."
+        },
+        {
+          "sleutel": "Stijl-Aangekondigde-Opsomming",
+          "beschrijving": "Vooraf het aantal elementen aankondigen (twee, drie, vijf, ...), gevolgd door een opsomming van precies dat aantal.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Er worden vooraf drie punten van zorgvuldigheid aangekondigd/opgesomd: de besluitvorming, de termijnbepaling en de mogelijkheid tot nazorg."
         }
       ],
       "oppositions": []
@@ -45707,6 +47307,14 @@
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker definieert de institutionele rol van de Nederlandse overheid ten opzichte van buitenlandse strafvervolging en de grenzen daarvan."
+        },
+        {
+          "sleutel": "Stijl-Antithese",
+          "beschrijving": "Het naast elkaar plaatsen van twee tegengestelde begrippen of ideeën.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het niet treden in strafvervolging door Polen wordt geplaatst tegenover het wel hardmaken voor een universeel eerlijk proces."
         }
       ],
       "oppositions": []
@@ -45893,69 +47501,69 @@
   "argument_count": 439,
   "tag_correspondence": {
     "inertia_pct": [
-      54.5,
-      14.3
+      52.4,
+      13.8
     ],
     "parties": [
       {
         "party": "BBB",
-        "x": -0.49162815273871013,
-        "y": -0.036786804842696676,
-        "n": 63
+        "x": -0.4161272710405284,
+        "y": -0.004345221939022256,
+        "n": 70
       },
       {
         "party": "ChristenUnie",
-        "x": -0.49569398671236825,
-        "y": -0.16364916645378383,
-        "n": 452
+        "x": -0.4740565890545492,
+        "y": -0.1280034120702314,
+        "n": 485
       },
       {
         "party": "D66",
-        "x": 0.4534459009963157,
-        "y": -0.14113101360340122,
-        "n": 673
+        "x": 0.450341785723014,
+        "y": -0.13278748414308308,
+        "n": 709
       },
       {
         "party": "FVD",
-        "x": -0.5545653318897514,
-        "y": -0.04142146390196034,
-        "n": 144
+        "x": -0.5374223078964765,
+        "y": -0.027891119066184387,
+        "n": 157
       },
       {
         "party": "GroenLinks-PvdA",
-        "x": 0.462556216702398,
-        "y": -0.07805409939547255,
-        "n": 385
+        "x": 0.45414013428045114,
+        "y": -0.075768045097454,
+        "n": 408
       },
       {
         "party": "NSC",
-        "x": -0.5690441332069914,
-        "y": 0.035749428788484486,
-        "n": 134
+        "x": -0.5328973446094726,
+        "y": 0.04926587693903706,
+        "n": 143
       },
       {
         "party": "PVV",
-        "x": -0.6546346498089807,
-        "y": 0.36204996135229944,
-        "n": 103
+        "x": -0.6792347904394738,
+        "y": 0.28036399233433895,
+        "n": 115
       },
       {
         "party": "SGP",
-        "x": -0.5853961796938858,
-        "y": -0.15053422315324935,
-        "n": 290
+        "x": -0.5955711476811305,
+        "y": -0.16925135021499946,
+        "n": 319
       },
       {
         "party": "SP",
-        "x": 0.5735277335797937,
-        "y": -0.23850678119657073,
-        "n": 145
+        "x": 0.5397907533598291,
+        "y": -0.32165756547235597,
+        "n": 156
       },
       {
         "party": "VVD",
-        "x": 0.15310856472883863,
-        "y": 0.45502901248117605,
-        "n": 536
+        "x": 0.17573057887360655,
+        "y": 0.45596322584713117,
+        "n": 564
       }
     ],
     "tags": [
@@ -45963,272 +47571,312 @@
         "sleutel": "Bewijs-Anekdotisch",
         "beschrijving": "Onderbouwd met één specifiek praktijkgeval, incident, exemplar of persoonlijk verhaal.",
         "labelgroep": "Type Bewijsvoering",
-        "x": -0.12593049737608208,
-        "y": -0.25524013360370473,
+        "x": -0.11097940589695086,
+        "y": -0.22111110472943316,
         "n": 47
       },
       {
         "sleutel": "Bewijs-Causaal",
         "beschrijving": "Onderbouwd met een heldere, mechanistische of logische verklaring van oorzaak en gevolg.",
         "labelgroep": "Type Bewijsvoering",
-        "x": 0.0631477539966209,
-        "y": 0.1341000386417081,
+        "x": 0.07509382781822595,
+        "y": 0.12647287872061647,
         "n": 107
       },
       {
         "sleutel": "Bewijs-Expert",
         "beschrijving": "Onderbouwd met de consensus, verklaring of het oordeel van een erkend specialist.",
         "labelgroep": "Type Bewijsvoering",
-        "x": 0.138379670523728,
-        "y": 0.21442449489673704,
+        "x": 0.15431351240787772,
+        "y": 0.2002442033939543,
         "n": 69
       },
       {
         "sleutel": "Bewijs-Statistisch",
         "beschrijving": "Onderbouwd met kwantitatieve gegevens, cijfers, percentages of grootschalig representatief onderzoek.",
         "labelgroep": "Type Bewijsvoering",
-        "x": 0.06633602995175462,
-        "y": -0.039279203199533055,
+        "x": 0.08725775169513608,
+        "y": -0.01703103972755343,
         "n": 69
       },
       {
         "sleutel": "Drogreden-Ad-Hominem",
         "beschrijving": "Persoonlijke aanval op de tegenstander (op de man spelen) in plaats van een inhoudelijke weerlegging.",
         "labelgroep": "Dialectische Kwaliteit",
-        "x": 0.9768799261961109,
-        "y": -0.5018859597207826,
+        "x": 0.9796805033631084,
+        "y": -0.48132457288962516,
         "n": 3
       },
       {
         "sleutel": "Drogreden-Bespelen-Publiek",
         "beschrijving": "Emotioneel argumenteren gericht op het oproepen van angst, woede of medelijden bij de toehoorder.",
         "labelgroep": "Dialectische Kwaliteit",
-        "x": -0.07346842174581528,
-        "y": -0.35381194087976414,
+        "x": -0.07101991426956805,
+        "y": -0.35382180073862,
         "n": 19
       },
       {
         "sleutel": "Drogreden-Stropop",
         "beschrijving": "Het vertekenen of overdrijven van het standpunt van de opponent om dit makkelijker te kunnen aanvallen.",
         "labelgroep": "Dialectische Kwaliteit",
-        "x": -0.4638048516555255,
-        "y": -0.02108489123530572,
+        "x": -0.4423780798290497,
+        "y": 0.006092223225627965,
         "n": 30
       },
       {
         "sleutel": "Drogreden-Vals-Dilemma",
         "beschrijving": "Zwart-wit denken; de situatie voorstellen alsof er slechts twee uiterste, elkaar uitsluitende opties bestaan.",
         "labelgroep": "Dialectische Kwaliteit",
-        "x": -0.8096629199450809,
-        "y": -0.010121471307605994,
+        "x": -0.8077820677795381,
+        "y": -0.011149818986388485,
         "n": 4
       },
       {
         "sleutel": "Frame-Conflict",
         "beschrijving": "De nadruk ligt op de felle strijd of meningsverschillen tussen personen, partijen of groepen.",
         "labelgroep": "Generieke Nieuwsframes",
-        "x": -0.35754689057793765,
-        "y": -0.06694427529509467,
+        "x": -0.3382486714916185,
+        "y": -0.04784798476059567,
         "n": 56
       },
       {
         "sleutel": "Frame-Economisch",
         "beschrijving": "De focus ligt op de financiële kosten, baten of budgettaire gevolgen van een kwestie.",
         "labelgroep": "Generieke Nieuwsframes",
-        "x": 0.4516195235031235,
-        "y": 0.12180266564072058,
+        "x": 0.45553405204914954,
+        "y": 0.03994298293391936,
         "n": 44
       },
       {
         "sleutel": "Frame-Episodisch",
         "beschrijving": "Inzoomen op een specifiek, individueel incident, persoonlijk verhaal of een concrete casus.",
         "labelgroep": "Framing-Focus",
-        "x": -0.05577476440404556,
-        "y": -0.5513253923311398,
+        "x": -0.04915112817234633,
+        "y": -0.5261826064827644,
         "n": 14
       },
       {
         "sleutel": "Frame-Menselijk-Belang",
         "beschrijving": "De focus ligt op de menselijke kant, de emoties of het individuele leed (Human Interest).",
         "labelgroep": "Generieke Nieuwsframes",
-        "x": 0.3099275357505226,
-        "y": -0.3894380363931603,
+        "x": 0.3198420930016321,
+        "y": -0.3717195980427318,
         "n": 73
       },
       {
         "sleutel": "Frame-Moraliteit",
         "beschrijving": "Inbranding vanuit ethische plichten, spirituele of religieuze principes.",
         "labelgroep": "Generieke Nieuwsframes",
-        "x": -0.35632138314773665,
-        "y": -0.2558214125057873,
+        "x": -0.34196706115751985,
+        "y": -0.226700065635799,
         "n": 164
       },
       {
         "sleutel": "Frame-Thematisch",
         "beschrijving": "Het benaderen van de kwestie vanuit een breder maatschappelijk, statistisch of historisch kader.",
         "labelgroep": "Framing-Focus",
-        "x": 0.02493382031583236,
-        "y": 0.06891310833511198,
+        "x": 0.03946027896089751,
+        "y": 0.07341483134134716,
         "n": 423
       },
       {
         "sleutel": "Frame-Verantwoordelijkheid",
         "beschrijving": "De nadruk ligt op de schuldvraag of de plicht tot het oplossen van het probleem.",
         "labelgroep": "Generieke Nieuwsframes",
-        "x": 0.048935793962342614,
-        "y": 0.14986113342018487,
+        "x": 0.059768053275954205,
+        "y": 0.1386310788942312,
         "n": 166
       },
       {
         "sleutel": "Ideologie-GAL",
         "beschrijving": "Progressief, ecologisch, kosmopolitisch (Green, Alternative, Libertarian).",
         "labelgroep": "Cultureel-Ideologische Breuklijn",
-        "x": 0.8529512180108236,
-        "y": -0.04716884302772763,
+        "x": 0.8624271995214611,
+        "y": -0.045692567850130365,
         "n": 208
       },
       {
         "sleutel": "Ideologie-Links-Economisch",
         "beschrijving": "Gericht op herverdeling van welvaart, sterke collectieve voorzieningen en overheidsingrijpen.",
         "labelgroep": "Cultureel-Ideologische Breuklijn",
-        "x": 0.7121975206080682,
-        "y": -0.47856148561520007,
+        "x": 0.7035885154319838,
+        "y": -0.5621593297751486,
         "n": 49
       },
       {
         "sleutel": "Ideologie-Rechts-Economisch",
         "beschrijving": "Gericht op de vrije markt, deregulering en individuele verantwoordelijkheid.",
         "labelgroep": "Cultureel-Ideologische Breuklijn",
-        "x": 0.3276546784626993,
-        "y": 1.9014358983881836,
+        "x": 0.38121525606507684,
+        "y": 1.9288483694927396,
         "n": 18
       },
       {
         "sleutel": "Ideologie-TAN",
         "beschrijving": "Conservatief, traditioneel, nationalistisch (Traditional, Authoritarian, Nationalist).",
         "labelgroep": "Cultureel-Ideologische Breuklijn",
-        "x": -1.0340984016880694,
-        "y": -0.07048007179261764,
+        "x": -1.0181332071393292,
+        "y": -0.05036457628432952,
         "n": 182
       },
       {
         "sleutel": "Meta-Agenda-Tijdigheid",
         "beschrijving": "Uitingen over de chronologische geschiktheid, de prioriteitstelling of de urgentie van de discussie op dit specifieke moment.",
         "labelgroep": "Metadiscussie",
-        "x": 0.1258421053262549,
-        "y": 0.2992759924119142,
+        "x": 0.14683961204694074,
+        "y": 0.33110098171426977,
         "n": 17
       },
       {
         "sleutel": "Meta-Bevoegdheid",
         "beschrijving": "Uitingen over het formele mandaat, de wettelijke of constitutionele autoriteit, of de institutionele taakverdeling om over de kwestie te beslissen.",
         "labelgroep": "Metadiscussie",
-        "x": -0.11284652935103016,
-        "y": 0.05872873240494986,
+        "x": -0.09553552878354916,
+        "y": 0.0891420493222727,
         "n": 29
       },
       {
         "sleutel": "Meta-Reikwijdte",
         "beschrijving": "Uitingen over de thematische grenzen van het debat, de toelaatbaarheid van specifieke beweringen, of de legitimiteit van bepaalde linguïstische framings.",
         "labelgroep": "Metadiscussie",
-        "x": -0.2528455819270287,
-        "y": 0.22379580901095522,
+        "x": -0.23207512379840592,
+        "y": 0.24435263655719924,
         "n": 42
       },
       {
         "sleutel": "Meta-Vorm-Setting",
         "beschrijving": "Uitingen over de formele procedure, de interactieve spelregels, het vergaderformat of de fysieke en institutionele context van de uitwisseling.",
         "labelgroep": "Metadiscussie",
-        "x": -0.6469591744186073,
-        "y": 0.5315675464684506,
+        "x": -0.6215612456716699,
+        "y": 0.525305548887726,
         "n": 18
       },
       {
         "sleutel": "Moraliteit-Autoriteit",
         "beschrijving": "Gericht op respect voor traditie, legitieme hiërarchie, wetten en maatschappelijke orde.",
         "labelgroep": "Morele Fundamenten",
-        "x": -0.6511351675108865,
-        "y": 0.25941218149539014,
+        "x": -0.6353517542663425,
+        "y": 0.260336807736126,
         "n": 135
       },
       {
         "sleutel": "Moraliteit-Eerlijkheid",
         "beschrijving": "Gericht op gelijke kansen, gelijke rechten en onpartijdige behandeling (equality).",
         "labelgroep": "Morele Fundamenten",
-        "x": 0.6173789082156518,
-        "y": -0.29627046461725054,
+        "x": 0.6191364537472498,
+        "y": -0.3486889572999615,
         "n": 44
       },
       {
         "sleutel": "Moraliteit-Loyaliteit",
         "beschrijving": "Gericht op groeps-solidariteit, vaderlandsliefde en trouw aan de eigen gemeenschap (in-group).",
         "labelgroep": "Morele Fundamenten",
-        "x": -0.9193631631876744,
-        "y": 0.2713285295700162,
+        "x": -0.9125475506838892,
+        "y": 0.2582019316393059,
         "n": 11
       },
       {
         "sleutel": "Moraliteit-Vrijheid",
         "beschrijving": "Gericht op individuele autonomie en weerstand tegen dwang of onderdrukking door dominante actoren.",
         "labelgroep": "Morele Fundamenten",
-        "x": 0.6038503238617192,
-        "y": 0.08373771081459733,
+        "x": 0.6205961609561829,
+        "y": 0.09814180311624739,
         "n": 153
       },
       {
         "sleutel": "Moraliteit-Zorg",
         "beschrijving": "Gericht op empathie, compassie en het voorkomen van leed en schade bij kwetsbaren.",
         "labelgroep": "Morele Fundamenten",
-        "x": 0.08308747222660576,
-        "y": -0.15063932613584932,
+        "x": 0.09425592564071647,
+        "y": -0.14666652271116168,
         "n": 261
       },
       {
         "sleutel": "Moraliteit-Zuiverheid",
         "beschrijving": "Gericht op het vermijden van morele of fysieke besmetting; streven naar het schone, natuurlijke of verhevene.",
         "labelgroep": "Morele Fundamenten",
-        "x": -1.1615552043450736,
-        "y": -0.45581424960572725,
+        "x": -1.1478252327624183,
+        "y": -0.4242041700669542,
         "n": 36
+      },
+      {
+        "sleutel": "Stijl-Aangekondigde-Opsomming",
+        "beschrijving": "Vooraf het aantal elementen aankondigen (twee, drie, vijf, ...), gevolgd door een opsomming van precies dat aantal.",
+        "labelgroep": "Stijlmiddelen",
+        "x": 0.35942106326253515,
+        "y": 0.32259960853202524,
+        "n": 14
+      },
+      {
+        "sleutel": "Stijl-Antithese",
+        "beschrijving": "Het naast elkaar plaatsen van twee tegengestelde begrippen of ideeën.",
+        "labelgroep": "Stijlmiddelen",
+        "x": 0.028707067098015838,
+        "y": -0.1863205339814854,
+        "n": 62
+      },
+      {
+        "sleutel": "Stijl-Herhaling",
+        "beschrijving": "Herhaling van hetzelfde woord of dezelfde woordgroep binnen het fragment, ter nadruk.",
+        "labelgroep": "Stijlmiddelen",
+        "x": -0.013590659155700938,
+        "y": 0.1411435038853349,
+        "n": 50
+      },
+      {
+        "sleutel": "Stijl-Retorische-Vraag",
+        "beschrijving": "Een vraag waarvan het antwoord al besloten ligt in de formulering zelf.",
+        "labelgroep": "Stijlmiddelen",
+        "x": -0.6401783463366076,
+        "y": -0.19006454074436416,
+        "n": 68
+      },
+      {
+        "sleutel": "Stijl-Slogan",
+        "beschrijving": "Beknopte, pakkende frase.",
+        "labelgroep": "Stijlmiddelen",
+        "x": -0.3116390350551522,
+        "y": 0.023064918308078226,
+        "n": 7
       },
       {
         "sleutel": "Walton-Analogie",
         "beschrijving": "Er wordt een vergelijking getrokken met een historische gebeurtenis, een andere specifieke casus of een precedent.",
         "labelgroep": "Redeneerschema",
-        "x": -0.33340879881095786,
-        "y": -0.21615942207678956,
+        "x": -0.3159906806394983,
+        "y": -0.16372246440426105,
         "n": 24
       },
       {
         "sleutel": "Walton-Causaal",
         "beschrijving": "Argumentatie gebaseerd op een directe oorzaak-gevolgrelatie.",
         "labelgroep": "Redeneerschema",
-        "x": -0.14874203785198117,
-        "y": 0.3411410122367011,
+        "x": -0.11301045770557924,
+        "y": 0.3771737385129428,
         "n": 18
       },
       {
         "sleutel": "Walton-Consequentie",
         "beschrijving": "Het verdedigen of aanvallen van een standpunt op basis van de verwachte praktische (voordelige of nadelige) gevolgen.",
         "labelgroep": "Redeneerschema",
-        "x": 0.09498745538016083,
-        "y": -0.015272133034073349,
+        "x": 0.1084012371190174,
+        "y": -0.01508944184688771,
         "n": 178
       },
       {
         "sleutel": "Walton-Expertise",
         "beschrijving": "Het argument leunt op de autoriteit, bevindingen of de verklaring van een specialist of expert.",
         "labelgroep": "Redeneerschema",
-        "x": 0.16851954139754352,
-        "y": 0.34391733000694324,
+        "x": 0.1798658854710083,
+        "y": 0.3134117087694478,
         "n": 42
       },
       {
         "sleutel": "Walton-Regel",
         "beschrijving": "Het argument beroept zich op een reeds gevestigde wet, formele regel of breed geaccepteerde maatschappelijke norm.",
         "labelgroep": "Redeneerschema",
-        "x": -0.015150441265454317,
-        "y": 0.04852707990308367,
+        "x": -0.0022934025803297425,
+        "y": 0.05639247318265265,
         "n": 171
       }
     ]

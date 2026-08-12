@@ -166,6 +166,14 @@ _GEEN_TAG = object()
 _GEEN_TAG_WAARDEN = (None, [], "null")
 
 
+def _normalize_sleutel(sleutel):
+    """Modellen plakken soms een spatie rond het streepje in een sleutel (bv.
+    'Stijl- Herhaling' i.p.v. 'Stijl-Herhaling') -- vormfoutje, geen andere
+    sleutel bedoeld. Normaliseren vóór de allowed-check, anders wordt een
+    correcte herkenning stilzwijgend als 'onbekende sleutel' weggegooid."""
+    return re.sub(r"\s*-\s*", "-", sleutel.strip())
+
+
 def _coerce_tag_entry(entry):
     """Accepteert zowel het nieuwe {sleutel, reden}-object als (voor
     achterwaartse compatibiliteit met oudere geplakte Gemini-antwoorden) een
@@ -173,13 +181,13 @@ def _coerce_tag_entry(entry):
     als het model expliciet "geen tag" bedoelde, of None bij een echt
     onherkenbare vorm."""
     if isinstance(entry, str):
-        return entry, None
+        return _normalize_sleutel(entry), None
     if isinstance(entry, dict) and "sleutel" in entry:
         sleutel = entry["sleutel"]
         if sleutel in _GEEN_TAG_WAARDEN:
             return _GEEN_TAG
         if isinstance(sleutel, str):
-            return sleutel, entry.get("reden")
+            return _normalize_sleutel(sleutel), entry.get("reden")
     return None
 
 

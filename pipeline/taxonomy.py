@@ -9,6 +9,7 @@ deze structuurkeuze te hoeven begrijpen of onderhouden.
 LABELGROEP_SELECTIE = {
     "Redeneerschema": "enkel",  # één primair redeneerschema per argument
     "Dialectische Kwaliteit": "meervoud",  # Kwaliteit-Zuiver of één of meer drogredenen kunnen samen voorkomen
+    "Stijlmiddelen": "meervoud",  # meerdere stijlmiddelen kunnen tegelijk voorkomen in één argument
     "Framing-Focus": "enkel",  # episodisch/thematisch is per definitie exclusief
     "Generieke Nieuwsframes": "meervoud",  # frames kunnen samen voorkomen (bv. conflict + economisch)
     "Issue Arena": "enkel",  # één bron-arena per document
