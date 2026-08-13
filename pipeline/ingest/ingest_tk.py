@@ -234,6 +234,18 @@ TOPIC_EXCLUDE_ACTIVITEITEN = {
         "Arbeidsmigratie",
         "Wet toelating terbeschikkingstelling van arbeidskrachten",
     ],
+    "energietransitie": [
+        # Zelfde-dag Vergadering/Verslag-koppeling (zie odata.py) bundelt een
+        # plenaire vergaderdag als geheel: een energie/klimaat-debat op die
+        # dag trekt zo ook de andere agendapunten van diezelfde vergadering
+        # binnen, ook al gaan die nergens over energie of klimaat.
+        "Mestbeleid",
+        "NAVO-ministeriële 3-4 april 2025",
+        "Instellingswet Adviescollege toetsing regeldruk",
+        "Gewasbeschermingsmiddelen",
+        "Wijziging begroting Volksgezondheid, Welzijn en Sport 2025 samenhangende met de Voorjaarsnota",
+        "Nationale fiscaliteit",
+    ],
 }
 
 # Tweede exclusiegrond, naast de letterlijke titels hierboven: een woord in de
