@@ -147,4 +147,35 @@ function tagPills(verwacht: string[] = [], voorspeld: string[] = []) {
 			{items.length === 0 && <p class="panel-note">Geen voorbeelden in deze categorie.</p>}
 		</details>
 	))}
+
+	<h2>Beperkingen van de referentiedataset</h2>
+	<p>
+		Haddadan et al. (2018) hebben honderden minuten aan presidentiële debatten met de hand
+		doorgelabeld op claims, premissen en hun onderlinge relaties — precies dat handwerk maakt
+		onafhankelijke validatie tegen een externe bron zoals hier pas mogelijk.
+	</p>
+	<p>Niet elke score-afwijking hierboven is dan ook een fout van onze pipeline. Twee voorbeelden uit de "Onterecht herkend als argument"-lijst:</p>
+	<ul>
+		<li>
+			<strong>Ontbrekende annotatie.</strong> <q><em>"The NAFTA agreement is defective. Just because
+			of the tax and many other reasons, but just because of the fact…"</em></q> (Trump) is evident een
+			standpunt met onderbouwing, maar de dataset heeft hier geen Claim-Premise-paar met een
+			Support-relatie geannoteerd. Onze extractie vindt het argument dus terecht; de referentiedataset
+			mist hier zelf een annotatie.
+		</li>
+		<li>
+			<strong>Te korte/inconsistente spangrenzen.</strong> Dezelfde stop-and-frisk-uitspraak van Trump
+			staat in de dataset met twee verschillende spangrenzen — eenmaal mét de aanloop over dalende
+			criminaliteitscijfers, eenmaal alleen het sluitstuk <q><em>"stop-and-frisk had a tremendous impact
+			on the safety of New York City. Tremendous beyond belief"</em></q>. Losstaand, zonder die
+			voorafgaande cijfers, leest die korte versie niet overtuigend als de gelabelde "Appeal to
+			Emotion" — eerder als een kale bewering. Zo'n te kort afgesneden span is voor mens én model
+			moeilijk eenduidig te classificeren.
+		</li>
+	</ul>
+	<p>
+		Dat zijn precies de grensgevallen die je verwacht bij handmatige annotatie op deze schaal, geen
+		reden om de dataset zelf te wantrouwen — zie <code>docs/eval-elecdebate.md</code> voor de volledige
+		toelichting.
+	</p>
 </BaseLayout>
