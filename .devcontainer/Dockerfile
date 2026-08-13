@@ -6,5 +6,5 @@ FROM mcr.microsoft.com/devcontainers/base:ubuntu
 # eigen managed build, dus zonder deze laag faalt zelfs `uv run pytest` met
 # "No module named 'shlex'".
 RUN apt-get update \
-	&& apt-get install -y --no-install-recommends python3.14 \
+	&& apt-get install -y --no-install-recommends python3.14 sqlite3 \
 	&& rm -rf /var/lib/apt/lists/*
