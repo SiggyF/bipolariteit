@@ -4,13 +4,20 @@ import stikstof from "../../../data/export/topics/stikstof.json";
 import abortus from "../../../data/export/topics/abortus.json";
 
 describe("parseTopicDescription", () => {
-	it("splitst stikstof (intro + pro + contra + disclaimer)", () => {
+	it("splitst stikstof (intro + pro + contra, geen disclaimer)", () => {
 		const parsed = parseTopicDescription(stikstof.description as string);
 		expect(parsed.intro).toHaveLength(1);
 		expect(parsed.intro[0]).toMatch(/^Dit debat gaat over het Nederlandse stikstofbeleid/);
 		expect(parsed.pro).toMatch(/^voorstander van verplichtende, stevige stikstofreductie/);
 		expect(parsed.contra).toMatch(/^voorstander van afzwakking, uitstel/);
-		expect(parsed.note).toMatch(/^Let op: dit is puur een classificatie-hulpmiddel/);
+		expect(parsed.note).toBeNull();
+	});
+
+	it("splitst een disclaimer na CONTRA af als note", () => {
+		const parsed = parseTopicDescription("Intro.\n\nPRO = a.\n\nCONTRA = b.\n\nLet op: een disclaimer.");
+		expect(parsed.pro).toBe("a.");
+		expect(parsed.contra).toBe("b.");
+		expect(parsed.note).toBe("Let op: een disclaimer.");
 	});
 
 	it("splitst abortus (intro + pro + contra, geen disclaimer)", () => {
