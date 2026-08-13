@@ -575,6 +575,20 @@ const chartOption = computed(() => {
 	};
 	const range = radius.value;
 
+	// Relatief aan de grootste `n` in déze selectie, niet aan een vaste absolute
+	// waarde: bij een topic met veel argumenten (bv. stikstof, ~2000) haalt
+	// vrijwel elke tag/rij eerder al `sqrt(n) * 3,2` boven de oude vaste
+	// bovengrens, en werd bijna elk punt hetzelfde maximale formaat (zie #88).
+	// Schalen t.o.v. het eigen maximum houdt het volledige bereik (min..max)
+	// altijd in gebruik, ongeacht hoe groot het topic is.
+	const maxRowN = Math.max(...c.rows.map((p) => p.n), 1);
+	const maxTagN = Math.max(...c.tags.map((p) => p.n), 1);
+	const ROW_SIZE = { min: 9, max: 24 };
+	const TAG_SIZE = { min: 13, max: 28 };
+	function sizeFor(n: number, maxN: number, { min, max }: { min: number; max: number }): number {
+		return min + (max - min) * Math.sqrt(n / maxN);
+	}
+
 	// Drempel waarboven een tag zijn naam vast in beeld houdt. In 3D op diepte
 	// i.p.v. frequentie: anders blijft het altijd dezelfde twaalf (globaal
 	// vaakst toegekende) tags, ook als je wegdraait van de plek waar ze staan.
@@ -646,7 +660,7 @@ const chartOption = computed(() => {
 				// De vereenvoudigde iconenset (en de initiaal-tegel) is één vast
 				// vierkant canvas per partij, dus in tegenstelling tot de officiële
 				// wordmarks hoeft de maat hier niet naar een eigen verhouding te kijken.
-				const size = Math.max(9, Math.min(24, Math.sqrt(point.n) * 3.2)) * scale * 1.15;
+				const size = sizeFor(point.n, maxRowN, ROW_SIZE) * scale * 1.15;
 				return {
 					name: unit.value === "persoon" ? point.label : displayPartyName(point.label),
 					rowLabel: point.label,
@@ -708,7 +722,7 @@ const chartOption = computed(() => {
 						beschrijving: point.beschrijving,
 						labelgroep: point.labelgroep,
 						perspectief: point.perspectief,
-						symbolSize: Math.max(13, Math.min(28, Math.sqrt(point.n) * 3.2)) * scale * 0.6,
+						symbolSize: sizeFor(point.n, maxTagN, TAG_SIZE) * scale * 0.6,
 						// Effen cirkel: iconen per tag (vijftig) en zelfs per perspectief
 						// (vier) lazen op kaartschaal niet als teken, zeker in een dichte
 						// cluster -- alleen kleur nog. Niet lager dan 0,75 opacity: op deze
