@@ -13,7 +13,7 @@ else
   RESOLVE_BASE_URL = scripts/detect_llm_base_url.sh
 endif
 
-.PHONY: help probe test test-js test-frontend ca-fixture status build dev dev-stop extract extract-agy tag tag-agy redactie validate export tags-taxonomy db-init pipeline-status backup-db release release-dry release-www release-www-dry check-public-exposure argument-doc confrontatie-tree
+.PHONY: help probe test test-js test-frontend ca-fixture status build dev dev-stop extract extract-agy tag tag-agy redactie validate export enrich-video tags-taxonomy db-init pipeline-status backup-db release release-dry release-www release-www-dry check-public-exposure argument-doc confrontatie-tree
 
 help: ## Toon deze lijst
 	@grep -E '^[a-zA-Z_-]+:.*## ' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*## "}; {printf "  \033[36m%-16s\033[0m %s\n", $$1, $$2}'
@@ -71,8 +71,12 @@ validate: ## Evalharnas draaien tegen een gouden validatiedataset (issue #62), z
 	@url=$$($(RESOLVE_BASE_URL)) || exit 1; \
 	uv run python -m pipeline.eval.benchmark_elecdebate data/raw/$(DATASET)/test.jsonl $(MODEL) --dataset $(DATASET) --base-url $$url --limit $(LIMIT)
 
-export: ## SQLite -> data/export/topics/<slug>.json + topics-index.json, voor alle topics
+export: ## SQLite -> data/export/topics/<slug>.json + topics-index.json, voor alle topics (incl. video_url-enrichment)
+	uv run python -m pipeline.enrich_video_url
 	uv run python -m pipeline.build_static_data
+
+enrich-video: ## Vult documents.video_url via Debat Direct (geen LLM, geen netstroom nodig). Vars: TOPIC
+	uv run python -m pipeline.enrich_video_url --topic $(TOPIC)
 
 argument-doc: ## Exporteert alle pro/contra-argumenten van TOPIC (met claims/opposities) als markdown, voor handmatig structureren via Gemini -- geen LLM-call
 	uv run python -m pipeline.export_argument_doc --topic $(TOPIC)

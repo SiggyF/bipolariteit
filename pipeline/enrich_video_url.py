@@ -14,12 +14,16 @@ Idempotent via documents.video_url IS NULL; een debat waarvoor geen
 bevredigende match gevonden wordt, blijft NULL (geen gok, geen foutieve link).
 
 Gebruik:
-    uv run python -m pipeline.enrich_video_url --topic stikstof [--dry-run]
+    uv run python -m pipeline.enrich_video_url [--topic stikstof] [--dry-run]
+
+Zonder --topic: alle topics, zodat een nieuw topic of een topic waarvoor
+deze stap nog nooit gedraaid is niet stilzwijgend achterblijft (zie issue
+#83). Draait ook automatisch mee in `make export`.
 """
 
 import argparse
 import logging
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import requests
 
@@ -40,6 +44,14 @@ MAX_START_DIFF_SECONDS = 5 * 60
 # een factor 2 afwijkt van onze eigen duur is vermoedelijk het verkeerde debat,
 # ook als de starttijd toevallig dichtbij ligt.
 MAX_DURATION_RATIO = 2.0
+
+# Debat Direct indexeert een vergadering onder de kalenderdag waarop ze begon,
+# niet de dag van elk afzonderlijk moment erin. Een laat-avondvergadering met
+# stemmingen die over middernacht doorloopt, krijgt dus als aanvangstijd bv.
+# "2023-07-07T01:04:12" (ná middernacht) terwijl Debat Direct 'm indexeert
+# onder "2023-07-06". Zoek daarom ook de vorige kalenderdag mee als onze
+# aanvangstijd vroeg in de nacht valt (zie issue #83).
+EARLY_HOUR_THRESHOLD = 6
 
 
 def fetch_pending_activiteiten(conn, topic_id):
@@ -69,6 +81,19 @@ def _parse_dt(value):
         return datetime.fromisoformat(value)
     except ValueError:
         return None
+
+
+def search_dates_for(aanvangstijd):
+    """Kalenderdagen om op Debat Direct te doorzoeken voor een gegeven
+    activiteit_aanvangstijd. Meestal alleen die dag zelf; bij een vroege
+    starttijd (over-middernacht-vergadering) ook de dag ervoor, want Debat
+    Direct indexeert zo'n vergadering onder de dag waarop ze begon."""
+    start_dt = _parse_dt(aanvangstijd)
+    date_str = aanvangstijd[:10]
+    if start_dt is not None and start_dt.hour < EARLY_HOUR_THRESHOLD:
+        previous_day = (start_dt.date() - timedelta(days=1)).isoformat()
+        return [previous_day, date_str]
+    return [date_str]
 
 
 def search_debates(session, date_str):
@@ -143,8 +168,29 @@ def enrich(topic_keyword, dry_run=False):
     topic_row = conn.execute("SELECT id FROM topics WHERE slug = ?", (topic_keyword,)).fetchone()
     if topic_row is None:
         raise SystemExit(f"onbekende topic-slug: {topic_keyword}")
-    topic_id = topic_row["id"]
+    try:
+        _enrich_topic(conn, topic_row["id"], dry_run=dry_run)
+    finally:
+        conn.close()
 
+
+def enrich_all(dry_run=False):
+    """Alle topics in één keer, zodat een nieuw topic of een topic met
+    verouderde video_url-dekking nooit los onthouden hoeft te worden --
+    zie issue #83 (39% ontbrekende video_url's kwam doordat deze stap
+    per topic handmatig gedraaid moest worden en dat voor nieuwe topics
+    niet gebeurd was)."""
+    conn = db.connect()
+    try:
+        topic_rows = conn.execute("SELECT id, slug FROM topics ORDER BY slug").fetchall()
+        for topic_row in topic_rows:
+            logger.info("=== topic: %s ===", topic_row["slug"])
+            _enrich_topic(conn, topic_row["id"], dry_run=dry_run)
+    finally:
+        conn.close()
+
+
+def _enrich_topic(conn, topic_id, dry_run=False):
     groups = fetch_pending_activiteiten(conn, topic_id)
     if not groups:
         logger.info("Geen documenten zonder video_url met een bekende activiteit_aanvangstijd.")
@@ -153,12 +199,17 @@ def enrich(topic_keyword, dry_run=False):
     session = requests.Session()
     matched, unmatched = 0, 0
     for (aanvangstijd, eindtijd), document_ids in groups.items():
-        date_str = aanvangstijd[:10]
+        date_strs = search_dates_for(aanvangstijd)
+        candidates_by_key = {}
         try:
-            candidates = search_debates(session, date_str)
+            for date_str in date_strs:
+                for cand in search_debates(session, date_str):
+                    key = (cand.get("slug"), cand.get("startsAt"))
+                    candidates_by_key[key] = cand
         except requests.RequestException as exc:
-            logger.error("Zoekopdracht mislukt voor %s: %s", date_str, exc)
+            logger.error("Zoekopdracht mislukt voor %s: %s", "/".join(date_strs), exc)
             continue
+        candidates = list(candidates_by_key.values())
 
         best = find_best_match(candidates, aanvangstijd, eindtijd)
         if best is None:
@@ -183,7 +234,6 @@ def enrich(topic_keyword, dry_run=False):
 
     if not dry_run:
         conn.commit()
-    conn.close()
 
     logger.info("Klaar: %d activiteiten gematcht, %d zonder match (van %d totaal).", matched, unmatched, len(groups))
     if dry_run:
@@ -192,10 +242,13 @@ def enrich(topic_keyword, dry_run=False):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("--topic", required=True, help="topic-slug, bv. stikstof")
+    parser.add_argument("--topic", help="topic-slug, bv. stikstof (default: alle topics)")
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
-    enrich(args.topic, dry_run=args.dry_run)
+    if args.topic:
+        enrich(args.topic, dry_run=args.dry_run)
+    else:
+        enrich_all(dry_run=args.dry_run)
 
 
 if __name__ == "__main__":

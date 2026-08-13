@@ -106,6 +106,17 @@ def topic_status(conn, topic_id, topic_slug, vanaf):
         (topic_id, REDACTIE_PROMPT_VERSION),
     )
 
+    # video_url-enrichment (pipeline/enrich_video_url.py) draait mee in
+    # `make export`, maar wordt hier ook los geteld: anders valt een topic
+    # waarvoor de enrichment nog nooit draaide (bv. net toegevoegd) pas op
+    # als iemand toevallig de export-output leest (zie issue #83).
+    pending_video = _count(
+        conn,
+        """SELECT COUNT(*) FROM documents
+           WHERE topic_id = ? AND video_url IS NULL AND activiteit_aanvangstijd IS NOT NULL""",
+        (topic_id,),
+    )
+
     return {
         "documents": total_documents,
         "voorzitter_turns": voorzitter_turns,
@@ -116,6 +127,7 @@ def topic_status(conn, topic_id, topic_slug, vanaf):
         "outdated_tagging": outdated_tagging,
         "pending_redactie": pending_redactie,
         "outdated_redactie": outdated_redactie,
+        "pending_video": pending_video,
     }
 
 
@@ -151,6 +163,10 @@ def print_report(conn, topics):
         logger.info(
             "  redactie:   %d documenten nog niet gecontroleerd | %d reviews met verouderde prompt",
             status["pending_redactie"], status["outdated_redactie"],
+        )
+        logger.info(
+            "  video_url:  %d documenten nog zonder video_url (make enrich-video TOPIC=%s)",
+            status["pending_video"], topic["slug"],
         )
 
 
