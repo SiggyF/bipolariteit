@@ -5,6 +5,7 @@
 // gebruiken.
 const PARTY_ALIASSEN: Record<string, string> = {
 	"Nieuw Sociaal Contract": "NSC",
+	FvD: "FVD",
 };
 
 /** Normaliseert een partijnaam uit de brondata naar de canonieke afkorting,

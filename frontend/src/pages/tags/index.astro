@@ -4,6 +4,7 @@ import { TAXONOMIE } from "../../lib/taxonomy";
 import { PERSPECTIEVEN, ICOON_PAD } from "../../lib/tagIcons.generated";
 import { tagIconPath, perspectiefWeergaveNaam } from "../../lib/tagIcon";
 import { slugify } from "../../lib/slug";
+import { canonicalParty } from "../../lib/parties";
 
 const topicModules = import.meta.glob("../../../../data/export/topics/*.json", { eager: true }) as Record<
 	string,
@@ -18,7 +19,7 @@ for (const mod of Object.values(topicModules)) {
 			counts.set(tag.sleutel, (counts.get(tag.sleutel) ?? 0) + 1);
 			if (argument.actor.party) {
 				const set = partiesPerTag.get(tag.sleutel) ?? new Set<string>();
-				set.add(argument.actor.party);
+				set.add(canonicalParty(argument.actor.party));
 				partiesPerTag.set(tag.sleutel, set);
 			}
 		}

@@ -87,9 +87,23 @@ def _speaker_name(spreker_el):
     return weergavenaam.strip() if weergavenaam and weergavenaam.strip() else "Onbekend"
 
 
+# <fractie> in de VLOS-data is niet altijd consistent: soms de afkorting,
+# soms de voluit geschreven naam (bv. "Nieuw Sociaal Contract" i.p.v. "NSC",
+# "FvD" i.p.v. "FVD"), afhankelijk van het debat/de periode. Zonder
+# normalisatie krijgt dezelfde spreker twee actor-rijen, en splitst dat
+# argumenten/documenten over allebei. Zie ook PARTY_ALIASSEN in
+# frontend/src/lib/parties.ts (dezelfde normalisatie, voor party-waarden die
+# al vóór deze fix zijn geïmporteerd).
+PARTIJ_ALIASSEN = {
+    "Nieuw Sociaal Contract": "NSC",
+    "FvD": "FVD",
+}
+
+
 def _speaker_party(spreker_el):
     fractie = spreker_el.findtext(NS + "fractie")
-    return fractie.strip() if fractie and fractie.strip() else None
+    fractie = fractie.strip() if fractie and fractie.strip() else None
+    return PARTIJ_ALIASSEN.get(fractie, fractie)
 
 
 def _speaker_role_title(spreker_el):

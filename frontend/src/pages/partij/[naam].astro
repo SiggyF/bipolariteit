@@ -3,6 +3,7 @@ import ActorTagUsage from "../../components/ActorTagUsage.vue";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { NO_PARTY } from "../../lib/types";
 import { slugify } from "../../lib/slug";
+import { canonicalParty } from "../../lib/parties";
 
 const topicModules = import.meta.glob("../../../../data/export/topics/*.json", { eager: true });
 
@@ -21,7 +22,7 @@ export function getStaticPaths() {
 	const parties = new Set<string>();
 	for (const mod of Object.values(modules) as any[]) {
 		for (const argument of mod.default.arguments) {
-			if (argument.actor.party && argument.actor.party !== NO_PARTY) parties.add(argument.actor.party);
+			if (argument.actor.party && argument.actor.party !== NO_PARTY) parties.add(canonicalParty(argument.actor.party));
 		}
 	}
 	return [...parties].map((party) => ({
@@ -32,11 +33,10 @@ export function getStaticPaths() {
 
 const { naam } = Astro.params;
 const allArgs = allArguments();
-const party =
-	Astro.props.party ??
-	allArgs.find((a: any) => a.actor.party && slugify(a.actor.party) === naam)?.actor.party;
+const matchedArg = allArgs.find((a: any) => a.actor.party && slugify(canonicalParty(a.actor.party)) === naam);
+const party = Astro.props.party ?? (matchedArg && canonicalParty(matchedArg.actor.party));
 
-const argumentList = allArgs.filter((a: any) => a.actor.party === party);
+const argumentList = allArgs.filter((a: any) => a.actor.party && canonicalParty(a.actor.party) === party);
 ---
 
 <BaseLayout title={`${party || "Partij"} — Bipolariteit`}>
