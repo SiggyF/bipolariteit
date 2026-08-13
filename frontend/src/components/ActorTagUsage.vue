@@ -29,6 +29,7 @@ export interface TagSignaalWeergave extends TagSignaal {
 	beschrijving?: string;
 	accentColor?: string;
 	title: string;
+	detail: string;
 }
 
 const props = defineProps<{
@@ -181,6 +182,7 @@ const ICOON_STER = "M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 
 								</svg>
 							</span>
 							<span class="tag-signalen-lijst-beschrijving">{{ signaal.beschrijving }}</span>
+							<span class="tag-signalen-lijst-detail">{{ signaal.detail }}</span>
 						</li>
 					</ul>
 				</div>
@@ -198,6 +200,7 @@ const ICOON_STER = "M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 
 								</svg>
 							</span>
 							<span class="tag-signalen-lijst-beschrijving">{{ signaal.beschrijving }}</span>
+							<span class="tag-signalen-lijst-detail">{{ signaal.detail }}</span>
 						</li>
 					</ul>
 				</div>

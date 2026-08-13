@@ -19,7 +19,7 @@ const generated = new Date(data.generated_at).toLocaleString("nl-NL", { dateStyl
 const EXTRACTION_OUTCOME_LABELS: Record<string, string> = {
 	gevonden: "Gevonden",
 	gemist: "Gemist",
-	hallucinatie: "Hallucinatie (niet in de gouden data)",
+	hallucinatie: "Onterecht herkend als argument (fout-positief)",
 };
 const TAGGING_OUTCOME_LABELS: Record<string, string> = {
 	correct: "Correct",
@@ -74,14 +74,16 @@ function tagPills(verwacht: string[] = [], voorspeld: string[] = []) {
 				<dt>F1</dt><dd>{pct(data.summary.argument_detection.f1)}</dd>
 			</dl>
 			<p class="validation-summary-caption">
-				Gemeten op tekenniveau ({data.summary.argument_detection.tp} overlappende, {data.summary.argument_detection.fp} te
-				veel, {data.summary.argument_detection.fn} gemiste tekens) — niet per argument geteld, dus deze aantallen zijn
-				geen argumenttelling.
+				Per teken van het citaat vergeleken, niet per heel argument — zo telt een net iets andere zinsgrens
+				(politieke transcripten lopen niet exact gelijk met de dataset-labels) als gedeeltelijke overlap in
+				plaats van een volledige misser. {data.summary.argument_detection.tp} overlappende,{" "}
+				{data.summary.argument_detection.fp} te veel, {data.summary.argument_detection.fn} gemiste tekens; dit
+				zijn dus geen argumenttellingen.
 			</p>
 		</div>
 		<div class="validation-summary-card">
 			<h2>Drogreden-tags</h2>
-			<p class="panel-note">Kent onze tagprompt de juiste drogreden toe op de gouden citaten van de dataset?</p>
+			<p class="panel-note">Kent onze tagprompt de juiste drogreden toe op de referentiecitaten van de dataset?</p>
 			<dl>
 				<dt>Precision</dt><dd>{pct(data.summary.fallacy_tags.precision)}</dd>
 				<dt>Recall</dt><dd>{pct(data.summary.fallacy_tags.recall)}</dd>
@@ -96,7 +98,7 @@ function tagPills(verwacht: string[] = [], voorspeld: string[] = []) {
 
 	<h2>Argumentherkenning — voorbeelden</h2>
 	<p class="panel-note">
-		Verwacht/voorspeld staat er alleen bij als dit argument overlapt met een gouden drogreden-citaat
+		Verwacht/voorspeld staat er alleen bij als dit argument overlapt met een referentie-drogreden-citaat
 		(zie "Drogreden-tags" hieronder) -- de meeste argumenten zijn geen drogreden en tonen dus geen tags.
 	</p>
 	{extractionGroups.map(({ outcome, items }) => (
@@ -145,4 +147,34 @@ function tagPills(verwacht: string[] = [], voorspeld: string[] = []) {
 			{items.length === 0 && <p class="panel-note">Geen voorbeelden in deze categorie.</p>}
 		</details>
 	))}
+
+	<h2>Beperkingen van de referentiedataset</h2>
+	<p>
+		Haddadan et al. (2018) hebben honderden minuten aan presidentiële debatten met de hand
+		doorgelabeld op claims, premissen en hun onderlinge relaties — precies dat handwerk maakt
+		onafhankelijke validatie tegen een externe bron zoals hier pas mogelijk.
+	</p>
+	<p>Niet elke score-afwijking hierboven is dan ook een fout van onze pipeline. Twee voorbeelden uit de "Onterecht herkend als argument"-lijst:</p>
+	<ul>
+		<li>
+			<strong>Ontbrekende annotatie.</strong> <q><em>"The NAFTA agreement is defective. Just because
+			of the tax and many other reasons, but just because of the fact…"</em></q> (Trump) is evident een
+			standpunt met onderbouwing, maar de dataset heeft hier geen Claim-Premise-paar met een
+			Support-relatie geannoteerd. Onze extractie vindt het argument dus terecht; de referentiedataset
+			mist hier zelf een annotatie.
+		</li>
+		<li>
+			<strong>Te korte/inconsistente spangrenzen.</strong> Dezelfde stop-and-frisk-uitspraak van Trump
+			staat in de dataset met twee verschillende spangrenzen — eenmaal mét de aanloop over dalende
+			criminaliteitscijfers, eenmaal alleen het sluitstuk <q><em>"stop-and-frisk had a tremendous impact
+			on the safety of New York City. Tremendous beyond belief"</em></q>. Losstaand, zonder die
+			voorafgaande cijfers, leest die korte versie niet overtuigend als de gelabelde "Appeal to
+			Emotion" — eerder als een kale bewering. Zo'n te kort afgesneden span is voor mens én model
+			moeilijk eenduidig te classificeren.
+		</li>
+	</ul>
+	<p>
+		Dat zijn precies de grensgevallen die je verwacht bij handmatige annotatie op deze schaal — zie
+		<code>docs/eval-elecdebate.md</code> voor de volledige toelichting.
+	</p>
 </BaseLayout>

@@ -2,7 +2,7 @@
 import topicsIndex from "../../../data/export/topics-index.json";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import PartyIcon from "../components/PartyIcon.astro";
-import { displayPartyName } from "../lib/parties";
+import { displayPartyName, canonicalParty } from "../lib/parties";
 import { slugify } from "../lib/slug";
 import { NO_PARTY } from "../lib/types";
 import { TEGENSTELLING } from "../lib/topics";
@@ -18,7 +18,8 @@ const perspectiefCounts = new Map<string, number>();
 for (const mod of Object.values(topicModules) as any[]) {
 	for (const argument of mod.default.arguments) {
 		if (argument.actor.party && argument.actor.party !== NO_PARTY) {
-			partyCounts.set(argument.actor.party, (partyCounts.get(argument.actor.party) ?? 0) + 1);
+			const party = canonicalParty(argument.actor.party);
+			partyCounts.set(party, (partyCounts.get(party) ?? 0) + 1);
 		}
 		for (const tag of argument.tags) {
 			if (tag.created_by !== "llm") continue;

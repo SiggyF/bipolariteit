@@ -1,10 +1,22 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import topicsIndex from "../../../data/export/topics-index.json";
 import { deriveTagUsage, type TagUsageRow } from "../lib/aggregate";
 import { analyseTable, canonicalSigns } from "../lib/correspondence";
 import { ICOON_PAD, PERSPECTIEVEN } from "../lib/tagIcons.generated";
 import { tagIconPath, perspectiefWeergaveNaam } from "../lib/tagIcon";
 import { STANCES, stanceLabel, stanceDescription, TYPOLOGIES, typologyLabel, typologyDescription, type Argument } from "../lib/types";
+
+// Opsomming in de intro-alinea ("Voor stikstof, abortus, ... ") -- afgeleid
+// van de topic-slugs i.p.v. hardcoded, zodat een nieuw onderwerp hier
+// vanzelf verschijnt. slug i.p.v. name: name is inconsistent qua hoofdletter
+// ("stikstof" vs "Abortus") en bij asiel langer ("Asiel en migratie") dan in
+// deze opsomming past.
+const topicSlugList = topicsIndex.map((t) => t.slug);
+const topicSlugListText =
+	topicSlugList.length <= 1
+		? (topicSlugList.join("") ?? "")
+		: `${topicSlugList.slice(0, -1).join(", ")} en ${topicSlugList.at(-1)}`;
 
 // Alle argumenten over alle onderwerpen heen, alleen om het taxonomie-
 // overzicht hieronder te vullen -- zelfde bron en aggregatiefunctie als de
@@ -120,28 +132,28 @@ const CA_ROW_LABEL_OFFSET: Record<string, CaLabelOffset> = {
 			<p class="motto">"We listen and we don't judge."</p>
 
 			<p>
-				Deze site brengt argumenten in kaart uit gepolariseerde Nederlandse maatschappelijke
-				discussies — te beginnen met stikstof. De bedoeling is niet om uit te maken wie gelijk
-				heeft, maar om zichtbaar te maken welke argumenten er, van welke kant, gebruikt worden.
+				Deze site ontleedt Nederlandse politieke debatten op argumenten: wie zegt wat, en waarom.
+				Voor {topicSlugListText} zet ze de standpunten van Kamerleden en
+				partijen naast elkaar, met het letterlijke citaat erbij. Zo zie je in één oogopslag welke
+				argumenten er, van welke kant, gebruikt worden. Dat maakt het makkelijk om standpunten te
+				vergelijken tussen partijen, personen en door de tijd heen.
 			</p>
 
 			{
 				import.meta.env.PUBLIC_RELEASE_OFFICIEEL !== "true" && (
 					<>
-						<h2>Dit is een ontwikkelversie</h2>
+						<h2>Ontwikkelversie</h2>
 						<p>
-							Wat je hier ziet is werk in uitvoering
+							Deze site groeit onderwerp voor onderwerp: elk debat doorloopt crawlen,
+							extractie, tagging en een redactiepas in zijn eigen tempo
 							{import.meta.env.PUBLIC_RELEASE_TAG
 								? ` (versie ${import.meta.env.PUBLIC_RELEASE_TAG})`
-								: ""}, geen
-							officiële publicatie. De site is openbaar bereikbaar zodat er meegekeken kan
-							worden, maar is bewust afgeschermd voor zoekmachines.
+								: ""}, zichtbaar terwijl het gebeurt. Zoekmachines slaan deze versie bewust
+							over.
 						</p>
 						<p>
-							Concreet betekent dat: de argumenten zijn nog niet allemaal door een
-							redactiepas heen, de dekking per onderwerp is onvolledig, en zowel cijfers
-							als teksten kunnen zonder aankondiging veranderen. Citeer deze versie niet
-							als bron.
+							Cijfers en teksten verschuiven mee met de pipeline. Behandel wat je ziet als een
+							momentopname, niet als citeerbare bron.
 						</p>
 					</>
 				)
@@ -161,6 +173,11 @@ const CA_ROW_LABEL_OFFSET: Record<string, CaLabelOffset> = {
 					<strong>Redactionele balans, geen waarheidscheck.</strong> Waar een redactie-pass
 					bestaat, checkt die alleen of het tegenperspectief evenwichtig aan bod komt — niet of
 					een standpunt feitelijk juist is.
+				</li>
+				<li>
+					<strong>Pro/contra is een classificatie-hulpmiddel.</strong> De indeling in pro/contra,
+					toegelicht bovenaan elke topicpagina, ordent het debat — het is geen waardeoordeel over
+					welke kant inhoudelijk gelijk heeft.
 				</li>
 			</ul>
 
@@ -359,15 +376,14 @@ const CA_ROW_LABEL_OFFSET: Record<string, CaLabelOffset> = {
 				</div>
 			</div>
 
-			<h2>Tags beschrijven vorm, niet geldigheid</h2>
+			<h2>Tags beschrijven de vorm van een argument</h2>
 			<p>
 				Naast stance/typologie krijgen argumenten waar mogelijk ook tags uit een argumentatietheoretische
 				taxonomie (o.a. redeneerschema's, en — in de labelgroep "Dialectische Kwaliteit"/"Metadiscussie" —
-				retorische patronen zoals stropop of ad-hominem). Dit zijn <strong>beschrijvingen van vorm</strong>,
-				geen oordeel: een tag zegt "dit fragment heeft de vorm van een ad-hominem-constructie", niet "dit
-				argument is daarom ongeldig of oneerlijk". Deze taxonomie-laag is minder uitgebreid gevalideerd dan
-				stance/typologie en kan foutgevoeliger zijn bij subtiele gevallen — zie de validatie-rapportage
-				hieronder voor de laatste steekproefresultaten.
+				retorische patronen zoals stropop of ad-hominem). Een tag zegt iets over de <strong>vorm</strong> van
+				een fragment: "dit heeft de vorm van een ad-hominem-constructie." Deze taxonomie-laag is minder
+				uitgebreid gevalideerd dan stance/typologie en kan foutgevoeliger zijn bij subtiele gevallen — zie de
+				validatie-rapportage hieronder voor de laatste steekproefresultaten.
 			</p>
 			<p>
 				De taxonomie is verdeeld in vier perspectieven, elk met een eigen kleur die overal op de site
@@ -688,7 +704,7 @@ const CA_ROW_LABEL_OFFSET: Record<string, CaLabelOffset> = {
 				</li>
 				<li>
 					<strong>Open werkwijze.</strong> De volledige pipeline, prompts en taxonomie staan in de broncode
-					van dit platform, niet alleen in deze uitleg. Zie de <a href="https://github.com/SiggyF/bipolariteit">broncode op GitHub</a>.
+					van dit platform, niet alleen in deze uitleg. Zie de <a href="https://github.com/bipolariteit/bipolariteit">broncode op GitHub</a>.
 				</li>
 			</ul>
 </BaseLayout>

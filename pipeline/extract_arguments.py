@@ -183,6 +183,20 @@ def insert_argument(conn, document_id, topic_id, actor_id, arg, model):
 # stikstof) krijgen geen titelfilter -- hun ingest-net is al smal genoeg.
 TOPIC_TITLE_KEYWORDS = {
     "asiel": ["asiel", "vreemdeling", "migratie", "immigratie"],
+    # "energie" en "klimaat" zijn zelf al breed (kernenergie, energiedragers,
+    # klimaatakkoord, ...) maar ook sterk polyseem in gewoon Nederlands
+    # ("investeringsklimaat", "vestigingsklimaat", ministerienaam "Klimaat en
+    # Groene Groei" in een heel ander debat) -- dat trok bv. "Instellingswet
+    # Adviescollege toetsing regeldruk" en "Mestbeleid" binnen zonder dat
+    # het debat zelf over energie/klimaat ging. Extra termen dekken
+    # deelonderwerpen die zelf geen "energie"/"klimaat" in de titel dragen
+    # (Gasmarkt en leveringszekerheid, Netcongestie, Mijnbouw/Groningen, CCS,
+    # Fit for 55, RES en wind op zee, warmtetransitie).
+    "energietransitie": [
+        "energie", "klimaat", "waterstof", "saldering", "elektriciteit",
+        "gas", "warmte", "duurzaam", "netcongestie", "mijnbouw", "ccs",
+        "fit for 55", "res en wind",
+    ],
 }
 
 # Procedurele activiteitsoorten bevatten geen inhoudelijke standpunten
