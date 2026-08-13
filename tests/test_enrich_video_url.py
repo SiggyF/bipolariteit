@@ -1,4 +1,4 @@
-from pipeline.enrich_video_url import build_video_url, find_best_match
+from pipeline.enrich_video_url import build_video_url, find_best_match, search_dates_for
 
 
 def _candidate(starts_at, ends_at, **extra):
@@ -48,3 +48,18 @@ def test_build_video_url_composes_expected_shape():
 def test_build_video_url_returns_none_when_fields_missing():
     candidate = _candidate("2026-07-01T13:35:26+0200", "2026-07-01T18:00:00+0200", categoryIds=[])
     assert build_video_url(candidate) is None
+
+
+def test_search_dates_for_regular_evening_start_is_single_day():
+    assert search_dates_for("2026-07-01T20:35:26") == ["2026-07-01"]
+
+
+def test_search_dates_for_over_midnight_start_includes_previous_day():
+    # Debat Direct indexeert een over-middernacht-vergadering (bv. late
+    # stemmingen) onder de dag waarop ze begon, niet de dag van dit tijdstip
+    # zelf -- zie issue #83.
+    assert search_dates_for("2023-07-07T01:04:12") == ["2023-07-06", "2023-07-07"]
+
+
+def test_search_dates_for_handles_month_boundary():
+    assert search_dates_for("2024-12-01T00:58:40") == ["2024-11-30", "2024-12-01"]
