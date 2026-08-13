@@ -28,7 +28,7 @@ const { perspectief } = Astro.props;
 const argumentList = allArguments();
 ---
 
-<BaseLayout title={`${perspectiefWeergaveNaam(perspectief)} — Bipolariteit`}>
+<BaseLayout title={`${perspectiefWeergaveNaam(perspectief)} - Bipolariteit`}>
 	<a href="/perspectief/" class="back-link">&larr; alle perspectieven</a>
 	<PerspectiefView perspectief={perspectief} argumentList={argumentList} client:only="vue" />
 </BaseLayout>

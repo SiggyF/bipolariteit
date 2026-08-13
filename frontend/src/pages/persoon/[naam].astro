@@ -91,7 +91,7 @@ const minstFavorieteTags = minstFavoriet.map((signaal) => ({
 }));
 ---
 
-<BaseLayout title={`${name || "Persoon"} — Bipolariteit`}>
+<BaseLayout title={`${name || "Persoon"} - Bipolariteit`}>
 	{canonicalPartyNaam && canonicalPartyNaam !== NO_PARTY ? (
 		<a href={`/partij/${slugify(canonicalPartyNaam)}/`} class="back-link">&larr; {displayPartyName(canonicalPartyNaam)}</a>
 	) : (

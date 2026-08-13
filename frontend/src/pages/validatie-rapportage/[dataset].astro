@@ -54,9 +54,9 @@ function tagPills(verwacht: string[] = [], voorspeld: string[] = []) {
 }
 ---
 
-<BaseLayout title={`Validatie — ${dataset} — Bipolariteit`} class="about status-page">
+<BaseLayout title={`Validatie - ${dataset} - Bipolariteit`} class="about status-page">
 	<a href="/validatie-rapportage" class="back-link">&larr; validatie-rapportage</a>
-	<h1>Validatie — {dataset}</h1>
+	<h1>Validatie: {dataset}</h1>
 	<p class="panel-note">
 		Cumulatief {data.n_records} van {data.total_records} sprekersbeurten gescoord, model {data.model}
 		({data.n_extract_errors} extractiefouten, {data.n_tag_errors} tagfouten totaal). Laatst bijgewerkt: {generated}.
@@ -74,7 +74,7 @@ function tagPills(verwacht: string[] = [], voorspeld: string[] = []) {
 				<dt>F1</dt><dd>{pct(data.summary.argument_detection.f1)}</dd>
 			</dl>
 			<p class="validation-summary-caption">
-				Per teken van het citaat vergeleken, niet per heel argument — zo telt een net iets andere zinsgrens
+				Per teken van het citaat vergeleken, niet per heel argument: zo telt een net iets andere zinsgrens
 				(politieke transcripten lopen niet exact gelijk met de dataset-labels) als gedeeltelijke overlap in
 				plaats van een volledige misser. {data.summary.argument_detection.tp} overlappende,{" "}
 				{data.summary.argument_detection.fp} te veel, {data.summary.argument_detection.fn} gemiste tekens; dit
@@ -91,12 +91,12 @@ function tagPills(verwacht: string[] = [], voorspeld: string[] = []) {
 			</dl>
 			<p class="validation-summary-caption">
 				{data.summary.fallacy_tags.tp} correct, {data.summary.fallacy_tags.fp} onterecht, {data.summary.fallacy_tags.fn}{" "}
-				gemist — per drogreden-citaat geteld.
+				gemist, per drogreden-citaat geteld.
 			</p>
 		</div>
 	</section>
 
-	<h2>Argumentherkenning — voorbeelden</h2>
+	<h2>Argumentherkenning: voorbeelden</h2>
 	<p class="panel-note">
 		Verwacht/voorspeld staat er alleen bij als dit argument overlapt met een referentie-drogreden-citaat
 		(zie "Drogreden-tags" hieronder) -- de meeste argumenten zijn geen drogreden en tonen dus geen tags.
@@ -125,7 +125,7 @@ function tagPills(verwacht: string[] = [], voorspeld: string[] = []) {
 		</details>
 	))}
 
-	<h2>Drogreden-tags — voorbeelden</h2>
+	<h2>Drogreden-tags: voorbeelden</h2>
 	{taggingGroups.map(({ outcome, items }) => (
 		<details open={outcome !== "correct"}>
 			<summary>{TAGGING_OUTCOME_LABELS[outcome]} ({items.length})</summary>
@@ -151,7 +151,7 @@ function tagPills(verwacht: string[] = [], voorspeld: string[] = []) {
 	<h2>Beperkingen van de referentiedataset</h2>
 	<p>
 		Haddadan et al. (2018) hebben honderden minuten aan presidentiële debatten met de hand
-		doorgelabeld op claims, premissen en hun onderlinge relaties — precies dat handwerk maakt
+		doorgelabeld op claims, premissen en hun onderlinge relaties, precies dat handwerk maakt
 		onafhankelijke validatie tegen een externe bron zoals hier pas mogelijk.
 	</p>
 	<p>Niet elke score-afwijking hierboven is dan ook een fout van onze pipeline. Twee voorbeelden uit de "Onterecht herkend als argument"-lijst:</p>
@@ -165,16 +165,16 @@ function tagPills(verwacht: string[] = [], voorspeld: string[] = []) {
 		</li>
 		<li>
 			<strong>Te korte/inconsistente spangrenzen.</strong> Dezelfde stop-and-frisk-uitspraak van Trump
-			staat in de dataset met twee verschillende spangrenzen — eenmaal mét de aanloop over dalende
+			staat in de dataset met twee verschillende spangrenzen: eenmaal mét de aanloop over dalende
 			criminaliteitscijfers, eenmaal alleen het sluitstuk <q><em>"stop-and-frisk had a tremendous impact
 			on the safety of New York City. Tremendous beyond belief"</em></q>. Losstaand, zonder die
 			voorafgaande cijfers, leest die korte versie niet overtuigend als de gelabelde "Appeal to
-			Emotion" — eerder als een kale bewering. Zo'n te kort afgesneden span is voor mens én model
+			Emotion", eerder als een kale bewering. Zo'n te kort afgesneden span is voor mens én model
 			moeilijk eenduidig te classificeren.
 		</li>
 	</ul>
 	<p>
-		Dat zijn precies de grensgevallen die je verwacht bij handmatige annotatie op deze schaal — zie
+		Dat zijn precies de grensgevallen die je verwacht bij handmatige annotatie op deze schaal, zie
 		<code>docs/eval-elecdebate.md</code> voor de volledige toelichting.
 	</p>
 </BaseLayout>

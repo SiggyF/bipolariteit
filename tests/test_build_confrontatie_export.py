@@ -86,7 +86,7 @@ def test_band_thema_and_samenvatting_are_passed_through_when_present():
 def test_band_thema_falls_back_to_mechanical_gist_join_when_absent():
     result = build_bands_and_losse(_tree())
     band = result["bands"][0]
-    assert band["thema"] == "pro hoofdargument — contra hoofdargument"
+    assert band["thema"] == "pro hoofdargument vs contra hoofdargument"
     assert result["registry"][1]["samenvatting"] is None
 
 

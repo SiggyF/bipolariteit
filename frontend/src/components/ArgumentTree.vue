@@ -166,7 +166,7 @@
 			<section v-if="losseGroepenPro.length || losseGroepenContra.length || losseArgumentenPro.length || losseArgumentenContra.length" class="confrontatie-losse">
 				<div class="confrontatie-losse-header">
 					<h2>Buiten de confrontatie</h2>
-					<span>argumenten uit de selectie zonder scherpe tegenhanger — geen weerlegging over de as</span>
+					<span>argumenten uit de selectie zonder scherpe tegenhanger, geen weerlegging over de as</span>
 				</div>
 				<div class="confrontatie-losse-row">
 					<div class="confrontatie-band-side confrontatie-band-side-pro">
@@ -240,7 +240,7 @@
 			<section v-if="toonTwijfel && tree.twijfelachtige_classificaties.length" class="confrontatie-twijfel">
 				<div class="confrontatie-twijfel-header">
 					<h2>Twijfelachtige classificaties</h2>
-					<span>gemarkeerd tijdens het structureren — niet in de boom opgenomen</span>
+					<span>gemarkeerd tijdens het structureren, niet in de boom opgenomen</span>
 				</div>
 				<div class="confrontatie-twijfel-grid">
 					<div v-for="t in tree.twijfelachtige_classificaties" :key="t.argument_id" class="confrontatie-twijfel-item">
@@ -254,7 +254,7 @@
 
 			<footer class="confrontatie-footer">
 				Bron: argumentexport {{ tree.name }}, {{ tree.stats.totaal_argumenten }} argumenten ({{ tree.stats.aantal_pro }}
-				pro / {{ tree.stats.aantal_contra }} contra). Boomstructuur uit Gemini's structurering — ruwe, ongevalideerde
+				pro / {{ tree.stats.aantal_contra }} contra). Boomstructuur uit Gemini's structurering: ruwe, ongevalideerde
 				output. Pro/contra-labels komen uit een eerdere automatische classificatie; het citaat is leidend, niet het
 				label.
 			</footer>
@@ -283,7 +283,7 @@
 				<div v-if="selectedOppositionId" class="confrontatie-detail-block">
 					<div class="confrontatie-detail-label">Weerlegging</div>
 					<div class="confrontatie-detail-oppositielink" @click="selectArgument(selectedOppositionId)">
-						↔ #{{ selectedOppositionId }} — {{ argumentFor(selectedOppositionId)?.gist }}
+						↔ #{{ selectedOppositionId }}: {{ argumentFor(selectedOppositionId)?.gist }}
 					</div>
 				</div>
 				<div v-if="selectedArgument.tags.length" class="confrontatie-detail-block">

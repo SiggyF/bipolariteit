@@ -127,7 +127,7 @@ def fetch_oppositions(conn, argument_ids):
 
 
 def _format_argument(arg):
-    lines = [f'### id {arg["id"]} — {arg["typology"]} — {arg["actor_name"]} ({arg["actor_party"]})']
+    lines = [f'### id {arg["id"]}: {arg["typology"]}, {arg["actor_name"]} ({arg["actor_party"]})']
     lines.append(f'> {arg["quote_text"]}')
     if arg["tags"]:
         lines.append(f'Tags: {", ".join(arg["tags"])}')

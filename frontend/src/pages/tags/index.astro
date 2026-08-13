@@ -32,7 +32,7 @@ const icoonPerPerspectief = new Map(PERSPECTIEVEN.map((p) => [p.naam, p.icoon]))
 const totaalTags = TAXONOMIE.reduce((n, p) => n + p.labelgroepen.reduce((m, lg) => m + lg.tags.length, 0), 0);
 ---
 
-<BaseLayout title="Tags — Bipolariteit">
+<BaseLayout title="Tags - Bipolariteit">
 	<a href="/" class="back-link">&larr; alle onderwerpen</a>
 	<h1>Tags</h1>
 	<p class="intro">

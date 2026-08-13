@@ -132,7 +132,7 @@ def build_bands_and_losse(gemini_tree):
         # zie argument_tree_gemini.md stap 3). Ontbreekt het (oudere
         # gemini-tree.json zonder dit veld), val terug op de mechanische
         # samenvoeging van de twee gists -- geen nieuwe tekst verzinnen.
-        thema = opp.get("thema") or f"{pro_side['gist']} — {contra_side['gist']}"
+        thema = opp.get("thema") or f"{pro_side['gist']} vs {contra_side['gist']}"
         bands.append(
             {
                 "nummer": band_index + 1,

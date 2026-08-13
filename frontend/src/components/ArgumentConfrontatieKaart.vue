@@ -19,7 +19,7 @@
 		<div v-if="oppGist" class="ack-opp">↔ weerlegt {{ oppGist }}</div>
 	</div>
 	<div v-else class="ack ack-ref" :class="`ack-${side}`" @click="$emit('select', refId)">
-		Zie #{{ refId }} — hangt als onderbouwing onder een ander thema (band {{ refBandNummer }}).
+		Zie #{{ refId }}: hangt als onderbouwing onder een ander thema (band {{ refBandNummer }}).
 	</div>
 </template>
 

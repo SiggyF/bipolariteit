@@ -74,7 +74,7 @@ def _build_batch_prompt(topic_name, topic_description, docs):
     for doc in docs:
         actor_party_suffix = f" ({doc['actor_party']})" if doc["actor_party"] else ""
         blocks.append(
-            f"--- document_id={doc['id']} — spreker: {doc['actor_name']}{actor_party_suffix} ---\n"
+            f"--- document_id={doc['id']}, spreker: {doc['actor_name']}{actor_party_suffix} ---\n"
             f'"""\n{doc["content"]}\n"""'
         )
     return BATCH_PROMPT_TEMPLATE.format(
