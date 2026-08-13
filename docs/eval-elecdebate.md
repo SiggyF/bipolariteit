@@ -62,6 +62,33 @@ geeft Support/Attack/Equivalent-relaties tussen componenten (`Dependent` ->
 argumentdefinitie. Kale claims zonder Support-relatie (die onze extractie ook
 zou afwijzen) worden dus terecht niet meegenomen als gouden span.
 
+## Bekende beperkingen van de referentiedataset
+
+Niet elke score-afwijking is een fout van onze pipeline. Twee voorbeelden uit
+`elecdebate60to16` (zie `/validatie-rapportage/elecdebate60to16`):
+
+**Ontbrekende annotatie.** Trump: *"The NAFTA agreement is defective. Just
+because of the tax and many other reasons, but just because of the fact…"*.
+Onze extractie herkent dit terecht als standpunt + onderbouwing, maar de
+dataset heeft hier geen Claim-Premise-paar met een Support-relatie
+geannoteerd (zie "Definitieverschil" hierboven) -- dus telt dit als
+fout-positief ("onterecht herkend als argument"), terwijl het argument
+evident aanwezig is. Met andere woorden: de referentiedataset zelf mist hier
+een annotatie, dit is geen extractiefout.
+
+**Te korte/inconsistente spangrenzen.** Dezelfde stop-and-frisk-uitspraak
+van Trump staat in de dataset met twee verschillende spangrenzen: eenmaal
+mét de aanloop (*"we went from 2,200 to 500 ... had a tremendous impact on
+the safety of New York City"*) en eenmaal alleen het sluitstuk (*"stop-and-
+frisk had a tremendous impact ... Tremendous beyond belief"*), allebei
+gelabeld als Appeal to Emotion (`Drogreden-Bespelen-Publiek`). Losstaand,
+zonder de voorafgaande cijfers over gedaalde criminaliteit, leest die korte
+versie niet overtuigend als emotionele bespeling -- eerder als een kale
+bewering. Onze tag-prompt classificeert 'm dan ook niet als zodanig
+(`voorspeld: []`), wat de precision op deze drogreden drukt zonder dat het
+per se een tagfout is: een te kort afgesneden span is voor mens én model
+moeilijk eenduidig te classificeren.
+
 ## De dataset
 
 **ElecDeb60to20** (https://github.com/pierpaologoffredo/ElecDeb60to20),
