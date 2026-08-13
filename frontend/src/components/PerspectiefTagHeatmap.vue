@@ -59,7 +59,7 @@ const groups = computed(() => {
 
 function cellTitle(row: PartyTagIndexEntry, tag: TagMeta): string {
 	const count = row.tagCounts.get(tag.sleutel) ?? 0;
-	return `${tag.sleutel} — ${tag.beschrijving}\n${Math.round(pct(row, tag.sleutel))}% (${count} van ${row.total})`;
+	return `${tag.sleutel}: ${tag.beschrijving}\n${Math.round(pct(row, tag.sleutel))}% (${count} van ${row.total})`;
 }
 </script>
 
@@ -92,7 +92,7 @@ function cellTitle(row: PartyTagIndexEntry, tag: TagMeta): string {
 							<button
 								type="button"
 								class="tag-heatmap-head-btn"
-								:title="`${tag.sleutel} — ${tag.beschrijving}`"
+								:title="`${tag.sleutel}: ${tag.beschrijving}`"
 								@click="toggleValue('tag', tag.sleutel)"
 							>
 								<svg

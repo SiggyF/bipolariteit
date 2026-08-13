@@ -125,7 +125,7 @@ const CA_ROW_LABEL_OFFSET: Record<string, CaLabelOffset> = {
 };
 ---
 
-<BaseLayout title="Over dit platform — Bipolariteit" class="about">
+<BaseLayout title="Over dit platform - Bipolariteit" class="about">
 			<a href="/" class="back-link">&larr; alle onderwerpen</a>
 			<h1>Over dit platform</h1>
 
@@ -171,12 +171,12 @@ const CA_ROW_LABEL_OFFSET: Record<string, CaLabelOffset> = {
 				</li>
 				<li>
 					<strong>Redactionele balans, geen waarheidscheck.</strong> Waar een redactie-pass
-					bestaat, checkt die alleen of het tegenperspectief evenwichtig aan bod komt — niet of
+					bestaat, checkt die alleen of het tegenperspectief evenwichtig aan bod komt, niet of
 					een standpunt feitelijk juist is.
 				</li>
 				<li>
 					<strong>Pro/contra is een classificatie-hulpmiddel.</strong> De indeling in pro/contra,
-					toegelicht bovenaan elke topicpagina, ordent het debat — het is geen waardeoordeel over
+					toegelicht bovenaan elke topicpagina, ordent het debat, het is geen waardeoordeel over
 					welke kant inhoudelijk gelijk heeft.
 				</li>
 			</ul>
@@ -186,14 +186,14 @@ const CA_ROW_LABEL_OFFSET: Record<string, CaLabelOffset> = {
 				Bronnen (op dit moment: Tweede Kamer-debatverslagen) worden per sprekerbeurt gesegmenteerd
 				en door een LLM geanalyseerd, dat per beurt 0 of meer argumenten extraheert: een standpunt,
 				een citaat, en eventueel genoemde claims met hun bron. Dit is een geautomatiseerd,
-				foutgevoelig proces — extractiekwaliteit verbetert nog met de tijd, en je kunt op elke kaart
+				foutgevoelig proces, extractiekwaliteit verbetert nog met de tijd, en je kunt op elke kaart
 				feedback geven als iets niet klopt.
 			</p>
 
 			<h3>Wat telt als argument?</h3>
 			<p>
 				Een argument heeft altijd twee delen, en beide moeten letterlijk in het citaat staan: een <strong>standpunt</strong> (pro/contra/onduidelijk)
-				én een <strong>reden of onderbouwing</strong> die dat standpunt ondersteunt. Geen onderbouwing betekent geen argument —
+				én een <strong>reden of onderbouwing</strong> die dat standpunt ondersteunt. Geen onderbouwing betekent geen argument,
 				ook niet als de uitspraak stellig of politiek geladen klinkt. Dit wordt bijvoorbeeld <strong>niet</strong> geëxtraheerd, met echte citaten
 				uit de database:
 			</p>
@@ -233,7 +233,7 @@ const CA_ROW_LABEL_OFFSET: Record<string, CaLabelOffset> = {
 						},
 					].map((voorbeeld) => (
 						<li>
-							<q><em>{voorbeeld.stelling}</em></q> — {voorbeeld.bron}. <strong>{voorbeeld.label}</strong>: {voorbeeld.toelichting}
+							<q><em>{voorbeeld.stelling}</em></q>: {voorbeeld.bron}. <strong>{voorbeeld.label}</strong>: {voorbeeld.toelichting}
 						</li>
 					))
 				}
@@ -258,7 +258,7 @@ const CA_ROW_LABEL_OFFSET: Record<string, CaLabelOffset> = {
 						},
 					].map((voorbeeld) => (
 						<li>
-							<q><em>{voorbeeld.stelling}</em></q> — {voorbeeld.bron} ({stanceLabel(voorbeeld.stance)}/{typologyLabel(voorbeeld.typology)}).{" "}
+							<q><em>{voorbeeld.stelling}</em></q>: {voorbeeld.bron} ({stanceLabel(voorbeeld.stance)}/{typologyLabel(voorbeeld.typology)}).{" "}
 							<strong>Wel een argument</strong>: {voorbeeld.toelichting}
 						</li>
 					))
@@ -267,7 +267,7 @@ const CA_ROW_LABEL_OFFSET: Record<string, CaLabelOffset> = {
 			<p>
 				Ook zuiver procedurele tekst (orde van de vergadering, spreektijd-afspraken, "ik geef het woord
 				aan...") levert nooit een argument op. Een uitspraak over de legitimiteit of spelregels van het
-				debat zelf telt wél mee als argument, mits onderbouwd — zie de <a href="#argumenttypen">typologie
+				debat zelf telt wél mee als argument, mits onderbouwd, zie de <a href="#argumenttypen">typologie
 				"Overig"</a> hieronder.
 			</p>
 
@@ -296,7 +296,7 @@ const CA_ROW_LABEL_OFFSET: Record<string, CaLabelOffset> = {
 				<li class="workflow-step">
 					<p class="workflow-step-title"><span class="workflow-step-index">4</span> Tags toekennen</p>
 					<p class="workflow-step-detail">
-						Tags uit de taxonomie hieronder worden toegekend — drie labelgroepen deterministisch, de
+						Tags uit de taxonomie hieronder worden toegekend: drie labelgroepen deterministisch, de
 						rest via hetzelfde lokale LLM.
 					</p>
 				</li>
@@ -379,10 +379,10 @@ const CA_ROW_LABEL_OFFSET: Record<string, CaLabelOffset> = {
 			<h2>Tags beschrijven de vorm van een argument</h2>
 			<p>
 				Naast stance/typologie krijgen argumenten waar mogelijk ook tags uit een argumentatietheoretische
-				taxonomie (o.a. redeneerschema's, en — in de labelgroep "Dialectische Kwaliteit"/"Metadiscussie" —
+				taxonomie (o.a. redeneerschema's, en, in de labelgroep "Dialectische Kwaliteit"/"Metadiscussie",
 				retorische patronen zoals stropop of ad-hominem). Een tag zegt iets over de <strong>vorm</strong> van
 				een fragment: "dit heeft de vorm van een ad-hominem-constructie." Deze taxonomie-laag is minder
-				uitgebreid gevalideerd dan stance/typologie en kan foutgevoeliger zijn bij subtiele gevallen — zie de
+				uitgebreid gevalideerd dan stance/typologie en kan foutgevoeliger zijn bij subtiele gevallen, zie de
 				validatie-rapportage hieronder voor de laatste steekproefresultaten.
 			</p>
 			<p>
@@ -454,14 +454,14 @@ const CA_ROW_LABEL_OFFSET: Record<string, CaLabelOffset> = {
 			</p>
 			<ul>
 				<li>
-					<strong>Favoriet</strong> is de tag met de hoogste ratio — met als ondergrens dat de tag in
+					<strong>Favoriet</strong> is de tag met de hoogste ratio, met als ondergrens dat de tag in
 					minstens 5% van iemands eigen getagde argumenten voorkomt. Zonder die ondergrens zou een enkele
 					toekenning op een klein volume al een torenhoge (maar betekenisloze) ratio geven.
 				</li>
 				<li>
 					<strong>Minst favoriet</strong> is de tag met de laagste ratio, vaak 0 (nooit gebruikt). Bij een
 					gelijke stand (meerdere tags die iemand nooit gebruikt) telt de tag die over alle sprekers heen
-					het vaakst voorkomt — een tag die verder gangbaar is maar deze spreker nooit gebruikt, is
+					het vaakst voorkomt: een tag die verder gangbaar is maar deze spreker nooit gebruikt, is
 					interessanter dan een obscure tag die toch bijna niemand gebruikt.
 				</li>
 			</ul>
@@ -473,7 +473,7 @@ const CA_ROW_LABEL_OFFSET: Record<string, CaLabelOffset> = {
 			<h2 id="correspondentiekaart-methode">Wat is een correspondentiekaart?</h2>
 			<p>
 				Elke topicpagina toont een <strong>correspondentiekaart</strong>: partijen (of personen) en tags
-				samen in één plaatje. Punten die dicht bij elkaar staan, horen bij elkaar — twee partijen dicht bij
+				samen in één plaatje. Punten die dicht bij elkaar staan, horen bij elkaar: twee partijen dicht bij
 				elkaar gebruiken vergelijkbare soorten argumenten, twee tags dicht bij elkaar worden vaak samen
 				toegekend. Een tag dicht bij een partij betekent dat die partij die tag relatief vaak gebruikt, niet
 				per se vaker dan andere partijen in absolute aantallen, maar relatief tot haar eigen totaal.
@@ -486,7 +486,7 @@ const CA_ROW_LABEL_OFFSET: Record<string, CaLabelOffset> = {
 
 			<h3>Hoe de kaart tot stand komt</h3>
 			<p>
-				We beginnen met een voorbeeld: een echte uitsnede uit de huidige data (drie partijen, drie tags — de
+				We beginnen met een voorbeeld: een echte uitsnede uit de huidige data (drie partijen, drie tags, de
 				volledige kaart gebruikt alle partijen/personen en alle toegekende tags tegelijk). Deze drie tags:
 			</p>
 
@@ -565,13 +565,13 @@ const CA_ROW_LABEL_OFFSET: Record<string, CaLabelOffset> = {
 				D66 gebruikt Ideologie-GAL in 166 van de 208 toekenningen (80%) en Ideologie-TAN vrijwel nooit. BBB
 				en SGP zijn het spiegelbeeld: samen goed voor 231 van de 231 Ideologie-TAN-toekenningen en nauwelijks
 				Ideologie-GAL. Moraliteit-Autoriteit wijst niet zomaar naar dezelfde plek als Ideologie-TAN: BBB
-				gebruikt die tag relatief vaker (87 van de 240, 36%) dan SGP (19 van de 105, 18%) — een nuance die in
+				gebruikt die tag relatief vaker (87 van de 240, 36%) dan SGP (19 van de 105, 18%), een nuance die in
 				een kale TAN/GAL-indeling verloren zou gaan.
 			</p>
 
 			<p>
 				Correspondentieanalyse (CA) zet dat soort verschil om in een positie op de kaart. Toegepast op precies
-				deze tabel (zonder de weergave-compressie uit de laatste stap hieronder — bij drie rijen en drie tags
+				deze tabel (zonder de weergave-compressie uit de laatste stap hieronder, bij drie rijen en drie tags
 				is er nog niets te comprimeren):
 			</p>
 
@@ -629,7 +629,7 @@ const CA_ROW_LABEL_OFFSET: Record<string, CaLabelOffset> = {
 					<p class="workflow-step-title"><span class="workflow-step-index">1</span> Tellen</p>
 					<p class="workflow-step-detail">
 						Voor elke combinatie van rij (partij of persoon) en tag: hoeveel argumenten hebben die
-						combinatie? Dat leverde de tabel hierboven op. Alleen LLM-toegekende tags tellen mee — de
+						combinatie? Dat leverde de tabel hierboven op. Alleen LLM-toegekende tags tellen mee, de
 						drie deterministisch afgeleide labelgroepen staan bij vrijwel elk argument en zouden geen
 						signaal toevoegen. Rijen en tags met te weinig toekenningen vallen weg; onder drie rijen of
 						drie tags stopt de analyse (te weinig voor een zinnige uitspraak).
@@ -649,7 +649,7 @@ const CA_ROW_LABEL_OFFSET: Record<string, CaLabelOffset> = {
 					<p class="workflow-step-title"><span class="workflow-step-index">3</span> Assen zoeken (SVD)</p>
 					<p class="workflow-step-detail">
 						Een singuliere-waardenontbinding vindt de assen waarlangs die afwijkingen het sterkst
-						uiteenlopen. De eerste assen vangen het meeste patroon — hun aandeel staat als
+						uiteenlopen. De eerste assen vangen het meeste patroon: hun aandeel staat als
 						percentage (verklaarde inertie) bij elke as op de kaart.
 					</p>
 				</li>
@@ -658,7 +658,7 @@ const CA_ROW_LABEL_OFFSET: Record<string, CaLabelOffset> = {
 					<p class="workflow-step-title"><span class="workflow-step-index">4</span> Coördinaten</p>
 					<p class="workflow-step-detail">
 						Rijen én tags krijgen allebei een positie op diezelfde assen. Daardoor is de afstand
-						tussen twee rijen onderling, en tussen twee tags onderling, interpreteerbaar — maar de
+						tussen twee rijen onderling, en tussen twee tags onderling, interpreteerbaar, maar de
 						afstand van een rij tot een tag alleen richtinggewijs, niet als letterlijke maat.
 					</p>
 				</li>
@@ -678,7 +678,7 @@ const CA_ROW_LABEL_OFFSET: Record<string, CaLabelOffset> = {
 						Eén zeldzame tag kan een afstand tot de kern hebben die de rest van de puntenwolk tot een
 						vlekje samenperst. Vlak vóór het tekenen worden dat soort uitschieters radiaal naar de
 						kern getrokken (richting blijft gelijk). Dit is puur een weergavetruc, ná de echte
-						analyse: afstanden op de kaart zijn daardoor geen letterlijke chi-kwadraatafstanden meer —
+						analyse: afstanden op de kaart zijn daardoor geen letterlijke chi-kwadraatafstanden meer,
 						alleen richting en relatieve volgorde blijven behouden.
 					</p>
 				</li>

@@ -81,7 +81,7 @@ watch(
 			<a v-if="argument.actor.party" :href="`/partij/${slugify(argument.actor.party)}/`" :title="`Alle tags van ${argument.actor.party}`">
 				<PartyLogo :party="argument.actor.party" />
 			</a>
-			Volgens <a :href="`/persoon/${slugify(argument.actor.name)}/`" :title="`Alle tags van ${argument.actor.name}`"><strong>{{ argument.actor.name }}</strong></a><span v-if="argument.actor.party"> (<a :href="`/partij/${slugify(argument.actor.party)}/`">{{ displayPartyName(argument.actor.party) }}</a>)</span><span v-if="argument.actor.role_title" class="role-title"> — {{ argument.actor.role_title }}</span>
+			Volgens <a :href="`/persoon/${slugify(argument.actor.name)}/`" :title="`Alle tags van ${argument.actor.name}`"><strong>{{ argument.actor.name }}</strong></a><span v-if="argument.actor.party"> (<a :href="`/partij/${slugify(argument.actor.party)}/`">{{ displayPartyName(argument.actor.party) }}</a>)</span><span v-if="argument.actor.role_title" class="role-title">, {{ argument.actor.role_title }}</span>
 		</p>
 		<ul v-if="argument.claims.length" class="claims">
 			<li v-for="(claim, i) in argument.claims" :key="i">
@@ -140,7 +140,7 @@ watch(
 
 		<div class="feedback">
 			<button type="button" class="feedback-toggle" @click="open = !open">
-				{{ saved ? "✓ feedback gegeven — aanpassen" : "feedback geven" }}
+				{{ saved ? "✓ feedback gegeven, aanpassen" : "feedback geven" }}
 			</button>
 			<div v-if="open" class="feedback-panel">
 				<label v-for="issue in ISSUE_TYPES" :key="issue.key" class="feedback-option">

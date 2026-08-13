@@ -39,7 +39,7 @@ const party = Astro.props.party ?? (matchedArg && canonicalParty(matchedArg.acto
 const argumentList = allArgs.filter((a: any) => a.actor.party && canonicalParty(a.actor.party) === party);
 ---
 
-<BaseLayout title={`${party || "Partij"} — Bipolariteit`}>
+<BaseLayout title={`${party || "Partij"} - Bipolariteit`}>
 	<a href="/" class="back-link">&larr; alle onderwerpen</a>
 	{party && <ActorTagUsage name={party} mode="partij" argumentList={argumentList} client:only="vue" />}
 </BaseLayout>

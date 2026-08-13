@@ -120,17 +120,17 @@ const typologyBars = computed(() => {
 function volumeTitle(bucket: TimelineBucket): string {
 	const datum = bucket.van === bucket.tot ? bucket.van : `${bucket.van} t/m ${bucket.tot}`;
 	const delen = STANCES.map((s) => `${stanceLabel(s)}: ${bucket.stance[s]}`).join(", ");
-	return `${datum} — ${bucket.total} argumenten (${delen})`;
+	return `${datum}: ${bucket.total} argumenten (${delen})`;
 }
 
 function typologyTitle(bucket: TimelineBucket): string {
 	const datum = bucket.van === bucket.tot ? bucket.van : `${bucket.van} t/m ${bucket.tot}`;
-	if (bucket.total < MIN_TOTAL) return `${datum} — ${bucket.total} argumenten, te weinig voor een betrouwbaar aandeel`;
+	if (bucket.total < MIN_TOTAL) return `${datum}: ${bucket.total} argumenten, te weinig voor een betrouwbaar aandeel`;
 	const delen = bucket.typology
 		.filter((t) => t.n)
 		.map((t) => `${typologyLabel(t.typology)}: ${t.pct}% (${t.n})`)
 		.join(", ");
-	return `${datum} — ${delen}`;
+	return `${datum}: ${delen}`;
 }
 
 function onBarClick(bucket: TimelineBucket) {
@@ -257,7 +257,7 @@ function onLegendClick(typology: string) {
 						<td v-for="stance in STANCES" :key="stance">{{ bucket.stance[`${stance}_pct`] }}% ({{ bucket.stance[stance] }})</td>
 						<td v-for="share in bucket.typology" :key="share.typology">
 							<template v-if="bucket.total >= MIN_TOTAL">{{ share.pct }}% ({{ share.n }})</template>
-							<template v-else>—</template>
+							<template v-else>-</template>
 						</td>
 					</tr>
 				</tbody>

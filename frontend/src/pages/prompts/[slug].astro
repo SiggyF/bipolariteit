@@ -23,9 +23,9 @@ const STAGE_LABELS: Record<string, string> = {
 const generated = new Date(generated_at).toLocaleString("nl-NL", { dateStyle: "medium", timeStyle: "short" });
 ---
 
-<BaseLayout title={`Prompts — ${slug} — Bipolariteit`} class="about status-page">
+<BaseLayout title={`Prompts - ${slug} - Bipolariteit`} class="about status-page">
 	<a href="/status/" class="back-link">&larr; status</a>
-	<h1>Prompts &amp; respons — {slug}</h1>
+	<h1>Prompts &amp; respons: {slug}</h1>
 	<p class="panel-note">
 		De {calls.length} meest recente LLM-calls voor dit onderwerp, met de gebruikte prompt en het ontvangen antwoord.
 		Dit is een steekproef, niet de volledige verwerkingsgeschiedenis. Laatst bijgewerkt: {generated}.
