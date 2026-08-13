@@ -54,6 +54,22 @@ export function berekenTagSignalen(
 	return { favorieten, minstFavoriet };
 }
 
+/** Factor + cijfers achter een favoriet/minst-favoriet-signaal, bv. "2.3x
+ * vaker dan gemiddeld — 5 van 20 eigen getagde argumenten, tegenover 100 van
+ * 5.000 over iedereen heen". Losstaand van signaalTitle zodat de aanroepende
+ * pagina'm ook zichtbaar (niet alleen als hover-title) kan tonen. */
+export function signaalDetail(
+	signaal: TagSignaal,
+	personTotal: number,
+	globalTagCount: Map<string, number>,
+	globalTagTotal: number,
+): string {
+	const globalN = globalTagCount.get(signaal.sleutel) ?? 0;
+	const factor = signaal.ratio >= 1 ? `${signaal.ratio.toFixed(1)}x vaker dan gemiddeld` : `${signaal.ratio.toFixed(1)}x zo vaak als gemiddeld`;
+	const cijfers = `${signaal.n} van ${personTotal} eigen getagde argumenten, tegenover ${globalN} van ${globalTagTotal} over iedereen heen`;
+	return `${factor} — ${cijfers}`;
+}
+
 export function signaalTitle(
 	signaal: TagSignaal,
 	soort: "favoriet" | "minst favoriet",
@@ -62,9 +78,7 @@ export function signaalTitle(
 	globalTagTotal: number,
 	tagBeschrijving: Map<string, string>,
 ): string {
-	const globalN = globalTagCount.get(signaal.sleutel) ?? 0;
 	const beschrijving = tagBeschrijving.get(signaal.sleutel);
-	const factor = signaal.ratio >= 1 ? `${signaal.ratio.toFixed(1)}x vaker dan gemiddeld` : `${signaal.ratio.toFixed(1)}x zo vaak als gemiddeld`;
-	const cijfers = `${signaal.n} van ${personTotal} eigen getagde argumenten, tegenover ${globalN} van ${globalTagTotal} over iedereen heen`;
-	return [`${soort}: ${signaal.sleutel}`, beschrijving, factor, cijfers].filter(Boolean).join(" — ");
+	const detail = signaalDetail(signaal, personTotal, globalTagCount, globalTagTotal);
+	return [`${soort}: ${signaal.sleutel}`, beschrijving, detail].filter(Boolean).join(" — ");
 }

@@ -5,7 +5,7 @@ import { displayPartyName, canonicalParty } from "../../lib/parties";
 import { slugify } from "../../lib/slug";
 import { NO_PARTY } from "../../lib/types";
 import { PERSPECTIEVEN } from "../../lib/tagIcons.generated";
-import { berekenTagSignalen, signaalTitle } from "../../lib/tagSignalen";
+import { berekenTagSignalen, signaalTitle, signaalDetail } from "../../lib/tagSignalen";
 
 const topicModules = import.meta.glob("../../../../data/export/topics/*.json", { eager: true });
 
@@ -81,11 +81,13 @@ const favorieteTags = favorieten.map((signaal) => ({
 	beschrijving: tagBeschrijving.get(signaal.sleutel),
 	accentColor: PERSPECTIEF_KLEUR.get(TAG_PERSPECTIEF.get(signaal.sleutel) ?? "") ?? ONBEKENDE_KLEUR,
 	title: signaalTitle(signaal, "favoriet", personTotal, globalTagCount, globalTagTotal, tagBeschrijving),
+	detail: signaalDetail(signaal, personTotal, globalTagCount, globalTagTotal),
 }));
 const minstFavorieteTags = minstFavoriet.map((signaal) => ({
 	...signaal,
 	beschrijving: tagBeschrijving.get(signaal.sleutel),
 	title: signaalTitle(signaal, "minst favoriet", personTotal, globalTagCount, globalTagTotal, tagBeschrijving),
+	detail: signaalDetail(signaal, personTotal, globalTagCount, globalTagTotal),
 }));
 ---
 
