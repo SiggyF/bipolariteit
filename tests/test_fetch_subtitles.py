@@ -1,4 +1,4 @@
-from pipeline.fetch_subtitles import find_subtitle_manifest_url, find_vtt_url
+from pipeline.fetch_subtitles import build_manifest_url, find_subtitle_manifest_url, find_vtt_url
 
 MANIFEST_URL = "https://livestreaming.b67v2.tweedekamer.nl/2026-07-01/plenairezaal/index.m3u8?hd=1&start=2026-07-01T13%3A35%3A26%2B0200"
 
@@ -40,3 +40,14 @@ def test_find_vtt_url_resolves_relative_uri_against_playlist_url():
 
 def test_find_vtt_url_returns_none_without_media_segment():
     assert find_vtt_url("#EXTM3U\n#EXT-X-ENDLIST\n", SUBTITLE_PLAYLIST_URL) is None
+
+
+def test_build_manifest_url_appends_url_encoded_start_and_end():
+    assert build_manifest_url(
+        "https://livestreaming.b67v2.tweedekamer.nl/2026-07-01/plenairezaal/index.m3u8?hd=1",
+        "2026-07-01T13:35:26+0200",
+        "2026-07-02T01:14:54+0200",
+    ) == (
+        "https://livestreaming.b67v2.tweedekamer.nl/2026-07-01/plenairezaal/index.m3u8?hd=1"
+        "&start=2026-07-01T13%3A35%3A26%2B0200&end=2026-07-02T01%3A14%3A54%2B0200"
+    )

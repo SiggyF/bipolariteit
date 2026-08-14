@@ -36,6 +36,7 @@ import argparse
 import logging
 import re
 import time
+from datetime import datetime, timezone
 from urllib.parse import quote, urljoin
 
 import requests
@@ -52,17 +53,20 @@ _SUBTITLE_URI_RE = re.compile(r'#EXT-X-MEDIA:TYPE=SUBTITLES.*?URI="([^"]+)"')
 
 
 def fetch_pending_debates(conn, topic_id):
-    """Distincte debatdirect_id's binnen dit topic waarvoor nog geen
-    video_url ontbreekt (debatdirect_id is dan altijd ook gevuld, zie
-    enrich_video_url.py)."""
+    """Distincte debatdirect_id's binnen dit topic, met een vlag of
+    raw_video_url nog op minstens één documentrij van die debatdirect_id
+    ontbreekt. De VTT-cache zelf staat op disk, niet in de database -- die
+    check doet de aanroeper (_fetch_topic) apart, via het cachebestand."""
     rows = conn.execute(
-        """SELECT DISTINCT debatdirect_id
+        """SELECT debatdirect_id,
+                  MAX(CASE WHEN raw_video_url IS NULL THEN 1 ELSE 0 END) AS needs_raw_video_url
            FROM documents
            WHERE topic_id = ? AND debatdirect_id IS NOT NULL
+           GROUP BY debatdirect_id
            ORDER BY debatdirect_id""",
         (topic_id,),
     ).fetchall()
-    return [row["debatdirect_id"] for row in rows]
+    return [(row["debatdirect_id"], bool(row["needs_raw_video_url"])) for row in rows]
 
 
 def fetch_debate_detail(session, debatdirect_id):
@@ -99,6 +103,14 @@ def find_vtt_url(subtitle_playlist_text, base_url):
 _MIN_SECONDS_BETWEEN_SAME_PATH_FETCH = 20
 
 
+def build_manifest_url(vod_url, starts_at, ends_at):
+    """Het afspeelbare HLS-manifest voor één debat: zonder start/end-params
+    ontbreekt de SUBTITLES-track stilzwijgend (zie moduledocstring). Dit is
+    zowel de URL die we in documents.raw_video_url persisteren als de URL
+    die we bevragen voor de ondertitel-sub-playlist hieronder."""
+    return f"{vod_url}&start={quote(starts_at, safe='')}&end={quote(ends_at, safe='')}"
+
+
 def fetch_subtitle_vtt(session, vod_url, starts_at, ends_at, last_fetch_by_path):
     """Haalt de VTT-inhoud op voor één debat, of None als er geen
     ondertitel-track beschikbaar is (bv. debat zonder live-ondertiteling).
@@ -106,7 +118,7 @@ def fetch_subtitle_vtt(session, vod_url, starts_at, ends_at, last_fetch_by_path)
     time.monotonic()) wordt door de aanroeper gedeeld tussen debatten, zodat
     de throttle hierboven ook geldt tussen opeenvolgende debatten op
     hetzelfde pad, niet alleen binnen één fetch."""
-    manifest_url = f"{vod_url}&start={quote(starts_at, safe='')}&end={quote(ends_at, safe='')}"
+    manifest_url = build_manifest_url(vod_url, starts_at, ends_at)
     vod_path = vod_url.split("?")[0]
     last_fetch = last_fetch_by_path.get(vod_path)
     if last_fetch is not None:
@@ -161,18 +173,23 @@ def fetch_all(force=False):
 
 
 def _fetch_topic(conn, topic_id, last_fetch_by_path, force=False):
-    debatdirect_ids = fetch_pending_debates(conn, topic_id)
-    if not debatdirect_ids:
+    debates = fetch_pending_debates(conn, topic_id)
+    if not debates:
         logger.info("Geen documenten met een debatdirect_id.")
         return
 
     SUBTITLES_DIR.mkdir(parents=True, exist_ok=True)
     session = requests.Session()
-    fetched, cached, skipped_no_subs, failed = 0, 0, 0, 0
+    fetched, cached, skipped_no_subs, failed, raw_urls_saved = 0, 0, 0, 0, 0
 
-    for debatdirect_id in debatdirect_ids:
+    for debatdirect_id, needs_raw_video_url in debates:
         cache_path = SUBTITLES_DIR / f"{debatdirect_id}.vtt"
-        if cache_path.exists() and not force:
+        needs_vtt = force or not cache_path.exists()
+        # raw_video_url en de VTT-cache zijn onafhankelijk idempotent -- een
+        # debat met een verse cache maar een nog lege raw_video_url (bv.
+        # documenten toegevoegd ná een eerdere run) moet toch nog een keer
+        # de detail-API bevragen, en andersom.
+        if not needs_vtt and not needs_raw_video_url:
             cached += 1
             continue
 
@@ -183,6 +200,18 @@ def _fetch_topic(conn, topic_id, last_fetch_by_path, force=False):
             if not vod_url or not starts_at or not ends_at:
                 logger.warning("Debat %s mist video.vodUrl/startsAt/endsAt, overgeslagen.", debatdirect_id)
                 failed += 1
+                continue
+
+            if needs_raw_video_url:
+                manifest_url = build_manifest_url(vod_url, starts_at, ends_at)
+                conn.execute(
+                    "UPDATE documents SET raw_video_url = ?, raw_video_url_checked_at = ? WHERE debatdirect_id = ?",
+                    (manifest_url, datetime.now(timezone.utc).isoformat(), debatdirect_id),
+                )
+                conn.commit()
+                raw_urls_saved += 1
+
+            if not needs_vtt:
                 continue
 
             vtt_text = fetch_subtitle_vtt(session, vod_url, starts_at, ends_at, last_fetch_by_path)
@@ -201,8 +230,9 @@ def _fetch_topic(conn, topic_id, last_fetch_by_path, force=False):
         logger.info("Opgeslagen: %s (%d bytes)", cache_path.relative_to(REPO_ROOT), len(vtt_text))
 
     logger.info(
-        "Klaar: %d opgehaald, %d al gecached, %d zonder ondertitel-track, %d mislukt (van %d debatten).",
-        fetched, cached, skipped_no_subs, failed, len(debatdirect_ids),
+        "Klaar: %d opgehaald, %d al gecached, %d zonder ondertitel-track, %d mislukt, "
+        "%d raw_video_url opgeslagen (van %d debatten).",
+        fetched, cached, skipped_no_subs, failed, raw_urls_saved, len(debates),
     )
 
 

@@ -104,9 +104,10 @@ def fetch_oppositions(conn, topic_id):
 def fetch_arguments(conn, topic_id, periode_index):
     rows = conn.execute(
         """SELECT ar.id, ar.stance, ar.typology, ar.quote_text, ar.quote_context,
-                  ar.prompt_version, ac.name AS actor_name, ac.party AS actor_party,
+                  ar.prompt_version, ar.start_seconds, ar.end_seconds,
+                  ac.name AS actor_name, ac.party AS actor_party,
                   d.id AS document_id, d.url AS document_url, d.video_url, d.published_at,
-                  d.tweedekamer_activiteit_url, d.speaker_role_title
+                  d.tweedekamer_activiteit_url, d.speaker_role_title, d.raw_video_url
            FROM arguments ar
            JOIN actors ac ON ac.id = ar.actor_id
            JOIN documents d ON d.id = ar.document_id
@@ -164,12 +165,18 @@ def fetch_arguments(conn, topic_id, periode_index):
                 "quote_text": row["quote_text"],
                 "quote_context": row["quote_context"],
                 "prompt_version": row["prompt_version"],
+                # Zin-precies gematchte videospanne (pipeline/match_argument_spans.py),
+                # of NULL als quote_text niet (succesvol) tegen de ondertitels gematcht
+                # kon worden -- de frontend valt dan terug op video_offset_seconds.
+                "start_seconds": row["start_seconds"],
+                "end_seconds": row["end_seconds"],
                 "actor": {
                     "name": row["actor_name"],
                     "party": row["actor_party"],
                     "role_title": row["speaker_role_title"],
                 },
                 "document": {
+                    "id": row["document_id"],
                     "url": row["document_url"],
                     "video_url": row["video_url"],
                     # Naive lokale tijd (VLOS markeertijdbegin), zonder offset --
@@ -178,6 +185,9 @@ def fetch_arguments(conn, topic_id, periode_index):
                     "speaker_video_url": _speaker_event_url(row["video_url"], row["published_at"]),
                     "tweedekamer_activiteit_url": row["tweedekamer_activiteit_url"],
                     "redactie_review": redactie_by_document.get(row["document_id"]),
+                    # Het afspeelbare HLS-manifest (pipeline/fetch_subtitles.py); NULL
+                    # zolang de detail-API nog niet (succesvol) bevraagd is voor dit debat.
+                    "raw_video_url": row["raw_video_url"],
                 },
                 # Kamer- en regeringsperiode van de publicatiedatum: staats-
                 # rechtelijke context waarop de frontend kan filteren zonder
