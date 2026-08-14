@@ -1,0 +1,271 @@
+{
+  "video_url": "https://debatdirect.tweedekamer.nl/2026-07-01/landbouw/plenaire-zaal/samenhangende-aanpak-landbouw-natuur-en-stikstof-13-30/video",
+  "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2026-07-01/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2026-07-01T13%3A35%3A26%2B0200&end=2026-07-02T01%3A14%3A54%2B0200",
+  "raw_video_url_note": "Dit is het onderliggende HLS-manifest (afspeelbaar met hls.js, zie docs/poc/video-eigen-player/poc_ownplayer.html), niet de officiële (debatdirect.tweedekamer.nl) paginalink. Niet gedocumenteerd/geen publieke API, en al minstens 1x gemigreerd sinds 2023 (zie docs/tk-data-sources-overview.md 5b) -- geverifieerd werkend op 2026-08-13, geen garantie dat dit later nog werkt.",
+  "debate_start": "2026-07-01T13:35:26",
+  "note": "video_offset_seconds is afgeleid uit document.published_at t.o.v. het debatbegin -- markeert het begin van de hele sprekersbeurt (document), niet het exacte moment van de quote zelf (zie docs/tk-data-sources-overview.md 5b voor zin-precieze sync via ondertitel-matching).",
+  "arguments": [
+    {
+      "argument_id": 21,
+      "video_offset_seconds": 347,
+      "actor": "Caroline van der Plas",
+      "party": "BBB",
+      "stance": "contra",
+      "typology": "moral",
+      "quote_text": "De minister van LVVN en de minister-president stonden vrijdag breed lachend het einde van duizenden boeren aan te kondigen. Duizenden boeren die hun toekomst vernietigd zien worden, moesten op tv en op sociale media toekijken hoe dit kabinet met een vrolijke lach een mes in hun rug stak.",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Anekdotisch",
+        "Drogreden-Ad-Hominem",
+        "Drogreden-Bespelen-Publiek",
+        "Frame-Conflict",
+        "Frame-Episodisch",
+        "Frame-Menselijk-Belang",
+        "Frame-Moraliteit",
+        "Ideologie-TAN",
+        "Moraliteit-Loyaliteit",
+        "Moraliteit-Zorg",
+        "Stijl-Antithese",
+        "Stijl-Herhaling",
+        "Walton-Consequentie"
+      ]
+    },
+    {
+      "argument_id": 22,
+      "video_offset_seconds": 347,
+      "actor": "Caroline van der Plas",
+      "party": "BBB",
+      "stance": "contra",
+      "typology": "legal",
+      "quote_text": "Met maatregelen als zonering van 500 meter en 1 kilometer rondom natuurgebieden, grondgebondenheid, oftewel een grens van 2,6 koeien per hectare, afroming, dreigen met gedwongen uitkoop, gedwongen krimp van de veestapel en emissierecht per fosfaatnorm werd het volk voorgehouden dat boeren weer perspectief hebben, dat ze vergunningen kunnen krijgen. Feitelijk betekent het gewoon halvering van de veestapel, de natte droom van D66.",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Causaal",
+        "Drogreden-Ad-Hominem",
+        "Drogreden-Stropop",
+        "Frame-Conflict",
+        "Frame-Economisch",
+        "Frame-Thematisch",
+        "Ideologie-TAN",
+        "Moraliteit-Eerlijkheid",
+        "Moraliteit-Vrijheid",
+        "Walton-Consequentie"
+      ]
+    },
+    {
+      "argument_id": 23,
+      "video_offset_seconds": 347,
+      "actor": "Caroline van der Plas",
+      "party": "BBB",
+      "stance": "contra",
+      "typology": "factual",
+      "quote_text": "De stikstofobsessie gaat de natuur niet eens helpen. Er is geen stikstofprobleem. Er is een stikstofwetprobleem.",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Causaal",
+        "Drogreden-Ontduiken-Bewijslast",
+        "Frame-Thematisch",
+        "Frame-Verantwoordelijkheid",
+        "Ideologie-TAN",
+        "Meta-Reikwijdte",
+        "Moraliteit-Vrijheid",
+        "Stijl-Antithese",
+        "Walton-Causaal"
+      ]
+    },
+    {
+      "argument_id": 24,
+      "video_offset_seconds": 347,
+      "actor": "Caroline van der Plas",
+      "party": "BBB",
+      "stance": "contra",
+      "typology": "moral",
+      "quote_text": "Iedereen weet dat duizenden boeren met alle maatregelen vrijdag gewoon een doodsvonnis hebben gekregen. Maar deze minister deed alsof hij boeren een plezier deed. Hij doet alsof hij doet wat boeren hem hebben gevraagd. Ik citeer de minister. \"Boeren zeggen ook: trek die pleister er maar eens af.\" Er is geen boer die dat zegt. Dit is wat bestuurders het volk willen doen geloven. Er is geen boer die zegt: duw me maar het ravijn in, want dan heb ik tenminste duidelijkheid. Dat zegt niemand. Boeren willen boeren en een toekomst, geen vernietiging.",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Drogreden-Bespelen-Publiek",
+        "Drogreden-Stropop",
+        "Frame-Conflict",
+        "Frame-Menselijk-Belang",
+        "Frame-Thematisch",
+        "Ideologie-TAN",
+        "Meta-Reikwijdte",
+        "Moraliteit-Loyaliteit",
+        "Moraliteit-Zorg",
+        "Stijl-Antithese",
+        "Walton-Consequentie"
+      ]
+    },
+    {
+      "argument_id": 25,
+      "video_offset_seconds": 347,
+      "actor": "Caroline van der Plas",
+      "party": "BBB",
+      "stance": "contra",
+      "typology": "other",
+      "quote_text": "Alles wat BBB in de steigers heeft gezet in het kabinet-Schoof, beleid dat was gericht op écht perspectief voor onze boeren met veel minder ingrijpende maatregelen en een échte toekomst, wordt met de sloophamer vernietigd.",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Frame-Conflict",
+        "Frame-Thematisch",
+        "Ideologie-TAN",
+        "Moraliteit-Loyaliteit",
+        "Moraliteit-Zorg",
+        "Walton-Consequentie"
+      ]
+    },
+    {
+      "argument_id": 26,
+      "video_offset_seconds": 479,
+      "actor": "Laura Bromet",
+      "party": "PRO",
+      "stance": "contra",
+      "typology": "factual",
+      "quote_text": "Daarin had de BBB immers diverse ministers die dit probleem helemaal niet hebben opgelost, ondanks dat er een ministeriële commissie met het halve kabinet was ingesteld.",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Anekdotisch",
+        "Frame-Conflict",
+        "Frame-Episodisch",
+        "Frame-Verantwoordelijkheid",
+        "Ideologie-GAL",
+        "Walton-Analogie"
+      ]
+    },
+    {
+      "argument_id": 1,
+      "video_offset_seconds": 493,
+      "actor": "Caroline van der Plas",
+      "party": "BBB",
+      "stance": "pro",
+      "typology": "moral",
+      "quote_text": "Hadden we er vier jaar gezeten, dan had de tribune hier niet zo vol gezeten met boeren. Ja, misschien met een feestmuts op, omdat we met beleid waren gekomen dat wél perspectief zou bieden.",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Frame-Conflict",
+        "Frame-Thematisch",
+        "Ideologie-TAN",
+        "Kwaliteit-Zuiver",
+        "Moraliteit-Loyaliteit",
+        "Stijl-Antithese",
+        "Walton-Consequentie"
+      ]
+    },
+    {
+      "argument_id": 2,
+      "video_offset_seconds": 493,
+      "actor": "Caroline van der Plas",
+      "party": "BBB",
+      "stance": "pro",
+      "typology": "factual",
+      "quote_text": "In de tijd dat BBB in het kabinet zat, heeft hier niet één boer gestaan. Toen hingen de vlaggen niet op de kop en stonden de trekkers niet in Den Haag.",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Anekdotisch",
+        "Frame-Conflict",
+        "Frame-Episodisch",
+        "Ideologie-TAN",
+        "Kwaliteit-Zuiver",
+        "Moraliteit-Loyaliteit",
+        "Stijl-Antithese",
+        "Stijl-Herhaling",
+        "Walton-Analogie"
+      ]
+    },
+    {
+      "argument_id": 3,
+      "video_offset_seconds": 493,
+      "actor": "Caroline van der Plas",
+      "party": "BBB",
+      "stance": "pro",
+      "typology": "moral",
+      "quote_text": "Als wij er vier jaar hadden gezeten, weet ik zeker dat hier een beleid was uitgerold waardoor boeren hun bestaansrecht behielden en niet een mes in de rug gestoken werden.",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Drogreden-Bespelen-Publiek",
+        "Frame-Conflict",
+        "Frame-Menselijk-Belang",
+        "Frame-Moraliteit",
+        "Frame-Thematisch",
+        "Ideologie-TAN",
+        "Moraliteit-Loyaliteit",
+        "Moraliteit-Zorg",
+        "Stijl-Antithese",
+        "Walton-Consequentie"
+      ]
+    },
+    {
+      "argument_id": 4,
+      "video_offset_seconds": 574,
+      "actor": "Laura Bromet",
+      "party": "PRO",
+      "stance": "contra",
+      "typology": "economic",
+      "quote_text": "De vergunningverlening voor de bouw van huizen is compleet vastgelopen.",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Frame-Economisch",
+        "Frame-Thematisch",
+        "Ideologie-Rechts-Economisch",
+        "Kwaliteit-Zuiver",
+        "Moraliteit-Vrijheid",
+        "Walton-Consequentie"
+      ]
+    },
+    {
+      "argument_id": 5,
+      "video_offset_seconds": 602,
+      "actor": "Caroline van der Plas",
+      "party": "BBB",
+      "stance": "pro",
+      "typology": "factual",
+      "quote_text": "Onze minister van Volkshuisvesting en Ruimtelijke Ordening stond elke week op een bouwplaats om de start van woningen in te luiden. Onze minister van Volkshuisvesting en Ruimtelijke Ordening heeft talloze plannen en wetsvoorstellen naar de Kamer gestuurd om de bouw los te trekken.",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Anekdotisch",
+        "Frame-Thematisch",
+        "Frame-Verantwoordelijkheid",
+        "Ideologie-Rechts-Economisch",
+        "Kwaliteit-Zuiver",
+        "Moraliteit-Autoriteit",
+        "Stijl-Herhaling",
+        "Walton-Consequentie"
+      ]
+    },
+    {
+      "argument_id": 6,
+      "video_offset_seconds": 657,
+      "actor": "Caroline van der Plas",
+      "party": "BBB",
+      "stance": "contra",
+      "typology": "economic",
+      "quote_text": "Voor duizenden boeren zullen deze plannen gewoon einde bedrijf betekenen. Duizenden boeren zullen gewoon moeten stoppen met hun bedrijf.",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Causaal",
+        "Frame-Economisch",
+        "Frame-Menselijk-Belang",
+        "Frame-Thematisch",
+        "Ideologie-Rechts-Economisch",
+        "Ideologie-TAN",
+        "Kwaliteit-Zuiver",
+        "Moraliteit-Vrijheid",
+        "Moraliteit-Zorg",
+        "Stijl-Herhaling",
+        "Walton-Consequentie"
+      ]
+    }
+  ]
+}

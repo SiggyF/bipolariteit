@@ -59,3 +59,15 @@ Het interactieve `.dc.html`-prototype waarmee dit is opgeleverd is niet
 overgenomen (eigen "dc-runtime", laadt React via een CDN — geen
 productiecode); deze map is wat overblijft nu de echte implementatie het
 heeft overgenomen.
+
+## `videoplayer/`
+
+Ontwerp voor visuele argumenttype-annotaties op een video-embed (issue #94):
+overlay-badges op de video (max. drie tags, gesorteerd op zeldzaamheid binnen
+het debat) + een tijdlijn met per-quote-markers, gebaseerd op het technisch
+onderzoek in `docs/tk-data-sources-overview.md` (secties 5a/5b) en de PoC in
+`docs/poc/video-eigen-player/`. Bevat expliciete developer-notities
+(datacontract, sync-aanpak, toegankelijkheid) — zie `videoplayer/README.md`.
+Zelfde afweging als bij `argumentenboom/`: het `.dc.html`-prototype en het
+"Classical" design system zijn niet overgenomen, wel het datacontract-voorbeeld
+(`arguments-timed.json`).
