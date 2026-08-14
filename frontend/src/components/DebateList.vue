@@ -60,10 +60,8 @@ function formatDate(iso: string | null): string {
 		<ul>
 			<li v-for="debate in debates" :key="debate.id">
 				<a :href="`/debat/${debate.id}/`">
-					<span class="debate-title">
-						<strong>{{ debate.name ?? "Debat" }}</strong>
-						<span class="debate-date">{{ formatDate(debate.earliestPublishedAt) }}</span>
-					</span>
+					<strong class="debate-title">{{ debate.name ?? "Debat" }}</strong>
+					<span class="debate-date">{{ formatDate(debate.earliestPublishedAt) }}</span>
 					<span class="debate-meta">
 						{{ debate.argumentCount }} argument{{ debate.argumentCount === 1 ? "" : "en" }}, {{ debate.speakers.size }}
 						spreker{{ debate.speakers.size === 1 ? "" : "s" }}
@@ -88,11 +86,16 @@ function formatDate(iso: string | null): string {
 	gap: var(--space-1);
 }
 
+/* Grid i.p.v. flex: een lange titel wrapt naar meerdere regels, maar datum
+   en meta blijven daardoor niet op de eigen (vaste) kolom staan als het een
+   flex-rij met baseline-uitlijning is -- ze zwierven dan mee met het midden
+   van de omhoog gegroeide titel. Vaste kolombreedtes lossen dat op. */
 .debate-list a {
-	display: flex;
-	justify-content: space-between;
+	display: grid;
+	grid-template-columns: 1fr auto auto;
 	align-items: baseline;
-	gap: var(--space-2);
+	column-gap: var(--space-3);
+	row-gap: 2px;
 	padding: var(--space-1) var(--space-2);
 	background: var(--color-card-bg);
 	border: 1px solid var(--color-border);
@@ -102,15 +105,14 @@ function formatDate(iso: string | null): string {
 }
 
 .debate-title {
-	display: flex;
-	align-items: baseline;
-	gap: 0.6em;
+	min-width: 0;
 }
 
 .debate-date {
 	color: var(--color-muted);
 	font-size: var(--step--1);
 	white-space: nowrap;
+	text-align: right;
 }
 
 .debate-meta {
@@ -118,5 +120,17 @@ function formatDate(iso: string | null): string {
 	font-family: var(--font-mono);
 	font-size: var(--step--1);
 	white-space: nowrap;
+	text-align: right;
+}
+
+@media (max-width: 640px) {
+	.debate-list a {
+		grid-template-columns: 1fr auto;
+	}
+
+	.debate-meta {
+		grid-column: 1 / -1;
+		text-align: left;
+	}
 }
 </style>
