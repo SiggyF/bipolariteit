@@ -164,11 +164,19 @@ debat(-segment)" nog voor golden:
 Niet-monotoon: de offset schommelt met >100s binnen een aaneengesloten stuk van
 maar 150 echte seconden, zónder ondertitel-gat. Dit weerlegt zowel "één vaste
 offset per debat" (het oorspronkelijke model, zie #106) als "één lineaire
-kloksnelheid-afwijking" (een tussentijdse hypothese tijdens dit onderzoek) --
-de ondertitel-klok in dit bestand loopt kennelijk niet voorspelbaar t.o.v. de
-echte videotijd, zelfs niet op een schaal van enkele minuten zonder zichtbare
-onderbreking. Dit is een sterkere, rechtstreeks geverifieerde verklaring voor
-#108 dan de eerdere (nog steeds geldige, maar minder doorslaggevende)
+kloksnelheid-afwijking" (een tussentijdse hypothese tijdens dit onderzoek).
+
+Waarschijnlijke verklaring voor déze schaal van afwijking (seconden tot ~2
+minuten): live-ondertiteling wordt getypt door een stenograaf/CART-typist,
+niet machinaal gegenereerd -- de tijd tussen een gesproken woord en de
+bijbehorende cue is dus inherent variabele menselijke tikvertraging, geen
+klokfout. Dat is normaal gedrag bij professionele live-ondertiteling, geen
+aanwijzing dat het bestand corrupt is. Verklaart **niet** de veel grotere
+sprong van >1700s rond de schorsing zelf (#108) -- die orde van grootte
+past niet bij tikvertraging en wijst eerder op een daadwerkelijke
+onderbreking/reset in het ondertitelsysteem tijdens de pauze. Dit is een
+sterkere, rechtstreeks geverifieerde verklaring voor #108 dan de eerdere
+(nog steeds geldige, maar minder doorslaggevende)
 `published_at`- en `X-TIMESTAMP-MAP`-observaties elders in deze sectie, en
 onderstreept dat de `MAX_CALIBRATION_SPREAD_SECONDS`-vangnet in
 `match_argument_spans.py` (#114) de juiste aanpak is voor dit soort debatten --
