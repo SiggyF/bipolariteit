@@ -26,14 +26,23 @@ export interface Argument {
 	quote_text: string;
 	quote_context: string | null;
 	prompt_version: string | null;
+	// Zin-precies gematchte videospanne (pipeline/match_argument_spans.py); null
+	// zolang quote_text niet tegen de ondertitels gematcht kon worden -- val dan
+	// terug op document.published_at t.o.v. de debat-aanvangstijd plus een vaste duur.
+	start_seconds: number | null;
+	end_seconds: number | null;
 	actor: { name: string; party: string | null; role_title: string | null };
 	document: {
+		id: number;
 		url: string | null;
 		video_url: string | null;
 		published_at: string | null;
 		speaker_video_url: string | null;
 		tweedekamer_activiteit_url: string | null;
 		redactie_review: { pass_status: string; notes: string | null } | null;
+		// Het afspeelbare HLS-manifest (pipeline/fetch_subtitles.py); null zolang
+		// dat nog niet (succesvol) opgehaald is voor dit debat.
+		raw_video_url: string | null;
 	};
 	// Staatsrechtelijke context van de publicatiedatum, afgeleid in de pipeline
 	// uit data/politieke-periodes.toml. Null als het document geen datum heeft.
