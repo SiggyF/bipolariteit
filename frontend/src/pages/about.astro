@@ -139,6 +139,12 @@ const CA_ROW_LABEL_OFFSET: Record<string, CaLabelOffset> = {
 				vergelijken tussen partijen, personen en door de tijd heen.
 			</p>
 
+			<p>
+				Dit platform dient ook als <strong>onderwijsmateriaal</strong>: het maakt zichtbaar
+				hoe politieke argumentatie in de praktijk werkt, met echte citaten en hun bron, zodat het
+				bruikbaar is bij het analyseren van politiek debat.
+			</p>
+
 			{
 				import.meta.env.PUBLIC_RELEASE_OFFICIEEL !== "true" && (
 					<>
@@ -690,6 +696,15 @@ const CA_ROW_LABEL_OFFSET: Record<string, CaLabelOffset> = {
 				model, de exacte promptversie en de brontekst waaruit het is gedestilleerd.
 			</p>
 			<ul>
+				<li>
+					<strong>Databronnen.</strong> De debatverslagen komen van de{" "}
+					<a href="https://opendata.tweedekamer.nl">Open Data van de Tweede Kamer</a> (OData-API, VLOS-XML
+					van elke Vergadering/Verslag) — bij elk argument staat een link naar zowel deze ruwe brondata als
+					naar de bijbehorende officiële <a href="https://www.tweedekamer.nl">tweedekamer.nl</a>-pagina van
+					het debat. Video's linken naar{" "}
+					<a href="https://debatdirect.tweedekamer.nl">Debat Direct</a>, de officiële videowebsite van de
+					Tweede Kamer.
+				</li>
 				<li>
 					<strong>Modellen &amp; promptversies.</strong> Argumenten-extractie, tagging en de bias-check draaien lokaal
 					via een open-source model (momenteel <code>qwen/qwen3.6-27b</code>);

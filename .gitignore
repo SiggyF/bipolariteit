@@ -22,6 +22,9 @@ data/*.db-journal
 data/*.db-wal
 data/*.db-shm
 data/*.db.bak-*
+# WebVTT-ondertitel-cache van pipeline/fetch_subtitles.py -- lokaal
+# hergebruikt tussen runs, geen brondata om te committen.
+data/subtitles/
 node_modules/
 frontend/dist/
 # Per release gerenderd uit deploy/wrangler.template.jsonc.
