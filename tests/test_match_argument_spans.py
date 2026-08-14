@@ -113,6 +113,27 @@ def test_match_debate_requires_minimum_number_of_turns_not_matches():
     assert match_debate(cues, rows) == {}
 
 
+def test_match_debate_skips_debate_with_implausible_calibration_spread():
+    # Drie spreekbeurten, ver uit elkaar in de tijd, waarvan er twee een
+    # vergelijkbare diff opleveren (~100s) en één een diff die daar >800s
+    # van afwijkt (zie #108: een spreiding dat groot komt niet doordat de
+    # video hapert -- die is altijd doorlopend, geverifieerd via ffprobe --
+    # maar doordat published_at ergens onbetrouwbaar is, bv. rond een
+    # schorsing). Beter geen kalibratie dan een mediaan tussen twee
+    # onverenigbare clusters die voor geen van beide klopt.
+    cues = [
+        {"start": 100, "end": 102, "text": "Eerste zin hier"},
+        {"start": 1150, "end": 1152, "text": "Tweede zin hier"},
+        {"start": 3200, "end": 3202, "text": "Derde zin hier"},
+    ]
+    rows = [
+        _row(1, "Eerste zin hier", "2026-07-01T13:35:26"),  # expected 0s, diff 100
+        _row(2, "Tweede zin hier", "2026-07-01T13:52:06"),  # expected 1000s, diff 150
+        _row(3, "Derde zin hier", "2026-07-01T14:08:46"),  # expected 2000s, diff 1200
+    ]
+    assert match_debate(cues, rows) == {}
+
+
 def test_match_debate_returns_empty_below_minimum_matches():
     cues = [{"start": 100, "end": 102, "text": "Enige zin hier"}]
     rows = [_row(1, "Enige zin hier", "2026-07-01T13:35:36")]
