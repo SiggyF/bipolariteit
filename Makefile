@@ -75,8 +75,14 @@ export: ## SQLite -> data/export/topics/<slug>.json + topics-index.json, voor al
 	uv run python -m pipeline.enrich_video_url
 	uv run python -m pipeline.build_static_data
 
-enrich-video: ## Vult documents.video_url via Debat Direct (geen LLM, geen netstroom nodig). Vars: TOPIC
-	uv run python -m pipeline.enrich_video_url --topic $(TOPIC)
+enrich-video: ## Vult documents.video_url/debatdirect_id via Debat Direct, voor alle topics (geen LLM, geen netstroom nodig, gebruik pipeline.enrich_video_url --topic direct voor één topic)
+	uv run python -m pipeline.enrich_video_url
+
+fetch-subtitles: ## Cachet het NL-ondertitel-VTT per debat naar data/subtitles/, voor alle topics (voorbereiding op arguments.start_seconds/end_seconds, geen LLM, gebruik pipeline.fetch_subtitles --topic direct voor één topic)
+	uv run python -m pipeline.fetch_subtitles
+
+match-video-spans: ## Vult arguments.start_seconds/end_seconds door quote_text te matchen tegen de gecachete VTT-ondertitels, voor alle topics (geen LLM, vereist fetch-subtitles vooraf, gebruik pipeline.match_argument_spans --topic direct voor één topic)
+	uv run python -m pipeline.match_argument_spans
 
 argument-doc: ## Exporteert alle pro/contra-argumenten van TOPIC (met claims/opposities) als markdown, voor handmatig structureren via Gemini -- geen LLM-call
 	uv run python -m pipeline.export_argument_doc --topic $(TOPIC)
