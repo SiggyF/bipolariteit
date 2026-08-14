@@ -59,28 +59,58 @@ def test_find_quote_span_returns_none_when_not_verbatim():
     assert find_quote_span("dit staat nergens in de ondertitels", running_text, offsets, cues) is None
 
 
-def test_match_debate_calibrates_using_median_offset():
-    # Alle drie argumenten publiceren 10s na activiteit_aanvangstijd; de
-    # ruwe cue-tijden lopen op (5h+10, +20, +30), dus de kalibratie
-    # (mediaan van raw - expected) wordt 5h+10 -- niet gewoon 5h, want de
-    # mediaan schuift mee met de middelste van de drie samples.
+def test_match_debate_calibrates_on_earliest_quote_per_turn():
+    # Beurt A heeft drie argumenten (zelfde published_at, expected 10s) met
+    # oplopende rauwe cue-tijden (5h+10, +20, +30) -- alleen de eerste ligt
+    # vlak bij het begin van de beurt, dus alleen die diff (5h) telt mee als
+    # kalibratiepunt; de latere twee zouden de mediaan 10-20s te hoog trekken
+    # als ze los meetelden (zie #106). Beurt B en C leveren elk één quote op
+    # die wél precies aan het begin van hun beurt valt, dus alle drie de
+    # beurten wijzen dezelfde kalibratieconstante (5h) aan.
     cues = [
         {"start": 5 * 3600 + 10, "end": 5 * 3600 + 12, "text": "Eerste zin hier"},
         {"start": 5 * 3600 + 20, "end": 5 * 3600 + 22, "text": "Tweede zin hier"},
         {"start": 5 * 3600 + 30, "end": 5 * 3600 + 32, "text": "Derde zin hier"},
+        {"start": 5 * 3600 + 40, "end": 5 * 3600 + 42, "text": "Vierde zin hier"},
+        {"start": 5 * 3600 + 70, "end": 5 * 3600 + 72, "text": "Vijfde zin hier"},
     ]
     rows = [
         _row(1, "Eerste zin hier", "2026-07-01T13:35:36"),
         _row(2, "Tweede zin hier", "2026-07-01T13:35:36"),
         _row(3, "Derde zin hier", "2026-07-01T13:35:36"),
+        _row(4, "Vierde zin hier", "2026-07-01T13:36:06"),
+        _row(5, "Vijfde zin hier", "2026-07-01T13:36:36"),
     ]
     spans = match_debate(cues, rows)
-    assert set(spans) == {1, 2, 3}
-    # calibratie = mediaan van (raw_start - expected_offset) over de drie
-    # argumenten = mediaan(5h, 5h+10, 5h+20) = 5h+10
-    assert spans[1] == (0, 2)
-    assert spans[2] == (10, 12)
-    assert spans[3] == (20, 22)
+    assert set(spans) == {1, 2, 3, 4, 5}
+    # calibratie = mediaan van de laagste diff per beurt = 5h (alle drie
+    # beurten wijzen dezelfde constante aan)
+    assert spans[1] == (10, 12)
+    assert spans[2] == (20, 22)
+    assert spans[3] == (30, 32)
+    assert spans[4] == (40, 42)
+    assert spans[5] == (70, 72)
+
+
+def test_match_debate_requires_minimum_number_of_turns_not_matches():
+    # Vijf argumenten, maar allemaal in dezelfde spreekbeurt -- dat levert
+    # maar één kalibratiepunt op (niet vijf), dus onder
+    # MIN_MATCHES_FOR_CALIBRATION en dus geen kalibratie.
+    cues = [
+        {"start": 10, "end": 12, "text": "Eerste zin hier"},
+        {"start": 20, "end": 22, "text": "Tweede zin hier"},
+        {"start": 30, "end": 32, "text": "Derde zin hier"},
+        {"start": 40, "end": 42, "text": "Vierde zin hier"},
+        {"start": 50, "end": 52, "text": "Vijfde zin hier"},
+    ]
+    rows = [
+        _row(1, "Eerste zin hier", "2026-07-01T13:35:36"),
+        _row(2, "Tweede zin hier", "2026-07-01T13:35:36"),
+        _row(3, "Derde zin hier", "2026-07-01T13:35:36"),
+        _row(4, "Vierde zin hier", "2026-07-01T13:35:36"),
+        _row(5, "Vijfde zin hier", "2026-07-01T13:35:36"),
+    ]
+    assert match_debate(cues, rows) == {}
 
 
 def test_match_debate_returns_empty_below_minimum_matches():
@@ -97,8 +127,8 @@ def test_match_debate_skips_arguments_that_do_not_match_verbatim():
     ]
     rows = [
         _row(1, "Eerste zin hier", "2026-07-01T13:35:26"),
-        _row(2, "Tweede zin hier", "2026-07-01T13:35:26"),
-        _row(3, "Derde zin hier", "2026-07-01T13:35:26"),
+        _row(2, "Tweede zin hier", "2026-07-01T13:35:36"),
+        _row(3, "Derde zin hier", "2026-07-01T13:35:46"),
         _row(4, "compleet ongerelateerde tekst", "2026-07-01T13:35:26"),
     ]
     spans = match_debate(cues, rows)

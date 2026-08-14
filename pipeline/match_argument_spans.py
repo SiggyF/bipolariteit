@@ -47,8 +47,10 @@ _CUE_RE = re.compile(
 )
 _NORMALIZE_RE = re.compile(r"[^a-z0-9]+")
 
-# Een kalibratie steunend op te weinig matches is onbetrouwbaar (één toevallige
-# woordelijke overlap zegt weinig over de klok-offset van het hele debat).
+# Een kalibratie steunend op te weinig spreekbeurten is onbetrouwbaar (één
+# toevallige woordelijke overlap zegt weinig over de klok-offset van het hele
+# debat). Telt spreekbeurten met minstens één match, niet losse argumenten --
+# meerdere argumenten in dezelfde beurt leveren maar één kalibratiepunt op.
 MIN_MATCHES_FOR_CALIBRATION = 3
 
 
@@ -141,7 +143,15 @@ def match_debate(cues, rows):
     running_text, cue_end_offsets = build_running_index(cues)
 
     raw_matches = {}  # argument_id -> (raw_start, raw_end)
-    calibration_samples = []
+    # Meerdere argumenten kunnen in dezelfde spreekbeurt vallen (zelfde
+    # published_at, dus dezelfde `expected`-waarde), maar hun quote begint op
+    # verschillende posities bínnen die beurt -- raw_start - expected loopt
+    # dus op naarmate een quote later in de beurt valt. Alleen de laagste
+    # diff per beurt (de quote die het dichtst bij het begin van de beurt
+    # ligt) is een bruikbaar kalibratiepunt; de mediaan van de rest ligt
+    # systematisch te hoog (zie #106 -- gaf spannes die tientallen seconden
+    # te vroeg lagen).
+    min_diff_per_turn = {}
     for row in rows:
         span = find_quote_span(row["quote_text"], running_text, cue_end_offsets, cues)
         if span is None:
@@ -150,8 +160,11 @@ def match_debate(cues, rows):
 
         expected = _expected_offset_seconds(row["published_at"], row["activiteit_aanvangstijd"])
         if expected is not None:
-            calibration_samples.append(span[0] - expected)
+            diff = span[0] - expected
+            if expected not in min_diff_per_turn or diff < min_diff_per_turn[expected]:
+                min_diff_per_turn[expected] = diff
 
+    calibration_samples = list(min_diff_per_turn.values())
     if len(calibration_samples) < MIN_MATCHES_FOR_CALIBRATION:
         return {}
 
