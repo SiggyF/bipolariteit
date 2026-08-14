@@ -19,7 +19,11 @@ const emit = defineEmits<{ timeupdate: [seconds: number]; loadedmetadata: [durat
 const videoEl = ref<HTMLVideoElement | null>(null);
 const fatalError = ref(false);
 const playing = ref(false);
-const muted = ref(true);
+// Geluid staat standaard aan (browsers laten ongedempte autoplay meestal
+// alleen toe na een eerdere gebruikersinteractie op de pagina -- lukt de
+// autoplay hieronder niet, dan staat het geluid alvast klaar voor de eerste
+// keer dat de kijker zelf op play drukt).
+const muted = ref(false);
 const currentTime = ref(0);
 const duration = ref(0);
 let tickInterval: ReturnType<typeof setInterval> | null = null;
@@ -51,6 +55,10 @@ onMounted(async () => {
 	video.addEventListener("loadedmetadata", () => {
 		duration.value = video.duration;
 		emit("loadedmetadata", video.duration);
+		// Autoplay-poging: browsers blokkeren dit doorgaans zonder eerdere
+		// gebruikersinteractie op de pagina, dus dit lukt niet altijd -- geen
+		// browser-issue om te "fixen", alleen best-effort.
+		video.play().catch(() => {});
 	});
 	video.addEventListener("play", () => (playing.value = true));
 	video.addEventListener("pause", () => (playing.value = false));

@@ -7,6 +7,7 @@ import { filters, toggleValue } from "../lib/filters";
 import { scrollTarget } from "../lib/scrollTarget";
 import { slugify } from "../lib/slug";
 import { typologyLabel, typologyDescription, type Argument, type Tag } from "../lib/types";
+import { formatClock } from "../lib/videoTime";
 import PartyLogo from "./PartyLogo.vue";
 
 function tagTooltip(tag: Tag): string {
@@ -83,6 +84,16 @@ watch(
 	},
 	{ immediate: true },
 );
+
+// Scrollt de kaart in beeld zodra dit argument aan de beurt is in de video
+// (playing-prop, alleen gezet op de debat-videopagina) -- anders moet je
+// zelf blijven scrollen om bij te houden welk argument nu speelt.
+watch(
+	() => props.playing,
+	(isPlaying) => {
+		if (isPlaying) cardEl.value?.scrollIntoView({ behavior: "smooth", block: "center" });
+	},
+);
 </script>
 
 <template>
@@ -101,6 +112,9 @@ watch(
 	>
 		<div class="argument-meta">
 			<span class="typology-badge" :title="typologyDescription(argument.typology)">{{ typologyLabel(argument.typology) }}</span>
+			<span v-if="videoContext && argument.start_seconds !== null" class="argument-span" title="Videospanne van dit argument">
+				{{ formatClock(argument.start_seconds) }}–{{ formatClock(argument.end_seconds ?? argument.start_seconds) }}
+			</span>
 		</div>
 		<blockquote class="quote">"{{ argument.quote_text }}"</blockquote>
 		<p v-if="argument.quote_context" class="quote-context">{{ argument.quote_context }}</p>

@@ -45,19 +45,15 @@ const nameplate = computed(() => {
 	return past?.actor ?? nextArgument.value?.actor ?? null;
 });
 
-const clockIndicator = computed(() => {
+// Tijdrange van het lopende argument, los van de "volgend argument"-knop --
+// die staat er nu altijd naast (i.p.v. alleen in een gat), maar compact
+// (pijl-icoon) als er al een tijdrange getoond wordt, anders voluit in tekst.
+const timeRangeText = computed(() => {
 	const current = active.value[0];
-	if (current && current.start_seconds !== null && current.end_seconds !== null) {
-		return { text: `${formatClock(current.start_seconds)}–${formatClock(current.end_seconds)}`, clickable: false, seekTo: null };
+	if (current?.start_seconds != null && current?.end_seconds != null) {
+		return `${formatClock(current.start_seconds)}–${formatClock(current.end_seconds)}`;
 	}
-	if (nextArgument.value?.start_seconds != null) {
-		return {
-			text: `volgend argument om ${formatClock(nextArgument.value.start_seconds)}`,
-			clickable: true,
-			seekTo: nextArgument.value.start_seconds,
-		};
-	}
-	return { text: "geen gelabelde argumenten meer", clickable: false, seekTo: null };
+	return null;
 });
 
 // Kort, niet-prominent flitsje bij het begin van een spreekbeurt: type
@@ -114,15 +110,22 @@ const badges = computed(() =>
 				<span class="nameplate-name">{{ nameplate.name }}</span>
 				<PartyLogo v-if="nameplate.party" :party="nameplate.party" class="nameplate-logo" />
 				<span v-if="nameplate.party" class="nameplate-party">{{ displayPartyName(nameplate.party) }}</span>
-				<button
-					v-if="clockIndicator.clickable"
-					type="button"
-					class="clock-indicator is-clickable"
-					@click="emit('seek', clockIndicator.seekTo as number)"
-				>
-					{{ clockIndicator.text }}
-				</button>
-				<span v-else class="clock-indicator">{{ clockIndicator.text }}</span>
+				<div class="clock-group">
+					<span v-if="timeRangeText" class="clock-indicator">{{ timeRangeText }}</span>
+					<button
+						v-if="nextArgument?.start_seconds != null"
+						type="button"
+						class="clock-indicator is-clickable"
+						:class="{ 'is-compact': !!timeRangeText }"
+						:aria-label="`Volgend argument om ${formatClock(nextArgument.start_seconds)}`"
+						:title="timeRangeText ? `Volgend argument om ${formatClock(nextArgument.start_seconds)}` : undefined"
+						@click="emit('seek', nextArgument.start_seconds as number)"
+					>
+						<span v-if="timeRangeText" aria-hidden="true">→ {{ formatClock(nextArgument.start_seconds) }}</span>
+						<span v-else>volgend argument om {{ formatClock(nextArgument.start_seconds) }}</span>
+					</button>
+					<span v-else-if="!timeRangeText" class="clock-indicator">geen gelabelde argumenten meer</span>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -179,8 +182,14 @@ const badges = computed(() =>
 	text-transform: uppercase;
 }
 
-.clock-indicator {
+.clock-group {
 	margin-left: auto;
+	display: flex;
+	align-items: baseline;
+	gap: 0.6em;
+}
+
+.clock-indicator {
 	font-family: var(--font-mono);
 	font-size: var(--step--1);
 	color: rgba(255, 255, 255, 0.55);
@@ -198,6 +207,12 @@ const badges = computed(() =>
 
 .clock-indicator.is-clickable:hover {
 	color: rgba(255, 255, 255, 0.85);
+}
+
+/* Compact: er staat al een tijdrange, dus alleen een pijl + tijdstip i.p.v.
+   de volledige "volgend argument om ..."-tekst. */
+.clock-indicator.is-compact {
+	font-size: 1em;
 }
 
 /* Verticale rail tegen de rechterrand, los van het naamplaatje onderin --

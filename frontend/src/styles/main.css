@@ -701,6 +701,9 @@ h3 {
 	max-width: 30px;
 	max-height: 30px;
 	object-fit: contain;
+	/* Zelfde desaturatie als de naamplaat in de video-overlay
+	   (VideoOverlay.vue), voor een consistente, minder felle partijkleur. */
+	filter: saturate(0.6);
 }
 
 .card-tile-initial {
@@ -1521,6 +1524,12 @@ h3 {
 	border-left-color: var(--color-unclear);
 }
 
+.argument-meta {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+}
+
 .typology-badge {
 	display: inline-block;
 	font-family: var(--font-mono);
@@ -1530,6 +1539,15 @@ h3 {
 	color: var(--color-muted);
 	border: 1px solid var(--color-border);
 	padding: 0.1rem 0.6rem;
+}
+
+/* Videospanne van dit argument (alleen op de debat-videopagina) --
+   bedoeld om te kunnen checken of start_seconds/end_seconds klopt met wat
+   er daadwerkelijk in beeld speelt. */
+.argument-span {
+	font-family: var(--font-mono);
+	font-size: 0.7rem;
+	color: var(--color-muted);
 }
 
 .quote {
