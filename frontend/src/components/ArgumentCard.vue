@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted, watch, nextTick } from "vue";
 import { ISSUE_TYPES, type IssueKey, getFeedbackFor, submitFeedback } from "../lib/feedback";
+import { debateId } from "../lib/debateId";
 import { displayPartyName } from "../lib/parties";
 import { filters, toggleValue } from "../lib/filters";
 import { scrollTarget } from "../lib/scrollTarget";
@@ -13,7 +14,21 @@ function tagTooltip(tag: Tag): string {
 	return tag.reden ? `${base}\n\nReden: ${tag.reden}` : base;
 }
 
-const props = defineProps<{ argument: Argument; topicSlug: string }>();
+// videoContext: true op de debat-videopagina (DebateVideoView.vue) -- daar
+// moet klikken op een argument de speler laten springen (event "seek") i.p.v.
+// naar /debat/[id]/ te navigeren, want een paginaherlaad onderbreekt de
+// afspelende video/het geluid. playing: dit argument is op dit moment aan de
+// beurt in de video (currentTime binnen start_seconds/end_seconds).
+const props = defineProps<{ argument: Argument; topicSlug: string; videoContext?: boolean; playing?: boolean }>();
+const emit = defineEmits<{ seek: [seconds: number] }>();
+
+function onCardClick(event: MouseEvent) {
+	if (!props.videoContext || props.argument.start_seconds === null) return;
+	// Klikken op een nested link/knop (tag, feedback, ...) moet zijn eigen
+	// gedrag houden, niet ook nog seeken.
+	if ((event.target as HTMLElement).closest("a, button, input, textarea, label")) return;
+	emit("seek", props.argument.start_seconds);
+}
 
 const open = ref(false);
 const selectedIssues = ref<IssueKey[]>([]);
@@ -71,7 +86,19 @@ watch(
 </script>
 
 <template>
-	<article ref="cardEl" class="argument-card" :class="[`stance-${argument.stance}`, { 'is-highlighted': justHighlighted }]">
+	<article
+		ref="cardEl"
+		class="argument-card"
+		:class="[
+			`stance-${argument.stance}`,
+			{
+				'is-highlighted': justHighlighted,
+				'is-seekable': videoContext && argument.start_seconds !== null,
+				'is-playing': playing,
+			},
+		]"
+		@click="onCardClick"
+	>
 		<div class="argument-meta">
 			<span class="typology-badge" :title="typologyDescription(argument.typology)">{{ typologyLabel(argument.typology) }}</span>
 		</div>
@@ -135,6 +162,20 @@ watch(
 				target="_blank"
 				rel="noopener"
 				>video (hele debat)</a
+			>
+			<button
+				v-if="videoContext && argument.start_seconds !== null"
+				type="button"
+				class="link-button"
+				title="Spring naar dit moment in de video"
+				@click="emit('seek', argument.start_seconds as number)"
+				>spring naar dit moment</button
+			>
+			<a
+				v-else-if="argument.document.raw_video_url && argument.start_seconds !== null"
+				:href="`/debat/${debateId(argument.document.raw_video_url)}/`"
+				title="Bekijk dit debat met argumentannotaties over de video"
+				>bekijk in videospeler</a
 			>
 		</div>
 

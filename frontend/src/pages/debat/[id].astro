@@ -1,0 +1,57 @@
+---
+import DebateVideoView from "../../components/DebateVideoView.vue";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { debateId } from "../../lib/debateId";
+import { debateName } from "../../lib/debateName";
+
+// Route puur op debateId(raw_video_url), niet genest onder een topic-slug:
+// welke links (persoon/topic-pagina's) hier precies naartoe gaan verwijzen
+// staat nog niet vast, dus deze route mag topic-onafhankelijk zijn. Groeperen
+// op raw_video_url, niet op document.id: één debat bestaat uit veel
+// document-rijen (één per spreekbeurt) die allemaal dezelfde raw_video_url
+// delen -- op document.id groeperen zou één "debat" per spreekbeurt opleveren.
+
+export function getStaticPaths() {
+	const topicModules = import.meta.glob("../../../../data/export/topics/*.json", { eager: true });
+
+	const byDebateId = new Map<string, { arguments: any[]; topicSlug: string }>();
+	for (const mod of Object.values(topicModules) as any[]) {
+		for (const argument of mod.default.arguments) {
+			const rawVideoUrl = argument.document.raw_video_url;
+			if (!rawVideoUrl) continue;
+			const id = debateId(rawVideoUrl);
+			let entry = byDebateId.get(id);
+			if (!entry) {
+				entry = { arguments: [], topicSlug: mod.default.slug };
+				byDebateId.set(id, entry);
+			}
+			entry.arguments.push(argument);
+		}
+	}
+
+	return [...byDebateId.entries()].map(([id, entry]) => {
+		entry.arguments.sort((a, b) => {
+			if (a.start_seconds === null) return 1;
+			if (b.start_seconds === null) return -1;
+			return a.start_seconds - b.start_seconds;
+		});
+		return { params: { id }, props: entry };
+	});
+}
+
+const { arguments: argumentList, topicSlug } = Astro.props;
+const name = debateName(argumentList[0]?.document.video_url ?? null);
+const title = `${name ?? "Debat"} - Bipolariteit`;
+---
+
+<BaseLayout title={title}>
+	<a href={`/topics/${topicSlug}/`} class="back-link">&larr; terug naar {topicSlug}</a>
+	<h1 class="debate-title">{name ?? "Debat"}</h1>
+	<DebateVideoView arguments={argumentList} topicSlug={topicSlug} client:only="vue" />
+</BaseLayout>
+
+<style>
+	.debate-title {
+		margin-top: var(--space-1);
+	}
+</style>
