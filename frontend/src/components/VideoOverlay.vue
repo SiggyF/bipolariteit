@@ -168,8 +168,7 @@ const badges = computed(() =>
    veel aandacht en oogt los van de rest van de overlay-typografie. */
 .nameplate-logo {
 	align-self: center;
-	filter: grayscale(1);
-	opacity: 0.85;
+	filter: saturate(0.6);
 }
 
 .nameplate-party {
