@@ -701,6 +701,9 @@ h3 {
 	max-width: 30px;
 	max-height: 30px;
 	object-fit: contain;
+	/* Zelfde desaturatie als de naamplaat in de video-overlay
+	   (VideoOverlay.vue), voor een consistente, minder felle partijkleur. */
+	filter: saturate(0.6);
 }
 
 .card-tile-initial {
@@ -1314,10 +1317,12 @@ h3 {
 	height: 18px;
 	object-fit: contain;
 	border-radius: 3px;
-	background: #fff;
 	flex-shrink: 0;
 	vertical-align: middle;
 	margin-right: 0.3rem;
+	/* Zelfde desaturatie als .card-tile-logo img / de video-naamplaat, voor
+	   een consistente, minder felle partijkleur overal op de site. */
+	filter: saturate(0.6);
 }
 
 .party-logo-placeholder {
@@ -1492,6 +1497,29 @@ h3 {
 	outline-offset: 2px;
 }
 
+/* Op de debat-videopagina (DebateVideoView.vue) laat klikken op de kaart de
+   speler springen -- geen paginaherlaad, dus het geluid loopt door. */
+.argument-card.is-seekable {
+	cursor: pointer;
+}
+
+.argument-card.is-seekable:hover {
+	border-color: var(--color-accent);
+}
+
+.argument-card.is-seekable:focus-visible {
+	outline: 2px solid var(--color-accent);
+	outline-offset: 2px;
+}
+
+/* Dit argument is nu aan de beurt in de video (currentTime binnen
+   start_seconds/end_seconds) -- zelfde uitgangspunt als het ontwerpprototype:
+   accentkleur op de rand + een lichte tint, i.p.v. de gewone stance-rand. */
+.argument-card.is-playing {
+	border-left-color: var(--color-accent);
+	background: color-mix(in srgb, var(--color-accent) 6%, var(--color-card-bg));
+}
+
 .argument-card.stance-pro {
 	border-left-color: var(--color-pro);
 }
@@ -1504,6 +1532,12 @@ h3 {
 	border-left-color: var(--color-unclear);
 }
 
+.argument-meta {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+}
+
 .typology-badge {
 	display: inline-block;
 	font-family: var(--font-mono);
@@ -1513,6 +1547,15 @@ h3 {
 	color: var(--color-muted);
 	border: 1px solid var(--color-border);
 	padding: 0.1rem 0.6rem;
+}
+
+/* Videospanne van dit argument (alleen op de debat-videopagina) --
+   bedoeld om te kunnen checken of start_seconds/end_seconds klopt met wat
+   er daadwerkelijk in beeld speelt. */
+.argument-span {
+	font-family: var(--font-mono);
+	font-size: 0.7rem;
+	color: var(--color-muted);
 }
 
 .quote {
@@ -1602,6 +1645,25 @@ h3 {
 
 .argument-links a {
 	color: var(--color-accent);
+}
+
+/* <button> voor "spring naar dit moment" (DebateVideoView.vue): visueel
+   gelijk aan de <a>-links ernaast, want inhoudelijk hoort het in hetzelfde
+   rijtje thuis -- alleen navigeert het niet (seekt de speler i.p.v. de
+   pagina te herladen). */
+.link-button {
+	background: none;
+	border: none;
+	padding: 0;
+	font: inherit;
+	color: var(--color-accent);
+	text-decoration: underline;
+	text-decoration-color: var(--color-border);
+	cursor: pointer;
+}
+
+.link-button:hover {
+	text-decoration-color: currentColor;
 }
 
 .debug-version {

@@ -2,6 +2,7 @@
 import { computed } from "vue";
 import FilterBar from "./FilterBar.vue";
 import ArgumentTimeline from "./ArgumentTimeline.vue";
+import DebateList from "./DebateList.vue";
 import ClaimsHighlights from "./ClaimsHighlights.vue";
 import StatsPanel from "./StatsPanel.vue";
 import TagsPerParty from "./TagsPerParty.vue";
@@ -47,6 +48,8 @@ const columns = computed(() =>
 	<TagCorrespondenceMap :argumentList="argumentList" />
 
 	<ArgumentTimeline :argumentList="timelineList" />
+
+	<DebateList :argumentList="filtered" />
 
 	<ClaimsHighlights :argumentList="filtered" />
 
