@@ -169,9 +169,10 @@ const badges = computed(() =>
 
 /* Gedesatureerd: een vol partijlogo naast de warme videobeelden trekt te
    veel aandacht en oogt los van de rest van de overlay-typografie. */
+/* Desaturatie zit nu in de globale .party-logo-regel (main.css), hier alleen
+   nog de verticale uitlijning. */
 .nameplate-logo {
 	align-self: center;
-	filter: saturate(0.6);
 }
 
 .nameplate-party {

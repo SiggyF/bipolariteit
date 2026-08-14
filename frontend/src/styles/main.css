@@ -1320,6 +1320,9 @@ h3 {
 	flex-shrink: 0;
 	vertical-align: middle;
 	margin-right: 0.3rem;
+	/* Zelfde desaturatie als .card-tile-logo img / de video-naamplaat, voor
+	   een consistente, minder felle partijkleur overal op de site. */
+	filter: saturate(0.6);
 }
 
 .party-logo-placeholder {
