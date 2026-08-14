@@ -1507,6 +1507,11 @@ h3 {
 	border-color: var(--color-accent);
 }
 
+.argument-card.is-seekable:focus-visible {
+	outline: 2px solid var(--color-accent);
+	outline-offset: 2px;
+}
+
 /* Dit argument is nu aan de beurt in de video (currentTime binnen
    start_seconds/end_seconds) -- zelfde uitgangspunt als het ontwerpprototype:
    accentkleur op de rand + een lichte tint, i.p.v. de gewone stance-rand. */

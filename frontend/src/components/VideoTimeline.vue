@@ -199,6 +199,7 @@ function onKeydown(event: KeyboardEvent) {
 			:viewBox="`0 0 ${svgWidth} ${height}`"
 			class="scrubber"
 			role="slider"
+			aria-label="Tijdlijn met argumenten"
 			:aria-valuemin="windowStart"
 			:aria-valuemax="windowEnd"
 			:aria-valuenow="currentTime"

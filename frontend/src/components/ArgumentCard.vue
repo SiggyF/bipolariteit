@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, watch, nextTick } from "vue";
+import { computed, ref, onMounted, watch, nextTick } from "vue";
 import { ISSUE_TYPES, type IssueKey, getFeedbackFor, submitFeedback } from "../lib/feedback";
 import { debateId } from "../lib/debateId";
 import { displayPartyName } from "../lib/parties";
@@ -23,12 +23,25 @@ function tagTooltip(tag: Tag): string {
 const props = defineProps<{ argument: Argument; topicSlug: string; videoContext?: boolean; playing?: boolean }>();
 const emit = defineEmits<{ seek: [seconds: number] }>();
 
+const isSeekable = computed(() => !!props.videoContext && props.argument.start_seconds !== null);
+
 function onCardClick(event: MouseEvent) {
-	if (!props.videoContext || props.argument.start_seconds === null) return;
+	if (!isSeekable.value) return;
 	// Klikken op een nested link/knop (tag, feedback, ...) moet zijn eigen
 	// gedrag houden, niet ook nog seeken.
 	if ((event.target as HTMLElement).closest("a, button, input, textarea, label")) return;
-	emit("seek", props.argument.start_seconds);
+	emit("seek", props.argument.start_seconds as number);
+}
+
+// Toetsenbordequivalent van onCardClick: de kaart is in videoContext
+// focusable (tabindex+role="button") maar zonder dit bleef Enter/Spatie
+// zonder effect.
+function onCardKeydown(event: KeyboardEvent) {
+	if (!isSeekable.value) return;
+	if ((event.target as HTMLElement).closest("a, button, input, textarea, label")) return;
+	if (event.key !== "Enter" && event.key !== " ") return;
+	event.preventDefault();
+	emit("seek", props.argument.start_seconds as number);
 }
 
 const open = ref(false);
@@ -104,11 +117,15 @@ watch(
 			`stance-${argument.stance}`,
 			{
 				'is-highlighted': justHighlighted,
-				'is-seekable': videoContext && argument.start_seconds !== null,
+				'is-seekable': isSeekable,
 				'is-playing': playing,
 			},
 		]"
+		:tabindex="isSeekable ? 0 : undefined"
+		:role="isSeekable ? 'button' : undefined"
+		:aria-label="isSeekable ? `Spring naar dit moment (${formatClock(argument.start_seconds as number)})` : undefined"
 		@click="onCardClick"
+		@keydown="onCardKeydown"
 	>
 		<div class="argument-meta">
 			<span class="typology-badge" :title="typologyDescription(argument.typology)">{{ typologyLabel(argument.typology) }}</span>
