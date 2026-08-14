@@ -48,6 +48,7 @@ const activeArgumentIds = computed(() => new Set(activeArguments(props.arguments
 					:seek-token="videoSeek.token"
 					@timeupdate="(t) => (currentTime = t)"
 					@loadedmetadata="(d) => (duration = d)"
+					@seek="requestSeek"
 				>
 					<VideoOverlay :arguments="props.arguments" :current-time="currentTime" :off="off" @seek="requestSeek" />
 				</VideoPlayer>

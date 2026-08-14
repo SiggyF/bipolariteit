@@ -14,7 +14,7 @@ import { formatClock } from "../lib/videoTime";
 // "knullig" t.o.v. de rest van de site.
 
 const props = defineProps<{ src: string; seekTo: number | null; seekToken: number }>();
-const emit = defineEmits<{ timeupdate: [seconds: number]; loadedmetadata: [duration: number] }>();
+const emit = defineEmits<{ timeupdate: [seconds: number]; loadedmetadata: [duration: number]; seek: [seconds: number] }>();
 
 const videoEl = ref<HTMLVideoElement | null>(null);
 const fatalError = ref(false);
@@ -126,6 +126,14 @@ function toggleMute() {
 	video.muted = !video.muted;
 }
 
+// Loopt via het "seek"-event (net als de tijdlijn/argumentenlijst) i.p.v.
+// hier direct video.currentTime te zetten -- zo profiteert een relatieve
+// sprong ook van de seeking/settle-onderdrukking hierboven, anders knippert
+// de overlay/tijdlijn ook bij deze knoppen.
+function skipBy(deltaSeconds: number) {
+	emit("seek", Math.max(0, currentTime.value + deltaSeconds));
+}
+
 defineExpose({ fatalError });
 </script>
 
@@ -143,6 +151,13 @@ defineExpose({ fatalError });
 			<slot />
 		</div>
 		<div v-if="!fatalError" class="controls-row">
+			<button type="button" class="control-button" title="30 seconden terug" aria-label="30 seconden terug" @click="skipBy(-30)">
+				<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+					<path d="M11 19l-7-7 7-7" />
+					<path d="M18 19l-7-7 7-7" />
+				</svg>
+				<span class="skip-label">30</span>
+			</button>
 			<button
 				type="button"
 				class="control-button is-primary"
@@ -157,6 +172,13 @@ defineExpose({ fatalError });
 					<rect x="7" y="4.5" width="3.5" height="15" fill="currentColor" />
 					<rect x="14" y="4.5" width="3.5" height="15" fill="currentColor" />
 				</svg>
+			</button>
+			<button type="button" class="control-button" title="10 seconden vooruit" aria-label="10 seconden vooruit" @click="skipBy(10)">
+				<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+					<path d="M13 5l7 7-7 7" />
+					<path d="M6 5l7 7-7 7" />
+				</svg>
+				<span class="skip-label">10</span>
 			</button>
 			<button
 				type="button"
@@ -237,6 +259,21 @@ video {
 
 .control-button.is-primary:hover {
 	background: color-mix(in srgb, var(--color-accent) 12%, transparent);
+}
+
+/* De -30s/+10s-knoppen (vergelijkbaar met YouTube's skip-knoppen) hebben
+   naast het pijl-icoon ook een secondenaantal nodig, dus breder dan de
+   vierkante iconknoppen. */
+.control-button:has(.skip-label) {
+	width: auto;
+	min-width: 40px;
+	padding: 0 8px;
+	gap: 3px;
+}
+
+.skip-label {
+	font-family: var(--font-mono);
+	font-size: 0.65rem;
 }
 
 .time-label {
