@@ -177,11 +177,26 @@ past niet bij tikvertraging en wijst eerder op een daadwerkelijke
 onderbreking/reset in het ondertitelsysteem tijdens de pauze. Dit is een
 sterkere, rechtstreeks geverifieerde verklaring voor #108 dan de eerdere
 (nog steeds geldige, maar minder doorslaggevende)
-`published_at`- en `X-TIMESTAMP-MAP`-observaties elders in deze sectie, en
-onderstreept dat de `MAX_CALIBRATION_SPREAD_SECONDS`-vangnet in
-`match_argument_spans.py` (#114) de juiste aanpak is voor dit soort debatten --
-een preciezere kalibratieformule zou hier niet helpen, want de onderliggende
-klok zelf is niet betrouwbaar te modelleren.
+`published_at`- en `X-TIMESTAMP-MAP`-observaties elders in deze sectie.
+
+**Concrete bevinding 3, doorslaggevend**: `docs/poc/video-eigen-player/poc_ownplayer.html`
+(zie 5b) hergebruikt voor dit debat om hls.js -- niet onze eigen Python-matching --
+de quote-naar-cue-vertaling te laten doen (kopie met alleen `MANIFEST`/`QUOTE_NEEDLE`
+aangepast en ondertitels op `showing` i.p.v. `hidden`, zodat ze ook zichtbaar zijn;
+niet toegevoegd aan git, puur voor dit onderzoek). Voor dezelfde quote als bevinding 2
+("een beetje teleurgesteld ben in mijn collega van de SGP", handmatig bevestigd bij
+0:02:37 echte videotijd) gaf hls.js's eigen, spec-conforme `cue.startTime`-resolutie
+**264.075s** -- 107s later dan wat daadwerkelijk beluisterd is. Die 264.075s is
+precies wat je krijgt door de ruwe cue-tijd (2028.555) via het bestand's eigen,
+gedeclareerde `X-TIMESTAMP-MAP` te vertalen: geen giswerk of bug in hls.js, gewoon de
+correcte toepassing van een formule op een input die voor dit bestand simpelweg fout
+is. Dit is het sterkste bewijs tot nu toe dat de fout in de brondata zit (het
+`X-TIMESTAMP-MAP` van dit specifieke bestand), niet in enige verwerkingsstap
+downstream -- of dat nu onze eigen `match_argument_spans.py`, een handmatige
+berekening, of een industriestandaard-library als hls.js is. Onderstreept nogmaals
+dat de `MAX_CALIBRATION_SPREAD_SECONDS`-vangnet in `match_argument_spans.py` (#114)
+de juiste aanpak is voor dit soort debatten -- een preciezere kalibratieformule zou
+hier niet geholpen hebben, welke implementatie dan ook.
 
 ## 6. `debatgemist.tweedekamer.nl` (legacy, dood)
 
