@@ -689,6 +689,14 @@ h3 {
 	border-color: var(--color-accent);
 }
 
+/* Bij hover iets minder gedempt, als subtiele hover-feedback op zowel de
+   topic-stills als de partijlogo's -- zelfde saturate(0.6)-basis, dus één
+   hover-waarde die voor beide geldt. */
+.card-tile:hover .card-tile-image img,
+.card-tile:hover .card-tile-logo img {
+	filter: saturate(0.85);
+}
+
 /* Vast kader rond elk partij-icoon: de brondata (party-logos/simplified/*.svg)
    deelt wel een 160x160-viewBox, maar niet elk logo vult 'm even ver -- sommige
    zijn edge-to-edge (GroenLinks-PvdA, CDA), andere een smal beeldmerk met veel
@@ -711,6 +719,7 @@ h3 {
 	/* Zelfde desaturatie als de naamplaat in de video-overlay
 	   (VideoOverlay.vue), voor een consistente, minder felle partijkleur. */
 	filter: saturate(0.6);
+	transition: filter 0.15s ease;
 }
 
 /* Representatief still-beeld per topic, uit Debat Direct's scrub-bar-
@@ -730,6 +739,7 @@ h3 {
 	/* Zelfde desaturatie als partijlogo's (.card-tile-logo img), voor een
 	   consistente, minder felle stijl. */
 	filter: saturate(0.6);
+	transition: filter 0.15s ease;
 }
 
 .card-tile-initial {
