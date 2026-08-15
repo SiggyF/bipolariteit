@@ -198,6 +198,71 @@ dat de `MAX_CALIBRATION_SPREAD_SECONDS`-vangnet in `match_argument_spans.py` (#1
 de juiste aanpak is voor dit soort debatten -- een preciezere kalibratieformule zou
 hier niet geholpen hebben, welke implementatie dan ook.
 
+### 5e. Per-moment still/thumbnail ophalen zonder ffmpeg (issue #111, 2026-08-15)
+
+Uitgezocht naar aanleiding van #111 (representatief beeld per topic): is er al een
+bruikbare afbeelding per debat beschikbaar vanuit de bron, i.p.v. zelf een frame te
+extraheren uit `raw_video_url` met ffmpeg?
+
+- **Wat niet bruikbaar is**: `video.imageUrl`/`video.cardImageUrl`, teruggegeven door
+  zowel de debat-detail-API (`api.debatdirect.tweedekamer.nl/debates/{id}`, zie punt 5)
+  als de zoek-API, is een **generieke achtergrondfoto per vergaderzaal** (bestandsnaam
+  volgt `locationId`, bv. `thorbeckezaal-1080.jpg`) — niet inhoudelijk representatief
+  voor een specifiek debat. Twee compleet verschillende debatten in dezelfde zaal
+  krijgen exact dezelfde foto. In de front-end-bundel (`index-B6WKAo3O.js`) is dit
+  terug te vinden als functie `mH(id, urls)`: kiest pseudo-random (hash van het
+  debat-id) één van meerdere zaalfoto's uit een array — puur cosmetische variatie
+  voor het idle-scherm vóór afspelen, geen inhoudelijke koppeling aan het debat.
+- **Wat wel bruikbaar is — `dynamicThumbnailUrl`**: `GET
+  https://cdn.debatdirect.tweedekamer.nl/api/app` retourneert onder `locations[]` per
+  zaal een basis-URL:
+  ```json
+  {
+    "slug": "actualiteitenkanaal",
+    "dynamicThumbnailUrl": "https://livestreaming-thumb.b67buv2.tweedekamer.nl/evenementenkanaal"
+  }
+  ```
+  Debat Direct's eigen player (`App-DYVvwzou.js`, functie die hier `Aa(debate,
+  location.dynamicThumbnailUrl, ...)` heet na minificatie) plakt hier zelf
+  `/{breedte}/{YYYY-MM-DD}/{HH:MM:SS}+0200.jpg` achteraan om de scrub-bar-preview van
+  de videoplayer te vullen op basis van de actuele afspeeltijd. Voorbeeld, getest en
+  werkend zonder authenticatie:
+  ```
+  https://livestreaming-thumb.b67buv2.tweedekamer.nl/suze-groenewegzaal/1080/2025-04-02/12:00:00+0200.jpg
+  ```
+  → HTTP 301-redirect naar de daadwerkelijke opslag bij Arbor (de streaming-leverancier
+  van de TK, `*.streaming.arbor.nl`), en levert een echt frame op dat exacte tijdstip in
+  het stikstofdebat van 2 april 2025 (spreker + voorzitter herkenbaar in beeld).
+  Bevestigd werkend voor meerdere zalen (`plenairezaal`, `thorbeckezaal`,
+  `suze-groenewegzaal`) en breedtes (400px, 1080px).
+- **Consequentie voor de implementatie**: geen `ffmpeg`-dependency nodig in de
+  pipeline — gewoon een HTTP GET met `locationId` (al beschikbaar via de
+  video-URL-matching in `pipeline/enrich_video_url.py`) en een gekozen tijdstip binnen
+  het debat. Cachen als statisch bestand kan met hetzelfde patroon als
+  `pipeline/fetch_subtitles.py` (VTT-caching).
+- **Welk moment kiest Debat Direct zelf?** Teruggevonden in `index-B6WKAo3O.js`
+  (functie `pH`, met constanten `aB = {offsetInSeconds: 45, refreshInterval: 60, ...}`):
+  voor een teruggekeken (`vod`) debat is dat altijd gewoon **`startedAt + 45s`** (bij
+  een live debat: `nu − 45s`, afgerond op de `refreshInterval`). Geen inhoudelijke
+  keuze, geen sprekersherkenning of "belangrijkste moment"-heuristiek — puur een vaste
+  offset om het openingswachtscherm van de zaal te vermijden (zie 5d: de eerste ~48s
+  tonen vaak nog "geen vergadering"-wachtscherm). Als `startedAt + 45s` al na
+  `endedAt` valt (zeer kort debat), valt het terug op `startedAt` zelf. Voor #111
+  betekent dit dat "gewoon hetzelfde doen als Debat Direct" geen representatief beeld
+  oplevert — we zullen zelf een zinvoller tijdstip moeten kiezen (bv. het moment van
+  een specifiek argument/quote binnen het topic).
+- **Nog open**: één still per topic of per debat, en of de licentie-uitzondering voor
+  onderwijsmateriaal (zie punt 5a) hier hetzelfde van toepassing is als bij het
+  HLS-materiaal zelf — een los still-beeld naast een topic is niet per se "verwerkt in
+  ander materiaal" zoals de quote-overlay-aanpak dat wel is, dus mogelijk is hier
+  alsnog een zichtbare, aparte bronvermelding nodig.
+- **Stijl**: voor consistentie met hoe partijlogo's al gedempt worden getoond, hergebruik
+  dezelfde desaturatie als `.party-logo`/`.card-tile-logo img`
+  (`frontend/src/styles/main.css:1332` resp. `:713`): `filter: saturate(0.6);`, geen
+  aparte hover-variant. Bij implementatie is er nog geen bestaand icoon/afbeelding-slot
+  op de topic-tegel in `index.astro:68-79` (`.card-tile`) — dat zou naar analogie van
+  `.card-tile-logo` (`main.css:699-714`) toegevoegd moeten worden.
+
 ## 6. `debatgemist.tweedekamer.nl` (legacy, dood)
 
 - Oude, server-side gerenderde site. Had een eigen Drupal-volltekstzoekfunctie (`search_api_views_fulltext`), gescraped door `~/src/echokamer`'s `zoeken.py` (Scrapy-spider + BeautifulSoup).
