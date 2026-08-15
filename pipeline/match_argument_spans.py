@@ -53,6 +53,14 @@ _NORMALIZE_RE = re.compile(r"[^a-z0-9]+")
 # meerdere argumenten in dezelfde beurt leveren maar één kalibratiepunt op.
 MIN_MATCHES_FOR_CALIBRATION = 3
 
+# Zie het uitgebreide commentaar bij het gebruik in match_debate() (#108):
+# steekproef over ~800 debatten gaf een mediane spreiding van ~130s tussen
+# de per-beurt kalibratiepunten, met twee uitschieters (1741s/8777s) die
+# aantoonbaar een onbetrouwbare published_at rond een schorsing hebben --
+# niet een kapotte video. 800s ligt ruim boven de rest (max ~630s) en ruim
+# onder beide uitschieters.
+MAX_CALIBRATION_SPREAD_SECONDS = 800
+
 
 def _ts_to_seconds(h, m, s, ms):
     return int(h) * 3600 + int(m) * 60 + int(s) + int(ms) / 1000
@@ -168,6 +176,28 @@ def match_debate(cues, rows):
     if len(calibration_samples) < MIN_MATCHES_FOR_CALIBRATION:
         return {}
 
+    # De spreiding tussen de per-beurt kalibratiepunten hoort klein te zijn
+    # (mediaan ~130s over ~800 onderzochte debatten) -- het HLS-manifest zelf
+    # is altijd één doorlopende, ononderbroken opname die exact de volledige
+    # wandklok-duur van de activiteit beslaat, ook over een schorsing heen
+    # (bevestigd via ffprobe, zie #108: geen ontbrekend stuk video, geen
+    # #EXT-X-DISCONTINUITY). Een grote spreiding betekent dus niet dat de
+    # video hapert, maar dat `published_at` voor een deel van de argumenten
+    # de echte schorsingsduur niet correct weerspiegelt -- een fout in de
+    # VLOS-brondata, niet in deze matching. Beter dan blind een mediaan
+    # tussen twee onverenigbare clusters te kiezen (die dan voor beide kanten
+    # fout is, met zelfs negatieve start_seconds tot gevolg): het hele debat
+    # ongekalibreerd laten, dezelfde "nooit gokken"-aanpak als bij een
+    # ontbrekende ondertitel-match.
+    if max(calibration_samples) - min(calibration_samples) > MAX_CALIBRATION_SPREAD_SECONDS:
+        logger.warning(
+            "Kalibratiepunten wijken te veel af (spreiding %.0fs > %.0fs) -- "
+            "vermoedelijk onbetrouwbare published_at rond een schorsing, debat overgeslagen.",
+            max(calibration_samples) - min(calibration_samples),
+            MAX_CALIBRATION_SPREAD_SECONDS,
+        )
+        return {}
+
     calibration = statistics.median(calibration_samples)
     return {
         argument_id: (raw_start - calibration, raw_end - calibration)
@@ -221,11 +251,24 @@ def _match_topic(conn, topic_id, dry_run=False, force=False):
             uncalibrated += len(debate_rows)
 
         matched += len(spans)
-        if not dry_run and spans:
-            conn.executemany(
-                "UPDATE arguments SET start_seconds = ?, end_seconds = ? WHERE id = ?",
-                [(start, end, argument_id) for argument_id, (start, end) in spans.items()],
-            )
+        if not dry_run:
+            if spans:
+                conn.executemany(
+                    "UPDATE arguments SET start_seconds = ?, end_seconds = ? WHERE id = ?",
+                    [(start, end, argument_id) for argument_id, (start, end) in spans.items()],
+                )
+            if force:
+                # --force herbeoordeelt ook argumenten met een bestaande span; als
+                # een debat nu (anders dan een eerdere run) niet meer kalibreert
+                # -- bv. de nieuwe spreiding-check in #108 -- moet die oude,
+                # inmiddels onbetrouwbaar geachte span ook echt verdwijnen i.p.v.
+                # stilzwijgend blijven staan.
+                stale_ids = [row["id"] for row in debate_rows if row["id"] not in spans]
+                if stale_ids:
+                    conn.executemany(
+                        "UPDATE arguments SET start_seconds = NULL, end_seconds = NULL WHERE id = ?",
+                        [(argument_id,) for argument_id in stale_ids],
+                    )
 
     if not dry_run:
         conn.commit()
