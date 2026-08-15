@@ -25,7 +25,7 @@ import argparse
 import json
 import logging
 from collections import Counter
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
 from urllib.parse import quote
 from zoneinfo import ZoneInfo
@@ -63,6 +63,39 @@ def _speaker_event_url(video_url, published_at):
     dt = datetime.fromisoformat(published_at).replace(tzinfo=_AMSTERDAM)
     event = quote(dt.strftime("%Y-%m-%dT%H:%M:%S%z"), safe="")
     return f"{base}?event=speaker{event}"
+
+
+def _thumbnail_url(video_url, published_at, start_seconds):
+    """Bouwt een still-URL via Debat Direct's eigen scrub-bar-thumbnail-
+    endpoint (zie docs/tk-data-sources-overview.md 5e) op het moment waarop
+    dit argument wordt uitgesproken. Dat is inhoudelijk representatiever dan
+    Debat Direct's eigen default (`startedAt + 45s`, zonder enige relatie tot
+    de inhoud -- idem 5e), omdat het echt het moment van een spreekbeurt over
+    dit topic pakt i.p.v. een willekeurig punt vlak na het begin van het debat.
+    `locationId` (het zaal-pad-segment) zit niet los in de database, alleen
+    verwerkt in `video_url` (opgebouwd in `enrich_video_url.py`), dus parsen
+    we 'm terug uit die URL i.p.v. 'm apart op te slaan."""
+    if not video_url or not published_at or start_seconds is None:
+        return None
+    parts = video_url.split("/")
+    if len(parts) < 6:
+        return None
+    location_id = parts[5]
+    dt = datetime.fromisoformat(published_at).replace(tzinfo=_AMSTERDAM) + timedelta(seconds=start_seconds)
+    return f"https://livestreaming-thumb.b67buv2.tweedekamer.nl/{location_id}/1080/{dt.strftime('%Y-%m-%d')}/{dt.strftime('%H:%M:%S%z')}.jpg"
+
+
+def _topic_image_url(arguments):
+    """Still van het eerste argument in dit topic met een gematchte
+    videospanne (start_seconds), als representatief beeld voor de topic-tegel
+    op de homepage. Bewust geen "beste"/langste-argument-selectie -- dat is
+    een aparte redactionele keuze die nog niet gemaakt is (zie issue #111)."""
+    for argument in arguments:
+        document = argument["document"]
+        url = _thumbnail_url(document["video_url"], document["published_at"], argument["start_seconds"])
+        if url:
+            return url
+    return None
 
 
 def fetch_redactie_reviews(conn, topic_id):
@@ -480,6 +513,7 @@ def build_topic_export(conn, topic_row, periode_index):
         "arguments": arguments,
         "argument_count": len(arguments),
         "tag_correspondence": build_correspondence_analysis(tag_rows),
+        "image_url": _topic_image_url(arguments),
     }
 
 
@@ -526,6 +560,7 @@ def main():
                 "name": topic_row["name"],
                 "description": topic_row["description"],
                 "argument_count": export["argument_count"],
+                "image_url": export["image_url"],
             }
         )
 
