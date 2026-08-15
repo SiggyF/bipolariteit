@@ -240,12 +240,22 @@ extraheren uit `raw_video_url` met ffmpeg?
   video-URL-matching in `pipeline/enrich_video_url.py`) en een gekozen tijdstip binnen
   het debat. Cachen als statisch bestand kan met hetzelfde patroon als
   `pipeline/fetch_subtitles.py` (VTT-caching).
-- **Nog open**: welk moment binnen een debat "het" beeld wordt, één still per topic of
-  per debat, en of de licentie-uitzondering voor onderwijsmateriaal (zie punt 5a) hier
-  hetzelfde van toepassing is als bij het HLS-materiaal zelf — een los still-beeld
-  naast een topic is niet per se "verwerkt in ander materiaal" zoals de quote-overlay-
-  aanpak dat wel is, dus mogelijk is hier alsnog een zichtbare, aparte bronvermelding
-  nodig.
+- **Welk moment kiest Debat Direct zelf?** Teruggevonden in `index-B6WKAo3O.js`
+  (functie `pH`, met constanten `aB = {offsetInSeconds: 45, refreshInterval: 60, ...}`):
+  voor een teruggekeken (`vod`) debat is dat altijd gewoon **`startedAt + 45s`** (bij
+  een live debat: `nu − 45s`, afgerond op de `refreshInterval`). Geen inhoudelijke
+  keuze, geen sprekersherkenning of "belangrijkste moment"-heuristiek — puur een vaste
+  offset om het openingswachtscherm van de zaal te vermijden (zie 5d: de eerste ~48s
+  tonen vaak nog "geen vergadering"-wachtscherm). Als `startedAt + 45s` al na
+  `endedAt` valt (zeer kort debat), valt het terug op `startedAt` zelf. Voor #111
+  betekent dit dat "gewoon hetzelfde doen als Debat Direct" geen representatief beeld
+  oplevert — we zullen zelf een zinvoller tijdstip moeten kiezen (bv. het moment van
+  een specifiek argument/quote binnen het topic).
+- **Nog open**: één still per topic of per debat, en of de licentie-uitzondering voor
+  onderwijsmateriaal (zie punt 5a) hier hetzelfde van toepassing is als bij het
+  HLS-materiaal zelf — een los still-beeld naast een topic is niet per se "verwerkt in
+  ander materiaal" zoals de quote-overlay-aanpak dat wel is, dus mogelijk is hier
+  alsnog een zichtbare, aparte bronvermelding nodig.
 - **Stijl**: voor consistentie met hoe partijlogo's al gedempt worden getoond, hergebruik
   dezelfde desaturatie als `.party-logo`/`.card-tile-logo img`
   (`frontend/src/styles/main.css:1332` resp. `:713`): `filter: saturate(0.6);`, geen
