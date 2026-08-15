@@ -2,6 +2,7 @@
 import { computed } from "vue";
 import { debateId } from "../lib/debateId";
 import { debateName } from "../lib/debateName";
+import { formatDate } from "../lib/formatDate";
 import type { Argument } from "../lib/types";
 
 // Lijst van debatten binnen dit topic die als video bekeken kunnen worden
@@ -47,11 +48,6 @@ const debates = computed(() => {
 	}
 	return [...perDebate.values()].sort((a, b) => (b.earliestPublishedAt ?? "").localeCompare(a.earliestPublishedAt ?? ""));
 });
-
-function formatDate(iso: string | null): string {
-	if (!iso) return "datum onbekend";
-	return new Date(iso).toLocaleDateString("nl-NL", { day: "numeric", month: "long", year: "numeric" });
-}
 </script>
 
 <template>
