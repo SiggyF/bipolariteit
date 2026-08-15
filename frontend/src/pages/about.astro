@@ -6,6 +6,7 @@ import { analyseTable, canonicalSigns } from "../lib/correspondence";
 import { ICOON_PAD, PERSPECTIEVEN } from "../lib/tagIcons.generated";
 import { tagIconPath, perspectiefWeergaveNaam } from "../lib/tagIcon";
 import { STANCES, stanceLabel, stanceDescription, TYPOLOGIES, typologyLabel, typologyDescription, type Argument } from "../lib/types";
+import { TYPOLOGY_COLORS } from "../lib/typologyColors";
 
 // Opsomming in de intro-alinea ("Voor stikstof, abortus, ... ") -- afgeleid
 // van de topic-slugs i.p.v. hardcoded, zodat een nieuw onderwerp hier
@@ -319,7 +320,9 @@ const CA_ROW_LABEL_OFFSET: Record<string, CaLabelOffset> = {
 								"{voorbeeld.parts.map((part) => <span class={`arg-${part.type}`}>{part.text}</span>)}."
 							</p>
 							<p class="argument-meta">
-								{voorbeeld.bron} ({stanceLabel(voorbeeld.stance)}/{typologyLabel(voorbeeld.typology)}).{" "}
+								{voorbeeld.bron}{" "}
+								<span class="argument-badge" style={`--badge-color: var(--color-${voorbeeld.stance})`}>{stanceLabel(voorbeeld.stance)}</span>
+								<span class="argument-badge" style={`--badge-color: ${TYPOLOGY_COLORS[voorbeeld.typology]}`}>{typologyLabel(voorbeeld.typology)}</span>
 								<strong>Wel een argument</strong>: {voorbeeld.toelichting}
 							</p>
 						</li>
