@@ -246,6 +246,12 @@ extraheren uit `raw_video_url` met ffmpeg?
   naast een topic is niet per se "verwerkt in ander materiaal" zoals de quote-overlay-
   aanpak dat wel is, dus mogelijk is hier alsnog een zichtbare, aparte bronvermelding
   nodig.
+- **Stijl**: voor consistentie met hoe partijlogo's al gedempt worden getoond, hergebruik
+  dezelfde desaturatie als `.party-logo`/`.card-tile-logo img`
+  (`frontend/src/styles/main.css:1332` resp. `:713`): `filter: saturate(0.6);`, geen
+  aparte hover-variant. Bij implementatie is er nog geen bestaand icoon/afbeelding-slot
+  op de topic-tegel in `index.astro:68-79` (`.card-tile`) — dat zou naar analogie van
+  `.card-tile-logo` (`main.css:699-714`) toegevoegd moeten worden.
 
 ## 6. `debatgemist.tweedekamer.nl` (legacy, dood)
 
