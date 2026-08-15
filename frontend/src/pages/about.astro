@@ -317,13 +317,26 @@ const CA_ROW_LABEL_OFFSET: Record<string, CaLabelOffset> = {
 					].map((voorbeeld) => (
 						<li>
 							<p class="argument-quote">
-								"{voorbeeld.parts.map((part) => <span class={`arg-${part.type}`}>{part.text}</span>)}."
+								"{
+									voorbeeld.parts.map((part) => (
+										<>
+											<span class={`arg-${part.type}`}>{part.text}</span>
+											{part.type === "standpunt" && (
+												<span class="argument-badge argument-badge-inline" style={`--badge-color: var(--color-${voorbeeld.stance})`}>
+													{stanceLabel(voorbeeld.stance)}
+												</span>
+											)}
+											{part.type === "onderbouwing" && (
+												<span class="argument-badge argument-badge-inline" style={`--badge-color: ${TYPOLOGY_COLORS[voorbeeld.typology]}`}>
+													{typologyLabel(voorbeeld.typology)}
+												</span>
+											)}
+										</>
+									))
+								}."
 							</p>
 							<p class="argument-meta">
-								{voorbeeld.bron}{" "}
-								<span class="argument-badge" style={`--badge-color: var(--color-${voorbeeld.stance})`}>{stanceLabel(voorbeeld.stance)}</span>
-								<span class="argument-badge" style={`--badge-color: ${TYPOLOGY_COLORS[voorbeeld.typology]}`}>{typologyLabel(voorbeeld.typology)}</span>
-								<strong>Wel een argument</strong>: {voorbeeld.toelichting}
+								{voorbeeld.bron}. <strong>Wel een argument</strong>: {voorbeeld.toelichting}
 							</p>
 						</li>
 					))
