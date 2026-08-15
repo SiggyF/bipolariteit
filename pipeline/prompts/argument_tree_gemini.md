@@ -93,6 +93,13 @@ Regels (belangrijk, volg strikt):
   node/groep staan. Het is een leesbare laag bovenop de citaten, geen
   vervanging en geen nieuwe bewering.
 
+## 4. Controleer je Nederlandse tekst op spelfouten
+
+Lees je eigen `gist`, `samenvatting`, `thema` en `label`-velden na op
+spelfouten voordat je antwoordt, en corrigeer ze. Dit is puur een
+taalcontrole van je eigen geformuleerde tekst — de letterlijke citaten uit
+de brondata blijven ongewijzigd.
+
 ## Output
 
 Antwoord ALLEEN met geldige JSON, geen uitleg, geen markdown-codeblok
