@@ -5,6 +5,7 @@ import { debateId } from "../lib/debateId";
 import { displayPartyName } from "../lib/parties";
 import { filters, toggleValue } from "../lib/filters";
 import { scrollTarget } from "../lib/scrollTarget";
+import { userScroll } from "../lib/userScroll";
 import { slugify } from "../lib/slug";
 import { typologyLabel, typologyDescription, type Argument, type Tag } from "../lib/types";
 import { formatClock } from "../lib/videoTime";
@@ -100,11 +101,14 @@ watch(
 
 // Scrollt de kaart in beeld zodra dit argument aan de beurt is in de video
 // (playing-prop, alleen gezet op de debat-videopagina) -- anders moet je
-// zelf blijven scrollen om bij te houden welk argument nu speelt.
+// zelf blijven scrollen om bij te houden welk argument nu speelt. Niet als de
+// gebruiker net zelf gescrolld heeft (userScroll.ts): anders wint deze
+// auto-scroll het steeds van een handmatige scrollbeweging, omdat player- en
+// argumentenkolom dezelfde paginascroll delen.
 watch(
 	() => props.playing,
 	(isPlaying) => {
-		if (isPlaying) cardEl.value?.scrollIntoView({ behavior: "smooth", block: "center" });
+		if (isPlaying && !userScroll.isScrolling) cardEl.value?.scrollIntoView({ behavior: "smooth", block: "center" });
 	},
 );
 </script>
