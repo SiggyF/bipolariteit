@@ -94,6 +94,110 @@ Vervolg op 5b, nu zonder browser: `pipeline/fetch_subtitles.py` haalt en cachet 
 - **CDN-cachebug op het `.vtt`-endpoint** (Akamai): de respons wordt een aantal seconden gecachet **op path alleen, de querystring (`start`/`end`) genegeerd**. Twee activiteiten in dezelfde zaal op dezelfde dag (één doorlopende vergadering, meerdere agendapunten) die kort na elkaar opgevraagd worden, kregen zo allebei de VTT van de eerst-opgevraagde activiteit terug — zelfde bug bevestigd op zowel de master- als sub-playlist-stap. Reproduceerbaar met losse `curl`-requests (<5s ertussen: identieke, dus foute, content; 12s ertussen: correcte, verschillende content). Een extra cache-bustende querystring-param bleek **niet** te helpen (nog steeds gecachet op path); de oplossing in `pipeline/fetch_subtitles.py` is een throttle van 20s tussen opeenvolgende `.vtt`-requests op hetzelfde onderliggende pad (datum+zaal), gedeeld tussen alle activiteiten van diezelfde vergadering.
 - **Matching + kalibratie nu gebouwd**: `pipeline/match_argument_spans.py` matcht `quote_text` woordelijk tegen de aaneengeregen, genormaliseerde cue-tekst (een quote kan over meerdere cues lopen) en kalibreert per debat via de mediaan van (ruwe cue-tijd − grove `published_at`-schatting) over alle gematchte quotes in dat debat — zie de docstring van dat bestand voor de volledige toelichting. Op het stikstof-topic (2026-08-14): 1798 van 2049 argumenten (88%) gematcht+gekalibreerd; de rest zijn vrijwel allemaal quotes uit één debat zonder live-ondertiteling (lege VTT, geen fout).
 
+### 5d. HLS-manifest handmatig inspecteren/scrubben voor debugging (issue #108, 2026-08-14)
+
+Bij het uitzoeken van een kalibratieprobleem in `match_argument_spans.py` (spannes die
+tientallen minuten van de echte spreektijd afweken bij een debat met een schorsing) bleek
+het nodig om de ruwe video zelf te scrubben, niet alleen de VTT/database-tijden te
+vergelijken -- puur cijferwerk op `published_at`/`X-TIMESTAMP-MAP` gaf herhaaldelijk
+plausibel ogende maar onjuiste conclusies (zie de PR-discussie bij #108/#114). Hulpmiddelen
+en valkuilen hieronder, voor de volgende keer dat dit nodig is.
+
+- **`ffprobe`/`ffmpeg` weigeren HLS-segmenten met een `.m4v`-extensie** ("mismatches allowed
+  extensions in url ... rejecting"), ook al staat `m4v` letterlijk in hun eigen
+  `allowed_extensions`/`allowed_segment_extensions`-lijst (`ffmpeg -h demuxer=hls`) -- de
+  `-extension_picky`-optie (default `true`) is een aparte, strengere check die dat
+  ondanks de whitelist alsnog blokkeert. Fix: `-extension_picky 0` als eerste argument,
+  vóór `-i`.
+- **`-ss` vóór `-i` werkt wél correct** (gecontroleerd: het opent direct het juiste
+  HLS-segment, niet segment 0) -- een `.mp4`-output die begint bij `start_time=0.000000`
+  is normaal (elk lokaal bestand begint bij zijn eigen nul) en géén teken dat de seek
+  genegeerd is.
+- **Interactief scrubben met pijltjestoetsen in `ffplay` breekt op een los
+  `Stream(0X)/prog_index.m3u8`**-adres (één bitrate-variant rechtstreeks) met
+  `The m3u8 list sequence may have been wrapped` en een ongewenste rewind naar het begin.
+  Op het master-adres (`index.m3u8`, met adaptieve bitrate-selectie) werkt scrubben wel
+  normaal. Gebruik dus altijd het master-adres voor interactief navigeren.
+- **De PTS-tijdbasis van deze streams is absolute Unix-epoch-tijd, niet nul bij
+  videobegin** -- bevestigd via zowel `ffprobe`'s `Stream: ... start 1738689421.725000`
+  -veld (identiek voor video/audio/subtitle-stream) als via een `drawtext`-overlay met
+  `%{pts\:hms}`, die dan ook een absurd ogende waarde als `482969:19:11.085` toont (dat
+  ís gewoon `1738689551.085` seconden-sinds-epoch, uitgedrukt als h:m:s zonder wrap). Dat
+  epoch-startpunt bleek **op 1.3s na gelijk aan `documents.activiteit_aanvangstijd`** voor
+  het onderzochte debat -- een betrouwbaardere, onafhankelijke bevestiging van "video-t=0"
+  dan de `X-TIMESTAMP-MAP`-header in de ondertitel-VTT zelf (die voor ditzelfde debat na de
+  schorsing >30 minuten afweek van waar de inhoud daadwerkelijk te horen was, dus **niet**
+  zomaar bruikbaar als absolute anker over een schorsing heen -- zie 5c, "eerste cue =
+  ankerpunt t=0" geldt kennelijk niet altijd).
+- **Een tijd-overlay tonen die niet reset bij elke seek**: `setpts=PTS-STARTPTS` (relatief
+  t.o.v. de laatste (re)start/seek) is voor scrubben onbruikbaar, want reset bij elke
+  pijltjestoets-seek. Oplossing: reken in de `drawtext`-expressie zelf de bekende
+  epoch-constante eraf via `eif`/`mod`/`trunc` (bv.
+  `%{eif\:trunc((t-1738689421.725)/3600)\:d\:2}\:...`), zodat een normale, niet-resettende
+  klok relatief aan videobegin overblijft. Getest op echte epoch-schaal (niet alleen met
+  kleine testwaarden) om afrondingsproblemen bij de floating-point-precisie op die
+  grootteorde uit te sluiten (bleek in de praktijk <0.1s afwijking te geven, ruim
+  voldoende nauwkeurig).
+
+**Concrete bevinding 1**: voor het onderzochte debat (Groen van Prinstererzaal,
+2025-02-04) toont de video van 0:00 tot in elk geval 0:48 een statisch "Momenteel is
+er in deze zaal geen openbare vergadering"-wachtscherm, geen inhoud --
+`documents.activiteit_aanvangstijd` markeert dus het (bijna exacte) begin van de
+*video-opname*, niet het moment waarop de vergadering daadwerkelijk inhoudelijk
+begint. Een kalibratie die uitgaat van "eerste woorden vallen vlak na
+`activiteit_aanvangstijd`" onderschat de werkelijke starttijd van de eerste
+spreekbeurt(en) met minstens enkele tientallen seconden, los van het
+schorsingsprobleem uit #108.
+
+**Concrete bevinding 2, belangrijker**: drie onafhankelijk geverifieerde
+(handmatig beluisterde, niet berekende) ankerpunten in hetzelfde, aaneengesloten
+stuk video vóór de schorsing -- dus een stuk waar de ondertitel-cues part-noch-deel
+een gat vertonen en waar eerdere aannames "één constante kalibratie-offset per
+debat(-segment)" nog voor golden:
+
+| echte videotijd | ruwe VTT-klok van de bijbehorende cue | ruw − echt |
+|---|---|---|
+| 0:67 (Van Dijk begint) | 1963.8 | 1896.8 |
+| 2:37 (interruptie Paulusma) | 2028.6 | 1871.6 |
+| 3:39 ("feiten mogen getoond worden") | 2206.4 | 1987.4 |
+
+Niet-monotoon: de offset schommelt met >100s binnen een aaneengesloten stuk van
+maar 150 echte seconden, zónder ondertitel-gat. Dit weerlegt zowel "één vaste
+offset per debat" (het oorspronkelijke model, zie #106) als "één lineaire
+kloksnelheid-afwijking" (een tussentijdse hypothese tijdens dit onderzoek).
+
+Waarschijnlijke verklaring voor déze schaal van afwijking (seconden tot ~2
+minuten): live-ondertiteling wordt getypt door een stenograaf/CART-typist,
+niet machinaal gegenereerd -- de tijd tussen een gesproken woord en de
+bijbehorende cue is dus inherent variabele menselijke tikvertraging, geen
+klokfout. Dat is normaal gedrag bij professionele live-ondertiteling, geen
+aanwijzing dat het bestand corrupt is. Verklaart **niet** de veel grotere
+sprong van >1700s rond de schorsing zelf (#108) -- die orde van grootte
+past niet bij tikvertraging en wijst eerder op een daadwerkelijke
+onderbreking/reset in het ondertitelsysteem tijdens de pauze. Dit is een
+sterkere, rechtstreeks geverifieerde verklaring voor #108 dan de eerdere
+(nog steeds geldige, maar minder doorslaggevende)
+`published_at`- en `X-TIMESTAMP-MAP`-observaties elders in deze sectie.
+
+**Concrete bevinding 3, doorslaggevend**: `docs/poc/video-eigen-player/poc_ownplayer.html`
+(zie 5b) hergebruikt voor dit debat om hls.js -- niet onze eigen Python-matching --
+de quote-naar-cue-vertaling te laten doen (kopie met alleen `MANIFEST`/`QUOTE_NEEDLE`
+aangepast en ondertitels op `showing` i.p.v. `hidden`, zodat ze ook zichtbaar zijn;
+niet toegevoegd aan git, puur voor dit onderzoek). Voor dezelfde quote als bevinding 2
+("een beetje teleurgesteld ben in mijn collega van de SGP", handmatig bevestigd bij
+0:02:37 echte videotijd) gaf hls.js's eigen, spec-conforme `cue.startTime`-resolutie
+**264.075s** -- 107s later dan wat daadwerkelijk beluisterd is. Die 264.075s is
+precies wat je krijgt door de ruwe cue-tijd (2028.555) via het bestand's eigen,
+gedeclareerde `X-TIMESTAMP-MAP` te vertalen: geen giswerk of bug in hls.js, gewoon de
+correcte toepassing van een formule op een input die voor dit bestand simpelweg fout
+is. Dit is het sterkste bewijs tot nu toe dat de fout in de brondata zit (het
+`X-TIMESTAMP-MAP` van dit specifieke bestand), niet in enige verwerkingsstap
+downstream -- of dat nu onze eigen `match_argument_spans.py`, een handmatige
+berekening, of een industriestandaard-library als hls.js is. Onderstreept nogmaals
+dat de `MAX_CALIBRATION_SPREAD_SECONDS`-vangnet in `match_argument_spans.py` (#114)
+de juiste aanpak is voor dit soort debatten -- een preciezere kalibratieformule zou
+hier niet geholpen hebben, welke implementatie dan ook.
+
 ## 6. `debatgemist.tweedekamer.nl` (legacy, dood)
 
 - Oude, server-side gerenderde site. Had een eigen Drupal-volltekstzoekfunctie (`search_api_views_fulltext`), gescraped door `~/src/echokamer`'s `zoeken.py` (Scrapy-spider + BeautifulSoup).
