@@ -31,7 +31,7 @@
 			<div class="confrontatie-toggles">
 				<label><input v-model="toonCitaten" type="checkbox" /> citaten tonen</label>
 				<label><input v-model="toonOnderbouwing" type="checkbox" /> onderbouwing tonen</label>
-				<label><input v-model="toonTwijfel" type="checkbox" /> twijfelachtige classificaties tonen</label>
+				<label v-if="!officieel"><input v-model="toonTwijfel" type="checkbox" /> twijfelachtige classificaties tonen</label>
 			</div>
 
 			<div class="confrontatie-colheader">
@@ -393,7 +393,13 @@ const introSentence = computed(() => {
 
 const toonCitaten = ref(false);
 const toonOnderbouwing = ref(true);
-const toonTwijfel = ref(true);
+const toonTwijfel = ref(false);
+
+// Zelfde vlag als de ontwikkelbalk (SiteNav.astro): fail-open, dus zichtbaar
+// tenzij een build zichzelf expliciet als officieel bestempelt. Twijfelachtige
+// classificaties zijn ruwe, ongefilterde LLM-output -- geschikt om tijdens
+// ontwikkeling te inspecteren, niet om in de officiële publicatie te tonen.
+const officieel = import.meta.env.PUBLIC_RELEASE_OFFICIEEL === "true";
 
 const selectedId = ref<number | null>(null);
 const hoverId = ref<number | null>(null);
