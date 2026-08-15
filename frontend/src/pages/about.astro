@@ -210,11 +210,11 @@ const CA_ROW_LABEL_OFFSET: Record<string, CaLabelOffset> = {
 					<div class="argument-schema-deel argument-schema-deel-standpunt">
 						<p class="argument-schema-label">Standpunt</p>
 						<p class="argument-schema-vraag">Wat vindt de spreker van de stelling?</p>
-						<ul class="argument-schema-varianten" role="list">
-							<li class="argument-schema-variant argument-schema-variant-pro">Pro</li>
-							<li class="argument-schema-variant argument-schema-variant-contra">Contra</li>
-							<li class="argument-schema-variant argument-schema-variant-onduidelijk">Onduidelijk</li>
-						</ul>
+						<div class="argument-schema-varianten">
+							<span class="argument-schema-variant argument-schema-variant-pro">Pro</span>
+							<span class="argument-schema-variant argument-schema-variant-contra">Contra</span>
+							<span class="argument-schema-variant argument-schema-variant-onduidelijk">Onduidelijk</span>
+						</div>
 					</div>
 					<div class="argument-schema-omdat" aria-hidden="true">
 						<span></span>omdat<span></span>
@@ -222,6 +222,15 @@ const CA_ROW_LABEL_OFFSET: Record<string, CaLabelOffset> = {
 					<div class="argument-schema-deel argument-schema-deel-onderbouwing">
 						<p class="argument-schema-label">Onderbouwing</p>
 						<p class="argument-schema-vraag">Wáárom vindt de spreker dat? Een reden, gevolg, voorbeeld of vergelijking.</p>
+						<div class="argument-schema-varianten">
+							{
+								TYPOLOGIES.map((typology) => (
+									<span class="argument-schema-variant argument-schema-variant--kleur" style={`--variant-color: ${TYPOLOGY_COLORS[typology]}`}>
+										{typologyLabel(typology)}
+									</span>
+								))
+							}
+						</div>
 						<p class="argument-schema-niet">niet: een intentie, een herhaling, "dat is duidelijk"</p>
 					</div>
 				</div>
@@ -317,23 +326,7 @@ const CA_ROW_LABEL_OFFSET: Record<string, CaLabelOffset> = {
 					].map((voorbeeld) => (
 						<li>
 							<p class="argument-quote">
-								"{
-									voorbeeld.parts.map((part) => (
-										<>
-											<span class={`arg-${part.type}`}>{part.text}</span>
-											{part.type === "standpunt" && (
-												<span class="argument-badge argument-badge-inline" style={`--badge-color: var(--color-${voorbeeld.stance})`}>
-													{stanceLabel(voorbeeld.stance)}
-												</span>
-											)}
-											{part.type === "onderbouwing" && (
-												<span class="argument-badge argument-badge-inline" style={`--badge-color: ${TYPOLOGY_COLORS[voorbeeld.typology]}`}>
-													{typologyLabel(voorbeeld.typology)}
-												</span>
-											)}
-										</>
-									))
-								}."
+								"{voorbeeld.parts.map((part) => <span class={`arg-${part.type}`}>{part.text}</span>)}."
 							</p>
 							<p class="argument-meta">
 								{voorbeeld.bron}. <strong>Wel een argument</strong>: {voorbeeld.toelichting}
