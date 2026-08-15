@@ -1,8 +1,11 @@
 ---
 import topicsIndex from "../../../data/export/topics-index.json";
 import BaseLayout from "../layouts/BaseLayout.astro";
+import DebateVideoView from "../components/DebateVideoView.vue";
 import PartyIcon from "../components/PartyIcon.astro";
 import { displayPartyName, canonicalParty } from "../lib/parties";
+import { debateName } from "../lib/debateName";
+import { findLatestDebate } from "../lib/latestDebate";
 import { slugify } from "../lib/slug";
 import { NO_PARTY } from "../lib/types";
 import { TEGENSTELLING } from "../lib/topics";
@@ -11,6 +14,11 @@ import { ALLE_TAGS } from "../lib/taxonomy";
 import { perspectiefWeergaveNaam } from "../lib/tagIcon";
 
 const topicModules = import.meta.glob("../../../data/export/topics/*.json", { eager: true });
+
+const latestDebate = findLatestDebate(
+	Object.values(topicModules as any).map((mod: any) => ({ slug: mod.default.slug, arguments: mod.default.arguments })),
+);
+const latestDebateName = latestDebate ? debateName(latestDebate.arguments[0]?.document.video_url ?? null) : null;
 
 const partyCounts = new Map<string, number>();
 const perspectiefCounts = new Map<string, number>();
@@ -42,6 +50,21 @@ for (const mod of Object.values(topicModules) as any[]) {
 				zien in de video van de bijdrage, steeds bijgewerkt.
 			</p>
 			<p class="motto">"We listen and we don't judge."</p>
+
+			{latestDebate && (
+				<section class="latest-debate">
+					<h2 class="latest-debate-heading" title={latestDebateName ?? undefined}>Laatste geanalyseerde debat</h2>
+					<DebateVideoView
+						arguments={latestDebate.arguments}
+						topicSlug={latestDebate.topicSlug}
+						debateHref={`/debat/${latestDebate.id}/`}
+						defaultExpanded={false}
+						initialMuted={true}
+						client:only="vue"
+					/>
+				</section>
+			)}
+
 			<h2>Onderwerpen</h2>
 			<ul class="card-grid">
 				{topicsIndex.map((topic) => (
@@ -117,3 +140,14 @@ for (const mod of Object.values(topicModules) as any[]) {
 				</li>
 			</ul>
 </BaseLayout>
+
+<style>
+	.latest-debate {
+		max-width: 520px;
+		margin: var(--space-3) 0 var(--space-4);
+	}
+
+	.latest-debate-heading {
+		margin-bottom: var(--space-2);
+	}
+</style>

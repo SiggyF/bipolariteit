@@ -10,9 +10,29 @@ import type { Argument } from "../lib/types";
 import { activeArguments } from "../lib/videoLabels";
 import { requestSeek, videoSeek } from "../lib/videoSeek";
 
-const props = defineProps<{ arguments: Argument[]; topicSlug: string }>();
+const props = withDefaults(
+	defineProps<{
+		arguments: Argument[];
+		topicSlug: string;
+		defaultExpanded?: boolean;
+		initialMuted?: boolean;
+		// Link naar de volledige /debat/[id]/-pagina; alleen zinvol op plekken
+		// die zelf niet al die pagina zijn (bv. de homepage-teaser).
+		debateHref?: string | null;
+	}>(),
+	// Expliciet via withDefaults, niet `props.defaultExpanded ?? true`: Vue
+	// cast een afwezige Boolean-prop zelf al naar `false` (vóórdat `??` iets
+	// ziet), dus `false ?? true` zou nog steeds `false` opleveren.
+	{ defaultExpanded: true, initialMuted: false },
+);
 
 const rawVideoUrl = props.arguments[0]?.document.raw_video_url ?? null;
+
+// Inklapbare argumentenlijst: elders (bv. de homepage-teaser van het laatste
+// debat) moet dezelfde view compact passen zonder de hele lijst permanent te
+// tonen. `defaultExpanded` ontbreekt op /debat/[id]/, dus die pagina's gedrag
+// blijft ongewijzigd (altijd uitgeklapt).
+const expanded = ref(props.defaultExpanded);
 
 const currentTime = ref(0);
 const duration = ref(0);
@@ -39,13 +59,15 @@ const activeArgumentIds = computed(() => new Set(activeArguments(props.arguments
 </script>
 
 <template>
-	<div class="debate-video-view">
+	<div class="debate-video-view" :class="{ 'is-compact': !expanded }">
 		<div class="player-column">
 			<div v-if="rawVideoUrl" class="player-stage">
 				<VideoPlayer
 					:src="rawVideoUrl"
 					:seek-to="videoSeek.seconds"
 					:seek-token="videoSeek.token"
+					:initial-muted="props.initialMuted"
+					:debate-href="props.debateHref"
 					@timeupdate="(t) => (currentTime = t)"
 					@loadedmetadata="(d) => (duration = d)"
 					@seek="requestSeek"
@@ -76,17 +98,32 @@ const activeArgumentIds = computed(() => new Set(activeArguments(props.arguments
 				</button>
 			</div>
 		</div>
-		<ol class="argument-list">
-			<li v-for="argument in props.arguments" :key="argument.id">
-				<ArgumentCard
-					:argument="argument"
-					:topic-slug="props.topicSlug"
-					video-context
-					:playing="activeArgumentIds.has(argument.id)"
-					@seek="requestSeek"
-				/>
-			</li>
-		</ol>
+		<!-- Op een smalle, compacte plek (debateHref aanwezig, bv. de
+		     homepage-teaser) past de argumentenlijst niet fatsoenlijk naast/
+		     onder de speler -- daar is de link naar de volledige pagina (nu bij
+		     de tijdsindicator in de player-controls) het enige zinvolle pad naar
+		     de argumenten, dus deze hele kolom vervalt. -->
+		<div v-if="!props.debateHref" class="argument-column">
+			<button type="button" class="argument-toggle" @click="expanded = !expanded">
+				<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+					<path
+						d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"
+					/>
+				</svg>
+				{{ expanded ? "Argumenten verbergen" : "Argumenten tonen" }}
+			</button>
+			<ol v-if="expanded" class="argument-list">
+				<li v-for="argument in props.arguments" :key="argument.id">
+					<ArgumentCard
+						:argument="argument"
+						:topic-slug="props.topicSlug"
+						video-context
+						:playing="activeArgumentIds.has(argument.id)"
+						@seek="requestSeek"
+					/>
+				</li>
+			</ol>
+		</div>
 	</div>
 </template>
 
@@ -102,6 +139,31 @@ const activeArgumentIds = computed(() => new Set(activeArguments(props.arguments
 	.debate-video-view {
 		grid-template-columns: 1fr;
 	}
+}
+
+/* Ingeklapte argumentenlijst: de player-kolom mag de volle breedte
+   innemen i.p.v. naast een lege rechterkolom te blijven staan. De
+   rij-afstand (anders 32px, bedoeld voor twee kolommen naast elkaar) is in
+   deze ene kolom veel te veel lucht boven de link/toggle-rij. */
+.debate-video-view.is-compact {
+	grid-template-columns: 1fr;
+	row-gap: var(--space-1);
+}
+
+/* In compacte stand staat er alleen de link + toggle-knop in deze kolom --
+   die horen dan bij de rand van de player i.p.v. onder de linkerkant te
+   blijven hangen. */
+.debate-video-view.is-compact .argument-column {
+	display: flex;
+	justify-content: flex-end;
+	gap: var(--space-2);
+}
+
+/* Perspectief-filters zijn een volledige-pagina-feature (filteren wat de
+   tijdlijn/overlay tonen) -- op een compacte teaser kost die rij(en) knoppen
+   meer ruimte dan ze daar opleveren. */
+.debate-video-view.is-compact .perspective-filters {
+	display: none;
 }
 
 .player-column {
@@ -156,6 +218,28 @@ const activeArgumentIds = computed(() => new Set(activeArguments(props.arguments
 	height: 8px;
 	border-radius: 50%;
 	background: var(--perspective-color);
+}
+
+.argument-toggle,
+.debate-page-link {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	padding: 5px 10px;
+	background: transparent;
+	border: 1px solid var(--color-border);
+	border-radius: 4px;
+	color: var(--color-text);
+	font-size: var(--step--1);
+	text-decoration: none;
+	cursor: pointer;
+}
+
+/* Buiten de compacte flex-rij (dus op /debat/[id]/, waar er geen
+   debate-page-link naast staat) heeft de toggle wel ruimte nodig t.o.v. de
+   argumentenlijst eronder. */
+.debate-video-view:not(.is-compact) .argument-toggle {
+	margin-bottom: var(--space-2);
 }
 
 .argument-list {

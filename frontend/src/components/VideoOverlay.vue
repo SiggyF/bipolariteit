@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
+import { debateName } from "../lib/debateName";
+import { formatDate } from "../lib/formatDate";
 import { perspectiefWeergaveNaam, tagIconPath } from "../lib/tagIcon";
 import { PERSPECTIEVEN } from "../lib/tagIcons.generated";
 import { stanceLabel, typologyLabel, type Argument } from "../lib/types";
@@ -23,6 +25,14 @@ function isVisible(tag: { perspectief: string }) {
 }
 
 const active = computed(() => activeArguments(props.arguments, props.currentTime));
+
+// Titelkaart bij het begin van de video: debat + datum, zodat je ook zonder
+// de (soms lange) paginatitel erboven te lezen weet welk debat dit is --
+// vooral relevant voor de compacte homepage-teaser (issue #110), waar die
+// titel nu kort ("Laatste gelabelde debat") is i.p.v. de volledige debatnaam.
+const debateTitle = computed(() => debateName(props.arguments[0]?.document.video_url ?? null));
+const debateDate = computed(() => formatDate(props.arguments[0]?.document.published_at ?? null));
+const showTitleCard = computed(() => props.currentTime < 4.5);
 
 // Uit het ontwerpprototype (.dc.html): naast de naamplaat een klok die, als
 // er nu geen gelabeld argument loopt, "volgend argument om ..." toont en
@@ -76,7 +86,9 @@ const badges = computed(() =>
 			label: tag.sleutel,
 			iconPad: tagIconPath(tag.sleutel),
 			color: colorByPerspective.get(tag.perspectief) ?? "var(--color-muted)",
-			tooltip: `${tag.labelgroep} · ${perspectiefWeergaveNaam(tag.perspectief)}`,
+			tooltip: tag.reden
+				? `${tag.labelgroep} · ${perspectiefWeergaveNaam(tag.perspectief)}\n\n${tag.reden}`
+				: `${tag.labelgroep} · ${perspectiefWeergaveNaam(tag.perspectief)}`,
 		})),
 	),
 );
@@ -84,6 +96,12 @@ const badges = computed(() =>
 
 <template>
 	<div class="video-overlay">
+		<Transition name="badge">
+			<div v-if="showTitleCard && debateTitle" class="title-card">
+				<span class="title-card-name">{{ debateTitle }}</span>
+				<span class="title-card-date">{{ debateDate }}</span>
+			</div>
+		</Transition>
 		<Transition name="badge">
 			<div v-if="introBadge" class="intro-badge">{{ introBadge }}</div>
 		</Transition>
@@ -141,6 +159,34 @@ const badges = computed(() =>
 	justify-content: flex-end;
 	padding: var(--space-2);
 	background: linear-gradient(to top, rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 0) 30%);
+}
+
+.title-card {
+	position: absolute;
+	top: var(--space-3);
+	left: 50%;
+	transform: translateX(-50%);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 0.2em;
+	max-width: 80%;
+	background: rgba(0, 0, 0, 0.55);
+	color: #fff;
+	padding: 0.5em 1em;
+	border-radius: 4px;
+	text-align: center;
+}
+
+.title-card-name {
+	font-family: var(--font-heading);
+	font-size: var(--step-1);
+}
+
+.title-card-date {
+	font-family: var(--font-mono);
+	font-size: var(--step--1);
+	color: rgba(255, 255, 255, 0.7);
 }
 
 .intro-badge {
