@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-14T22:04:34+02:00",
+  "generated_at": "2026-08-15T14:23:56+02:00",
   "topics": [
     {
       "slug": "stikstof",
@@ -84,9 +84,9 @@
       "name": "Asiel en migratie",
       "vanaf": "2023-12-06",
       "documents_total": 7820,
-      "documents_extracted": 994,
-      "arguments_total": 859,
-      "arguments_tagged": 338,
+      "documents_extracted": 1014,
+      "arguments_total": 885,
+      "arguments_tagged": 388,
       "documents_redactie_checked": 0,
       "arguments_ander_onderwerp": 57,
       "ander_onderwerp_top": [
@@ -135,24 +135,24 @@
         {
           "stage": "extraction",
           "model": "qwen/qwen3.6-27b",
-          "n_calls": 851,
-          "total_duration_s": 17121.217975216656,
-          "avg_duration_s": 20.118940041382675,
+          "n_calls": 871,
+          "total_duration_s": 17750.9247252566,
+          "avg_duration_s": 20.37993653875614,
           "n_errors": 1,
-          "total_completion_tokens": 170752,
+          "total_completion_tokens": 176296,
           "first_call_at": "2026-08-05T16:50:43.369858+00:00",
-          "last_call_at": "2026-08-08T19:45:01.640843+00:00"
+          "last_call_at": "2026-08-15T09:14:04.786203+00:00"
         },
         {
           "stage": "tagging",
           "model": "qwen/qwen3.6-27b",
-          "n_calls": 342,
-          "total_duration_s": 19982.337646276894,
-          "avg_duration_s": 58.4278878546108,
+          "n_calls": 392,
+          "total_duration_s": 23404.986962609546,
+          "avg_duration_s": 59.70659939441211,
           "n_errors": 4,
-          "total_completion_tokens": 196667,
+          "total_completion_tokens": 226136,
           "first_call_at": "2026-08-05T16:53:22.700983+00:00",
-          "last_call_at": "2026-08-08T21:52:04.330492+00:00"
+          "last_call_at": "2026-08-15T10:26:16.836957+00:00"
         }
       ]
     },
