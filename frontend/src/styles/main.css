@@ -1985,13 +1985,6 @@ h3 {
 	background: color-mix(in srgb, var(--variant-color) 10%, var(--color-card-bg));
 }
 
-.argument-schema-niet {
-	margin: 0.2rem 0 0;
-	font-size: var(--step--1);
-	font-style: italic;
-	color: var(--color-muted);
-}
-
 .argument-schema-omdat {
 	display: flex;
 	flex-direction: column;
