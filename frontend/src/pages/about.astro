@@ -188,16 +188,7 @@ const CA_ROW_LABEL_OFFSET: Record<string, CaLabelOffset> = {
 				</li>
 			</ul>
 
-			<h2>Hoe de argumenten hier terechtkomen</h2>
-			<p>
-				Bronnen (op dit moment: Tweede Kamer-debatverslagen) worden per sprekerbeurt gesegmenteerd
-				en door een LLM geanalyseerd, dat per beurt 0 of meer argumenten extraheert: een standpunt,
-				een citaat, en eventueel genoemde claims met hun bron. Dit is een geautomatiseerd,
-				foutgevoelig proces, extractiekwaliteit verbetert nog met de tijd, en je kunt op elke kaart
-				feedback geven als iets niet klopt.
-			</p>
-
-			<h3>Wat telt als argument?</h3>
+			<h2>Wat is een argument?</h2>
 			<p>
 				Een argument heeft altijd twee delen, en beide moeten letterlijk in het citaat staan: een <strong>standpunt</strong> (pro/contra/onduidelijk)
 				én een <strong>reden of onderbouwing</strong> die dat standpunt ondersteunt. Geen onderbouwing betekent geen argument,
@@ -341,9 +332,14 @@ const CA_ROW_LABEL_OFFSET: Record<string, CaLabelOffset> = {
 				<li><span class="argument-legend-streep argument-ontbreekt-streep"></span>ontbrekend deel</li>
 			</ul>
 			<p>
-				Dit is een pragmatische, zelf afgebakende definitie, geen letterlijk citaat uit één theorie. Wie verder wil
-				lezen: <a href="https://plato.stanford.edu/entries/argument/">Stanford Encyclopedia of Philosophy over argument
-				en argumentatie</a> voor een algemeen overzicht; Van Eemeren &amp; Grootendorsts <a
+				Ook zuiver procedurele tekst (orde van de vergadering, spreektijd-afspraken, "ik geef het woord
+				aan...") levert nooit een argument op. Een uitspraak over de legitimiteit of spelregels van het
+				debat zelf telt wél mee als argument, mits onderbouwd, zie de <a href="#argumenttypen">typologie
+				"Overig"</a> hieronder.
+			</p>
+			<p>
+				Wie verder wil lezen: <a href="https://plato.stanford.edu/entries/argument/">Stanford Encyclopedia of Philosophy
+				over argument en argumentatie</a> voor een algemeen overzicht; Van Eemeren &amp; Grootendorsts <a
 				href="https://archive.org/details/systematictheory0000eeme">pragma-dialectische theorie</a> voor het
 				standpunt-plus-onderbouwing-model zelf; Douglas Waltons <a
 				href="https://en.wikipedia.org/wiki/Argumentation_scheme">argumentatieschema's</a> voor het type
@@ -351,11 +347,14 @@ const CA_ROW_LABEL_OFFSET: Record<string, CaLabelOffset> = {
 				Cabrio &amp; Villata (2019)</a> voor de externe dataset waartegen deze definitie kwantitatief gevalideerd is (zie{" "}
 				<a href="https://github.com/bipolariteit/bipolariteit/blob/main/docs/eval-elecdebate.md">docs/eval-elecdebate.md</a>).
 			</p>
+
+			<h2>Hoe de argumenten hier terechtkomen</h2>
 			<p>
-				Ook zuiver procedurele tekst (orde van de vergadering, spreektijd-afspraken, "ik geef het woord
-				aan...") levert nooit een argument op. Een uitspraak over de legitimiteit of spelregels van het
-				debat zelf telt wél mee als argument, mits onderbouwd, zie de <a href="#argumenttypen">typologie
-				"Overig"</a> hieronder.
+				Bronnen (op dit moment: Tweede Kamer-debatverslagen) worden per sprekerbeurt gesegmenteerd
+				en door een LLM geanalyseerd, dat per beurt 0 of meer argumenten extraheert: een standpunt,
+				een citaat, en eventueel genoemde claims met hun bron. Dit is een geautomatiseerd,
+				foutgevoelig proces, extractiekwaliteit verbetert nog met de tijd, en je kunt op elke kaart
+				feedback geven als iets niet klopt.
 			</p>
 
 			<ol class="workflow" role="list">
