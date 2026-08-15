@@ -200,63 +200,114 @@ const CA_ROW_LABEL_OFFSET: Record<string, CaLabelOffset> = {
 			<p>
 				Een argument heeft altijd twee delen, en beide moeten letterlijk in het citaat staan: een <strong>standpunt</strong> (pro/contra/onduidelijk)
 				én een <strong>reden of onderbouwing</strong> die dat standpunt ondersteunt. Geen onderbouwing betekent geen argument,
-				ook niet als de uitspraak stellig of politiek geladen klinkt. Dit wordt bijvoorbeeld <strong>niet</strong> geëxtraheerd, met echte citaten
-				uit de database:
+				ook niet als de uitspraak stellig of politiek geladen klinkt.
 			</p>
-			<ul>
+
+			<div class="argument-schema">
+				<p class="argument-schema-kicker">Eén argument, twee delen</p>
+				<div class="argument-schema-grid">
+					<div class="argument-schema-deel argument-schema-deel-standpunt">
+						<p class="argument-schema-label">Standpunt</p>
+						<p class="argument-schema-vraag">Wat vindt de spreker van de stelling?</p>
+						<ul class="argument-schema-varianten" role="list">
+							<li class="argument-schema-variant argument-schema-variant-pro">Pro</li>
+							<li class="argument-schema-variant argument-schema-variant-contra">Contra</li>
+							<li class="argument-schema-variant argument-schema-variant-onduidelijk">Onduidelijk</li>
+						</ul>
+					</div>
+					<div class="argument-schema-omdat" aria-hidden="true">
+						<span></span>omdat<span></span>
+					</div>
+					<div class="argument-schema-deel argument-schema-deel-onderbouwing">
+						<p class="argument-schema-label">Onderbouwing</p>
+						<p class="argument-schema-vraag">Wáárom vindt de spreker dat? Een reden, gevolg, voorbeeld of vergelijking.</p>
+						<p class="argument-schema-niet">niet: een intentie, een herhaling, "dat is duidelijk"</p>
+					</div>
+				</div>
+				<p class="argument-schema-caption">beide delen staan letterlijk in het citaat — wij vullen niets aan</p>
+			</div>
+
+			<p>Dit wordt bijvoorbeeld <strong>niet</strong> geëxtraheerd, met echte citaten uit de database — het aanwezige deel is onderstreept, het ontbrekende deel is de gestippelde streep:</p>
+			<ul class="argument-voorbeelden">
 				{
 					[
 						{
-							stelling: "Ik strijd hier tot de laatste dag om desastreus beleid voor onze boeren en het platteland",
+							parts: [{ text: "Ik strijd hier tot de laatste dag om desastreus beleid voor onze boeren en het platteland", type: "standpunt" as const }],
+							ontbreekt: "onderbouwing" as const,
 							bron: "Caroline van der Plas, BBB",
 							label: "Geen onderbouwing",
 							toelichting: "een intentie, geen reden.",
 						},
 						{
-							stelling: "De motie op stuk nr. 470 zou ik willen ontraden",
+							parts: [{ text: "De motie op stuk nr. 470 zou ik willen ontraden", type: "standpunt" as const }],
+							ontbreekt: "onderbouwing" as const,
 							bron: "minister Van Essen",
 							label: "Geen onderbouwing",
 							toelichting: "een kaal standpunt zonder reden.",
 						},
 						{
-							stelling: "Zones rondom Natura 2000-gebieden vinden wij een goed idee; dat is duidelijk",
+							parts: [{ text: "Zones rondom Natura 2000-gebieden vinden wij een goed idee; dat is duidelijk", type: "standpunt" as const }],
+							ontbreekt: "onderbouwing" as const,
 							bron: "Laura Bromet, GroenLinks-PvdA",
 							label: "Geen onderbouwing",
 							toelichting: "instemming zonder reden.",
 						},
 						{
-							stelling:
-								"Het flauwe antwoord is dat het bij de Raad van State ligt. En het is geen afkapgrens, om even scherp te zijn; het is een rekengrens",
+							parts: [
+								{ text: "Het flauwe antwoord is dat het bij de Raad van State ligt.", type: "plain" as const },
+								{ text: " En het is geen afkapgrens, om even scherp te zijn; het is een rekengrens", type: "onderbouwing" as const },
+							],
+							ontbreekt: "standpunt" as const,
 							bron: "minister Van der Wal-Zeggelink",
 							label: "Geen stelling",
 							toelichting: "een feitelijke verduidelijking, geen standpunt.",
 						},
 						{
-							stelling: "De antwoorden op de advisering van de Raad van State zullen in het nader rapport, zoals dat heet, worden weerspiegeld",
+							parts: [
+								{
+									text: "De antwoorden op de advisering van de Raad van State zullen in het nader rapport, zoals dat heet, worden weerspiegeld",
+									type: "onderbouwing" as const,
+								},
+							],
+							ontbreekt: "standpunt" as const,
 							bron: "minister Wiersma",
 							label: "Geen stelling",
 							toelichting: "een procedurele mededeling, geen standpunt.",
 						},
 					].map((voorbeeld) => (
 						<li>
-							<q><em>{voorbeeld.stelling}</em></q>: {voorbeeld.bron}. <strong>{voorbeeld.label}</strong>: {voorbeeld.toelichting}
+							<p class="argument-quote">
+								"{voorbeeld.parts.map((part) => (part.type === "plain" ? part.text : <span class={`arg-${part.type}`}>{part.text}</span>))}."
+							</p>
+							<p class="argument-ontbreekt">
+								<span class="argument-ontbreekt-streep" aria-hidden="true"></span>{voorbeeld.ontbreekt} ontbreekt
+							</p>
+							<p class="argument-meta">
+								<strong>{voorbeeld.label}</strong>: {voorbeeld.bron} — {voorbeeld.toelichting}
+							</p>
 						</li>
 					))
 				}
 			</ul>
 			<p>Dit wél, want standpunt én reden staan er allebei, letterlijk in het citaat:</p>
-			<ul>
+			<ul class="argument-voorbeelden">
 				{
 					[
 						{
-							stelling: "Met dit pakket nemen we de blokkade weg om vergunningen te verlenen. Alleen met vergunningen kunnen we echt verduurzamen",
+							parts: [
+								{ text: "Met dit pakket nemen we de blokkade weg om vergunningen te verlenen.", type: "standpunt" as const },
+								{ text: " Alleen met vergunningen kunnen we echt verduurzamen", type: "onderbouwing" as const },
+							],
 							bron: "Jan Arie Koorevaar, CDA",
 							stance: "pro" as const,
 							typology: "factual" as const,
 							toelichting: "standpunt (vóór het pakket) én reden (het maakt vergunningen weer mogelijk).",
 						},
 						{
-							stelling: "In Nederland kunnen wij zelf keuzes maken over ons eigen lichaam. Dat is een belangrijke verworvenheid",
+							parts: [
+								{ text: "In Nederland kunnen wij zelf keuzes maken over ons eigen lichaam.", type: "standpunt" as const },
+								{ text: " Dat is een belangrijke verworvenheid", type: "onderbouwing" as const },
+							],
 							bron: "Vincent Karremans, VVD",
 							stance: "pro" as const,
 							typology: "moral" as const,
@@ -264,11 +315,21 @@ const CA_ROW_LABEL_OFFSET: Record<string, CaLabelOffset> = {
 						},
 					].map((voorbeeld) => (
 						<li>
-							<q><em>{voorbeeld.stelling}</em></q>: {voorbeeld.bron} ({stanceLabel(voorbeeld.stance)}/{typologyLabel(voorbeeld.typology)}).{" "}
-							<strong>Wel een argument</strong>: {voorbeeld.toelichting}
+							<p class="argument-quote">
+								"{voorbeeld.parts.map((part) => <span class={`arg-${part.type}`}>{part.text}</span>)}."
+							</p>
+							<p class="argument-meta">
+								{voorbeeld.bron} ({stanceLabel(voorbeeld.stance)}/{typologyLabel(voorbeeld.typology)}).{" "}
+								<strong>Wel een argument</strong>: {voorbeeld.toelichting}
+							</p>
 						</li>
 					))
 				}
+			</ul>
+			<ul class="argument-legend" role="list">
+				<li><span class="argument-legend-streep arg-standpunt-streep"></span>standpunt</li>
+				<li><span class="argument-legend-streep arg-onderbouwing-streep"></span>onderbouwing</li>
+				<li><span class="argument-legend-streep argument-ontbreekt-streep"></span>ontbrekend deel</li>
 			</ul>
 			<p>
 				Ook zuiver procedurele tekst (orde van de vergadering, spreektijd-afspraken, "ik geef het woord
