@@ -109,6 +109,13 @@
 	   --color-pro so hyperlinks don't implicitly read as "pro"-colored. */
 	--color-accent: #33456e;
 
+	/* Warme, van --color-text/--color-accent goed te onderscheiden kleur voor
+	   "onderbouwing" in de argumentdefinitie (about-pagina, issue #89) --
+	   --color-accent (navy) en --color-text (bijna zwart) liggen te dicht bij
+	   elkaar in lichtheid om als los kleurenpaar te lezen, zeker op een dunne
+	   onderstreping. */
+	--color-onderbouwing: #a6742c;
+
 	--font-display: "Libre Caslon Display", "Libre Caslon Text", Georgia, serif;
 	--font-heading: "Libre Caslon Text", Georgia, serif;
 	--font-body: "Work Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -1872,6 +1879,219 @@ h3 {
 	line-height: 1.4;
 }
 
+/* Argumentdefinitie-schema + geannoteerde citaten (about-pagina, issue #89).
+   Ontwerp in docs/design/argumenten-uitleg/: standpunt in ink, onderbouwing in
+   --color-onderbouwing, een ontbrekend deel als losse gestippelde streep. Een
+   losse kleur i.p.v. --color-accent (navy) -- die ligt te dicht bij
+   --color-text in lichtheid om als duidelijk te onderscheiden paar te lezen. */
+.argument-schema {
+	max-width: 65ch;
+	margin: var(--space-3) 0;
+	padding: var(--space-3);
+	border: 1px solid var(--color-border);
+	background: var(--color-card-bg);
+}
+
+.argument-schema-kicker {
+	margin: 0 0 var(--space-2);
+	font-family: var(--font-mono);
+	font-size: var(--step--1);
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: var(--color-muted);
+}
+
+.argument-schema-grid {
+	display: grid;
+	grid-template-columns: 1fr 84px 1fr;
+	align-items: stretch;
+	gap: var(--space-1);
+}
+
+.argument-schema-deel {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-1);
+	padding: var(--space-2);
+	border: 1px solid var(--color-text);
+}
+
+.argument-schema-deel-onderbouwing {
+	border-color: var(--color-onderbouwing);
+}
+
+.argument-schema-label {
+	margin: 0;
+	font-family: var(--font-mono);
+	font-size: var(--step--1);
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+}
+
+.argument-schema-deel-onderbouwing .argument-schema-label {
+	color: var(--color-onderbouwing);
+}
+
+.argument-schema-vraag {
+	margin: 0;
+	font-size: var(--step--1);
+	line-height: 1.5;
+}
+
+.argument-schema-varianten {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.35rem;
+	margin: 0.2rem 0 0;
+}
+
+/* Zelfde vorm/maat als .tag-signaal elders op de site (person-row-signalen,
+   ArgumentCard) -- ronde pill, dunne rand, gevuld met een lichte kleurtint
+   via color-mix, zoals .tag-signaal-favoriet. Bewust geen <li> (voorkwam de
+   "—"-lijstmarkering van .about li::before die samen met de ronde vorm een
+   staafje-in-cirkel opleverde). */
+.argument-schema-variant {
+	display: inline-flex;
+	align-items: center;
+	padding: 0.15rem 0.6rem;
+	border-radius: 999px;
+	font-family: var(--font-mono);
+	font-size: 0.65rem;
+	letter-spacing: 0.05em;
+	text-transform: uppercase;
+	white-space: nowrap;
+	border: 1px solid var(--color-text);
+	color: var(--color-text);
+	background: color-mix(in srgb, var(--color-text) 8%, var(--color-card-bg));
+}
+
+.argument-schema-variant-contra {
+	border-style: dashed;
+}
+
+.argument-schema-variant-onduidelijk {
+	border-style: dotted;
+	border-color: var(--color-muted);
+	color: var(--color-muted);
+	background: color-mix(in srgb, var(--color-muted) 8%, var(--color-card-bg));
+}
+
+/* Typologievarianten bij Onderbouwing -- zelfde vorm als de standpuntpills,
+   maar met kleur i.p.v. randstijl als onderscheid (typologie is geen
+   tegenstelling zoals pro/contra, dus geen lijn/dotted/dashed-logica). */
+.argument-schema-variant--kleur {
+	border-color: var(--variant-color);
+	color: var(--variant-color);
+	background: color-mix(in srgb, var(--variant-color) 10%, var(--color-card-bg));
+}
+
+.argument-schema-omdat {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 0.4rem;
+	padding: 0 var(--space-1);
+	font-style: italic;
+	color: var(--color-onderbouwing);
+}
+
+.argument-schema-omdat span {
+	width: 100%;
+	height: 1px;
+	background: var(--color-onderbouwing);
+}
+
+.argument-voorbeelden {
+	max-width: 65ch;
+	list-style: none;
+	margin: var(--space-2) 0;
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-2);
+}
+
+.argument-voorbeelden li {
+	padding-bottom: var(--space-2);
+	border-bottom: 1px solid var(--color-border);
+}
+
+.argument-voorbeelden li:last-child {
+	border-bottom: none;
+}
+
+.argument-quote {
+	margin: 0;
+	font-family: var(--font-heading);
+	font-size: var(--step-0);
+	line-height: 1.5;
+}
+
+.arg-standpunt {
+	border-bottom: 2px solid var(--color-text);
+}
+
+.arg-onderbouwing {
+	border-bottom: 2px solid var(--color-onderbouwing);
+}
+
+.argument-ontbreekt {
+	display: flex;
+	align-items: center;
+	gap: 0.6rem;
+	margin: 0.35rem 0 0;
+	font-family: var(--font-mono);
+	font-size: var(--step--1);
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	color: var(--color-muted);
+}
+
+.argument-ontbreekt-streep {
+	width: 2.5rem;
+	border-bottom: 2px dashed var(--color-border);
+}
+
+.argument-meta {
+	margin: 0.35rem 0 0;
+	font-size: var(--step--1);
+	color: var(--color-muted);
+}
+
+.argument-legend {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--space-2);
+	margin: var(--space-2) 0 var(--space-3);
+	padding: 0;
+	list-style: none;
+	font-size: var(--step--1);
+	color: var(--color-muted);
+}
+
+.argument-legend li {
+	display: flex;
+	align-items: center;
+	gap: 0.4rem;
+}
+
+.argument-legend-streep {
+	width: 1.6rem;
+	height: 0;
+	border-bottom: 2px solid var(--color-border);
+}
+
+.arg-standpunt-streep {
+	border-bottom-color: var(--color-text);
+	border-bottom-style: solid;
+}
+
+.arg-onderbouwing-streep {
+	border-bottom-color: var(--color-onderbouwing);
+	border-bottom-style: solid;
+}
+
 /* Kleine cijfervoorbeeld-tabel bij de CA-uitleg -- zelfde tabelstijl als
    party-table, alleen zonder partijlogo-kolom. */
 .ca-example-table td,
@@ -2488,4 +2708,5 @@ a.card-item:hover {
 	--color-contra: #cf6b5f;
 	--color-unclear: #a89e8c;
 	--color-accent: #7d97c4;
+	--color-onderbouwing: #d1a44f;
 }

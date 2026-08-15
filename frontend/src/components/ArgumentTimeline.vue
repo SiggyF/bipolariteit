@@ -2,7 +2,8 @@
 import { computed } from "vue";
 import { buildTimeline, bucketLabel, type BucketUnit, type TimelineBucket } from "../lib/timeline";
 import { setDateRange, toggleValue } from "../lib/filters";
-import { STANCES, TYPOLOGIES, stanceLabel, typologyLabel, type Argument, type Stance, type Typology } from "../lib/types";
+import { STANCES, TYPOLOGIES, stanceLabel, typologyLabel, type Argument, type Stance } from "../lib/types";
+import { TYPOLOGY_COLORS } from "../lib/typologyColors";
 
 // `interactive` staat aan op de topic-pagina (TopicView.vue): daar bestaat een
 // FilterBar/filterstore, dus klikken op een staaf om te filteren betekent iets.
@@ -33,18 +34,6 @@ const STANCE_COLORS: Record<Stance, string> = {
 	pro: "var(--color-pro)",
 	contra: "var(--color-contra)",
 	unclear: "var(--color-unclear)",
-};
-
-// Gevalideerd 4-slot palet (validate_palette.js, licht + donker, alle zes
-// checks PASS) plus --color-unclear als bewust neutrale "Overig"-kleur. De
-// slotvolgorde is de CVD-garantie en ligt vast; wijzig hier niet de volgorde
-// zonder opnieuw te valideren (zie het plan bij issue #54).
-const TYPOLOGY_COLORS: Record<Typology, string> = {
-	factual: "#6586c3",
-	legal: "#804674",
-	economic: "#5c884c",
-	moral: "#067396",
-	other: "var(--color-unclear)",
 };
 
 interface Segment {
