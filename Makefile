@@ -100,8 +100,15 @@ build: ## Frontend production build (frontend/dist/)
 dev: ## Start de Astro dev-server op de achtergrond (0.0.0.0:4321, ook bereikbaar via localhost:4321)
 	cd frontend && npx astro dev --background --host 0.0.0.0
 
-dev-stop: ## Stop de achtergrond dev-server
+dev-stop: ## Stop de achtergrond dev-server, incl. weesprocessen die de lockfile kwijt is
 	cd frontend && npx astro dev stop
+	@pids="$$(pgrep -f 'frontend/node_modules/astro/bin/astro\.mjs dev' || true)"; \
+	if [ -n "$$pids" ]; then \
+		echo "Weesprocessen gevonden (niet in .astro/dev.json): $$pids -- worden ook gestopt."; \
+		kill $$pids 2>/dev/null; sleep 1; \
+		still="$$(pgrep -f 'frontend/node_modules/astro/bin/astro\.mjs dev' || true)"; \
+		if [ -n "$$still" ]; then kill -9 $$still 2>/dev/null || true; fi; \
+	fi
 
 # De ontwikkelbalk wordt bij het bouwen ingebakken, dus PUBLIC_RELEASE_TAG moet
 # mee met `npm run build` -- niet met het releasescript, dat draait pas als
