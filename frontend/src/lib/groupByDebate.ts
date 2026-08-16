@@ -4,7 +4,7 @@ import type { Argument } from "./types";
 
 // Generalisatie van findLatestDebate.ts: niet alleen het meest recente debat,
 // maar alle debatten over alle topics heen, aflopend gesorteerd -- voor de
-// debatlijst op /topics/ (issue #132). Zelfde groeperingsprincipe als
+// debatlijst op /debatten/ (issue #132). Zelfde groeperingsprincipe als
 // findLatestDebate.ts/DebateList.vue/[id].astro: groeperen op
 // debateId(raw_video_url), niet document.id.
 

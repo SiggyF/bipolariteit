@@ -67,7 +67,7 @@ onBeforeUnmount(() => {
 	<section class="column" :class="stanceClass">
 		<h2>
 			{{ label }} ({{ argumentList.length }})
-			<a href="/about/#argumenttypen" class="info-link" title="Wat betekenen stance en typologie?" aria-label="Uitleg: wat betekenen stance en typologie?">?</a>
+			<a href="/over/#argumenttypen" class="info-link" title="Wat betekenen stance en typologie?" aria-label="Uitleg: wat betekenen stance en typologie?">?</a>
 		</h2>
 		<ArgumentCard v-for="argument in visible" :key="argument.id" :argument="argument" :topicSlug="topicSlug" />
 		<div v-if="hasMore" ref="sentinel" class="column-load-more">

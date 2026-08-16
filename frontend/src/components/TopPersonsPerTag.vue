@@ -57,7 +57,7 @@ function verhouding(row: { tagCount: number; total: number }): string {
 			<p class="panel-note">{{ tag.beschrijving }}</p>
 			<ol v-if="personen.length" class="top-persons-list">
 				<li v-for="row in personen" :key="row.person">
-					<a :href="`/persoon/${slugify(row.person)}/`">{{ row.person }}</a>
+					<a :href="`/personen/${slugify(row.person)}/`">{{ row.person }}</a>
 					<span v-if="row.party" class="topic-count">({{ displayPartyName(row.party) }})</span>
 					<span class="topic-count">{{ verhouding(row) }} argumenten ({{ row.tagCount }} van {{ row.total }})</span>
 				</li>

@@ -40,6 +40,6 @@ const argumentList = allArgs.filter((a: any) => a.actor.party && canonicalParty(
 ---
 
 <BaseLayout title={`${party || "Partij"} - Bipolariteit`}>
-	<a href="/topics/" class="back-link">&larr; alle onderwerpen</a>
+	<a href="/onderwerpen/" class="back-link">&larr; alle onderwerpen</a>
 	{party && <ActorTagUsage name={party} mode="partij" argumentList={argumentList} client:only="vue" />}
 </BaseLayout>

@@ -8,7 +8,7 @@
 import { mkdirSync } from "node:fs";
 import { chromium } from "playwright";
 
-const url = process.argv[2] ?? "http://localhost:4321/topics/stikstof/";
+const url = process.argv[2] ?? "http://localhost:4321/onderwerpen/stikstof/";
 const outDir = process.argv[3] ?? "/tmp/correspondence-shots";
 mkdirSync(outDir, { recursive: true });
 

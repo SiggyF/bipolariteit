@@ -128,7 +128,7 @@ const perTopic = computed(() => {
 
 function topicLink(topicSlug: string): string {
 	const param = props.mode === "partij" ? "partij" : "persoon";
-	return `/topics/${topicSlug}/?${param}=${encodeURIComponent(props.name)}`;
+	return `/onderwerpen/${topicSlug}/?${param}=${encodeURIComponent(props.name)}`;
 }
 
 const persons = computed(() => {
@@ -162,7 +162,7 @@ const ICOON_STER = "M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 
 		<section v-if="(favorieteTags && favorieteTags.length) || (minstFavorieteTags && minstFavorieteTags.length)" class="stats-panel">
 			<h2>
 				Favoriete tags
-				<a href="/about/#favoriete-tags-methode" class="info-link" title="Hoe favoriet/minst favoriet bepaald wordt" aria-label="Uitleg: hoe favoriet en minst favoriet bepaald worden">?</a>
+				<a href="/over/#favoriete-tags-methode" class="info-link" title="Hoe favoriet/minst favoriet bepaald wordt" aria-label="Uitleg: hoe favoriet en minst favoriet bepaald worden">?</a>
 			</h2>
 			<div class="tag-signalen-kolommen">
 				<div>
@@ -243,7 +243,7 @@ const ICOON_STER = "M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 
 				<h2>Personen</h2>
 				<ul class="topic-breakdown">
 					<li v-for="row in persons" :key="row.person">
-						<a :href="`/persoon/${slugify(row.person)}/`">{{ row.person }}</a>
+						<a :href="`/personen/${slugify(row.person)}/`">{{ row.person }}</a>
 						<span class="topic-count">{{ row.count }} argumenten</span>
 					</li>
 				</ul>

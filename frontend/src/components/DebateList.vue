@@ -55,7 +55,7 @@ const debates = computed(() => {
 		<h2>Bekijk de debatten</h2>
 		<ul>
 			<li v-for="debate in debates" :key="debate.id">
-				<a :href="`/debat/${debate.id}/`">
+				<a :href="`/debatten/${debate.id}/`">
 					<strong class="debate-title">{{ debate.name ?? "Debat" }}</strong>
 					<span class="debate-date">{{ formatDate(debate.earliestPublishedAt) }}</span>
 					<span class="debate-meta">

@@ -55,7 +55,7 @@ const persons = [...counts.entries()].sort((a, b) => b[1] - a[1]);
 ---
 
 <BaseLayout title="Personen - Bipolariteit">
-	<a href="/topics/" class="back-link">&larr; alle onderwerpen</a>
+	<a href="/onderwerpen/" class="back-link">&larr; alle onderwerpen</a>
 	<EntityTabs />
 	<h1>Personen</h1>
 	<p class="intro">
@@ -70,7 +70,7 @@ const persons = [...counts.entries()].sort((a, b) => b[1] - a[1]);
 			favoriet
 			<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.75"><path d={ICOON_STER} /></svg>
 			minst favoriet
-			<a href="/about/#favoriete-tags-methode" class="info-link" title="Hoe favoriet/minst favoriet bepaald wordt" aria-label="Uitleg: hoe favoriet en minst favoriet bepaald worden">?</a>
+			<a href="/over/#favoriete-tags-methode" class="info-link" title="Hoe favoriet/minst favoriet bepaald wordt" aria-label="Uitleg: hoe favoriet en minst favoriet bepaald worden">?</a>
 		</span>
 		<span>Argumenten</span>
 	</div>
@@ -84,7 +84,7 @@ const persons = [...counts.entries()].sort((a, b) => b[1] - a[1]);
 			const minFavoriet = minstFavoriet[0] ?? null;
 			return (
 				<li>
-					<a href={`/persoon/${slugify(name)}/`} class="person-row">
+					<a href={`/personen/${slugify(name)}/`} class="person-row">
 						<span class="person-row-who">
 							{party && party !== NO_PARTY && (
 								<span class="person-row-party">

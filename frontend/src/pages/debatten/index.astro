@@ -5,8 +5,8 @@ import { formatDate } from "../../lib/formatDate";
 
 // Bewust geen navigatie-ingang (issue #132-vervolg): onderwerpen zijn de
 // hoofdstructuur, debatten zijn secundair en alleen bereikbaar via de link
-// op /topics/. Wel een eigen route, zodat een debat linkbaar is los van een
-// specifiek onderwerp.
+// op /onderwerpen/. Wel een eigen route, zodat een debat linkbaar is los van
+// een specifiek onderwerp.
 const topicModules = import.meta.glob("../../../../data/export/topics/*.json", { eager: true });
 const debates = groupByDebate(
 	Object.values(topicModules as any).map((mod: any) => ({ slug: mod.default.slug, arguments: mod.default.arguments })),
@@ -14,7 +14,7 @@ const debates = groupByDebate(
 ---
 
 <BaseLayout title="Debatten - Bipolariteit">
-	<a href="/topics/" class="back-link">&larr; alle onderwerpen</a>
+	<a href="/onderwerpen/" class="back-link">&larr; alle onderwerpen</a>
 	<h1>Debatten</h1>
 	<p class="intro">Alle geanalyseerde debatten, meest recente eerst.</p>
 
@@ -22,7 +22,7 @@ const debates = groupByDebate(
 		<ul>
 			{debates.map((debate) => (
 				<li>
-					<a href={`/debat/${debate.id}/`}>
+					<a href={`/debatten/${debate.id}/`}>
 						<strong class="debate-title">{debate.name ?? "Debat"}</strong>
 						<span class="debate-date">{formatDate(debate.earliestPublishedAt)}</span>
 						<span class="debate-meta">{debate.argumentCount} argument{debate.argumentCount === 1 ? "" : "en"}</span>

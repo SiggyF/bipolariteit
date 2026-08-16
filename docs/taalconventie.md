@@ -30,6 +30,19 @@ zijn en blijven. De vraag is dus niet "welke taal", maar "welke taal waar".
 3. **Domeinwaarden** (string-*waarden*, niet identifiers): **Nederlands**. Bijvoorbeeld
    `"partij"`, `"persoon"`, `"kamerperiode"` als waarden van `RowUnit`, en alle tekst die de
    gebruiker op het scherm ziet.
+   - **URL-routes vallen hieronder, niet onder regel 1.** Een Astro-routebestand
+     (`pages/onderwerpen/index.astro`) is tegelijk bestandsnaam én de URL zelf — in
+     file-based routing vallen die twee samen. Maar de *reden* achter regel 1
+     (grep-baarheid, aansluiten bij Engelse framework-API's) gaat over interne
+     code-samenhang die een eindgebruiker nooit ziet; een URL is het tegenovergestelde
+     daarvan: het adres dat iemand leest, typt, deelt, bookmarkt. Dus Nederlands, en —
+     net als bij UI-tekst — één woord per entiteitstype, consequent meervoud, index en
+     detail genest onder hetzelfde segment (`/onderwerpen/`, `/onderwerpen/[slug]/`, niet
+     twee verschillende woorden zoals voorheen `/debatten/` naast `/debat/[id]/`).
+     Vastgesteld bij de hernoeming van `/topics/`→`/onderwerpen/`, `/about/`→`/over/`,
+     `/partij/`→`/partijen/`, `/persoon/`→`/personen/`, `/perspectief/`→`/perspectieven/`
+     en het samenvoegen van `/debat/[id]/` in `/debatten/[id]/`. Data-bestandsnamen
+     (`data/export/topics/*.json`) zijn geen URL's en blijven identifiers (regel 1).
 4. **Commentaar, docstrings, `docs/`, commitberichten, issue-teksten**: **Nederlands**. Dat is
    de taal waarin over dit project nagedacht wordt en het publiek is Nederlands.
 5. **Interne, nooit-gebruiker-zichtbare error-/log-strings**: behandeld als commentaar-achtig,
