@@ -1,0 +1,60 @@
+---
+// Mobiele tabbalk onderaan (issue #133): dezelfde vier ingangen als de
+// desktopnavigatie in SiteNav.astro, als icoon + label i.p.v. tekstlinks --
+// dat past wel op telefoonbreedte. Onzichtbaar boven het 900px-breakpoint
+// (main.css), SiteNav.astro verbergt daar op zijn beurt .site-nav-links.
+//
+// Geen lucide-static: die dependency bestaat nergens in deze codebase (geen
+// entry in package.json, geen import) -- alle iconen elders zijn losse
+// inline SVG-paden (zie PERSPECTIEVEN/ICOON_PAD in tagIcons.generated.ts),
+// dezelfde stijl hier i.p.v. een nieuwe afhankelijkheid toe te voegen.
+const ICONS: Record<string, string> = {
+	debat: `<circle cx="12" cy="12" r="9"/><polygon points="10 8 16 12 10 16 10 8"/>`,
+	onderwerpen: `<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>`,
+	verkennen: `<circle cx="12" cy="12" r="9"/><polygon points="16 8 13.5 13.5 8 16 10.5 10.5 16 8"/>`,
+	over: `<circle cx="12" cy="12" r="9"/><line x1="12" y1="11" x2="12" y2="16"/><line x1="12" y1="7.5" x2="12" y2="7.51"/>`,
+};
+
+const items = [
+	{ key: "debat", label: "Debat", href: "/", activePrefixes: ["/"] },
+	{ key: "onderwerpen", label: "Onderwerpen", href: "/topics/", activePrefixes: ["/topics/"] },
+	{
+		key: "verkennen",
+		label: "Verkennen",
+		href: "/partij/",
+		activePrefixes: ["/partij/", "/persoon/", "/tags/", "/perspectief/"],
+	},
+	{ key: "over", label: "Over", href: "/about/", activePrefixes: ["/about/"] },
+];
+
+const pathname = Astro.url.pathname;
+// "/" als prefix zou met .startsWith() elke route matchen -- Debat is alleen
+// actief op de exacte homepage, de andere drie op prefix (incl. detailpaginas
+// zoals /topics/stikstof/ of /partij/vvd/).
+function isActive(prefixes: string[]): boolean {
+	return prefixes.some((prefix) => (prefix === "/" ? pathname === "/" : pathname.startsWith(prefix)));
+}
+---
+
+<nav class="site-tabbar" aria-label="Hoofdnavigatie">
+	{items.map((item) => {
+		const active = isActive(item.activePrefixes);
+		return (
+			<a href={item.href} class:list={["site-tabbar-item", { "is-active": active }]} aria-current={active ? "page" : undefined}>
+				<svg
+					viewBox="0 0 24 24"
+					width="22"
+					height="22"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="1.75"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					aria-hidden="true"
+					set:html={ICONS[item.key]}
+				/>
+				<span class="site-tabbar-label">{item.label}</span>
+			</a>
+		);
+	})}
+</nav>
