@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="stylesheet" href="_ds/classical-974e6ac3-dcd9-4446-a833-ca68e8f583ba/styles.css">
+<script src="_ds/classical-974e6ac3-dcd9-4446-a833-ca68e8f583ba/_ds_bundle.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.17/dist/hls.min.js"></script>
+<style>
+  body { margin: 0; background: var(--color-neutral-200); }
+  a { color: var(--color-accent-700); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+  a:hover { color: var(--color-accent-600); }
+  .bp-screen::-webkit-scrollbar { width: 0; height: 0; }
+  .bp-track::-webkit-scrollbar { width: 0; height: 0; }
+</style>
+</helmet>
+
+<section id="turn-2" style="padding: var(--space-8) var(--space-8) var(--space-10); display: flex; flex-direction: column; gap: var(--space-7);">
+  <div style="display: flex; align-items: flex-end; gap: var(--space-5); flex-wrap: wrap;">
+    <div style="max-width: 44ch;">
+      <div style="font-family: var(--font-heading); font-feature-settings: 'tnum'; letter-spacing: 0.14em; text-transform: uppercase; font-size: 12px; color: var(--color-accent-700);">2a · het debat vooraan</div>
+      <h1 style="font-family: var(--font-heading); font-weight: 400; font-size: 40px; line-height: 1.1; margin: var(--space-2) 0 var(--space-3);">Eén ding per scherm</h1>
+      <p style="font-family: var(--font-body); font-size: 15px; line-height: 1.65; color: var(--color-neutral-700); text-align: justify; text-wrap: pretty; margin: 0;">Het openingsscherm is nu het debat zelf: de echte videostream van 1 juli staat direct in beeld, met daaronder het argument dat op dat moment gezegd wordt en de gemarkeerde momenten ervoor en erna. De lijsten met onderwerpen en partijen zijn weg — die zitten in de tabbalk. Het onderwerpscherm houdt de correspondentiekaart en de veegbare pro/contra-tabbladen.</p>
+    </div>
+    <div style="font-family: var(--font-body); font-size: 12px; line-height: 1.7; color: var(--color-neutral-600); border-left: 1px solid var(--color-divider); padding-left: var(--space-4);">
+      Bron: livestreaming.b67v2.tweedekamer.nl<br>(HLS, plenaire zaal 1 juli 2026).<br>Tik op een moment om te springen.<br>Citaten zijn voorbeelden.
+    </div>
+  </div>
+
+  <div style="display: flex; gap: var(--space-8); flex-wrap: wrap; align-items: flex-start;">
+
+    <div style="display: flex; flex-direction: column; gap: var(--space-3);">
+      <x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" hint-size="402px,874px">
+        <div class="bp-screen" style="height: 100%; overflow: auto; background: var(--color-bg); font-family: var(--font-body); padding: 56px 0 92px; box-sizing: border-box;">
+
+          <div style="display: flex; align-items: center; justify-content: space-between; padding: var(--space-2) var(--space-4) var(--space-3);">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="font-family: var(--font-heading); font-size: 18px; color: var(--color-accent);">◑</span>
+              <span style="font-family: var(--font-heading); font-size: 18px;">Bipolariteit</span>
+            </div>
+            <button type="button" class="btn btn-ghost btn-icon" aria-label="Zoeken" style="width: 44px; height: 44px;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.6-3.6"></path></svg>
+            </button>
+          </div>
+
+          <div style="padding: 0 var(--space-5) var(--space-3);">
+            <div style="display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-3);">
+              <span style="font-family: var(--font-heading); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-accent-700);">Laatste debat</span>
+              <span style="font-feature-settings: 'tnum'; font-size: 11px; color: var(--color-neutral-600);">1 juli 2026 · 1976 argumenten</span>
+            </div>
+            <h1 style="font-family: var(--font-heading); font-weight: 400; font-size: 27px; line-height: 1.16; margin: 4px 0 0;">Stikstof</h1>
+          </div>
+
+          <div style="padding: 0 var(--space-4) var(--space-2);">
+            <div class="plate" style="position: relative; background: var(--color-neutral-900);">
+              <video ref="{{ videoRef }}" muted playsinline preload="metadata" style="width: 100%; height: 190px; display: block; object-fit: cover; background: var(--color-neutral-900);"></video>
+              <div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; gap: var(--space-4); pointer-events: none;">
+                <button type="button" onClick="{{ prevMoment }}" aria-label="Vorig argument" style="pointer-events: auto; all: unset; cursor: pointer; width: 44px; height: 44px; border-radius: 50%; border: 1px solid color-mix(in oklab, var(--color-surface) 70%, transparent); background: color-mix(in oklab, var(--color-neutral-900) 35%, transparent); backdrop-filter: blur(6px); display: flex; align-items: center; justify-content: center;">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="var(--color-surface)"><path d="M18 5.5v13L9 12z"></path><rect x="5.5" y="5.5" width="2.2" height="13" rx="1"></rect></svg>
+                </button>
+                <button type="button" onClick="{{ togglePlay }}" aria-label="Afspelen of pauzeren" style="pointer-events: auto; all: unset; cursor: pointer; width: 56px; height: 56px; border-radius: 50%; border: 1px solid var(--color-surface); background: color-mix(in oklab, var(--color-neutral-900) 45%, transparent); backdrop-filter: blur(6px); display: flex; align-items: center; justify-content: center;">
+                  <sc-if value="{{ playing }}" hint-placeholder-val="{{ false }}">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-surface)" stroke-width="1.6" stroke-linecap="round"><path d="M9 5v14M15 5v14"></path></svg>
+                  </sc-if>
+                  <sc-if value="{{ paused }}" hint-placeholder-val="{{ true }}">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="var(--color-surface)"><path d="M8 5l12 7-12 7z"></path></svg>
+                  </sc-if>
+                </button>
+                <button type="button" onClick="{{ nextMoment }}" aria-label="Volgend argument" style="pointer-events: auto; all: unset; cursor: pointer; width: 44px; height: 44px; border-radius: 50%; border: 1px solid color-mix(in oklab, var(--color-surface) 70%, transparent); background: color-mix(in oklab, var(--color-neutral-900) 35%, transparent); backdrop-filter: blur(6px); display: flex; align-items: center; justify-content: center;">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="var(--color-surface)"><path d="M6 5.5v13L15 12z"></path><rect x="16.3" y="5.5" width="2.2" height="13" rx="1"></rect></svg>
+                </button>
+              </div>
+              <div style="position: absolute; left: 10px; bottom: 8px; pointer-events: none; font-feature-settings: 'tnum'; font-size: 11px; color: #fff; text-shadow: 0 1px 3px rgba(0,0,0,0.7);">{{ clock }}</div>
+              <div style="position: absolute; right: 10px; bottom: 8px; pointer-events: none; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: #fff; text-shadow: 0 1px 3px rgba(0,0,0,0.7);">plenaire zaal</div>
+            </div>
+          </div>
+
+          <div style="padding: var(--space-2) var(--space-4) var(--space-4);">
+            <div style="position: relative; height: 22px;">
+              <div style="position: absolute; left: 0; right: 0; top: 10px; height: 1px; background: var(--color-neutral-300);"></div>
+              <div style="position: absolute; left: 0; top: 10px; height: 1px; background: var(--color-accent); width: {{ progress }};"></div>
+              <div style="position: absolute; top: 4px; width: 1px; height: 13px; background: var(--color-neutral-500); left: {{ mark0 }};"></div>
+              <div style="position: absolute; top: 4px; width: 1px; height: 13px; background: var(--color-neutral-500); left: {{ mark1 }};"></div>
+              <div style="position: absolute; top: 4px; width: 1px; height: 13px; background: var(--color-neutral-500); left: {{ mark2 }};"></div>
+              <div style="position: absolute; top: 4px; width: 1px; height: 13px; background: var(--color-neutral-500); left: {{ mark3 }};"></div>
+              <div style="position: absolute; top: 0; height: 21px; width: 2px; background: var(--color-accent); left: {{ progress }};"></div>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--color-neutral-600); margin-top: 2px;">
+              <span>4 gemarkeerde momenten</span><span>{{ duration }}</span>
+            </div>
+          </div>
+
+          <div style="padding: 0 var(--space-4) var(--space-4);">
+            <div class="card elev-sm" style="padding: var(--space-4); border-left: 2px solid var(--color-accent);">
+              <div style="display: flex; align-items: center; gap: 9px; margin-bottom: var(--space-3);">
+                <img src="{{ nowLogo }}" alt="" width="22" height="22" style="flex-shrink: 0;">
+                <span style="flex: 1; font-family: var(--font-heading); font-size: 15px;">{{ nowSpeaker }}</span>
+                <span style="font-feature-settings: 'tnum'; font-size: 11px; color: var(--color-neutral-600);">{{ nowTime }}</span>
+              </div>
+              <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 6px;">
+                <span class="tag tag-outline" style="font-size: 10px; display: inline-flex; align-items: center; gap: 5px;"><span style="width: 7px; height: 7px; border-radius: 50%; background: {{ nowStanceDot }};"></span>{{ nowStance }}</span>
+                <span class="tag tag-neutral" style="font-size: 10px;">voorbeeldcitaat</span>
+                <span class="tag tag-outline" style="font-size: 10px;">{{ nowTypology }}</span>
+                <span class="tag tag-accent" style="font-size: 10px;">{{ nowTagA }}</span>
+              </div>
+            </div>
+          </div>
+
+          <div style="padding: 0 var(--space-5) var(--space-5);">
+            <div style="display: flex; align-items: baseline; justify-content: space-between; margin-bottom: var(--space-2);">
+              <span style="font-family: var(--font-heading); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-accent-700);">Gemarkeerde momenten</span>
+            </div>
+            <div style="display: flex; flex-direction: column;">
+              <button type="button" onClick="{{ goTo0 }}" style="all: unset; cursor: pointer; display: flex; align-items: center; gap: var(--space-3); min-height: 52px; padding: var(--space-3) 0 var(--space-3) var(--space-2); border-top: 1px solid var(--color-divider); border-left: 2px solid {{ rule0 }}; font-family: var(--font-body);">
+                <span style="font-feature-settings: 'tnum'; font-size: 11px; color: var(--color-neutral-600); width: 46px; flex-shrink: 0;">00:48:19</span>
+                <img src="party-logos/groenlinks-pvda.svg" alt="" width="18" height="18" style="flex-shrink: 0;">
+                <span style="flex: 1; font-size: 13px; line-height: 1.4; color: var(--color-neutral-700); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">"We schuiven de rekening door naar boeren die straks geen keuze meer hebben."</span>
+              </button>
+              <button type="button" onClick="{{ goTo1 }}" style="all: unset; cursor: pointer; display: flex; align-items: center; gap: var(--space-3); min-height: 52px; padding: var(--space-3) 0 var(--space-3) var(--space-2); border-top: 1px solid var(--color-divider); border-left: 2px solid {{ rule1 }}; font-family: var(--font-body);">
+                <span style="font-feature-settings: 'tnum'; font-size: 11px; color: var(--color-neutral-600); width: 46px; flex-shrink: 0;">01:12:04</span>
+                <img src="party-logos/d66.svg" alt="" width="18" height="18" style="flex-shrink: 0;">
+                <span style="flex: 1; font-size: 13px; line-height: 1.4; color: var(--color-neutral-700); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">"Zonder harde reductiedatum blijft elke vergunning aanvechtbaar."</span>
+              </button>
+              <button type="button" onClick="{{ goTo2 }}" style="all: unset; cursor: pointer; display: flex; align-items: center; gap: var(--space-3); min-height: 52px; padding: var(--space-3) 0 var(--space-3) var(--space-2); border-top: 1px solid var(--color-divider); border-left: 2px solid {{ rule2 }}; font-family: var(--font-body);">
+                <span style="font-feature-settings: 'tnum'; font-size: 11px; color: var(--color-neutral-600); width: 46px; flex-shrink: 0;">02:03:37</span>
+                <img src="party-logos/bbb.svg" alt="" width="18" height="18" style="flex-shrink: 0;">
+                <span style="flex: 1; font-size: 13px; line-height: 1.4; color: var(--color-neutral-700); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">"Een gedwongen krimp kost dit land zijn voedselproductie."</span>
+              </button>
+              <button type="button" onClick="{{ goTo3 }}" style="all: unset; cursor: pointer; display: flex; align-items: center; gap: var(--space-3); min-height: 52px; padding: var(--space-3) 0 var(--space-3) var(--space-2); border-top: 1px solid var(--color-divider); border-bottom: 1px solid var(--color-divider); border-left: 2px solid {{ rule3 }}; font-family: var(--font-body);">
+                <span style="font-feature-settings: 'tnum'; font-size: 11px; color: var(--color-neutral-600); width: 46px; flex-shrink: 0;">02:31:55</span>
+                <img src="party-logos/vvd.svg" alt="" width="18" height="18" style="flex-shrink: 0;">
+                <span style="flex: 1; font-size: 13px; line-height: 1.4; color: var(--color-neutral-700); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">"De Habitatrichtlijn vraagt een resultaat, geen politiek jaartal."</span>
+              </button>
+            </div>
+          </div>
+
+          <div style="padding: 0 var(--space-5);">
+            <button type="button" class="btn btn-secondary btn-block" style="min-height: 44px;">Alle argumenten over stikstof</button>
+          </div>
+        </div>
+
+        <div style="position: absolute; left: 0; right: 0; bottom: 0; height: 84px; background: color-mix(in oklab, var(--color-bg) 88%, transparent); backdrop-filter: blur(12px); border-top: 1px solid var(--color-divider); display: grid; grid-template-columns: repeat(4, 1fr); align-items: start; padding-top: 8px; z-index: 40;">
+          <button type="button" style="all: unset; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 4px; min-height: 44px; padding-top: 6px; color: var(--color-accent-700); font-family: var(--font-body); font-size: 10px; letter-spacing: 0.06em;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l9 5-9 5-9-5z"></path><path d="M3 13l9 5 9-5"></path></svg>
+            Onderwerpen
+          </button>
+          <button type="button" style="all: unset; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 4px; min-height: 44px; padding-top: 6px; color: var(--color-neutral-600); font-family: var(--font-body); font-size: 10px; letter-spacing: 0.06em;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20v-1a4 4 0 014-4h2a4 4 0 014 4v1"></path><circle cx="9" cy="8" r="3"></circle><path d="M17 20v-1a4 4 0 00-2-3.4"></path><path d="M15 5.2a3 3 0 010 5.6"></path></svg>
+            Partijen
+          </button>
+          <button type="button" style="all: unset; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 4px; min-height: 44px; padding-top: 6px; color: var(--color-neutral-600); font-family: var(--font-body); font-size: 10px; letter-spacing: 0.06em;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.6 12.6l-8 8a2 2 0 01-2.8 0l-6.4-6.4a2 2 0 01-.6-1.4V5a2 2 0 012-2h7.8a2 2 0 011.4.6l6.6 6.6a2 2 0 010 2.4z"></path><circle cx="8" cy="8" r="1.2"></circle></svg>
+            Tags
+          </button>
+          <button type="button" style="all: unset; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 4px; min-height: 44px; padding-top: 6px; color: var(--color-neutral-600); font-family: var(--font-body); font-size: 10px; letter-spacing: 0.06em;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.4"></circle><path d="M5 20v-1a5 5 0 015-5h4a5 5 0 015 5v1"></path></svg>
+            Personen
+          </button>
+        </div>
+      </x-import>
+      <div style="font-family: var(--font-body); font-size: 12px; color: var(--color-neutral-600); text-align: center;">Opening — de video van het laatste debat</div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: var(--space-3);">
+      <x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" hint-size="402px,874px">
+        <div class="bp-screen" style="height: 100%; overflow: auto; background: var(--color-bg); font-family: var(--font-body); padding: 56px 0 92px; box-sizing: border-box;">
+
+          <div style="display: flex; align-items: center; gap: var(--space-2); padding: var(--space-2) var(--space-3);">
+            <button type="button" class="btn btn-ghost btn-icon" aria-label="Terug" style="width: 44px; height: 44px;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 5.5L8 12l6.5 6.5"></path></svg>
+            </button>
+            <span style="flex: 1; font-family: var(--font-heading); font-size: 17px;">Stikstof</span>
+            <button type="button" class="btn btn-secondary" style="min-height: 44px; gap: 6px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M4 6h16"></path><path d="M7 12h10"></path><path d="M10 18h4"></path></svg>
+              Filter
+            </button>
+          </div>
+
+          <div style="padding: 0 var(--space-4) var(--space-4);">
+            <p style="font-size: 13px; line-height: 1.6; color: var(--color-neutral-700); margin: 0;">Snel en streng terugdringen (<em>pro</em>) versus ruimte voor landbouw behouden (<em>contra</em>).</p>
+          </div>
+
+          <sc-if value="{{ showMap }}" hint-placeholder-val="{{ true }}">
+            <div style="padding: 0 var(--space-4) var(--space-4);">
+              <div class="card" style="padding: var(--space-4);">
+                <div style="display: flex; align-items: baseline; justify-content: space-between; margin-bottom: var(--space-2);">
+                  <span style="font-family: var(--font-heading); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-accent-700);">Correspondentiekaart</span>
+                  <span style="font-feature-settings: 'tnum'; font-size: 11px; color: var(--color-neutral-600);">as 1 · 37,7% — as 2 · 20,4%</span>
+                </div>
+                <svg viewBox="0 0 340 262" style="width: 100%; height: auto; display: block; font-family: var(--font-body);">
+                  <line x1="14" y1="130" x2="326" y2="130" stroke="var(--color-divider)" stroke-width="0.7"></line>
+                  <line x1="170" y1="14" x2="170" y2="250" stroke="var(--color-divider)" stroke-width="0.7"></line>
+                  <g fill="none" stroke="var(--color-accent)" stroke-width="0.9" opacity="0.45">
+                    <path d="M176.5 150.2h5M179 147.7v5"></path>
+                    <path d="M175.9 162.9h5M178.4 160.4v5"></path>
+                    <path d="M184.3 170.6h5M186.8 168.1v5"></path>
+                    <path d="M140.7 150.7h5M143.2 148.2v5"></path>
+                    <path d="M151 168.2h5M153.5 165.7v5"></path>
+                    <path d="M281 168.5h5M283.5 166v5"></path>
+                    <path d="M262.6 186.1h5M265.1 183.6v5"></path>
+                  </g>
+                  <g fill="none" stroke="var(--color-accent)" stroke-width="1.2">
+                    <path d="M26.8 134.6h6M29.8 131.6v6"></path>
+                    <path d="M25.7 235.9h6M28.7 232.9v6"></path>
+                    <path d="M256 26.3h6M259 23.3v6"></path>
+                    <path d="M298.9 186h6M301.9 183v6"></path>
+                    <path d="M269.8 135.1h6M272.8 132.1v6"></path>
+                  </g>
+                  <g fill="var(--color-accent-700)" font-size="7.5" font-style="italic">
+                    <text x="24" y="110">Ideologie-GAL</text>
+                    <text x="24" y="228">Ideologie-Links-Economisch</text>
+                    <text x="326" y="38" text-anchor="end">Ideologie-Rechts-Economisch</text>
+                    <text x="296" y="200" text-anchor="end">Ideologie-TAN</text>
+                    <text x="326" y="124" text-anchor="end">Moraliteit-Vrijheid</text>
+                  </g>
+                  <g fill="var(--color-neutral-700)">
+                    <circle cx="168.1" cy="131.6" r="2.1"></circle>
+                    <circle cx="164.6" cy="123.1" r="2.1"></circle>
+                    <circle cx="156.9" cy="138.3" r="2.1"></circle>
+                    <circle cx="132.5" cy="127.3" r="2.1"></circle>
+                    <circle cx="112" cy="131.9" r="2.1"></circle>
+                    <circle cx="105.4" cy="139.1" r="2.1"></circle>
+                    <circle cx="103.5" cy="141.3" r="2.1"></circle>
+                  </g>
+                  <line x1="224.3" y1="158.6" x2="218" y2="166" stroke="var(--color-neutral-400)" stroke-width="0.6"></line>
+                  <g>
+                    <image href="party-logos/vvd.svg" x="191.3" y="56.4" width="13" height="13"></image>
+                    <image href="party-logos/ja21.svg" x="227.7" y="105.7" width="13" height="13"></image>
+                    <image href="party-logos/bbb.svg" x="214.8" y="132.9" width="13" height="13"></image>
+                    <image href="party-logos/pvv.svg" x="230.5" y="142.1" width="13" height="13"></image>
+                    <image href="party-logos/fvd.svg" x="250.9" y="158.1" width="13" height="13"></image>
+                    <image href="party-logos/sgp.svg" x="211.5" y="159.5" width="13" height="13"></image>
+                    <image href="party-logos/d66.svg" x="96.9" y="113.7" width="13" height="13"></image>
+                    <image href="party-logos/pro.svg" x="79.5" y="131.2" width="13" height="13"></image>
+                    <image href="party-logos/sp.svg" x="94.2" y="178.9" width="13" height="13"></image>
+                  </g>
+                  <g fill="var(--color-neutral-900)" font-size="8" font-family="var(--font-heading)">
+                    <text x="207" y="61">VVD</text>
+                    <text x="225" y="104" text-anchor="end">JA21</text>
+                    <text x="213" y="138" text-anchor="end">BBB</text>
+                    <text x="246" y="152">PVV</text>
+                    <text x="266" y="170">FVD</text>
+                    <text x="209" y="170" text-anchor="end">SGP</text>
+                    <text x="95" y="112" text-anchor="end">D66</text>
+                    <text x="77" y="129" text-anchor="end">PRO</text>
+                    <text x="110" y="194">SP</text>
+                  </g>
+                  <g fill="var(--color-neutral-500)" font-size="7">
+                    <text x="14" y="20">← GAL / links</text>
+                    <text x="326" y="20" text-anchor="end">rechts / TAN →</text>
+                  </g>
+                </svg>
+                <div style="display: flex; gap: var(--space-4); border-top: 1px solid var(--color-divider); margin-top: var(--space-3); padding-top: var(--space-3); font-size: 11px; color: var(--color-neutral-600);">
+                  <span style="display: flex; align-items: center; gap: 6px;"><img src="party-logos/vvd.svg" alt="" width="12" height="12">partij aan de rand</span>
+                  <span style="display: flex; align-items: center; gap: 6px;"><svg width="10" height="10"><circle cx="5" cy="5" r="2.4" fill="var(--color-neutral-700)"></circle></svg>middenveld</span>
+                </div>
+              </div>
+            </div>
+          </sc-if>
+
+          <div style="padding: 0 var(--space-4) var(--space-4);">
+            <div class="card" style="padding: var(--space-4);">
+              <div style="display: flex; align-items: baseline; justify-content: space-between; margin-bottom: var(--space-3);">
+                <span style="font-family: var(--font-heading); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-accent-700);">Soort argument</span>
+                <span style="display: flex; gap: var(--space-3); font-size: 10px; color: var(--color-neutral-600);">
+                  <span style="display: flex; align-items: center; gap: 5px;"><span style="width: 14px; height: 6px; border: 1px solid var(--color-accent-300); background: var(--color-accent-200);"></span>pro</span>
+                  <span style="display: flex; align-items: center; gap: 5px;"><span style="width: 14px; height: 6px; border: 1px solid var(--color-neutral-400); background: var(--color-neutral-200);"></span>contra</span>
+                </span>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: var(--space-3);">
+                <div style="display: grid; grid-template-columns: 74px 1fr 34px; align-items: center; gap: var(--space-2); font-size: 12px;">
+                  <span>Feitelijk</span>
+                  <span style="display: flex; flex-direction: column; gap: 2px;">
+                    <span style="height: 6px; width: 87%; border: 1px solid var(--color-accent-300); background: var(--color-accent-200);"></span>
+                    <span style="height: 6px; width: 100%; border: 1px solid var(--color-neutral-400); background: var(--color-neutral-200);"></span>
+                  </span>
+                  <span style="font-feature-settings: 'tnum'; font-size: 11px; color: var(--color-neutral-600); text-align: right;">637</span>
+                </div>
+                <div style="display: grid; grid-template-columns: 74px 1fr 34px; align-items: center; gap: var(--space-2); font-size: 12px;">
+                  <span>Moreel</span>
+                  <span style="display: flex; flex-direction: column; gap: 2px;">
+                    <span style="height: 6px; width: 63%; border: 1px solid var(--color-accent-300); background: var(--color-accent-200);"></span>
+                    <span style="height: 6px; width: 38%; border: 1px solid var(--color-neutral-400); background: var(--color-neutral-200);"></span>
+                  </span>
+                  <span style="font-feature-settings: 'tnum'; font-size: 11px; color: var(--color-neutral-600); text-align: right;">342</span>
+                </div>
+                <div style="display: grid; grid-template-columns: 74px 1fr 34px; align-items: center; gap: var(--space-2); font-size: 12px;">
+                  <span>Economisch</span>
+                  <span style="display: flex; flex-direction: column; gap: 2px;">
+                    <span style="height: 6px; width: 35%; border: 1px solid var(--color-accent-300); background: var(--color-accent-200);"></span>
+                    <span style="height: 6px; width: 79%; border: 1px solid var(--color-neutral-400); background: var(--color-neutral-200);"></span>
+                  </span>
+                  <span style="font-feature-settings: 'tnum'; font-size: 11px; color: var(--color-neutral-600); text-align: right;">389</span>
+                </div>
+                <div style="display: grid; grid-template-columns: 74px 1fr 34px; align-items: center; gap: var(--space-2); font-size: 12px;">
+                  <span>Juridisch</span>
+                  <span style="display: flex; flex-direction: column; gap: 2px;">
+                    <span style="height: 6px; width: 35%; border: 1px solid var(--color-accent-300); background: var(--color-accent-200);"></span>
+                    <span style="height: 6px; width: 42%; border: 1px solid var(--color-neutral-400); background: var(--color-neutral-200);"></span>
+                  </span>
+                  <span style="font-feature-settings: 'tnum'; font-size: 11px; color: var(--color-neutral-600); text-align: right;">260</span>
+                </div>
+                <div style="display: grid; grid-template-columns: 74px 1fr 34px; align-items: center; gap: var(--space-2); font-size: 12px;">
+                  <span>Overig</span>
+                  <span style="display: flex; flex-direction: column; gap: 2px;">
+                    <span style="height: 6px; width: 18%; border: 1px solid var(--color-accent-300); background: var(--color-accent-200);"></span>
+                    <span style="height: 6px; width: 22%; border: 1px solid var(--color-neutral-400); background: var(--color-neutral-200);"></span>
+                  </span>
+                  <span style="font-feature-settings: 'tnum'; font-size: 11px; color: var(--color-neutral-600); text-align: right;">138</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style="position: sticky; top: 0; z-index: 30; background: color-mix(in oklab, var(--color-bg) 92%, transparent); backdrop-filter: blur(10px); border-top: 1px solid var(--color-divider); border-bottom: 1px solid var(--color-divider);">
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr);">
+              <button type="button" onClick="{{ selectPro }}" style="all: unset; cursor: pointer; min-height: 52px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; font-family: var(--font-heading); font-size: 15px; color: {{ proColor }}; border-bottom: 2px solid {{ proRule }};">
+                Pro<span style="font-family: var(--font-body); font-feature-settings: 'tnum'; font-size: 11px; opacity: 0.7;">812</span>
+              </button>
+              <button type="button" onClick="{{ selectContra }}" style="all: unset; cursor: pointer; min-height: 52px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; font-family: var(--font-heading); font-size: 15px; color: {{ contraColor }}; border-bottom: 2px solid {{ contraRule }};">
+                Contra<span style="font-family: var(--font-body); font-feature-settings: 'tnum'; font-size: 11px; opacity: 0.7;">954</span>
+              </button>
+              <button type="button" onClick="{{ selectUnclear }}" style="all: unset; cursor: pointer; min-height: 52px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; font-family: var(--font-heading); font-size: 15px; color: {{ unclearColor }}; border-bottom: 2px solid {{ unclearRule }};">
+                Onduidelijk<span style="font-family: var(--font-body); font-feature-settings: 'tnum'; font-size: 11px; opacity: 0.7;">210</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="bp-track" ref="{{ trackRef }}" onScroll="{{ onTrackScroll }}" style="display: grid; grid-auto-flow: column; grid-auto-columns: 100%; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none;">
+
+            <div style="scroll-snap-align: start; padding: var(--space-4); display: flex; flex-direction: column; gap: var(--space-4);">
+              <div class="card" style="padding: var(--space-4); border-left: 2px solid var(--color-accent);">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-3);">
+                  <span class="tag tag-outline" style="font-size: 10px;">Feitelijk</span>
+                  <span style="font-feature-settings: 'tnum'; font-size: 11px; color: var(--color-neutral-600);">01:12:04</span>
+                </div>
+                <blockquote style="margin: 0 0 var(--space-3); font-family: var(--font-heading); font-size: 17px; line-height: 1.42;">"De rechter heeft ons twee keer teruggestuurd; zonder een harde reductiedatum blijft elke vergunning aanvechtbaar."</blockquote>
+                <p style="margin: 0 0 var(--space-3); font-size: 12px; color: var(--color-neutral-600); display: flex; align-items: center; gap: 7px;"><img src="party-logos/d66.svg" alt="D66" width="18" height="18" style="flex-shrink: 0;">Volgens <strong style="font-weight: 500; color: var(--color-text);">Tjeerd de Groot · D66</strong></p>
+                <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+                  <span class="tag tag-accent" style="font-size: 10px;">Walton-Regel</span>
+                  <span class="tag tag-neutral" style="font-size: 10px;">Bewijs-Expert</span>
+                </div>
+                <div style="border-top: 1px solid var(--color-divider); margin-top: var(--space-3); padding-top: var(--space-3); font-size: 12px;">
+                  <a href="#turn-2">video (dit moment)</a>
+                </div>
+              </div>
+              <div class="card" style="padding: var(--space-4); border-left: 2px solid var(--color-accent);">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-3);">
+                  <span class="tag tag-outline" style="font-size: 10px;">Moreel</span>
+                  <span style="font-feature-settings: 'tnum'; font-size: 11px; color: var(--color-neutral-600);">00:48:19</span>
+                </div>
+                <blockquote style="margin: 0 0 var(--space-3); font-family: var(--font-heading); font-size: 17px; line-height: 1.42;">"We schuiven de rekening door naar boeren die straks helemaal geen keuze meer hebben."</blockquote>
+                <p style="margin: 0 0 var(--space-3); font-size: 12px; color: var(--color-neutral-600); display: flex; align-items: center; gap: 7px;"><img src="party-logos/groenlinks-pvda.svg" alt="GroenLinks-PvdA" width="18" height="18" style="flex-shrink: 0;">Volgens <strong style="font-weight: 500; color: var(--color-text);">Laura Bromet · GroenLinks-PvdA</strong></p>
+                <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+                  <span class="tag tag-accent" style="font-size: 10px;">Moraliteit-Zorg</span>
+                  <span class="tag tag-neutral" style="font-size: 10px;">Frame-Menselijk-Belang</span>
+                </div>
+                <div style="border-top: 1px solid var(--color-divider); margin-top: var(--space-3); padding-top: var(--space-3); font-size: 12px;">
+                  <a href="#turn-2">video (dit moment)</a>
+                </div>
+              </div>
+              <button type="button" class="btn btn-secondary btn-block" style="min-height: 44px;">Nog 810 argumenten</button>
+            </div>
+
+            <div style="scroll-snap-align: start; padding: var(--space-4); display: flex; flex-direction: column; gap: var(--space-4);">
+              <div class="card" style="padding: var(--space-4); border-left: 2px solid var(--color-neutral-500);">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-3);">
+                  <span class="tag tag-outline" style="font-size: 10px;">Economisch</span>
+                  <span style="font-feature-settings: 'tnum'; font-size: 11px; color: var(--color-neutral-600);">02:03:37</span>
+                </div>
+                <blockquote style="margin: 0 0 var(--space-3); font-family: var(--font-heading); font-size: 17px; line-height: 1.42;">"Een gedwongen krimp kost dit land zijn voedselproductie en levert geen enkele hectare natuur op."</blockquote>
+                <p style="margin: 0 0 var(--space-3); font-size: 12px; color: var(--color-neutral-600); display: flex; align-items: center; gap: 7px;"><img src="party-logos/bbb.svg" alt="BBB" width="18" height="18" style="flex-shrink: 0;">Volgens <strong style="font-weight: 500; color: var(--color-text);">Caroline van der Plas · BBB</strong></p>
+                <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+                  <span class="tag tag-accent" style="font-size: 10px;">Frame-Economisch</span>
+                  <span class="tag tag-neutral" style="font-size: 10px;">Walton-Consequentie</span>
+                </div>
+                <div style="border-top: 1px solid var(--color-divider); margin-top: var(--space-3); padding-top: var(--space-3); font-size: 12px;">
+                  <a href="#turn-2">video (dit moment)</a>
+                </div>
+              </div>
+              <div class="card" style="padding: var(--space-4); border-left: 2px solid var(--color-neutral-500);">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-3);">
+                  <span class="tag tag-outline" style="font-size: 10px;">Juridisch</span>
+                  <span style="font-feature-settings: 'tnum'; font-size: 11px; color: var(--color-neutral-600);">02:31:55</span>
+                </div>
+                <blockquote style="margin: 0 0 var(--space-3); font-family: var(--font-heading); font-size: 17px; line-height: 1.42;">"De Habitatrichtlijn vraagt een resultaat, geen jaartal dat wij hier politiek verzinnen."</blockquote>
+                <p style="margin: 0 0 var(--space-3); font-size: 12px; color: var(--color-neutral-600); display: flex; align-items: center; gap: 7px;"><img src="party-logos/vvd.svg" alt="VVD" width="18" height="18" style="flex-shrink: 0;">Volgens <strong style="font-weight: 500; color: var(--color-text);">Thom van Campen · VVD</strong></p>
+                <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+                  <span class="tag tag-accent" style="font-size: 10px;">Walton-Regel</span>
+                  <span class="tag tag-neutral" style="font-size: 10px;">Meta-Bevoegdheid</span>
+                </div>
+                <div style="border-top: 1px solid var(--color-divider); margin-top: var(--space-3); padding-top: var(--space-3); font-size: 12px;">
+                  <a href="#turn-2">video (dit moment)</a>
+                </div>
+              </div>
+              <button type="button" class="btn btn-secondary btn-block" style="min-height: 44px;">Nog 952 argumenten</button>
+            </div>
+
+            <div style="scroll-snap-align: start; padding: var(--space-4); display: flex; flex-direction: column; gap: var(--space-4);">
+              <div class="card" style="padding: var(--space-4); border-left: 2px solid var(--color-neutral-300);">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-3);">
+                  <span class="tag tag-outline" style="font-size: 10px;">Overig</span>
+                  <span style="font-feature-settings: 'tnum'; font-size: 11px; color: var(--color-neutral-600);">00:12:02</span>
+                </div>
+                <blockquote style="margin: 0 0 var(--space-3); font-family: var(--font-heading); font-size: 17px; line-height: 1.42;">"Voorzitter, we behandelen vandaag een brief die we vorige week nog niet hadden."</blockquote>
+                <p style="margin: 0 0 var(--space-3); font-size: 12px; color: var(--color-neutral-600); display: flex; align-items: center; gap: 7px;"><img src="party-logos/sgp.svg" alt="SGP" width="18" height="18" style="flex-shrink: 0;">Volgens <strong style="font-weight: 500; color: var(--color-text);">Roelof Bisschop · SGP</strong></p>
+                <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+                  <span class="tag tag-accent" style="font-size: 10px;">Meta-Agenda-Tijdigheid</span>
+                </div>
+                <div style="border-top: 1px solid var(--color-divider); margin-top: var(--space-3); padding-top: var(--space-3); font-size: 12px;">
+                  <a href="#turn-2">video (dit moment)</a>
+                </div>
+              </div>
+              <button type="button" class="btn btn-secondary btn-block" style="min-height: 44px;">Nog 209 argumenten</button>
+            </div>
+          </div>
+        </div>
+
+        <div style="position: absolute; left: 0; right: 0; bottom: 0; height: 84px; background: color-mix(in oklab, var(--color-bg) 88%, transparent); backdrop-filter: blur(12px); border-top: 1px solid var(--color-divider); display: grid; grid-template-columns: repeat(4, 1fr); align-items: start; padding-top: 8px; z-index: 40;">
+          <button type="button" style="all: unset; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 4px; min-height: 44px; padding-top: 6px; color: var(--color-accent-700); font-family: var(--font-body); font-size: 10px; letter-spacing: 0.06em;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l9 5-9 5-9-5z"></path><path d="M3 13l9 5 9-5"></path></svg>
+            Onderwerpen
+          </button>
+          <button type="button" style="all: unset; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 4px; min-height: 44px; padding-top: 6px; color: var(--color-neutral-600); font-family: var(--font-body); font-size: 10px; letter-spacing: 0.06em;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20v-1a4 4 0 014-4h2a4 4 0 014 4v1"></path><circle cx="9" cy="8" r="3"></circle><path d="M17 20v-1a4 4 0 00-2-3.4"></path><path d="M15 5.2a3 3 0 010 5.6"></path></svg>
+            Partijen
+          </button>
+          <button type="button" style="all: unset; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 4px; min-height: 44px; padding-top: 6px; color: var(--color-neutral-600); font-family: var(--font-body); font-size: 10px; letter-spacing: 0.06em;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.6 12.6l-8 8a2 2 0 01-2.8 0l-6.4-6.4a2 2 0 01-.6-1.4V5a2 2 0 012-2h7.8a2 2 0 011.4.6l6.6 6.6a2 2 0 010 2.4z"></path><circle cx="8" cy="8" r="1.2"></circle></svg>
+            Tags
+          </button>
+          <button type="button" style="all: unset; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 4px; min-height: 44px; padding-top: 6px; color: var(--color-neutral-600); font-family: var(--font-body); font-size: 10px; letter-spacing: 0.06em;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.4"></circle><path d="M5 20v-1a5 5 0 015-5h4a5 5 0 015 5v1"></path></svg>
+            Personen
+          </button>
+        </div>
+      </x-import>
+      <div style="font-family: var(--font-body); font-size: 12px; color: var(--color-neutral-600); text-align: center;">Onderwerp — kaart plus veegbare pro/contra</div>
+    </div>
+  </div>
+</section>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;showMap&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Onderwerppagina&quot;}}">
+const STREAM = "https://livestreaming.b67v2.tweedekamer.nl/2026-07-01/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2026-07-01T13%3A35%3A26%2B0200&end=2026-07-02T01%3A14%3A54%2B0200";
+
+const MOMENTS = [
+  { t: 2899, time: "00:48:19", speaker: "Laura Bromet · GroenLinks-PvdA", logo: "party-logos/groenlinks-pvda.svg", stance: "Pro", typology: "Moreel", a: "Moraliteit-Zorg", b: "Frame-Menselijk-Belang", quote: "\"We schuiven de rekening door naar boeren die straks helemaal geen keuze meer hebben.\"" },
+  { t: 4324, time: "01:12:04", speaker: "Tjeerd de Groot · D66", logo: "party-logos/d66.svg", stance: "Pro", typology: "Feitelijk", a: "Walton-Regel", b: "Bewijs-Expert", quote: "\"De rechter heeft ons twee keer teruggestuurd; zonder een harde reductiedatum blijft elke vergunning aanvechtbaar.\"" },
+  { t: 7417, time: "02:03:37", speaker: "Caroline van der Plas · BBB", logo: "party-logos/bbb.svg", stance: "Contra", typology: "Economisch", a: "Frame-Economisch", b: "Walton-Consequentie", quote: "\"Een gedwongen krimp kost dit land zijn voedselproductie en levert geen enkele hectare natuur op.\"" },
+  { t: 9115, time: "02:31:55", speaker: "Thom van Campen · VVD", logo: "party-logos/vvd.svg", stance: "Contra", typology: "Juridisch", a: "Walton-Regel", b: "Meta-Bevoegdheid", quote: "\"De Habitatrichtlijn vraagt een resultaat, geen jaartal dat wij hier politiek verzinnen.\"" },
+];
+
+function fmt(s) {
+  if (!isFinite(s) || s < 0) s = 0;
+  const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), sec = Math.floor(s % 60);
+  const p = (n) => String(n).padStart(2, "0");
+  return h + ":" + p(m) + ":" + p(sec);
+}
+
+class Component extends DCLogic {
+  state = { tab: 0, playing: false, t: 4324, dur: 10800, ready: false };
+  constructor(props) {
+    super(props);
+    this.track = React.createRef();
+    this.video = React.createRef();
+    this.scrollLock = 0;
+  }
+  componentDidMount() {
+    const v = this.video.current;
+    if (!v) return;
+    v.addEventListener("timeupdate", () => this.setState({ t: v.currentTime }));
+    v.addEventListener("play", () => this.setState({ playing: true }));
+    v.addEventListener("pause", () => this.setState({ playing: false }));
+    v.addEventListener("loadedmetadata", () => {
+      this.setState({ dur: isFinite(v.duration) && v.duration > 0 ? v.duration : 10800, ready: true });
+    });
+    if (window.Hls && window.Hls.isSupported()) {
+      this.hls = new window.Hls({ startPosition: 4324 });
+      this.hls.loadSource(STREAM);
+      this.hls.attachMedia(v);
+    } else {
+      v.src = STREAM;
+    }
+  }
+  componentWillUnmount() {
+    if (this.hls) this.hls.destroy();
+  }
+  seek(sec) {
+    const v = this.video.current;
+    if (v) { try { v.currentTime = sec; } catch (e) {} }
+    this.setState({ t: sec });
+  }
+  togglePlay = () => {
+    const v = this.video.current;
+    if (!v) return;
+    if (v.paused) { const p = v.play(); if (p && p.catch) p.catch(() => {}); } else v.pause();
+  };
+  go(i) {
+    this.setState({ tab: i });
+    const el = this.track.current;
+    if (!el) return;
+    this.scrollLock = Date.now();
+    el.scrollTo({ left: i * el.clientWidth, behavior: "smooth" });
+  }
+  onScroll = () => {
+    const el = this.track.current;
+    if (!el || Date.now() - this.scrollLock < 500) return;
+    const i = Math.round(el.scrollLeft / Math.max(1, el.clientWidth));
+    if (i !== this.state.tab) this.setState({ tab: i });
+  };
+  currentIndex() {
+    let i = 0;
+    for (let k = 0; k < MOMENTS.length; k++) if (this.state.t >= MOMENTS[k].t - 20) i = k;
+    return i;
+  }
+  renderVals() {
+    const dur = this.state.dur || 10800;
+    const pct = (s) => Math.max(0, Math.min(100, (s / dur) * 100)).toFixed(2) + "%";
+    const i = this.currentIndex();
+    const m = MOMENTS[i];
+    const on = "var(--color-text)", off = "var(--color-neutral-600)";
+    const rule = "var(--color-accent)", norule = "transparent";
+    const t = this.state.tab;
+    return {
+      videoRef: this.video,
+      playing: this.state.playing,
+      paused: !this.state.playing,
+      togglePlay: this.togglePlay,
+      clock: fmt(this.state.t) + " / " + fmt(dur),
+      duration: "duur " + fmt(dur),
+      progress: pct(this.state.t),
+      mark0: pct(MOMENTS[0].t),
+      mark1: pct(MOMENTS[1].t),
+      mark2: pct(MOMENTS[2].t),
+      mark3: pct(MOMENTS[3].t),
+      nowTime: m.time,
+      nowQuote: m.quote,
+      nowSpeaker: m.speaker,
+      nowLogo: m.logo,
+      nowTypology: m.typology,
+      nowTagA: m.a,
+      nowTagB: m.b,
+      nowStance: m.stance,
+      nowStanceDot: m.stance === "Pro" ? "var(--color-accent-600)" : "var(--color-neutral-600)",
+      rule0: i === 0 ? rule : "transparent",
+      rule1: i === 1 ? rule : "transparent",
+      rule2: i === 2 ? rule : "transparent",
+      rule3: i === 3 ? rule : "transparent",
+      goTo0: () => this.seek(MOMENTS[0].t),
+      goTo1: () => this.seek(MOMENTS[1].t),
+      goTo2: () => this.seek(MOMENTS[2].t),
+      goTo3: () => this.seek(MOMENTS[3].t),
+      prevMoment: () => this.seek(MOMENTS[Math.max(0, i - 1)].t),
+      nextMoment: () => this.seek(MOMENTS[Math.min(MOMENTS.length - 1, i + 1)].t),
+      showMap: this.props.showMap ?? true,
+      trackRef: this.track,
+      onTrackScroll: this.onScroll,
+      selectPro: () => this.go(0),
+      selectContra: () => this.go(1),
+      selectUnclear: () => this.go(2),
+      proColor: t === 0 ? on : off,
+      contraColor: t === 1 ? on : off,
+      unclearColor: t === 2 ? on : off,
+      proRule: t === 0 ? rule : norule,
+      contraRule: t === 1 ? rule : norule,
+      unclearRule: t === 2 ? rule : norule,
+    };
+  }
+}
+</script>
+</body>
+</html>
