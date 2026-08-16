@@ -1632,6 +1632,14 @@ h3 {
 	gap: 0.5rem;
 }
 
+/* Compacte ArgumentCard (issue #135): het eerste-tag-badge in .argument-meta
+   is een statisch overzichtsbadge, geen filterknop zoals de .tag-badge's in
+   de volledige tags-lijst -- geen pointer/underline die klikbaarheid suggereert. */
+.argument-meta .tag-badge {
+	cursor: default;
+	text-decoration: none;
+}
+
 .typology-badge {
 	display: inline-block;
 	font-family: var(--font-mono);
