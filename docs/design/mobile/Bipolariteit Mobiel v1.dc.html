@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="stylesheet" href="_ds/classical-974e6ac3-dcd9-4446-a833-ca68e8f583ba/styles.css">
+<script src="_ds/classical-974e6ac3-dcd9-4446-a833-ca68e8f583ba/_ds_bundle.js"></script>
+<style>
+  body { margin: 0; background: var(--color-neutral-200); }
+  a { color: var(--color-accent-700); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+  a:hover { color: var(--color-accent-600); }
+  .bp-screen::-webkit-scrollbar { width: 0; height: 0; }
+  .bp-track::-webkit-scrollbar { width: 0; height: 0; }
+</style>
+</helmet>
+
+<section id="turn-1" style="padding: var(--space-8) var(--space-8) var(--space-10); display: flex; flex-direction: column; gap: var(--space-7);">
+  <div style="display: flex; align-items: flex-end; gap: var(--space-5); flex-wrap: wrap;">
+    <div style="max-width: 40ch;">
+      <div style="font-family: var(--font-heading); font-feature-settings: 'tnum'; letter-spacing: 0.14em; text-transform: uppercase; font-size: 12px; color: var(--color-accent-700);">1a · mobiel ontwerp</div>
+      <h1 style="font-family: var(--font-heading); font-weight: 400; font-size: 40px; line-height: 1.1; margin: var(--space-2) 0 var(--space-3);">Bipolariteit op de telefoon</h1>
+      <p style="font-family: var(--font-body); font-size: 15px; line-height: 1.65; color: var(--color-neutral-700); text-align: justify; text-wrap: pretty; margin: 0;">Twee schermen: het overzicht dat het laatste geanalyseerde debat vooropzet, en de onderwerppagina waar pro en contra als veegbare tabbladen naast elkaar staan met de correspondentiekaart erboven. Navigatie via een tabbalk onderaan.</p>
+    </div>
+    <div style="font-family: var(--font-body); font-size: 12px; line-height: 1.7; color: var(--color-neutral-600); border-left: 1px solid var(--color-divider); padding-left: var(--space-4);">
+      Citaten in dit ontwerp zijn voorbeelden.<br>Tags, partijen en de kaartdata komen uit de repository.
+    </div>
+  </div>
+
+  <div style="display: flex; gap: var(--space-8); flex-wrap: wrap; align-items: flex-start;">
+
+    <div style="display: flex; flex-direction: column; gap: var(--space-3);">
+      <x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" hint-size="402px,874px">
+        <div class="bp-screen" style="height: 100%; overflow: auto; background: var(--color-bg); font-family: var(--font-body); padding: 56px 0 92px; box-sizing: border-box;">
+
+          <div style="display: flex; align-items: center; justify-content: space-between; padding: var(--space-3) var(--space-5) var(--space-4);">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="font-family: var(--font-heading); font-size: 20px; color: var(--color-accent);">◑</span>
+              <span style="font-family: var(--font-heading); font-size: 20px; letter-spacing: 0.01em;">Bipolariteit</span>
+            </div>
+            <button type="button" class="btn btn-ghost btn-icon" aria-label="Zoeken" style="width: 44px; height: 44px;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.6-3.6"></path></svg>
+            </button>
+          </div>
+
+          <div style="padding: 0 var(--space-5) var(--space-5);">
+            <p style="font-family: var(--font-heading); font-size: 26px; line-height: 1.22; font-weight: 400; margin: 0 0 var(--space-3);">Wie zegt wat.</p>
+            <p style="font-size: 14px; line-height: 1.62; color: var(--color-neutral-700); text-align: justify; text-wrap: pretty; margin: 0;">Kamerleden geprofileerd op argumenten en stijl in gepolariseerde debatten. Terug te zien in de video van de bijdrage, steeds bijgewerkt.</p>
+          </div>
+
+          <div style="height: 1px; background: var(--color-divider); margin: 0 var(--space-5);"></div>
+
+          <div style="padding: var(--space-5);">
+            <div style="display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-3); margin-bottom: var(--space-3);">
+              <span style="font-family: var(--font-heading); font-feature-settings: 'tnum'; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-accent-700);">Laatste geanalyseerde debat</span>
+              <span style="font-feature-settings: 'tnum'; font-size: 12px; color: var(--color-neutral-600);">1 juli 2026</span>
+            </div>
+            <div class="card elev-sm" style="padding: var(--space-5);">
+              <div class="card-title" style="font-size: 24px; margin: 0 0 6px;">Stikstof</div>
+              <p style="font-size: 13px; line-height: 1.55; color: var(--color-neutral-700); margin: 0 0 var(--space-4);">Snel en streng stikstof terugdringen versus ruimte voor landbouw behouden.</p>
+              <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-3); border-top: 1px solid var(--color-divider); border-bottom: 1px solid var(--color-divider); padding: var(--space-3) 0; margin-bottom: var(--space-4);">
+                <div>
+                  <div style="font-family: var(--font-heading); font-feature-settings: 'tnum'; font-size: 22px; line-height: 1;">812</div>
+                  <div style="font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-neutral-600); margin-top: 4px;">Pro</div>
+                </div>
+                <div>
+                  <div style="font-family: var(--font-heading); font-feature-settings: 'tnum'; font-size: 22px; line-height: 1;">954</div>
+                  <div style="font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-neutral-600); margin-top: 4px;">Contra</div>
+                </div>
+                <div>
+                  <div style="font-family: var(--font-heading); font-feature-settings: 'tnum'; font-size: 22px; line-height: 1;">210</div>
+                  <div style="font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-neutral-600); margin-top: 4px;">Onduidelijk</div>
+                </div>
+              </div>
+              <div style="display: flex; gap: var(--space-3);">
+                <button type="button" class="btn btn-primary" onClick="{{ openTopic }}" style="min-height: 44px; flex: 1;">Bekijk het debat</button>
+                <button type="button" class="btn btn-secondary btn-icon" aria-label="Video van de bijdrage" style="width: 44px; min-height: 44px;">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M9 7.5l8 4.5-8 4.5z"></path><rect x="3" y="4" width="18" height="16" rx="2"></rect></svg>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div style="padding: 0 var(--space-5) var(--space-5);">
+            <div style="display: flex; align-items: baseline; justify-content: space-between; margin-bottom: var(--space-2);">
+              <span style="font-family: var(--font-heading); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-accent-700);">Onderwerpen</span>
+              <a href="#turn-1" style="font-size: 12px;">alle vier</a>
+            </div>
+            <div style="display: flex; flex-direction: column;">
+              <button type="button" onClick="{{ openTopic }}" style="all: unset; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); min-height: 52px; padding: var(--space-3) 0; border-top: 1px solid var(--color-divider); font-family: var(--font-body);" style-hover="background: var(--color-accent-100);">
+                <span>
+                  <span style="font-family: var(--font-heading); font-size: 18px; display: block;">Stikstof</span>
+                  <span style="font-size: 12px; color: var(--color-neutral-600);">landbouw versus reductietempo</span>
+                </span>
+                <span style="font-feature-settings: 'tnum'; font-size: 13px; color: var(--color-accent-700); white-space: nowrap;">1976 →</span>
+              </button>
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); min-height: 52px; padding: var(--space-3) 0; border-top: 1px solid var(--color-divider);">
+                <span>
+                  <span style="font-family: var(--font-heading); font-size: 18px; display: block;">Asiel en migratie</span>
+                  <span style="font-size: 12px; color: var(--color-neutral-600);">humane opvang versus instroom</span>
+                </span>
+                <span style="font-feature-settings: 'tnum'; font-size: 13px; color: var(--color-accent-700); white-space: nowrap;">828 →</span>
+              </div>
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); min-height: 52px; padding: var(--space-3) 0; border-top: 1px solid var(--color-divider);">
+                <span>
+                  <span style="font-family: var(--font-heading); font-size: 18px; display: block;">Abortus</span>
+                  <span style="font-size: 12px; color: var(--color-neutral-600);">keuzevrijheid versus bescherming</span>
+                </span>
+                <span style="font-feature-settings: 'tnum'; font-size: 13px; color: var(--color-accent-700); white-space: nowrap;">439 →</span>
+              </div>
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); min-height: 52px; padding: var(--space-3) 0; border-top: 1px solid var(--color-divider); border-bottom: 1px solid var(--color-divider);">
+                <span>
+                  <span style="font-family: var(--font-heading); font-size: 18px; display: block;">Energietransitie</span>
+                  <span style="font-size: 12px; color: var(--color-neutral-600);">verduurzamen versus tempo</span>
+                </span>
+                <span style="font-feature-settings: 'tnum'; font-size: 13px; color: var(--color-accent-700); white-space: nowrap;">154 →</span>
+              </div>
+            </div>
+          </div>
+
+          <div style="padding: 0 var(--space-5) var(--space-5);">
+            <div style="display: flex; align-items: baseline; justify-content: space-between; margin-bottom: var(--space-3);">
+              <span style="font-family: var(--font-heading); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-accent-700);">Partijen</span>
+              <a href="#turn-1" style="font-size: 12px;">alle negentien</a>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: var(--space-3);">
+              <div style="display: flex; align-items: center; gap: var(--space-3);">
+                <span style="width: 108px; display: flex; align-items: center; gap: 8px; font-family: var(--font-heading); font-size: 15px;"><img src="party-logos/vvd.svg" alt="" width="18" height="18" style="flex-shrink: 0;">VVD</span>
+                <span style="flex: 1; height: 6px; border: 1px solid var(--color-accent-300); position: relative;"><span style="position: absolute; inset: 0 0 0 0; width: 100%; background: var(--color-accent-200);"></span></span>
+                <span style="width: 34px; text-align: right; font-feature-settings: 'tnum'; font-size: 12px; color: var(--color-neutral-600);">557</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: var(--space-3);">
+                <span style="width: 108px; display: flex; align-items: center; gap: 8px; font-family: var(--font-heading); font-size: 15px;"><img src="party-logos/bbb.svg" alt="" width="18" height="18" style="flex-shrink: 0;">BBB</span>
+                <span style="flex: 1; height: 6px; border: 1px solid var(--color-accent-300); position: relative;"><span style="position: absolute; inset: 0; width: 80%; background: var(--color-accent-200);"></span></span>
+                <span style="width: 34px; text-align: right; font-feature-settings: 'tnum'; font-size: 12px; color: var(--color-neutral-600);">444</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: var(--space-3);">
+                <span style="width: 108px; display: flex; align-items: center; gap: 8px; font-family: var(--font-heading); font-size: 15px;"><img src="party-logos/d66.svg" alt="" width="18" height="18" style="flex-shrink: 0;">D66</span>
+                <span style="flex: 1; height: 6px; border: 1px solid var(--color-accent-300); position: relative;"><span style="position: absolute; inset: 0; width: 74%; background: var(--color-accent-200);"></span></span>
+                <span style="width: 34px; text-align: right; font-feature-settings: 'tnum'; font-size: 12px; color: var(--color-neutral-600);">415</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: var(--space-3);">
+                <span style="width: 108px; display: flex; align-items: center; gap: 8px; font-family: var(--font-heading); font-size: 15px;"><img src="party-logos/christenunie.svg" alt="" width="18" height="18" style="flex-shrink: 0;">ChristenUnie</span>
+                <span style="flex: 1; height: 6px; border: 1px solid var(--color-accent-300); position: relative;"><span style="position: absolute; inset: 0; width: 51%; background: var(--color-accent-200);"></span></span>
+                <span style="width: 34px; text-align: right; font-feature-settings: 'tnum'; font-size: 12px; color: var(--color-neutral-600);">285</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: var(--space-3);">
+                <span style="width: 108px; display: flex; align-items: center; gap: 8px; font-family: var(--font-heading); font-size: 15px;"><img src="party-logos/groenlinks-pvda.svg" alt="" width="18" height="18" style="flex-shrink: 0;">GroenLinks-PvdA</span>
+                <span style="flex: 1; height: 6px; border: 1px solid var(--color-accent-300); position: relative;"><span style="position: absolute; inset: 0; width: 39%; background: var(--color-accent-200);"></span></span>
+                <span style="width: 34px; text-align: right; font-feature-settings: 'tnum'; font-size: 12px; color: var(--color-neutral-600);">218</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: var(--space-3);">
+                <span style="width: 108px; display: flex; align-items: center; gap: 8px; font-family: var(--font-heading); font-size: 15px;"><img src="party-logos/sgp.svg" alt="" width="18" height="18" style="flex-shrink: 0;">SGP</span>
+                <span style="flex: 1; height: 6px; border: 1px solid var(--color-accent-300); position: relative;"><span style="position: absolute; inset: 0; width: 35%; background: var(--color-accent-200);"></span></span>
+                <span style="width: 34px; text-align: right; font-feature-settings: 'tnum'; font-size: 12px; color: var(--color-neutral-600);">197</span>
+              </div>
+            </div>
+          </div>
+
+          <div style="padding: 0 var(--space-5) var(--space-6); display: flex; gap: var(--space-3);">
+            <div class="card" style="flex: 1; padding: var(--space-4); text-align: center;">
+              <div style="font-family: var(--font-heading); font-feature-settings: 'tnum'; font-size: 22px;">55</div>
+              <div style="font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-neutral-600); margin-top: 4px;">tags</div>
+            </div>
+            <div class="card" style="flex: 1; padding: var(--space-4); text-align: center;">
+              <div style="font-family: var(--font-heading); font-feature-settings: 'tnum'; font-size: 22px;">92</div>
+              <div style="font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-neutral-600); margin-top: 4px;">sprekers</div>
+            </div>
+            <div class="card" style="flex: 1; padding: var(--space-4); text-align: center;">
+              <div style="font-family: var(--font-heading); font-feature-settings: 'tnum'; font-size: 22px;">4</div>
+              <div style="font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-neutral-600); margin-top: 4px;">perspectieven</div>
+            </div>
+          </div>
+
+          <p style="padding: 0 var(--space-5); margin: 0; font-family: var(--font-heading); font-style: italic; font-size: 15px; color: var(--color-neutral-600); text-align: center;">"We listen and we don't judge."</p>
+        </div>
+
+        <div style="position: absolute; left: 0; right: 0; bottom: 0; height: 84px; background: color-mix(in oklab, var(--color-bg) 88%, transparent); backdrop-filter: blur(12px); border-top: 1px solid var(--color-divider); display: grid; grid-template-columns: repeat(4, 1fr); align-items: start; padding-top: 8px; z-index: 40;">
+          <button type="button" style="all: unset; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 4px; min-height: 44px; padding-top: 6px; color: var(--color-accent-700); font-family: var(--font-body); font-size: 10px; letter-spacing: 0.06em;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l9 5-9 5-9-5z"></path><path d="M3 13l9 5 9-5"></path></svg>
+            Onderwerpen
+          </button>
+          <button type="button" style="all: unset; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 4px; min-height: 44px; padding-top: 6px; color: var(--color-neutral-600); font-family: var(--font-body); font-size: 10px; letter-spacing: 0.06em;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20v-1a4 4 0 014-4h2a4 4 0 014 4v1"></path><circle cx="9" cy="8" r="3"></circle><path d="M17 20v-1a4 4 0 00-2-3.4"></path><path d="M15 5.2a3 3 0 010 5.6"></path></svg>
+            Partijen
+          </button>
+          <button type="button" style="all: unset; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 4px; min-height: 44px; padding-top: 6px; color: var(--color-neutral-600); font-family: var(--font-body); font-size: 10px; letter-spacing: 0.06em;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.6 12.6l-8 8a2 2 0 01-2.8 0l-6.4-6.4a2 2 0 01-.6-1.4V5a2 2 0 012-2h7.8a2 2 0 011.4.6l6.6 6.6a2 2 0 010 2.4z"></path><circle cx="8" cy="8" r="1.2"></circle></svg>
+            Tags
+          </button>
+          <button type="button" style="all: unset; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 4px; min-height: 44px; padding-top: 6px; color: var(--color-neutral-600); font-family: var(--font-body); font-size: 10px; letter-spacing: 0.06em;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.4"></circle><path d="M5 20v-1a5 5 0 015-5h4a5 5 0 015 5v1"></path></svg>
+            Personen
+          </button>
+        </div>
+      </x-import>
+      <div style="font-family: var(--font-body); font-size: 12px; color: var(--color-neutral-600); text-align: center;">Overzicht — het laatste debat vooropgezet</div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: var(--space-3);">
+      <x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" hint-size="402px,874px">
+        <div class="bp-screen" style="height: 100%; overflow: auto; background: var(--color-bg); font-family: var(--font-body); padding: 56px 0 92px; box-sizing: border-box;">
+
+          <div style="display: flex; align-items: center; gap: var(--space-2); padding: var(--space-2) var(--space-3) var(--space-3);">
+            <button type="button" class="btn btn-ghost btn-icon" onClick="{{ goHome }}" aria-label="Terug" style="width: 44px; height: 44px;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 5.5L8 12l6.5 6.5"></path></svg>
+            </button>
+            <span style="flex: 1; font-family: var(--font-heading); font-size: 17px;">Stikstof</span>
+            <button type="button" class="btn btn-secondary" style="min-height: 44px; gap: 6px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M4 6h16"></path><path d="M7 12h10"></path><path d="M10 18h4"></path></svg>
+              Filter
+            </button>
+          </div>
+
+          <div style="padding: 0 var(--space-5) var(--space-5);">
+            <h2 style="font-family: var(--font-heading); font-weight: 400; font-size: 30px; line-height: 1.14; margin: 0 0 var(--space-3);">Stikstof</h2>
+            <p style="font-size: 14px; line-height: 1.62; color: var(--color-neutral-700); text-align: justify; text-wrap: pretty; margin: 0 0 var(--space-3);">Snel en streng stikstof terugdringen versus ruimte voor landbouw behouden. Wat <em>pro</em> en <em>contra</em> hier betekenen, geldt alleen voor dit onderwerp.</p>
+            <div style="display: flex; align-items: center; gap: var(--space-3); font-feature-settings: 'tnum'; font-size: 12px; color: var(--color-neutral-600); border-top: 1px solid var(--color-divider); padding-top: var(--space-3);">
+              <span>1976 argumenten</span><span style="color: var(--color-divider);">·</span><span>19 partijen</span><span style="color: var(--color-divider);">·</span><span>42 tags</span>
+            </div>
+          </div>
+
+          <sc-if value="{{ showMap }}" hint-placeholder-val="{{ true }}">
+            <div style="padding: 0 var(--space-5) var(--space-5);">
+              <div class="card" style="padding: var(--space-4);">
+                <div style="display: flex; align-items: baseline; justify-content: space-between; margin-bottom: var(--space-2);">
+                  <span class="card-kicker" style="font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-accent-700);">Correspondentiekaart</span>
+                  <span style="font-feature-settings: 'tnum'; font-size: 11px; color: var(--color-neutral-600);">as 1 · 37,7% — as 2 · 20,4%</span>
+                </div>
+                <p style="font-size: 12px; line-height: 1.5; color: var(--color-neutral-600); margin: 0 0 var(--space-3);">Partijen en tags dichter bij elkaar worden vaker samen gezien. Alleen de uitersten zijn benoemd. Het middenveld — CDA, NSC, ChristenUnie, DENK, Volt, GroenLinks-PvdA en PvdD — ligt te dicht op elkaar voor labels: tik op een punt voor de naam en het filter.</p>
+                <svg viewBox="0 0 340 262" style="width: 100%; height: auto; display: block; font-family: var(--font-body);">
+                  <line x1="14" y1="130" x2="326" y2="130" stroke="var(--color-divider)" stroke-width="0.7"></line>
+                  <line x1="170" y1="14" x2="170" y2="250" stroke="var(--color-divider)" stroke-width="0.7"></line>
+                  <g fill="none" stroke="var(--color-accent)" stroke-width="0.9" opacity="0.45">
+                    <path d="M176.5 150.2h5M179 147.7v5"></path>
+                    <path d="M175.9 162.9h5M178.4 160.4v5"></path>
+                    <path d="M184.3 170.6h5M186.8 168.1v5"></path>
+                    <path d="M140.7 150.7h5M143.2 148.2v5"></path>
+                    <path d="M151 168.2h5M153.5 165.7v5"></path>
+                    <path d="M281 168.5h5M283.5 166v5"></path>
+                    <path d="M262.6 186.1h5M265.1 183.6v5"></path>
+                  </g>
+                  <g fill="none" stroke="var(--color-accent)" stroke-width="1.2">
+                    <path d="M26.8 134.6h6M29.8 131.6v6"></path>
+                    <path d="M25.7 235.9h6M28.7 232.9v6"></path>
+                    <path d="M256 26.3h6M259 23.3v6"></path>
+                    <path d="M298.9 186h6M301.9 183v6"></path>
+                    <path d="M269.8 135.1h6M272.8 132.1v6"></path>
+                  </g>
+                  <g fill="var(--color-accent-700)" font-size="7.5" font-style="italic">
+                    <text x="24" y="110">Ideologie-GAL</text>
+                    <text x="24" y="228">Ideologie-Links-Economisch</text>
+                    <text x="326" y="38" text-anchor="end">Ideologie-Rechts-Economisch</text>
+                    <text x="296" y="200" text-anchor="end">Ideologie-TAN</text>
+                    <text x="326" y="124" text-anchor="end">Moraliteit-Vrijheid</text>
+                  </g>
+                  <g fill="var(--color-neutral-700)">
+                    <circle cx="168.1" cy="131.6" r="2.1"></circle>
+                    <circle cx="164.6" cy="123.1" r="2.1"></circle>
+                    <circle cx="156.9" cy="138.3" r="2.1"></circle>
+                    <circle cx="132.5" cy="127.3" r="2.1"></circle>
+                    <circle cx="112" cy="131.9" r="2.1"></circle>
+                    <circle cx="105.4" cy="139.1" r="2.1"></circle>
+                    <circle cx="103.5" cy="141.3" r="2.1"></circle>
+                  </g>
+                  <line x1="224.3" y1="158.6" x2="218" y2="166" stroke="var(--color-neutral-400)" stroke-width="0.6"></line>
+                  <g>
+                    <image href="party-logos/vvd.svg" x="191.3" y="56.4" width="13" height="13"></image>
+                    <image href="party-logos/ja21.svg" x="227.7" y="105.7" width="13" height="13"></image>
+                    <image href="party-logos/bbb.svg" x="214.8" y="132.9" width="13" height="13"></image>
+                    <image href="party-logos/pvv.svg" x="230.5" y="142.1" width="13" height="13"></image>
+                    <image href="party-logos/fvd.svg" x="250.9" y="158.1" width="13" height="13"></image>
+                    <image href="party-logos/sgp.svg" x="211.5" y="159.5" width="13" height="13"></image>
+                    <image href="party-logos/d66.svg" x="96.9" y="113.7" width="13" height="13"></image>
+                    <image href="party-logos/pro.svg" x="79.5" y="131.2" width="13" height="13"></image>
+                    <image href="party-logos/sp.svg" x="94.2" y="178.9" width="13" height="13"></image>
+                  </g>
+                  <g fill="var(--color-neutral-900)" font-size="8" font-family="var(--font-heading)">
+                    <text x="207" y="61">VVD</text>
+                    <text x="225" y="104" text-anchor="end">JA21</text>
+                    <text x="213" y="138" text-anchor="end">BBB</text>
+                    <text x="246" y="152">PVV</text>
+                    <text x="266" y="170">FVD</text>
+                    <text x="209" y="170" text-anchor="end">SGP</text>
+                    <text x="95" y="112" text-anchor="end">D66</text>
+                    <text x="77" y="129" text-anchor="end">PRO</text>
+                    <text x="110" y="194">SP</text>
+                  </g>
+                  <g fill="var(--color-neutral-500)" font-size="7">
+                    <text x="14" y="20">← GAL / links</text>
+                    <text x="326" y="20" text-anchor="end">rechts / TAN →</text>
+                  </g>
+                </svg>
+                <div style="display: flex; gap: var(--space-4); border-top: 1px solid var(--color-divider); margin-top: var(--space-3); padding-top: var(--space-3); font-size: 11px; color: var(--color-neutral-600);">
+                  <span style="display: flex; align-items: center; gap: 6px;"><img src="party-logos/vvd.svg" alt="" width="12" height="12">partij aan de rand</span>
+                  <span style="display: flex; align-items: center; gap: 6px;"><svg width="10" height="10"><circle cx="5" cy="5" r="2.4" fill="var(--color-neutral-700)"></circle></svg>middenveld</span>
+                  <span style="display: flex; align-items: center; gap: 6px;"><svg width="10" height="10" stroke="var(--color-accent)" stroke-width="1"><path d="M1 5h8M5 1v8"></path></svg>tag</span>
+                </div>
+              </div>
+            </div>
+          </sc-if>
+
+          <div style="position: sticky; top: 0; z-index: 30; background: color-mix(in oklab, var(--color-bg) 92%, transparent); backdrop-filter: blur(10px); border-top: 1px solid var(--color-divider); border-bottom: 1px solid var(--color-divider);">
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr);">
+              <button type="button" onClick="{{ selectPro }}" style="all: unset; cursor: pointer; min-height: 52px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; font-family: var(--font-heading); font-size: 15px; color: {{ proColor }}; border-bottom: 2px solid {{ proRule }};">
+                Pro<span style="font-family: var(--font-body); font-feature-settings: 'tnum'; font-size: 11px; opacity: 0.7;">812</span>
+              </button>
+              <button type="button" onClick="{{ selectContra }}" style="all: unset; cursor: pointer; min-height: 52px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; font-family: var(--font-heading); font-size: 15px; color: {{ contraColor }}; border-bottom: 2px solid {{ contraRule }};">
+                Contra<span style="font-family: var(--font-body); font-feature-settings: 'tnum'; font-size: 11px; opacity: 0.7;">954</span>
+              </button>
+              <button type="button" onClick="{{ selectUnclear }}" style="all: unset; cursor: pointer; min-height: 52px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; font-family: var(--font-heading); font-size: 15px; color: {{ unclearColor }}; border-bottom: 2px solid {{ unclearRule }};">
+                Onduidelijk<span style="font-family: var(--font-body); font-feature-settings: 'tnum'; font-size: 11px; opacity: 0.7;">210</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="bp-track" ref="{{ trackRef }}" onScroll="{{ onTrackScroll }}" style="display: grid; grid-auto-flow: column; grid-auto-columns: 100%; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none;">
+
+            <div style="scroll-snap-align: start; padding: var(--space-5); display: flex; flex-direction: column; gap: var(--space-4);">
+              <div class="card" style="padding: var(--space-4); border-left: 2px solid var(--color-accent);">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-3);">
+                  <span class="tag tag-outline" style="font-size: 10px;">Feitelijk</span>
+                  <span style="font-feature-settings: 'tnum'; font-size: 11px; color: var(--color-neutral-600);">01:12:04–01:12:41</span>
+                </div>
+                <blockquote style="margin: 0 0 var(--space-3); font-family: var(--font-heading); font-size: 17px; line-height: 1.42;">"De rechter heeft ons twee keer teruggestuurd; zonder een harde reductiedatum blijft elke vergunning aanvechtbaar."</blockquote>
+                <p style="margin: 0 0 var(--space-3); font-size: 12px; color: var(--color-neutral-600); display: flex; align-items: center; gap: 7px;"><img src="party-logos/d66.svg" alt="D66" width="18" height="18" style="flex-shrink: 0;">Volgens <strong style="font-weight: 500; color: var(--color-text);">woordvoerder D66</strong>, Tweede Kamer</p>
+                <sc-if value="{{ showClaims }}" hint-placeholder-val="{{ true }}">
+                  <ul style="margin: 0 0 var(--space-3); padding-left: 1.1em; font-size: 12px; line-height: 1.55; color: var(--color-neutral-700);">
+                    <li>noemt: twee uitspraken van de Raad van State</li>
+                  </ul>
+                </sc-if>
+                <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+                  <span class="tag tag-accent" style="font-size: 10px;">Walton-Regel</span>
+                  <span class="tag tag-neutral" style="font-size: 10px;">Bewijs-Expert</span>
+                  <span class="tag tag-neutral" style="font-size: 10px;">Frame-Verantwoordelijkheid</span>
+                </div>
+                <div style="display: flex; gap: var(--space-3); border-top: 1px solid var(--color-divider); margin-top: var(--space-3); padding-top: var(--space-3); font-size: 12px;">
+                  <a href="#turn-1">video (dit moment)</a><a href="#turn-1">in de Tweede Kamer</a>
+                </div>
+              </div>
+              <div class="card" style="padding: var(--space-4); border-left: 2px solid var(--color-accent);">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-3);">
+                  <span class="tag tag-outline" style="font-size: 10px;">Moreel</span>
+                  <span style="font-feature-settings: 'tnum'; font-size: 11px; color: var(--color-neutral-600);">00:48:19–00:48:52</span>
+                </div>
+                <blockquote style="margin: 0 0 var(--space-3); font-family: var(--font-heading); font-size: 17px; line-height: 1.42;">"We schuiven de rekening door naar boeren die straks helemaal geen keuze meer hebben."</blockquote>
+                <p style="margin: 0 0 var(--space-3); font-size: 12px; color: var(--color-neutral-600); display: flex; align-items: center; gap: 7px;"><img src="party-logos/groenlinks-pvda.svg" alt="GroenLinks-PvdA" width="18" height="18" style="flex-shrink: 0;">Volgens <strong style="font-weight: 500; color: var(--color-text);">woordvoerder GroenLinks-PvdA</strong>, Tweede Kamer</p>
+                <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+                  <span class="tag tag-accent" style="font-size: 10px;">Moraliteit-Zorg</span>
+                  <span class="tag tag-neutral" style="font-size: 10px;">Frame-Menselijk-Belang</span>
+                </div>
+                <div style="display: flex; gap: var(--space-3); border-top: 1px solid var(--color-divider); margin-top: var(--space-3); padding-top: var(--space-3); font-size: 12px;">
+                  <a href="#turn-1">video (dit moment)</a><a href="#turn-1">in de Tweede Kamer</a>
+                </div>
+              </div>
+              <button type="button" class="btn btn-secondary btn-block" style="min-height: 44px;">Nog 810 argumenten</button>
+            </div>
+
+            <div style="scroll-snap-align: start; padding: var(--space-5); display: flex; flex-direction: column; gap: var(--space-4);">
+              <div class="card" style="padding: var(--space-4); border-left: 2px solid var(--color-neutral-500);">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-3);">
+                  <span class="tag tag-outline" style="font-size: 10px;">Economisch</span>
+                  <span style="font-feature-settings: 'tnum'; font-size: 11px; color: var(--color-neutral-600);">02:03:37–02:04:10</span>
+                </div>
+                <blockquote style="margin: 0 0 var(--space-3); font-family: var(--font-heading); font-size: 17px; line-height: 1.42;">"Een gedwongen krimp kost dit land zijn voedselproductie en levert geen enkele hectare natuur op."</blockquote>
+                <p style="margin: 0 0 var(--space-3); font-size: 12px; color: var(--color-neutral-600); display: flex; align-items: center; gap: 7px;"><img src="party-logos/bbb.svg" alt="BBB" width="18" height="18" style="flex-shrink: 0;">Volgens <strong style="font-weight: 500; color: var(--color-text);">woordvoerder BBB</strong>, Tweede Kamer</p>
+                <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+                  <span class="tag tag-accent" style="font-size: 10px;">Frame-Economisch</span>
+                  <span class="tag tag-neutral" style="font-size: 10px;">Walton-Consequentie</span>
+                  <span class="tag tag-neutral" style="font-size: 10px;">Stijl-Antithese</span>
+                </div>
+                <div style="display: flex; gap: var(--space-3); border-top: 1px solid var(--color-divider); margin-top: var(--space-3); padding-top: var(--space-3); font-size: 12px;">
+                  <a href="#turn-1">video (dit moment)</a><a href="#turn-1">in de Tweede Kamer</a>
+                </div>
+              </div>
+              <div class="card" style="padding: var(--space-4); border-left: 2px solid var(--color-neutral-500);">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-3);">
+                  <span class="tag tag-outline" style="font-size: 10px;">Juridisch</span>
+                  <span style="font-feature-settings: 'tnum'; font-size: 11px; color: var(--color-neutral-600);">02:31:55–02:32:29</span>
+                </div>
+                <blockquote style="margin: 0 0 var(--space-3); font-family: var(--font-heading); font-size: 17px; line-height: 1.42;">"De Habitatrichtlijn vraagt een resultaat, geen jaartal dat wij hier politiek verzinnen."</blockquote>
+                <p style="margin: 0 0 var(--space-3); font-size: 12px; color: var(--color-neutral-600); display: flex; align-items: center; gap: 7px;"><img src="party-logos/vvd.svg" alt="VVD" width="18" height="18" style="flex-shrink: 0;">Volgens <strong style="font-weight: 500; color: var(--color-text);">woordvoerder VVD</strong>, Tweede Kamer</p>
+                <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+                  <span class="tag tag-accent" style="font-size: 10px;">Walton-Regel</span>
+                  <span class="tag tag-neutral" style="font-size: 10px;">Meta-Bevoegdheid</span>
+                </div>
+                <div style="display: flex; gap: var(--space-3); border-top: 1px solid var(--color-divider); margin-top: var(--space-3); padding-top: var(--space-3); font-size: 12px;">
+                  <a href="#turn-1">video (dit moment)</a><a href="#turn-1">in de Tweede Kamer</a>
+                </div>
+              </div>
+              <button type="button" class="btn btn-secondary btn-block" style="min-height: 44px;">Nog 952 argumenten</button>
+            </div>
+
+            <div style="scroll-snap-align: start; padding: var(--space-5); display: flex; flex-direction: column; gap: var(--space-4);">
+              <div class="card" style="padding: var(--space-4); border-left: 2px solid var(--color-neutral-300);">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-3);">
+                  <span class="tag tag-outline" style="font-size: 10px;">Overig</span>
+                  <span style="font-feature-settings: 'tnum'; font-size: 11px; color: var(--color-neutral-600);">00:12:02–00:12:24</span>
+                </div>
+                <blockquote style="margin: 0 0 var(--space-3); font-family: var(--font-heading); font-size: 17px; line-height: 1.42;">"Voorzitter, we behandelen vandaag een brief die we vorige week nog niet hadden."</blockquote>
+                <p style="margin: 0 0 var(--space-3); font-size: 12px; color: var(--color-neutral-600); display: flex; align-items: center; gap: 7px;"><img src="party-logos/sgp.svg" alt="SGP" width="18" height="18" style="flex-shrink: 0;">Volgens <strong style="font-weight: 500; color: var(--color-text);">woordvoerder SGP</strong>, Tweede Kamer</p>
+                <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+                  <span class="tag tag-accent" style="font-size: 10px;">Meta-Agenda-Tijdigheid</span>
+                </div>
+                <div style="display: flex; gap: var(--space-3); border-top: 1px solid var(--color-divider); margin-top: var(--space-3); padding-top: var(--space-3); font-size: 12px;">
+                  <a href="#turn-1">video (dit moment)</a><a href="#turn-1">in de Tweede Kamer</a>
+                </div>
+              </div>
+              <button type="button" class="btn btn-secondary btn-block" style="min-height: 44px;">Nog 209 argumenten</button>
+            </div>
+          </div>
+        </div>
+
+        <div style="position: absolute; left: 0; right: 0; bottom: 0; height: 84px; background: color-mix(in oklab, var(--color-bg) 88%, transparent); backdrop-filter: blur(12px); border-top: 1px solid var(--color-divider); display: grid; grid-template-columns: repeat(4, 1fr); align-items: start; padding-top: 8px; z-index: 40;">
+          <button type="button" style="all: unset; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 4px; min-height: 44px; padding-top: 6px; color: var(--color-accent-700); font-family: var(--font-body); font-size: 10px; letter-spacing: 0.06em;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l9 5-9 5-9-5z"></path><path d="M3 13l9 5 9-5"></path></svg>
+            Onderwerpen
+          </button>
+          <button type="button" style="all: unset; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 4px; min-height: 44px; padding-top: 6px; color: var(--color-neutral-600); font-family: var(--font-body); font-size: 10px; letter-spacing: 0.06em;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20v-1a4 4 0 014-4h2a4 4 0 014 4v1"></path><circle cx="9" cy="8" r="3"></circle><path d="M17 20v-1a4 4 0 00-2-3.4"></path><path d="M15 5.2a3 3 0 010 5.6"></path></svg>
+            Partijen
+          </button>
+          <button type="button" style="all: unset; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 4px; min-height: 44px; padding-top: 6px; color: var(--color-neutral-600); font-family: var(--font-body); font-size: 10px; letter-spacing: 0.06em;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.6 12.6l-8 8a2 2 0 01-2.8 0l-6.4-6.4a2 2 0 01-.6-1.4V5a2 2 0 012-2h7.8a2 2 0 011.4.6l6.6 6.6a2 2 0 010 2.4z"></path><circle cx="8" cy="8" r="1.2"></circle></svg>
+            Tags
+          </button>
+          <button type="button" style="all: unset; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 4px; min-height: 44px; padding-top: 6px; color: var(--color-neutral-600); font-family: var(--font-body); font-size: 10px; letter-spacing: 0.06em;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.4"></circle><path d="M5 20v-1a5 5 0 015-5h4a5 5 0 015 5v1"></path></svg>
+            Personen
+          </button>
+        </div>
+      </x-import>
+      <div style="font-family: var(--font-body); font-size: 12px; color: var(--color-neutral-600); text-align: center;">Onderwerp — veegbare pro/contra-tabbladen</div>
+    </div>
+  </div>
+</section>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;showMap&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Onderwerppagina&quot;},&quot;showClaims&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Onderwerppagina&quot;}}">
+class Component extends DCLogic {
+  state = { tab: 0 };
+  constructor(props) {
+    super(props);
+    this.track = React.createRef();
+    this.scrollLock = 0;
+  }
+  go(i) {
+    this.setState({ tab: i });
+    const el = this.track.current;
+    if (!el) return;
+    this.scrollLock = Date.now();
+    el.scrollTo({ left: i * el.clientWidth, behavior: "smooth" });
+  }
+  onScroll = () => {
+    const el = this.track.current;
+    if (!el || Date.now() - this.scrollLock < 500) return;
+    const i = Math.round(el.scrollLeft / Math.max(1, el.clientWidth));
+    if (i !== this.state.tab) this.setState({ tab: i });
+  };
+  renderVals() {
+    const on = "var(--color-text)";
+    const off = "var(--color-neutral-600)";
+    const rule = "var(--color-accent)";
+    const norule = "transparent";
+    const t = this.state.tab;
+    return {
+      showMap: this.props.showMap ?? true,
+      showClaims: this.props.showClaims ?? true,
+      trackRef: this.track,
+      onTrackScroll: this.onScroll,
+      selectPro: () => this.go(0),
+      selectContra: () => this.go(1),
+      selectUnclear: () => this.go(2),
+      proColor: t === 0 ? on : off,
+      contraColor: t === 1 ? on : off,
+      unclearColor: t === 2 ? on : off,
+      proRule: t === 0 ? rule : norule,
+      contraRule: t === 1 ? rule : norule,
+      unclearRule: t === 2 ? rule : norule,
+      openTopic: () => this.go(0),
+      goHome: () => this.go(0),
+    };
+  }
+}
+</script>
+</body>
+</html>
