@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { activeArguments, selectBadgeTags } from "./videoLabels";
+import { activeArguments, nextArgumentAfter, prevArgumentBefore, selectBadgeTags } from "./videoLabels";
 import type { Argument, Tag } from "./types";
 
 function tag(sleutel: string, perspectief = "Filosofisch & Argumentatietheoretisch"): Tag {
@@ -55,6 +55,46 @@ describe("activeArguments", () => {
 
 	it("levert niets buiten elke spanne", () => {
 		expect(activeArguments(args, 100)).toEqual([]);
+	});
+});
+
+describe("nextArgumentAfter", () => {
+	const a = argument({ id: 1, start_seconds: 10, end_seconds: 20 });
+	const b = argument({ id: 2, start_seconds: 30, end_seconds: 40 });
+	const withoutSpan = argument({ id: 3 });
+	const args = [b, withoutSpan, a]; // bewust niet al gesorteerd
+
+	it("vindt het eerstvolgende argument na de gegeven tijd", () => {
+		expect(nextArgumentAfter(args, 5)?.id).toBe(1);
+		expect(nextArgumentAfter(args, 10)?.id).toBe(2);
+	});
+
+	it("negeert argumenten zonder spanne", () => {
+		expect(nextArgumentAfter(args, 25)?.id).toBe(2);
+	});
+
+	it("levert null als er niets meer na deze tijd komt", () => {
+		expect(nextArgumentAfter(args, 100)).toBeNull();
+	});
+});
+
+describe("prevArgumentBefore", () => {
+	const a = argument({ id: 1, start_seconds: 10, end_seconds: 20 });
+	const b = argument({ id: 2, start_seconds: 30, end_seconds: 40 });
+	const withoutSpan = argument({ id: 3 });
+	const args = [b, withoutSpan, a];
+
+	it("vindt het laatste argument vóór de gegeven tijd", () => {
+		expect(prevArgumentBefore(args, 35)?.id).toBe(2);
+		expect(prevArgumentBefore(args, 30)?.id).toBe(1);
+	});
+
+	it("negeert argumenten zonder spanne", () => {
+		expect(prevArgumentBefore(args, 15)?.id).toBe(1);
+	});
+
+	it("levert null als er niets vóór deze tijd is", () => {
+		expect(prevArgumentBefore(args, 0)).toBeNull();
 	});
 });
 

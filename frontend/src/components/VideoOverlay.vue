@@ -5,7 +5,7 @@ import { formatDate } from "../lib/formatDate";
 import { perspectiefWeergaveNaam, tagIconPath } from "../lib/tagIcon";
 import { PERSPECTIEVEN } from "../lib/tagIcons.generated";
 import { stanceLabel, typologyLabel, type Argument } from "../lib/types";
-import { activeArguments, selectBadgeTags } from "../lib/videoLabels";
+import { activeArguments, nextArgumentAfter, prevArgumentBefore, selectBadgeTags } from "../lib/videoLabels";
 import { formatClock } from "../lib/videoTime";
 import { displayPartyName } from "../lib/parties";
 import PartyLogo from "./PartyLogo.vue";
@@ -38,21 +38,12 @@ const showTitleCard = computed(() => props.currentTime < 4.5);
 // er nu geen gelabeld argument loopt, "volgend argument om ..." toont en
 // aanklikbaar is -- anders staar je naar een gat in de tijdlijn zonder iets
 // te kunnen doen.
-const nextArgument = computed(() => {
-	return props.arguments
-		.filter((a) => a.start_seconds !== null && a.start_seconds > props.currentTime)
-		.sort((a, b) => (a.start_seconds as number) - (b.start_seconds as number))[0] ?? null;
-});
+const nextArgument = computed(() => nextArgumentAfter(props.arguments, props.currentTime));
 
 // Symmetrisch aan nextArgument, maar t.o.v. het huidige/eerstvolgende
 // argument i.p.v. currentTime: anders is "vorig argument" tijdens het actieve
 // argument zelf (start_seconds <= currentTime) hetzelfde argument als "nu".
-const prevArgument = computed(() => {
-	const before = active.value[0]?.start_seconds ?? props.currentTime;
-	return props.arguments
-		.filter((a) => a.start_seconds !== null && a.start_seconds < before)
-		.sort((a, b) => (b.start_seconds as number) - (a.start_seconds as number))[0] ?? null;
-});
+const prevArgument = computed(() => prevArgumentBefore(props.arguments, active.value[0]?.start_seconds ?? props.currentTime));
 
 // De naamplaat blijft ook zichtbaar in een gat tussen twee gelabelde
 // argumenten (anders verdwijnt-ie zodra "volgend argument" nog getoond moet
@@ -139,33 +130,35 @@ const badges = computed(() =>
 				<PartyLogo v-if="nameplate.party" :party="nameplate.party" class="nameplate-logo" />
 				<span v-if="nameplate.party" class="nameplate-party">{{ displayPartyName(nameplate.party) }}</span>
 				<div class="clock-group">
-					<!-- Altijd het compacte pijl+tijd-formaat, ook zonder timeRangeText
-					     (in een gat tussen twee argumenten): de volledige zin
-					     ("vorig/volgend argument om ...") paste daar niet meer op één
-					     regel zodra prev/next tegelijk zichtbaar zijn -- de volledige
-					     tekst staat nog wel in aria-label/title. -->
+					<!-- Altijd zichtbaar, disabled i.p.v. verborgen bij het eerste/
+					     laatste argument (issue #134): een verdwijnende knop springt de
+					     layout en de disabled-state is dan niet te onderscheiden van
+					     "bestaat niet". Altijd het compacte pijl+tijd-formaat, ook
+					     zonder timeRangeText (in een gat tussen twee argumenten): de
+					     volledige zin ("vorig/volgend argument om ...") paste daar niet
+					     meer op één regel zodra prev/next tegelijk zichtbaar zijn -- die
+					     staat nog wel in aria-label/title. -->
 					<button
-						v-if="prevArgument?.start_seconds != null"
 						type="button"
 						class="clock-indicator is-clickable"
-						:aria-label="`Vorig argument om ${formatClock(prevArgument.start_seconds)}`"
-						:title="`Vorig argument om ${formatClock(prevArgument.start_seconds)}`"
-						@click="emit('seek', prevArgument.start_seconds as number)"
+						:disabled="!prevArgument"
+						:aria-label="prevArgument ? `Vorig argument om ${formatClock(prevArgument.start_seconds as number)}` : 'Geen vorig argument'"
+						:title="prevArgument ? `Vorig argument om ${formatClock(prevArgument.start_seconds as number)}` : 'Geen vorig argument'"
+						@click="prevArgument && emit('seek', prevArgument.start_seconds as number)"
 					>
-						← {{ formatClock(prevArgument.start_seconds) }}
+						← <span v-if="prevArgument">{{ formatClock(prevArgument.start_seconds as number) }}</span>
 					</button>
 					<span v-if="timeRangeText" class="clock-indicator">{{ timeRangeText }}</span>
 					<button
-						v-if="nextArgument?.start_seconds != null"
 						type="button"
 						class="clock-indicator is-clickable"
-						:aria-label="`Volgend argument om ${formatClock(nextArgument.start_seconds)}`"
-						:title="`Volgend argument om ${formatClock(nextArgument.start_seconds)}`"
-						@click="emit('seek', nextArgument.start_seconds as number)"
+						:disabled="!nextArgument"
+						:aria-label="nextArgument ? `Volgend argument om ${formatClock(nextArgument.start_seconds as number)}` : 'Geen volgend argument'"
+						:title="nextArgument ? `Volgend argument om ${formatClock(nextArgument.start_seconds as number)}` : 'Geen volgend argument'"
+						@click="nextArgument && emit('seek', nextArgument.start_seconds as number)"
 					>
-						→ {{ formatClock(nextArgument.start_seconds) }}
+						→ <span v-if="nextArgument">{{ formatClock(nextArgument.start_seconds as number) }}</span>
 					</button>
-					<span v-else-if="!timeRangeText && !prevArgument" class="clock-indicator">geen gelabelde argumenten meer</span>
 				</div>
 			</div>
 		</div>
@@ -279,10 +272,13 @@ const badges = computed(() =>
 	color: rgba(255, 255, 255, 0.85);
 }
 
-/* Compact: er staat al een tijdrange, dus alleen een pijl + tijdstip i.p.v.
-   de volledige "volgend argument om ..."-tekst. */
-.clock-indicator.is-compact {
-	font-size: 1em;
+/* Eerste/laatste argument: knop blijft staan (geen layout-sprong) maar is
+   disabled i.p.v. verborgen, zie issue #134. */
+.clock-indicator.is-clickable:disabled {
+	pointer-events: none;
+	cursor: default;
+	opacity: 0.35;
+	text-decoration: none;
 }
 
 /* Verticale rail tegen de rechterrand, los van het naamplaatje onderin --

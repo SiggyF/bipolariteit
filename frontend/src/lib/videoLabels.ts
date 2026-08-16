@@ -13,6 +13,30 @@ export function activeArguments(args: Argument[], t: number): Argument[] {
 	);
 }
 
+/** Eerstvolgende argument met `start_seconds` na `afterSeconds` (exclusief),
+ * of null. Eén lineaire pass i.p.v. filteren+sorteren op de hele lijst -- dit
+ * draait bij elke currentTime-update (~4x/s) in VideoOverlay.vue, en een
+ * lange debat kan honderden argumenten hebben. */
+export function nextArgumentAfter(args: Argument[], afterSeconds: number): Argument | null {
+	let result: Argument | null = null;
+	for (const a of args) {
+		if (a.start_seconds === null || a.start_seconds <= afterSeconds) continue;
+		if (result === null || a.start_seconds < (result.start_seconds as number)) result = a;
+	}
+	return result;
+}
+
+/** Symmetrisch aan nextArgumentAfter: laatste argument met `start_seconds`
+ * vóór `beforeSeconds` (exclusief). */
+export function prevArgumentBefore(args: Argument[], beforeSeconds: number): Argument | null {
+	let result: Argument | null = null;
+	for (const a of args) {
+		if (a.start_seconds === null || a.start_seconds >= beforeSeconds) continue;
+		if (result === null || a.start_seconds > (result.start_seconds as number)) result = a;
+	}
+	return result;
+}
+
 /** Tot drie tags van dit argument, gesorteerd op zeldzaamheid binnen dit
  * debat (documentfrequentie, niet globaal) zodat generieke tags als
  * Actor-Politicus wegvallen en wat afwijkt -- meestal de drogreden --

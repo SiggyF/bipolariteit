@@ -48,10 +48,15 @@ const expanded = ref(props.defaultExpanded && (typeof window === "undefined" || 
 // breedte -- anders krijgt ook het slepen aan de vensterrand een trage,
 // inhalende animatie i.p.v. direct mee te schalen.
 const animating = ref(false);
+let animatingTimer: ReturnType<typeof setTimeout> | null = null;
 function toggleExpanded() {
 	expanded.value = !expanded.value;
 	animating.value = true;
-	window.setTimeout(() => (animating.value = false), 320);
+	if (animatingTimer) clearTimeout(animatingTimer);
+	animatingTimer = setTimeout(() => {
+		animating.value = false;
+		animatingTimer = null;
+	}, 320);
 }
 
 const currentTime = ref(0);
@@ -75,7 +80,8 @@ function togglePerspective(name: string) {
 
 // Welk argument(en) nu spelen, om de bijbehorende kaart in de lijst rechts
 // te benadrukken (zelfde idee als de overlay-badges: currentTime is leidend).
-const activeArgumentIds = computed(() => new Set(activeArguments(props.arguments, currentTime.value).map((a) => a.id)));
+const activeArgumentsList = computed(() => activeArguments(props.arguments, currentTime.value));
+const activeArgumentIds = computed(() => new Set(activeArgumentsList.value.map((a) => a.id)));
 
 // Bij een lang debat (honderden argumenten) is de hele lijst in één keer
 // renderen de grootste kostenpost op de pagina (gemeten: >34.000 DOM-nodes
@@ -92,7 +98,13 @@ const activeArgumentIds = computed(() => new Set(activeArguments(props.arguments
 // helemaal uit de DOM).
 const PAGE_SIZE = 50;
 const visibleArgumentCount = ref(Math.min(PAGE_SIZE, props.arguments.length));
-watch(activeArgumentIds, (ids) => {
+// Watcht op een stabiele string-sleutel i.p.v. rechtstreeks op
+// activeArgumentIds: dat Set-object wordt bij elke currentTime-tick (~4x/s)
+// opnieuw aangemaakt, dus zonder dit vuurt de watcher ook wanneer de actieve
+// argumenten niet echt gewijzigd zijn en doet dan alsnog een O(n) findIndex.
+const activeArgumentKey = computed(() => activeArgumentsList.value.map((a) => a.id).join(","));
+watch(activeArgumentKey, () => {
+	const ids = activeArgumentIds.value;
 	if (ids.size === 0) return;
 	const activeIndex = props.arguments.findIndex((a) => ids.has(a.id));
 	if (activeIndex >= 0 && activeIndex + 1 > visibleArgumentCount.value) {
@@ -142,6 +154,7 @@ onUnmounted(() => {
 	window.removeEventListener("wheel", notifyUserScroll);
 	window.removeEventListener("touchmove", notifyUserScroll);
 	sentinelObserver?.disconnect();
+	if (animatingTimer) clearTimeout(animatingTimer);
 });
 </script>
 
