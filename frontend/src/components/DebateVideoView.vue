@@ -58,6 +58,13 @@ function togglePerspective(name: string) {
 // te benadrukken (zelfde idee als de overlay-badges: currentTime is leidend).
 const activeArgumentIds = computed(() => new Set(activeArguments(props.arguments, currentTime.value).map((a) => a.id)));
 
+// Op de compacte teaser (debateHref gezet, bv. de homepage) is er geen ruimte
+// voor de volledige argumentenlijst -- maar wel voor één compacte kaart van
+// het argument dat nu speelt (issue #135), met linkjes naar persoon/partij/
+// tag zodat die vanaf de homepage al bereikbaar zijn zonder eerst naar de
+// volledige debatpagina te hoeven.
+const nowPlaying = computed(() => activeArguments(props.arguments, currentTime.value)[0] ?? null);
+
 // Onderdrukt de auto-volg-scroll in ArgumentCard.vue zolang de gebruiker zelf
 // aan het scrollen is (zie lib/userScroll.ts) -- window-niveau, want player-
 // en argumentenkolom delen dezelfde paginascroll.
@@ -111,11 +118,6 @@ onUnmounted(() => {
 				</button>
 			</div>
 		</div>
-		<!-- Op een smalle, compacte plek (debateHref aanwezig, bv. de
-		     homepage-teaser) past de argumentenlijst niet fatsoenlijk naast/
-		     onder de speler -- daar is de link naar de volledige pagina (nu bij
-		     de tijdsindicator in de player-controls) het enige zinvolle pad naar
-		     de argumenten, dus deze hele kolom vervalt. -->
 		<div v-if="!props.debateHref" class="argument-column">
 			<button type="button" class="argument-toggle" @click="expanded = !expanded">
 				<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -136,6 +138,12 @@ onUnmounted(() => {
 					/>
 				</li>
 			</ol>
+		</div>
+		<!-- Compacte plek (debateHref gezet, bv. de homepage-teaser): geen ruimte
+		     voor de volledige lijst, wel voor één compacte "nu in beeld"-kaart
+		     (issue #135). -->
+		<div v-else-if="nowPlaying" class="now-playing">
+			<ArgumentCard :argument="nowPlaying" :topic-slug="props.topicSlug" compact video-context :playing="true" @seek="requestSeek" />
 		</div>
 	</div>
 </template>
@@ -163,9 +171,10 @@ onUnmounted(() => {
 	row-gap: var(--space-1);
 }
 
-/* In compacte stand staat er alleen de link + toggle-knop in deze kolom --
-   die horen dan bij de rand van de player i.p.v. onder de linkerkant te
-   blijven hangen. */
+/* Alleen bereikbaar door handmatig in te klappen op /debatten/[id]/ (de
+   homepage-teaser rendert i.p.v. .argument-column de .now-playing-kaart
+   hieronder, zie template): in ingeklapte stand staat er alleen de
+   toggle-knop in deze kolom, die hoort dan bij de rand van de player. */
 .debate-video-view.is-compact .argument-column {
 	display: flex;
 	justify-content: flex-end;
@@ -233,8 +242,7 @@ onUnmounted(() => {
 	background: var(--perspective-color);
 }
 
-.argument-toggle,
-.debate-page-link {
+.argument-toggle {
 	display: inline-flex;
 	align-items: center;
 	gap: 6px;
@@ -248,9 +256,8 @@ onUnmounted(() => {
 	cursor: pointer;
 }
 
-/* Buiten de compacte flex-rij (dus op /debat/[id]/, waar er geen
-   debate-page-link naast staat) heeft de toggle wel ruimte nodig t.o.v. de
-   argumentenlijst eronder. */
+/* Buiten de compacte (ingeklapte) stand heeft de toggle wel ruimte nodig
+   t.o.v. de argumentenlijst eronder. */
 .debate-video-view:not(.is-compact) .argument-toggle {
 	margin-bottom: var(--space-2);
 }

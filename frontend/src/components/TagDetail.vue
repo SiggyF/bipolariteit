@@ -68,7 +68,7 @@ const exampleArguments = computed(() =>
 );
 
 function topicLink(topicSlug: string): string {
-	return `/topics/${topicSlug}/?tag=${encodeURIComponent(props.sleutel)}`;
+	return `/onderwerpen/${topicSlug}/?tag=${encodeURIComponent(props.sleutel)}`;
 }
 
 function verhouding(row: { tagCount: number; total: number }): string {
@@ -97,7 +97,7 @@ function verhouding(row: { tagCount: number; total: number }): string {
 		<p class="panel-note">{{ beschrijving }}</p>
 		<p class="panel-note">
 			{{ labelgroep }} &middot;
-			<a :href="`/perspectief/${slugify(perspectief)}/`">{{ perspectief }}</a>
+			<a :href="`/perspectieven/${slugify(perspectief)}/`">{{ perspectief }}</a>
 		</p>
 		<p v-if="deterministic" class="panel-note">
 			Deze tag wordt automatisch (deterministisch) toegekend, niet door het LLM. Bij TK-data is dat vrijwel altijd
@@ -119,7 +119,7 @@ function verhouding(row: { tagCount: number; total: number }): string {
 				<p v-if="!partyRows.length" class="panel-note">Te weinig volume voor een zinnige uitsplitsing per partij.</p>
 				<ul v-else class="topic-breakdown">
 					<li v-for="row in partyRows" :key="row.party">
-						<a :href="`/partij/${slugify(row.party)}/`">{{ displayPartyName(row.party) }}</a>
+						<a :href="`/partijen/${slugify(row.party)}/`">{{ displayPartyName(row.party) }}</a>
 						<span class="topic-count">{{ Math.round(row.pct) }}% ({{ row.count }} van {{ row.total }})</span>
 					</li>
 				</ul>
@@ -133,7 +133,7 @@ function verhouding(row: { tagCount: number; total: number }): string {
 				</p>
 				<ol v-if="topPersons.length" class="top-persons-list">
 					<li v-for="row in topPersons" :key="row.person">
-						<a :href="`/persoon/${slugify(row.person)}/`">{{ row.person }}</a>
+						<a :href="`/personen/${slugify(row.person)}/`">{{ row.person }}</a>
 						<span v-if="row.party" class="topic-count">({{ displayPartyName(row.party) }})</span>
 						<span class="topic-count">{{ verhouding(row) }} argumenten ({{ row.tagCount }} van {{ row.total }})</span>
 					</li>

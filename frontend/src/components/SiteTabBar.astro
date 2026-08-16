@@ -9,28 +9,28 @@
 // inline SVG-paden (zie PERSPECTIEVEN/ICOON_PAD in tagIcons.generated.ts),
 // dezelfde stijl hier i.p.v. een nieuwe afhankelijkheid toe te voegen.
 const ICONS: Record<string, string> = {
-	debat: `<circle cx="12" cy="12" r="9"/><polygon points="10 8 16 12 10 16 10 8"/>`,
+	home: `<path d="M4 11.5 12 4l8 7.5"/><path d="M6 10v9a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-9"/>`,
 	onderwerpen: `<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>`,
 	verkennen: `<circle cx="12" cy="12" r="9"/><polygon points="16 8 13.5 13.5 8 16 10.5 10.5 16 8"/>`,
 	over: `<circle cx="12" cy="12" r="9"/><line x1="12" y1="11" x2="12" y2="16"/><line x1="12" y1="7.5" x2="12" y2="7.51"/>`,
 };
 
 const items = [
-	{ key: "debat", label: "Debat", href: "/", activePrefixes: ["/"] },
-	{ key: "onderwerpen", label: "Onderwerpen", href: "/topics/", activePrefixes: ["/topics/"] },
+	{ key: "home", label: "Home", href: "/", activePrefixes: ["/"] },
+	{ key: "onderwerpen", label: "Onderwerpen", href: "/onderwerpen/", activePrefixes: ["/onderwerpen/"] },
 	{
 		key: "verkennen",
 		label: "Verkennen",
-		href: "/partij/",
-		activePrefixes: ["/partij/", "/persoon/", "/tags/", "/perspectief/"],
+		href: "/partijen/",
+		activePrefixes: ["/partijen/", "/personen/", "/tags/", "/perspectieven/"],
 	},
-	{ key: "over", label: "Over", href: "/about/", activePrefixes: ["/about/"] },
+	{ key: "over", label: "Over", href: "/over/", activePrefixes: ["/over/"] },
 ];
 
 const pathname = Astro.url.pathname;
-// "/" als prefix zou met .startsWith() elke route matchen -- Debat is alleen
+// "/" als prefix zou met .startsWith() elke route matchen -- Home is alleen
 // actief op de exacte homepage, de andere drie op prefix (incl. detailpaginas
-// zoals /topics/stikstof/ of /partij/vvd/).
+// zoals /onderwerpen/stikstof/ of /partijen/vvd/).
 function isActive(prefixes: string[]): boolean {
 	return prefixes.some((prefix) => (prefix === "/" ? pathname === "/" : pathname.startsWith(prefix)));
 }

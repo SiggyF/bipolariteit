@@ -7,7 +7,7 @@ import { filters, toggleValue } from "../lib/filters";
 import { scrollTarget } from "../lib/scrollTarget";
 import { userScroll } from "../lib/userScroll";
 import { slugify } from "../lib/slug";
-import { typologyLabel, typologyDescription, type Argument, type Tag } from "../lib/types";
+import { stanceLabel, typologyLabel, typologyDescription, type Argument, type Tag } from "../lib/types";
 import { formatClock } from "../lib/videoTime";
 import PartyLogo from "./PartyLogo.vue";
 
@@ -18,10 +18,20 @@ function tagTooltip(tag: Tag): string {
 
 // videoContext: true op de debat-videopagina (DebateVideoView.vue) -- daar
 // moet klikken op een argument de speler laten springen (event "seek") i.p.v.
-// naar /debat/[id]/ te navigeren, want een paginaherlaad onderbreekt de
+// naar /debatten/[id]/ te navigeren, want een paginaherlaad onderbreekt de
 // afspelende video/het geluid. playing: dit argument is op dit moment aan de
 // beurt in de video (currentTime binnen start_seconds/end_seconds).
-const props = defineProps<{ argument: Argument; topicSlug: string; videoContext?: boolean; playing?: boolean }>();
+const props = defineProps<{
+	argument: Argument;
+	topicSlug: string;
+	videoContext?: boolean;
+	playing?: boolean;
+	// Compacte variant voor krappe plekken (bv. de "nu in beeld"-kaart op de
+	// homepage, issue #135): alleen partijlogo + naam·partij + tijdcode + één
+	// rij badges (stance/typologie/eerste tag), zonder citaat/claims/links/
+	// feedback -- die passen niet naast/onder de speler.
+	compact?: boolean;
+}>();
 const emit = defineEmits<{ seek: [seconds: number] }>();
 
 const isSeekable = computed(() => !!props.videoContext && props.argument.start_seconds !== null);
@@ -132,25 +142,27 @@ watch(
 		@keydown="onCardKeydown"
 	>
 		<div class="argument-meta">
+			<span v-if="compact" class="stance-dot" :class="`stance-${argument.stance}`" :title="stanceLabel(argument.stance)"></span>
 			<span class="typology-badge" :title="typologyDescription(argument.typology)">{{ typologyLabel(argument.typology) }}</span>
+			<span v-if="compact && argument.tags[0]" class="tag-badge">{{ argument.tags[0].sleutel }}</span>
 			<span v-if="videoContext && argument.start_seconds !== null" class="argument-span" title="Videospanne van dit argument">
 				{{ formatClock(argument.start_seconds) }}–{{ formatClock(argument.end_seconds ?? argument.start_seconds) }}
 			</span>
 		</div>
-		<blockquote class="quote">"{{ argument.quote_text }}"</blockquote>
-		<p v-if="argument.quote_context" class="quote-context">{{ argument.quote_context }}</p>
+		<blockquote v-if="!compact" class="quote">"{{ argument.quote_text }}"</blockquote>
+		<p v-if="!compact && argument.quote_context" class="quote-context">{{ argument.quote_context }}</p>
 		<p class="attribution">
-			<a v-if="argument.actor.party" :href="`/partij/${slugify(argument.actor.party)}/`" :title="`Alle tags van ${argument.actor.party}`">
+			<a v-if="argument.actor.party" :href="`/partijen/${slugify(argument.actor.party)}/`" :title="`Alle tags van ${argument.actor.party}`">
 				<PartyLogo :party="argument.actor.party" />
 			</a>
-			Volgens <a :href="`/persoon/${slugify(argument.actor.name)}/`" :title="`Alle tags van ${argument.actor.name}`"><strong>{{ argument.actor.name }}</strong></a><span v-if="argument.actor.party"> (<a :href="`/partij/${slugify(argument.actor.party)}/`">{{ displayPartyName(argument.actor.party) }}</a>)</span><span v-if="argument.actor.role_title" class="role-title">, {{ argument.actor.role_title }}</span>
+			Volgens <a :href="`/personen/${slugify(argument.actor.name)}/`" :title="`Alle tags van ${argument.actor.name}`"><strong>{{ argument.actor.name }}</strong></a><span v-if="argument.actor.party"> (<a :href="`/partijen/${slugify(argument.actor.party)}/`">{{ displayPartyName(argument.actor.party) }}</a>)</span><span v-if="argument.actor.role_title" class="role-title">, {{ argument.actor.role_title }}</span>
 		</p>
-		<ul v-if="argument.claims.length" class="claims">
+		<ul v-if="!compact && argument.claims.length" class="claims">
 			<li v-for="(claim, i) in argument.claims" :key="i">
 				noemt: {{ claim.claim_text }}<span v-if="claim.attributed_source_text"> (bron: {{ claim.attributed_source_text }})</span>
 			</li>
 		</ul>
-		<ul v-if="argument.tags.length" class="tags">
+		<ul v-if="!compact && argument.tags.length" class="tags">
 			<li v-for="tag in argument.tags" :key="tag.sleutel" class="tag-item">
 				<button
 					type="button"
@@ -166,7 +178,7 @@ watch(
 			</li>
 		</ul>
 
-		<div class="argument-links">
+		<div v-if="!compact" class="argument-links">
 			<a
 				v-if="argument.document.tweedekamer_activiteit_url"
 				:href="argument.document.tweedekamer_activiteit_url"
@@ -208,13 +220,13 @@ watch(
 			>
 			<a
 				v-else-if="argument.document.raw_video_url && argument.start_seconds !== null"
-				:href="`/debat/${debateId(argument.document.raw_video_url)}/`"
+				:href="`/debatten/${debateId(argument.document.raw_video_url)}/`"
 				title="Bekijk dit debat met argumentannotaties over de video"
 				>bekijk in videospeler</a
 			>
 		</div>
 
-		<div class="feedback">
+		<div v-if="!compact" class="feedback">
 			<button type="button" class="feedback-toggle" @click="open = !open">
 				{{ saved ? "✓ feedback gegeven, aanpassen" : "feedback geven" }}
 			</button>
@@ -234,6 +246,6 @@ watch(
 			</div>
 		</div>
 
-		<p v-if="argument.prompt_version" class="debug-version">prompt {{ argument.prompt_version }}</p>
+		<p v-if="!compact && argument.prompt_version" class="debug-version">prompt {{ argument.prompt_version }}</p>
 	</article>
 </template>

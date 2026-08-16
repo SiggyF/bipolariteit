@@ -30,7 +30,7 @@ const perspectieven = PERSPECTIEVEN.map((p) => ({
 ---
 
 <BaseLayout title="Perspectieven - Bipolariteit">
-	<a href="/topics/" class="back-link">&larr; alle onderwerpen</a>
+	<a href="/onderwerpen/" class="back-link">&larr; alle onderwerpen</a>
 	<EntityTabs />
 	<h1>Perspectieven</h1>
 	<p class="intro">
@@ -39,7 +39,7 @@ const perspectieven = PERSPECTIEVEN.map((p) => ({
 	<ul class="topic-list">
 		{perspectieven.map((p) => (
 			<li>
-				<a href={`/perspectief/${slugify(p.naam)}/`}>
+				<a href={`/perspectieven/${slugify(p.naam)}/`}>
 					<span class="perspectief-list-name">
 						<span class="perspectief-swatch" style={`background:${p.kleur}`}></span>
 						<span class="topic-name">{perspectiefWeergaveNaam(p.naam)}</span>

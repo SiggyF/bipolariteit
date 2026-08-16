@@ -45,7 +45,7 @@ const title = `${name ?? "Debat"} - Bipolariteit`;
 ---
 
 <BaseLayout title={title}>
-	<a href={`/topics/${topicSlug}/`} class="back-link">&larr; terug naar {topicSlug}</a>
+	<a href={`/onderwerpen/${topicSlug}/`} class="back-link">&larr; terug naar {topicSlug}</a>
 	<h1 class="debate-title">{name ?? "Debat"}</h1>
 	<DebateVideoView arguments={argumentList} topicSlug={topicSlug} client:only="vue" />
 </BaseLayout>

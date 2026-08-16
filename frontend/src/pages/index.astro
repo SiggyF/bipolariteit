@@ -12,6 +12,9 @@ const latestDebate = findLatestDebate(
 );
 const latestDebateName = latestDebate ? debateName(latestDebate.arguments[0]?.document.video_url ?? null) : null;
 const latestDebateDate = latestDebate ? formatDate(latestDebate.earliestPublishedAt) : null;
+const latestDebateTopicName = latestDebate
+	? (Object.values(topicModules as any).find((mod: any) => mod.default.slug === latestDebate.topicSlug) as any)?.default.name
+	: null;
 ---
 
 <BaseLayout title="Bipolariteit">
@@ -28,11 +31,16 @@ const latestDebateDate = latestDebate ? formatDate(latestDebate.earliestPublishe
 					<DebateVideoView
 						arguments={latestDebate.arguments}
 						topicSlug={latestDebate.topicSlug}
-						debateHref={`/debat/${latestDebate.id}/`}
+						debateHref={`/debatten/${latestDebate.id}/`}
 						defaultExpanded={false}
 						initialMuted={true}
 						client:only="vue"
 					/>
+					<p class="latest-debate-link">
+						<a href={`/onderwerpen/${latestDebate.topicSlug}/`}>
+							Bekijk alle argumenten over {latestDebateTopicName ?? latestDebate.topicSlug} &rarr;
+						</a>
+					</p>
 				</section>
 			)}
 </BaseLayout>
@@ -45,5 +53,9 @@ const latestDebateDate = latestDebate ? formatDate(latestDebate.earliestPublishe
 
 	.latest-debate-heading {
 		margin-bottom: var(--space-2);
+	}
+
+	.latest-debate-link {
+		margin-top: var(--space-2);
 	}
 </style>

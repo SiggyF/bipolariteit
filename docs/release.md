@@ -162,7 +162,7 @@ afgedwongen:
 1. **Een balk boven aan elke pagina**: "Ontwikkelversie v0.3.0 — geen officiële
    publicatie." Komt uit `frontend/src/components/SiteNav.astro`, die op alle
    pagina's staat.
-2. **Een uitgebreidere toelichting op `/about`** — waarom de cijfers kunnen
+2. **Een uitgebreidere toelichting op `/over`** — waarom de cijfers kunnen
    schuiven en waarom je deze versie niet als bron moet citeren.
 3. **Niet indexeerbaar**: `robots.txt` (geschreven door het releasescript) én
    de `X-Robots-Tag: noindex, nofollow`-header uit `deploy/worker.js`. Die
@@ -189,7 +189,7 @@ als ontwikkelversie.
 | Variabele | Effect |
 | --- | --- |
 | `PUBLIC_RELEASE_TAG` | Versienummer in de balk. Wordt door `make release` gezet. |
-| `PUBLIC_RELEASE_OFFICIEEL=true` | Verbergt balk én `/about`-sectie. |
+| `PUBLIC_RELEASE_OFFICIEEL=true` | Verbergt balk én `/over`-sectie. |
 
 De balk is **fail-open**: hij verschijnt tenzij een build zichzelf expliciet
 als officieel bestempelt. Vergeet je de vlag bij een echte publicatie, dan staat
