@@ -6,6 +6,7 @@ import PartyIcon from "../components/PartyIcon.astro";
 import { displayPartyName, canonicalParty } from "../lib/parties";
 import { debateName } from "../lib/debateName";
 import { findLatestDebate } from "../lib/latestDebate";
+import { formatDate } from "../lib/formatDate";
 import { slugify } from "../lib/slug";
 import { NO_PARTY } from "../lib/types";
 import { TEGENSTELLING } from "../lib/topics";
@@ -19,6 +20,7 @@ const latestDebate = findLatestDebate(
 	Object.values(topicModules as any).map((mod: any) => ({ slug: mod.default.slug, arguments: mod.default.arguments })),
 );
 const latestDebateName = latestDebate ? debateName(latestDebate.arguments[0]?.document.video_url ?? null) : null;
+const latestDebateDate = latestDebate ? formatDate(latestDebate.earliestPublishedAt) : null;
 
 const partyCounts = new Map<string, number>();
 const perspectiefCounts = new Map<string, number>();
@@ -53,7 +55,7 @@ for (const mod of Object.values(topicModules) as any[]) {
 
 			{latestDebate && (
 				<section class="latest-debate">
-					<h2 class="latest-debate-heading" title={latestDebateName ?? undefined}>Laatste geanalyseerde debat</h2>
+					<h2 class="latest-debate-heading" title={latestDebateName ?? undefined}>Laatste geanalyseerde debat ({latestDebateDate})</h2>
 					<DebateVideoView
 						arguments={latestDebate.arguments}
 						topicSlug={latestDebate.topicSlug}

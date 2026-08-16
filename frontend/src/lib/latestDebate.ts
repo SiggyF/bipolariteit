@@ -11,6 +11,7 @@ export interface LatestDebate {
 	id: string;
 	topicSlug: string;
 	arguments: Argument[];
+	earliestPublishedAt: string | null;
 }
 
 export function findLatestDebate(argumentsByTopic: { slug: string; arguments: Argument[] }[]): LatestDebate | null {
@@ -47,5 +48,5 @@ export function findLatestDebate(argumentsByTopic: { slug: string; arguments: Ar
 		if (b.start_seconds === null) return -1;
 		return a.start_seconds - b.start_seconds;
 	});
-	return { id, topicSlug: entry.topicSlug, arguments: entry.arguments };
+	return { id, topicSlug: entry.topicSlug, arguments: entry.arguments, earliestPublishedAt: entry.earliestPublishedAt };
 }

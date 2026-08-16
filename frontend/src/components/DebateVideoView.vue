@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, reactive, ref, watch } from "vue";
+import { computed, onMounted, onUnmounted, reactive, ref, watch } from "vue";
 import ArgumentCard from "./ArgumentCard.vue";
 import VideoOverlay from "./VideoOverlay.vue";
 import VideoPlayer from "./VideoPlayer.vue";
@@ -9,6 +9,7 @@ import { perspectiefWeergaveNaam } from "../lib/tagIcon";
 import type { Argument } from "../lib/types";
 import { activeArguments } from "../lib/videoLabels";
 import { requestSeek, videoSeek } from "../lib/videoSeek";
+import { notifyUserScroll } from "../lib/userScroll";
 
 const props = withDefaults(
 	defineProps<{
@@ -56,6 +57,18 @@ function togglePerspective(name: string) {
 // Welk argument(en) nu spelen, om de bijbehorende kaart in de lijst rechts
 // te benadrukken (zelfde idee als de overlay-badges: currentTime is leidend).
 const activeArgumentIds = computed(() => new Set(activeArguments(props.arguments, currentTime.value).map((a) => a.id)));
+
+// Onderdrukt de auto-volg-scroll in ArgumentCard.vue zolang de gebruiker zelf
+// aan het scrollen is (zie lib/userScroll.ts) -- window-niveau, want player-
+// en argumentenkolom delen dezelfde paginascroll.
+onMounted(() => {
+	window.addEventListener("wheel", notifyUserScroll, { passive: true });
+	window.addEventListener("touchmove", notifyUserScroll, { passive: true });
+});
+onUnmounted(() => {
+	window.removeEventListener("wheel", notifyUserScroll);
+	window.removeEventListener("touchmove", notifyUserScroll);
+});
 </script>
 
 <template>
