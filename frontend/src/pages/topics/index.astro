@@ -1,0 +1,35 @@
+---
+import topicsIndex from "../../../../data/export/topics-index.json";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { TEGENSTELLING } from "../../lib/topics";
+---
+
+<BaseLayout title="Onderwerpen - Bipolariteit">
+	<h1>Onderwerpen</h1>
+	<ul class="card-grid">
+		{topicsIndex.map((topic) => (
+			<li>
+				<a href={`/topics/${topic.slug}/`} class="card-tile">
+					{topic.image_url && (
+						<span class="card-tile-image">
+							<img src={topic.image_url} alt="" loading="lazy" />
+						</span>
+					)}
+					<span class="card-tile-name">{topic.name}</span>
+					{TEGENSTELLING[topic.slug] && <span class="card-tile-subtitle">{TEGENSTELLING[topic.slug]}</span>}
+					<span class="card-tile-count">{topic.argument_count} argumenten</span>
+				</a>
+			</li>
+		))}
+	</ul>
+
+	<p class="topics-debatten-link">
+		<a href="/debatten/">Alle geanalyseerde debatten &rarr;</a>
+	</p>
+</BaseLayout>
+
+<style>
+	.topics-debatten-link {
+		margin-top: var(--space-4);
+	}
+</style>

@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import EntityTabs from "../../components/EntityTabs.astro";
 import { TAXONOMIE } from "../../lib/taxonomy";
 import { PERSPECTIEVEN, ICOON_PAD } from "../../lib/tagIcons.generated";
 import { tagIconPath, perspectiefWeergaveNaam } from "../../lib/tagIcon";
@@ -33,7 +34,8 @@ const totaalTags = TAXONOMIE.reduce((n, p) => n + p.labelgroepen.reduce((m, lg) 
 ---
 
 <BaseLayout title="Tags - Bipolariteit">
-	<a href="/" class="back-link">&larr; alle onderwerpen</a>
+	<a href="/topics/" class="back-link">&larr; alle onderwerpen</a>
+	<EntityTabs />
 	<h1>Tags</h1>
 	<p class="intro">
 		Alle {totaalTags} tags uit de taxonomie, gegroepeerd per perspectief en labelgroep. Klik op een tag voor wie hem

@@ -1,0 +1,32 @@
+---
+// Segmented control bovenaan de vier entiteitsindexen (partij/persoon/tags/
+// perspectief), zodat die vier pagina's zich als één "Verkennen"-sectie
+// gedragen (issue #132). Bouwt op het bestaande .toggle-group/.toggle-btn-
+// patroon (main.css) -- het ontwerpvoorstel noemt een .seg-klasse, maar die
+// bestaat niet in deze codebase.
+const items = [
+	{ label: "Partijen", href: "/partij/" },
+	{ label: "Personen", href: "/persoon/" },
+	{ label: "Tags", href: "/tags/" },
+	{ label: "Perspectieven", href: "/perspectief/" },
+];
+
+const pathname = Astro.url.pathname;
+---
+
+<nav class="entity-tabs toggle-group" aria-label="Verkennen">
+	{items.map((item) => {
+		const isActive = pathname.startsWith(item.href);
+		return (
+			<a href={item.href} class:list={["toggle-btn", { "is-active": isActive }]} aria-current={isActive ? "page" : undefined}>
+				{item.label}
+			</a>
+		);
+	})}
+</nav>
+
+<style>
+	.entity-tabs {
+		margin-bottom: var(--space-3);
+	}
+</style>

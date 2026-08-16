@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import EntityTabs from "../../components/EntityTabs.astro";
 import { PERSPECTIEVEN } from "../../lib/tagIcons.generated";
 import { slugify } from "../../lib/slug";
 import { perspectiefWeergaveNaam } from "../../lib/tagIcon";
@@ -29,7 +30,8 @@ const perspectieven = PERSPECTIEVEN.map((p) => ({
 ---
 
 <BaseLayout title="Perspectieven - Bipolariteit">
-	<a href="/" class="back-link">&larr; alle onderwerpen</a>
+	<a href="/topics/" class="back-link">&larr; alle onderwerpen</a>
+	<EntityTabs />
 	<h1>Perspectieven</h1>
 	<p class="intro">
 		Welke partij welke tags gebruikt en hoe vaak, per perspectief uit de taxonomie, over alle onderwerpen heen.

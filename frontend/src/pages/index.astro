@@ -1,18 +1,9 @@
 ---
-import topicsIndex from "../../../data/export/topics-index.json";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import DebateVideoView from "../components/DebateVideoView.vue";
-import PartyIcon from "../components/PartyIcon.astro";
-import { displayPartyName, canonicalParty } from "../lib/parties";
 import { debateName } from "../lib/debateName";
 import { findLatestDebate } from "../lib/latestDebate";
 import { formatDate } from "../lib/formatDate";
-import { slugify } from "../lib/slug";
-import { NO_PARTY } from "../lib/types";
-import { TEGENSTELLING } from "../lib/topics";
-import { ICOON_PAD, PERSPECTIEVEN } from "../lib/tagIcons.generated";
-import { ALLE_TAGS } from "../lib/taxonomy";
-import { perspectiefWeergaveNaam } from "../lib/tagIcon";
 
 const topicModules = import.meta.glob("../../../data/export/topics/*.json", { eager: true });
 
@@ -21,28 +12,6 @@ const latestDebate = findLatestDebate(
 );
 const latestDebateName = latestDebate ? debateName(latestDebate.arguments[0]?.document.video_url ?? null) : null;
 const latestDebateDate = latestDebate ? formatDate(latestDebate.earliestPublishedAt) : null;
-
-const partyCounts = new Map<string, number>();
-const perspectiefCounts = new Map<string, number>();
-
-for (const mod of Object.values(topicModules) as any[]) {
-	for (const argument of mod.default.arguments) {
-		if (argument.actor.party && argument.actor.party !== NO_PARTY) {
-			const party = canonicalParty(argument.actor.party);
-			partyCounts.set(party, (partyCounts.get(party) ?? 0) + 1);
-		}
-		for (const tag of argument.tags) {
-			if (tag.created_by !== "llm") continue;
-			perspectiefCounts.set(tag.perspectief, (perspectiefCounts.get(tag.perspectief) ?? 0) + 1);
-		}
-	}
-}
-const parties = [...partyCounts.entries()].sort((a, b) => b[1] - a[1]);
-
-const personNames = new Set<string>();
-for (const mod of Object.values(topicModules) as any[]) {
-	for (const argument of mod.default.arguments) personNames.add(argument.actor.name);
-}
 ---
 
 <BaseLayout title="Bipolariteit">
@@ -66,86 +35,6 @@ for (const mod of Object.values(topicModules) as any[]) {
 					/>
 				</section>
 			)}
-
-			<h2>Onderwerpen</h2>
-			<ul class="card-grid">
-				{topicsIndex.map((topic) => (
-					<li>
-						<a href={`/topics/${topic.slug}/`} class="card-tile">
-							{topic.image_url && (
-								<span class="card-tile-image">
-									<img src={topic.image_url} alt="" loading="lazy" />
-								</span>
-							)}
-							<span class="card-tile-name">{topic.name}</span>
-							{TEGENSTELLING[topic.slug] && <span class="card-tile-subtitle">{TEGENSTELLING[topic.slug]}</span>}
-							<span class="card-tile-count">{topic.argument_count} argumenten</span>
-						</a>
-					</li>
-				))}
-			</ul>
-
-			<h2>Partijen</h2>
-			<p class="intro">Welke tags een partij gebruikt en hoe vaak, over alle onderwerpen heen.</p>
-			<ul class="card-grid">
-				{parties.map(([party, count]) => (
-					<li>
-						<a href={`/partij/${slugify(party)}/`} class="card-tile">
-							<PartyIcon party={party} />
-							<span class="card-tile-name">{displayPartyName(party)}</span>
-							<span class="card-tile-count">{count} argumenten</span>
-						</a>
-					</li>
-				))}
-			</ul>
-
-			<h2>Perspectieven</h2>
-			<p class="intro">Welke partij welke tags gebruikt en hoe vaak, per perspectief uit de taxonomie.</p>
-			<ul class="card-grid card-grid--perspectieven">
-				{PERSPECTIEVEN.map((p) => (
-					<li>
-						<a href={`/perspectief/${slugify(p.naam)}/`} class="card-tile card-tile--perspectief">
-							<svg
-								class="card-tile-perspectief-icon"
-								viewBox="0 0 24 24"
-								width="32"
-								height="32"
-								fill="none"
-								stroke={p.kleur}
-								stroke-width="1.75"
-								stroke-linecap="round"
-								stroke-linejoin="round"
-							>
-								<path d={ICOON_PAD[p.icoon]} />
-							</svg>
-							<span class="card-tile-name">{perspectiefWeergaveNaam(p.naam)}</span>
-							<span class="card-tile-count">{perspectiefCounts.get(p.naam) ?? 0}x toegekend</span>
-						</a>
-					</li>
-				))}
-			</ul>
-
-			<h2>Tags</h2>
-			<p class="intro">De volledige taxonomie, wie welke tag gebruikt en hoe vaak.</p>
-			<ul class="card-grid">
-				<li>
-					<a href="/tags/" class="card-tile">
-						<span class="card-tile-name">Alle tags</span>
-						<span class="card-tile-count">{ALLE_TAGS.length} tags in de taxonomie</span>
-					</a>
-				</li>
-			</ul>
-
-			<h2>Personen</h2>
-			<p class="intro">Welke tags een spreker gebruikt en hoe vaak, over alle onderwerpen heen.</p>
-			<ul class="card-grid">
-				<li>
-					<a href="/persoon/" class="card-tile">
-						<span class="card-tile-name">Alle personen</span>
-						<span class="card-tile-count">{personNames.size} sprekers</span>
-					</a>
-				</li>
-			</ul>
 </BaseLayout>
 
 <style>
