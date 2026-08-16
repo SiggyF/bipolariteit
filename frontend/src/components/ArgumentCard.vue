@@ -115,10 +115,16 @@ watch(
 // gebruiker net zelf gescrolld heeft (userScroll.ts): anders wint deze
 // auto-scroll het steeds van een handmatige scrollbeweging, omdat player- en
 // argumentenkolom dezelfde paginascroll delen.
+// Ook niet op een gestapelde mobiele layout (video-kolom boven, lijst
+// eronder, ≤900px -- zelfde grens als `.player-column`'s sticky-positionering
+// in DebateVideoView.vue, die daar om dezelfde reden ook uitstaat): daar
+// scrollt dit de video net buiten beeld i.p.v. 'm zichtbaar te houden.
 watch(
 	() => props.playing,
 	(isPlaying) => {
-		if (isPlaying && !userScroll.isScrolling) cardEl.value?.scrollIntoView({ behavior: "smooth", block: "center" });
+		if (isPlaying && !userScroll.isScrolling && window.matchMedia("(min-width: 901px)").matches) {
+			cardEl.value?.scrollIntoView({ behavior: "smooth", block: "center" });
+		}
 	},
 );
 </script>

@@ -18,36 +18,62 @@ const latestDebateTopicName = latestDebate
 ---
 
 <BaseLayout title="Bipolariteit">
-			<h1>Bipolariteit</h1>
-			<p class="intro">
-				Wie zegt wat. Kamerleden geprofileerd op argumenten en stijl in gepolariseerde debatten. Terug te
-				zien in de video van de bijdrage, steeds bijgewerkt.
-			</p>
-			<p class="motto">"We listen and we don't judge."</p>
-
-			{latestDebate && (
-				<section class="latest-debate">
-					<h2 class="latest-debate-heading" title={latestDebateName ?? undefined}>Laatste geanalyseerde debat ({latestDebateDate})</h2>
-					<DebateVideoView
-						arguments={latestDebate.arguments}
-						topicSlug={latestDebate.topicSlug}
-						debateHref={`/debatten/${latestDebate.id}/`}
-						defaultExpanded={false}
-						initialMuted={true}
-						client:only="vue"
-					/>
-					<p class="latest-debate-link">
-						<a href={`/onderwerpen/${latestDebate.topicSlug}/`}>
-							Bekijk alle argumenten over {latestDebateTopicName ?? latestDebate.topicSlug} &rarr;
-						</a>
+			<div class="home">
+				{latestDebate && (
+					<section class="latest-debate">
+						<h2 class="latest-debate-heading" title={latestDebateName ?? undefined}>Laatste geanalyseerde debat ({latestDebateDate})</h2>
+						<DebateVideoView
+							arguments={latestDebate.arguments}
+							topicSlug={latestDebate.topicSlug}
+							debateHref={`/debatten/${latestDebate.id}/`}
+							defaultExpanded={false}
+							initialMuted={true}
+							client:only="vue"
+						/>
+						<p class="latest-debate-link">
+							<a href={`/onderwerpen/${latestDebate.topicSlug}/`}>
+								Bekijk alle argumenten over {latestDebateTopicName ?? latestDebate.topicSlug} &rarr;
+							</a>
+						</p>
+					</section>
+				)}
+				<div class="home-intro">
+					<h1>Bipolariteit</h1>
+					<p class="intro">
+						Wie zegt wat. Kamerleden geprofileerd op argumenten en stijl in gepolariseerde debatten. Terug te
+						zien in de video van de bijdrage, steeds bijgewerkt.
 					</p>
-				</section>
-			)}
+					<p class="motto">"We listen and we don't judge."</p>
+				</div>
+			</div>
 </BaseLayout>
 
 <style>
+	/* Mobiel-eerst: video staat in de DOM vóór de titel/intro (het eerste wat
+	   je ziet op een telefoon). Op desktop (>900px, dezelfde breakpoint als de
+	   tabbalk elders in de site) moet de titel weer bovenaan staan -- vandaar
+	   de grid-reorder i.p.v. de DOM-volgorde te laten bepalen. */
+	.home {
+		display: grid;
+		gap: var(--space-3);
+	}
+
+	@media (min-width: 901px) {
+		.home {
+			grid-template-areas: "intro" "video";
+		}
+
+		.home-intro {
+			grid-area: intro;
+		}
+
+		.latest-debate {
+			grid-area: video;
+		}
+	}
+
 	.latest-debate {
-		max-width: 520px;
+		max-width: min(720px, 100%);
 		margin: var(--space-3) 0 var(--space-4);
 	}
 

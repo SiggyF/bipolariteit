@@ -31,9 +31,28 @@ const rawVideoUrl = props.arguments[0]?.document.raw_video_url ?? null;
 
 // Inklapbare argumentenlijst: elders (bv. de homepage-teaser van het laatste
 // debat) moet dezelfde view compact passen zonder de hele lijst permanent te
-// tonen. `defaultExpanded` ontbreekt op /debat/[id]/, dus die pagina's gedrag
-// blijft ongewijzigd (altijd uitgeklapt).
-const expanded = ref(props.defaultExpanded);
+// tonen. `defaultExpanded` ontbreekt op /debat/[id]/, dus die pagina blijft op
+// de `true`-default zitten -- maar op een klein scherm is een direct
+// volledig uitgeklapte lijst onder de video niet fijn (veel scrollen voor je
+// bij de bediening bent), dus dan begint 'ie toch ingeklapt. `&&` i.p.v. een
+// aparte "was defaultExpanded expliciet gezet"-check: de homepage-teaser zet
+// defaultExpanded altijd expliciet op false, dus `false && ...` blijft daar
+// gewoon `false` ongeacht schermbreedte; alleen de `true`-default (dus
+// /debatten/[id]/) is schermbreedte-gevoelig. Veilig om hier synchroon
+// `window` te lezen: dit component rendert alleen via `client:only="vue"`,
+// dus zonder SSR-hydratatie om mismatch mee te krijgen.
+const expanded = ref(props.defaultExpanded && (typeof window === "undefined" || window.innerWidth > 900));
+
+// De breedte-transitie (zie .is-animating hieronder) mag alleen lopen bij
+// deze bewuste toggle, niet bij elke herberekening van de (procentuele)
+// breedte -- anders krijgt ook het slepen aan de vensterrand een trage,
+// inhalende animatie i.p.v. direct mee te schalen.
+const animating = ref(false);
+function toggleExpanded() {
+	expanded.value = !expanded.value;
+	animating.value = true;
+	window.setTimeout(() => (animating.value = false), 320);
+}
 
 const currentTime = ref(0);
 const duration = ref(0);
@@ -58,6 +77,53 @@ function togglePerspective(name: string) {
 // te benadrukken (zelfde idee als de overlay-badges: currentTime is leidend).
 const activeArgumentIds = computed(() => new Set(activeArguments(props.arguments, currentTime.value).map((a) => a.id)));
 
+// Bij een lang debat (honderden argumenten) is de hele lijst in één keer
+// renderen de grootste kostenpost op de pagina (gemeten: >34.000 DOM-nodes
+// voor één debat), en dat maakt ook ongerelateerde layoutwijzigingen elders
+// (bv. de video die van breedte verandert) traag. Zelfde infinite-scroll-
+// patroon (PAGE_SIZE, IntersectionObserver+sentinel, "meer laden"-knop) als
+// ArgumentColumn.vue op de topic-pagina, hier lokaal i.p.v. hergebruikt: die
+// component is voor de naast-elkaar pro/contra-kolommen daar, deze lijst is
+// één chronologische kolom. Extra t.o.v. dat patroon: altijd minstens tot het
+// actieve argument, zodat de kaart bestaat om naartoe te scrollen (zie
+// ArgumentCard.vue's scrollIntoView-op-playing), en de sentinel-observer
+// wordt hier opnieuw gekoppeld telkens als de lijst in-/uitklapt (bij
+// ArgumentColumn.vue bestaat de lijst altijd, hier niet: `expanded` toggelt 'm
+// helemaal uit de DOM).
+const PAGE_SIZE = 50;
+const visibleArgumentCount = ref(Math.min(PAGE_SIZE, props.arguments.length));
+watch(activeArgumentIds, (ids) => {
+	if (ids.size === 0) return;
+	const activeIndex = props.arguments.findIndex((a) => ids.has(a.id));
+	if (activeIndex >= 0 && activeIndex + 1 > visibleArgumentCount.value) {
+		visibleArgumentCount.value = Math.min(activeIndex + 1 + PAGE_SIZE, props.arguments.length);
+	}
+});
+const visibleArguments = computed(() => props.arguments.slice(0, visibleArgumentCount.value));
+const hasMoreArguments = computed(() => visibleArgumentCount.value < props.arguments.length);
+function loadMoreArguments() {
+	visibleArgumentCount.value = Math.min(visibleArgumentCount.value + PAGE_SIZE, props.arguments.length);
+}
+
+// IntersectionObserver i.p.v. een scroll-listener: observeert alleen de
+// sentinel onderaan i.p.v. bij elke scroll-tick te rekenen. `rootMargin` laadt
+// de volgende batch al ruim voordat de sentinel zelf in beeld komt, zodat het
+// aanvullen niet als een merkbare hapering aanvoelt.
+const sentinelEl = ref<HTMLElement | null>(null);
+let sentinelObserver: IntersectionObserver | null = null;
+watch(sentinelEl, (el) => {
+	sentinelObserver?.disconnect();
+	sentinelObserver = null;
+	if (!el) return;
+	sentinelObserver = new IntersectionObserver(
+		(entries) => {
+			if (entries[0]?.isIntersecting && hasMoreArguments.value) loadMoreArguments();
+		},
+		{ rootMargin: "600px 0px" },
+	);
+	sentinelObserver.observe(el);
+});
+
 // Op de compacte teaser (debateHref gezet, bv. de homepage) is er geen ruimte
 // voor de volledige argumentenlijst -- maar wel voor één compacte kaart van
 // het argument dat nu speelt (issue #135), met linkjes naar persoon/partij/
@@ -75,11 +141,12 @@ onMounted(() => {
 onUnmounted(() => {
 	window.removeEventListener("wheel", notifyUserScroll);
 	window.removeEventListener("touchmove", notifyUserScroll);
+	sentinelObserver?.disconnect();
 });
 </script>
 
 <template>
-	<div class="debate-video-view" :class="{ 'is-compact': !expanded }">
+	<div class="debate-video-view" :class="{ 'is-compact': !expanded, 'is-animating': animating }">
 		<div class="player-column">
 			<div v-if="rawVideoUrl" class="player-stage">
 				<VideoPlayer
@@ -93,6 +160,26 @@ onUnmounted(() => {
 					@seek="requestSeek"
 				>
 					<VideoOverlay :arguments="props.arguments" :current-time="currentTime" :off="off" @seek="requestSeek" />
+					<!-- Altijd dezelfde plek (dezelfde rij als play/pause, vergelijk
+					     YouTube's chat-knop) i.p.v. mee te verhuizen tussen boven de
+					     lijst en onder de video -- dat verspringen maakte de knop
+					     moeilijker terug te vinden. -->
+					<template v-if="!props.debateHref" #controls-extra>
+						<button
+							type="button"
+							class="control-button argument-toggle-inline"
+							:aria-pressed="expanded"
+							:aria-label="expanded ? 'Argumenten verbergen' : 'Argumenten tonen'"
+							:title="expanded ? 'Argumenten verbergen' : 'Argumenten tonen'"
+							@click="toggleExpanded"
+						>
+							<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+								<path
+									d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"
+								/>
+							</svg>
+						</button>
+					</template>
 				</VideoPlayer>
 			</div>
 			<p v-else class="no-video">Voor dit debat is geen video beschikbaar.</p>
@@ -103,8 +190,8 @@ onUnmounted(() => {
 				:duration="duration"
 				:off="off"
 			/>
-			<div class="perspective-filters">
-				<span class="perspective-filters-label">Perspectief</span>
+			<div class="perspective-filters" title="Verbergt of toont dit perspectief in de tag-badges op de video en in de tijdlijn hieronder">
+				<span class="perspective-filters-label">Filter op perspectief</span>
 				<button
 					v-for="p in PERSPECTIEVEN"
 					:key="p.naam"
@@ -112,6 +199,8 @@ onUnmounted(() => {
 					class="perspective-toggle"
 					:class="{ 'is-off': off[p.naam] }"
 					:style="{ '--perspective-color': p.kleur }"
+					:aria-pressed="!off[p.naam]"
+					:title="off[p.naam] ? `${perspectiefWeergaveNaam(p.naam)} weer tonen in badges en tijdlijn` : `${perspectiefWeergaveNaam(p.naam)} verbergen uit badges en tijdlijn`"
 					@click="togglePerspective(p.naam)"
 				>
 					<span class="perspective-dot"></span>{{ perspectiefWeergaveNaam(p.naam) }}
@@ -119,16 +208,8 @@ onUnmounted(() => {
 			</div>
 		</div>
 		<div v-if="!props.debateHref" class="argument-column">
-			<button type="button" class="argument-toggle" @click="expanded = !expanded">
-				<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-					<path
-						d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"
-					/>
-				</svg>
-				{{ expanded ? "Argumenten verbergen" : "Argumenten tonen" }}
-			</button>
 			<ol v-if="expanded" class="argument-list">
-				<li v-for="argument in props.arguments" :key="argument.id">
+				<li v-for="argument in visibleArguments" :key="argument.id">
 					<ArgumentCard
 						:argument="argument"
 						:topic-slug="props.topicSlug"
@@ -136,6 +217,11 @@ onUnmounted(() => {
 						:playing="activeArgumentIds.has(argument.id)"
 						@seek="requestSeek"
 					/>
+				</li>
+				<li v-if="hasMoreArguments" ref="sentinelEl" class="column-load-more">
+					<button type="button" @click="loadMoreArguments">
+						meer laden ({{ props.arguments.length - visibleArgumentCount }} resterend)
+					</button>
 				</li>
 			</ol>
 		</div>
@@ -149,36 +235,60 @@ onUnmounted(() => {
 </template>
 
 <style scoped>
+/* Flex i.p.v. grid, met expliciete breedte-percentages: grid-template-columns
+   is met een wisselend aantal tracks (2 uitgeklapt, 1 ingeklapt) niet
+   animeerbaar, dus sprong de video-breedte (en daarmee -- 16:9 -- de hoogte)
+   bij het in-/uitklappen van de argumentenlijst instant naar een heel andere
+   grootte. `width` in procenten is wel een animeerbare eigenschap. */
 .debate-video-view {
-	display: grid;
-	grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+	display: flex;
+	flex-wrap: wrap;
 	gap: var(--space-4);
 	align-items: start;
 }
 
+.player-column {
+	width: 60%;
+}
+
+.argument-column {
+	width: calc(40% - var(--space-4));
+	overflow: hidden;
+}
+
 @media (max-width: 900px) {
-	.debate-video-view {
-		grid-template-columns: 1fr;
+	.player-column,
+	.argument-column {
+		width: 100%;
 	}
 }
 
-/* Ingeklapte argumentenlijst: de player-kolom mag de volle breedte
-   innemen i.p.v. naast een lege rechterkolom te blijven staan. De
-   rij-afstand (anders 32px, bedoeld voor twee kolommen naast elkaar) is in
-   deze ene kolom veel te veel lucht boven de link/toggle-rij. */
-.debate-video-view.is-compact {
-	grid-template-columns: 1fr;
-	row-gap: var(--space-1);
+/* Alleen tijdens de bewuste toggle (zie toggleExpanded() in de script-sectie)
+   animeert de breedte -- deze transitie permanent op .player-column/
+   .argument-column zetten liet ook doodgewone vensterresizes trage,
+   inhalende breedteveranderingen geven, want elke herberekening van de
+   procentuele breedte (dus ook slepen aan de vensterrand) triggert een CSS-
+   transition net zo goed als een class-toggle. */
+.debate-video-view.is-animating .player-column,
+.debate-video-view.is-animating .argument-column {
+	transition: width 0.3s ease, opacity 0.2s ease;
 }
 
-/* Alleen bereikbaar door handmatig in te klappen op /debatten/[id]/ (de
-   homepage-teaser rendert i.p.v. .argument-column de .now-playing-kaart
-   hieronder, zie template): in ingeklapte stand staat er alleen de
-   toggle-knop in deze kolom, die hoort dan bij de rand van de player. */
+/* Ingeklapte argumentenlijst: de player-kolom mag de volle breedte
+   innemen i.p.v. naast een lege rechterkolom te blijven staan. */
+.debate-video-view.is-compact .player-column {
+	width: 100%;
+}
+
 .debate-video-view.is-compact .argument-column {
-	display: flex;
-	justify-content: flex-end;
-	gap: var(--space-2);
+	width: 0%;
+	opacity: 0;
+}
+
+/* Compacte teaser (debateHref gezet): geen argument-column-buur om ruimte
+   mee te delen, dus altijd de volle breedte. */
+.now-playing {
+	width: 100%;
 }
 
 /* Perspectief-filters zijn een volledige-pagina-feature (filteren wat de
@@ -188,9 +298,17 @@ onUnmounted(() => {
 	display: none;
 }
 
-.player-column {
-	position: sticky;
-	top: var(--space-2);
+/* Sticky is alleen zinvol naast een langere, gelijktijdig zichtbare
+   argumentenkolom (desktop, 2 kolommen): dan blijft de video in beeld terwijl
+   je door de langere lijst ernaast scrolt. Op een gestapelde mobiele layout
+   (≤900px, zie hierboven) staat de argumentenlijst ONDER de video in
+   dezelfde kolom -- sticky zou de video dan over die lijst heen laten
+   plakken terwijl je erdoorheen scrolt. */
+@media (min-width: 901px) {
+	.player-column {
+		position: sticky;
+		top: var(--space-2);
+	}
 }
 
 .no-video {
@@ -242,24 +360,36 @@ onUnmounted(() => {
 	background: var(--perspective-color);
 }
 
-.argument-toggle {
-	display: inline-flex;
+/* Zit in VideoPlayer's controls-row (via de controls-extra-slot), dus in
+   DebateVideoView's eigen scoped stylesheet -- VideoPlayer's `.control-button`
+   -regel (andere scope-attribute) bereikt deze knop niet, vandaar hier
+   dezelfde vormgeving herhaald. Icoon-only zoals de andere controlsrij-
+   knoppen (play/pauze/mute): geen tekstlabel meer, dat maakte "vorig/volgend
+   argument" ernaast al krap; aria-label/title dragen de betekenis. */
+.argument-toggle-inline {
+	width: 40px;
+	height: 40px;
+	min-width: 40px;
+	min-height: 40px;
+	display: flex;
 	align-items: center;
-	gap: 6px;
-	padding: 5px 10px;
+	justify-content: center;
 	background: transparent;
 	border: 1px solid var(--color-border);
 	border-radius: 4px;
 	color: var(--color-text);
-	font-size: var(--step--1);
-	text-decoration: none;
 	cursor: pointer;
+	padding: 0;
+	margin-left: auto;
 }
 
-/* Buiten de compacte (ingeklapte) stand heeft de toggle wel ruimte nodig
-   t.o.v. de argumentenlijst eronder. */
-.debate-video-view:not(.is-compact) .argument-toggle {
-	margin-bottom: var(--space-2);
+.argument-toggle-inline:hover {
+	background: color-mix(in srgb, var(--color-text) 7%, transparent);
+}
+
+.argument-toggle-inline[aria-pressed="true"] {
+	color: var(--color-accent);
+	border-color: var(--color-accent);
 }
 
 .argument-list {
@@ -269,5 +399,19 @@ onUnmounted(() => {
 	display: flex;
 	flex-direction: column;
 	gap: var(--space-2);
+}
+
+/* Bij een lang debat (honderden argumenten) draagt deze lijst het gros van
+   de paginagrootte -- gemeten op één debat: >34.000 DOM-nodes, bijna alle
+   nodes op de hele pagina. Zonder dit moet de browser bij ELKE
+   layoutverandering elders op de pagina (bv. de video die van breedte
+   verandert tijdens het slepen aan de vensterrand) ook deze hele lijst
+   herberekenen, wat het slepen zichtbaar traag maakt. `content-visibility`
+   laat de browser layout/paint overslaan voor kaarten buiten beeld;
+   `contain-intrinsic-size` is een plaatshouder-hoogte zodat de scrollbar
+   niet springt zolang een kaart nog niet gemeten is. */
+.argument-list li {
+	content-visibility: auto;
+	contain-intrinsic-size: 0 220px;
 }
 </style>

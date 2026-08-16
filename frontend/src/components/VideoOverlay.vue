@@ -44,6 +44,16 @@ const nextArgument = computed(() => {
 		.sort((a, b) => (a.start_seconds as number) - (b.start_seconds as number))[0] ?? null;
 });
 
+// Symmetrisch aan nextArgument, maar t.o.v. het huidige/eerstvolgende
+// argument i.p.v. currentTime: anders is "vorig argument" tijdens het actieve
+// argument zelf (start_seconds <= currentTime) hetzelfde argument als "nu".
+const prevArgument = computed(() => {
+	const before = active.value[0]?.start_seconds ?? props.currentTime;
+	return props.arguments
+		.filter((a) => a.start_seconds !== null && a.start_seconds < before)
+		.sort((a, b) => (b.start_seconds as number) - (a.start_seconds as number))[0] ?? null;
+});
+
 // De naamplaat blijft ook zichtbaar in een gat tussen twee gelabelde
 // argumenten (anders verdwijnt-ie zodra "volgend argument" nog getoond moet
 // worden): actieve spreker, anders de laatst gestarte, anders de eerstvolgende.
@@ -129,20 +139,33 @@ const badges = computed(() =>
 				<PartyLogo v-if="nameplate.party" :party="nameplate.party" class="nameplate-logo" />
 				<span v-if="nameplate.party" class="nameplate-party">{{ displayPartyName(nameplate.party) }}</span>
 				<div class="clock-group">
+					<!-- Altijd het compacte pijl+tijd-formaat, ook zonder timeRangeText
+					     (in een gat tussen twee argumenten): de volledige zin
+					     ("vorig/volgend argument om ...") paste daar niet meer op één
+					     regel zodra prev/next tegelijk zichtbaar zijn -- de volledige
+					     tekst staat nog wel in aria-label/title. -->
+					<button
+						v-if="prevArgument?.start_seconds != null"
+						type="button"
+						class="clock-indicator is-clickable"
+						:aria-label="`Vorig argument om ${formatClock(prevArgument.start_seconds)}`"
+						:title="`Vorig argument om ${formatClock(prevArgument.start_seconds)}`"
+						@click="emit('seek', prevArgument.start_seconds as number)"
+					>
+						← {{ formatClock(prevArgument.start_seconds) }}
+					</button>
 					<span v-if="timeRangeText" class="clock-indicator">{{ timeRangeText }}</span>
 					<button
 						v-if="nextArgument?.start_seconds != null"
 						type="button"
 						class="clock-indicator is-clickable"
-						:class="{ 'is-compact': !!timeRangeText }"
 						:aria-label="`Volgend argument om ${formatClock(nextArgument.start_seconds)}`"
-						:title="timeRangeText ? `Volgend argument om ${formatClock(nextArgument.start_seconds)}` : undefined"
+						:title="`Volgend argument om ${formatClock(nextArgument.start_seconds)}`"
 						@click="emit('seek', nextArgument.start_seconds as number)"
 					>
-						<span v-if="timeRangeText" aria-hidden="true">→ {{ formatClock(nextArgument.start_seconds) }}</span>
-						<span v-else>volgend argument om {{ formatClock(nextArgument.start_seconds) }}</span>
+						→ {{ formatClock(nextArgument.start_seconds) }}
 					</button>
-					<span v-else-if="!timeRangeText" class="clock-indicator">geen gelabelde argumenten meer</span>
+					<span v-else-if="!timeRangeText && !prevArgument" class="clock-indicator">geen gelabelde argumenten meer</span>
 				</div>
 			</div>
 		</div>
@@ -311,9 +334,18 @@ const badges = computed(() =>
 	white-space: nowrap;
 }
 
-.badge-enter-active,
-.badge-leave-active {
+.badge-enter-active {
 	transition: opacity 0.2s;
+}
+
+/* Kort en uit de flex-flow (position:absolute): zonder dit bleef een
+   vertrekkende badge tijdens de fade-out nog meetellen in de
+   kolomstapeling, waardoor een binnenkomende badge tijdelijk lager
+   (halverwege het beeld) verscheen en pas na het verdwijnen van de oude naar
+   boven sprong. */
+.badge-leave-active {
+	transition: opacity 0.06s;
+	position: absolute;
 }
 
 .badge-enter-from,

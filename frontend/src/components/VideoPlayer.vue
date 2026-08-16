@@ -222,6 +222,11 @@ defineExpose({ fatalError });
 					<path d="M10 14 21 3" />
 				</svg>
 			</a>
+			<!-- Ruimte voor een niet-generieke, per-plek control (bv. de
+			     argumentenlijst-toggle op /debatten/[id]/ als die lijst is
+			     ingeklapt): hoort qua herkomst niet in deze kale mediaplayer,
+			     maar wel qua rij i.p.v. een aparte knoppenrij eronder. -->
+			<slot name="controls-extra" />
 		</div>
 	</div>
 </template>
@@ -230,12 +235,30 @@ defineExpose({ fatalError });
 .video-stage {
 	position: relative;
 	background: #000;
+	/* Op een brede/korte viewport (bv. een laptop met weinig hoogte) laat een
+	   16:9-video die simpelweg 100% breedte volgt de speler + bedieningsrij +
+	   tijdlijn + perspectief-filters eronder (allemaal in dezelfde sticky
+	   player-column, zie DebateVideoView.vue) samen hoger uitvallen dan het
+	   scherm, met de bedieningsrij dan buiten beeld. 220px is een grove
+	   schatting van die rijen samen.
+	   Native aspect-ratio+max-width+max-height (i.p.v. de breedte zelf via een
+	   `calc((100vh - ...) * 16/9)` afleiden): dat eerdere `width`-calc maakte
+	   de breedte ook afhankelijk van vh, dus herrekende bij ELKE resize (ook
+	   een hoogteverandering, bv. bij het slepen aan een vensterhoek) de hele
+	   breedte -- en daarmee de layout van alles eronder. Dit is het
+	   standaardpatroon waarmee browsers "pas een blok met een vaste
+	   verhouding binnen een begrensde ruimte" al goedkoop oplossen. */
+	width: auto;
+	max-width: 100%;
+	max-height: calc(100vh - 220px);
+	aspect-ratio: 16 / 9;
+	margin: 0 auto;
 }
 
 video {
 	display: block;
 	width: 100%;
-	aspect-ratio: 16 / 9;
+	height: 100%;
 }
 
 .video-fallback {
