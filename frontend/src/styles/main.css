@@ -232,6 +232,16 @@ a:hover {
 	line-height: 1;
 }
 
+/* Groepeert de links en de theme-toggle als één flex-item t.o.v. de brand
+   (.site-nav zelf is justify-content: space-between met precies twee items) --
+   zo blijft de toggle rechts naast de links staan als .site-nav-links op
+   mobiel verdwijnt (issue #133: brand + toggle blijven, alleen de links weg). */
+.site-nav-right {
+	display: flex;
+	align-items: center;
+	gap: var(--space-2);
+}
+
 .site-nav-links {
 	display: flex;
 	align-items: center;
@@ -262,6 +272,30 @@ a:hover {
 
 .theme-toggle:hover {
 	border-color: var(--color-accent);
+}
+
+/* Mobiele tabbalk (SiteTabBar.astro, issue #133): onzichtbaar boven het
+   900px-breakpoint, waar .site-nav-links de navigatie al doet. */
+.site-tabbar {
+	display: none;
+}
+
+.site-tabbar-item {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 2px;
+	padding: var(--space-1) 0;
+	color: var(--color-muted);
+	text-decoration: none;
+}
+
+.site-tabbar-item.is-active {
+	color: var(--color-accent);
+}
+
+.site-tabbar-label {
+	font-size: 0.7rem;
 }
 
 h1 {
@@ -1401,6 +1435,28 @@ h3 {
 }
 
 @media (max-width: 900px) {
+	/* Tabbalk vervangt de tekstlinks (SiteNav blijft voor brand + theme-
+	   toggle): anders staat de navigatie dubbel. body-padding voorkomt dat de
+	   laatste kaart op een pagina onder de vaste tabbalk uitkomt. */
+	.site-nav-links {
+		display: none;
+	}
+
+	body {
+		padding-bottom: 84px;
+	}
+
+	.site-tabbar {
+		position: fixed;
+		inset: auto 0 0 0;
+		z-index: 15;
+		display: grid;
+		grid-template-columns: repeat(4, 1fr);
+		background: color-mix(in srgb, var(--color-bg) 88%, transparent);
+		backdrop-filter: blur(8px);
+		border-top: 1px solid var(--color-border);
+	}
+
 	.columns {
 		grid-template-columns: 1fr;
 	}
@@ -1429,7 +1485,9 @@ h3 {
 
 	.facet-sheet {
 		position: fixed;
-		inset: auto 0 0 0;
+		/* bottom: 84px, niet 0 -- moet boven de tabbalk uitkomen (issue #133),
+		   z-index 20 > tabbalk (15) doet daarnaast hetzelfde voor de laag zelf. */
+		inset: auto 0 84px 0;
 		z-index: 20;
 		max-height: 80vh;
 		overflow-y: auto;

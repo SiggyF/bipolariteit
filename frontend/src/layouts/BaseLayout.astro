@@ -1,6 +1,7 @@
 ---
 import BaseHead from "../components/BaseHead.astro";
 import SiteNav from "../components/SiteNav.astro";
+import SiteTabBar from "../components/SiteTabBar.astro";
 import "../styles/main.css";
 
 interface Props {
@@ -19,5 +20,6 @@ const { title, description, class: className } = Astro.props;
 		<main class={className}>
 			<slot />
 		</main>
+		<SiteTabBar />
 	</body>
 </html>
