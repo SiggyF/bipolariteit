@@ -1,0 +1,113 @@
+---
+import topicsIndex from "../../../../data/export/topics-index.json";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { TEGENSTELLING } from "../../lib/topics";
+import { groupByDebate } from "../../lib/groupByDebate";
+import { formatDate } from "../../lib/formatDate";
+
+const topicModules = import.meta.glob("../../../../data/export/topics/*.json", { eager: true });
+const debates = groupByDebate(
+	Object.values(topicModules as any).map((mod: any) => ({ slug: mod.default.slug, arguments: mod.default.arguments })),
+);
+---
+
+<BaseLayout title="Onderwerpen - Bipolariteit">
+	<h1>Onderwerpen</h1>
+	<ul class="card-grid">
+		{topicsIndex.map((topic) => (
+			<li>
+				<a href={`/topics/${topic.slug}/`} class="card-tile">
+					{topic.image_url && (
+						<span class="card-tile-image">
+							<img src={topic.image_url} alt="" loading="lazy" />
+						</span>
+					)}
+					<span class="card-tile-name">{topic.name}</span>
+					{TEGENSTELLING[topic.slug] && <span class="card-tile-subtitle">{TEGENSTELLING[topic.slug]}</span>}
+					<span class="card-tile-count">{topic.argument_count} argumenten</span>
+				</a>
+			</li>
+		))}
+	</ul>
+
+	{debates.length > 0 && (
+		<section class="debate-list">
+			<h2>Eerdere debatten</h2>
+			<ul>
+				{debates.map((debate) => (
+					<li>
+						<a href={`/debat/${debate.id}/`}>
+							<strong class="debate-title">{debate.name ?? "Debat"}</strong>
+							<span class="debate-date">{formatDate(debate.earliestPublishedAt)}</span>
+							<span class="debate-meta">{debate.argumentCount} argument{debate.argumentCount === 1 ? "" : "en"}</span>
+						</a>
+					</li>
+				))}
+			</ul>
+		</section>
+	)}
+</BaseLayout>
+
+<style>
+	.debate-list {
+		margin: var(--space-4) 0;
+	}
+
+	.debate-list ul {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-1);
+	}
+
+	/* Grid i.p.v. flex: een lange titel wrapt naar meerdere regels, maar datum
+	   en meta blijven daardoor niet op de eigen (vaste) kolom staan als het een
+	   flex-rij met baseline-uitlijning is -- ze zwierven dan mee met het midden
+	   van de omhoog gegroeide titel. Vaste kolombreedtes lossen dat op. Zelfde
+	   patroon als DebateList.vue. */
+	.debate-list a {
+		display: grid;
+		grid-template-columns: 1fr auto auto;
+		align-items: baseline;
+		column-gap: var(--space-3);
+		row-gap: 2px;
+		padding: var(--space-1) var(--space-2);
+		background: var(--color-card-bg);
+		border: 1px solid var(--color-border);
+		border-radius: 4px;
+		text-decoration: none;
+		color: var(--color-text);
+	}
+
+	.debate-title {
+		min-width: 0;
+	}
+
+	.debate-date {
+		color: var(--color-muted);
+		font-size: var(--step--1);
+		white-space: nowrap;
+		text-align: right;
+	}
+
+	.debate-meta {
+		color: var(--color-muted);
+		font-family: var(--font-mono);
+		font-size: var(--step--1);
+		white-space: nowrap;
+		text-align: right;
+	}
+
+	@media (max-width: 640px) {
+		.debate-list a {
+			grid-template-columns: 1fr auto;
+		}
+
+		.debate-meta {
+			grid-column: 1 / -1;
+			text-align: left;
+		}
+	}
+</style>
