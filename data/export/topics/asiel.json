@@ -58615,98 +58615,98 @@
     "parties": [
       {
         "party": "BBB",
-        "x": -0.48823948052489985,
-        "y": -0.06073208459067999,
+        "x": -0.4882394805248999,
+        "y": -0.060732084590679775,
         "n": 76
       },
       {
         "party": "CDA",
-        "x": -0.4787338208135486,
-        "y": -0.2975886417064569,
+        "x": -0.4787338208135485,
+        "y": -0.297588641706457,
         "n": 145
       },
       {
         "party": "ChristenUnie",
-        "x": -0.17816033569271114,
-        "y": -0.13499463951751206,
+        "x": -0.1781603356927111,
+        "y": -0.13499463951751214,
         "n": 275
       },
       {
         "party": "D66",
-        "x": 0.538979718108214,
-        "y": -0.12973659115200434,
+        "x": 0.5389797181082142,
+        "y": -0.12973659115200423,
         "n": 123
       },
       {
         "party": "DENK",
         "x": 0.5620029038366305,
-        "y": -0.030950122183215006,
+        "y": -0.030950122183214707,
         "n": 155
       },
       {
         "party": "FVD",
-        "x": -0.391928223333804,
-        "y": 0.5611535111325738,
+        "x": -0.39192822333380395,
+        "y": 0.5611535111325743,
         "n": 99
       },
       {
         "party": "GroenLinks-PvdA",
         "x": 0.5475207745781611,
-        "y": -0.12598245397642702,
+        "y": -0.12598245397642688,
         "n": 286
       },
       {
         "party": "JA21",
-        "x": -0.2947140023644382,
-        "y": 0.19646957069386367,
+        "x": -0.2947140023644381,
+        "y": 0.19646957069386392,
         "n": 93
       },
       {
         "party": "Lid Keijzer",
-        "x": -0.002432748221219173,
-        "y": 0.29856408284910385,
+        "x": -0.0024327482212190762,
+        "y": 0.2985640828491033,
         "n": 23
       },
       {
         "party": "NSC",
-        "x": -0.2397265864100887,
-        "y": -0.12388056221609707,
+        "x": -0.23972658641008868,
+        "y": -0.12388056221609738,
         "n": 265
       },
       {
         "party": "PVV",
-        "x": -0.5234828084984436,
-        "y": 0.1891513102553392,
+        "x": -0.5234828084984435,
+        "y": 0.1891513102553394,
         "n": 119
       },
       {
         "party": "PvdD",
         "x": 0.6218393112591873,
-        "y": -0.0028974988931069158,
+        "y": -0.0028974988931069743,
         "n": 113
       },
       {
         "party": "SGP",
-        "x": -0.4370355811853539,
-        "y": 0.05147927435881053,
+        "x": -0.43703558118535385,
+        "y": 0.051479274358810743,
         "n": 164
       },
       {
         "party": "SP",
-        "x": 0.3522937694589999,
-        "y": 0.4039810264354989,
+        "x": 0.3522937694589998,
+        "y": 0.40398102643549816,
         "n": 274
       },
       {
         "party": "VVD",
         "x": -0.38577682925128354,
-        "y": -0.06449577688933503,
+        "y": -0.06449577688933525,
         "n": 368
       },
       {
         "party": "Volt",
-        "x": 0.49099664259210757,
-        "y": -0.13819574797838324,
+        "x": 0.4909966425921077,
+        "y": -0.1381957479783831,
         "n": 172
       }
     ],
@@ -58715,31 +58715,31 @@
         "sleutel": "Bewijs-Anekdotisch",
         "beschrijving": "Onderbouwd met één specifiek praktijkgeval, incident, exemplar of persoonlijk verhaal.",
         "labelgroep": "Type Bewijsvoering",
-        "x": 0.02555002622962579,
-        "y": 0.21992676989273718,
+        "x": 0.02555002622962575,
+        "y": 0.2199267698927371,
         "n": 63
       },
       {
         "sleutel": "Bewijs-Causaal",
         "beschrijving": "Onderbouwd met een heldere, mechanistische of logische verklaring van oorzaak en gevolg.",
         "labelgroep": "Type Bewijsvoering",
-        "x": -0.04125951498496567,
-        "y": 0.017074226485083766,
+        "x": -0.04125951498496568,
+        "y": 0.0170742264850839,
         "n": 134
       },
       {
         "sleutel": "Bewijs-Expert",
         "beschrijving": "Onderbouwd met de consensus, verklaring of het oordeel van een erkend specialist.",
         "labelgroep": "Type Bewijsvoering",
-        "x": 0.32146344339473826,
-        "y": -0.1881817412908955,
+        "x": 0.3214634433947383,
+        "y": -0.18818174129089535,
         "n": 60
       },
       {
         "sleutel": "Bewijs-Statistisch",
         "beschrijving": "Onderbouwd met kwantitatieve gegevens, cijfers, percentages of grootschalig representatief onderzoek.",
         "labelgroep": "Type Bewijsvoering",
-        "x": -0.06756728811768449,
+        "x": -0.06756728811768445,
         "y": -0.1953706311068926,
         "n": 75
       },
@@ -58747,16 +58747,16 @@
         "sleutel": "Drogreden-Ad-Hominem",
         "beschrijving": "Persoonlijke aanval op de tegenstander (op de man spelen) in plaats van een inhoudelijke weerlegging.",
         "labelgroep": "Dialectische Kwaliteit",
-        "x": 0.20279816224656394,
-        "y": 0.6438426035602783,
+        "x": 0.20279816224656386,
+        "y": 0.6438426035602773,
         "n": 2
       },
       {
         "sleutel": "Drogreden-Bespelen-Publiek",
         "beschrijving": "Emotioneel argumenteren gericht op het oproepen van angst, woede of medelijden bij de toehoorder.",
         "labelgroep": "Dialectische Kwaliteit",
-        "x": -0.0661091752343987,
-        "y": 0.8686115760927781,
+        "x": -0.06610917523439866,
+        "y": 0.868611576092779,
         "n": 30
       },
       {
@@ -58764,55 +58764,55 @@
         "beschrijving": "Doen alsof een claim geen bewijs behoeft of de tegenstander dwingen het tegendeel te bewijzen.",
         "labelgroep": "Dialectische Kwaliteit",
         "x": 0.9821074684235552,
-        "y": 0.6361804685751555,
+        "y": 0.6361804685751551,
         "n": 2
       },
       {
         "sleutel": "Drogreden-Stropop",
         "beschrijving": "Het vertekenen of overdrijven van het standpunt van de opponent om dit makkelijker te kunnen aanvallen.",
         "labelgroep": "Dialectische Kwaliteit",
-        "x": 0.04732446360515412,
-        "y": 0.3809963886027509,
+        "x": 0.047324463605154125,
+        "y": 0.3809963886027512,
         "n": 21
       },
       {
         "sleutel": "Drogreden-Vals-Dilemma",
         "beschrijving": "Zwart-wit denken; de situatie voorstellen alsof er slechts twee uiterste, elkaar uitsluitende opties bestaan.",
         "labelgroep": "Dialectische Kwaliteit",
-        "x": -0.04615882334372825,
-        "y": 2.3101345037332126,
+        "x": -0.04615882334372833,
+        "y": 2.3101345037332144,
         "n": 2
       },
       {
         "sleutel": "Frame-Conflict",
         "beschrijving": "De nadruk ligt op de felle strijd of meningsverschillen tussen personen, partijen of groepen.",
         "labelgroep": "Generieke Nieuwsframes",
-        "x": 0.050688461152637754,
-        "y": 0.05306517081990147,
+        "x": 0.0506884611526378,
+        "y": 0.053065170819902176,
         "n": 43
       },
       {
         "sleutel": "Frame-Economisch",
         "beschrijving": "De focus ligt op de financiële kosten, baten of budgettaire gevolgen van een kwestie.",
         "labelgroep": "Generieke Nieuwsframes",
-        "x": 0.03676837872176529,
-        "y": -0.18836596225703317,
+        "x": 0.036768378721765325,
+        "y": -0.18836596225703356,
         "n": 109
       },
       {
         "sleutel": "Frame-Episodisch",
         "beschrijving": "Inzoomen op een specifiek, individueel incident, persoonlijk verhaal of een concrete casus.",
         "labelgroep": "Framing-Focus",
-        "x": 0.10573477122399622,
-        "y": 0.5300672931359445,
+        "x": 0.10573477122399619,
+        "y": 0.5300672931359449,
         "n": 24
       },
       {
         "sleutel": "Frame-Menselijk-Belang",
         "beschrijving": "De focus ligt op de menselijke kant, de emoties of het individuele leed (Human Interest).",
         "labelgroep": "Generieke Nieuwsframes",
-        "x": 0.4733483963515575,
-        "y": 0.34224150573953266,
+        "x": 0.47334839635155745,
+        "y": 0.34224150573953255,
         "n": 43
       },
       {
@@ -58820,23 +58820,23 @@
         "beschrijving": "Inbranding vanuit ethische plichten, spirituele of religieuze principes.",
         "labelgroep": "Generieke Nieuwsframes",
         "x": 0.5018305414813539,
-        "y": 0.23540403850152491,
+        "y": 0.23540403850152478,
         "n": 59
       },
       {
         "sleutel": "Frame-Thematisch",
         "beschrijving": "Het benaderen van de kwestie vanuit een breder maatschappelijk, statistisch of historisch kader.",
         "labelgroep": "Framing-Focus",
-        "x": -0.050232383819268624,
-        "y": -0.07945960947520363,
+        "x": -0.05023238381926864,
+        "y": -0.07945960947520388,
         "n": 362
       },
       {
         "sleutel": "Frame-Verantwoordelijkheid",
         "beschrijving": "De nadruk ligt op de schuldvraag of de plicht tot het oplossen van het probleem.",
         "labelgroep": "Generieke Nieuwsframes",
-        "x": -0.033167756541716664,
-        "y": -0.10292361917344423,
+        "x": -0.03316775654171669,
+        "y": -0.10292361917344436,
         "n": 238
       },
       {
@@ -58844,7 +58844,7 @@
         "beschrijving": "Progressief, ecologisch, kosmopolitisch (Green, Alternative, Libertarian).",
         "labelgroep": "Cultureel-Ideologische Breuklijn",
         "x": 1.0501969109228577,
-        "y": -0.19318270030691137,
+        "y": -0.19318270030691123,
         "n": 118
       },
       {
@@ -58852,7 +58852,7 @@
         "beschrijving": "Gericht op herverdeling van welvaart, sterke collectieve voorzieningen en overheidsingrijpen.",
         "labelgroep": "Cultureel-Ideologische Breuklijn",
         "x": 0.9926382212007077,
-        "y": 0.4328076836149254,
+        "y": 0.4328076836149249,
         "n": 56
       },
       {
@@ -58860,7 +58860,7 @@
         "beschrijving": "Gericht op de vrije markt, deregulering en individuele verantwoordelijkheid.",
         "labelgroep": "Cultureel-Ideologische Breuklijn",
         "x": -0.699114116915053,
-        "y": -0.28533569839912826,
+        "y": -0.28533569839912887,
         "n": 40
       },
       {
@@ -58868,79 +58868,79 @@
         "beschrijving": "Conservatief, traditioneel, nationalistisch (Traditional, Authoritarian, Nationalist).",
         "labelgroep": "Cultureel-Ideologische Breuklijn",
         "x": -0.8192997422095947,
-        "y": 0.049117525976474355,
+        "y": 0.04911752597647436,
         "n": 167
       },
       {
         "sleutel": "Meta-Agenda-Tijdigheid",
         "beschrijving": "Uitingen over de chronologische geschiktheid, de prioriteitstelling of de urgentie van de discussie op dit specifieke moment.",
         "labelgroep": "Metadiscussie",
-        "x": -0.25725104776479224,
-        "y": -0.39359816767656913,
+        "x": -0.2572510477647922,
+        "y": -0.39359816767656985,
         "n": 22
       },
       {
         "sleutel": "Meta-Bevoegdheid",
         "beschrijving": "Uitingen over het formele mandaat, de wettelijke of constitutionele autoriteit, of de institutionele taakverdeling om over de kwestie te beslissen.",
         "labelgroep": "Metadiscussie",
-        "x": -0.17740685282394758,
-        "y": -0.04471532860333009,
+        "x": -0.1774068528239477,
+        "y": -0.04471532860333055,
         "n": 20
       },
       {
         "sleutel": "Meta-Reikwijdte",
         "beschrijving": "Uitingen over de thematische grenzen van het debat, de toelaatbaarheid van specifieke beweringen, of de legitimiteit van bepaalde linguïstische framings.",
         "labelgroep": "Metadiscussie",
-        "x": -0.12295750831129877,
-        "y": -0.15876895471357483,
+        "x": -0.12295750831129881,
+        "y": -0.15876895471357522,
         "n": 15
       },
       {
         "sleutel": "Meta-Vorm-Setting",
         "beschrijving": "Uitingen over de formele procedure, de interactieve spelregels, het vergaderformat of de fysieke en institutionele context van de uitwisseling.",
         "labelgroep": "Metadiscussie",
-        "x": -0.43971761414921307,
-        "y": 0.302857268631821,
+        "x": -0.4397176141492131,
+        "y": 0.3028572686318219,
         "n": 13
       },
       {
         "sleutel": "Moraliteit-Autoriteit",
         "beschrijving": "Gericht op respect voor traditie, legitieme hiërarchie, wetten en maatschappelijke orde.",
         "labelgroep": "Morele Fundamenten",
-        "x": -0.4221165767730796,
-        "y": -0.06027430939050258,
+        "x": -0.42211657677307973,
+        "y": -0.060274309390502746,
         "n": 232
       },
       {
         "sleutel": "Moraliteit-Eerlijkheid",
         "beschrijving": "Gericht op gelijke kansen, gelijke rechten en onpartijdige behandeling (equality).",
         "labelgroep": "Morele Fundamenten",
-        "x": 0.3115588493226295,
-        "y": 0.11315230233556094,
+        "x": 0.31155884932262945,
+        "y": 0.11315230233556067,
         "n": 82
       },
       {
         "sleutel": "Moraliteit-Loyaliteit",
         "beschrijving": "Gericht op groeps-solidariteit, vaderlandsliefde en trouw aan de eigen gemeenschap (in-group).",
         "labelgroep": "Morele Fundamenten",
-        "x": -0.7608875695071733,
-        "y": 0.5572536856009471,
+        "x": -0.7608875695071732,
+        "y": 0.557253685600948,
         "n": 35
       },
       {
         "sleutel": "Moraliteit-Proportionaliteit",
         "beschrijving": "Gericht op rechtvaardigheid naar rato van inspanning; belonen naar werken en het straffen van profiteurs.",
         "labelgroep": "Morele Fundamenten",
-        "x": -0.26733937966445004,
-        "y": 0.574794760850258,
+        "x": -0.26733937966445015,
+        "y": 0.5747947608502573,
         "n": 18
       },
       {
         "sleutel": "Moraliteit-Vrijheid",
         "beschrijving": "Gericht op individuele autonomie en weerstand tegen dwang of onderdrukking door dominante actoren.",
         "labelgroep": "Morele Fundamenten",
-        "x": 0.20296723274752354,
-        "y": 0.013846074921977014,
+        "x": 0.20296723274752357,
+        "y": 0.01384607492197774,
         "n": 24
       },
       {
@@ -58948,47 +58948,47 @@
         "beschrijving": "Gericht op empathie, compassie en het voorkomen van leed en schade bij kwetsbaren.",
         "labelgroep": "Morele Fundamenten",
         "x": 0.6522609420804016,
-        "y": -0.02910869515723889,
+        "y": -0.029108695157238726,
         "n": 112
       },
       {
         "sleutel": "Moraliteit-Zuiverheid",
         "beschrijving": "Gericht op het vermijden van morele of fysieke besmetting; streven naar het schone, natuurlijke of verhevene.",
         "labelgroep": "Morele Fundamenten",
-        "x": -0.8297408969793806,
-        "y": 0.7799143233851473,
+        "x": -0.8297408969793807,
+        "y": 0.7799143233851488,
         "n": 3
       },
       {
         "sleutel": "Stijl-Aangekondigde-Opsomming",
         "beschrijving": "Vooraf het aantal elementen aankondigen (twee, drie, vijf, ...), gevolgd door een opsomming van precies dat aantal.",
         "labelgroep": "Stijlmiddelen",
-        "x": -0.4731480475611813,
-        "y": -0.6320469892287978,
+        "x": -0.4731480475611814,
+        "y": -0.6320469892287992,
         "n": 7
       },
       {
         "sleutel": "Stijl-Antithese",
         "beschrijving": "Het naast elkaar plaatsen van twee tegengestelde begrippen of ideeën.",
         "labelgroep": "Stijlmiddelen",
-        "x": 0.0011668947388061854,
-        "y": 0.025073422845789284,
+        "x": 0.0011668947388061986,
+        "y": 0.025073422845789468,
         "n": 34
       },
       {
         "sleutel": "Stijl-Herhaling",
         "beschrijving": "Herhaling van hetzelfde woord of dezelfde woordgroep binnen het fragment, ter nadruk.",
         "labelgroep": "Stijlmiddelen",
-        "x": -0.22191671451438225,
-        "y": 0.016434982227291214,
+        "x": -0.22191671451438227,
+        "y": 0.016434982227291197,
         "n": 47
       },
       {
         "sleutel": "Stijl-Retorische-Vraag",
         "beschrijving": "Een vraag waarvan het antwoord al besloten ligt in de formulering zelf.",
         "labelgroep": "Stijlmiddelen",
-        "x": 0.3946495761037211,
-        "y": -0.011291060515321296,
+        "x": 0.39464957610372114,
+        "y": -0.011291060515321149,
         "n": 49
       },
       {
@@ -58996,23 +58996,23 @@
         "beschrijving": "Beknopte, pakkende frase.",
         "labelgroep": "Stijlmiddelen",
         "x": -0.7248072473086441,
-        "y": 0.3147924906190782,
+        "y": 0.3147924906190798,
         "n": 6
       },
       {
         "sleutel": "Walton-Analogie",
         "beschrijving": "Er wordt een vergelijking getrokken met een historische gebeurtenis, een andere specifieke casus of een precedent.",
         "labelgroep": "Redeneerschema",
-        "x": -0.5146474207128827,
-        "y": 0.1124506906100433,
+        "x": -0.5146474207128828,
+        "y": 0.11245069061004392,
         "n": 16
       },
       {
         "sleutel": "Walton-Causaal",
         "beschrijving": "Argumentatie gebaseerd op een directe oorzaak-gevolgrelatie.",
         "labelgroep": "Redeneerschema",
-        "x": -0.027501341356915534,
-        "y": -0.05757430021048424,
+        "x": -0.027501341356915527,
+        "y": -0.05757430021048407,
         "n": 26
       },
       {
@@ -59020,23 +59020,23 @@
         "beschrijving": "Het verdedigen of aanvallen van een standpunt op basis van de verwachte praktische (voordelige of nadelige) gevolgen.",
         "labelgroep": "Redeneerschema",
         "x": -0.033384742838066826,
-        "y": -0.044833185327520286,
+        "y": -0.044833185327520536,
         "n": 227
       },
       {
         "sleutel": "Walton-Expertise",
         "beschrijving": "Het argument leunt op de autoriteit, bevindingen of de verklaring van een specialist of expert.",
         "labelgroep": "Redeneerschema",
-        "x": 0.45660096177338577,
-        "y": -0.2215732543283518,
+        "x": 0.4566009617733859,
+        "y": -0.22157325432835157,
         "n": 33
       },
       {
         "sleutel": "Walton-Regel",
         "beschrijving": "Het argument beroept zich op een reeds gevestigde wet, formele regel of breed geaccepteerde maatschappelijke norm.",
         "labelgroep": "Redeneerschema",
-        "x": -0.16775998902653322,
-        "y": 0.03216019002763173,
+        "x": -0.1677599890265333,
+        "y": 0.0321601900276314,
         "n": 81
       }
     ]
