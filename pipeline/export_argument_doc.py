@@ -46,7 +46,8 @@ def fetch_stance_arguments(conn, topic_id, stance, vanaf, limit):
     van build_argument_tree.py::fetch_stance_arguments (deze export is niet
     bedoeld voor een lokaal model met een klein contextvenster)."""
     query = """SELECT ar.id, ar.quote_text, ar.typology, ac.name AS actor_name, ac.party AS actor_party,
-                      d.tweedekamer_activiteit_url, d.video_url, d.published_at
+                      d.tweedekamer_activiteit_url, d.video_url, d.published_at, d.speaker_event_anchor_at,
+                      d.turn_type, d.is_voorzitter_turn
                FROM arguments ar
                JOIN actors ac ON ac.id = ar.actor_id
                JOIN documents d ON d.id = ar.document_id
@@ -93,7 +94,13 @@ def fetch_stance_arguments(conn, topic_id, stance, vanaf, limit):
                 "tags": tags_by_argument.get(row["id"], []),
                 "claims": claims_by_argument.get(row["id"], []),
                 "tweedekamer_activiteit_url": row["tweedekamer_activiteit_url"],
-                "speaker_video_url": _speaker_event_url(row["video_url"], row["published_at"]),
+                "speaker_video_url": _speaker_event_url(
+                    row["video_url"],
+                    row["published_at"],
+                    row["speaker_event_anchor_at"],
+                    row["turn_type"],
+                    row["is_voorzitter_turn"],
+                ),
             }
         )
     return arguments

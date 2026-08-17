@@ -4,6 +4,15 @@ debatdirect events-API (docs/tk-data-sources-overview.md 5f) en verfijnd met
 de gecachete WebVTT-ondertitel-cues (pipeline/fetch_subtitles.py), zoals
 gespecificeerd in docs/design/videoplayer/README.md ("Spannes verrijken").
 
+Vult daarnaast documents.speaker_event_anchor_at (issue #148-vervolg) met
+hetzelfde Tier-1-anker, maar dan als absolute wall-clock-tijd i.p.v.
+videoseconden: het drift-vrije alternatief voor documents.published_at dat
+build_static_data.py e.a. gebruiken voor de externe "video op dit
+moment"-deep-link naar Debat Direct (?event=speaker<ISO8601>).
+published_at (VLOS-markeertijd) bleek voor sommige beurten uren af te wijken
+van de werkelijke spreektijd, waardoor die link naar het begin van het debat
+sprong i.p.v. naar de juiste beurt.
+
 Twee tiers per sprekerbeurt (VLOS-`<woordvoerder>`/`<interrumpant>`, één
 document per beurt):
 
@@ -41,7 +50,7 @@ import logging
 import re
 import statistics
 from bisect import bisect_right
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from pipeline.db import db
 from pipeline.fetch_debate_events import DEBATE_EVENTS_DIR
@@ -384,16 +393,24 @@ def match_turn_with_anchor(cues, running_text, cue_end_offsets, turn_anchor_seco
 def calibrate_debate(cues, debate_rows, events_json=None):
     """Eén debat (rows = argumenten met dezelfde debatdirect_id), side-effect-
     vrij (geen DB/disk-IO -- events_json is al ingelezen door de aanroeper).
-    Retourneert {argument_id: (start_seconds, end_seconds)}.
+    Retourneert (spans, anchors):
+    - spans: {argument_id: (start_seconds, end_seconds)}
+    - anchors: {document_id: wall-clock ISO8601-string van het Tier-1-anker}
+      voor beurten die een events-API-anker kregen -- dit is het drift-vrije
+      alternatief voor documents.published_at (zie _speaker_event_url in
+      build_static_data.py/export_argument_doc.py/build_confrontatie_export.py,
+      issue #148-vervolg: "video op dit moment" sprong naar het begin omdat
+      published_at rond sommige beurten uren kan afwijken van de werkelijke
+      spreektijd).
 
     events_json=None reproduceert exact match_debate()'s gedrag (Tier-2-only,
     debat-brede mediaan) -- de niet-regressie-garantie voor debatten zonder
     events-cache. Met events_json: elke beurt (gegroepeerd op document_id)
     krijgt eerst een Tier-1-poging (find_turn_anchor); lukt die niet, dan valt
     alleen díe beurt terug op het Tier-2-debat-brede pad, niet het hele
-    debat."""
+    debat -- en blijft er voor die beurt geen anchors-entry over."""
     if events_json is None:
-        return match_debate(cues, debate_rows)
+        return match_debate(cues, debate_rows), {}
 
     running_text, cue_end_offsets = build_running_index(cues)
     started_at, events = load_events(events_json)
@@ -403,6 +420,7 @@ def calibrate_debate(cues, debate_rows, events_json=None):
         rows_by_turn.setdefault(row["document_id"], []).append(row)
 
     spans = {}
+    anchors = {}
     unanchored_rows = []
     for turn_rows in rows_by_turn.values():
         first = turn_rows[0]
@@ -412,6 +430,7 @@ def calibrate_debate(cues, debate_rows, events_json=None):
         if anchor is None:
             unanchored_rows.extend(turn_rows)
             continue
+        anchors[first["document_id"]] = (started_at + timedelta(seconds=anchor)).isoformat()
         spans.update(
             match_turn_with_anchor(cues, running_text, cue_end_offsets, anchor, turn_rows, turn_content=first["turn_content"])
         )
@@ -419,7 +438,7 @@ def calibrate_debate(cues, debate_rows, events_json=None):
     if unanchored_rows:
         spans.update(match_debate(cues, unanchored_rows))
 
-    return spans
+    return spans, anchors
 
 
 def match(topic_keyword, dry_run=False, force=False):
@@ -466,7 +485,7 @@ def _match_topic(conn, topic_id, dry_run=False, force=False):
 
         events_path = DEBATE_EVENTS_DIR / f"{debatdirect_id}.json"
         events_json = json.loads(events_path.read_text()) if events_path.exists() else None
-        spans = calibrate_debate(cues, debate_rows, events_json)
+        spans, anchors = calibrate_debate(cues, debate_rows, events_json)
 
         if not spans and len(debate_rows) > 0:
             uncalibrated += len(debate_rows)
@@ -477,6 +496,14 @@ def _match_topic(conn, topic_id, dry_run=False, force=False):
                 conn.executemany(
                     "UPDATE arguments SET start_seconds = ?, end_seconds = ? WHERE id = ?",
                     [(start, end, argument_id) for argument_id, (start, end) in spans.items()],
+                )
+            if anchors:
+                # Drift-vrij alternatief voor documents.published_at (zie
+                # calibrate_debate hierboven) -- gebruikt door
+                # _speaker_event_url voor de "video op dit moment"-link.
+                conn.executemany(
+                    "UPDATE documents SET speaker_event_anchor_at = ? WHERE id = ?",
+                    [(anchor_at, document_id) for document_id, anchor_at in anchors.items()],
                 )
             if force:
                 # --force herbeoordeelt ook argumenten met een bestaande span; als
@@ -489,6 +516,13 @@ def _match_topic(conn, topic_id, dry_run=False, force=False):
                     conn.executemany(
                         "UPDATE arguments SET start_seconds = NULL, end_seconds = NULL WHERE id = ?",
                         [(argument_id,) for argument_id in stale_ids],
+                    )
+                # Zelfde reden als hierboven, nu voor het Tier-1-anker per beurt.
+                stale_document_ids = {row["document_id"] for row in debate_rows} - anchors.keys()
+                if stale_document_ids:
+                    conn.executemany(
+                        "UPDATE documents SET speaker_event_anchor_at = NULL WHERE id = ?",
+                        [(document_id,) for document_id in stale_document_ids],
                     )
 
     if not dry_run:

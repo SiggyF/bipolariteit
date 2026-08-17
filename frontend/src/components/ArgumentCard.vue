@@ -172,6 +172,16 @@ watch(
 				{{ formatClock(argument.start_seconds) }}–{{ formatClock(argument.end_seconds ?? argument.start_seconds) }}
 			</span>
 		</div>
+		<!-- De tag-badges hierboven leunen op de title-tooltip (hover) voor de
+		     toelichting -- op mobiel/touch is die onbereikbaar. Hier dezelfde
+		     tekst (tagTooltip) gewoon uitgeschreven, want onder de video is
+		     ruimte genoeg. -->
+		<ul v-if="compact && compactTags.length" class="compact-tag-details">
+			<li v-for="tag in compactTags" :key="tag.sleutel">
+				<strong>{{ tag.sleutel }}</strong> ({{ tag.labelgroep }}): {{ tag.beschrijving }}
+				<span v-if="tag.reden" class="tag-reason">Reden: {{ tag.reden }}</span>
+			</li>
+		</ul>
 		<blockquote v-if="!compact" class="quote">"{{ argument.quote_text }}"</blockquote>
 		<p v-if="!compact && argument.quote_context" class="quote-context">{{ argument.quote_context }}</p>
 		<p class="attribution">

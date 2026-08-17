@@ -36,6 +36,7 @@ import prince
 from pipeline.db import db
 from pipeline.extract_arguments import PROMPT_VERSION as EXTRACT_PROMPT_VERSION
 from pipeline.extract_arguments import _build_prompt as _build_extraction_prompt
+from pipeline.match_argument_spans import expected_event_type
 from pipeline.periodes import PeriodeIndex
 from pipeline.redactie_check import PROMPT_TEMPLATE as REDACTIE_PROMPT_TEMPLATE
 from pipeline.redactie_check import PROMPT_VERSION as REDACTIE_PROMPT_VERSION
@@ -50,19 +51,36 @@ EXPORT_DIR = Path(__file__).parent.parent / "data" / "export"
 _AMSTERDAM = ZoneInfo("Europe/Amsterdam")
 
 
-def _speaker_event_url(video_url, published_at):
+def _speaker_event_url(video_url, published_at, anchor_at=None, turn_type=None, is_voorzitter_turn=False):
     """Debat Direct ondersteunt een deep link naar het moment dat een
-    specifieke spreker begint (?event=speaker<ISO8601-tijdstip+offset>),
-    naast de generieke .../video-link naar het begin van het hele debat.
-    documents.published_at (VLOS markeertijdbegin) is naive lokale tijd
-    zonder offset -- Europe/Amsterdam-lokalisatie geeft automatisch de
-    juiste +01:00/+02:00 DST-offset i.p.v. een hardgecodeerde regel."""
-    if not video_url or not published_at:
+    specifieke spreker/interruptie/voorzitter begint
+    (?event=<eventType><ISO8601-tijdstip+offset>), naast de generieke
+    .../video-link naar het begin van het hele debat.
+
+    eventType (via expected_event_type, pipeline/match_argument_spans.py)
+    hing hier tot issue #148-vervolg altijd hardgecodeerd vast op "speaker" --
+    voor een interruptie (turn_type="interrumpant") bestaat er in de
+    events-API geen "speaker"-event op dat tijdstip, dus Debat Direct kon geen
+    match vinden en sprong terug naar het begin van het debat. Geverifieerd
+    live: hetzelfde tijdstip met eventType "interrupter" i.p.v. "speaker"
+    seekt wel naar de juiste beurt.
+
+    anchor_at (documents.speaker_event_anchor_at, al tz-aware) heeft de
+    voorkeur boven published_at: het is het drift-vrije Tier-1-anker uit de
+    debatdirect events-API (pipeline/match_argument_spans.py calibrate_debate),
+    terwijl published_at (VLOS-markeertijdbegin) voor sommige beurten uren kan
+    afwijken van de werkelijke spreektijd. published_at zelf is naive lokale
+    tijd zonder offset -- Europe/Amsterdam-lokalisatie geeft automatisch de
+    juiste +01:00/+02:00 DST-offset i.p.v. een hardgecodeerde regel. anchor_at
+    is NULL voor beurten zonder Tier-1-anker; dan blijft published_at de
+    enige (beste-poging) bron."""
+    if not video_url or not (anchor_at or published_at):
         return None
     base = video_url[: -len("/video")] if video_url.endswith("/video") else video_url
-    dt = datetime.fromisoformat(published_at).replace(tzinfo=_AMSTERDAM)
+    dt = datetime.fromisoformat(anchor_at) if anchor_at else datetime.fromisoformat(published_at).replace(tzinfo=_AMSTERDAM)
+    event_type = expected_event_type(turn_type, is_voorzitter_turn)
     event = quote(dt.strftime("%Y-%m-%dT%H:%M:%S%z"), safe="")
-    return f"{base}?event=speaker{event}"
+    return f"{base}?event={event_type}{event}"
 
 
 def _thumbnail_url(video_url, published_at, start_seconds):
@@ -140,7 +158,8 @@ def fetch_arguments(conn, topic_id, periode_index):
                   ar.prompt_version, ar.start_seconds, ar.end_seconds,
                   ac.name AS actor_name, ac.party AS actor_party,
                   d.id AS document_id, d.url AS document_url, d.video_url, d.published_at,
-                  d.tweedekamer_activiteit_url, d.speaker_role_title, d.raw_video_url
+                  d.tweedekamer_activiteit_url, d.speaker_role_title, d.raw_video_url,
+                  d.speaker_event_anchor_at, d.turn_type, d.is_voorzitter_turn
            FROM arguments ar
            JOIN actors ac ON ac.id = ar.actor_id
            JOIN documents d ON d.id = ar.document_id
@@ -215,7 +234,13 @@ def fetch_arguments(conn, topic_id, periode_index):
                     # Naive lokale tijd (VLOS markeertijdbegin), zonder offset --
                     # de frontend gebruikt alleen het datumdeel, voor het datumfilter.
                     "published_at": row["published_at"],
-                    "speaker_video_url": _speaker_event_url(row["video_url"], row["published_at"]),
+                    "speaker_video_url": _speaker_event_url(
+                        row["video_url"],
+                        row["published_at"],
+                        row["speaker_event_anchor_at"],
+                        row["turn_type"],
+                        row["is_voorzitter_turn"],
+                    ),
                     "tweedekamer_activiteit_url": row["tweedekamer_activiteit_url"],
                     "redactie_review": redactie_by_document.get(row["document_id"]),
                     # Het afspeelbare HLS-manifest (pipeline/fetch_subtitles.py); NULL
