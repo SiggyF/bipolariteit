@@ -348,4 +348,39 @@ const badges = computed(() =>
 .badge-leave-to {
 	opacity: 0;
 }
+
+/* Zelfde breakpoint als de kolomstapeling in DebateVideoView.vue: op een
+   gestapelde mobiele layout is de video zelf smaller dan op desktop, maar
+   deze badges/naamplaatje gebruiken de vaste (niet-vloeiende) --step-*-
+   tokens uit main.css, dus zonder dit blok blijven ze op mobiel even groot
+   als op desktop en nemen ze verhoudingsgewijs veel meer van het beeld in
+   (issue #149). */
+@media (max-width: 900px) {
+	.title-card-name,
+	.nameplate-name {
+		font-size: var(--step-0);
+	}
+
+	.title-card-date,
+	.intro-badge,
+	.nameplate-party,
+	.clock-indicator,
+	.badge-label {
+		font-size: 0.7rem;
+	}
+
+	.badge,
+	.intro-badge {
+		padding: 0.2em 0.45em;
+	}
+
+	.badge-icon-circle {
+		width: 1.1em;
+		height: 1.1em;
+	}
+
+	.badges {
+		gap: 0.3em;
+	}
+}
 </style>

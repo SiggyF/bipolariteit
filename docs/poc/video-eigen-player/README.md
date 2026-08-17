@@ -18,6 +18,20 @@ python3 -m http.server 8912
 
 en open `http://localhost:8912/docs/poc/video-eigen-player/poc_ownplayer.html`.
 
+## Debugtool: `frontend/public/playback_debug.html` (issue #148)
+
+Los van de PoC hierboven staat in
+[`frontend/public/playback_debug.html`](../../../frontend/public/playback_debug.html): geen
+argumentmatching-demo, maar een diagnosetool voor afspeelproblemen (bv.
+[issue #148](https://github.com/SiggyF/bipolariteit/issues/148), "Chrome Android speelt geen
+video af"). Staat in `frontend/public/` (niet hier) zodat hij meedraait met de gewone
+`make dev`-server -- geen aparte service nodig om hem op een telefoon te openen. Toont op het
+scherm zelf (geen devtools nodig) omgevingsinfo, codec-/`Hls.isSupported()`-checks, een losse
+fetch-check van het manifest (om CORS/providerproxy-problemen te onderscheiden van een
+hls.js/video-elementprobleem) en een volledige event-/foutenlog (ook niet-fatale
+hls.js-events, met een "kopieer log"-knop). Accepteert een alternatieve manifest-URL via het
+invoerveld of `?src=`.
+
 ## Let op: dit is een throwaway PoC, geen productiecode
 
 - De manifest-/ondertitel-URL en de gezochte quote (`QUOTE_NEEDLE`) zijn hardgecodeerd
