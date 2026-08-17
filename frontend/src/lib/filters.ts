@@ -76,6 +76,7 @@ const DIMENSION_BY_KEY = new Map(DIMENSIONS.map((d) => [d.key, d]));
 
 export const DATE_FROM = "van";
 export const DATE_TO = "tot";
+const QUERY_PARAM = "zoek";
 
 export interface FilterState {
 	/** dimensiesleutel -> geselecteerde waarden (OR binnen de dimensie). */
@@ -83,16 +84,36 @@ export interface FilterState {
 	/** Publicatiedatum van het brondocument, ISO yyyy-mm-dd, inclusief grenzen. */
 	van: string | null;
 	tot: string | null;
+	/** Vrije tekstzoek door quote_text; lege string = geen zoekopdracht. */
+	q: string;
 }
 
 function emptyState(): FilterState {
-	return { values: Object.fromEntries(DIMENSIONS.map((d) => [d.key, []])), van: null, tot: null };
+	return { values: Object.fromEntries(DIMENSIONS.map((d) => [d.key, []])), van: null, tot: null, q: "" };
 }
 
 export const filters = reactive<FilterState>(emptyState());
 
 export function isActive(): boolean {
-	return DIMENSIONS.some((d) => filters.values[d.key].length > 0) || !!filters.van || !!filters.tot;
+	return DIMENSIONS.some((d) => filters.values[d.key].length > 0) || !!filters.van || !!filters.tot || !!filters.q;
+}
+
+// Hoofdletter-/accentongevoelig, zelfde NFD-aanpak als slug.ts. Geen aparte
+// woordgrenzen: een deelwoord (bv. "compensati") mag ook matchen, net als een
+// gewone zoekmachine.
+function normalizeSearchText(value: string): string {
+	return value
+		.normalize("NFD")
+		.replace(/[\u0300-\u036f]/g, "")
+		.toLowerCase();
+}
+
+/** Alle woorden in de zoekopdracht moeten voorkomen (AND), losstaand van volgorde. */
+function matchesQuery(argument: Argument): boolean {
+	const terms = normalizeSearchText(filters.q).trim().split(/\s+/).filter(Boolean);
+	if (!terms.length) return true;
+	const haystack = normalizeSearchText(argument.quote_text);
+	return terms.every((term) => haystack.includes(term));
 }
 
 export function activeCount(): number {
@@ -131,6 +152,7 @@ export function matchesExcept(argument: Argument, skipKeys: string[]): boolean {
 	const date = argument.document.published_at?.slice(0, 10);
 	if (!skipKeys.includes(DATE_FROM) && filters.van && (!date || date < filters.van)) return false;
 	if (!skipKeys.includes(DATE_TO) && filters.tot && (!date || date > filters.tot)) return false;
+	if (!matchesQuery(argument)) return false;
 	return true;
 }
 
@@ -203,7 +225,15 @@ export function clearAll() {
 	for (const dimension of DIMENSIONS) filters.values[dimension.key] = [];
 	filters.van = null;
 	filters.tot = null;
+	filters.q = "";
 	syncToUrl();
+}
+
+// replace: true bij elke toetsaanslag i.p.v. pushState -- anders zet elk
+// getypt teken een eigen stap in de terugknop-geschiedenis.
+export function setQuery(q: string) {
+	filters.q = q;
+	syncToUrl({ replace: true });
 }
 
 // --- URL-synchronisatie ---------------------------------------------------
@@ -218,6 +248,7 @@ function toSearchParams(): URLSearchParams {
 	}
 	if (filters.van) params.set(DATE_FROM, filters.van);
 	if (filters.tot) params.set(DATE_TO, filters.tot);
+	if (filters.q) params.set(QUERY_PARAM, filters.q);
 	return params;
 }
 
@@ -238,6 +269,7 @@ function applySearchParams(params: URLSearchParams) {
 	}
 	filters.van = parseDate(params.get(DATE_FROM));
 	filters.tot = parseDate(params.get(DATE_TO));
+	filters.q = params.get(QUERY_PARAM) ?? "";
 }
 
 const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
@@ -251,10 +283,12 @@ function parseDate(value: string | null): string | null {
 	return value;
 }
 
-function syncToUrl() {
+function syncToUrl(options?: { replace?: boolean }) {
 	const params = toSearchParams();
 	const query = params.toString();
-	history.pushState(null, "", query ? `?${query}${location.hash}` : `${location.pathname}${location.hash}`);
+	const url = query ? `?${query}${location.hash}` : `${location.pathname}${location.hash}`;
+	if (options?.replace) history.replaceState(null, "", url);
+	else history.pushState(null, "", url);
 	persistToStorage(query);
 }
 

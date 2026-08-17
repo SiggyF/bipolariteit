@@ -12,6 +12,7 @@ import {
 	labelFor,
 	removeValue,
 	setDateRange,
+	setQuery,
 	toggleValue,
 } from "../lib/filters";
 
@@ -89,6 +90,17 @@ onBeforeUnmount(() => {
 
 <template>
 	<div ref="bar" class="filter-bar" :class="{ 'is-active': isActive() }">
+		<div class="filter-search-row">
+			<input
+				type="search"
+				class="filter-search"
+				placeholder="Zoek in citaten…"
+				aria-label="Zoek in citaten"
+				:value="filters.q"
+				@input="setQuery(($event.target as HTMLInputElement).value)"
+			/>
+		</div>
+
 		<div class="filter-bar-row">
 			<span class="filter-count">
 				<strong>{{ matchCount }}</strong> van {{ argumentList.length }} argumenten

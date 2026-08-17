@@ -1044,6 +1044,26 @@ h3 {
 	padding-left: var(--space-2);
 }
 
+.filter-search-row {
+	margin-bottom: var(--space-2);
+}
+
+.filter-search {
+	width: 100%;
+	padding: 0.35rem 0.7rem;
+	border: 1px solid var(--color-border);
+	border-radius: 999px;
+	background: var(--color-card-bg);
+	color: inherit;
+	font: inherit;
+	font-size: var(--step--1);
+}
+
+.filter-search:focus-visible {
+	outline: 2px solid var(--color-accent);
+	outline-offset: 1px;
+}
+
 .filter-bar-row {
 	display: flex;
 	flex-wrap: wrap;
