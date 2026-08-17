@@ -83,6 +83,10 @@ const latestDebateTopicName = latestDebate
 	}
 
 	.latest-debate-heading {
+		/* .latest-debate's eigen margin-top (hierboven) is al de bedoelde
+		   ruimte -- zonder deze reset stapelt de user-agent-default
+		   margin-block-start van h2 daar nog eens bovenop. */
+		margin-top: 0;
 		margin-bottom: var(--space-2);
 	}
 
