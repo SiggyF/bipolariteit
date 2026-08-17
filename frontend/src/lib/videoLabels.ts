@@ -43,7 +43,12 @@ export function prevArgumentBefore(args: Argument[], beforeSeconds: number): Arg
  * bovenaan komt. Tie-break op perspectief (alfabetisch, voor een stabiele
  * volgorde). `isVisible` filtert kandidaten (bv. een uitgezet perspectief
  * in de tijdlijn-legenda) zonder de frequentietelling zelf te beïnvloeden --
- * die blijft over alle tags van het debat gaan, ook verborgen tags. */
+ * die blijft over alle tags van het debat gaan, ook verborgen tags.
+ *
+ * Bewust geen categorie-voorrang (bv. drogredenen/stijlmiddelen altijd
+ * eerst): dat zou de selectie laten oordelen over wat "belangrijker" is
+ * i.p.v. gewoon te laten zien wat opvalt binnen dit specifieke debat -- zie
+ * de site-motto "We listen and we don't judge" op de homepage. */
 export function selectBadgeTags(
 	argument: Argument,
 	argsInThisDebate: Argument[],

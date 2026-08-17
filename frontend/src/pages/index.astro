@@ -74,11 +74,24 @@ const latestDebateTopicName = latestDebate
 
 	.latest-debate {
 		max-width: min(720px, 100%);
-		margin: var(--space-3) 0 var(--space-4);
+		/* Geen eigen margin: .home's gap (hierboven) is al de ruimte tussen
+		   dit blok en .home-intro, aan weerszijden (mobiel: video eerst,
+		   desktop: intro eerst, zie de media query hierboven) -- een eigen
+		   margin hier stapelde daar nog eens bovenop, plus (via de
+		   heading) de user-agent-default margin-block-start van <h2>. Drie
+		   marges op dezelfde plek voor hetzelfde doel. main's eigen
+		   padding (main.css) is de enige bron voor de ruimte aan de
+		   paginaranden. */
+		margin: 0;
+		/* Zelfde reden als min-width: 0 op .player-column in
+		   DebateVideoView.vue: dit is een grid-item, dat anders zijn
+		   inhoud (uiteindelijk de niet-wrappende .controls-row-knoppen)
+		   de hele pagina breder dan de viewport kan laten duwen. */
+		min-width: 0;
 	}
 
 	.latest-debate-heading {
-		margin-bottom: var(--space-2);
+		margin: 0 0 var(--space-2);
 	}
 
 	.latest-debate-link {

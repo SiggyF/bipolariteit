@@ -80,11 +80,22 @@ const introBadge = computed(() => {
 
 // Categorie + perspectief gaan niet meer altijd zichtbaar op de badge (te
 // veel tekst over het beeld), maar in de title-tooltip bij hover.
+//
+// sleutel is opgebouwd als "Categorie-Subtype" (bv. "Drogreden-Ad-Hominem");
+// op mobiel is er geen ruimte voor het volledige label, dus valt de
+// categorie daar weg ("Ad Hominem") -- de volledige tekst blijft wel in de
+// title-tooltip en op desktop (zie de mobiele media query hieronder).
+function shortTagLabel(sleutel: string): string {
+	const parts = sleutel.split("-");
+	return parts.length > 1 ? parts.slice(1).join(" ") : sleutel;
+}
+
 const badges = computed(() =>
 	active.value.flatMap((argument) =>
 		selectBadgeTags(argument, props.arguments, isVisible).map((tag) => ({
 			key: `${argument.id}-${tag.sleutel}`,
 			label: tag.sleutel,
+			shortLabel: shortTagLabel(tag.sleutel),
 			iconPad: tagIconPath(tag.sleutel),
 			color: colorByPerspective.get(tag.perspectief) ?? "var(--color-muted)",
 			tooltip: tag.reden
@@ -121,7 +132,10 @@ const badges = computed(() =>
 						<path :d="badge.iconPad" fill="none" stroke="currentColor" stroke-width="2" />
 					</svg>
 				</span>
-				<span class="badge-label">{{ badge.label }}</span>
+				<span class="badge-label">
+					<span class="badge-label-full">{{ badge.label }}</span>
+					<span class="badge-label-short">{{ badge.shortLabel }}</span>
+				</span>
 			</div>
 		</TransitionGroup>
 		<div v-if="nameplate" class="bottom-block">
@@ -330,6 +344,10 @@ const badges = computed(() =>
 	white-space: nowrap;
 }
 
+.badge-label-short {
+	display: none;
+}
+
 .badge-enter-active {
 	transition: opacity 0.2s;
 }
@@ -347,5 +365,52 @@ const badges = computed(() =>
 .badge-enter-from,
 .badge-leave-to {
 	opacity: 0;
+}
+
+/* Zelfde breakpoint als de kolomstapeling in DebateVideoView.vue: op een
+   gestapelde mobiele layout is de video zelf smaller dan op desktop, maar
+   deze badges/naamplaatje gebruiken de vaste (niet-vloeiende) --step-*-
+   tokens uit main.css, dus zonder dit blok blijven ze op mobiel even groot
+   als op desktop en nemen ze verhoudingsgewijs veel meer van het beeld in
+   (issue #149). */
+@media (max-width: 900px) {
+	.title-card-name,
+	.nameplate-name {
+		font-size: var(--step-0);
+	}
+
+	.title-card-date,
+	.intro-badge,
+	.nameplate-party,
+	.clock-indicator,
+	.badge-label {
+		font-size: 0.7rem;
+	}
+
+	.badge,
+	.intro-badge {
+		padding: 0.2em 0.45em;
+	}
+
+	.badge-icon-circle {
+		width: 1.1em;
+		height: 1.1em;
+	}
+
+	/* Geen ruimte voor "Drogreden Ad Hominem" -- toon alleen "Ad Hominem"
+	   (de volledige tekst blijft beschikbaar via de title-tooltip en op
+	   desktop, en staat er sowieso bij in de "nu in beeld"-kaart onder de
+	   video, zie ArgumentCard.vue). */
+	.badge-label-full {
+		display: none;
+	}
+
+	.badge-label-short {
+		display: inline;
+	}
+
+	.badges {
+		gap: 0.3em;
+	}
 }
 </style>

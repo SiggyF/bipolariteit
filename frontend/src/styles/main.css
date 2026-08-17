@@ -485,6 +485,15 @@ h3 {
 	border-bottom: 1px solid var(--color-border);
 }
 
+/* Op de homepage is het motto het laatste element op de pagina -- de
+   onderrand-marge is daar dan gestapelde witruimte bovenop main's eigen
+   padding-bottom (main.css), en oogt te groot. Op de "Over"-pagina staat het
+   motto wel middenin de tekst, dus die basisstijl hierboven blijft daar
+   ongewijzigd. */
+.home-intro .motto {
+	margin-bottom: 0;
+}
+
 .back-link {
 	color: var(--color-muted);
 	text-decoration: none;
@@ -1629,12 +1638,15 @@ h3 {
 .argument-meta {
 	display: flex;
 	align-items: center;
+	flex-wrap: wrap;
 	gap: 0.5rem;
 }
 
-/* Compacte ArgumentCard (issue #135): het eerste-tag-badge in .argument-meta
-   is een statisch overzichtsbadge, geen filterknop zoals de .tag-badge's in
-   de volledige tags-lijst -- geen pointer/underline die klikbaarheid suggereert. */
+/* Compacte ArgumentCard (issue #135): de tag-badges in .argument-meta zijn
+   statische overzichtsbadges, geen filterknop zoals de .tag-badge's in de
+   volledige tags-lijst -- geen pointer/underline die klikbaarheid suggereert.
+   Het eigen linkje ernaast (.tag-link, hergebruikt van diezelfde volledige
+   lijst) is wel klikbaar, naar de tagpagina/definitie (issue #149-vervolg). */
 .argument-meta .tag-badge {
 	cursor: default;
 	text-decoration: none;

@@ -43,22 +43,38 @@ onMounted(async () => {
 	if (!video) return;
 	video.muted = muted.value;
 
-	if (video.canPlayType("application/vnd.apple.mpegurl")) {
-		// Safari: native HLS-ondersteuning, geen hls.js nodig.
+	// Eerst hls.js/MediaSource proberen, pas daarna canPlayType als fallback
+	// (i.p.v. andersom): sommige Android Chrome-builds rapporteren
+	// canPlayType("application/vnd.apple.mpegurl") ten onrechte als
+	// "probably"/"maybe" terwijl native afspelen dan alsnog faalt met
+	// MEDIA_ERR_SRC_NOT_SUPPORTED (issue #148, bevestigd via
+	// frontend/public/playback_debug.html op een echt Android-toestel). Met
+	// hls.js/MSE eerst blijft de native src-route voorbehouden aan browsers
+	// die er ook echt geen MSE-alternatief voor hebben (Safari).
+	const { default: Hls } = await import("hls.js");
+	if (Hls.isSupported()) {
+		hls = new Hls();
+		hls.loadSource(props.src);
+		hls.attachMedia(video);
+		// Ook niet-fatale errors loggen (i.p.v. alleen data.fatal afhandelen):
+		// een stille, niet-fatale fout geeft anders geen enkel spoor voor een
+		// afspeelklacht zoals issue #148. Blijft staan als lichte,
+		// permanente diagnostiek (console.error, geen UI-ruis).
+		hls.on(Hls.Events.ERROR, (_evt, data) => {
+			if (data.fatal) {
+				fatalError.value = true;
+				console.error("hls.js fatale fout:", data.type, data.details, data.error);
+			} else {
+				console.warn("hls.js niet-fatale fout:", data.type, data.details, data.error);
+			}
+		});
+	} else if (video.canPlayType("application/vnd.apple.mpegurl")) {
+		// Safari: geen MSE-ondersteuning voor HLS, wel native.
 		video.src = props.src;
 	} else {
-		const { default: Hls } = await import("hls.js");
-		if (Hls.isSupported()) {
-			hls = new Hls();
-			hls.loadSource(props.src);
-			hls.attachMedia(video);
-			hls.on(Hls.Events.ERROR, (_evt, data) => {
-				if (data.fatal) fatalError.value = true;
-			});
-		} else {
-			fatalError.value = true;
-			return;
-		}
+		fatalError.value = true;
+		console.error("Geen afspeelpad beschikbaar: Hls.isSupported() is false en canPlayType(HLS) is leeg");
+		return;
 	}
 
 	video.addEventListener("loadedmetadata", () => {
@@ -66,8 +82,11 @@ onMounted(async () => {
 		emit("loadedmetadata", video.duration);
 		// Autoplay-poging: browsers blokkeren dit doorgaans zonder eerdere
 		// gebruikersinteractie op de pagina, dus dit lukt niet altijd -- geen
-		// browser-issue om te "fixen", alleen best-effort.
-		video.play().catch(() => {});
+		// browser-issue om te "fixen", alleen best-effort. Wel loggen (i.p.v.
+		// stil negeren): de reden (bv. NotAllowedError) is precies het verschil
+		// tussen een geblokkeerde-autoplay-afwijzing en een echt afspeelprobleem
+		// zoals issue #148.
+		video.play().catch((e) => console.warn("autoplay-poging geweigerd:", e.name, e.message));
 	});
 	video.addEventListener("play", () => (playing.value = true));
 	video.addEventListener("pause", () => (playing.value = false));
@@ -272,6 +291,11 @@ video {
 	align-items: center;
 	gap: var(--space-2);
 	padding: var(--space-1) 0;
+	/* Vangnet naast de min-width: 0-fixes in DebateVideoView.vue/index.astro:
+	   op een erg smal scherm scrollt deze rij dan lokaal i.p.v. de pagina
+	   breder te duwen dan de viewport. */
+	max-width: 100%;
+	overflow-x: auto;
 }
 
 /* Zelfde uitgangspunten als de .btn/.btn-icon-knoppen uit het

@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>videospeler-debugtool (issue #148)</title>
+<script src="https://cdn.jsdelivr.net/npm/hls.js@1.7.0/dist/hls.min.js"></script>
+<style>
+  :root { color-scheme: dark; }
+  body { font: 15px/1.4 -apple-system, system-ui, sans-serif; background: #111; color: #eee; margin: 0; padding: 12px; }
+  h1 { font-size: 1.1rem; margin: 0 0 4px; }
+  p.hint { color: #999; font-size: 0.85rem; margin: 0 0 16px; }
+  section { margin-bottom: 16px; }
+  h2 { font-size: 0.95rem; margin: 0 0 6px; color: #ccc; border-bottom: 1px solid #333; padding-bottom: 4px; }
+  .stage { position: relative; width: 100%; max-width: 640px; background: #000; }
+  video { display: block; width: 100%; height: auto; aspect-ratio: 16/9; }
+  .row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
+  input[type=text] { flex: 1; min-width: 200px; font: 13px monospace; padding: 8px; background: #1a1a1a; color: #eee; border: 1px solid #444; border-radius: 4px; }
+  button { font: 13px sans-serif; padding: 10px 14px; min-height: 44px; background: #2a2a2a; color: #eee; border: 1px solid #555; border-radius: 4px; cursor: pointer; }
+  button:active { background: #3a3a3a; }
+  table { border-collapse: collapse; width: 100%; font-size: 0.85rem; }
+  table td { padding: 3px 8px 3px 0; vertical-align: top; }
+  table td:first-child { color: #999; white-space: nowrap; }
+  .ok { color: #6f6; }
+  .fail { color: #f66; }
+  .warn { color: #fc6; }
+  #log { font: 12px/1.4 ui-monospace, monospace; white-space: pre-wrap; word-break: break-word; background: #0a0a0a; border: 1px solid #333; border-radius: 4px; padding: 8px; max-height: 40vh; overflow-y: auto; }
+  #log .err { color: #f66; }
+  #log .warn { color: #fc6; }
+</style>
+</head>
+<body>
+
+<h1>videospeler-debugtool</h1>
+<p class="hint">
+  Voor issue #148 (Chrome Android speelt geen video af). Draait mee met de gewone dev-server
+  (<code>make dev</code> in de repo-root, luistert op <code>0.0.0.0</code>) -- geen aparte
+  service nodig, open op het toestel gewoon
+  <code>http://&lt;lan-ip-van-de-devcontainer&gt;:4321/playback_debug.html</code>.
+  Alle checks/logs staan hieronder op het scherm zelf -- geen devtools nodig, maar
+  "Kopieer log" werkt ook als je de uitvoer wilt doorsturen.
+</p>
+
+<section>
+  <h2>1. Omgeving</h2>
+  <table id="envTable"></table>
+</section>
+
+<section>
+  <h2>2. Ondersteuning (canPlayType / MSE / hls.js)</h2>
+  <table id="supportTable"></table>
+</section>
+
+<section>
+  <h2>3. Manifest laden</h2>
+  <div class="row">
+    <input type="text" id="srcInput" placeholder="HLS-manifest-URL (.m3u8)">
+    <button id="loadBtn">Laden</button>
+  </div>
+  <div class="stage">
+    <video id="v" playsinline controls></video>
+  </div>
+  <div class="row">
+    <button id="playMutedBtn">play() gedempt</button>
+    <button id="playUnmutedBtn">play() ongedempt</button>
+  </div>
+</section>
+
+<section>
+  <h2>4. Netwerkcheck (los van hls.js/video-element)</h2>
+  <div class="row">
+    <button id="fetchCheckBtn">Fetch manifest rechtstreeks testen</button>
+  </div>
+  <table id="fetchTable"></table>
+</section>
+
+<section>
+  <h2>5. Live log</h2>
+  <div class="row">
+    <button id="copyLogBtn">Kopieer log</button>
+    <button id="clearLogBtn">Wis log</button>
+  </div>
+  <div id="log"></div>
+</section>
+
+<script>
+  // Zelfde manifest-URL-vorm als productie (document.raw_video_url), hier als
+  // handig startpunt -- overschrijfbaar via het invoerveld of ?src=.
+  const DEFAULT_SRC = "https://livestreaming.b67v2.tweedekamer.nl/2026-07-01/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2026-07-01T13%3A35%3A26%2B0200&end=2026-07-02T01%3A14%3A54%2B0200";
+
+  const video = document.getElementById('v');
+  const logEl = document.getElementById('log');
+  const srcInput = document.getElementById('srcInput');
+
+  function ts() {
+    const d = new Date();
+    return d.toTimeString().slice(0, 8) + '.' + String(d.getMilliseconds()).padStart(3, '0');
+  }
+
+  function log(msg, cls) {
+    const line = document.createElement('div');
+    if (cls) line.className = cls;
+    line.textContent = `[${ts()}] ${msg}`;
+    logEl.appendChild(line);
+    logEl.scrollTop = logEl.scrollHeight;
+    console.log(msg);
+  }
+
+  document.getElementById('clearLogBtn').addEventListener('click', () => { logEl.textContent = ''; });
+
+  document.getElementById('copyLogBtn').addEventListener('click', async () => {
+    const text = logEl.textContent;
+    try {
+      await navigator.clipboard.writeText(text);
+      log('log gekopieerd naar klembord');
+    } catch (e) {
+      // Oudere Android-webviews/geen HTTPS: clipboard API kan ontbreken --
+      // fallback via een tijdelijke, geselecteerde textarea + execCommand.
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      try {
+        document.execCommand('copy');
+        log('log gekopieerd (fallback)');
+      } catch (e2) {
+        log('kopiëren mislukt, selecteer handmatig: ' + e2.message, 'err');
+      }
+      document.body.removeChild(ta);
+    }
+  });
+
+  // --- 1. Omgeving ---
+  (function fillEnv() {
+    const t = document.getElementById('envTable');
+    const conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+    const rows = [
+      ['userAgent', navigator.userAgent],
+      ['platform', navigator.platform || '(onbekend)'],
+      ['viewport', `${window.innerWidth}x${window.innerHeight}, dpr=${window.devicePixelRatio}`],
+      ['online', String(navigator.onLine)],
+      ['connection.effectiveType', conn ? conn.effectiveType : '(niet beschikbaar)'],
+      ['connection.saveData', conn ? String(conn.saveData) : '(niet beschikbaar)'],
+    ];
+    for (const [k, v] of rows) {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td>${k}</td><td></td>`;
+      tr.children[1].textContent = v;
+      t.appendChild(tr);
+    }
+    if (conn && conn.saveData) {
+      log('LET OP: Data Saver staat aan -- Chrome kan videoladen/-preload actief beperken', 'warn');
+    }
+  })();
+
+  // --- 2. Ondersteuning ---
+  (function fillSupport() {
+    const t = document.getElementById('supportTable');
+    const rows = [
+      ['video.canPlayType(HLS)', video.canPlayType('application/vnd.apple.mpegurl') || '(leeg = niet native ondersteund)'],
+      ['window.MediaSource', typeof MediaSource !== 'undefined' ? 'aanwezig' : 'ontbreekt'],
+      ['MSE isTypeSupported(H.264/AAC)', (typeof MediaSource !== 'undefined' && MediaSource.isTypeSupported('video/mp4; codecs="avc1.64001f, mp4a.40.2"')) ? 'ja' : 'nee'],
+      ['MSE isTypeSupported(H.265/HEVC)', (typeof MediaSource !== 'undefined' && MediaSource.isTypeSupported('video/mp4; codecs="hev1.1.6.L93.90"')) ? 'ja' : 'nee'],
+      ['Hls.isSupported()', (typeof Hls !== 'undefined' && Hls.isSupported()) ? 'ja' : 'nee'],
+      ['hls.js versie', typeof Hls !== 'undefined' ? Hls.version : '(hls.js niet geladen)'],
+    ];
+    for (const [k, v] of rows) {
+      const tr = document.createElement('tr');
+      const isBad = /leeg|ontbreekt|nee \(|^nee$/.test(String(v)) && k !== 'video.canPlayType(HLS)';
+      tr.innerHTML = `<td>${k}</td><td class="${isBad ? 'fail' : ''}"></td>`;
+      tr.children[1].textContent = v;
+      t.appendChild(tr);
+    }
+    log(`ondersteuningscheck: canPlayType=${video.canPlayType('application/vnd.apple.mpegurl') || '(leeg)'}, Hls.isSupported=${typeof Hls !== 'undefined' && Hls.isSupported()}`);
+  })();
+
+  // --- 3. Manifest laden ---
+  let hls = null;
+
+  function attachVideoLogging() {
+    const events = ['loadstart', 'loadedmetadata', 'loadeddata', 'canplay', 'canplaythrough', 'playing', 'pause', 'waiting', 'stalled', 'suspend', 'abort', 'emptied', 'ended'];
+    for (const evt of events) {
+      video.addEventListener(evt, () => {
+        log(`video event: ${evt} (readyState=${video.readyState}, networkState=${video.networkState}, currentTime=${video.currentTime.toFixed(2)})`);
+      });
+    }
+    video.addEventListener('error', () => {
+      const err = video.error;
+      log(`video element ERROR: code=${err ? err.code : '?'} message=${err ? err.message : '(geen details)'}`, 'err');
+    });
+  }
+  attachVideoLogging();
+
+  function loadManifest(src) {
+    log(`--- laden: ${src}`);
+    if (hls) {
+      hls.destroy();
+      hls = null;
+    }
+    video.removeAttribute('src');
+    video.load();
+
+    // Eerst hls.js/MSE proberen, canPlayType() pas als fallback -- zie de
+    // productiefix in VideoPlayer.vue voor issue #148: sommige Android
+    // Chrome-builds rapporteren canPlayType(HLS) ten onrechte als
+    // "probably"/"maybe" terwijl native afspelen alsnog faalt met
+    // MEDIA_ERR_SRC_NOT_SUPPORTED.
+    if (typeof Hls !== 'undefined' && Hls.isSupported()) {
+      hls = new Hls({ debug: false });
+    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+      log('native HLS-pad (Safari-achtig, geen MSE): video.src rechtstreeks gezet, hls.js niet gebruikt');
+      video.src = src;
+      return;
+    } else {
+      log('geen enkel afspeelpad beschikbaar: Hls.isSupported() is false en canPlayType(HLS) is leeg', 'err');
+      return;
+    }
+    hls.loadSource(src);
+    hls.attachMedia(video);
+    // Alle events loggen (niet alleen fatale errors, zoals de productiecode
+    // vóór deze sessie deed) -- juist de niet-fatale/vroege events zijn hier
+    // interessant.
+    hls.on(Hls.Events.MEDIA_ATTACHED, () => log('hls: MEDIA_ATTACHED'));
+    hls.on(Hls.Events.MANIFEST_LOADING, () => log('hls: MANIFEST_LOADING'));
+    hls.on(Hls.Events.MANIFEST_PARSED, (_e, d) => log(`hls: MANIFEST_PARSED, levels=${d.levels.length}`));
+    hls.on(Hls.Events.LEVEL_LOADED, (_e, d) => log(`hls: LEVEL_LOADED, level=${d.level}, live=${d.details.live}`));
+    let fragCount = 0;
+    hls.on(Hls.Events.FRAG_LOADED, () => { fragCount++; if (fragCount === 1 || fragCount % 10 === 0) log(`hls: FRAG_LOADED x${fragCount}`); });
+    hls.on(Hls.Events.BUFFER_APPENDING, () => {});
+    hls.on(Hls.Events.ERROR, (_e, data) => {
+      const info = { type: data.type, details: data.details, fatal: data.fatal, response: data.response ? { code: data.response.code, text: data.response.text } : undefined, err: data.error && data.error.message };
+      log(`hls: ERROR ${JSON.stringify(info)}`, data.fatal ? 'err' : 'warn');
+    });
+  }
+
+  document.getElementById('loadBtn').addEventListener('click', () => {
+    const src = srcInput.value.trim();
+    if (!src) { log('geen URL ingevuld', 'err'); return; }
+    loadManifest(src);
+  });
+
+  document.getElementById('playMutedBtn').addEventListener('click', () => {
+    video.muted = true;
+    video.play().then(
+      () => log('play() (gedempt) -- resolved, autoplay/afspelen gelukt'),
+      (e) => log(`play() (gedempt) -- REJECTED: ${e.name}: ${e.message}`, 'err'),
+    );
+  });
+
+  document.getElementById('playUnmutedBtn').addEventListener('click', () => {
+    video.muted = false;
+    video.play().then(
+      () => log('play() (ongedempt) -- resolved, afspelen gelukt'),
+      (e) => log(`play() (ongedempt) -- REJECTED: ${e.name}: ${e.message} (dit is de MEI/autoplay-hypothese uit issue #148)`, 'err'),
+    );
+  });
+
+  // --- 4. Netwerkcheck ---
+  document.getElementById('fetchCheckBtn').addEventListener('click', async () => {
+    const src = srcInput.value.trim() || DEFAULT_SRC;
+    const t = document.getElementById('fetchTable');
+    t.innerHTML = '';
+    const addRow = (k, v, bad) => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td>${k}</td><td class="${bad ? 'fail' : ''}"></td>`;
+      tr.children[1].textContent = v;
+      t.appendChild(tr);
+    };
+    log(`fetch-check gestart voor: ${src}`);
+    try {
+      const start = performance.now();
+      const resp = await fetch(src, { mode: 'cors' });
+      const ms = Math.round(performance.now() - start);
+      addRow('status', `${resp.status} ${resp.statusText}`, !resp.ok);
+      addRow('duur', `${ms} ms`);
+      addRow('access-control-allow-origin', resp.headers.get('access-control-allow-origin') || '(ontbreekt)', !resp.headers.get('access-control-allow-origin'));
+      addRow('content-type', resp.headers.get('content-type') || '(ontbreekt)');
+      const body = await resp.text();
+      addRow('body-lengte', `${body.length} bytes`);
+      log(`fetch-check OK: status=${resp.status}, content-type=${resp.headers.get('content-type')}`);
+    } catch (e) {
+      // Een CORS- of netwerkfout (bv. door een mobiele-providerproxy die
+      // headers strip) geeft hier een generieke TypeError -- de browser
+      // verbergt de precieze reden, maar het ONDERSCHEID "fetch faalt
+      // hier ook al" vs. "fetch werkt, alleen hls.js/video faalt" is al
+      // heel bruikbaar.
+      addRow('fout', e.message, true);
+      log(`fetch-check FOUT: ${e.name}: ${e.message} (mogelijk CORS of een mobiele netwerk-/providerproxy)`, 'err');
+    }
+  });
+
+  // --- init ---
+  const params = new URLSearchParams(location.search);
+  const initialSrc = params.get('src') || DEFAULT_SRC;
+  srcInput.value = initialSrc;
+  loadManifest(initialSrc);
+</script>
+</body>
+</html>
