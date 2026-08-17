@@ -35,16 +35,30 @@ tagset als pills, klikbaar om naar dat moment te springen.
 Per argument zijn twee nieuwe velden nodig: `start_seconds` en `end_seconds`, relatief
 aan `debate_start`. De rest (`document_id`, `actor`, `typologie`, `tags`) blijft
 ongewijzigd — zie [`arguments-timed.json`](arguments-timed.json). Ontbreekt een spanne,
-val terug op `video_offset_seconds` plus een vaste duur en markeer het label als
-onzeker.
+dan is er noch een events-anker, noch een debat-brede VTT-kalibratie voor dit debat
+gelukt (zie hieronder) — zeldzaam, maar dan verdwijnt het argument uit de tijdlijn i.p.v.
+een gegokte spanne te tonen.
 
-**Spannes verrijken**
-De spannes in `arguments-timed.json` zijn geschat uit spreektempo (~2,4 woorden/sec) en
-driften dus. Zin-precies wordt het door de quote te matchen op de WebVTT-ondertitels uit
-het HLS-manifest: fuzzy match op genormaliseerde tekst, neem de cue-tijd van de eerste
-en laatste treffer. Bewaar het resultaat in de database, niet de berekening. (Dit is
-precies wat [de PoC](../../poc/video-eigen-player/poc_ownplayer.html) al aantoont te
-werken, via `video.textTracks`.)
+**Spannes verrijken** (issue #94, uitgebreid in #130 met een exact per-beurt-anker)
+Twee tiers, zie `pipeline/match_argument_spans.py` en
+[`docs/tk-data-sources-overview.md` 5f](../../tk-data-sources-overview.md):
+1. **Events-anker per sprekerbeurt** (primair): Debat Direct's eigen
+   `events`-array (`docs/tk-data-sources-overview.md` 5f) geeft een exacte,
+   drift-vrije wandklok-tijd per beurtwissel, gekoppeld via de TK-Persoon-GUID
+   (`documents.speaker_person_id`, byte-identiek aan `events[].objectId`).
+2. **WebVTT-ondertitelmatching** (verfijning binnen de beurt): de quote wordt
+   fuzzy gematcht op genormaliseerde tekst tegen de WebVTT-ondertitels uit het
+   HLS-manifest (zoals eerder, zie [de PoC](../../poc/video-eigen-player/poc_ownplayer.html),
+   via `video.textTracks`), maar nu gekalibreerd op het events-anker van déze
+   beurt i.p.v. op een mediaan voor het hele debat — dat voorkomt dat
+   tikvertraging/drift in één beurt de spannes van andere beurten scheeftrekt.
+   Levert geen enkele quote in een geankerde beurt een VTT-match op, dan valt
+   de hele beurt terug op het anker zelf plus een spreektempo-schatting van de
+   duur (~2,4 woorden/sec, zelfde schatting als `arguments-timed.json`).
+   Debatten zonder events-anker (geen `fetch-debate-events`-cache) vallen
+   volledig terug op de oorspronkelijke aanpak: één mediane VTT-kalibratie
+   voor het hele debat. Bewaar het resultaat in de database, niet de
+   berekening.
 
 **Player & sync**
 De iframe van Debat Direct geeft geen speeltijd terug (bevestigd in sectie 5a). Voor

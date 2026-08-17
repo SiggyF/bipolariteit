@@ -11,6 +11,7 @@ import xml.etree.ElementTree as ET
 
 from pipeline.ingest.ingest_tk import (
     NS,
+    _local,
     _speaker_name,
     build_parent_map,
     find_matching_activiteiten,
@@ -64,10 +65,10 @@ VLOS_ROOT = f"""<vlosCoreDocument xmlns="http://www.tweedekamer.nl/ggm/vergaderv
       <activiteitdeel>
         <activiteititem>
           <woordvoerder objectid="turn-1">
-            <spreker><achternaam>Paulusma</achternaam><voornaam>Wieke</voornaam></spreker>
+            <spreker objectid="persoon-paulusma"><achternaam>Paulusma</achternaam><voornaam>Wieke</voornaam></spreker>
             <tekst><alinea><alineaitem>Eerste opmerking.</alineaitem></alinea></tekst>
             <interrumpant objectid="turn-2">
-              <spreker><achternaam>Plas van der</achternaam><voornaam>Caroline</voornaam></spreker>
+              <spreker objectid="persoon-vanderplas"><achternaam>Plas van der</achternaam><voornaam>Caroline</voornaam></spreker>
               <tekst><alinea><alineaitem>Een interruptie.</alineaitem></alinea></tekst>
             </interrumpant>
           </woordvoerder>
@@ -162,6 +163,25 @@ def test_find_speaking_turns_includes_woordvoerder_and_interrumpant():
     turns = find_speaking_turns(activiteit)
     turn_ids = {el.attrib["objectid"] for el, _, _ in turns}
     assert turn_ids == {"turn-1", "turn-2"}
+
+
+def test_find_speaking_turns_exposes_speaker_person_id_and_turn_type():
+    # speaker_person_id (VLOS <spreker objectid>) en turn_type (de lokale
+    # tagnaam van het beurt-element) zijn wat ingest_file() bij het INSERT'en
+    # van een documents-rij afleidt (zie schema.sql) -- hier direct op de
+    # find_speaking_turns()-output geverifieerd, zonder DB.
+    root = ET.fromstring(VLOS_ROOT)
+    activiteit, _title_match = find_matching_activiteiten(root, "stikstof")[0]
+    turns = find_speaking_turns(activiteit)
+    by_turn_id = {turn_el.attrib["objectid"]: (spreker_el, turn_el) for turn_el, spreker_el, _tekst in turns}
+
+    spreker_1, turn_1 = by_turn_id["turn-1"]
+    assert spreker_1.attrib.get("objectid") == "persoon-paulusma"
+    assert _local(turn_1.tag) == "woordvoerder"
+
+    spreker_2, turn_2 = by_turn_id["turn-2"]
+    assert spreker_2.attrib.get("objectid") == "persoon-vanderplas"
+    assert _local(turn_2.tag) == "interrumpant"
 
 
 def test_activiteit_aanvangstijd_and_eindtijd_readable_on_debate_level():

@@ -426,12 +426,14 @@ def ingest_file(conn, xml_path, meta_path, topic_keyword, also_keywords=()):
 
             published_at = turn_el.findtext(NS + "markeertijdbegin") or metadata.get("activiteit_datum")
             voorzitter_turn = is_voorzitter_turn(turn_el, parent_map, content)
+            speaker_person_id = spreker_el.attrib.get("objectid")
+            turn_type = _local(turn_el.tag)
 
             conn.execute(
                 """
                 INSERT INTO documents
-                    (source_id, topic_id, actor_id, external_id, title, content, published_at, raw_ref, url, activiteit_soort, activiteit_aanvangstijd, activiteit_eindtijd, tweedekamer_activiteit_url, is_voorzitter_turn, speaker_role_title)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    (source_id, topic_id, actor_id, external_id, title, content, published_at, raw_ref, url, activiteit_soort, activiteit_aanvangstijd, activiteit_eindtijd, tweedekamer_activiteit_url, is_voorzitter_turn, speaker_role_title, speaker_person_id, turn_type)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                 (
                     source_id,
@@ -449,6 +451,8 @@ def ingest_file(conn, xml_path, meta_path, topic_keyword, also_keywords=()):
                     metadata.get("tweedekamer_activiteit_url"),
                     int(voorzitter_turn),
                     speaker_role_title,
+                    speaker_person_id,
+                    turn_type,
                 ),
             )
             inserted += 1
