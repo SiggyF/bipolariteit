@@ -485,6 +485,15 @@ h3 {
 	border-bottom: 1px solid var(--color-border);
 }
 
+/* Op de homepage is het motto het laatste element op de pagina -- de
+   onderrand-marge is daar dan gestapelde witruimte bovenop main's eigen
+   padding-bottom (main.css), en oogt te groot. Op de "Over"-pagina staat het
+   motto wel middenin de tekst, dus die basisstijl hierboven blijft daar
+   ongewijzigd. */
+.home-intro .motto {
+	margin-bottom: 0;
+}
+
 .back-link {
 	color: var(--color-muted);
 	text-decoration: none;
