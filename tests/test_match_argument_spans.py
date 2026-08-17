@@ -11,6 +11,7 @@ from pipeline.match_argument_spans import (
     match_turn_with_anchor,
     normalize_text,
     parse_vtt,
+    turn_opening_needle,
 )
 
 SAMPLE_VTT = """WEBVTT
@@ -36,6 +37,7 @@ def _row(
     speaker_person_id=None,
     turn_type="woordvoerder",
     is_voorzitter_turn=0,
+    turn_content=None,
 ):
     return {
         "id": id_,
@@ -46,6 +48,7 @@ def _row(
         "speaker_person_id": speaker_person_id,
         "turn_type": turn_type,
         "is_voorzitter_turn": is_voorzitter_turn,
+        "turn_content": turn_content,
     }
 
 
@@ -359,3 +362,60 @@ def test_calibrate_debate_falls_back_to_debate_wide_median_for_unanchored_turns(
     spans = calibrate_debate(cues, rows, events_json)
     assert spans == match_debate(cues, rows)
     assert set(spans) == {1, 2, 3}
+
+
+# --- Beurt-opening als kalibratiereferentie (i.p.v. eerste gematcht argument) ---
+
+
+def test_turn_opening_needle_strips_speaker_label_and_takes_first_words():
+    content = "Mevrouw Van der Plas (BBB): Dit zijn weer grote woorden van mevrouw Bromet. We weten allemaal dat."
+    assert turn_opening_needle(content, word_count=6) == "Dit zijn weer grote woorden van"
+
+
+def test_turn_opening_needle_returns_none_without_content():
+    assert turn_opening_needle(None) is None
+    assert turn_opening_needle("") is None
+
+
+def test_turn_opening_needle_returns_none_when_too_short_after_stripping():
+    assert turn_opening_needle("De voorzitter: Ja.") is None
+
+
+def test_match_turn_with_anchor_calibrates_on_turn_opening_not_first_matched_argument():
+    # Reproduceert de bug uit issue #130 (na de eerste live-run gerapporteerd
+    # als "argumenten komen steeds een paar seconden te vroeg"): de beurt
+    # begint met een inleidende reactie ("Dit zijn weer grote woorden...")
+    # die zelf geen geëxtraheerd argument is -- het eerste argument
+    # ("Hadden we er vier jaar gezeten...") begint pas later in de beurt.
+    # Zonder de beurt-opening als kalibratiereferentie zou dat argument
+    # exact op turn_anchor_seconds vastgepind worden, en zo de hele
+    # inleiding stilzwijgend laten verdwijnen -- elk argument in de beurt
+    # komt dan stelselmatig te vroeg te liggen.
+    cues = [
+        {"start": 1000, "end": 1010, "text": "Dit zijn weer grote woorden van mevrouw Bromet. We weten"},
+        {"start": 1042, "end": 1050, "text": "Hadden we er vier jaar gezeten dan"},
+    ]
+    running_text, offsets = build_running_index(cues)
+    turn_content = "Mevrouw Van der Plas (BBB): Dit zijn weer grote woorden van mevrouw Bromet. We weten dat."
+    rows = [_row(1, "Hadden we er vier jaar gezeten dan", published_at=None, document_id=10)]
+
+    spans = match_turn_with_anchor(cues, running_text, offsets, turn_anchor_seconds=900, turn_rows=rows, turn_content=turn_content)
+
+    # calibratie = 1000 (opening) - 900 (anker) = 100, dus het argument
+    # (rauw 1042) komt op 1042-100=942, NIET op 900 (waar het zou belanden
+    # als het eerste-gematchte-argument de referentie was).
+    assert spans == {1: (942, 950)}
+
+
+def test_match_turn_with_anchor_falls_back_to_first_matched_argument_when_opening_does_not_match():
+    # De beurt-opening zelf komt niet woordelijk in de VTT voor (VLOS vs.
+    # live-ondertiteling kunnen verschillen) -- valt dan terug op het eerste
+    # gematchte argument als referentie, zoals vóór deze fix.
+    cues = [{"start": 1042, "end": 1050, "text": "Hadden we er vier jaar gezeten dan"}]
+    running_text, offsets = build_running_index(cues)
+    turn_content = "Mevrouw Van der Plas (BBB): Dit staat helemaal niet in de ondertitels."
+    rows = [_row(1, "Hadden we er vier jaar gezeten dan", published_at=None, document_id=10)]
+
+    spans = match_turn_with_anchor(cues, running_text, offsets, turn_anchor_seconds=900, turn_rows=rows, turn_content=turn_content)
+
+    assert spans == {1: (900, 908)}

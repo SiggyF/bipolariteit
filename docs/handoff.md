@@ -54,6 +54,15 @@ sectie 5f.
   oude debat-brede mediaan volledig ongekalibreerd zou blijven, + non-regressietest dat
   `events_json=None` exact het oude gedrag reproduceert), `tests/test_ingest_tk.py`.
   `uv run pytest tests/` groen (126 tests).
+- **Na de eerste live-rollout gerapporteerd**: "argumenten komen steeds een paar
+  seconden te vroeg". Oorzaak: de kalibratie pinde het eerste gématchte ARGUMENT vast
+  op het beurt-anker, maar een beurt begint vaak met een inleidende reactie die zelf
+  geen argument is (landbouwdebat turn 40: ~42s inleiding vóór het eerste argument).
+  Fix: `turn_opening_needle()` matcht i.p.v. daarvan de beurt-tekst zélf (VLOS-content,
+  met het niet-uitgesproken sprekerlabel gestript) tegen de VTT als kalibratiereferentie
+  — zie `docs/tk-data-sources-overview.md` 5f. 5 nieuwe tests, `uv run pytest tests/`
+  groen (131 tests). Live opnieuw gedraaid (`match-video-spans --force` + `make export`)
+  vóór deze PR.
 
 ## Stand bij einde sessie (2026-08-12, validatie-experiment stijlmiddelen issue #67 + afsluiting #50) — begin hier bij een nieuwe sessie
 

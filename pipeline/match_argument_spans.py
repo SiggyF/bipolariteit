@@ -84,6 +84,14 @@ TURN_ANCHOR_WINDOW_SECONDS = 180
 SPEAKING_WORDS_PER_SECOND = 2.4
 MIN_ESTIMATED_DURATION_SECONDS = 1.0
 
+# VLOS-brontekst begint elke beurt met een sprekerlabel dat zelf niet
+# uitgesproken is (bv. "Mevrouw Van der Plas (BBB): ", "De voorzitter: ") --
+# de live-ondertiteling bevat dat label niet, dus zonder dit te strippen zou
+# de beurt-openingstekst nooit in de VTT te vinden zijn. Sprekerlabels zijn
+# altijd kort en gevolgd door een dubbele punt vlak aan het begin.
+_SPEAKER_LABEL_RE = re.compile(r"^[^:\n]{1,80}:\s*")
+TURN_OPENING_WORD_COUNT = 10
+
 
 def _ts_to_seconds(h, m, s, ms):
     return int(h) * 3600 + int(m) * 60 + int(s) + int(ms) / 1000
@@ -150,7 +158,8 @@ def fetch_candidate_arguments(conn, topic_id, force):
     span_filter = "" if force else "AND ar.start_seconds IS NULL"
     return conn.execute(
         f"""SELECT ar.id, ar.document_id, ar.quote_text, d.debatdirect_id, d.published_at,
-                   d.activiteit_aanvangstijd, d.speaker_person_id, d.turn_type, d.is_voorzitter_turn
+                   d.activiteit_aanvangstijd, d.speaker_person_id, d.turn_type, d.is_voorzitter_turn,
+                   d.content AS turn_content
             FROM arguments ar
             JOIN documents d ON d.id = ar.document_id
             WHERE ar.topic_id = ? AND d.debatdirect_id IS NOT NULL {span_filter}
@@ -310,19 +319,46 @@ def estimate_duration_seconds(quote_text):
     return max(word_count / SPEAKING_WORDS_PER_SECOND, MIN_ESTIMATED_DURATION_SECONDS)
 
 
-def match_turn_with_anchor(cues, running_text, cue_end_offsets, turn_anchor_seconds, turn_rows):
+def turn_opening_needle(turn_content, word_count=TURN_OPENING_WORD_COUNT):
+    """Eerste `word_count` woorden van een sprekerbeurt, ná het sprekerlabel
+    (zie _SPEAKER_LABEL_RE) -- bruikbaar als VTT-matching-needle om te bepalen
+    waar de beurt zélf begint, i.t.t. waar een specifiek argument daarbinnen
+    begint (zie match_turn_with_anchor). None als er te weinig tekst overblijft
+    om een betrouwbare match op te baseren."""
+    if not turn_content:
+        return None
+    stripped = _SPEAKER_LABEL_RE.sub("", turn_content, count=1)
+    words = stripped.split()[:word_count]
+    if len(words) < 4:
+        return None
+    return " ".join(words)
+
+
+def match_turn_with_anchor(cues, running_text, cue_end_offsets, turn_anchor_seconds, turn_rows, turn_content=None):
     """Eén sprekerbeurt met een Tier-1-anker (turn_anchor_seconds, in
     videoseconden). VTT-matches binnen de beurt verfijnen de exacte positie
     van elk argument, gekalibreerd op déze beurt (niet op een mediaan voor
-    het hele debat): calibration = eerste_rauwe_match_in_beurt -
-    turn_anchor_seconds, toegepast op alle gematchte quotes van die beurt --
-    de relatieve afstand tussen quotes komt van de VTT, alleen het absolute
-    ankerpunt komt van Tier 1.
+    het hele debat).
 
-    Levert geen enkele quote in de beurt een VTT-match op, dan valt de hele
-    beurt terug op het anker zelf plus een spreektempo-schatting van de duur
-    (estimate_duration_seconds) -- de eerder aspirational, nooit gebouwde
-    video_offset_seconds-fallback."""
+    Kalibratiereferentie is bij voorkeur de beurt-openingstekst zelf
+    (turn_opening_needle(turn_content)) -- niet het eerste gématchte
+    ARGUMENT: een beurt begint vaak met tekst die geen eigen argument is (bv.
+    "Voorzitter, dank u wel." of een langere inleidende reactie vóórdat het
+    eerste geëxtraheerde argument begint). Zou je in plaats daarvan het eerste
+    gématchte argument op het anker vastzetten, dan verdwijnt die inleiding
+    stilzwijgend uit de berekening en komt *elk* argument in die beurt
+    stelselmatig te vroeg te liggen, met precies de duur van die inleiding
+    (in de praktijk enkele tot enkele tientallen seconden, zie issue #130).
+
+    Lukt het niet om de beurt-opening zelf te vinden (VLOS-transcriptie en
+    live-ondertiteling kunnen verschillen), dan valt dit terug op het eerste
+    gématchte argument als kalibratiereferentie -- minder precies, maar beter
+    dan de beurt overslaan.
+
+    Levert geen enkele quote in de beurt een VTT-match op (ook de opening
+    niet), dan valt de hele beurt terug op het anker zelf plus een
+    spreektempo-schatting van de duur (estimate_duration_seconds) -- de
+    eerder aspirational, nooit gebouwde video_offset_seconds-fallback."""
     raw_matches = {}
     for row in turn_rows:
         span = find_quote_span(row["quote_text"], running_text, cue_end_offsets, cues)
@@ -330,7 +366,10 @@ def match_turn_with_anchor(cues, running_text, cue_end_offsets, turn_anchor_seco
             raw_matches[row["id"]] = span
 
     if raw_matches:
-        calibration = min(start for start, _end in raw_matches.values()) - turn_anchor_seconds
+        opening_needle = turn_opening_needle(turn_content)
+        opening_span = find_quote_span(opening_needle, running_text, cue_end_offsets, cues) if opening_needle else None
+        reference_raw_start = opening_span[0] if opening_span is not None else min(start for start, _end in raw_matches.values())
+        calibration = reference_raw_start - turn_anchor_seconds
         return {
             argument_id: (start - calibration, end - calibration)
             for argument_id, (start, end) in raw_matches.items()
@@ -373,7 +412,9 @@ def calibrate_debate(cues, debate_rows, events_json=None):
         if anchor is None:
             unanchored_rows.extend(turn_rows)
             continue
-        spans.update(match_turn_with_anchor(cues, running_text, cue_end_offsets, anchor, turn_rows))
+        spans.update(
+            match_turn_with_anchor(cues, running_text, cue_end_offsets, anchor, turn_rows, turn_content=first["turn_content"])
+        )
 
     if unanchored_rows:
         spans.update(match_debate(cues, unanchored_rows))

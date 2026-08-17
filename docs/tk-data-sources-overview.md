@@ -322,6 +322,18 @@ ondertitelklok.
   dan valt die terug op het anker zelf plus een spreektempo-schatting van de duur
   (`estimate_duration_seconds`) — de in `docs/design/videoplayer/README.md` al langer
   beschreven maar nooit gebouwde fallback.
+- **Kalibratiereferentie is de beurt-opening, niet het eerste gématchte argument**
+  (bijgesteld na de eerste live-rollout, gerapporteerd als "argumenten komen steeds
+  een paar seconden te vroeg"): een beurt begint vaak met een inleidende reactie die
+  zelf geen geëxtraheerd argument is (bv. "Dit zijn weer grote woorden van mevrouw
+  Bromet..." vóórdat het eerste argument, "Hadden we er vier jaar gezeten...", begint
+  — landbouwdebat, turn 40, ~42s verschil). Het eerste gématchte ARGUMENT op het anker
+  vastpinnen laat die inleiding stilzwijgend verdwijnen en trekt zo elk argument in de
+  beurt stelselmatig te vroeg. `turn_opening_needle()` matcht i.p.v. daarvan de eerste
+  ~10 woorden van de VLOS-beurttekst zelf (met het niet-uitgesproken sprekerlabel,
+  bv. "Mevrouw Van der Plas (BBB): ", gestript) tegen de VTT, en gebruikt dát als
+  kalibratiereferentie; lukt die match niet, dan blijft het eerste-argument-fallback
+  bestaan (beter dan de beurt overslaan).
 
 ## 6. `debatgemist.tweedekamer.nl` (legacy, dood)
 
