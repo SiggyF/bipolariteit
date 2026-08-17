@@ -1486,20 +1486,13 @@ h3 {
 		border-top: 1px solid var(--color-border);
 	}
 
-	.columns {
-		grid-template-columns: 1fr;
-	}
-
-	.column {
+	/* Onder 900px vervangt TopicView.vue de drie gegroepeerde kolommen door
+	   één samengevoegde ArgumentColumn (issue #136) -- .columns/.column
+	   komen dan niet meer in de DOM voor. .column-single is de kop-loze
+	   variant daarvan: geen kolomrand/-opvulling, want er is nog maar één. */
+	.column-single {
 		padding: 0;
 		border-left: none;
-		border-top: 1px solid var(--color-border);
-		padding-top: var(--space-3);
-	}
-
-	.column:first-child {
-		border-top: none;
-		padding-top: 0;
 	}
 
 	.filter-mobile-toggle {
@@ -1681,6 +1674,40 @@ h3 {
 	color: var(--color-muted);
 	border: 1px solid var(--color-border);
 	padding: 0.1rem 0.6rem;
+}
+
+/* Standaard verborgen: op desktop staat de stance al in de kolomkop en de
+   randkleur van .argument-card. Alleen nodig zodra kaarten niet meer per
+   stance gegroepeerd staan (samengevoegde mobiele lijst, issue #136). */
+.stance-badge {
+	display: none;
+	font-family: var(--font-mono);
+	font-size: 0.7rem;
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+	font-weight: 600;
+	padding: 0.1rem 0.6rem;
+}
+
+.stance-badge.stance-pro {
+	color: var(--color-pro);
+	border: 1px solid var(--color-pro);
+}
+
+.stance-badge.stance-contra {
+	color: var(--color-contra);
+	border: 1px solid var(--color-contra);
+}
+
+.stance-badge.stance-unclear {
+	color: var(--color-unclear);
+	border: 1px solid var(--color-unclear);
+}
+
+@media (max-width: 900px) {
+	.stance-badge {
+		display: inline-block;
+	}
 }
 
 /* Videospanne van dit argument (alleen op de debat-videopagina) --
