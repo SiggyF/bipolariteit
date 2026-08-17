@@ -298,7 +298,7 @@ def test_calibrate_debate_without_events_reproduces_match_debate_exactly():
         _row(2, "Tweede zin hier", "2026-07-01T13:35:36"),
         _row(3, "Derde zin hier", "2026-07-01T13:35:46"),
     ]
-    assert calibrate_debate(cues, rows, events_json=None) == match_debate(cues, rows)
+    assert calibrate_debate(cues, rows, events_json=None) == (match_debate(cues, rows), {})
 
 
 def test_calibrate_debate_anchors_each_turn_independently_recovers_from_single_turn_vtt_drift():
@@ -337,8 +337,20 @@ def test_calibrate_debate_anchors_each_turn_independently_recovers_from_single_t
 
     assert match_debate(cues, rows) == {}
 
-    spans = calibrate_debate(cues, rows, events_json)
+    spans, anchors = calibrate_debate(cues, rows, events_json)
     assert spans == {1: (1000, 1002), 2: (2000, 2002), 3: (4000, 4002)}
+    # anchors (issue #148-vervolg): het Tier-1-anker per beurt (document_id),
+    # als absolute wall-clock ISO8601-tijd -- exact events[].eventStart hier,
+    # want expected_seconds valt precies op het event (geen zoekvenster nodig).
+    # startedAt in deze testfixture heeft geen offset (naive), dus ook de
+    # anchors hier niet -- in het echte events-API-antwoord staat er altijd
+    # wel een offset in startedAt (zie load_events), waardoor de anchors in
+    # productie tz-aware zijn.
+    assert anchors == {
+        1: "2026-07-01T13:16:40",
+        3: "2026-07-01T13:33:20",
+        2: "2026-07-01T14:06:40",
+    }
 
 
 def test_calibrate_debate_falls_back_to_debate_wide_median_for_unanchored_turns():
@@ -359,9 +371,10 @@ def test_calibrate_debate_falls_back_to_debate_wide_median_for_unanchored_turns(
     ]
     events_json = {"startedAt": "2026-07-01T13:00:00", "events": []}  # geen enkel event matcht
 
-    spans = calibrate_debate(cues, rows, events_json)
+    spans, anchors = calibrate_debate(cues, rows, events_json)
     assert spans == match_debate(cues, rows)
     assert set(spans) == {1, 2, 3}
+    assert anchors == {}
 
 
 # --- Beurt-opening als kalibratiereferentie (i.p.v. eerste gematcht argument) ---

@@ -1698,6 +1698,29 @@ h3 {
 	margin: 0.5rem 0;
 }
 
+/* Uitgeschreven versie van tagTooltip() voor de compacte "nu in beeld"-kaart
+   (issue #149-vervolg): de title-tooltip op de tag-badges is op mobiel/touch
+   onbereikbaar (geen hover), en onder de video is wel ruimte om dit gewoon
+   leesbaar neer te zetten. */
+.compact-tag-details {
+	list-style: none;
+	padding: 0;
+	margin: 0.4rem 0;
+	font-size: 0.8rem;
+	color: var(--color-muted);
+	display: grid;
+	gap: 0.3rem;
+}
+
+.compact-tag-details strong {
+	color: var(--color-text);
+	font-weight: 600;
+}
+
+.compact-tag-details .tag-reason {
+	display: block;
+}
+
 .tags {
 	list-style: none;
 	display: flex;

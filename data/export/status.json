@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-17T07:51:24+02:00",
+  "generated_at": "2026-08-17T21:16:47+02:00",
   "topics": [
     {
       "slug": "stikstof",
@@ -84,15 +84,15 @@
       "name": "Asiel en migratie",
       "vanaf": "2023-12-06",
       "documents_total": 7820,
-      "documents_extracted": 1014,
-      "arguments_total": 885,
+      "documents_extracted": 3371,
+      "arguments_total": 2524,
       "arguments_tagged": 388,
       "documents_redactie_checked": 0,
-      "arguments_ander_onderwerp": 57,
+      "arguments_ander_onderwerp": 68,
       "ander_onderwerp_top": [
         {
           "onderwerp": "arbeidsmigratie",
-          "aantal": 34
+          "aantal": 42
         },
         {
           "onderwerp": "faunabeheer / de wolf",
@@ -135,13 +135,13 @@
         {
           "stage": "extraction",
           "model": "qwen/qwen3.6-27b",
-          "n_calls": 871,
-          "total_duration_s": 17750.9247252566,
-          "avg_duration_s": 20.37993653875614,
-          "n_errors": 1,
-          "total_completion_tokens": 176296,
+          "n_calls": 3238,
+          "total_duration_s": 60736.34519718445,
+          "avg_duration_s": 18.75736417454739,
+          "n_errors": 11,
+          "total_completion_tokens": 546975,
           "first_call_at": "2026-08-05T16:50:43.369858+00:00",
-          "last_call_at": "2026-08-15T09:14:04.786203+00:00"
+          "last_call_at": "2026-08-17T17:54:32.348305+00:00"
         },
         {
           "stage": "tagging",

@@ -31,6 +31,46 @@ def test_speaker_event_url_returns_none_without_published_at():
     assert _speaker_event_url("https://debatdirect.tweedekamer.nl/x/video", None) is None
 
 
+def test_speaker_event_url_prefers_anchor_at_over_published_at():
+    # published_at kan uren afwijken van de werkelijke spreektijd (issue
+    # #148-vervolg) -- anchor_at (het events-API-Tier-1-anker) moet dan
+    # winnen, niet alleen als tie-break.
+    video_url = "https://debatdirect.tweedekamer.nl/2026-07-01/landbouw/plenaire-zaal/stikstof-13-30/video"
+    url = _speaker_event_url(video_url, "2026-07-01T13:49:28", "2026-07-01T16:52:20+02:00")
+    assert "%2B0200" in url
+    assert "2026-07-01T16%3A52%3A20" in url
+    assert "13%3A49%3A28" not in url
+
+
+def test_speaker_event_url_falls_back_to_published_at_without_anchor():
+    video_url = "https://debatdirect.tweedekamer.nl/2026-07-01/landbouw/plenaire-zaal/stikstof-13-30/video"
+    url = _speaker_event_url(video_url, "2026-07-01T17:12:59", None)
+    assert "17%3A12%3A59" in url
+
+
+def test_speaker_event_url_uses_speaker_event_type_by_default():
+    video_url = "https://debatdirect.tweedekamer.nl/2026-07-01/landbouw/plenaire-zaal/stikstof-13-30/video"
+    url = _speaker_event_url(video_url, "2026-07-01T17:12:59")
+    assert url.split("?event=")[1].startswith("speaker")
+
+
+def test_speaker_event_url_uses_interrupter_event_type_for_interruptions():
+    # Issue #148-vervolg: een interruptie kreeg altijd het hardgecodeerde
+    # "speaker"-eventType mee, waarvoor Debat Direct op dat tijdstip geen
+    # match kon vinden (er bestaat daar geen "speaker"-event) -- de deep
+    # link sprong daardoor terug naar het begin van het debat. Geverifieerd
+    # live tegen debatdirect.tweedekamer.nl dat "interrupter" wel seekt.
+    video_url = "https://debatdirect.tweedekamer.nl/2026-07-01/landbouw/plenaire-zaal/stikstof-13-30/video"
+    url = _speaker_event_url(video_url, "2026-07-01T13:49:28", turn_type="interrumpant")
+    assert url.split("?event=")[1].startswith("interrupter")
+
+
+def test_speaker_event_url_uses_chairman_event_type_for_voorzitter_turns():
+    video_url = "https://debatdirect.tweedekamer.nl/2026-07-01/landbouw/plenaire-zaal/stikstof-13-30/video"
+    url = _speaker_event_url(video_url, "2026-07-01T13:49:28", turn_type="woordvoerder", is_voorzitter_turn=True)
+    assert url.split("?event=")[1].startswith("chairman")
+
+
 def _fresh_conn():
     conn = sqlite3.connect(":memory:")
     conn.row_factory = sqlite3.Row
