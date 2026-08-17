@@ -263,6 +263,66 @@ extraheren uit `raw_video_url` met ffmpeg?
   op de topic-tegel in `index.astro:68-79` (`.card-tile`) — dat zou naar analogie van
   `.card-tile-logo` (`main.css:699-714`) toegevoegd moeten worden.
 
+### 5f. Sprekersbeurten exact kalibreren via de events-array (issue #130, 2026-08-16)
+
+Aanleiding: sprekersbeurten in onze eigen player (zie 5b/5c) lopen merkbaar slechter
+gelijk met de video dan op debatdirect.tweedekamer.nl zelf, terwijl beide dezelfde
+ruwe video afspelen. `pipeline/match_argument_spans.py` kalibreerde tot nu toe puur op
+de WebVTT-ondertitelklok, met **één mediane offset voor het hele debat** — precies de
+klok die in 5c/5d al aantoonbaar onbetrouwbaar bleek (tot 30+ minuten drift rond een
+schorsing, en tot >100s niet-monotone drift zelfs binnen één ononderbroken
+spreekbeurt door tikvertraging van de live-stenograaf). Debat Direct zelf drift niet,
+omdat het rechtstreeks ankert op zijn eigen wandklok-events in plaats van op de
+ondertitelklok.
+
+- **De bron**: `https://api.debatdirect.tweedekamer.nl/debates/{id}` (dezelfde route
+  als 5c, nu ook de rest van de respons gebruikt) geeft een `events`-array terug:
+  per beurtwissel een `eventStart` (ISO8601-wandklok) en `eventType`
+  (`speaker`/`interrupter`/`chairman`/`chairman_change`/`chairman_selection`/
+  `speaker_motion_present`/`speaker_motion_suspend`/`suspended`/
+  `debate_start`/`debate_end`/`debate_part_start`/`debate_part_end`), plus
+  `startedAt` als het video-t=0-anker (zie ook 5d, waar dit al onafhankelijk bevestigd
+  is via de HLS-PTS-tijdbasis).
+- **`objectId` is byte-identiek aan VLOS `<spreker objectid="...">`**: geverifieerd op
+  een concreet voorbeeld (Flach/SGP, `60b927f9-0d42-40f3-921d-54d4696d7a1c`, gelijk in
+  beide bronnen) — dit is de TK-Persoon-GUID, en maakt een exacte, drift-vrije koppeling
+  mogelijk tussen een VLOS-sprekersbeurt en het bijbehorende debatdirect-event, zonder
+  enige tekst- of tijdmatching.
+- **Voorzitterbeurten mappen uitsluitend naar `eventType=chairman`, nooit naar
+  `speaker`**: geverifieerd op het landbouwdebat (`c1663929-...`) via de
+  voorzitter-GUID van Krul (`80a5d70b-e932-493d-90b4-d45fe2be522f`) — alle 254
+  matchende events waren `chairman`, met de eerste exact gelijk aan de
+  `markeertijdbegin` van die beurt in de VLOS-bron. Voorzitterbeurten zijn structureel
+  nog steeds een `<woordvoerder>`-element (zie `is_voorzitter_turn` in
+  `pipeline/ingest/ingest_tk.py`) — het onderscheid zit dus niet in de VLOS-tagnaam,
+  maar moet apart bepaald worden (`expected_event_type()` in
+  `pipeline/match_argument_spans.py`).
+- **Pilotresultaat op het landbouwdebat** (687 argumenten, 682/687 al gematcht onder de
+  oude aanpak): met een events-anker per beurt bleven `interrupter`-beurten (n=204)
+  vrijwel exact gelijk aan de oude spannes (gem. verschil 5,0s, sd 12,5s) — een goede
+  onafhankelijke bevestiging dat de oude aanpak daar al goed zat. `speaker`-beurten
+  (n=478) liepen echter gemiddeld 44,2s en in het slechtste geval 566,6s af t.o.v. de
+  oude aanpak — precies het patroon dat een mediaan-per-debat-kalibratie zou verklaren
+  wanneer individuele beurten sterk uiteenlopende tikvertraging/drift hebben.
+- **Dekking van de bestaande dataset**: alle 666 distincte `debatdirect_id`'s die al in
+  de database staan (2013–2026, 43.607 documenten) gaven bij bevraging succesvol een
+  `events`-array terug (666/666, min. 5 / mediaan 142 events per debat) — volledige
+  herkalibratie van de bestaande dataset is dus haalbaar zonder debatten te verliezen.
+  `hasSubtitles` in dezelfde respons bleek **niet** betrouwbaar als indicator (`false`
+  ook voor debatten met bevestigd werkende ondertitels) — niet gebruikt.
+- **Implementatie**: `pipeline/fetch_debate_events.py` (nieuw, cachet naar
+  `data/debate_events/<id>.json`) + `pipeline/debatdirect_api.py` (de gedeelde
+  `fetch_debate_detail()`-call, uit `fetch_subtitles.py` getrokken). Twee nieuwe
+  kolommen op `documents` (`speaker_person_id`, `turn_type`, schema.sql) koppelen een
+  VLOS-beurt aan zijn events-anker. `pipeline/match_argument_spans.py` gebruikt het
+  events-anker als primair, exact ankerpunt per beurt (`find_turn_anchor`), met de
+  WebVTT-ondertitelmatching nu als verfijning *binnen* die beurt in plaats van als
+  enige bron — en als volledige fallback (debat-brede mediaan, ongewijzigd) voor
+  debatten zonder events-cache. Levert een geankerde beurt geen enkele VTT-match op,
+  dan valt die terug op het anker zelf plus een spreektempo-schatting van de duur
+  (`estimate_duration_seconds`) — de in `docs/design/videoplayer/README.md` al langer
+  beschreven maar nooit gebouwde fallback.
+
 ## 6. `debatgemist.tweedekamer.nl` (legacy, dood)
 
 - Oude, server-side gerenderde site. Had een eigen Drupal-volltekstzoekfunctie (`search_api_views_fulltext`), gescraped door `~/src/echokamer`'s `zoeken.py` (Scrapy-spider + BeautifulSoup).

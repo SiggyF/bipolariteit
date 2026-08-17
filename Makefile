@@ -13,7 +13,7 @@ else
   RESOLVE_BASE_URL = scripts/detect_llm_base_url.sh
 endif
 
-.PHONY: help probe test test-js test-frontend ca-fixture status build dev dev-stop extract extract-agy tag tag-agy redactie validate export enrich-video tags-taxonomy db-init pipeline-status backup-db release release-dry release-www release-www-dry check-public-exposure argument-doc confrontatie-tree
+.PHONY: help probe test test-js test-frontend ca-fixture status build dev dev-stop extract extract-agy tag tag-agy redactie validate export enrich-video fetch-debate-events fetch-subtitles match-video-spans tags-taxonomy db-init pipeline-status backup-db release release-dry release-www release-www-dry check-public-exposure argument-doc confrontatie-tree
 
 help: ## Toon deze lijst
 	@grep -E '^[a-zA-Z_-]+:.*## ' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*## "}; {printf "  \033[36m%-16s\033[0m %s\n", $$1, $$2}'
@@ -78,10 +78,13 @@ export: ## SQLite -> data/export/topics/<slug>.json + topics-index.json, voor al
 enrich-video: ## Vult documents.video_url/debatdirect_id via Debat Direct, voor alle topics (geen LLM, geen netstroom nodig, gebruik pipeline.enrich_video_url --topic direct voor één topic)
 	uv run python -m pipeline.enrich_video_url
 
+fetch-debate-events: ## Cachet de debatdirect events-array (exact per-beurt-anker) per debat naar data/debate_events/, voor alle topics (voorbereiding op arguments.start_seconds/end_seconds, geen LLM, gebruik pipeline.fetch_debate_events --topic direct voor één topic)
+	uv run python -m pipeline.fetch_debate_events
+
 fetch-subtitles: ## Cachet het NL-ondertitel-VTT per debat naar data/subtitles/, voor alle topics (voorbereiding op arguments.start_seconds/end_seconds, geen LLM, gebruik pipeline.fetch_subtitles --topic direct voor één topic)
 	uv run python -m pipeline.fetch_subtitles
 
-match-video-spans: ## Vult arguments.start_seconds/end_seconds door quote_text te matchen tegen de gecachete VTT-ondertitels, voor alle topics (geen LLM, vereist fetch-subtitles vooraf, gebruik pipeline.match_argument_spans --topic direct voor één topic)
+match-video-spans: ## Vult arguments.start_seconds/end_seconds door quote_text te matchen tegen de gecachete VTT-ondertitels, gekalibreerd op de debatdirect events-anker per beurt, voor alle topics (geen LLM, vereist fetch-debate-events+fetch-subtitles vooraf, gebruik pipeline.match_argument_spans --topic direct voor één topic)
 	uv run python -m pipeline.match_argument_spans
 
 argument-doc: ## Exporteert alle pro/contra-argumenten van TOPIC (met claims/opposities) als markdown, voor handmatig structureren via Gemini -- geen LLM-call

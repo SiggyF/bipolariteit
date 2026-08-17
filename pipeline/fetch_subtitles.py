@@ -42,11 +42,11 @@ from urllib.parse import quote, urljoin
 import requests
 
 from pipeline.db import db
+from pipeline.debatdirect_api import fetch_debate_detail
 from pipeline.paths import REPO_ROOT
 
 logger = logging.getLogger(__name__)
 
-DEBATE_API_URL = "https://api.debatdirect.tweedekamer.nl/debates/{id}"
 SUBTITLES_DIR = REPO_ROOT / "data" / "subtitles"
 
 _SUBTITLE_URI_RE = re.compile(r'#EXT-X-MEDIA:TYPE=SUBTITLES.*?URI="([^"]+)"')
@@ -67,12 +67,6 @@ def fetch_pending_debates(conn, topic_id):
         (topic_id,),
     ).fetchall()
     return [(row["debatdirect_id"], bool(row["needs_raw_video_url"])) for row in rows]
-
-
-def fetch_debate_detail(session, debatdirect_id):
-    resp = session.get(DEBATE_API_URL.format(id=debatdirect_id), timeout=15)
-    resp.raise_for_status()
-    return resp.json()
 
 
 def find_subtitle_manifest_url(manifest_text, base_url):

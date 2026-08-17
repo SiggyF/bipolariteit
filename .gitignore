@@ -25,6 +25,8 @@ data/*.db.bak-*
 # WebVTT-ondertitel-cache van pipeline/fetch_subtitles.py -- lokaal
 # hergebruikt tussen runs, geen brondata om te committen.
 data/subtitles/
+# Idem, events-cache van pipeline/fetch_debate_events.py.
+data/debate_events/
 node_modules/
 frontend/dist/
 # Per release gerenderd uit deploy/wrangler.template.jsonc.

@@ -2,6 +2,59 @@
 
 Status per 2026-07-27. Zie `docs/plan.md` voor het volledige, goedgekeurde architectuurplan. Dit document is voor het vervolg: wat staat er al, wat is er onderweg ontdekt, en wat is de volgende concrete stap.
 
+## Stand bij einde sessie (2026-08-16, videokalibratie via events-API, issue #130) — begin hier bij een nieuwe sessie
+
+**Probleem**: sprekersbeurten in onze player liepen merkbaar slechter gelijk met de
+video dan op debatdirect.tweedekamer.nl zelf. Oorzaak: `pipeline/match_argument_spans.py`
+kalibreerde puur op de WebVTT-ondertitelklok met één mediane offset voor het hele debat
+— aantoonbaar onbetrouwbaar (30+ min drift rond een schorsing, niet-monotone drift
+binnen één beurt door tikvertraging van de live-stenograaf, zie #108).
+
+**Oplossing**: Debat Direct's eigen `events`-API
+(`https://api.debatdirect.tweedekamer.nl/debates/{id}`) geeft een exacte, drift-vrije
+wandklok-tijd per beurtwissel, gekoppeld via de TK-Persoon-GUID (byte-identiek aan VLOS
+`<spreker objectid>`). Volledige uitleg + pilotcijfers: `docs/tk-data-sources-overview.md`
+sectie 5f.
+
+- **Nieuwe kolommen** `documents.speaker_person_id`/`turn_type` (schema.sql + eenmalige
+  `ALTER TABLE` op de live DB) — gevuld door `ingest_tk.py` bij nieuwe imports, met
+  terugwerkende kracht via **`scripts/backfill_speaker_events_meta.py`** (nieuw). Bewust
+  topic-onafhankelijk (géén `--topic`-filter via `find_matching_activiteiten`, i.t.t.
+  `backfill_activiteit_tijden.py`): een eerste versie mét topic-matching miste 1427
+  documenten (asiel/energietransitie) omdat die topics bij de oorspronkelijke ingest
+  met `--also-keyword`/`--also-dir` verbreed zijn, nergens vastgelegd welke — de
+  uiteindelijke versie matcht rechtstreeks op `external_id` (bestaat de rij al, ongeacht
+  topic-logica) en dekte zo alsnog alle 42.920 documenten in één scan. Live gedraaid:
+  0 documenten met `speaker_person_id IS NULL` over alle 4 topics.
+- **[Issue #145](https://github.com/SiggyF/bipolariteit/issues/145) geopend**: de
+  volledige `**/*.xml`-scan (305 bestanden, sommige tot ~4MB) bleek >1 uur te kosten
+  voor deze backfill — sys-tijd domineerde ruim boven user-tijd, wijst op
+  filesystem/syscall-overhead in de devcontainer, niet op een algoritmische blow-up.
+  Niet opgelost, alleen vastgelegd (lxml/iterparse/index als mogelijke richtingen).
+- **Nieuwe pipeline-stap** `pipeline/fetch_debate_events.py` (+ Makefile-target
+  `fetch-debate-events`, tussen `enrich-video` en `fetch-subtitles`) cachet de
+  `events`-array per debat naar `data/debate_events/<id>.json`. De gedeelde
+  `fetch_debate_detail()`-call is uitgetrokken naar `pipeline/debatdirect_api.py`
+  (hergebruikt door `fetch_subtitles.py`, gedrag ongewijzigd).
+- **`pipeline/match_argument_spans.py` herzien**: twee tiers per sprekerbeurt. Tier 1
+  (nieuw): exact events-anker via `find_turn_anchor` (persoon-GUID + verwacht
+  eventType + dichtstbijzijnd tijdstip binnen 180s). Tier 2 (bestaand, nu per-beurt
+  i.p.v. per-debat): VTT-quote-matching verfijnt de positie binnen een geankerde beurt
+  (`match_turn_with_anchor`), gekalibreerd op dát beurt-anker. Debatten zonder
+  events-cache vallen volledig terug op de oorspronkelijke aanpak (`match_debate`,
+  ongewijzigd — geen regressie). Als bijvangst: de al langer gedocumenteerde maar nooit
+  gebouwde `video_offset_seconds`-achtige fallback nu wél gebouwd — een geankerde beurt
+  zonder VTT-match krijgt alsnog een spanne (anker + spreektempo-schatting van de duur),
+  i.p.v. stilzwijgend te verdwijnen.
+- **Coverage geverifieerd**: alle 666 al gekoppelde `debatdirect_id`'s (2013–2026,
+  43.607 documenten) geven succesvol een `events`-array terug — volledige herkalibratie
+  van de bestaande dataset is haalbaar zonder debatten te verliezen.
+- Tests uitgebreid: `tests/test_match_argument_spans.py` (Tier-1-functies +
+  regressiefixture die aantoont dat per-beurt-ankering een debat herstelt dat onder de
+  oude debat-brede mediaan volledig ongekalibreerd zou blijven, + non-regressietest dat
+  `events_json=None` exact het oude gedrag reproduceert), `tests/test_ingest_tk.py`.
+  `uv run pytest tests/` groen (126 tests).
+
 ## Stand bij einde sessie (2026-08-12, validatie-experiment stijlmiddelen issue #67 + afsluiting #50) — begin hier bij een nieuwe sessie
 
 **Issue #50** (stance/typology van Stage 1 naar Stage 1b verplaatsen) **gesloten**

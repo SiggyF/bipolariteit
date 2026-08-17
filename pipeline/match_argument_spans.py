@@ -1,27 +1,33 @@
 """
-Vult arguments.start_seconds/end_seconds door quote_text zin-precies te
-matchen tegen de gecachete WebVTT-ondertitel-cues (pipeline/fetch_subtitles.py),
-zoals aangetoond in de PoC (docs/poc/video-eigen-player/, zie ook
-docs/tk-data-sources-overview.md 5b/5c) en gespecificeerd in
-docs/design/videoplayer/README.md ("Spannes verrijken").
+Vult arguments.start_seconds/end_seconds, per sprekerbeurt geankerd op de
+debatdirect events-API (docs/tk-data-sources-overview.md 5f) en verfijnd met
+de gecachete WebVTT-ondertitel-cues (pipeline/fetch_subtitles.py), zoals
+gespecificeerd in docs/design/videoplayer/README.md ("Spannes verrijken").
 
-Twee stappen per debat:
-1. **Matchen**: quote_text van elk argument opzoeken als aaneengesloten,
-   genormaliseerde tekst in de cues (een quote kan over meerdere cues lopen,
-   dus lopende tekst i.p.v. cue-voor-cue-vensters). Levert per match een
-   tijdspanne op de VTT's eigen, niet bij nul beginnende klok
-   (X-TIMESTAMP-MAP, zie 5c) -- nog niet bruikbaar als videoseconden.
-2. **Calibreren**: die klok wordt per debat omgezet naar seconden-sinds-
-   videobegin door 'm te vergelijken met de al bekende, grovere schatting
-   (document.published_at t.o.v. de debat-aanvangstijd -- hetzelfde
-   `video_offset_seconds`-concept als in arguments-timed.json). De mediane
-   afwijking over alle gematchte quotes in dat debat is de kalibratie-
-   constante; één afwijkende match trekt die dankzij de mediaan niet scheef.
+Twee tiers per sprekerbeurt (VLOS-`<woordvoerder>`/`<interrumpant>`, één
+document per beurt):
 
-Quotes die niet woordelijk in de ondertitels voorkomen (VLOS-transcriptie en
-live-ondertiteling kunnen verschillen, zie de PoC-caveat) blijven simpelweg
-ongematcht -- geen gok, de frontend valt voor die argumenten terug op
-video_offset_seconds plus een vaste duur (zie het datacontract in schema.sql).
+1. **Tier 1 (primair)**: een exact, drift-vrij anker uit de debatdirect
+   events-API (pipeline/fetch_debate_events.py), gekoppeld via
+   `documents.speaker_person_id` (TK-Persoon-GUID, byte-identiek aan
+   events[].objectId) + verwacht eventType (`expected_event_type`) +
+   dichtstbijzijnde tijdstip binnen een venster (`find_turn_anchor`).
+2. **Tier 2 (verfijning/fallback)**: binnen een geankerde beurt verfijnt een
+   VTT-quote-match de exacte positie van elk argument (`match_turn_with_anchor`,
+   gekalibreerd op déze beurt, niet op een mediaan voor het hele debat). Voor
+   beurten zonder Tier-1-anker (geen events-cache, of geen matchend event
+   binnen het venster) blijft de oorspronkelijke aanpak intact: één mediane
+   VTT-kalibratie over het hele debat (`match_debate`) -- dus geen regressie
+   voor debatten waarvoor de events-API niets oplevert.
+
+Levert een VTT-match binnen een geankerde beurt niets op (VLOS-transcriptie en
+live-ondertiteling kunnen verschillen), dan valt die beurt terug op het
+Tier-1-anker zelf plus een spreektempo-schatting van de duur
+(`estimate_duration_seconds`) -- de al langer gedocumenteerde maar nooit
+gebouwde `video_offset_seconds`-fallback, nu wél geïmplementeerd nu er een
+betrouwbaar beurt-anker bestaat. Alleen wanneer noch een Tier-1-anker, noch
+een debat-brede Tier-2-kalibratie lukt, blijft een argument ongematcht
+(`start_seconds`/`end_seconds` NULL).
 
 Idempotent via arguments.start_seconds IS NULL; --force matcht opnieuw.
 
@@ -30,6 +36,7 @@ Gebruik:
 """
 
 import argparse
+import json
 import logging
 import re
 import statistics
@@ -37,6 +44,7 @@ from bisect import bisect_right
 from datetime import datetime
 
 from pipeline.db import db
+from pipeline.fetch_debate_events import DEBATE_EVENTS_DIR
 from pipeline.fetch_subtitles import SUBTITLES_DIR
 
 logger = logging.getLogger(__name__)
@@ -51,6 +59,9 @@ _NORMALIZE_RE = re.compile(r"[^a-z0-9]+")
 # toevallige woordelijke overlap zegt weinig over de klok-offset van het hele
 # debat). Telt spreekbeurten met minstens één match, niet losse argumenten --
 # meerdere argumenten in dezelfde beurt leveren maar één kalibratiepunt op.
+# Geldt alleen voor het Tier-2-only-fallbackpad (match_debate) -- voor
+# Tier-1-geankerde beurten speelt TURN_ANCHOR_WINDOW_SECONDS dezelfde
+# beschermende rol.
 MIN_MATCHES_FOR_CALIBRATION = 3
 
 # Zie het uitgebreide commentaar bij het gebruik in match_debate() (#108):
@@ -60,6 +71,18 @@ MIN_MATCHES_FOR_CALIBRATION = 3
 # niet een kapotte video. 800s ligt ruim boven de rest (max ~630s) en ruim
 # onder beide uitschieters.
 MAX_CALIBRATION_SPREAD_SECONDS = 800
+
+# Venster waarbinnen een debatdirect-event nog als hetzelfde beurt-begin
+# geldt (zie find_turn_anchor). Ruim genoeg voor de grove published_at-schatting
+# die als zoekcentrum dient, streng genoeg om nooit een verkeerde latere beurt
+# van dezelfde spreker te pakken (zie pilotonderzoek issue #130).
+TURN_ANCHOR_WINDOW_SECONDS = 180
+
+# Spreektempo-schatting voor de anker-zonder-VTT-match-fallback, zelfde
+# concept als arguments-timed.json/docs/design/videoplayer/README.md
+# ("Spannes verrijken"): ~2,4 woorden/sec.
+SPEAKING_WORDS_PER_SECOND = 2.4
+MIN_ESTIMATED_DURATION_SECONDS = 1.0
 
 
 def _ts_to_seconds(h, m, s, ms):
@@ -126,7 +149,8 @@ def find_quote_span(quote_text, running_text, cue_end_offsets, cues):
 def fetch_candidate_arguments(conn, topic_id, force):
     span_filter = "" if force else "AND ar.start_seconds IS NULL"
     return conn.execute(
-        f"""SELECT ar.id, ar.quote_text, d.debatdirect_id, d.published_at, d.activiteit_aanvangstijd
+        f"""SELECT ar.id, ar.document_id, ar.quote_text, d.debatdirect_id, d.published_at,
+                   d.activiteit_aanvangstijd, d.speaker_person_id, d.turn_type, d.is_voorzitter_turn
             FROM arguments ar
             JOIN documents d ON d.id = ar.document_id
             WHERE ar.topic_id = ? AND d.debatdirect_id IS NOT NULL {span_filter}
@@ -138,7 +162,7 @@ def fetch_candidate_arguments(conn, topic_id, force):
 def _expected_offset_seconds(published_at, activiteit_aanvangstijd):
     """Grove schatting van de spreekbeurt-start t.o.v. het debatbegin --
     zelfde `video_offset_seconds`-concept als arguments-timed.json, hier
-    gebruikt als kalibratie-anker in plaats van als eindresultaat."""
+    gebruikt als kalibratie-anker in het Tier-2-only-fallbackpad."""
     if not published_at or not activiteit_aanvangstijd:
         return None
     return (datetime.fromisoformat(published_at) - datetime.fromisoformat(activiteit_aanvangstijd)).total_seconds()
@@ -147,7 +171,12 @@ def _expected_offset_seconds(published_at, activiteit_aanvangstijd):
 def match_debate(cues, rows):
     """rows: argumenten van één debat (zelfde debatdirect_id). Retourneert
     {argument_id: (start_seconds, end_seconds)} in videoseconden, alleen voor
-    argumenten die zowel matchten als binnen een kalibreerbaar debat vielen."""
+    argumenten die zowel matchten als binnen een kalibreerbaar debat vielen.
+
+    Dit is het Tier-2-only-fallbackpad: één mediane kalibratie-offset over
+    het hele debat, gebruikt voor beurten zonder Tier-1-anker (zie
+    calibrate_debate) -- ongewijzigd t.o.v. de oorspronkelijke aanpak, dus
+    geen regressie voor debatten waarvoor de events-API niets oplevert."""
     running_text, cue_end_offsets = build_running_index(cues)
 
     raw_matches = {}  # argument_id -> (raw_start, raw_end)
@@ -205,6 +234,153 @@ def match_debate(cues, rows):
     }
 
 
+def load_events(events_json):
+    """events_json: geparste inhoud van data/debate_events/<id>.json
+    ({"startedAt": ..., "events": [...]}). Retourneert (started_at, events)
+    met events als lijst van {"video_seconds", "eventType", "objectId"} --
+    eventStart - startedAt is hier al één keer vooraf omgerekend naar
+    videoseconden, zodat find_turn_anchor alleen nog met getallen hoeft te
+    vergelijken."""
+    started_at = datetime.fromisoformat(events_json["startedAt"])
+    events = []
+    for e in events_json.get("events", []):
+        event_type = e.get("eventType")
+        object_id = e.get("objectId")
+        event_start_raw = e.get("eventStart")
+        if not event_type or not object_id or not event_start_raw:
+            continue
+        event_start = datetime.fromisoformat(event_start_raw)
+        events.append(
+            {
+                "video_seconds": (event_start - started_at).total_seconds(),
+                "eventType": event_type,
+                "objectId": object_id,
+            }
+        )
+    return started_at, events
+
+
+def expected_event_type(turn_type, is_voorzitter_turn):
+    """Welk debatdirect-eventType bij deze VLOS-beurt hoort. Voorzitterbeurten
+    (structureel nog steeds een <woordvoerder>-element) blijken in de
+    events-API uitsluitend als 'chairman' voor te komen, nooit 'speaker' --
+    geverifieerd op c1663929-... (zie docs/tk-data-sources-overview.md 5f)."""
+    if turn_type == "interrumpant":
+        return "interrupter"
+    if is_voorzitter_turn:
+        return "chairman"
+    return "speaker"
+
+
+def expected_turn_seconds(published_at, started_at):
+    """published_at (VLOS markeertijdbegin, mogelijk zonder tijdzone) omgezet
+    naar videoseconden t.o.v. started_at (het video-t=0-anker uit de
+    events-API) -- het zoekcentrum voor find_turn_anchor, niet het
+    uiteindelijke resultaat."""
+    if not published_at:
+        return None
+    target = datetime.fromisoformat(published_at)
+    if target.tzinfo is None:
+        target = target.replace(tzinfo=started_at.tzinfo)
+    return (target - started_at).total_seconds()
+
+
+def find_turn_anchor(events, speaker_person_id, event_type, expected_seconds, window_seconds=TURN_ANCHOR_WINDOW_SECONDS):
+    """Dichtstbijzijnde event met matchend objectId + eventType binnen
+    `window_seconds` van `expected_seconds`, in videoseconden. None als er
+    geen kandidaat is, of de dichtstbijzijnde toch te ver weg ligt (voorkomt
+    dat een andere, latere beurt van dezelfde spreker per ongeluk als anker
+    voor déze beurt gebruikt wordt)."""
+    if speaker_person_id is None or expected_seconds is None:
+        return None
+    candidates = [e for e in events if e["objectId"] == speaker_person_id and e["eventType"] == event_type]
+    if not candidates:
+        return None
+    best = min(candidates, key=lambda e: abs(e["video_seconds"] - expected_seconds))
+    if abs(best["video_seconds"] - expected_seconds) > window_seconds:
+        return None
+    return best["video_seconds"]
+
+
+def estimate_duration_seconds(quote_text):
+    """Spreektempo-schatting van de duur van een quote (zelfde concept als
+    arguments-timed.json), gebruikt als een geankerde beurt geen enkele
+    VTT-match oplevert."""
+    word_count = len(quote_text.split())
+    return max(word_count / SPEAKING_WORDS_PER_SECOND, MIN_ESTIMATED_DURATION_SECONDS)
+
+
+def match_turn_with_anchor(cues, running_text, cue_end_offsets, turn_anchor_seconds, turn_rows):
+    """Eén sprekerbeurt met een Tier-1-anker (turn_anchor_seconds, in
+    videoseconden). VTT-matches binnen de beurt verfijnen de exacte positie
+    van elk argument, gekalibreerd op déze beurt (niet op een mediaan voor
+    het hele debat): calibration = eerste_rauwe_match_in_beurt -
+    turn_anchor_seconds, toegepast op alle gematchte quotes van die beurt --
+    de relatieve afstand tussen quotes komt van de VTT, alleen het absolute
+    ankerpunt komt van Tier 1.
+
+    Levert geen enkele quote in de beurt een VTT-match op, dan valt de hele
+    beurt terug op het anker zelf plus een spreektempo-schatting van de duur
+    (estimate_duration_seconds) -- de eerder aspirational, nooit gebouwde
+    video_offset_seconds-fallback."""
+    raw_matches = {}
+    for row in turn_rows:
+        span = find_quote_span(row["quote_text"], running_text, cue_end_offsets, cues)
+        if span is not None:
+            raw_matches[row["id"]] = span
+
+    if raw_matches:
+        calibration = min(start for start, _end in raw_matches.values()) - turn_anchor_seconds
+        return {
+            argument_id: (start - calibration, end - calibration)
+            for argument_id, (start, end) in raw_matches.items()
+        }
+
+    return {
+        row["id"]: (turn_anchor_seconds, turn_anchor_seconds + estimate_duration_seconds(row["quote_text"]))
+        for row in turn_rows
+    }
+
+
+def calibrate_debate(cues, debate_rows, events_json=None):
+    """Eén debat (rows = argumenten met dezelfde debatdirect_id), side-effect-
+    vrij (geen DB/disk-IO -- events_json is al ingelezen door de aanroeper).
+    Retourneert {argument_id: (start_seconds, end_seconds)}.
+
+    events_json=None reproduceert exact match_debate()'s gedrag (Tier-2-only,
+    debat-brede mediaan) -- de niet-regressie-garantie voor debatten zonder
+    events-cache. Met events_json: elke beurt (gegroepeerd op document_id)
+    krijgt eerst een Tier-1-poging (find_turn_anchor); lukt die niet, dan valt
+    alleen díe beurt terug op het Tier-2-debat-brede pad, niet het hele
+    debat."""
+    if events_json is None:
+        return match_debate(cues, debate_rows)
+
+    running_text, cue_end_offsets = build_running_index(cues)
+    started_at, events = load_events(events_json)
+
+    rows_by_turn = {}
+    for row in debate_rows:
+        rows_by_turn.setdefault(row["document_id"], []).append(row)
+
+    spans = {}
+    unanchored_rows = []
+    for turn_rows in rows_by_turn.values():
+        first = turn_rows[0]
+        event_type = expected_event_type(first["turn_type"], first["is_voorzitter_turn"])
+        expected_seconds = expected_turn_seconds(first["published_at"], started_at)
+        anchor = find_turn_anchor(events, first["speaker_person_id"], event_type, expected_seconds)
+        if anchor is None:
+            unanchored_rows.extend(turn_rows)
+            continue
+        spans.update(match_turn_with_anchor(cues, running_text, cue_end_offsets, anchor, turn_rows))
+
+    if unanchored_rows:
+        spans.update(match_debate(cues, unanchored_rows))
+
+    return spans
+
+
 def match(topic_keyword, dry_run=False, force=False):
     conn = db.connect()
     topic_row = conn.execute("SELECT id FROM topics WHERE slug = ?", (topic_keyword,)).fetchone()
@@ -246,7 +422,11 @@ def _match_topic(conn, topic_id, dry_run=False, force=False):
             continue
 
         cues = parse_vtt(cache_path.read_text())
-        spans = match_debate(cues, debate_rows)
+
+        events_path = DEBATE_EVENTS_DIR / f"{debatdirect_id}.json"
+        events_json = json.loads(events_path.read_text()) if events_path.exists() else None
+        spans = calibrate_debate(cues, debate_rows, events_json)
+
         if not spans and len(debate_rows) > 0:
             uncalibrated += len(debate_rows)
 
