@@ -75,6 +75,11 @@ const latestDebateTopicName = latestDebate
 	.latest-debate {
 		max-width: min(720px, 100%);
 		margin: var(--space-3) 0 var(--space-4);
+		/* Zelfde reden als min-width: 0 op .player-column in
+		   DebateVideoView.vue: dit is een grid-item, dat anders zijn
+		   inhoud (uiteindelijk de niet-wrappende .controls-row-knoppen)
+		   de hele pagina breder dan de viewport kan laten duwen. */
+		min-width: 0;
 	}
 
 	.latest-debate-heading {

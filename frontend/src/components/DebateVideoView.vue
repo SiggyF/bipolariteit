@@ -262,6 +262,12 @@ onUnmounted(() => {
 
 .player-column {
 	width: 60%;
+	/* Flex-items krijgen standaard min-width: auto (= min-content van hun
+	   inhoud) -- zonder dit duwt een niet-wrappende rij knoppen
+	   (.controls-row in VideoPlayer.vue) deze kolom, en daarmee de hele
+	   pagina, breder dan de viewport (zichtbaar als een ontbrekende
+	   rechtermarge op mobiel). */
+	min-width: 0;
 }
 
 .argument-column {

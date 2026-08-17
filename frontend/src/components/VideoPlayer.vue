@@ -291,6 +291,11 @@ video {
 	align-items: center;
 	gap: var(--space-2);
 	padding: var(--space-1) 0;
+	/* Vangnet naast de min-width: 0-fixes in DebateVideoView.vue/index.astro:
+	   op een erg smal scherm scrollt deze rij dan lokaal i.p.v. de pagina
+	   breder te duwen dan de viewport. */
+	max-width: 100%;
+	overflow-x: auto;
 }
 
 /* Zelfde uitgangspunten als de .btn/.btn-icon-knoppen uit het
