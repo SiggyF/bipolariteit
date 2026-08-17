@@ -37,13 +37,25 @@ export function prevArgumentBefore(args: Argument[], beforeSeconds: number): Arg
 	return result;
 }
 
-/** Tot drie tags van dit argument, gesorteerd op zeldzaamheid binnen dit
+/** Prioriteitsgroep vóór de zeldzaamheidssortering: drogredenen eerst, dan
+ * stijlmiddelen, dan de rest -- zo blijft een aanwezige drogreden/stijlfiguur
+ * zichtbaar ook als er toevallig een zeldzamere tag uit een andere categorie
+ * meedoet in hetzelfde argument, i.p.v. dat puur op zeldzaamheid te laten
+ * aankomen. */
+function badgePriority(sleutel: string): number {
+	if (sleutel.startsWith("Drogreden-")) return 0;
+	if (sleutel.startsWith("Stijl-")) return 1;
+	return 2;
+}
+
+/** Tot drie tags van dit argument: eerst gegroepeerd op prioriteit
+ * (badgePriority hierboven), daarbinnen gesorteerd op zeldzaamheid binnen dit
  * debat (documentfrequentie, niet globaal) zodat generieke tags als
- * Actor-Politicus wegvallen en wat afwijkt -- meestal de drogreden --
- * bovenaan komt. Tie-break op perspectief (alfabetisch, voor een stabiele
- * volgorde). `isVisible` filtert kandidaten (bv. een uitgezet perspectief
- * in de tijdlijn-legenda) zonder de frequentietelling zelf te beïnvloeden --
- * die blijft over alle tags van het debat gaan, ook verborgen tags. */
+ * Actor-Politicus wegvallen en wat afwijkt bovenaan komt. Tie-break op
+ * perspectief (alfabetisch, voor een stabiele volgorde). `isVisible` filtert
+ * kandidaten (bv. een uitgezet perspectief in de tijdlijn-legenda) zonder de
+ * frequentietelling zelf te beïnvloeden -- die blijft over alle tags van het
+ * debat gaan, ook verborgen tags. */
 export function selectBadgeTags(
 	argument: Argument,
 	argsInThisDebate: Argument[],
@@ -58,6 +70,8 @@ export function selectBadgeTags(
 	return argument.tags
 		.filter(isVisible)
 		.sort((a, b) => {
+			const priorityDiff = badgePriority(a.sleutel) - badgePriority(b.sleutel);
+			if (priorityDiff !== 0) return priorityDiff;
 			const freqDiff = (frequency.get(a.sleutel) ?? 0) - (frequency.get(b.sleutel) ?? 0);
 			if (freqDiff !== 0) return freqDiff;
 			return a.perspectief.localeCompare(b.perspectief);

@@ -124,4 +124,19 @@ describe("selectBadgeTags", () => {
 		const result = selectBadgeTags(target, [target]).map((t) => t.sleutel);
 		expect(result).toEqual(["Y", "X"]);
 	});
+
+	it("geeft Drogreden- en Stijl-tags voorrang boven zeldzaamheid", () => {
+		// "Zeldzaam" komt hier maar één keer voor (frequentie 1) en zou zonder
+		// prioritering als eerste getoond worden -- de drogreden/stijl-tags
+		// moeten 'm toch voorgaan, ook al zijn ze binnen dit debat vaker
+		// gebruikt (frequentie 2).
+		const drogreden = tag("Drogreden-Stropop");
+		const stijl = tag("Stijl-Herhaling");
+		const zeldzaam = tag("Zeldzaam-Ding");
+		const target = argument({ id: 1, tags: [zeldzaam, stijl, drogreden] });
+		const debate = [target, argument({ id: 2, tags: [drogreden, stijl] })];
+
+		const result = selectBadgeTags(target, debate).map((t) => t.sleutel);
+		expect(result).toEqual(["Drogreden-Stropop", "Stijl-Herhaling", "Zeldzaam-Ding"]);
+	});
 });
