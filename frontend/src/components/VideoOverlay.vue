@@ -80,11 +80,22 @@ const introBadge = computed(() => {
 
 // Categorie + perspectief gaan niet meer altijd zichtbaar op de badge (te
 // veel tekst over het beeld), maar in de title-tooltip bij hover.
+//
+// sleutel is opgebouwd als "Categorie-Subtype" (bv. "Drogreden-Ad-Hominem");
+// op mobiel is er geen ruimte voor het volledige label, dus valt de
+// categorie daar weg ("Ad Hominem") -- de volledige tekst blijft wel in de
+// title-tooltip en op desktop (zie de mobiele media query hieronder).
+function shortTagLabel(sleutel: string): string {
+	const parts = sleutel.split("-");
+	return parts.length > 1 ? parts.slice(1).join(" ") : sleutel;
+}
+
 const badges = computed(() =>
 	active.value.flatMap((argument) =>
 		selectBadgeTags(argument, props.arguments, isVisible).map((tag) => ({
 			key: `${argument.id}-${tag.sleutel}`,
 			label: tag.sleutel,
+			shortLabel: shortTagLabel(tag.sleutel),
 			iconPad: tagIconPath(tag.sleutel),
 			color: colorByPerspective.get(tag.perspectief) ?? "var(--color-muted)",
 			tooltip: tag.reden
@@ -121,7 +132,10 @@ const badges = computed(() =>
 						<path :d="badge.iconPad" fill="none" stroke="currentColor" stroke-width="2" />
 					</svg>
 				</span>
-				<span class="badge-label">{{ badge.label }}</span>
+				<span class="badge-label">
+					<span class="badge-label-full">{{ badge.label }}</span>
+					<span class="badge-label-short">{{ badge.shortLabel }}</span>
+				</span>
 			</div>
 		</TransitionGroup>
 		<div v-if="nameplate" class="bottom-block">
@@ -330,6 +344,10 @@ const badges = computed(() =>
 	white-space: nowrap;
 }
 
+.badge-label-short {
+	display: none;
+}
+
 .badge-enter-active {
 	transition: opacity 0.2s;
 }
@@ -377,6 +395,18 @@ const badges = computed(() =>
 	.badge-icon-circle {
 		width: 1.1em;
 		height: 1.1em;
+	}
+
+	/* Geen ruimte voor "Drogreden Ad Hominem" -- toon alleen "Ad Hominem"
+	   (de volledige tekst blijft beschikbaar via de title-tooltip en op
+	   desktop, en staat er sowieso bij in de "nu in beeld"-kaart onder de
+	   video, zie ArgumentCard.vue). */
+	.badge-label-full {
+		display: none;
+	}
+
+	.badge-label-short {
+		display: inline;
 	}
 
 	.badges {

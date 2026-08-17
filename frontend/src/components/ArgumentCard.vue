@@ -9,6 +9,7 @@ import { userScroll } from "../lib/userScroll";
 import { slugify } from "../lib/slug";
 import { stanceLabel, typologyLabel, typologyDescription, type Argument, type Tag } from "../lib/types";
 import { formatClock } from "../lib/videoTime";
+import { selectBadgeTags } from "../lib/videoLabels";
 import PartyLogo from "./PartyLogo.vue";
 
 function tagTooltip(tag: Tag): string {
@@ -28,11 +29,22 @@ const props = defineProps<{
 	playing?: boolean;
 	// Compacte variant voor krappe plekken (bv. de "nu in beeld"-kaart op de
 	// homepage, issue #135): alleen partijlogo + naam·partij + tijdcode + één
-	// rij badges (stance/typologie/eerste tag), zonder citaat/claims/links/
-	// feedback -- die passen niet naast/onder de speler.
+	// rij badges (stance/typologie/tot 3 tags met linkje naar de tagpagina),
+	// zonder citaat/claims/feedback -- die passen niet naast/onder de speler.
 	compact?: boolean;
+	// Voor de tagselectie in de compacte variant (zelfde selectie/volgorde als
+	// de video-overlaybadges, issue #149-vervolg): alle argumenten van dit
+	// debat (voor de zeldzaamheidssortering) en de per-perspectief
+	// zichtbaarheidstoggle die VideoOverlay.vue ook gebruikt. Zonder
+	// argumentsInDebate valt selectBadgeTags terug op alleen dit argument.
+	argumentsInDebate?: Argument[];
+	off?: Record<string, boolean>;
 }>();
 const emit = defineEmits<{ seek: [seconds: number] }>();
+
+const compactTags = computed(() =>
+	selectBadgeTags(props.argument, props.argumentsInDebate ?? [props.argument], (tag) => !props.off?.[tag.perspectief]),
+);
 
 const isSeekable = computed(() => !!props.videoContext && props.argument.start_seconds !== null);
 
@@ -150,7 +162,12 @@ watch(
 		<div class="argument-meta">
 			<span v-if="compact" class="stance-dot" :class="`stance-${argument.stance}`" :title="stanceLabel(argument.stance)"></span>
 			<span class="typology-badge" :title="typologyDescription(argument.typology)">{{ typologyLabel(argument.typology) }}</span>
-			<span v-if="compact && argument.tags[0]" class="tag-badge">{{ argument.tags[0].sleutel }}</span>
+			<template v-if="compact">
+				<span v-for="tag in compactTags" :key="tag.sleutel" class="tag-item">
+					<span class="tag-badge" :title="tagTooltip(tag)">{{ tag.sleutel }}</span>
+					<a class="tag-link" :href="`/tags/${slugify(tag.sleutel)}/`" title="Bekijk tagpagina (definitie)">↗</a>
+				</span>
+			</template>
 			<span v-if="videoContext && argument.start_seconds !== null" class="argument-span" title="Videospanne van dit argument">
 				{{ formatClock(argument.start_seconds) }}–{{ formatClock(argument.end_seconds ?? argument.start_seconds) }}
 			</span>

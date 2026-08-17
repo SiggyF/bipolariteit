@@ -242,7 +242,16 @@ onUnmounted(() => {
 		     voor de volledige lijst, wel voor één compacte "nu in beeld"-kaart
 		     (issue #135). -->
 		<div v-else-if="nowPlaying" class="now-playing">
-			<ArgumentCard :argument="nowPlaying" :topic-slug="props.topicSlug" compact video-context :playing="true" @seek="requestSeek" />
+			<ArgumentCard
+				:argument="nowPlaying"
+				:topic-slug="props.topicSlug"
+				compact
+				video-context
+				:playing="true"
+				:arguments-in-debate="props.arguments"
+				:off="off"
+				@seek="requestSeek"
+			/>
 		</div>
 	</div>
 </template>
