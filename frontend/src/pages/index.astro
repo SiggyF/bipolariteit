@@ -1,9 +1,12 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import DebateVideoView from "../components/DebateVideoView.vue";
+import { debateId } from "../lib/debateId";
 import { debateName } from "../lib/debateName";
+import { debateThumbnailUrl } from "../lib/debateThumbnail";
 import { findLatestDebate } from "../lib/latestDebate";
 import { formatDate } from "../lib/formatDate";
+import { groupByDebate } from "../lib/groupByDebate";
 
 const topicModules = import.meta.glob("../../../data/export/topics/*.json", { eager: true });
 
@@ -15,6 +18,40 @@ const latestDebateDate = latestDebate ? formatDate(latestDebate.earliestPublishe
 const latestDebateTopicName = latestDebate
 	? (Object.values(topicModules as any).find((mod: any) => mod.default.slug === latestDebate.topicSlug) as any)?.default.name
 	: null;
+
+// Redactionele keuze (geen automatische selectie): vier debatten met veel
+// argumenten, verspreid over topics, video bevestigd werkend (zie issue
+// #152 / pipeline/check_video_urls.py). Vier i.p.v. drie omdat dat op
+// .card-grid's auto-fill-kolommen (main.css) evenwichtiger uitlijnt (2x2
+// i.p.v. een half-lege laatste rij).
+const HIGHLIGHTED_DEBATE_IDS = ["1223sv0", "n6wbek", "oo1q3d", "1r1bopd"];
+
+const topicNameBySlug = new Map(
+	Object.values(topicModules as any).map((mod: any) => [mod.default.slug, mod.default.name]),
+);
+const allDebates = groupByDebate(
+	Object.values(topicModules as any).map((mod: any) => ({ slug: mod.default.slug, arguments: mod.default.arguments })),
+);
+const debatesById = new Map(allDebates.map((debate) => [debate.id, debate]));
+const highlightedDebates = HIGHLIGHTED_DEBATE_IDS.map((id) => debatesById.get(id)).filter(
+	(debate): debate is NonNullable<typeof debate> => debate != null,
+);
+
+// Zelfde "eerste argument met een gematchte videospanne"-aanpak als Python's
+// _topic_image_url (pipeline/build_static_data.py), maar hier per debat i.p.v.
+// per topic -- vandaar een losse scan i.p.v. iets uit groupByDebate() te
+// hergebruiken, die alleen aantallen bijhoudt en geen argument-referentie.
+const highlightedThumbnails = new Map<string, string>();
+for (const mod of Object.values(topicModules as any) as any[]) {
+	for (const argument of mod.default.arguments) {
+		const rawVideoUrl = argument.document.raw_video_url;
+		if (!rawVideoUrl) continue;
+		const id = debateId(rawVideoUrl);
+		if (!HIGHLIGHTED_DEBATE_IDS.includes(id) || highlightedThumbnails.has(id)) continue;
+		const url = debateThumbnailUrl(argument.document.video_url, argument.document.published_at, argument.start_seconds);
+		if (url) highlightedThumbnails.set(id, url);
+	}
+}
 ---
 
 <BaseLayout title="Bipolariteit">
@@ -45,6 +82,27 @@ const latestDebateTopicName = latestDebate
 					</p>
 					<p class="motto">"We listen and we don't judge."</p>
 				</div>
+				{highlightedDebates.length > 0 && (
+					<section class="highlighted-debates">
+						<h2>Uitgelicht</h2>
+						<ul class="card-grid">
+							{highlightedDebates.map((debate) => (
+								<li>
+									<a href={`/debatten/${debate.id}/`} class="card-tile">
+										{highlightedThumbnails.has(debate.id) && (
+											<span class="card-tile-image">
+												<img src={highlightedThumbnails.get(debate.id)} alt="" loading="lazy" />
+											</span>
+										)}
+										<span class="card-tile-name">{debate.name ?? "Debat"}</span>
+										<span class="card-tile-subtitle">{topicNameBySlug.get(debate.topicSlug) ?? debate.topicSlug}</span>
+										<span class="card-tile-count">{formatDate(debate.earliestPublishedAt)} · {debate.argumentCount} argumenten</span>
+									</a>
+								</li>
+							))}
+						</ul>
+					</section>
+				)}
 			</div>
 </BaseLayout>
 
@@ -60,7 +118,7 @@ const latestDebateTopicName = latestDebate
 
 	@media (min-width: 901px) {
 		.home {
-			grid-template-areas: "intro" "video";
+			grid-template-areas: "intro" "video" "highlighted";
 		}
 
 		.home-intro {
@@ -69,6 +127,10 @@ const latestDebateTopicName = latestDebate
 
 		.latest-debate {
 			grid-area: video;
+		}
+
+		.highlighted-debates {
+			grid-area: highlighted;
 		}
 	}
 
@@ -96,5 +158,13 @@ const latestDebateTopicName = latestDebate
 
 	.latest-debate-link {
 		margin-top: var(--space-2);
+	}
+
+	/* Bredere kolommen dan .card-grid's 140px-default (main.css): een
+	   debattitel ("Samenhangende aanpak landbouw natuur en stikstof") is een
+	   stuk langer dan een partij- of onderwerpnaam en verdrinkt anders in
+	   drie/vier regels op een te smalle tegel. */
+	.highlighted-debates .card-grid {
+		grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
 	}
 </style>

@@ -4,6 +4,7 @@ import ArgumentCard from "./ArgumentCard.vue";
 import VideoOverlay from "./VideoOverlay.vue";
 import VideoPlayer from "./VideoPlayer.vue";
 import VideoTimeline from "./VideoTimeline.vue";
+import { debateThumbnailUrl } from "../lib/debateThumbnail";
 import { PERSPECTIEVEN } from "../lib/tagIcons.generated";
 import { perspectiefWeergaveNaam } from "../lib/tagIcon";
 import type { Argument } from "../lib/types";
@@ -28,6 +29,18 @@ const props = withDefaults(
 );
 
 const rawVideoUrl = props.arguments[0]?.document.raw_video_url ?? null;
+
+// Still voor het <video>-element z'n `poster` (issue: zwart vlak vóórdat
+// hls.js het manifest geladen heeft) -- eerste argument in dit debat met een
+// gematchte videospanne, zelfde aanpak als de homepage-kaarten
+// (frontend/src/pages/index.astro) en Python's _topic_image_url.
+const posterUrl = computed(() => {
+	for (const argument of props.arguments) {
+		const url = debateThumbnailUrl(argument.document.video_url, argument.document.published_at, argument.start_seconds);
+		if (url) return url;
+	}
+	return null;
+});
 
 // Inklapbare argumentenlijst: elders (bv. de homepage-teaser van het laatste
 // debat) moet dezelfde view compact passen zonder de hele lijst permanent te
@@ -164,6 +177,7 @@ onUnmounted(() => {
 			<div v-if="rawVideoUrl" class="player-stage">
 				<VideoPlayer
 					:src="rawVideoUrl"
+					:poster="posterUrl"
 					:seek-to="videoSeek.seconds"
 					:seek-token="videoSeek.token"
 					:initial-muted="props.initialMuted"
