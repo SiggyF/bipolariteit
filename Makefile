@@ -84,6 +84,9 @@ fetch-debate-events: ## Cachet de debatdirect events-array (exact per-beurt-anke
 fetch-subtitles: ## Cachet het NL-ondertitel-VTT per debat naar data/subtitles/, voor alle topics (voorbereiding op arguments.start_seconds/end_seconds, geen LLM, gebruik pipeline.fetch_subtitles --topic direct voor één topic)
 	uv run python -m pipeline.fetch_subtitles
 
+check-video-urls: ## Controleert of opgeslagen raw_video_url-manifesten nog afspeelbaar zijn (master + eerste video-rendition), voor alle topics (geen LLM, geen netstroom nodig, gebruik pipeline.check_video_urls --topic/--limit voor een subset)
+	uv run python -m pipeline.check_video_urls
+
 match-video-spans: ## Vult arguments.start_seconds/end_seconds door quote_text te matchen tegen de gecachete VTT-ondertitels, gekalibreerd op de debatdirect events-anker per beurt, voor alle topics (geen LLM, vereist fetch-debate-events+fetch-subtitles vooraf, gebruik pipeline.match_argument_spans --topic direct voor één topic)
 	uv run python -m pipeline.match_argument_spans
 
