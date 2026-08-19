@@ -15,6 +15,11 @@ import { formatClock } from "../lib/videoTime";
 
 const props = defineProps<{
 	src: string;
+	// Still die zichtbaar is zolang hls.js het manifest nog niet geladen heeft
+	// (anders is dat zwart, zie DebateVideoView.vue's posterUrl); `null` als er
+	// geen still bepaald kon worden (bv. geen argument met een gematchte
+	// videospanne).
+	poster?: string | null;
 	seekTo: number | null;
 	seekToken: number;
 	initialMuted?: boolean;
@@ -168,7 +173,7 @@ defineExpose({ fatalError });
 <template>
 	<div class="video-player">
 		<div class="video-stage">
-			<video v-show="!fatalError" ref="videoEl" playsinline></video>
+			<video v-show="!fatalError" ref="videoEl" playsinline :poster="poster ?? undefined"></video>
 			<p v-if="fatalError" class="video-fallback">
 				De video kan nu niet worden afgespeeld (het onderliggende manifest is ongedocumenteerd en kan gemigreerd
 				zijn). Probeer het later opnieuw, of bekijk het debat rechtstreeks bij de Tweede Kamer.

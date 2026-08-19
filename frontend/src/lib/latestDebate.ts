@@ -14,6 +14,16 @@ export interface LatestDebate {
 	earliestPublishedAt: string | null;
 }
 
+// Handmatige uitsluitlijst voor debatten waarvan bevestigd is dat de video
+// niet afspeelt (bv. via pipeline/check_video_urls.py) -- zonder deze lijst
+// zou "laatste debat" op de homepage zo'n kapotte video tonen totdat de bron
+// het zelf weer oplost, wat voor dit specifieke debat niet lijkt te gebeuren
+// (zie issue #152: alle vijf video-renditions geven HTTP 400 bij de Tweede
+// Kamer zelf, alleen de audio-only rendition werkt nog). Bewust hier
+// hardgecodeerd i.p.v. een gepersisteerde databasevlag: dit komt zelden voor
+// en handmatig een id toevoegen/verwijderen is voor nu genoeg.
+const BROKEN_VIDEO_DEBATE_IDS = new Set(["yn3moz"]);
+
 export function findLatestDebate(argumentsByTopic: { slug: string; arguments: Argument[] }[]): LatestDebate | null {
 	const byDebateId = new Map<string, { topicSlug: string; arguments: Argument[]; earliestPublishedAt: string | null }>();
 
@@ -37,9 +47,9 @@ export function findLatestDebate(argumentsByTopic: { slug: string; arguments: Ar
 		}
 	}
 
-	const latest = [...byDebateId.entries()].sort(
-		(a, b) => (b[1].earliestPublishedAt ?? "").localeCompare(a[1].earliestPublishedAt ?? ""),
-	)[0];
+	const latest = [...byDebateId.entries()]
+		.filter(([id]) => !BROKEN_VIDEO_DEBATE_IDS.has(id))
+		.sort((a, b) => (b[1].earliestPublishedAt ?? "").localeCompare(a[1].earliestPublishedAt ?? ""))[0];
 	if (!latest) return null;
 
 	const [id, entry] = latest;
