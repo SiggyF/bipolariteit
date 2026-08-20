@@ -16,7 +16,10 @@ const PAGE_SIZE = 50;
 // Krijgt een al gefilterde lijst binnen: TopicView past het filter één keer
 // toe voor de hele pagina, zodat kolommen en grafieken niet elk hun eigen
 // interpretatie kunnen hebben.
-const props = defineProps<{ argumentList: Argument[]; topicSlug: string; label: string; stanceClass: string }>();
+// label ontbreekt voor de samengevoegde mobiele lijst (issue #136): daar is
+// er geen aparte titel per stance meer, de stance staat per kaart zelf
+// (ArgumentCard's .stance-badge, alleen zichtbaar onder de 900px-breakpoint).
+const props = defineProps<{ argumentList: Argument[]; topicSlug: string; label?: string; stanceClass?: string }>();
 
 const visibleCount = ref(Math.min(PAGE_SIZE, props.argumentList.length));
 const visible = computed(() => props.argumentList.slice(0, visibleCount.value));
@@ -65,7 +68,7 @@ onBeforeUnmount(() => {
 
 <template>
 	<section class="column" :class="stanceClass">
-		<h2>
+		<h2 v-if="label">
 			{{ label }} ({{ argumentList.length }})
 			<a href="/over/#argumenttypen" class="info-link" title="Wat betekenen stance en typologie?" aria-label="Uitleg: wat betekenen stance en typologie?">?</a>
 		</h2>

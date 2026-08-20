@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, onBeforeUnmount, onMounted, ref } from "vue";
 import FilterBar from "./FilterBar.vue";
 import ArgumentTimeline from "./ArgumentTimeline.vue";
 import DebateList from "./DebateList.vue";
@@ -40,6 +40,21 @@ const columns = computed(() =>
 		argumentList: filtered.value.filter((a) => a.stance === stance),
 	})),
 );
+
+// Onder 900px vervangt één samengevoegde lijst (natuurlijke volgorde, niet
+// per stance gegroepeerd) de drie kolommen (issue #136) -- pro/contra/
+// onduidelijk staan daar door elkaar, met een stance-badge per kaart
+// (ArgumentCard.vue) i.p.v. de kolomkop als enige indicatie. Zelfde
+// breakpoint als ArgumentCard's eigen matchMedia-check en de rest van de
+// site (main.css).
+const MOBILE_QUERY = "(max-width: 900px)";
+const mobileQuery = window.matchMedia(MOBILE_QUERY);
+const isMobile = ref(mobileQuery.matches);
+function onMobileQueryChange(e: MediaQueryListEvent) {
+	isMobile.value = e.matches;
+}
+onMounted(() => mobileQuery.addEventListener("change", onMobileQueryChange));
+onBeforeUnmount(() => mobileQuery.removeEventListener("change", onMobileQueryChange));
 </script>
 
 <template>
@@ -59,6 +74,8 @@ const columns = computed(() =>
 	<p v-if="!filtered.length" class="no-results">
 		Geen argumenten voldoen aan dit filter. Verwijder een filter hierboven om er meer te zien.
 	</p>
+
+	<ArgumentColumn v-else-if="isMobile" :argumentList="filtered" :topicSlug="topicSlug" label="Argumenten" stanceClass="column-single" />
 
 	<div v-else class="columns">
 		<ArgumentColumn
