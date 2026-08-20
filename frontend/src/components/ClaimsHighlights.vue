@@ -6,7 +6,15 @@ import type { Argument, Claim } from "../lib/types";
 
 const TARGET_COUNT = 6;
 
-const props = defineProps<{ argumentList: Argument[] }>();
+const props = defineProps<{
+	argumentList: Argument[];
+	// Alleen zinvol op plekken die zelf niet de topic-pagina zijn (bv. de
+	// homepage-teaser, zie DebateVideoView.vue's debateHref voor hetzelfde
+	// idee): daar bestaat geen argumentenlijst op de pagina zelf om naartoe te
+	// scrollen (requestScrollTo/scrollTarget werkt alleen binnen één pagina),
+	// dus wordt elke kaart een link naar de topic-pagina i.p.v. een scrollknop.
+	topicHref?: string;
+}>();
 
 interface Candidate {
 	argument: Argument;
@@ -63,7 +71,13 @@ function displayClaimText(text: string): string {
 		<p class="panel-note">Een willekeurige greep uit de claims in deze selectie. Klik om het bijbehorende argument te bekijken.</p>
 		<ul class="claims-highlights-grid">
 			<li v-for="candidate in candidates" :key="candidate.key">
-				<button type="button" class="claim-highlight-card" @click="onClaimClick(candidate)">
+				<component
+					:is="topicHref ? 'a' : 'button'"
+					:type="topicHref ? undefined : 'button'"
+					:href="topicHref"
+					class="claim-highlight-card"
+					@click="topicHref ? undefined : onClaimClick(candidate)"
+				>
 					<blockquote class="claim-highlight-text">{{ displayClaimText(candidate.claim.claim_text) }}</blockquote>
 					<p v-if="candidate.claim.attributed_source_text" class="claim-highlight-source">
 						bron: {{ candidate.claim.attributed_source_text }}
@@ -72,7 +86,7 @@ function displayClaimText(text: string): string {
 						<span class="stance-dot" :class="`stance-${candidate.argument.stance}`"></span>
 						{{ candidate.argument.actor.name }}<span v-if="candidate.argument.actor.party"> ({{ displayPartyName(candidate.argument.actor.party) }})</span>
 					</p>
-				</button>
+				</component>
 			</li>
 		</ul>
 	</section>

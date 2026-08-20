@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import ClaimsHighlights from "../components/ClaimsHighlights.vue";
 import DebateVideoView from "../components/DebateVideoView.vue";
 import { debateId } from "../lib/debateId";
 import { debateName } from "../lib/debateName";
@@ -72,6 +73,11 @@ for (const mod of Object.values(topicModules as any) as any[]) {
 								Bekijk alle argumenten over {latestDebateTopicName ?? latestDebate.topicSlug} &rarr;
 							</a>
 						</p>
+						<ClaimsHighlights
+							argumentList={latestDebate.arguments}
+							topicHref={`/onderwerpen/${latestDebate.topicSlug}/`}
+							client:only="vue"
+						/>
 					</section>
 				)}
 				<div class="home-intro">
