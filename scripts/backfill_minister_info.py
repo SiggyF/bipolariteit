@@ -41,6 +41,18 @@ frontend geen partij/naam-context. Twee losse stappen, geen LLM:
    - Judith Tielen -> VVD, via de TK OData Persoon/FractieZetelPersoon-API
      (Kamerzetel t/m 2025-06-18, spreekt in de abortus-data als
      staatssecretaris Jeugd, Preventie en Sport), geverifieerd op 2026-08-01.
+   - Jo-Annes de Bat -> CDA, via rijksoverheid.nl (bio-profiel noemt de
+     partij expliciet: "Partij: CDA",
+     rijksoverheid.nl/regering/bewindspersonen/jo-annes-de-bat; staatssecretaris
+     van Klimaat en Groene Groei in kabinet-Jetten sinds 2026-02-23),
+     geverifieerd op 2026-08-20.
+   - Stientje van der Veldhoven van-Meer -> D66, via rijksoverheid.nl
+     (bio-profiel noemt de partij expliciet: "Partij: D66",
+     rijksoverheid.nl/regering/bewindspersonen/stientje-van-veldhoven; minister
+     van Klimaat en Groene Groei in kabinet-Jetten sinds 2026-02-23; de naam
+     staat in de brondata als "Stientje van der Veldhoven van-Meer" i.p.v. de
+     publieke schrijfwijze "Van Veldhoven-van der Meer"), geverifieerd op
+     2026-08-20.
 
 Gebruik:
     uv run python scripts/backfill_minister_info.py --topic stikstof [--dry-run]
@@ -70,6 +82,8 @@ MINISTER_PARTY = {
     "Dick Schoof": "Onafhankelijk",
     "Piet Adema": "ChristenUnie",
     "Judith Tielen": "VVD",
+    "Jo-Annes de Bat": "CDA",
+    "Stientje van der Veldhoven van-Meer": "D66",
 }
 
 
