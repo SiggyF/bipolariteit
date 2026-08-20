@@ -1499,6 +1499,18 @@ h3 {
 		display: inline-flex;
 	}
 
+	/* Correspondentiekaart (TagCorrespondenceMap.vue, issue #138): kleinere
+	   kaart en geen methodologie-uitleg boven de kaart, die kost op dit
+	   formaat meer ruimte dan hij oplevert. De filterstatus-panel-note's
+	   (geen .panel-note-intro) blijven staan, die zijn functioneel. */
+	.correspondence-chart {
+		height: min(70vw, 420px);
+	}
+
+	.panel-note-intro {
+		display: none;
+	}
+
 	/* Facetknoppen en -paneel verhuizen op mobiel naar een oproepbaar
 	   bottom-sheet in plaats van de permanent zichtbare balk. */
 	.filter-facets {

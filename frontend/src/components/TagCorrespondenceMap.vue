@@ -544,6 +544,31 @@ watch(wrapperEl, (el) => {
 
 onUnmounted(() => observer?.disconnect());
 
+// Zelfde breakpoint als de rest van de mobiele laag (main.css). 3D-slepen
+// conflicteert met paginascroll op touch, dus die modus is onder dit
+// breakpoint niet beschikbaar (zie de watcher hieronder en de v-if in de
+// template).
+const MOBILE_QUERY = "(max-width: 900px)";
+const isMobile = ref(false);
+let mobileQuery: MediaQueryList | null = null;
+
+function updateIsMobile() {
+	isMobile.value = mobileQuery?.matches ?? false;
+}
+
+onMounted(() => {
+	if (typeof matchMedia === "undefined") return;
+	mobileQuery = matchMedia(MOBILE_QUERY);
+	updateIsMobile();
+	mobileQuery.addEventListener("change", updateIsMobile);
+});
+
+onUnmounted(() => mobileQuery?.removeEventListener("change", updateIsMobile));
+
+watch(isMobile, (mobile) => {
+	if (mobile) threeDimensional.value = false;
+});
+
 /** Diepte -> 0 (achterin) .. 1 (vooraan). Voert zowel de mist als het dimmen
  * van beeldsymbolen aan, die geen kleur kunnen aannemen. */
 function proximity(depth: number, range: number): number {
@@ -565,6 +590,19 @@ function niceStep(ruw: number): number {
 	return (normalized >= 5 ? 5 : normalized >= 2 ? 2 : 1) * magnitude;
 }
 
+// Onder 900px is er geen ruimte voor alle labels tegelijk: alleen punten
+// duidelijk buiten de kern van de wolk houden een naam, de rest wordt een
+// kale stip (nog altijd aanklikbaar, zie onChartClick). Genormaliseerd op
+// hetzelfde 90e-percentielvenster als de assen (axisLimits) zodat de drempel
+// per topic hetzelfde relatieve gebied dekt, ongeacht de absolute schaal van
+// de correspondentieanalyse. Alleen relevant in 2D: 3D staat al uit onder
+// 900px (zie de watcher op isMobile hierboven).
+const MOBILE_LABEL_DISTANCE = 0.35;
+function isAwayFromCenter(x: number, y: number): boolean {
+	const [gx, gy] = axisLimits.value;
+	return Math.hypot(x / gx, y / gy) > MOBILE_LABEL_DISTANCE;
+}
+
 const chartOption = computed(() => {
 	const c = display.value;
 	if (!c) return {};
@@ -583,8 +621,10 @@ const chartOption = computed(() => {
 	// altijd in gebruik, ongeacht hoe groot het topic is.
 	const maxRowN = Math.max(...c.rows.map((p) => p.n), 1);
 	const maxTagN = Math.max(...c.tags.map((p) => p.n), 1);
-	const ROW_SIZE = { min: 9, max: 24 };
-	const TAG_SIZE = { min: 13, max: 28 };
+	// Onder 900px is er geen ruimte voor de volle desktop-spreiding: partijlogo's
+	// blijven rond de 13-14px i.p.v. uit te lopen tot 24px.
+	const ROW_SIZE = isMobile.value ? { min: 8, max: 14 } : { min: 9, max: 24 };
+	const TAG_SIZE = isMobile.value ? { min: 9, max: 16 } : { min: 13, max: 28 };
 	function sizeFor(n: number, maxN: number, { min, max }: { min: number; max: number }): number {
 		return min + (max - min) * Math.sqrt(n / maxN);
 	}
@@ -684,7 +724,7 @@ const chartOption = computed(() => {
 					// nog eens bij te zetten), bij personen niet: het logo zegt alleen
 					// welke partij, niet wie. Daar blijft de naam dus altijd nodig.
 					label: {
-						show: !logo || unit.value === "persoon",
+						show: (!logo || unit.value === "persoon") && (!isMobile.value || isAwayFromCenter(x, y)),
 						formatter: "{b}",
 						position: "top",
 						color: fog(ink.value, prox),
@@ -739,9 +779,11 @@ const chartOption = computed(() => {
 							opacity: (inSelection ? 0.75 : DIM) * (0.7 + 0.3 * prox),
 						},
 						label: {
-							show: threeDimensional.value
-								? depth >= tagThreshold
-								: (tagKeysInView?.has(point.sleutel) ?? true) && point.n >= tagThreshold,
+							show:
+								(threeDimensional.value
+									? depth >= tagThreshold
+									: (tagKeysInView?.has(point.sleutel) ?? true) && point.n >= tagThreshold) &&
+								(!isMobile.value || isAwayFromCenter(x, y)),
 							formatter: "{b}",
 							position: "top",
 							color: fog(muted.value, prox),
@@ -990,12 +1032,12 @@ const filterActive = computed(isActive);
 			Partijen &amp; tags (correspondentieanalyse)
 			<a href="/over/#correspondentiekaart-methode" class="info-link" title="Hoe deze kaart tot stand komt" aria-label="Uitleg: hoe deze kaart tot stand komt">?</a>
 		</h2>
-		<p class="panel-note">
+		<p class="panel-note panel-note-intro">
 			Rijen dicht bij elkaar gebruiken vergelijkbare soorten argumenten; een tag dicht bij een rij komt relatief vaak bij die rij
 			voor. Kleur geeft het perspectief van de tag aan. Alleen de vaakst toegekende tags houden hun naam in beeld; wijs een punt
 			aan voor de rest. Klik op een punt om erop te filteren.
 		</p>
-		<p class="panel-note">
+		<p class="panel-note panel-note-intro">
 			Staat er een filter aan, dan dimt "focus" (standaard) alleen de punten buiten de selectie, zodat de tabel niet tot
 			één rij/kolom terugvalt. Kies "detail" om de kaart net als de rest van de pagina volledig op de selectie te
 			herberekenen.
@@ -1025,22 +1067,24 @@ const filterActive = computed(isActive);
 				</div>
 			</div>
 			<div class="chart-controls-group">
-				<span class="chart-controls-label">Weergave</span>
-				<div class="toggle-group" role="group" aria-label="Weergave">
-					<button type="button" class="toggle-btn" :class="{ 'is-active': !threeDimensional }" @click="threeDimensional = false">
-						2D
-					</button>
-					<button
-						type="button"
-						class="toggle-btn"
-						:class="{ 'is-active': threeDimensional }"
-						:disabled="!hasThirdAxis"
-						:title="hasThirdAxis ? '' : 'Te weinig data voor een derde dimensie'"
-						@click="threeDimensional = true"
-					>
-						3D
-					</button>
-				</div>
+				<template v-if="!isMobile">
+					<span class="chart-controls-label">Weergave</span>
+					<div class="toggle-group" role="group" aria-label="Weergave">
+						<button type="button" class="toggle-btn" :class="{ 'is-active': !threeDimensional }" @click="threeDimensional = false">
+							2D
+						</button>
+						<button
+							type="button"
+							class="toggle-btn"
+							:class="{ 'is-active': threeDimensional }"
+							:disabled="!hasThirdAxis"
+							:title="hasThirdAxis ? '' : 'Te weinig data voor een derde dimensie'"
+							@click="threeDimensional = true"
+						>
+							3D
+						</button>
+					</div>
+				</template>
 				<button type="button" class="control-knop" @click="resetView">Aanzicht herstellen</button>
 			</div>
 			<template v-if="threeDimensional">
