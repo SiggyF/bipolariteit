@@ -41,10 +41,7 @@ function widthPct(n: number): number {
 					<div class="typology-bar-fill typology-bar-fill-contra" :style="{ width: `${widthPct(row.contra)}%` }"></div>
 				</div>
 
-				<span class="typology-bar-name">
-					{{ typologyLabel(row.typology) }}
-					<span class="typology-bar-total">{{ row.total }}</span>
-				</span>
+				<span class="typology-bar-name">{{ typologyLabel(row.typology) }}</span>
 
 				<div class="typology-bar-track typology-bar-track-pro">
 					<div class="typology-bar-fill typology-bar-fill-pro" :style="{ width: `${widthPct(row.pro)}%` }"></div>

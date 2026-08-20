@@ -2510,15 +2510,6 @@ a.card-item:hover {
 	font-weight: 500;
 }
 
-.typology-bar-total {
-	display: block;
-	font-family: var(--font-mono);
-	font-variant-numeric: tabular-nums;
-	font-size: var(--step--2);
-	font-weight: 400;
-	color: var(--color-muted);
-}
-
 /* Het aantal staat in dezelfde flex-rij als de balk, direct ertegenaan
    (gap: 4px) i.p.v. vastgepind op de buitenrand van de kolom -- bij een
    korte balk (een typologie met weinig argumenten) zou dat een groot leeg
