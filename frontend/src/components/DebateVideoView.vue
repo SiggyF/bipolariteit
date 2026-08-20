@@ -168,12 +168,71 @@ onUnmounted(() => {
 	window.removeEventListener("touchmove", notifyUserScroll);
 	sentinelObserver?.disconnect();
 	if (animatingTimer) clearTimeout(animatingTimer);
+	floatObserver?.disconnect();
 });
+
+// Mini-player (YouTube/nieuwssites): op de compacte teaser (debateHref
+// gezet, dus geen argumentenkolom ernaast om sticky voor zinvol te maken,
+// zie de :not(.is-compact) hierboven) blijft de video zichtbaar in een klein
+// blokje rechtsonder zodra je 'm voorbij scrolt, i.p.v. gewoon te verdwijnen.
+// Geen position:sticky op .player-column zelf: dat legde 'm eerder op volle
+// breedte over .now-playing/de rest van de pagina heen (zie #143-vervolg).
+const playerColumnEl = ref<HTMLElement | null>(null);
+// Los "ankerpunt" vóór .player-column i.p.v. .player-column zelf observeren:
+// zodra isFloating aanstaat wordt .player-column position:fixed (dus altijd
+// "in beeld", ongeacht scrollpositie) -- observeer je .player-column zelf,
+// dan meldt de observer meteen weer isIntersecting:true zodra 'm float, wat
+// isFloating direct weer uitzet en oneindig oscilleert. Dit ankerpunt blijft
+// altijd op zijn oorspronkelijke plek in de document-flow staan.
+const floatAnchorEl = ref<HTMLElement | null>(null);
+const isFloating = ref(false);
+const floatingDismissed = ref(false);
+const floatingPlaceholderHeight = ref(0);
+let floatObserver: IntersectionObserver | null = null;
+
+watch(floatAnchorEl, (el) => {
+	floatObserver?.disconnect();
+	floatObserver = null;
+	if (!el || !props.debateHref) return;
+	floatObserver = new IntersectionObserver(
+		([entry]) => {
+			// boundingClientRect.top < 0 onderscheidt "voorbij de bovenkant
+			// gescrolld" van "nog niet in beeld gekomen" (bv. bij het eerste
+			// meten) -- beide geven isIntersecting: false.
+			if (!entry.isIntersecting && entry.boundingClientRect.top < 0) {
+				if (floatingDismissed.value) return;
+				if (playerColumnEl.value) floatingPlaceholderHeight.value = playerColumnEl.value.getBoundingClientRect().height;
+				isFloating.value = true;
+			} else {
+				isFloating.value = false;
+				floatingDismissed.value = false;
+			}
+		},
+		{ threshold: 0 },
+	);
+	floatObserver.observe(el);
+});
+
+function dismissFloating() {
+	isFloating.value = false;
+	floatingDismissed.value = true;
+}
 </script>
 
 <template>
-	<div class="debate-video-view" :class="{ 'is-compact': !expanded, 'is-animating': animating }">
-		<div class="player-column">
+	<div class="debate-video-view" :class="{ 'is-compact': !expanded, 'is-animating': animating, 'is-floating': isFloating }">
+		<div ref="floatAnchorEl" class="float-anchor" aria-hidden="true"></div>
+		<div ref="playerColumnEl" class="player-column">
+			<button
+				v-if="isFloating"
+				type="button"
+				class="floating-close"
+				aria-label="Zwevende video sluiten"
+				title="Zwevende video sluiten"
+				@click="dismissFloating"
+			>
+				×
+			</button>
 			<div v-if="rawVideoUrl" class="player-stage">
 				<VideoPlayer
 					:src="rawVideoUrl"
@@ -211,13 +270,13 @@ onUnmounted(() => {
 			</div>
 			<p v-else class="no-video">Voor dit debat is geen video beschikbaar.</p>
 			<VideoTimeline
-				v-if="rawVideoUrl"
+				v-if="rawVideoUrl && !isFloating"
 				:arguments="props.arguments"
 				:current-time="currentTime"
 				:duration="duration"
 				:off="off"
 			/>
-			<div class="perspective-filters" title="Verbergt of toont dit perspectief in de tag-badges op de video en in de tijdlijn hieronder">
+			<div v-if="!isFloating" class="perspective-filters" title="Verbergt of toont dit perspectief in de tag-badges op de video en in de tijdlijn hieronder">
 				<span class="perspective-filters-label">Filter op perspectief</span>
 				<button
 					v-for="p in PERSPECTIEVEN"
@@ -234,6 +293,10 @@ onUnmounted(() => {
 				</button>
 			</div>
 		</div>
+		<!-- Neemt de rij in die .player-column normaal vult zolang die zweeft
+		     (position: fixed, dus buiten de flow) -- anders springt .now-playing
+		     omhoog naar waar de video ooit stond. -->
+		<div v-if="isFloating" class="player-column-spacer" :style="{ height: `${floatingPlaceholderHeight}px` }" aria-hidden="true"></div>
 		<div v-if="!props.debateHref" class="argument-column">
 			<ol v-if="expanded" class="argument-list">
 				<li v-for="argument in visibleArguments" :key="argument.id">
@@ -356,6 +419,56 @@ onUnmounted(() => {
 		position: sticky;
 		top: var(--space-2);
 	}
+}
+
+/* Mini-player (YouTube/nieuwssites): zodra je de teaser voorbij scrolt,
+   blijft de video zichtbaar in een klein blokje rechtsonder i.p.v. gewoon te
+   verdwijnen. position: fixed i.p.v. sticky (zie hierboven): fixed haalt
+   .player-column volledig uit de flow en legt 'm nooit over volgende inhoud
+   heen op volle breedte, wat sticky hier eerder wel deed. */
+.debate-video-view.is-floating .player-column {
+	position: fixed;
+	bottom: var(--space-3);
+	right: var(--space-3);
+	width: min(320px, calc(100vw - 2 * var(--space-3)));
+	z-index: 40;
+	background: var(--color-bg);
+	border: 1px solid var(--color-border);
+	border-radius: 6px;
+	box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+	overflow: hidden;
+}
+
+.player-column-spacer {
+	width: 100%;
+}
+
+.float-anchor {
+	width: 0;
+	height: 0;
+}
+
+.floating-close {
+	position: absolute;
+	top: 6px;
+	right: 6px;
+	z-index: 2;
+	width: 26px;
+	height: 26px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border: none;
+	border-radius: 50%;
+	background: rgba(0, 0, 0, 0.55);
+	color: #fff;
+	font-size: 1rem;
+	line-height: 1;
+	cursor: pointer;
+}
+
+.floating-close:hover {
+	background: rgba(0, 0, 0, 0.75);
 }
 
 .no-video {
