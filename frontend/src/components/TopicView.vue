@@ -5,6 +5,7 @@ import ArgumentTimeline from "./ArgumentTimeline.vue";
 import DebateList from "./DebateList.vue";
 import ClaimsHighlights from "./ClaimsHighlights.vue";
 import StatsPanel from "./StatsPanel.vue";
+import TypologyStanceBars from "./TypologyStanceBars.vue";
 import TagsPerParty from "./TagsPerParty.vue";
 import TagCorrespondenceMap from "./TagCorrespondenceMap.vue";
 import ArgumentColumn from "./ArgumentColumn.vue";
@@ -59,6 +60,8 @@ onBeforeUnmount(() => mobileQuery.removeEventListener("change", onMobileQueryCha
 
 <template>
 	<FilterBar :argumentList="argumentList" :matchCount="filtered.length" />
+
+	<TypologyStanceBars :argumentList="filtered" />
 
 	<TagCorrespondenceMap :argumentList="argumentList" />
 

@@ -1,4 +1,4 @@
-import { NO_PARTY, type Argument, type Stance } from "./types";
+import { NO_PARTY, TYPOLOGIES, type Argument, type Stance, type Typology } from "./types";
 
 // Afgeleide cijfers voor de grafieken. Stonden eerder voorberekend in de
 // export (build_stats/build_tags_per_party); nu leiden we ze af uit dezelfde
@@ -38,6 +38,31 @@ export function stanceCounts(argumentList: Argument[]): StanceCounts {
 		contra_pct: pct(contra, total),
 		unclear_pct: pct(unclear, total),
 	};
+}
+
+export interface TypologyStanceCounts {
+	typology: Typology;
+	pro: number;
+	contra: number;
+	unclear: number;
+	total: number;
+}
+
+/** Verdeling van argumenttypes (feitelijk/moreel/economisch/...) over
+ * pro/contra/onduidelijk, voor TypologyStanceBars.vue (issue #137). Alle vijf
+ * typologieën komen terug, ook als een ervan 0 argumenten heeft in deze
+ * selectie -- anders verspringt de rijenlijst bij het filteren. */
+export function countByTypologyAndStance(argumentList: Argument[]): TypologyStanceCounts[] {
+	const counts = new Map<Typology, { pro: number; contra: number; unclear: number }>(
+		TYPOLOGIES.map((t) => [t, { pro: 0, contra: 0, unclear: 0 }]),
+	);
+	for (const argument of argumentList) {
+		const row = counts.get(argument.typology);
+		if (row) row[argument.stance] += 1;
+	}
+	return [...counts.entries()]
+		.map(([typology, c]) => ({ typology, ...c, total: c.pro + c.contra + c.unclear }))
+		.sort((a, b) => b.total - a.total);
 }
 
 function groupByParty(argumentList: Argument[]): Map<string, Argument[]> {
