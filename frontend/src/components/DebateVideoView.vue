@@ -345,9 +345,14 @@ onUnmounted(() => {
    je door de langere lijst ernaast scrolt. Op een gestapelde mobiele layout
    (≤900px, zie hierboven) staat de argumentenlijst ONDER de video in
    dezelfde kolom -- sticky zou de video dan over die lijst heen laten
-   plakken terwijl je erdoorheen scrolt. */
+   plakken terwijl je erdoorheen scrolt. Dezelfde stapeling geldt op een brede
+   viewport voor de compacte teaser (.is-compact, bv. de homepage): daar staat
+   geen argumentenkolom náást de video maar hooguit .now-playing eronder, dus
+   :not(.is-compact) hier -- zonder die uitsluiting bleef de video ook daar
+   aan de bovenkant plakken terwijl de rest van de pagina eronderdoor
+   scrolde. */
 @media (min-width: 901px) {
-	.player-column {
+	.debate-video-view:not(.is-compact) .player-column {
 		position: sticky;
 		top: var(--space-2);
 	}
