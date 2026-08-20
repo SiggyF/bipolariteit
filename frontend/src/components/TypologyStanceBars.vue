@@ -33,20 +33,20 @@ function widthPct(n: number): number {
 
 		<ul class="typology-bars">
 			<li v-for="row in rows" :key="row.typology" class="typology-bar-row">
-				<div class="typology-bar-label">
-					<span>{{ typologyLabel(row.typology) }}</span>
-					<span class="typology-bar-total">{{ row.total }}</span>
+				<span class="typology-bar-name">{{ typologyLabel(row.typology) }}</span>
+				<span class="typology-bar-total">{{ row.total }}</span>
+
+				<span class="typology-bar-stance-label">Contra</span>
+				<div class="typology-bar-track">
+					<div class="typology-bar-fill typology-bar-fill-contra" :style="{ width: `${widthPct(row.contra)}%` }"></div>
 				</div>
-				<div class="typology-bar-pair">
-					<span class="typology-bar-value typology-bar-value-contra">{{ row.contra }}</span>
-					<div class="typology-bar-track typology-bar-track-contra">
-						<div class="typology-bar-fill typology-bar-fill-contra" :style="{ width: `${widthPct(row.contra)}%` }"></div>
-					</div>
-					<div class="typology-bar-track typology-bar-track-pro">
-						<div class="typology-bar-fill typology-bar-fill-pro" :style="{ width: `${widthPct(row.pro)}%` }"></div>
-					</div>
-					<span class="typology-bar-value typology-bar-value-pro">{{ row.pro }}</span>
+				<span class="typology-bar-value">{{ row.contra }}</span>
+
+				<span class="typology-bar-stance-label">Pro</span>
+				<div class="typology-bar-track">
+					<div class="typology-bar-fill typology-bar-fill-pro" :style="{ width: `${widthPct(row.pro)}%` }"></div>
 				</div>
+				<span class="typology-bar-value">{{ row.pro }}</span>
 			</li>
 		</ul>
 	</section>

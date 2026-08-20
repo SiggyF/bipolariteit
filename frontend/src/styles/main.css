@@ -2480,63 +2480,59 @@ a.card-item:hover {
 }
 
 /* --- TypologyStanceBars.vue (issue #137) -------------------------------- */
-/* Diverging balkenpaar per typologie: contra groeit naar links, pro naar
-   rechts, vanaf een gedeelde middenas -- zo is in één oogopslag te zien welke
-   argumenttypes vooral pro of vooral contra worden ingezet. Zelfde
-   rand+color-mix-vulling als .status-bar-fill, maar in --color-pro/-contra. */
+/* Twee losse, links uitgelijnde balken (contra/pro) per typologie in een CSS
+   grid met vaste kolombreedtes. Eerdere versie liet contra/pro vanuit een
+   gedeelde middenas groeien via flex; de wisselende breedte van de getallen
+   ("102" vs "5") verschoof daardoor de tracks per rij, zodat balken niet
+   meer op elkaar aansloten ("schots en scheef"). Een grid-kolom heeft overal
+   dezelfde breedte, ongeacht de inhoud van andere rijen, dus alle balken
+   beginnen nu op precies dezelfde x-positie. Zelfde rand+color-mix-vulling
+   als .status-bar-fill, maar in --color-pro/-contra. */
 .typology-bars {
 	list-style: none;
 	margin: 0;
 	padding: 0;
 	display: flex;
 	flex-direction: column;
-	gap: var(--space-2);
+	gap: var(--space-3);
 }
 
-.typology-bar-label {
-	display: flex;
-	justify-content: space-between;
-	gap: var(--space-2);
+.typology-bar-row {
+	display: grid;
+	grid-template-columns: 4rem 1fr 3rem;
+	row-gap: 2px;
+	column-gap: var(--space-2);
+	align-items: center;
 	font-size: var(--step--1);
-	margin-bottom: 0.25rem;
+}
+
+.typology-bar-name {
+	grid-column: 1 / 3;
+	font-weight: 500;
 }
 
 .typology-bar-total {
+	grid-column: 3;
 	font-family: var(--font-mono);
 	font-variant-numeric: tabular-nums;
 	color: var(--color-muted);
-	flex-shrink: 0;
+	text-align: right;
 }
 
-.typology-bar-pair {
-	display: flex;
-	align-items: center;
-	gap: 2px;
+.typology-bar-stance-label {
+	color: var(--color-muted);
+	font-size: var(--step--2);
 }
 
 .typology-bar-track {
-	flex: 1;
-	display: flex;
 	height: 10px;
 }
 
-.typology-bar-track-contra {
-	justify-content: flex-end;
-	border-right: 1px solid var(--color-border);
-}
-
-/* Altijd zichtbaar i.p.v. een hover-title: die verschijnt op de muispositie
-   en kan daardoor over de kop/andere content heen vallen. */
 .typology-bar-value {
 	font-family: var(--font-mono);
 	font-variant-numeric: tabular-nums;
 	font-size: var(--step--2);
 	color: var(--color-muted);
-	flex-shrink: 0;
-	min-width: 1.5em;
-}
-
-.typology-bar-value-contra {
 	text-align: right;
 }
 
