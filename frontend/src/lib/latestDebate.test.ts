@@ -1,7 +1,19 @@
 import { describe, expect, it } from "vitest";
 import { findLatestDebate } from "./latestDebate";
-import type { Argument } from "./types";
+import type { Argument, Tag } from "./types";
 
+const TAG: Tag = {
+	sleutel: "test-tag",
+	beschrijving: "",
+	labelgroep: "test",
+	perspectief: "test",
+	created_by: "llm",
+	reden: null,
+};
+
+// Standaard getagd: findLatestDebate sluit ongetagde debatten uit (zie
+// hieronder), dus tests die niet specifiek dat gedrag beproeven, moeten zelf
+// niet telkens een tag hoeven meegeven.
 function argument(overrides: Partial<Argument> & { id: number }): Argument {
 	return {
 		stance: "pro",
@@ -24,7 +36,7 @@ function argument(overrides: Partial<Argument> & { id: number }): Argument {
 		},
 		periode: { kamer: null, regering: null },
 		claims: [],
-		tags: [],
+		tags: [TAG],
 		oppositions: [],
 		...overrides,
 	};
@@ -56,5 +68,19 @@ describe("findLatestDebate", () => {
 			document: { ...argument({ id: 1 }).document, raw_video_url: BROKEN_RAW_VIDEO_URL, published_at: "2026-07-01T13:35:26" },
 		});
 		expect(findLatestDebate([{ slug: "stikstof", arguments: [broken] }])).toBeNull();
+	});
+
+	it("slaat een geëxtraheerd-maar-nog-niet-getagd debat over, ook al is het recenter", () => {
+		const untagged = argument({
+			id: 1,
+			tags: [],
+			document: { ...argument({ id: 1 }).document, raw_video_url: "https://example.com/net-geextraheerd.m3u8", published_at: "2026-06-17T16:29:22" },
+		});
+		const tagged = argument({
+			id: 2,
+			document: { ...argument({ id: 2 }).document, raw_video_url: "https://example.com/getagd.m3u8", published_at: "2026-06-11T10:00:00" },
+		});
+		const result = findLatestDebate([{ slug: "asiel", arguments: [untagged, tagged] }]);
+		expect(result?.earliestPublishedAt).toBe("2026-06-11T10:00:00");
 	});
 });
