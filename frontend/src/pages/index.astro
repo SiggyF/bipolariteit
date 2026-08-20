@@ -76,6 +76,7 @@ for (const mod of Object.values(topicModules as any) as any[]) {
 						<ClaimsHighlights
 							argumentList={latestDebate.arguments}
 							topicHref={`/onderwerpen/${latestDebate.topicSlug}/`}
+							heading="Argumenten uit dit debat"
 							client:only="vue"
 						/>
 					</section>
