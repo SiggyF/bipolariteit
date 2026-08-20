@@ -2525,6 +2525,21 @@ a.card-item:hover {
 	border-right: 1px solid var(--color-border);
 }
 
+/* Altijd zichtbaar i.p.v. een hover-title: die verschijnt op de muispositie
+   en kan daardoor over de kop/andere content heen vallen. */
+.typology-bar-value {
+	font-family: var(--font-mono);
+	font-variant-numeric: tabular-nums;
+	font-size: var(--step--2);
+	color: var(--color-muted);
+	flex-shrink: 0;
+	min-width: 1.5em;
+}
+
+.typology-bar-value-contra {
+	text-align: right;
+}
+
 .typology-bar-fill {
 	height: 100%;
 	border-radius: 2px;

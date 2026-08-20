@@ -38,20 +38,14 @@ function widthPct(n: number): number {
 					<span class="typology-bar-total">{{ row.total }}</span>
 				</div>
 				<div class="typology-bar-pair">
+					<span class="typology-bar-value typology-bar-value-contra">{{ row.contra }}</span>
 					<div class="typology-bar-track typology-bar-track-contra">
-						<div
-							class="typology-bar-fill typology-bar-fill-contra"
-							:style="{ width: `${widthPct(row.contra)}%` }"
-							:title="`Contra: ${row.contra}`"
-						></div>
+						<div class="typology-bar-fill typology-bar-fill-contra" :style="{ width: `${widthPct(row.contra)}%` }"></div>
 					</div>
 					<div class="typology-bar-track typology-bar-track-pro">
-						<div
-							class="typology-bar-fill typology-bar-fill-pro"
-							:style="{ width: `${widthPct(row.pro)}%` }"
-							:title="`Pro: ${row.pro}`"
-						></div>
+						<div class="typology-bar-fill typology-bar-fill-pro" :style="{ width: `${widthPct(row.pro)}%` }"></div>
 					</div>
+					<span class="typology-bar-value typology-bar-value-pro">{{ row.pro }}</span>
 				</div>
 			</li>
 		</ul>
