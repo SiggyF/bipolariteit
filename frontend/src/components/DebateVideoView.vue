@@ -340,6 +340,7 @@ function dismissFloating() {
    bij het in-/uitklappen van de argumentenlijst instant naar een heel andere
    grootte. `width` in procenten is wel een animeerbare eigenschap. */
 .debate-video-view {
+	position: relative;
 	display: flex;
 	flex-wrap: wrap;
 	gap: var(--space-4);
@@ -443,7 +444,20 @@ function dismissFloating() {
 	width: 100%;
 }
 
+/* position: absolute i.p.v. gewoon flex-item: als (0x0-)flex-item telde dit
+   toch nog mee voor de gap tussen flex-items (zie .debate-video-view), en op
+   de volle /debatten/[id]/-pagina is de 60/40-verdeling al exact sluitend
+   (.argument-column trekt de gap er al vanaf) -- die extra gap-breedte was
+   precies genoeg om de argumentenkolom naar een nieuwe rij te laten
+   wrappen, met de sticky video er nog steeds overheen (issue: video-column
+   bleef zichtbaar, argumentenlijst scrolde eronderdoor). Absoluut
+   gepositioneerd t.o.v. .debate-video-view (position: relative, zie
+   hierboven) blijft dit ankerpunt op dezelfde documentplek -- vlak boven
+   waar .player-column staat -- zonder in de flex-berekening mee te tellen. */
 .float-anchor {
+	position: absolute;
+	top: 0;
+	left: 0;
 	width: 0;
 	height: 0;
 }
