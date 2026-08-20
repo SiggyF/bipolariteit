@@ -171,12 +171,16 @@ onUnmounted(() => {
 	floatObserver?.disconnect();
 });
 
-// Mini-player (YouTube/nieuwssites): op de compacte teaser (debateHref
-// gezet, dus geen argumentenkolom ernaast om sticky voor zinvol te maken,
-// zie de :not(.is-compact) hierboven) blijft de video zichtbaar in een klein
-// blokje rechtsonder zodra je 'm voorbij scrolt, i.p.v. gewoon te verdwijnen.
-// Geen position:sticky op .player-column zelf: dat legde 'm eerder op volle
-// breedte over .now-playing/de rest van de pagina heen (zie #143-vervolg).
+// Mini-player (YouTube/nieuwssites): overal waar sticky niet al voor "video
+// blijft in beeld" zorgt -- de compacte teaser (debateHref gezet, geen
+// argumentenkolom ernaast) én de gestapelde mobiele /debatten/[id]/-layout
+// (≤900px, of handmatig ingeklapt via de argumentenlijst-toggle, zie de
+// :not(.is-compact)/min-width:901px-voorwaarden bij de sticky-regel
+// hierboven) -- blijft de video zichtbaar in een klein blokje rechtsonder
+// zodra je 'm voorbij scrolt, i.p.v. gewoon te verdwijnen. Geen
+// position:sticky op .player-column zelf voor dit geval: dat legde 'm eerder
+// op volle breedte over .now-playing/de rest van de pagina heen (zie
+// #143-vervolg).
 const playerColumnEl = ref<HTMLElement | null>(null);
 // Los "ankerpunt" vóór .player-column i.p.v. .player-column zelf observeren:
 // zodra isFloating aanstaat wordt .player-column position:fixed (dus altijd
@@ -190,16 +194,23 @@ const floatingDismissed = ref(false);
 const floatingPlaceholderHeight = ref(0);
 let floatObserver: IntersectionObserver | null = null;
 
+// Zelfde voorwaarde als de sticky-CSS hieronder, maar omgekeerd: sticky is
+// alleen actief bij :not(.is-compact) op min-width:901px, dus mini-player
+// juist overal daarbuiten.
+function stickyHandlesVisibility(): boolean {
+	return expanded.value && window.innerWidth > 900;
+}
+
 watch(floatAnchorEl, (el) => {
 	floatObserver?.disconnect();
 	floatObserver = null;
-	if (!el || !props.debateHref) return;
+	if (!el) return;
 	floatObserver = new IntersectionObserver(
 		([entry]) => {
 			// boundingClientRect.top < 0 onderscheidt "voorbij de bovenkant
 			// gescrolld" van "nog niet in beeld gekomen" (bv. bij het eerste
 			// meten) -- beide geven isIntersecting: false.
-			if (!entry.isIntersecting && entry.boundingClientRect.top < 0) {
+			if (!entry.isIntersecting && entry.boundingClientRect.top < 0 && !stickyHandlesVisibility()) {
 				if (floatingDismissed.value) return;
 				if (playerColumnEl.value) floatingPlaceholderHeight.value = playerColumnEl.value.getBoundingClientRect().height;
 				isFloating.value = true;

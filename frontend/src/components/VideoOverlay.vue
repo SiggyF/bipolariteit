@@ -143,6 +143,15 @@ const badges = computed(() =>
 				<span class="nameplate-name">{{ nameplate.name }}</span>
 				<PartyLogo v-if="nameplate.party" :party="nameplate.party" class="nameplate-logo" />
 				<span v-if="nameplate.party" class="nameplate-party">{{ displayPartyName(nameplate.party) }}</span>
+				<!-- Bewindspersonen (bv. een staatssecretaris) spreken op dat moment
+				     niet namens een fractie, dus actors.party is voor hen vaak NULL
+				     totdat scripts/backfill_minister_info.py 'm (waar traceerbaar via
+				     de TK Persoon-API/rijksoverheid.nl/Wikidata) alsnog vult -- zie
+				     pipeline/db/schema.sql (speaker_role_title). Zolang dat nog niet
+				     gebeurd is voor deze spreker, role_title als vangnet i.p.v. een
+				     kaal naamplaatje -- zelfde patroon als ArgumentCard.vue al doet
+				     ("Volgens X, staatssecretaris van ..."). -->
+				<span v-else-if="nameplate.role_title" class="nameplate-party">{{ nameplate.role_title }}</span>
 				<div class="clock-group">
 					<!-- Altijd zichtbaar, disabled i.p.v. verborgen bij het eerste/
 					     laatste argument (issue #134): een verdwijnende knop springt de
