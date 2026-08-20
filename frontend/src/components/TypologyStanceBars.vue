@@ -17,8 +17,11 @@ const rows = computed(() => countByTypologyAndStance(props.argumentList));
 // niet een balk die tot de rand van zijn eigen rij is opgerekt.
 const maxCount = computed(() => Math.max(1, ...rows.value.map((r) => Math.max(r.pro, r.contra))));
 
+// Tot 92% i.p.v. 100%: het aantal staat vlak na de balk, in dezelfde
+// flex-rij (zie template) -- bij de langste balk moet daar nog ruimte voor
+// overblijven, anders duwt de tekst zichzelf de kolom uit.
 function widthPct(n: number): number {
-	return (n / maxCount.value) * 100;
+	return (n / maxCount.value) * 92;
 }
 </script>
 
@@ -33,20 +36,20 @@ function widthPct(n: number): number {
 
 		<ul class="typology-bars">
 			<li v-for="row in rows" :key="row.typology" class="typology-bar-row">
-				<span class="typology-bar-name">{{ typologyLabel(row.typology) }}</span>
-				<span class="typology-bar-total">{{ row.total }}</span>
-
-				<span class="typology-bar-stance-label">Contra</span>
-				<div class="typology-bar-track">
+				<div class="typology-bar-track typology-bar-track-contra">
+					<span class="typology-bar-value">{{ row.contra }}</span>
 					<div class="typology-bar-fill typology-bar-fill-contra" :style="{ width: `${widthPct(row.contra)}%` }"></div>
 				</div>
-				<span class="typology-bar-value">{{ row.contra }}</span>
 
-				<span class="typology-bar-stance-label">Pro</span>
-				<div class="typology-bar-track">
+				<span class="typology-bar-name">
+					{{ typologyLabel(row.typology) }}
+					<span class="typology-bar-total">{{ row.total }}</span>
+				</span>
+
+				<div class="typology-bar-track typology-bar-track-pro">
 					<div class="typology-bar-fill typology-bar-fill-pro" :style="{ width: `${widthPct(row.pro)}%` }"></div>
+					<span class="typology-bar-value">{{ row.pro }}</span>
 				</div>
-				<span class="typology-bar-value">{{ row.pro }}</span>
 			</li>
 		</ul>
 	</section>
