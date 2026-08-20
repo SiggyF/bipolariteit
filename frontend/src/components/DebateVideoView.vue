@@ -162,6 +162,16 @@ const nowPlaying = computed(() => activeArguments(props.arguments, currentTime.v
 onMounted(() => {
 	window.addEventListener("wheel", notifyUserScroll, { passive: true });
 	window.addEventListener("touchmove", notifyUserScroll, { passive: true });
+
+	// Vervolg op VideoPlayer.vue's debateHrefWithTime: de "volledige
+	// debatpagina"-link vanaf een teaser (bv. de homepage) neemt de
+	// afspeelpositie mee als ?t=<seconden>, zodat je hier niet weer bij 0:00
+	// begint. Alleen op de eigen /debatten/[id]/-pagina zinvol (!debateHref) --
+	// een teaser heeft zelf geen ?t= in zijn URL.
+	if (!props.debateHref) {
+		const seconds = Number(new URLSearchParams(window.location.search).get("t"));
+		if (Number.isFinite(seconds) && seconds > 0) requestSeek(seconds);
+	}
 });
 onUnmounted(() => {
 	window.removeEventListener("wheel", notifyUserScroll);

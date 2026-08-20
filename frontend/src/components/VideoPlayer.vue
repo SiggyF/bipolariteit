@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted, ref, watch } from "vue";
+import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import { formatClock } from "../lib/videoTime";
 
 // Kale <video>-wrapper rond het HLS-manifest uit document.raw_video_url. Geen
@@ -42,6 +42,16 @@ const currentTime = ref(0);
 const duration = ref(0);
 let tickInterval: ReturnType<typeof setInterval> | null = null;
 let hls: import("hls.js").default | null = null;
+
+// Zonder ?t= begon de volledige debatpagina altijd bij 0:00 -- ook als je 'm
+// vanaf een teaser (homepage) opende terwijl de video daar al een stuk
+// gevorderd was. DebateVideoView.vue leest deze query-param bij het laden
+// van /debatten/[id]/ weer uit en seekt ernaartoe (zie daar).
+const debateHrefWithTime = computed(() => {
+	if (!props.debateHref) return null;
+	const seconds = Math.floor(currentTime.value);
+	return seconds > 0 ? `${props.debateHref}?t=${seconds}` : props.debateHref;
+});
 
 onMounted(async () => {
 	const video = videoEl.value;
@@ -235,7 +245,7 @@ defineExpose({ fatalError });
 			<span class="time-label">{{ formatClock(currentTime) }} / {{ formatClock(duration) }}</span>
 			<a
 				v-if="debateHref"
-				:href="debateHref"
+				:href="debateHrefWithTime"
 				class="control-button debate-link-button"
 				title="Volledige debatpagina"
 				aria-label="Volledige debatpagina"
