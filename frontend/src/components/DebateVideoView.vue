@@ -10,7 +10,7 @@ import { perspectiefWeergaveNaam } from "../lib/tagIcon";
 import type { Argument } from "../lib/types";
 import { activeArguments } from "../lib/videoLabels";
 import { requestSeek, videoSeek } from "../lib/videoSeek";
-import { notifyUserScroll } from "../lib/userScroll";
+import { notifyUserScroll, userScroll } from "../lib/userScroll";
 
 const props = withDefaults(
 	defineProps<{
@@ -125,6 +125,11 @@ watch(activeArgumentKey, () => {
 	}
 });
 const visibleArguments = computed(() => props.arguments.slice(0, visibleArgumentCount.value));
+// Alleen relevant op de volle pagina (niet de compacte teaser, die heeft geen
+// scrollende argumentenlijst) -- gaat naar VideoOverlay.vue zodat de "lijst
+// volgt niet mee"-hint naast de vorig/volgend-knoppen verschijnt zolang
+// userScroll.ts' cooldown actief is (issue #147-vervolg).
+const followPaused = computed(() => !props.debateHref && userScroll.isScrolling);
 const hasMoreArguments = computed(() => visibleArgumentCount.value < props.arguments.length);
 function loadMoreArguments() {
 	visibleArgumentCount.value = Math.min(visibleArgumentCount.value + PAGE_SIZE, props.arguments.length);
@@ -158,10 +163,12 @@ const nowPlaying = computed(() => activeArguments(props.arguments, currentTime.v
 
 // Onderdrukt de auto-volg-scroll in ArgumentCard.vue zolang de gebruiker zelf
 // aan het scrollen is (zie lib/userScroll.ts) -- window-niveau, want player-
-// en argumentenkolom delen dezelfde paginascroll.
+// en argumentenkolom delen dezelfde paginascroll. Het generieke "scroll"-
+// event i.p.v. losse wheel-/touchmove-listeners: die missen toetsenbord-
+// scrollen (Page Down/spatie/pijltjes) en het slepen aan de scrollbar-
+// duimschijf, waarbij geen van beide events afgaat.
 onMounted(() => {
-	window.addEventListener("wheel", notifyUserScroll, { passive: true });
-	window.addEventListener("touchmove", notifyUserScroll, { passive: true });
+	window.addEventListener("scroll", notifyUserScroll, { passive: true });
 
 	// Vervolg op VideoPlayer.vue's debateHrefWithTime: de "volledige
 	// debatpagina"-link vanaf een teaser (bv. de homepage) neemt de
@@ -174,8 +181,7 @@ onMounted(() => {
 	}
 });
 onUnmounted(() => {
-	window.removeEventListener("wheel", notifyUserScroll);
-	window.removeEventListener("touchmove", notifyUserScroll);
+	window.removeEventListener("scroll", notifyUserScroll);
 	sentinelObserver?.disconnect();
 	if (animatingTimer) clearTimeout(animatingTimer);
 	floatObserver?.disconnect();
@@ -266,7 +272,7 @@ function dismissFloating() {
 					@loadedmetadata="(d) => (duration = d)"
 					@seek="requestSeek"
 				>
-					<VideoOverlay :arguments="props.arguments" :current-time="currentTime" :off="off" @seek="requestSeek" />
+					<VideoOverlay :arguments="props.arguments" :current-time="currentTime" :off="off" :follow-paused="followPaused" @seek="requestSeek" />
 					<!-- Altijd dezelfde plek (dezelfde rij als play/pause, vergelijk
 					     YouTube's chat-knop) i.p.v. mee te verhuizen tussen boven de
 					     lijst en onder de video -- dat verspringen maakte de knop

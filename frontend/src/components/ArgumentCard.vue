@@ -5,7 +5,7 @@ import { debateId } from "../lib/debateId";
 import { displayPartyName } from "../lib/parties";
 import { filters, toggleValue } from "../lib/filters";
 import { scrollTarget } from "../lib/scrollTarget";
-import { userScroll } from "../lib/userScroll";
+import { markProgrammaticScroll, userScroll } from "../lib/userScroll";
 import { slugify } from "../lib/slug";
 import { stanceDescription, stanceLabel, typologyLabel, typologyDescription, type Argument, type Tag } from "../lib/types";
 import { formatClock } from "../lib/videoTime";
@@ -106,12 +106,28 @@ const cardEl = ref<HTMLElement | null>(null);
 const justHighlighted = ref(false);
 let highlightTimer: ReturnType<typeof setTimeout> | null = null;
 
+// Bij een sprong over een lange afstand (honderden kaarten verderop, issue
+// #147) is één lange smooth-scroll-animatie onwerkbaar traag. Ver buiten
+// beeld (drie schermhoogtes) springt dit daarom instant vlak bij het doel,
+// dichtbij blijft het een smooth scroll -- zelfde idee als "scroll to index"
+// in lange virtuele lijsten elders.
+function scrollCardIntoView() {
+	const el = cardEl.value;
+	if (!el) return;
+	const distance = Math.abs(el.getBoundingClientRect().top);
+	// Zonder dit ziet DebateVideoView.vue's generieke "scroll"-listener
+	// (userScroll.ts) deze eigen scroll aan voor een handmatige
+	// gebruikersactie, en verlengt de cooldown zichzelf oneindig door.
+	markProgrammaticScroll();
+	el.scrollIntoView({ behavior: distance > window.innerHeight * 3 ? "auto" : "smooth", block: "center" });
+}
+
 watch(
 	() => scrollTarget.token,
 	async () => {
 		if (scrollTarget.argumentId !== props.argument.id) return;
 		await nextTick();
-		cardEl.value?.scrollIntoView({ behavior: "smooth", block: "center" });
+		scrollCardIntoView();
 		justHighlighted.value = true;
 		if (highlightTimer) clearTimeout(highlightTimer);
 		highlightTimer = setTimeout(() => {
@@ -131,13 +147,20 @@ watch(
 // eronder, ≤900px -- zelfde grens als `.player-column`'s sticky-positionering
 // in DebateVideoView.vue, die daar om dezelfde reden ook uitstaat): daar
 // scrollt dit de video net buiten beeld i.p.v. 'm zichtbaar te houden.
+// immediate: true, met een nextTick erna: bij een sprong over een lange
+// afstand (bv. "volgende argument" in VideoOverlay.vue) moet
+// DebateVideoView.vue zijn visibleArgumentCount eerst ophogen tot voorbij het
+// doelargument voordat deze kaart uberhaupt bestaat -- zonder immediate mist
+// een kaart die al met playing:true gemount wordt (i.p.v. er via een prop-
+// wijziging naartoe te gaan) deze auto-scroll dus volledig.
 watch(
 	() => props.playing,
-	(isPlaying) => {
-		if (isPlaying && !userScroll.isScrolling && window.matchMedia("(min-width: 901px)").matches) {
-			cardEl.value?.scrollIntoView({ behavior: "smooth", block: "center" });
-		}
+	async (isPlaying) => {
+		if (!isPlaying || userScroll.isScrolling || !window.matchMedia("(min-width: 901px)").matches) return;
+		await nextTick();
+		scrollCardIntoView();
 	},
+	{ immediate: true },
 );
 </script>
 

@@ -15,7 +15,14 @@ import PartyLogo from "./PartyLogo.vue";
 // "Toegankelijkheid" -- icoon+tekst altijd samen, nooit kleur alleen, nooit
 // tekst direct op beeld (vandaar de achtergrond per badge hieronder).
 
-const props = defineProps<{ arguments: Argument[]; currentTime: number; off: Record<string, boolean> }>();
+// followPaused: DebateVideoView.vue geeft dit door zolang userScroll.ts'
+// cooldown actief is (de gebruiker heeft net zelf gescrolld) -- dan slaat
+// ArgumentCard.vue's auto-scroll-naar-actief-argument (issue #147) even over.
+// Zonder duidelijk signaal hier oogt dat als een bug ("waarom scrollt de
+// lijst nu niet mee, en waarom een paar seconden later opeens wel"): dit
+// badge maakt de (bestaande, tijdelijke) onderdrukking zichtbaar op de plek
+// waar je 'm merkt -- naast de vorig/volgend-knoppen.
+const props = defineProps<{ arguments: Argument[]; currentTime: number; off: Record<string, boolean>; followPaused?: boolean }>();
 const emit = defineEmits<{ seek: [seconds: number] }>();
 
 const colorByPerspective = new Map(PERSPECTIEVEN.map((p) => [p.naam, p.kleur]));
@@ -184,6 +191,23 @@ const badges = computed(() =>
 					</button>
 				</div>
 			</div>
+			<!-- Eigen regel onder de klok-knoppenrij i.p.v. ernaast in .clock-group:
+			     dat liet de knoppen (margin-left: auto, dus rechts uitgelijnd binnen
+			     .header-row) bij elke verschijning/verdwijning van breedte
+			     veranderen, waardoor ze zichtbaar heen en weer sprongen. Altijd
+			     gerenderd (geen v-if) en alleen opacity togglend i.p.v. verwijderd
+			     uit de DOM: anders reserveert deze regel geen ruimte zolang 'm
+			     onzichtbaar is, en schuift .bottom-block (flex-end in
+			     .video-overlay) bij elke verschijning/verdwijning alsnog verticaal
+			     op/neer. -->
+			<p
+				class="follow-paused-hint"
+				:class="{ 'is-visible': followPaused }"
+				:title="followPaused ? 'Je scrollt zelf in de argumentenlijst -- die volgt de video hierdoor even niet automatisch mee' : undefined"
+				aria-hidden="true"
+			>
+				lijst volgt niet mee
+			</p>
 		</div>
 	</div>
 </template>
@@ -298,6 +322,28 @@ const badges = computed(() =>
 
 .clock-indicator.is-clickable:hover {
 	color: rgba(255, 255, 255, 0.85);
+}
+
+/* Subtiel bedoeld: geen achtergrond/kader, gewoon een kleine, gedempte regel
+   onder de klok-knoppen -- opvallen is niet het doel, alleen even duidelijk
+   maken waarom de argumentenlijst nu niet meebeweegt. Rechts uitgelijnd,
+   onder .clock-group (die zelf ook rechts uitgelijnd staat via
+   margin-left: auto). Altijd gerenderd (zie template) en hier alleen via
+   opacity in-/uitgeschakeld -- nooit `display: none`, anders reserveert deze
+   regel geen hoogte terwijl 'm uit staat en schuift .bottom-block (flex-end
+   in .video-overlay) bij elke toggle een regel op/neer. */
+.follow-paused-hint {
+	margin: 0.2em 0 0;
+	font-family: var(--font-mono);
+	font-size: 0.65rem;
+	color: rgba(255, 255, 255, 0.4);
+	text-align: right;
+	opacity: 0;
+	transition: opacity 0.4s ease;
+}
+
+.follow-paused-hint.is-visible {
+	opacity: 1;
 }
 
 /* Eerste/laatste argument: knop blijft staan (geen layout-sprong) maar is

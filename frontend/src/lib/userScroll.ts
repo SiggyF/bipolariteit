@@ -15,10 +15,28 @@ export const userScroll = reactive({ isScrolling: false });
 
 let timer: ReturnType<typeof setTimeout> | null = null;
 
+// Tot voor kort werd dit alleen aangeroepen vanuit wheel-/touchmove-listeners
+// (zie DebateVideoView.vue) -- dat mist toetsenbordscrollen (Page Down/
+// spatie/pijltjes) en het slepen aan de eigen scrollbar-duimschijf, die geen
+// van beide een wheel-/touchmove-event geven. Nu gekoppeld aan het generieke
+// window "scroll"-event (vangt elke oorzaak), met markProgrammaticScroll()
+// hieronder om te voorkomen dat de eigen auto-scroll (ArgumentCard.vue's
+// scrollIntoView) zichzelf als "gebruiker scrolt" aanmerkt -- dat zou anders
+// de cooldown telkens zelf blijven verlengen.
 export function notifyUserScroll() {
+	if (Date.now() < programmaticUntil) return;
 	userScroll.isScrolling = true;
 	if (timer) clearTimeout(timer);
 	timer = setTimeout(() => {
 		userScroll.isScrolling = false;
 	}, COOLDOWN_MS);
+}
+
+let programmaticUntil = 0;
+
+// Aanroepen vlak vóór een programmatische scroll (scrollIntoView), zodat de
+// scroll-events die dat zelf veroorzaakt niet alsnog notifyUserScroll
+// triggeren. durationMs ruim boven een smooth-scrollanimatie (~1s) houden.
+export function markProgrammaticScroll(durationMs = 1200) {
+	programmaticUntil = Date.now() + durationMs;
 }
