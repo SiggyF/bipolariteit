@@ -209,7 +209,7 @@ const badges = computed(() =>
 	flex-direction: column;
 	align-items: center;
 	gap: 0.2em;
-	max-width: 80%;
+	max-width: min(80%, 28rem);
 	background: rgba(0, 0, 0, 0.55);
 	color: #fff;
 	padding: 0.5em 1em;
@@ -217,14 +217,19 @@ const badges = computed(() =>
 	text-align: center;
 }
 
+/* clamp() i.p.v. de vaste --step-*-tokens: schaalt continu met de
+   viewportbreedte, zodat een lange debattitel op smalle telefoons niet meer
+   buiten de kaart uitsteekt (voorheen: één vaste stap bij 900px, die op
+   bv. 360px-schermen alsnog kon overlopen). */
 .title-card-name {
 	font-family: var(--font-heading);
-	font-size: var(--step-1);
+	font-size: clamp(0.8rem, 3.2vw, var(--step-1));
+	overflow-wrap: break-word;
 }
 
 .title-card-date {
 	font-family: var(--font-mono);
-	font-size: var(--step--1);
+	font-size: clamp(0.65rem, 2vw, var(--step--1));
 	color: rgba(255, 255, 255, 0.7);
 }
 
