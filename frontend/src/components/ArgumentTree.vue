@@ -293,7 +293,7 @@
 					</div>
 				</div>
 				<div
-					v-if="selectedArgument.tweedekamer_activiteit_url || (selectedArgument.raw_video_url && selectedArgument.start_seconds !== null)"
+					v-if="selectedArgument.tweedekamer_activiteit_url || selectedArgument.raw_video_url"
 					class="confrontatie-detail-links"
 				>
 					<a v-if="selectedArgument.tweedekamer_activiteit_url" :href="selectedArgument.tweedekamer_activiteit_url" target="_blank" rel="noopener">bekijk in de Tweede Kamer</a>
@@ -301,6 +301,11 @@
 						v-if="selectedArgument.raw_video_url && selectedArgument.start_seconds !== null"
 						:href="`/debatten/${debateId(selectedArgument.raw_video_url)}/?t=${Math.floor(selectedArgument.start_seconds)}`"
 						>video (dit moment)</a
+					>
+					<a
+						v-else-if="selectedArgument.raw_video_url"
+						:href="`/debatten/${debateId(selectedArgument.raw_video_url)}/`"
+						>bekijk in videospeler</a
 					>
 				</div>
 			</div>
