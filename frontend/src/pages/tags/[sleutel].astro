@@ -3,6 +3,7 @@ import TagDetail from "../../components/TagDetail.vue";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { ALLE_TAGS } from "../../lib/taxonomy";
 import { slugify } from "../../lib/slug";
+import { derivePartyTagIndex, derivePersonTagIndex, deriveTopPersonsForTag, filterArgumentsByTag } from "../../lib/aggregate";
 
 const topicModules = import.meta.glob("../../../../data/export/topics/*.json", { eager: true });
 
@@ -25,6 +26,32 @@ export function getStaticPaths() {
 
 const { tag } = Astro.props;
 const argumentList = allArguments();
+
+// Alleen de argumenten met déze tag gaan naar de client -- niet de volledige,
+// tientallen MB's grote argumentenlijst van alle onderwerpen samen (zie issue
+// over de Cloudflare Workers assetlimiet van 25 MiB per bestand). De
+// partij-/persoonpercentages hebben wel de volledige lijst als noemer nodig
+// (alle onderwerpen), dus die aggregatie gebeurt hier, build-time, en alleen
+// de kleine uitkomst (partyRows/topPersons) gaat mee als prop.
+const taggedArguments = filterArgumentsByTag(argumentList, tag.sleutel);
+
+// Zelfde ondergrens als TagDetail.vue/PerspectiefTagHeatmap.vue: onder dit
+// partijtotaal is een percentage schijnnauwkeurig.
+const MIN_PARTY_TOTAL = 8;
+
+let partyRows: { party: string; count: number; total: number; pct: number }[] = [];
+let topPersons: ReturnType<typeof deriveTopPersonsForTag> = [];
+if (!tag.deterministic) {
+	const partyIndex = derivePartyTagIndex(argumentList);
+	for (const entry of partyIndex.values()) {
+		if (entry.total < MIN_PARTY_TOTAL) continue;
+		const count = entry.tagCounts.get(tag.sleutel) ?? 0;
+		if (!count) continue;
+		partyRows.push({ party: entry.party, count, total: entry.total, pct: (count / entry.total) * 100 });
+	}
+	partyRows.sort((a, b) => b.pct - a.pct);
+	topPersons = deriveTopPersonsForTag(derivePersonTagIndex(argumentList), tag.sleutel);
+}
 ---
 
 <BaseLayout title={`${tag.sleutel} - Bipolariteit`}>
@@ -35,7 +62,9 @@ const argumentList = allArguments();
 		labelgroep={tag.labelgroep}
 		perspectief={tag.perspectief}
 		deterministic={tag.deterministic}
-		argumentList={argumentList}
+		taggedArguments={taggedArguments}
+		partyRows={partyRows}
+		topPersons={topPersons}
 		client:only="vue"
 	/>
 </BaseLayout>
