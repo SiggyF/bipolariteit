@@ -4,17 +4,55 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import { PERSPECTIEVEN } from "../../lib/tagIcons.generated";
 import { slugify } from "../../lib/slug";
 import { perspectiefWeergaveNaam } from "../../lib/tagIcon";
+import type { Argument } from "../../lib/types";
 
 const topicModules = import.meta.glob("../../../../data/export/topics/*.json", { eager: true });
 
-function allArguments() {
-	return Object.values(topicModules).flatMap((mod: any) =>
-		mod.default.arguments.map((argument: any) => ({
-			...argument,
-			topicSlug: mod.default.slug,
-			topicName: mod.default.name,
+// PerspectiefView (tijdlijn + correspondentiekaart) toont nooit een losse
+// ArgumentCard en heeft dus nooit de zware, per-argument herhaalde velden
+// nodig (videolinks, quote_context, claims, oppositions, tag-`reden`) -- die
+// vormen het gros van de ruwe export (zie issue over de Cloudflare Workers
+// assetlimiet van 25 MiB per bestand: elk van de vier perspectiefpagina's
+// bevatte de volledige, ongefilterde argumentenlijst tweemaal). Alleen de
+// velden die matches()/buildTimeline()/buildCorrespondence() (lib/filters.ts,
+// lib/timeline.ts, lib/correspondence.ts) daadwerkelijk lezen blijven over.
+function toLeanArgument(argument: any): Argument {
+	return {
+		id: argument.id,
+		stance: argument.stance,
+		typology: argument.typology,
+		quote_text: argument.quote_text,
+		quote_context: null,
+		prompt_version: null,
+		start_seconds: null,
+		end_seconds: null,
+		actor: argument.actor,
+		document: {
+			id: argument.document.id,
+			url: null,
+			video_url: null,
+			published_at: argument.document.published_at,
+			speaker_video_url: null,
+			tweedekamer_activiteit_url: null,
+			redactie_review: null,
+			raw_video_url: null,
+		},
+		periode: argument.periode,
+		claims: [],
+		tags: argument.tags.map((tag: any) => ({
+			sleutel: tag.sleutel,
+			beschrijving: tag.beschrijving,
+			labelgroep: tag.labelgroep,
+			perspectief: tag.perspectief,
+			created_by: tag.created_by,
+			reden: null,
 		})),
-	);
+		oppositions: [],
+	};
+}
+
+function allArguments(): Argument[] {
+	return Object.values(topicModules).flatMap((mod: any) => mod.default.arguments.map(toLeanArgument));
 }
 
 export function getStaticPaths() {

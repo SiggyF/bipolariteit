@@ -3,12 +3,7 @@ import { computed } from "vue";
 import { displayPartyName } from "../lib/parties";
 import { slugify } from "../lib/slug";
 import { tagIconPath } from "../lib/tagIcon";
-import {
-	derivePartyTagIndex,
-	derivePersonTagIndex,
-	deriveTopPersonsForTag,
-	filterArgumentsByTag,
-} from "../lib/aggregate";
+import type { TopPersonRow } from "../lib/aggregate";
 import ArgumentCard from "./ArgumentCard.vue";
 import type { Argument } from "../lib/types";
 
@@ -17,43 +12,35 @@ export interface TopicTaggedArgument extends Argument {
 	topicName: string;
 }
 
+export interface TagPartyRow {
+	party: string;
+	count: number;
+	total: number;
+	pct: number;
+}
+
 const props = defineProps<{
 	sleutel: string;
 	beschrijving: string;
 	labelgroep: string;
 	perspectief: string;
 	deterministic: boolean;
-	argumentList: TopicTaggedArgument[];
+	// Alleen de argumenten met déze tag -- de partij-/persoonaggregatie over de
+	// volledige, ongefilterde argumentenlijst gebeurt build-time in
+	// [sleutel].astro, zodat hier niet tientallen MB's aan ruwe data per tag
+	// naar de client hoeft.
+	taggedArguments: TopicTaggedArgument[];
+	partyRows: TagPartyRow[];
+	topPersons: TopPersonRow[];
 }>();
 
-// Zelfde ondergrens als PerspectiefTagHeatmap.vue/aggregate.ts: onder dit
+// Zelfde ondergrens als [sleutel].astro/PerspectiefTagHeatmap.vue: onder dit
 // partijtotaal is een percentage schijnnauwkeurig.
 const MIN_PARTY_TOTAL = 8;
 
-const taggedArguments = computed(() => filterArgumentsByTag(props.argumentList, props.sleutel));
-
-const partyRows = computed(() => {
-	if (props.deterministic) return [];
-	const index = derivePartyTagIndex(props.argumentList);
-	const rows: { party: string; count: number; total: number; pct: number }[] = [];
-	for (const entry of index.values()) {
-		if (entry.total < MIN_PARTY_TOTAL) continue;
-		const count = entry.tagCounts.get(props.sleutel) ?? 0;
-		if (!count) continue;
-		rows.push({ party: entry.party, count, total: entry.total, pct: (count / entry.total) * 100 });
-	}
-	rows.sort((a, b) => b.pct - a.pct);
-	return rows;
-});
-
-const topPersons = computed(() => {
-	if (props.deterministic) return [];
-	return deriveTopPersonsForTag(derivePersonTagIndex(props.argumentList), props.sleutel);
-});
-
 const perTopic = computed(() => {
 	const byTopic = new Map<string, { topicSlug: string; topicName: string; count: number }>();
-	for (const argument of taggedArguments.value) {
+	for (const argument of props.taggedArguments) {
 		const existing = byTopic.get(argument.topicSlug);
 		if (existing) existing.count += 1;
 		else byTopic.set(argument.topicSlug, { topicSlug: argument.topicSlug, topicName: argument.topicName, count: 1 });
@@ -62,7 +49,7 @@ const perTopic = computed(() => {
 });
 
 const exampleArguments = computed(() =>
-	[...taggedArguments.value]
+	[...props.taggedArguments]
 		.sort((a, b) => (b.document.published_at ?? "").localeCompare(a.document.published_at ?? ""))
 		.slice(0, 5),
 );
