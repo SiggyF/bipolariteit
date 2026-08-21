@@ -2,7 +2,7 @@
   "slug": "abortus",
   "name": "Abortus",
   "topic_description": "Dit debat gaat over het Nederlandse abortusbeleid. Aan de ene kant staat\nkeuzevrijheid van de vrouw, aan de andere kant bescherming van het ongeboren\nkind. De discussie omvat aspecten als decriminalisering, de 24-wekengrens, en\nde vorm van abortuszorg.\n\nPRO = pleit voor het schrappen van abortus uit het Wetboek van Strafrecht,\nvoor behoud of verruiming van de 24-wekengrens, voor afschaffing van de\nbedenktijd, en tegen actief aansturen op alternatieven -- de keuze is aan de\nvrouw zelf.\nCONTRA = pleit voor behoud van abortus als uitzondering in het strafrecht,\nvoor een kortere toegestane periode, voor behoud van de bedenktijd als\nzorgvuldigheidswaarborg, en voor actief hulp/informatie aanbieden over\nalternatieven voor abortus.",
-  "generated_at": "2026-08-08T11:48:21.648380+00:00",
+  "generated_at": "2026-08-21T22:19:16.314797+00:00",
   "stats": {
     "totaal_argumenten": 439,
     "aantal_pro": 216,
@@ -38,7 +38,8 @@
         }
       ],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2025A03392",
-      "speaker_video_url": "https://debatdirect.tweedekamer.nl/2026-02-10/zorg-gezondheid/thorbeckezaal/vrouwengezondheid-18-00?event=speaker2026-02-10T18%3A02%3A49%2B0100",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2026-02-10/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2026-02-10T18%3A01%3A39%2B0100&end=2026-02-10T21%3A20%3A31%2B0100",
+      "start_seconds": 254.5600000000004,
       "gist": "honderden vrouwen missen toegang",
       "samenvatting": null
     },
@@ -75,7 +76,8 @@
         }
       ],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2025A03392",
-      "speaker_video_url": "https://debatdirect.tweedekamer.nl/2026-02-10/zorg-gezondheid/thorbeckezaal/vrouwengezondheid-18-00?event=speaker2026-02-10T18%3A02%3A49%2B0100",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2026-02-10/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2026-02-10T18%3A01%3A39%2B0100&end=2026-02-10T21%3A20%3A31%2B0100",
+      "start_seconds": 283.3000000000002,
       "gist": "gebrek vergoeding dwingt zwarte-markt",
       "samenvatting": null
     },
@@ -97,11 +99,13 @@
         "Ideologie-Links-Economisch",
         "Moraliteit-Eerlijkheid",
         "Moraliteit-Vrijheid",
+        "Stijl-Antithese",
         "Walton-Analogie"
       ],
       "claims": [],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2025A03392",
-      "speaker_video_url": "https://debatdirect.tweedekamer.nl/2026-02-10/zorg-gezondheid/thorbeckezaal/vrouwengezondheid-18-00?event=speaker2026-02-10T18%3A02%3A49%2B0100",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2026-02-10/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2026-02-10T18%3A01%3A39%2B0100&end=2026-02-10T21%3A20%3A31%2B0100",
+      "start_seconds": 305.7399999999998,
       "gist": "vergoeding onverzekerden via cak",
       "samenvatting": "Toegang tot abortuszorg raakt aan het recht op gezondheid en moet voor onverzekerden via de CAK-regeling gefinancierd worden."
     },
@@ -131,7 +135,8 @@
         }
       ],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2025A03392",
-      "speaker_video_url": "https://debatdirect.tweedekamer.nl/2026-02-10/zorg-gezondheid/thorbeckezaal/vrouwengezondheid-18-00?event=speaker2026-02-10T20%3A42%3A57%2B0100",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2026-02-10/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2026-02-10T18%3A01%3A39%2B0100&end=2026-02-10T21%3A20%3A31%2B0100",
+      "start_seconds": 9682.0,
       "gist": "abortuspil bij huisarts belangrijk",
       "samenvatting": null
     },
@@ -151,11 +156,13 @@
         "Frame-Verantwoordelijkheid",
         "Ideologie-Rechts-Economisch",
         "Moraliteit-Eerlijkheid",
+        "Stijl-Antithese",
         "Walton-Consequentie"
       ],
       "claims": [],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08083",
-      "speaker_video_url": "https://debatdirect.tweedekamer.nl/2025-01-15/zorg-gezondheid/thorbeckezaal/medische-ethiek-orgaandonatie-14-00?event=speaker2025-01-15T14%3A05%3A21%2B0100",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-01-15/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-01-15T14%3A03%3A00%2B0100&end=2025-01-15T18%3A10%3A35%2B0100",
+      "start_seconds": 393.5809999999999,
       "gist": "anticonceptie verantwoordelijkheid beide partners",
       "samenvatting": null
     },
@@ -177,6 +184,7 @@
         "Ideologie-TAN",
         "Moraliteit-Autoriteit",
         "Moraliteit-Zorg",
+        "Stijl-Retorische-Vraag",
         "Walton-Causaal"
       ],
       "claims": [
@@ -186,7 +194,8 @@
         }
       ],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08083",
-      "speaker_video_url": "https://debatdirect.tweedekamer.nl/2025-01-15/zorg-gezondheid/thorbeckezaal/medische-ethiek-orgaandonatie-14-00?event=speaker2025-01-15T14%3A10%3A15%2B0100",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-01-15/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-01-15T14%3A03%3A00%2B0100&end=2025-01-15T18%3A10%3A35%2B0100",
+      "start_seconds": 451.279,
       "gist": "afschaffing beraadtermijn verhoogt abortuscijfers",
       "samenvatting": null
     },
@@ -207,11 +216,13 @@
         "Ideologie-GAL",
         "Moraliteit-Vrijheid",
         "Moraliteit-Zorg",
+        "Stijl-Antithese",
         "Walton-Consequentie"
       ],
       "claims": [],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08083",
-      "speaker_video_url": "https://debatdirect.tweedekamer.nl/2025-01-15/zorg-gezondheid/thorbeckezaal/medische-ethiek-orgaandonatie-14-00?event=speaker2025-01-15T14%3A11%3A04%2B0100",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-01-15/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-01-15T14%3A03%3A00%2B0100&end=2025-01-15T18%3A10%3A35%2B0100",
+      "start_seconds": 484.0,
       "gist": "preventie is eigen verantwoordelijkheid",
       "samenvatting": "Het voorkomen van ongewenste zwangerschappen is een eigen verantwoordelijkheid van beide partners en geen argument voor gratis vergoeding."
     },
@@ -230,11 +241,13 @@
         "Frame-Thematisch",
         "Ideologie-GAL",
         "Moraliteit-Vrijheid",
+        "Stijl-Herhaling",
         "Walton-Causaal"
       ],
       "claims": [],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08083",
-      "speaker_video_url": "https://debatdirect.tweedekamer.nl/2025-01-15/zorg-gezondheid/thorbeckezaal/medische-ethiek-orgaandonatie-14-00?event=speaker2025-01-15T14%3A11%3A04%2B0100",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-01-15/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-01-15T14%3A03%3A00%2B0100&end=2025-01-15T18%3A10%3A35%2B0100",
+      "start_seconds": 514.8800000000001,
       "gist": "vrouwen beslissen op dag1",
       "samenvatting": null
     },
@@ -265,7 +278,8 @@
         }
       ],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08083",
-      "speaker_video_url": "https://debatdirect.tweedekamer.nl/2025-01-15/zorg-gezondheid/thorbeckezaal/medische-ethiek-orgaandonatie-14-00?event=speaker2025-01-15T14%3A20%3A17%2B0100",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-01-15/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-01-15T14%3A03%3A00%2B0100&end=2025-01-15T18%3A10%3A35%2B0100",
+      "start_seconds": 1047.7199999999998,
       "gist": "veel abortuspatienten zonder anticonceptie",
       "samenvatting": null
     },
@@ -291,7 +305,8 @@
       ],
       "claims": [],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08083",
-      "speaker_video_url": "https://debatdirect.tweedekamer.nl/2025-01-15/zorg-gezondheid/thorbeckezaal/medische-ethiek-orgaandonatie-14-00?event=speaker2025-01-15T14%3A20%3A17%2B0100",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-01-15/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-01-15T14%3A03%3A00%2B0100&end=2025-01-15T18%3A10%3A35%2B0100",
+      "start_seconds": 1075.1799999999998,
       "gist": "financiele barriere verhoogt abortussen",
       "samenvatting": "Financiële drempels bij anticonceptie leiden tot ongewenste zwangerschappen, waardoor vergoeding in het basispakket kostenbesparend werkt."
     },
@@ -316,7 +331,8 @@
       ],
       "claims": [],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08083",
-      "speaker_video_url": "https://debatdirect.tweedekamer.nl/2025-01-15/zorg-gezondheid/thorbeckezaal/medische-ethiek-orgaandonatie-14-00?event=speaker2025-01-15T14%3A33%3A39%2B0100",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-01-15/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-01-15T14%3A03%3A00%2B0100&end=2025-01-15T18%3A10%3A35%2B0100",
+      "start_seconds": 1881.48,
       "gist": "beraadtermijn beschermt tegen familiedruk",
       "samenvatting": null
     },
@@ -341,7 +357,8 @@
       ],
       "claims": [],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08083",
-      "speaker_video_url": "https://debatdirect.tweedekamer.nl/2025-01-15/zorg-gezondheid/thorbeckezaal/medische-ethiek-orgaandonatie-14-00?event=speaker2025-01-15T14%3A38%3A30%2B0100",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-01-15/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-01-15T14%3A03%3A00%2B0100&end=2025-01-15T18%3A10%3A35%2B0100",
+      "start_seconds": 2183.1809999999996,
       "gist": "registratie motieven verbetert hulpverlening",
       "samenvatting": "Het registreren van abortusmotieven is noodzakelijk om gerichte ondersteuning te bieden en inzicht te krijgen in stijgende cijfers."
     },
@@ -361,11 +378,13 @@
         "Ideologie-GAL",
         "Moraliteit-Vrijheid",
         "Moraliteit-Zorg",
+        "Stijl-Antithese",
         "Walton-Regel"
       ],
       "claims": [],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08083",
-      "speaker_video_url": "https://debatdirect.tweedekamer.nl/2025-01-15/zorg-gezondheid/thorbeckezaal/medische-ethiek-orgaandonatie-14-00?event=speaker2025-01-15T14%3A42%3A33%2B0100",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-01-15/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-01-15T14%3A03%3A00%2B0100&end=2025-01-15T18%3A10%3A35%2B0100",
+      "start_seconds": 2432.299,
       "gist": "abortus is reguliere zorg",
       "samenvatting": "Abortus is een vorm van gezondheidszorg en hoort daarom niet thuis in het Wetboek van Strafrecht."
     },
@@ -384,6 +403,7 @@
         "Frame-Thematisch",
         "Ideologie-TAN",
         "Moraliteit-Autoriteit",
+        "Stijl-Antithese",
         "Walton-Analogie"
       ],
       "claims": [
@@ -397,7 +417,8 @@
         }
       ],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08083",
-      "speaker_video_url": "https://debatdirect.tweedekamer.nl/2025-01-15/zorg-gezondheid/thorbeckezaal/medische-ethiek-orgaandonatie-14-00?event=speaker2025-01-15T14%3A51%3A55%2B0100",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-01-15/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-01-15T14%3A03%3A00%2B0100&end=2025-01-15T18%3A10%3A35%2B0100",
+      "start_seconds": 2989.0,
       "gist": "nederlandse 24-wekengrens is uitzonderlijk",
       "samenvatting": "Nederland hanteert een uitzonderlijk lange termijngrens van 24 weken, terwijl foetussen bij latere termijnen al pijn kunnen ervaren."
     },
@@ -419,11 +440,14 @@
         "Ideologie-Links-Economisch",
         "Moraliteit-Eerlijkheid",
         "Moraliteit-Zorg",
+        "Stijl-Aangekondigde-Opsomming",
+        "Stijl-Antithese",
         "Walton-Consequentie"
       ],
       "claims": [],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08083",
-      "speaker_video_url": "https://debatdirect.tweedekamer.nl/2025-01-15/zorg-gezondheid/thorbeckezaal/medische-ethiek-orgaandonatie-14-00?event=speaker2025-01-15T15%3A19%3A43%2B0100",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-01-15/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-01-15T14%3A03%3A00%2B0100&end=2025-01-15T18%3A10%3A35%2B0100",
+      "start_seconds": 4979.200999999999,
       "gist": "anticonceptievergoeding bespaart zorgkosten abortus",
       "samenvatting": null
     },
@@ -447,7 +471,8 @@
       ],
       "claims": [],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08083",
-      "speaker_video_url": "https://debatdirect.tweedekamer.nl/2025-01-15/zorg-gezondheid/thorbeckezaal/medische-ethiek-orgaandonatie-14-00?event=speaker2025-01-15T15%3A36%3A38%2B0100",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-01-15/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-01-15T14%3A03%3A00%2B0100&end=2025-01-15T18%3A10%3A35%2B0100",
+      "start_seconds": 5676.100999999999,
       "gist": "beraadtermijn helpt zorgvuldige keuze",
       "samenvatting": "De verplichte bedenktijd vormt een essentiële zorgvuldigheidswaarborg die vrouwen helpt en beschermt tegen sociale dwang."
     },
@@ -467,6 +492,7 @@
         "Frame-Verantwoordelijkheid",
         "Ideologie-TAN",
         "Moraliteit-Zorg",
+        "Stijl-Retorische-Vraag",
         "Walton-Consequentie"
       ],
       "claims": [
@@ -476,7 +502,8 @@
         }
       ],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08083",
-      "speaker_video_url": "https://debatdirect.tweedekamer.nl/2025-01-15/zorg-gezondheid/thorbeckezaal/medische-ethiek-orgaandonatie-14-00?event=speaker2025-01-15T14%3A25%3A11%2B0100",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-01-15/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-01-15T14%3A03%3A00%2B0100&end=2025-01-15T18%3A10%3A35%2B0100",
+      "start_seconds": 1404.221,
       "gist": "registratie biedt inzicht stijging",
       "samenvatting": null
     },
@@ -519,7 +546,8 @@
         }
       ],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08083",
-      "speaker_video_url": "https://debatdirect.tweedekamer.nl/2025-01-15/zorg-gezondheid/thorbeckezaal/medische-ethiek-orgaandonatie-14-00?event=speaker2025-01-15T14%3A25%3A11%2B0100",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-01-15/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-01-15T14%3A03%3A00%2B0100&end=2025-01-15T18%3A10%3A35%2B0100",
+      "start_seconds": 1470.52,
       "gist": "medische kennis levensvatbaarheid vordert",
       "samenvatting": null
     },
@@ -551,7 +579,8 @@
         }
       ],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08083",
-      "speaker_video_url": "https://debatdirect.tweedekamer.nl/2025-01-15/zorg-gezondheid/thorbeckezaal/medische-ethiek-orgaandonatie-14-00?event=speaker2025-01-15T15%3A42%3A02%2B0100",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-01-15/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-01-15T14%3A03%3A00%2B0100&end=2025-01-15T18%3A10%3A35%2B0100",
+      "start_seconds": 5962.298999999999,
       "gist": "stijging al voor afschaffing",
       "samenvatting": null
     },
@@ -576,7 +605,8 @@
       ],
       "claims": [],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08083",
-      "speaker_video_url": "https://debatdirect.tweedekamer.nl/2025-01-15/zorg-gezondheid/thorbeckezaal/medische-ethiek-orgaandonatie-14-00?event=speaker2025-01-15T15%3A45%3A36%2B0100",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-01-15/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-01-15T14%3A03%3A00%2B0100&end=2025-01-15T18%3A10%3A35%2B0100",
+      "start_seconds": 6156.0,
       "gist": "strafbaarheid belemmert zorgtoegang",
       "samenvatting": null
     },
@@ -602,7 +632,8 @@
       ],
       "claims": [],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08083",
-      "speaker_video_url": "https://debatdirect.tweedekamer.nl/2025-01-15/zorg-gezondheid/thorbeckezaal/medische-ethiek-orgaandonatie-14-00?event=speaker2025-01-15T16%3A34%3A49%2B0100",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-01-15/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-01-15T14%3A03%3A00%2B0100&end=2025-01-15T18%3A10%3A35%2B0100",
+      "start_seconds": 9109.0,
       "gist": "registratie abortusredenen niet zinvol",
       "samenvatting": "Het verplicht registreren van abortusredenen is onwenselijk omdat het stigmatiserend werkt en besluiten te complex zijn voor vinklijsten."
     },
@@ -624,6 +655,7 @@
         "Ideologie-GAL",
         "Moraliteit-Vrijheid",
         "Moraliteit-Zorg",
+        "Stijl-Aangekondigde-Opsomming",
         "Walton-Expertise"
       ],
       "claims": [
@@ -633,7 +665,8 @@
         }
       ],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08083",
-      "speaker_video_url": "https://debatdirect.tweedekamer.nl/2025-01-15/zorg-gezondheid/thorbeckezaal/medische-ethiek-orgaandonatie-14-00?event=speaker2025-01-15T16%3A34%3A49%2B0100",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-01-15/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-01-15T14%3A03%3A00%2B0100&end=2025-01-15T18%3A10%3A35%2B0100",
+      "start_seconds": 9109.0,
       "gist": "eerstelijnszorg voldoet wettelijke regels",
       "samenvatting": null
     },
@@ -661,7 +694,8 @@
         }
       ],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08083",
-      "speaker_video_url": "https://debatdirect.tweedekamer.nl/2025-01-15/zorg-gezondheid/thorbeckezaal/medische-ethiek-orgaandonatie-14-00?event=speaker2025-01-15T16%3A34%3A49%2B0100",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-01-15/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-01-15T14%3A03%3A00%2B0100&end=2025-01-15T18%3A10%3A35%2B0100",
+      "start_seconds": 9109.0,
       "gist": "beraadtermijn niet noodzakelijk zorgvuldigheid",
       "samenvatting": "Een verplichte beraadtermijn is geen noodzakelijke voorwaarde voor zorgvuldige besluitvorming door vrouwen."
     },
@@ -680,6 +714,7 @@
         "Frame-Thematisch",
         "Ideologie-GAL",
         "Moraliteit-Vrijheid",
+        "Stijl-Herhaling",
         "Walton-Expertise"
       ],
       "claims": [
@@ -689,7 +724,8 @@
         }
       ],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08083",
-      "speaker_video_url": "https://debatdirect.tweedekamer.nl/2025-01-15/zorg-gezondheid/thorbeckezaal/medische-ethiek-orgaandonatie-14-00?event=speaker2025-01-15T16%3A46%3A31%2B0100",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-01-15/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-01-15T14%3A03%3A00%2B0100&end=2025-01-15T18%3A10%3A35%2B0100",
+      "start_seconds": 9811.0,
       "gist": "besluit te complex vinklijsten",
       "samenvatting": null
     },
@@ -709,6 +745,7 @@
         "Frame-Verantwoordelijkheid",
         "Ideologie-GAL",
         "Moraliteit-Autoriteit",
+        "Stijl-Aangekondigde-Opsomming",
         "Walton-Consequentie"
       ],
       "claims": [
@@ -722,7 +759,8 @@
         }
       ],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08083",
-      "speaker_video_url": "https://debatdirect.tweedekamer.nl/2025-01-15/zorg-gezondheid/thorbeckezaal/medische-ethiek-orgaandonatie-14-00?event=speaker2025-01-15T16%3A46%3A31%2B0100",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-01-15/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-01-15T14%3A03%3A00%2B0100&end=2025-01-15T18%3A10%3A35%2B0100",
+      "start_seconds": 9811.0,
       "gist": "huisartsenzorg behoudt kwaliteit zorgvuldigheid",
       "samenvatting": null
     },
@@ -757,7 +795,8 @@
         }
       ],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08083",
-      "speaker_video_url": "https://debatdirect.tweedekamer.nl/2025-01-15/zorg-gezondheid/thorbeckezaal/medische-ethiek-orgaandonatie-14-00?event=speaker2025-01-15T16%3A51%3A01%2B0100",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-01-15/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-01-15T14%3A03%3A00%2B0100&end=2025-01-15T18%3A10%3A35%2B0100",
+      "start_seconds": 10081.0,
       "gist": "registratie werkt stigmatiserend vrouwen",
       "samenvatting": null
     },
@@ -781,6 +820,7 @@
         "Ideologie-Links-Economisch",
         "Moraliteit-Eerlijkheid",
         "Moraliteit-Zorg",
+        "Stijl-Retorische-Vraag",
         "Walton-Consequentie"
       ],
       "claims": [
@@ -790,7 +830,8 @@
         }
       ],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08083",
-      "speaker_video_url": "https://debatdirect.tweedekamer.nl/2025-01-15/zorg-gezondheid/thorbeckezaal/medische-ethiek-orgaandonatie-14-00?event=speaker2025-01-15T17%3A08%3A00%2B0100",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-01-15/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-01-15T14%3A03%3A00%2B0100&end=2025-01-15T18%3A10%3A35%2B0100",
+      "start_seconds": 11100.0,
       "gist": "klinieken missen financiele buffers",
       "samenvatting": null
     },
@@ -811,11 +852,13 @@
         "Ideologie-GAL",
         "Meta-Reikwijdte",
         "Moraliteit-Zorg",
+        "Stijl-Aangekondigde-Opsomming",
         "Walton-Causaal"
       ],
       "claims": [],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08083",
-      "speaker_video_url": "https://debatdirect.tweedekamer.nl/2025-01-15/zorg-gezondheid/thorbeckezaal/medische-ethiek-orgaandonatie-14-00?event=speaker2025-01-15T17%3A21%3A27%2B0100",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-01-15/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-01-15T14%3A03%3A00%2B0100&end=2025-01-15T18%3A10%3A35%2B0100",
+      "start_seconds": 11907.0,
       "gist": "anticonceptiefouten veroorzaken ook zwangerschap",
       "samenvatting": null
     },
@@ -834,6 +877,7 @@
         "Frame-Thematisch",
         "Ideologie-TAN",
         "Moraliteit-Autoriteit",
+        "Stijl-Antithese",
         "Walton-Causaal"
       ],
       "claims": [
@@ -855,7 +899,8 @@
         }
       ],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08828",
-      "speaker_video_url": "https://debatdirect.tweedekamer.nl/2025-09-08/overig/troelstrazaal/toegang-tot-abortus-is-een-mensenrecht-10-00?event=speaker2025-09-08T11%3A40%3A52%2B0200",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-09-08/troelstrazaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-09-08T10%3A00%3A04%2B0200&end=2025-09-08T13%3A47%3A37%2B0200",
+      "start_seconds": 6065.080000000002,
       "gist": "huisartsenzorg leidt tot stijging",
       "samenvatting": null
     },
@@ -882,7 +927,8 @@
         }
       ],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08828",
-      "speaker_video_url": "https://debatdirect.tweedekamer.nl/2025-09-08/overig/troelstrazaal/toegang-tot-abortus-is-een-mensenrecht-10-00?event=speaker2025-09-08T12%3A51%3A03%2B0200",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-09-08/troelstrazaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-09-08T10%3A00%3A04%2B0200&end=2025-09-08T13%3A47%3A37%2B0200",
+      "start_seconds": 10300.6,
       "gist": "laagdrempelige pil verhoogt abortusaantal",
       "samenvatting": null
     },
@@ -915,7 +961,8 @@
         }
       ],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08828",
-      "speaker_video_url": "https://debatdirect.tweedekamer.nl/2025-09-08/overig/troelstrazaal/toegang-tot-abortus-is-een-mensenrecht-10-00?event=speaker2025-09-08T13%3A14%3A01%2B0200",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-09-08/troelstrazaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-09-08T10%3A00%3A04%2B0200&end=2025-09-08T13%3A47%3A37%2B0200",
+      "start_seconds": 11773.301,
       "gist": "klinieken hebben eigen buffers",
       "samenvatting": null
     },
@@ -938,6 +985,8 @@
         "Ideologie-TAN",
         "Moraliteit-Zorg",
         "Moraliteit-Zuiverheid",
+        "Stijl-Herhaling",
+        "Stijl-Retorische-Vraag",
         "Walton-Consequentie"
       ],
       "claims": [
@@ -959,7 +1008,8 @@
         }
       ],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08828",
-      "speaker_video_url": "https://debatdirect.tweedekamer.nl/2025-09-08/overig/troelstrazaal/toegang-tot-abortus-is-een-mensenrecht-10-00?event=speaker2025-09-08T13%3A27%3A17%2B0200",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-09-08/troelstrazaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-09-08T10%3A00%3A04%2B0200&end=2025-09-08T13%3A47%3A37%2B0200",
+      "start_seconds": 12459.3,
       "gist": "latere foetussen ervaren pijn",
       "samenvatting": null
     },
@@ -992,7 +1042,8 @@
         }
       ],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08828",
-      "speaker_video_url": "https://debatdirect.tweedekamer.nl/2025-09-08/overig/troelstrazaal/toegang-tot-abortus-is-een-mensenrecht-10-00?event=speaker2025-09-08T13%3A41%3A23%2B0200",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-09-08/troelstrazaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-09-08T10%3A00%3A04%2B0200&end=2025-09-08T13%3A47%3A37%2B0200",
+      "start_seconds": 13288.401,
       "gist": "overheidsregeling onverzekerden roept problemen",
       "samenvatting": "Een landelijke overheidsregeling voor onverzekerden roept onopgeloste vragen op, terwijl bestaande kliniekbuffers en initiatieven al opvang bieden."
     },
@@ -1003,7 +1054,19 @@
       "stance": "contra",
       "spreker": "Vincent Karremans",
       "partij": "VVD",
-      "tags": [],
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Anekdotisch",
+        "Context-Commissie",
+        "Frame-Economisch",
+        "Frame-Thematisch",
+        "Ideologie-Rechts-Economisch",
+        "Meta-Agenda-Tijdigheid",
+        "Moraliteit-Autoriteit",
+        "Moraliteit-Zorg",
+        "Walton-Regel"
+      ],
       "claims": [
         {
           "claim_text": "Abortusklinieken staan in heel goed contact met mekaar.",
@@ -1019,7 +1082,8 @@
         }
       ],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2025A00323",
-      "speaker_video_url": "https://debatdirect.tweedekamer.nl/2025-02-04/zorg-en-gezondheid/groen-van-prinstererzaal/medische-ethiek-orgaandonatie-vervolg-18-15?event=speaker2025-02-04T19%3A03%3A27%2B0100",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-02-04/groenvanprinstererzaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-02-04T18%3A17%3A03%2B0100&end=2025-02-04T19%3A09%3A21%2B0100",
+      "start_seconds": 2784.0,
       "gist": "liefdadigheid en netwerken vangen",
       "samenvatting": null
     },
@@ -1030,10 +1094,20 @@
       "stance": "contra",
       "spreker": "Gideon van Meijeren",
       "partij": "FVD",
-      "tags": [],
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Context-Commissie",
+        "Frame-Thematisch",
+        "Frame-Verantwoordelijkheid",
+        "Ideologie-TAN",
+        "Moraliteit-Autoriteit",
+        "Walton-Regel"
+      ],
       "claims": [],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08053",
-      "speaker_video_url": "https://debatdirect.tweedekamer.nl/2026-04-01/zorg-gezondheid/groen-van-prinstererzaal/eerstelijnszorg-13-00?event=speaker2026-04-01T14%3A14%3A31%2B0200",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2026-04-01/groenvanprinstererzaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2026-04-01T13%3A02%3A34%2B0200&end=2026-04-01T17%3A18%3A50%2B0200",
+      "start_seconds": null,
       "gist": "online verstrekking is strafbaar",
       "samenvatting": null
     },
@@ -1044,10 +1118,26 @@
       "stance": "contra",
       "spreker": "Gideon van Meijeren",
       "partij": "FVD",
-      "tags": [],
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Context-Commissie",
+        "Drogreden-Bespelen-Publiek",
+        "Drogreden-Stropop",
+        "Frame-Moraliteit",
+        "Frame-Thematisch",
+        "Frame-Verantwoordelijkheid",
+        "Ideologie-TAN",
+        "Moraliteit-Autoriteit",
+        "Moraliteit-Zorg",
+        "Stijl-Retorische-Vraag",
+        "Stijl-Slogan",
+        "Walton-Regel"
+      ],
       "claims": [],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08053",
-      "speaker_video_url": "https://debatdirect.tweedekamer.nl/2026-04-01/zorg-gezondheid/groen-van-prinstererzaal/eerstelijnszorg-13-00?event=speaker2026-04-01T14%3A14%3A31%2B0200",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2026-04-01/groenvanprinstererzaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2026-04-01T13%3A02%3A34%2B0200&end=2026-04-01T17%3A18%3A50%2B0200",
+      "start_seconds": 4528.839,
       "gist": "strafrecht handhaaft bescherming leven",
       "samenvatting": "Wettelijke strafbepalingen zijn noodzakelijk om het ongeboren leven te beschermen en illegale abortuspraktijken aan te pakken."
     },
@@ -1058,10 +1148,20 @@
       "stance": "contra",
       "spreker": "Elke Slagt-Tichelman",
       "partij": "GroenLinks-PvdA",
-      "tags": [],
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Causaal",
+        "Frame-Thematisch",
+        "Frame-Verantwoordelijkheid",
+        "Moraliteit-Zorg",
+        "Stijl-Herhaling",
+        "Walton-Consequentie"
+      ],
       "claims": [],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A00656",
-      "speaker_video_url": "https://debatdirect.tweedekamer.nl/2024-04-08/zorg-en-gezondheid/groen-van-prinstererzaal/initiatiefnota-van-het-lid-slagt-tichelman-over-toegang-tot-veilige-en-legale-abortuszorg-voor-iedereen-10-00?event=speaker2024-04-08T12%3A06%3A30%2B0200",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-04-08/groenvanprinstererzaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-04-08T10%3A04%3A47%2B0200&end=2024-04-08T14%3A00%3A09%2B0200",
+      "start_seconds": 7317.101000000001,
       "gist": "twijfel termijn vereist consult",
       "samenvatting": null
     },
@@ -1072,7 +1172,14 @@
       "stance": "pro",
       "spreker": "Elke Slagt-Tichelman",
       "partij": "GroenLinks-PvdA",
-      "tags": [],
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Expert",
+        "Frame-Thematisch",
+        "Ideologie-GAL",
+        "Walton-Expertise"
+      ],
       "claims": [
         {
           "claim_text": "Een embryo onder de tien of twaalf weken is niet levensvatbaar.",
@@ -1080,7 +1187,8 @@
         }
       ],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A00656",
-      "speaker_video_url": "https://debatdirect.tweedekamer.nl/2024-04-08/zorg-en-gezondheid/groen-van-prinstererzaal/initiatiefnota-van-het-lid-slagt-tichelman-over-toegang-tot-veilige-en-legale-abortuszorg-voor-iedereen-10-00?event=speaker2024-04-08T12%3A45%3A16%2B0200",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-04-08/groenvanprinstererzaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-04-08T10%3A04%3A47%2B0200&end=2024-04-08T14%3A00%3A09%2B0200",
+      "start_seconds": 9782.42,
       "gist": "embryo onder twaalf niet-levensvatbaar",
       "samenvatting": null
     }

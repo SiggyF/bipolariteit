@@ -293,11 +293,15 @@
 					</div>
 				</div>
 				<div
-					v-if="selectedArgument.tweedekamer_activiteit_url || selectedArgument.speaker_video_url"
+					v-if="selectedArgument.tweedekamer_activiteit_url || (selectedArgument.raw_video_url && selectedArgument.start_seconds !== null)"
 					class="confrontatie-detail-links"
 				>
 					<a v-if="selectedArgument.tweedekamer_activiteit_url" :href="selectedArgument.tweedekamer_activiteit_url" target="_blank" rel="noopener">bekijk in de Tweede Kamer</a>
-					<a v-if="selectedArgument.speaker_video_url" :href="selectedArgument.speaker_video_url" target="_blank" rel="noopener">video (dit moment)</a>
+					<a
+						v-if="selectedArgument.raw_video_url && selectedArgument.start_seconds !== null"
+						:href="`/debatten/${debateId(selectedArgument.raw_video_url)}/?t=${Math.floor(selectedArgument.start_seconds)}`"
+						>video (dit moment)</a
+					>
 				</div>
 			</div>
 		</Transition>
@@ -307,6 +311,7 @@
 <script setup lang="ts">
 import { computed, nextTick, onMounted, onUnmounted, ref, watch } from "vue";
 import ArgumentConfrontatieKaart from "./ArgumentConfrontatieKaart.vue";
+import { debateId } from "../lib/debateId";
 
 interface ExportArgument {
 	id: number;
@@ -318,7 +323,8 @@ interface ExportArgument {
 	tags: string[];
 	claims: { claim_text: string; attributed_source_text: string | null }[];
 	tweedekamer_activiteit_url: string | null;
-	speaker_video_url: string | null;
+	raw_video_url: string | null;
+	start_seconds: number | null;
 	gist: string;
 	samenvatting: string | null;
 }
