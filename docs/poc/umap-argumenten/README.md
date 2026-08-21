@@ -88,3 +88,26 @@ deelonderwerpen daarbuiten vallen, zodat de boom gerichter aangevuld kan
 worden? Uitgewerkt als onderzoeksvraag in
 [`docs/onderzoeksvraag-argumentboom-coverage.md`](../../onderzoeksvraag-argumentboom-coverage.md) --
 nog puur een idee, vereist grondig testen voor het gebouwd wordt.
+
+## Sanity check: topic-scheiding op alle 4 topics gepoold
+
+Script: [`scripts/experiment_topic_separation.py`](../../../scripts/experiment_topic_separation.py).
+Voordat we verder bouwen op de sub-topic-clusters, eerst een validatie op
+een schaal waar we het antwoord al kennen: als je alle 6382 argumenten van
+alle vier topics (abortus, asiel, energietransitie, stikstof) samen embedt
+met bge-m3 en naar 2D projecteert, herkent het model dan de topic-grenzen
+zelf, puur op tekstsemantiek (het topic staat nergens letterlijk in
+`quote_text`)?
+
+![bge-m3 alle topics gepoold](bgem3_all-topics_topic.png)
+
+Resultaat: abortus en energietransitie vormen allebei een volledig
+geïsoleerde cluster, geen overlap met de andere topics. Asiel en stikstof
+vormen elk een grote eigen regio, met een herkenbare vervaagde overlapzone
+waar ze elkaar raken -- plausibel een echt signaal (asiel- en
+stikstofbeleid werden in deze periode politiek vaak in samenhang
+onderhandeld/gedebatteerd, bv. rond boerderij-uitkoop en coalitieakkoorden),
+geen ruis. Dit bevestigt dat het model op een schaal waar we de juiste
+uitkomst al kennen, daadwerkelijk onderwerpsemantiek vastlegt -- en
+onderbouwt daarmee het vertrouwen in de sub-topic-clusters binnen één topic
+hierboven.
