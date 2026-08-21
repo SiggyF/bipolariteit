@@ -29,7 +29,6 @@ import logging
 from datetime import datetime, timezone
 from pathlib import Path
 
-from pipeline.build_static_data import _speaker_event_url
 from pipeline.db import db
 from pipeline.periodes import PeriodeIndex
 
@@ -185,9 +184,8 @@ def fetch_arguments_by_id(conn, argument_ids):
         return {}
     placeholders = ",".join("?" * len(argument_ids))
     rows = conn.execute(
-        f"""SELECT ar.id, ar.quote_text, ar.typology, ar.stance, ac.name AS actor_name, ac.party AS actor_party,
-                   d.tweedekamer_activiteit_url, d.video_url, d.published_at, d.speaker_event_anchor_at,
-                   d.turn_type, d.is_voorzitter_turn
+        f"""SELECT ar.id, ar.quote_text, ar.typology, ar.stance, ar.start_seconds, ac.name AS actor_name, ac.party AS actor_party,
+                   d.tweedekamer_activiteit_url, d.raw_video_url
             FROM arguments ar
             JOIN actors ac ON ac.id = ar.actor_id
             JOIN documents d ON d.id = ar.document_id
@@ -228,13 +226,8 @@ def fetch_arguments_by_id(conn, argument_ids):
             "tags": tags_by_argument.get(row["id"], []),
             "claims": claims_by_argument.get(row["id"], []),
             "tweedekamer_activiteit_url": row["tweedekamer_activiteit_url"],
-            "speaker_video_url": _speaker_event_url(
-                row["video_url"],
-                row["published_at"],
-                row["speaker_event_anchor_at"],
-                row["turn_type"],
-                row["is_voorzitter_turn"],
-            ),
+            "raw_video_url": row["raw_video_url"],
+            "start_seconds": row["start_seconds"],
         }
     return arguments
 

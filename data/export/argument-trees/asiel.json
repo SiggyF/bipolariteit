@@ -2,11 +2,11 @@
   "slug": "asiel",
   "name": "Asiel en migratie",
   "topic_description": "Dit debat gaat over het Nederlandse asiel- en migratiebeleid: de omvang van de\ninstroom, de opvang en spreiding daarvan, de asielprocedure, gezinshereniging,\nterugkeer en uitzetting, remigratie, en de ruimte die Europese en\ninternationale verplichtingen laten.\n\nPRO = bescherming van de asielzoeker. Nederland heeft een opvangprobleem: te\nweinig plekken en haperende procedures. Kenmerkende onderbouwingen: wie te laat\neen besluit krijgt houdt een rechtsmiddel, zorgvuldigheid gaat boven snelheid,\nopvang hoort kleinschalig en eerlijk verdeeld te zijn, gedwongen terugkeer kan\nalleen als het land van herkomst veilig is, en internationale en Europese\nverplichtingen worden nageleefd. Deze pool bekritiseert maatregelen vaak vanuit\nde rechtsstaat, niet vanuit een pleidooi voor meer migratie.\n\nCONTRA = beperking van de instroom. Nederland heeft te veel asielzoekers: er\nwordt te weinig afgewezen en teruggestuurd, en meer opvangcapaciteit lost dat\nniet op. Oplossingen die deze pool aandraagt: strengere toelating, sneller\nafwijzen, actief terugsturen en remigratie stimuleren, voorzieningen versoberen\nomdat ze als aanzuigende prikkel werken, gemeenten vrijlaten om niet mee te\nwerken aan opvang, en niet ruimhartiger zijn dan Europa vereist. Verder: het\ndraagvlak in de samenleving brokkelt af.",
-  "generated_at": "2026-08-08T11:45:33.876189+00:00",
+  "generated_at": "2026-08-21T22:19:16.428625+00:00",
   "stats": {
-    "totaal_argumenten": 576,
-    "aantal_pro": 218,
-    "aantal_contra": 328,
+    "totaal_argumenten": 3463,
+    "aantal_pro": 1187,
+    "aantal_contra": 2127,
     "aantal_geselecteerd": 39
   },
   "arguments": {
@@ -25,6 +25,7 @@
         "Ideologie-TAN",
         "Meta-Bevoegdheid",
         "Moraliteit-Autoriteit",
+        "Stijl-Aangekondigde-Opsomming",
         "Walton-Regel"
       ],
       "claims": [
@@ -34,7 +35,8 @@
         }
       ],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2025A04881",
-      "speaker_video_url": null,
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-06-17/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-06-17T15%3A19%3A37%2B0200&end=2025-06-17T16%3A19%3A19%2B0200",
+      "start_seconds": 28.0,
       "gist": "Verdragen inperken voor snellere uitzetting",
       "samenvatting": null
     },
@@ -57,7 +59,8 @@
       ],
       "claims": [],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08687",
-      "speaker_video_url": null,
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-12-03/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-12-03T16%3A26%3A24%2B0100&end=2024-12-03T17%3A02%3A22%2B0100",
+      "start_seconds": 1313.0,
       "gist": "Syrië is onveilig voor terugkeer",
       "samenvatting": "Terugsturen naar Syrië is onveilig en schendt internationale verplichtingen zolang foltering en oorlog dreigen."
     },
@@ -78,6 +81,8 @@
         "Frame-Verantwoordelijkheid",
         "Ideologie-Links-Economisch",
         "Moraliteit-Zorg",
+        "Stijl-Herhaling",
+        "Stijl-Retorische-Vraag",
         "Walton-Consequentie"
       ],
       "claims": [
@@ -95,7 +100,8 @@
         }
       ],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A07626",
-      "speaker_video_url": null,
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-11-05/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-11-05T16%3A40%3A18%2B0100&end=2024-11-05T21%3A14%3A32%2B0100",
+      "start_seconds": 431.6800000000003,
       "gist": "IND-bezuiniging veroorzaakt langere wachttijden",
       "samenvatting": "Kortingen op de IND-financiering verergeren de achterstanden en verlengen het verblijf in de opvang."
     },
@@ -131,7 +137,8 @@
         }
       ],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A07626",
-      "speaker_video_url": null,
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-11-05/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-11-05T16%3A40%3A18%2B0100&end=2024-11-05T21%3A14%3A32%2B0100",
+      "start_seconds": 549.7800000000025,
       "gist": "Noodopvang in paardenstallen beschamend",
       "samenvatting": null
     },
@@ -158,7 +165,8 @@
       ],
       "claims": [],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A07626",
-      "speaker_video_url": null,
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-11-05/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-11-05T16%3A40%3A18%2B0100&end=2024-11-05T21%3A14%3A32%2B0100",
+      "start_seconds": 592.640000000003,
       "gist": "Spreidingswet biedt structurele oplossing",
       "samenvatting": null
     },
@@ -214,7 +222,8 @@
         }
       ],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A07626",
-      "speaker_video_url": null,
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-11-05/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-11-05T16%3A40%3A18%2B0100&end=2024-11-05T21%3A14%3A32%2B0100",
+      "start_seconds": 623.3000000000029,
       "gist": "Asielprocedure duurt gemiddeld 61 weken",
       "samenvatting": null
     },
@@ -238,7 +247,8 @@
       ],
       "claims": [],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A07626",
-      "speaker_video_url": null,
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-11-05/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-11-05T16%3A40%3A18%2B0100&end=2024-11-05T21%3A14%3A32%2B0100",
+      "start_seconds": 701.640000000003,
       "gist": "Achterstanden bij IND wegwerken is noodzaak",
       "samenvatting": null
     },
@@ -267,7 +277,8 @@
         }
       ],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A07626",
-      "speaker_video_url": null,
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-11-05/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-11-05T16%3A40%3A18%2B0100&end=2024-11-05T21%3A14%3A32%2B0100",
+      "start_seconds": 1216.2400000000016,
       "gist": "Kanslozen vereisen zorgvuldige toets",
       "samenvatting": "Ook bij kansloze aanvragen is een individuele toets nodig en is gedwongen terugkeer gebonden aan feitelijke veiligheid."
     },
@@ -287,11 +298,13 @@
         "Frame-Verantwoordelijkheid",
         "Ideologie-GAL",
         "Moraliteit-Autoriteit",
+        "Stijl-Antithese",
         "Walton-Consequentie"
       ],
       "claims": [],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A07626",
-      "speaker_video_url": null,
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-11-05/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-11-05T16%3A40%3A18%2B0100&end=2024-11-05T21%3A14%3A32%2B0100",
+      "start_seconds": 1700.6599999999999,
       "gist": "Opt-outbriefjes belemmeren Europees Migratiepact",
       "samenvatting": "Nationale uitzonderingsverzoeken en grenscontroles ondermijnen Europese afspraken en berokkenen de economie schade."
     },
@@ -324,7 +337,8 @@
         }
       ],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A07626",
-      "speaker_video_url": null,
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-11-05/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-11-05T16%3A40%3A18%2B0100&end=2024-11-05T21%3A14%3A32%2B0100",
+      "start_seconds": 3822.7790000000023,
       "gist": "Provincies steunen Spreidingswet massaal",
       "samenvatting": null
     },
@@ -350,7 +364,8 @@
       ],
       "claims": [],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A07626",
-      "speaker_video_url": null,
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-11-05/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-11-05T16%3A40%3A18%2B0100&end=2024-11-05T21%3A14%3A32%2B0100",
+      "start_seconds": 4491.0,
       "gist": "Nareisbeperking treft echte vluchtelingen",
       "samenvatting": "Beperken van nareis treft echte vluchtelingen en sluit ongehuwde en afhankelijke gezinsleden onrechtmatig uit."
     },
@@ -376,7 +391,8 @@
       ],
       "claims": [],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A07626",
-      "speaker_video_url": null,
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-11-05/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-11-05T16%3A40%3A18%2B0100&end=2024-11-05T21%3A14%3A32%2B0100",
+      "start_seconds": 4799.380000000005,
       "gist": "Nareisstop treft lhbti-partners onevenredig",
       "samenvatting": null
     },
@@ -402,7 +418,8 @@
       ],
       "claims": [],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A07626",
-      "speaker_video_url": null,
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-11-05/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-11-05T16%3A40%3A18%2B0100&end=2024-11-05T21%3A14%3A32%2B0100",
+      "start_seconds": 4888.0,
       "gist": "Gezinshereniging is fundamenteel mensenrecht",
       "samenvatting": null
     },
@@ -425,6 +442,7 @@
         "Ideologie-GAL",
         "Moraliteit-Vrijheid",
         "Moraliteit-Zorg",
+        "Stijl-Retorische-Vraag",
         "Walton-Expertise"
       ],
       "claims": [
@@ -446,7 +464,8 @@
         }
       ],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A07626",
-      "speaker_video_url": null,
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-11-05/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-11-05T16%3A40%3A18%2B0100&end=2024-11-05T21%3A14%3A32%2B0100",
+      "start_seconds": 5012.0,
       "gist": "Terugkeerders riskeren foltering in Syrië",
       "samenvatting": null
     },
@@ -467,7 +486,8 @@
       ],
       "claims": [],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A07626",
-      "speaker_video_url": null,
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-11-05/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-11-05T16%3A40%3A18%2B0100&end=2024-11-05T21%3A14%3A32%2B0100",
+      "start_seconds": 8588.301,
       "gist": "Veiligheid moet feitelijk vaststaan",
       "samenvatting": null
     },
@@ -488,7 +508,8 @@
       ],
       "claims": [],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A07626",
-      "speaker_video_url": null,
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-11-05/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-11-05T16%3A40%3A18%2B0100&end=2024-11-05T21%3A14%3A32%2B0100",
+      "start_seconds": 8597.121,
       "gist": "Terugkeer onmogelijk zonder diplomatieke banden",
       "samenvatting": null
     },
@@ -499,7 +520,19 @@
       "stance": "pro",
       "spreker": "Marieke Koekkoek",
       "partij": "Volt",
-      "tags": [],
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Statistisch",
+        "Context-Plenair",
+        "Frame-Economisch",
+        "Frame-Thematisch",
+        "Ideologie-GAL",
+        "Ideologie-Rechts-Economisch",
+        "Moraliteit-Vrijheid",
+        "Stijl-Retorische-Vraag",
+        "Walton-Consequentie"
+      ],
       "claims": [
         {
           "claim_text": "kosten van 75 miljoen per maand voor ondernemers, voor mensen die dagelijks de grens over moeten voor werk, studie of school",
@@ -507,7 +540,8 @@
         }
       ],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A07626",
-      "speaker_video_url": null,
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-11-05/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-11-05T16%3A40%3A18%2B0100&end=2024-11-05T21%3A14%3A32%2B0100",
+      "start_seconds": 15887.298999999999,
       "gist": "Grenscontroles schaden economie en vrijheden",
       "samenvatting": null
     },
@@ -518,7 +552,20 @@
       "stance": "pro",
       "spreker": "Marieke Koekkoek",
       "partij": "Volt",
-      "tags": [],
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Anekdotisch",
+        "Context-Plenair",
+        "Frame-Moraliteit",
+        "Frame-Thematisch",
+        "Frame-Verantwoordelijkheid",
+        "Ideologie-GAL",
+        "Moraliteit-Vrijheid",
+        "Moraliteit-Zorg",
+        "Stijl-Retorische-Vraag",
+        "Walton-Consequentie"
+      ],
       "claims": [
         {
           "claim_text": "Syriërs die nu Libanon ontvluchten door ditzelfde regime opgepakt, gemarteld en vermoord worden",
@@ -526,7 +573,8 @@
         }
       ],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A07626",
-      "speaker_video_url": null,
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-11-05/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-11-05T16%3A40%3A18%2B0100&end=2024-11-05T21%3A14%3A32%2B0100",
+      "start_seconds": 15908.298999999999,
       "gist": "Samenwerking met Assad schendt waarden",
       "samenvatting": null
     },
@@ -537,10 +585,23 @@
       "stance": "contra",
       "spreker": "Eric van der Burg",
       "partij": "VVD",
-      "tags": [],
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Context-Plenair",
+        "Frame-Thematisch",
+        "Frame-Verantwoordelijkheid",
+        "Ideologie-Rechts-Economisch",
+        "Meta-Bevoegdheid",
+        "Moraliteit-Autoriteit",
+        "Moraliteit-Vrijheid",
+        "Stijl-Herhaling",
+        "Walton-Regel"
+      ],
       "claims": [],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A02468",
-      "speaker_video_url": null,
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-03-26/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-03-26T18%3A48%3A45%2B0100&end=2024-03-26T20%3A18%3A32%2B0100",
+      "start_seconds": 2150.1589999999997,
       "gist": "Nationale autonomie boven Europese richtlijnen",
       "samenvatting": null
     },
@@ -551,7 +612,17 @@
       "stance": "contra",
       "spreker": "Diederik van Dijk",
       "partij": "SGP",
-      "tags": [],
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Statistisch",
+        "Context-Plenair",
+        "Frame-Economisch",
+        "Frame-Thematisch",
+        "Ideologie-TAN",
+        "Moraliteit-Autoriteit",
+        "Walton-Consequentie"
+      ],
       "claims": [
         {
           "claim_text": "65 miljoen euro is in de afgelopen twaalf jaar uitgekeerd aan asieldwangsommen",
@@ -563,7 +634,8 @@
         }
       ],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A04848",
-      "speaker_video_url": null,
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-06-18/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-06-18T16%3A29%3A36%2B0200&end=2024-06-18T21%3A21%3A39%2B0200",
+      "start_seconds": 1975.0,
       "gist": "Dwangsommen kosten miljoenen zonder effect",
       "samenvatting": "Miljoenen euro’s aan dwangsommen prikkelen de IND niet om sneller te werken en verlagen het maatschappelijk draagvlak."
     },
@@ -574,7 +646,19 @@
       "stance": "contra",
       "spreker": "Eric van der Burg",
       "partij": "VVD",
-      "tags": [],
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Causaal",
+        "Context-Plenair",
+        "Frame-Economisch",
+        "Frame-Thematisch",
+        "Frame-Verantwoordelijkheid",
+        "Ideologie-TAN",
+        "Moraliteit-Autoriteit",
+        "Moraliteit-Proportionaliteit",
+        "Walton-Consequentie"
+      ],
       "claims": [
         {
           "claim_text": "Dwangsommen werken niet als stimulans voor de IND om sneller te leveren.",
@@ -586,7 +670,8 @@
         }
       ],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A04848",
-      "speaker_video_url": null,
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-06-18/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-06-18T16%3A29%3A36%2B0200&end=2024-06-18T21%3A21%3A39%2B0200",
+      "start_seconds": null,
       "gist": "Dwangsom beloont procederen en verlaagt draagvlak",
       "samenvatting": null
     },
@@ -597,7 +682,18 @@
       "stance": "pro",
       "spreker": "Marieke Koekkoek",
       "partij": "Volt",
-      "tags": [],
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Anekdotisch",
+        "Context-Plenair",
+        "Frame-Moraliteit",
+        "Frame-Thematisch",
+        "Ideologie-GAL",
+        "Moraliteit-Eerlijkheid",
+        "Stijl-Retorische-Vraag",
+        "Walton-Analogie"
+      ],
       "claims": [
         {
           "claim_text": "dwangsommen worden in Nederland overal toegepast als middel",
@@ -605,7 +701,8 @@
         }
       ],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A04848",
-      "speaker_video_url": null,
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-06-18/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-06-18T16%3A29%3A36%2B0200&end=2024-06-18T21%3A21%3A39%2B0200",
+      "start_seconds": 12050.798999999999,
       "gist": "Afschaffen dwangsom veroorzaakt rechtsongelijkheid",
       "samenvatting": null
     },
@@ -616,10 +713,21 @@
       "stance": "pro",
       "spreker": "Marieke Koekkoek",
       "partij": "Volt",
-      "tags": [],
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Context-Plenair",
+        "Frame-Moraliteit",
+        "Frame-Thematisch",
+        "Ideologie-GAL",
+        "Moraliteit-Vrijheid",
+        "Moraliteit-Zorg",
+        "Walton-Regel"
+      ],
       "claims": [],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A04848",
-      "speaker_video_url": null,
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-06-18/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-06-18T16%3A29%3A36%2B0200&end=2024-06-18T21%3A21%3A39%2B0200",
+      "start_seconds": 13020.0,
       "gist": "Dwangsom beschermt kwetsbare burger",
       "samenvatting": "Dwangsommen beschermen de burger tegen een trage overheid en horen op alle terreinen van het recht te gelden."
     },
@@ -630,10 +738,24 @@
       "stance": "pro",
       "spreker": "Michiel van Nispen",
       "partij": "SP",
-      "tags": [],
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Causaal",
+        "Context-Plenair",
+        "Frame-Conflict",
+        "Frame-Thematisch",
+        "Frame-Verantwoordelijkheid",
+        "Ideologie-Links-Economisch",
+        "Moraliteit-Autoriteit",
+        "Moraliteit-Zorg",
+        "Stijl-Herhaling",
+        "Walton-Consequentie"
+      ],
       "claims": [],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A04848",
-      "speaker_video_url": null,
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-06-18/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-06-18T16%3A29%3A36%2B0200&end=2024-06-18T21%3A21%3A39%2B0200",
+      "start_seconds": 15670.0,
       "gist": "Afschaffen dwangsom verbergt overheidsfalen",
       "samenvatting": null
     },
@@ -644,7 +766,17 @@
       "stance": "contra",
       "spreker": "Marina Vondeling",
       "partij": "PVV",
-      "tags": [],
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Context-Plenair",
+        "Frame-Thematisch",
+        "Frame-Verantwoordelijkheid",
+        "Ideologie-TAN",
+        "Moraliteit-Autoriteit",
+        "Moraliteit-Loyaliteit",
+        "Walton-Regel"
+      ],
       "claims": [
         {
           "claim_text": "Uitgeprocedeerde vreemdelingen worden nu veel te weinig snel uit het land gestuurd",
@@ -660,7 +792,8 @@
         }
       ],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2025A04080",
-      "speaker_video_url": null,
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-05-20/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-05-20T17%3A07%3A21%2B0200&end=2025-05-20T17%3A41%3A36%2B0200",
+      "start_seconds": 404.2400000000016,
       "gist": "Kanslozen direct afwijzen aan grens",
       "samenvatting": null
     },
@@ -671,10 +804,22 @@
       "stance": "contra",
       "spreker": "Marjolein Faber",
       "partij": "PVV",
-      "tags": [],
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Context-Plenair",
+        "Drogreden-Stropop",
+        "Frame-Thematisch",
+        "Ideologie-TAN",
+        "Moraliteit-Autoriteit",
+        "Moraliteit-Loyaliteit",
+        "Stijl-Antithese",
+        "Walton-Consequentie"
+      ],
       "claims": [],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2025A04080",
-      "speaker_video_url": null,
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-05-20/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-05-20T17%3A41%3A36%2B0200&end=2025-05-20T19%3A30%3A44%2B0200",
+      "start_seconds": 6478.4000000000015,
       "gist": "Nederland moet geen groot azc worden",
       "samenvatting": null
     },
@@ -685,10 +830,24 @@
       "stance": "contra",
       "spreker": "Simon Ceulemans",
       "partij": "JA21",
-      "tags": [],
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Causaal",
+        "Context-Commissie",
+        "Frame-Conflict",
+        "Frame-Thematisch",
+        "Frame-Verantwoordelijkheid",
+        "Ideologie-TAN",
+        "Moraliteit-Autoriteit",
+        "Moraliteit-Loyaliteit",
+        "Stijl-Antithese",
+        "Walton-Consequentie"
+      ],
       "claims": [],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2025A07195",
-      "speaker_video_url": null,
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-12-09/groenvanprinstererzaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-12-09T16%3A32%3A35%2B0100&end=2025-12-09T19%3A52%3A54%2B0100",
+      "start_seconds": 790.9390000000001,
       "gist": "Azc-bouw mist maatschappelijk draagvlak",
       "samenvatting": null
     },
@@ -699,7 +858,18 @@
       "stance": "contra",
       "spreker": "Simon Ceulemans",
       "partij": "JA21",
-      "tags": [],
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Anekdotisch",
+        "Context-Commissie",
+        "Frame-Conflict",
+        "Frame-Thematisch",
+        "Ideologie-TAN",
+        "Moraliteit-Autoriteit",
+        "Stijl-Retorische-Vraag",
+        "Walton-Analogie"
+      ],
       "claims": [
         {
           "claim_text": "Oostenrijk beroept zich op artikel 72 van het Verdrag betreffende de werking van de Europese Unie om nareis te beperken",
@@ -711,7 +881,8 @@
         }
       ],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2025A07195",
-      "speaker_video_url": null,
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-12-09/groenvanprinstererzaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-12-09T16%3A32%3A35%2B0100&end=2025-12-09T19%3A52%3A54%2B0100",
+      "start_seconds": 856.299,
       "gist": "Nareis beperken via Oostenrijks voorbeeld",
       "samenvatting": "Ruime nareismogelijkheden leiden tot extra druk op de opvang en vereisen strengere wettelijke voorwaarden."
     },
@@ -722,10 +893,21 @@
       "stance": "contra",
       "spreker": "Simon Ceulemans",
       "partij": "JA21",
-      "tags": [],
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Causaal",
+        "Context-Commissie",
+        "Frame-Thematisch",
+        "Frame-Verantwoordelijkheid",
+        "Ideologie-TAN",
+        "Moraliteit-Autoriteit",
+        "Walton-Causaal"
+      ],
       "claims": [],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2025A07195",
-      "speaker_video_url": null,
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-12-09/groenvanprinstererzaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-12-09T16%3A32%3A35%2B0100&end=2025-12-09T19%3A52%3A54%2B0100",
+      "start_seconds": 960.1790000000001,
       "gist": "Syrië-statussen herbeoordelen voor terugkeer",
       "samenvatting": "Grote delen van Syrië zijn weer stabiel genoeg om verleende vergunningen te herbeoordelen en terugkeer te eisen."
     },
@@ -736,7 +918,19 @@
       "stance": "contra",
       "spreker": "David van Weel",
       "partij": "VVD",
-      "tags": [],
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Statistisch",
+        "Context-Commissie",
+        "Frame-Economisch",
+        "Frame-Thematisch",
+        "Frame-Verantwoordelijkheid",
+        "Ideologie-Rechts-Economisch",
+        "Moraliteit-Proportionaliteit",
+        "Stijl-Slogan",
+        "Walton-Consequentie"
+      ],
       "claims": [
         {
           "claim_text": "Er is tot en met augustus meer dan 40 miljoen uitgegeven aan dwangsommen",
@@ -744,7 +938,8 @@
         }
       ],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2025A07195",
-      "speaker_video_url": null,
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-12-09/groenvanprinstererzaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-12-09T16%3A32%3A35%2B0100&end=2025-12-09T19%3A52%3A54%2B0100",
+      "start_seconds": 5134.62,
       "gist": "Dwangsommen demotiverend voor IND-personeel",
       "samenvatting": null
     },
@@ -755,7 +950,19 @@
       "stance": "contra",
       "spreker": "Simon Ceulemans",
       "partij": "JA21",
-      "tags": [],
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Anekdotisch",
+        "Context-Commissie",
+        "Frame-Conflict",
+        "Frame-Thematisch",
+        "Frame-Verantwoordelijkheid",
+        "Ideologie-TAN",
+        "Moraliteit-Autoriteit",
+        "Stijl-Retorische-Vraag",
+        "Walton-Analogie"
+      ],
       "claims": [
         {
           "claim_text": "Duitsland is vanwege die grenscontroles op basis van artikel 72 op individuele basis teruggefloten door de rechter",
@@ -763,7 +970,8 @@
         }
       ],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2025A07195",
-      "speaker_video_url": null,
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-12-09/groenvanprinstererzaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-12-09T16%3A32%3A35%2B0100&end=2025-12-09T19%3A52%3A54%2B0100",
+      "start_seconds": 5290.179,
       "gist": "Zoek nationale geitenpaadjes tegen instroom",
       "samenvatting": "Nederland moet nationale beleidsruimte en uitzonderingen benutten om strenge toelatingsregels door te voeren."
     },
@@ -774,10 +982,20 @@
       "stance": "contra",
       "spreker": "David van Weel",
       "partij": "VVD",
-      "tags": [],
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Causaal",
+        "Context-Commissie",
+        "Frame-Economisch",
+        "Frame-Thematisch",
+        "Ideologie-Rechts-Economisch",
+        "Walton-Consequentie"
+      ],
       "claims": [],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2025A07195",
-      "speaker_video_url": null,
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-12-09/groenvanprinstererzaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-12-09T16%3A32%3A35%2B0100&end=2025-12-09T19%3A52%3A54%2B0100",
+      "start_seconds": 5602.241,
       "gist": "Versobering maakt procedures efficiënter",
       "samenvatting": "Het versoberen van voorzieningen en het inperken van instroom verlicht de opvangdruk effectiever dan geld bijpassen."
     },
@@ -788,7 +1006,18 @@
       "stance": "contra",
       "spreker": "David van Weel",
       "partij": "VVD",
-      "tags": [],
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Causaal",
+        "Context-Commissie",
+        "Frame-Thematisch",
+        "Frame-Verantwoordelijkheid",
+        "Ideologie-TAN",
+        "Moraliteit-Autoriteit",
+        "Moraliteit-Eerlijkheid",
+        "Walton-Consequentie"
+      ],
       "claims": [
         {
           "claim_text": "bij een no-show, als dat vaker gebeurt en als het verwijtbaar wordt geacht, de procedure van de vreemdeling buiten behandeling kan worden geplaatst",
@@ -808,7 +1037,8 @@
         }
       ],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2025A07195",
-      "speaker_video_url": null,
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-12-09/groenvanprinstererzaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-12-09T16%3A32%3A35%2B0100&end=2025-12-09T19%3A52%3A54%2B0100",
+      "start_seconds": 5776.139,
       "gist": "No-shows misbruiken het asielsysteem",
       "samenvatting": "Kansloze asielzoekers die de procedure frustreren moeten versneld worden afgewezen en direct uitgezet."
     },
@@ -819,7 +1049,18 @@
       "stance": "contra",
       "spreker": "Simon Ceulemans",
       "partij": "JA21",
-      "tags": [],
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Statistisch",
+        "Context-Commissie",
+        "Frame-Thematisch",
+        "Frame-Verantwoordelijkheid",
+        "Ideologie-TAN",
+        "Meta-Agenda-Tijdigheid",
+        "Moraliteit-Autoriteit",
+        "Walton-Consequentie"
+      ],
       "claims": [
         {
           "claim_text": "ruim 75.000 Syriërs met een tijdelijke verblijfsvergunning",
@@ -831,7 +1072,8 @@
         }
       ],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2025A07195",
-      "speaker_video_url": null,
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-12-09/groenvanprinstererzaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-12-09T16%3A32%3A35%2B0100&end=2025-12-09T19%3A52%3A54%2B0100",
+      "start_seconds": 6773.62,
       "gist": "Gewijzigde situatie Syrië maakt terugkeer mogelijk",
       "samenvatting": null
     },
@@ -842,10 +1084,21 @@
       "stance": "contra",
       "spreker": "Mona Keijzer",
       "partij": "Lid Keijzer",
-      "tags": [],
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Context-Commissie",
+        "Frame-Thematisch",
+        "Frame-Verantwoordelijkheid",
+        "Ideologie-TAN",
+        "Moraliteit-Autoriteit",
+        "Stijl-Herhaling",
+        "Walton-Consequentie"
+      ],
       "claims": [],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2025A07195",
-      "speaker_video_url": null,
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-12-09/groenvanprinstererzaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-12-09T16%3A32%3A35%2B0100&end=2025-12-09T19%3A52%3A54%2B0100",
+      "start_seconds": 7828.299999999999,
       "gist": "Instroombeperking verlicht opvangdruk het beste",
       "samenvatting": null
     },
@@ -856,10 +1109,22 @@
       "stance": "contra",
       "spreker": "Mona Keijzer",
       "partij": "Lid Keijzer",
-      "tags": [],
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Causaal",
+        "Context-Commissie",
+        "Frame-Thematisch",
+        "Frame-Verantwoordelijkheid",
+        "Ideologie-TAN",
+        "Meta-Agenda-Tijdigheid",
+        "Moraliteit-Autoriteit",
+        "Walton-Consequentie"
+      ],
       "claims": [],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2025A07195",
-      "speaker_video_url": null,
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-12-09/groenvanprinstererzaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-12-09T16%3A32%3A35%2B0100&end=2025-12-09T19%3A52%3A54%2B0100",
+      "start_seconds": 7873.141,
       "gist": "Nareisvoorwaarden noodzakelijk voor opvangdruk",
       "samenvatting": null
     },
@@ -870,10 +1135,23 @@
       "stance": "contra",
       "spreker": "Mona Keijzer",
       "partij": "Lid Keijzer",
-      "tags": [],
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Anekdotisch",
+        "Context-Commissie",
+        "Frame-Economisch",
+        "Frame-Episodisch",
+        "Ideologie-TAN",
+        "Moraliteit-Eerlijkheid",
+        "Moraliteit-Loyaliteit",
+        "Stijl-Retorische-Vraag",
+        "Walton-Consequentie"
+      ],
       "claims": [],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2025A07195",
-      "speaker_video_url": null,
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-12-09/groenvanprinstererzaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-12-09T16%3A32%3A35%2B0100&end=2025-12-09T19%3A52%3A54%2B0100",
+      "start_seconds": 8060.76,
       "gist": "Nareizigers belasten COA-opvang onnodig",
       "samenvatting": null
     },
@@ -884,7 +1162,14 @@
       "stance": "contra",
       "spreker": "Mona Keijzer",
       "partij": "Lid Keijzer",
-      "tags": [],
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Statistisch",
+        "Context-Commissie",
+        "Frame-Thematisch",
+        "Walton-Consequentie"
+      ],
       "claims": [
         {
           "claim_text": "Het aantal reguliere opvangplekken neemt toe, van nu 40.000 naar 51.000 begin 2027",
@@ -892,7 +1177,8 @@
         }
       ],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2025A07195",
-      "speaker_video_url": null,
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-12-09/groenvanprinstererzaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-12-09T16%3A32%3A35%2B0100&end=2025-12-09T19%3A52%3A54%2B0100",
+      "start_seconds": 8249.34,
       "gist": "Reguliere opvang bouwt noodopvang af",
       "samenvatting": null
     },
@@ -903,10 +1189,20 @@
       "stance": "contra",
       "spreker": "Marina Vondeling",
       "partij": "PVV",
-      "tags": [],
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Context-Commissie",
+        "Frame-Thematisch",
+        "Frame-Verantwoordelijkheid",
+        "Ideologie-TAN",
+        "Moraliteit-Autoriteit",
+        "Walton-Regel"
+      ],
       "claims": [],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2025A07195",
-      "speaker_video_url": null,
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-12-09/groenvanprinstererzaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-12-09T16%3A32%3A35%2B0100&end=2025-12-09T19%3A52%3A54%2B0100",
+      "start_seconds": 10086.101,
       "gist": "Tijdelijke Syrië-vergunningen actief intrekken",
       "samenvatting": null
     }
