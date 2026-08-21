@@ -111,3 +111,31 @@ geen ruis. Dit bevestigt dat het model op een schaal waar we de juiste
 uitkomst al kennen, daadwerkelijk onderwerpsemantiek vastlegt -- en
 onderbouwt daarmee het vertrouwen in de sub-topic-clusters binnen één topic
 hierboven.
+
+### Wat de nog-overgebleven cross-topic-uitschieters zijn
+
+Voor de individuele argumenten die (in de originele, hoog-dimensionale
+bge-m3-ruimte, niet alleen de 2D-projectie) het dichtst bij een ander topic
+liggen dan hun eigen topic, bleek de topic-toewijzing zelf steeds correct
+(gecheckt tegen spreker/partij/debat in de database) -- geen
+extractiefouten. Twee andere, wél echte effecten liggen hieraan ten
+grondslag:
+
+- **Gedeeld generiek parlementair register, geen inhoudelijke overlap.**
+  Zinnen die louter naar een coalitieakkoord, EU-afspraken, of
+  mensenrechten-/mensenwaardigheidsframing verwijzen, zonder verder
+  onderwerpsspecifieke inhoud, liggen dicht bij vergelijkbare zinnen uit een
+  ander topic puur op basis van die gedeelde formulering.
+- **Letterlijk herbruikte retorische frames/talking points.** Bv. [763]
+  (stikstof, SGP): *"Nederland zit op slot. We moeten door en er moeten
+  wetten komen."* naast [3877] (asiel, NSC): *"Het Nederlandse stelsel kan
+  het niet meer aan. We moeten nu dus snel maatregelen nemen."* -- of de
+  "X% van Nederland wil hiervan af"-statistiekframing, terugkerend in zowel
+  stikstof- als asielargumenten. Dit zijn generieke retorische bouwstenen
+  die in principe in elk debat inzetbaar zijn, los van het onderwerp.
+
+Praktisch gevolg voor het "gerelateerde argumenten"-idee: dit is precies
+waarom `scripts/experiment_find_similar_arguments.py` similarity-search
+altijd binnen één topic scoped, niet topic-overstijgend -- cross-topic
+similarity wordt gedomineerd door dit generieke-formulering-/
+talking-point-effect, niet door inhoudelijke verwantschap.
