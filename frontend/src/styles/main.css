@@ -1838,8 +1838,19 @@ h3 {
 
 .argument-links {
 	display: flex;
-	gap: 0.75rem;
+	flex-wrap: wrap;
+	row-gap: 0.4rem;
+	column-gap: 0.75rem;
 	font-size: 0.8rem;
+}
+
+/* Zonder dit breekt een lange link (bv. "video op tweedekamer.nl (dit
+   moment)") midden in de tekst af zodra de rij te smal wordt, i.p.v. als
+   geheel naar een nieuwe regel te vallen -- dat gaf een rafelig, "slordig"
+   ogend resultaat (issue #173, vervolgfeedback). */
+.argument-links a,
+.argument-links .link-button {
+	white-space: nowrap;
 }
 
 .argument-links a {
