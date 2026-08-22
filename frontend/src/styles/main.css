@@ -1857,6 +1857,18 @@ h3 {
 	color: var(--color-accent);
 }
 
+/* Tweede Kamer-icoontje voor externe tweedekamer.nl-links (issue #173,
+   vervolgfeedback) -- zelfde desaturatie als .party-logo, voor een
+   consistente, minder felle kleur overal op de site. */
+.link-icon {
+	width: 14px;
+	height: 14px;
+	object-fit: contain;
+	vertical-align: middle;
+	margin-right: 0.25rem;
+	filter: saturate(0.6);
+}
+
 /* <button> voor "spring naar dit moment" (DebateVideoView.vue): visueel
    gelijk aan de <a>-links ernaast, want inhoudelijk hoort het in hetzelfde
    rijtje thuis -- alleen navigeert het niet (seekt de speler i.p.v. de
