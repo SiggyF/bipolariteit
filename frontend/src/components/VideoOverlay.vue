@@ -23,10 +23,10 @@ import PartyLogo from "./PartyLogo.vue";
 // badge maakt de (bestaande, tijdelijke) onderdrukking zichtbaar op de plek
 // waar je 'm merkt -- naast de vorig/volgend-knoppen.
 // minimal: zwevende mini-player (DebateVideoView.vue's isFloating, issue
-// #173-vervolg). Op de smalle 320px-breedte verdrongen de vorig/volgend-
-// knoppen (samen met VideoPlayer.vue's eigen controlsrij, daar apart
-// gestript) de naamplaat/partij -- niet bruikbaar op dat formaat en de
-// argumentenlijst waar ze naartoe seeken is toch niet in beeld.
+// #173-vervolg). De vorig/volgend-argumentknoppen blijven bruikbaar (het
+// seek-event werkt ongeacht of de speler zweeft), maar op de smalle 320px-
+// breedte past niet de volle pijl+tijdstempel-vorm -- alleen de kale
+// pijlknoppen, zonder tijdstempel/tussentekst.
 const props = defineProps<{
 	arguments: Argument[];
 	currentTime: number;
@@ -170,7 +170,7 @@ const badges = computed(() =>
 				     kaal naamplaatje -- zelfde patroon als ArgumentCard.vue al doet
 				     ("Volgens X, staatssecretaris van ..."). -->
 				<span v-else-if="nameplate.role_title" class="nameplate-party">{{ nameplate.role_title }}</span>
-				<div v-if="!minimal" class="clock-group">
+				<div class="clock-group" :class="{ 'is-minimal': minimal }">
 					<!-- Altijd zichtbaar, disabled i.p.v. verborgen bij het eerste/
 					     laatste argument (issue #134): een verdwijnende knop springt de
 					     layout en de disabled-state is dan niet te onderscheiden van
@@ -178,7 +178,10 @@ const badges = computed(() =>
 					     zonder timeRangeText (in een gat tussen twee argumenten): de
 					     volledige zin ("vorig/volgend argument om ...") paste daar niet
 					     meer op één regel zodra prev/next tegelijk zichtbaar zijn -- die
-					     staat nog wel in aria-label/title. -->
+					     staat nog wel in aria-label/title. In de mini-player (minimal)
+					     blijven de knoppen zelf staan -- ze werken daar (seeken doet de
+					     video gewoon door) -- maar zonder de tijdstempel/tussentekst,
+					     die past niet meer op de smalle 320px-breedte. -->
 					<button
 						type="button"
 						class="clock-indicator is-clickable"
@@ -187,9 +190,9 @@ const badges = computed(() =>
 						:title="prevArgument ? `Vorig argument om ${formatClock(prevArgument.start_seconds as number)}` : 'Geen vorig argument'"
 						@click="prevArgument && emit('seek', prevArgument.start_seconds as number)"
 					>
-						← <span v-if="prevArgument">{{ formatClock(prevArgument.start_seconds as number) }}</span>
+						← <span v-if="prevArgument && !minimal">{{ formatClock(prevArgument.start_seconds as number) }}</span>
 					</button>
-					<span v-if="timeRangeText" class="clock-indicator">{{ timeRangeText }}</span>
+					<span v-if="timeRangeText && !minimal" class="clock-indicator">{{ timeRangeText }}</span>
 					<button
 						type="button"
 						class="clock-indicator is-clickable"
@@ -198,7 +201,7 @@ const badges = computed(() =>
 						:title="nextArgument ? `Volgend argument om ${formatClock(nextArgument.start_seconds as number)}` : 'Geen volgend argument'"
 						@click="nextArgument && emit('seek', nextArgument.start_seconds as number)"
 					>
-						→ <span v-if="nextArgument">{{ formatClock(nextArgument.start_seconds as number) }}</span>
+						→ <span v-if="nextArgument && !minimal">{{ formatClock(nextArgument.start_seconds as number) }}</span>
 					</button>
 				</div>
 			</div>
@@ -335,6 +338,12 @@ const badges = computed(() =>
 	display: flex;
 	align-items: baseline;
 	gap: 0.6em;
+}
+
+/* Mini-player (issue #173-vervolg): alleen de kale pijlen, geen tijdstempel
+   ernaast -- krapper gaatje ertussen past bij die kortere knopinhoud. */
+.clock-group.is-minimal {
+	gap: 0.4em;
 }
 
 .clock-indicator {
