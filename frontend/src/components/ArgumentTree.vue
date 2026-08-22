@@ -292,20 +292,15 @@
 						<span v-for="tag in selectedArgument.tags" :key="tag">{{ tag }}</span>
 					</div>
 				</div>
-				<div
-					v-if="selectedArgument.tweedekamer_activiteit_url || selectedArgument.raw_video_url"
-					class="confrontatie-detail-links"
-				>
-					<a v-if="selectedArgument.tweedekamer_activiteit_url" :href="selectedArgument.tweedekamer_activiteit_url" target="_blank" rel="noopener">bekijk in de Tweede Kamer</a>
+				<div v-if="selectedArgumentLinks.length" class="confrontatie-detail-links">
 					<a
-						v-if="selectedArgument.raw_video_url && selectedArgument.start_seconds !== null"
-						:href="`/debatten/${debateId(selectedArgument.raw_video_url)}/?t=${Math.floor(selectedArgument.start_seconds)}`"
-						>video (dit moment)</a
-					>
-					<a
-						v-else-if="selectedArgument.raw_video_url"
-						:href="`/debatten/${debateId(selectedArgument.raw_video_url)}/`"
-						>bekijk in videospeler</a
+						v-for="link in selectedArgumentLinks"
+						:key="link.key"
+						:href="link.href"
+						:target="link.external ? '_blank' : undefined"
+						:rel="link.external ? 'noopener' : undefined"
+						:title="link.title"
+						>{{ link.label }}</a
 					>
 				</div>
 			</div>
@@ -316,7 +311,7 @@
 <script setup lang="ts">
 import { computed, nextTick, onMounted, onUnmounted, ref, watch } from "vue";
 import ArgumentConfrontatieKaart from "./ArgumentConfrontatieKaart.vue";
-import { debateId } from "../lib/debateId";
+import { externalArgumentLinks, internalVideoLink, type ArgumentLink } from "../lib/argumentLinks";
 
 interface ExportArgument {
 	id: number;
@@ -416,6 +411,24 @@ const selectedId = ref<number | null>(null);
 const hoverId = ref<number | null>(null);
 
 const selectedArgument = computed(() => (selectedId.value === null ? undefined : argumentFor(selectedId.value)));
+
+// Zelfde regelset als ArgumentCard.vue (issue #173): deze confrontatie-export
+// kent alleen tweedekamer_activiteit_url en raw_video_url (geen XML/externe
+// video-velden), dus externalArgumentLinks levert hier hooguit de
+// Tweede Kamer-link op -- de video wijst altijd naar de eigen videospeler.
+const selectedArgumentLinks = computed<ArgumentLink[]>(() => {
+	const a = selectedArgument.value;
+	if (!a) return [];
+	const links = externalArgumentLinks({
+		tweedekamer_activiteit_url: a.tweedekamer_activiteit_url,
+		document_url: null,
+		speaker_video_url: null,
+		video_url: null,
+	});
+	const player = internalVideoLink(a.raw_video_url, a.start_seconds);
+	if (player) links.push(player);
+	return links;
+});
 
 function selectArgument(id: number) {
 	selectedId.value = selectedId.value === id ? null : id;

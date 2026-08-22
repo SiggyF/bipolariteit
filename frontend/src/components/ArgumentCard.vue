@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, onMounted, watch, nextTick } from "vue";
 import { ISSUE_TYPES, type IssueKey, getFeedbackFor, submitFeedback } from "../lib/feedback";
-import { debateId } from "../lib/debateId";
+import { externalArgumentLinks, internalVideoLink } from "../lib/argumentLinks";
 import { displayPartyName } from "../lib/parties";
 import { filters, toggleValue } from "../lib/filters";
 import { scrollTarget } from "../lib/scrollTarget";
@@ -47,6 +47,21 @@ const compactTags = computed(() =>
 );
 
 const isSeekable = computed(() => !!props.videoContext && props.argument.start_seconds !== null);
+
+const sourceLinks = computed(() =>
+	externalArgumentLinks({
+		tweedekamer_activiteit_url: props.argument.document.tweedekamer_activiteit_url,
+		document_url: props.argument.document.url,
+		speaker_video_url: props.argument.document.speaker_video_url,
+		video_url: props.argument.document.video_url,
+	}),
+);
+// Buiten videoContext (bv. op de gewone topic-pagina) is er geen "seek"-event
+// om naar te luisteren -- daar wijst dit naar de interne videospeler-pagina
+// i.p.v. een knop die de speler op dezelfde pagina laat springen.
+const playerLink = computed(() =>
+	props.videoContext ? null : internalVideoLink(props.argument.document.raw_video_url, props.argument.start_seconds),
+);
 
 function onCardClick(event: MouseEvent) {
 	if (!isSeekable.value) return;
@@ -246,36 +261,8 @@ watch(
 		</ul>
 
 		<div v-if="!compact" class="argument-links">
-			<a
-				v-if="argument.document.tweedekamer_activiteit_url"
-				:href="argument.document.tweedekamer_activiteit_url"
-				target="_blank"
-				rel="noopener"
-				title="Officiële tweedekamer.nl-pagina van dit debat (Verslag/Handelingen + video)"
-				>bekijk in de Tweede Kamer</a
-			>
-			<a
-				v-if="argument.document.url"
-				:href="argument.document.url"
-				target="_blank"
-				rel="noopener"
-				title="Ruwe brondata (XML) van de Tweede Kamer -- machine-leesbaar, geen leesbare pagina"
-				>ruwe brondata (XML)</a
-			>
-			<a
-				v-if="argument.document.speaker_video_url"
-				:href="argument.document.speaker_video_url"
-				target="_blank"
-				rel="noopener"
-				title="Springt naar het moment dat deze spreker begint in het debat"
-				>video (dit moment)</a
-			>
-			<a
-				v-else-if="argument.document.video_url"
-				:href="argument.document.video_url"
-				target="_blank"
-				rel="noopener"
-				>video (hele debat)</a
+			<a v-for="link in sourceLinks" :key="link.key" :href="link.href" target="_blank" rel="noopener" :title="link.title"
+				>{{ link.label }}</a
 			>
 			<button
 				v-if="videoContext && argument.start_seconds !== null"
@@ -285,12 +272,7 @@ watch(
 				@click="emit('seek', argument.start_seconds as number)"
 				>spring naar dit moment</button
 			>
-			<a
-				v-else-if="argument.document.raw_video_url && argument.start_seconds !== null"
-				:href="`/debatten/${debateId(argument.document.raw_video_url)}/`"
-				title="Bekijk dit debat met argumentannotaties over de video"
-				>bekijk in videospeler</a
-			>
+			<a v-else-if="playerLink" :href="playerLink.href" :title="playerLink.title">{{ playerLink.label }}</a>
 		</div>
 
 		<div v-if="!compact" class="feedback">
