@@ -4,6 +4,10 @@ TOPIC ?= stikstof
 LIMIT ?= 15
 DATASET ?= elecdebate60to16
 MODEL ?= qwen/qwen3.6-27b
+# Los van MODEL: dat is de default voor de lokale qwen-pipeline (extract/tag/
+# validate) en is geen geldig model voor agy (Docker/Gemini). Leeg = laat het
+# script zijn eigen Gemini-default kiezen.
+AGY_MODEL ?=
 # Zonder expliciete BASE_URL=... op de command line wordt scripts/detect_llm_base_url.sh
 # gebruikt: probeert localhost:1234 en host.docker.internal:1234 (devcontainer),
 # en stopt met een foutmelding als geen van beide een LM Studio-instance heeft.
@@ -52,15 +56,15 @@ extract: ## Stage 1 -- argumenten extraheren (LLM, alleen op netstroom). Vars: T
 	@url=$$($(RESOLVE_BASE_URL)) || exit 1; \
 	uv run python -m pipeline.extract_arguments --topic $(TOPIC) --limit $(LIMIT) --base-url $$url
 
-extract-agy: ## Stage 1 -- argumenten extraheren via Docker agy (Gemini). Vars: TOPIC, LIMIT, MODEL, MIN_ID
-	PYTHONPATH=. uv run python scripts/agy_run_extraction_batch.py --topic $(TOPIC) --limit $(LIMIT) $(if $(MODEL),--model $(MODEL),) $(if $(MIN_ID),--min-id $(MIN_ID),)
+extract-agy: ## Stage 1 -- argumenten extraheren via Docker agy (Gemini). Vars: TOPIC, LIMIT, AGY_MODEL, MIN_ID
+	PYTHONPATH=. uv run python scripts/agy_run_extraction_batch.py --topic $(TOPIC) --limit $(LIMIT) $(if $(AGY_MODEL),--model $(AGY_MODEL),) $(if $(MIN_ID),--min-id $(MIN_ID),)
 
 tag: ## Stage 1b -- tags toekennen (LLM, alleen op netstroom). Vars: TOPIC, LIMIT, BASE_URL
 	@url=$$($(RESOLVE_BASE_URL)) || exit 1; \
 	uv run python -m pipeline.tag_arguments --topic $(TOPIC) --limit $(LIMIT) --base-url $$url
 
-tag-agy: ## Stage 1b -- tags toekennen via Docker agy (Gemini). Vars: TOPIC, LIMIT, MODEL
-	PYTHONPATH=. uv run python scripts/agy_run_tagging_batch.py --topic $(TOPIC) --limit $(LIMIT) $(if $(MODEL),--model $(MODEL),)
+tag-agy: ## Stage 1b -- tags toekennen via Docker agy (Gemini). Vars: TOPIC, LIMIT, AGY_MODEL
+	PYTHONPATH=. uv run python scripts/agy_run_tagging_batch.py --topic $(TOPIC) --limit $(LIMIT) $(if $(AGY_MODEL),--model $(AGY_MODEL),)
 
 redactie: ## Stage 2 -- redactie-check/opposition-linking (LLM, alleen op netstroom). Vars: TOPIC, LIMIT, BASE_URL
 	@url=$$($(RESOLVE_BASE_URL)) || exit 1; \
@@ -93,8 +97,8 @@ match-video-spans: ## Vult arguments.start_seconds/end_seconds door quote_text t
 argument-doc: ## Exporteert alle pro/contra-argumenten van TOPIC (met claims/opposities) als markdown, voor handmatig structureren via Gemini -- geen LLM-call
 	uv run python -m pipeline.export_argument_doc --topic $(TOPIC)
 
-confrontatie-tree: ## Genereert data/export/argument-docs/<TOPIC>-gemini-tree.json via Docker agy (Gemini) en combineert die meteen met de DB tot de argumentenboom-export. Vars: TOPIC, MODEL (default gemini-3.6-flash-high)
-	PYTHONPATH=. uv run python scripts/agy_run_confrontatie_tree.py --topic $(TOPIC) $(if $(MODEL),--model $(MODEL),)
+confrontatie-tree: ## Genereert data/export/argument-docs/<TOPIC>-gemini-tree.json via Docker agy (Gemini) en combineert die meteen met de DB tot de argumentenboom-export. Vars: TOPIC, AGY_MODEL (default gemini-3.6-flash-high)
+	PYTHONPATH=. uv run python scripts/agy_run_confrontatie_tree.py --topic $(TOPIC) $(if $(AGY_MODEL),--model $(AGY_MODEL),)
 	uv run python -m pipeline.build_confrontatie_export --topic $(TOPIC)
 
 tags-taxonomy: ## data/tags.toml -> frontend/src/lib/tagsTaxonomy.generated.ts

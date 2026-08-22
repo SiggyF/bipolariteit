@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-21T20:30:03+02:00",
+  "generated_at": "2026-08-22T12:40:47+02:00",
   "topics": [
     {
       "slug": "stikstof",
@@ -161,12 +161,53 @@
       "name": "Energietransitie",
       "vanaf": "2023-12-06",
       "documents_total": 11723,
-      "documents_extracted": 475,
-      "arguments_total": 339,
-      "arguments_tagged": 305,
+      "documents_extracted": 837,
+      "arguments_total": 662,
+      "arguments_tagged": 401,
       "documents_redactie_checked": 0,
-      "arguments_ander_onderwerp": 0,
-      "ander_onderwerp_top": [],
+      "arguments_ander_onderwerp": 84,
+      "ander_onderwerp_top": [
+        {
+          "onderwerp": "armoedebeleid",
+          "aantal": 4
+        },
+        {
+          "onderwerp": "overheidsfinanciën",
+          "aantal": 3
+        },
+        {
+          "onderwerp": "steun aan Oekraïne",
+          "aantal": 2
+        },
+        {
+          "onderwerp": "openbaar vervoer",
+          "aantal": 2
+        },
+        {
+          "onderwerp": "ontwikkelingssamenwerking",
+          "aantal": 2
+        },
+        {
+          "onderwerp": "brandstofaccijns",
+          "aantal": 2
+        },
+        {
+          "onderwerp": "zzp-wetgeving en belastingmaatregelen",
+          "aantal": 1
+        },
+        {
+          "onderwerp": "woningmarkt",
+          "aantal": 1
+        },
+        {
+          "onderwerp": "werkgeversbeleid",
+          "aantal": 1
+        },
+        {
+          "onderwerp": "vrachtwagenheffing",
+          "aantal": 1
+        }
+      ],
       "llm_calls_by_model": [
         {
           "stage": "extraction",
@@ -182,13 +223,13 @@
         {
           "stage": "tagging",
           "model": "qwen/qwen3.6-27b",
-          "n_calls": 306,
-          "total_duration_s": 19466.870268239756,
-          "avg_duration_s": 63.617223098822734,
-          "n_errors": 1,
-          "total_completion_tokens": 188010,
+          "n_calls": 403,
+          "total_duration_s": 25260.033268044936,
+          "avg_duration_s": 62.67998329539686,
+          "n_errors": 2,
+          "total_completion_tokens": 242161,
           "first_call_at": "2026-08-13T10:16:21.437585+00:00",
-          "last_call_at": "2026-08-16T17:34:10.455752+00:00"
+          "last_call_at": "2026-08-22T10:38:07.530901+00:00"
         }
       ]
     }

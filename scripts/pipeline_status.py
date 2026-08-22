@@ -69,7 +69,16 @@ def topic_status(conn, topic_id, topic_slug, vanaf):
     voorzitter_turns = _count(
         conn, "SELECT COUNT(*) FROM documents WHERE topic_id = ? AND is_voorzitter_turn = 1", (topic_id,)
     )
+    attempted_extraction = _count(
+        conn,
+        "SELECT COUNT(*) FROM documents WHERE topic_id = ? AND is_voorzitter_turn = 0 AND extraction_attempted_at IS NOT NULL",
+        (topic_id,),
+    )
     pending_extraction = _count_pending_extraction(conn, topic_id, topic_slug, vanaf)
+    # Niet-voorzitter documenten die nooit door `make extract` opgepakt worden:
+    # buiten de kamerperiode-drempel of het titelfilter (zie
+    # _count_pending_extraction hierboven), niet omdat ze nog in de wachtrij staan.
+    out_of_scope_extraction = total_documents - voorzitter_turns - attempted_extraction - pending_extraction
     outdated_extraction = _count(
         conn,
         """SELECT COUNT(*) FROM documents
@@ -120,7 +129,9 @@ def topic_status(conn, topic_id, topic_slug, vanaf):
     return {
         "documents": total_documents,
         "voorzitter_turns": voorzitter_turns,
+        "attempted_extraction": attempted_extraction,
         "pending_extraction": pending_extraction,
+        "out_of_scope_extraction": out_of_scope_extraction,
         "outdated_extraction": outdated_extraction,
         "arguments": total_arguments,
         "pending_tagging": pending_tagging,
@@ -153,8 +164,12 @@ def print_report(conn, topics):
         logger.info("")
         logger.info("=== %s (%s)%s ===", topic["name"], topic["slug"], missing_description)
         logger.info(
-            "  documenten: %d totaal | %d nog niet geëxtraheerd | %d met verouderde extractie-prompt | %d voorzitter-beurten (overgeslagen)",
-            status["documents"], status["pending_extraction"], status["outdated_extraction"], status["voorzitter_turns"],
+            "  documenten: %d totaal | %d voorzitter-beurten (overgeslagen)",
+            status["documents"], status["voorzitter_turns"],
+        )
+        logger.info(
+            "  extractie:  %d verwerkt | %d nog te doen (make extract) | %d buiten scope (datum-/titelfilter) | %d met verouderde prompt",
+            status["attempted_extraction"], status["pending_extraction"], status["out_of_scope_extraction"], status["outdated_extraction"],
         )
         logger.info(
             "  arguments:  %d totaal | %d nog niet getagd | %d met verouderde tag-prompt",
