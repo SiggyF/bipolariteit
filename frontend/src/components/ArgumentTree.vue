@@ -300,7 +300,7 @@
 						:target="link.external ? '_blank' : undefined"
 						:rel="link.external ? 'noopener' : undefined"
 						:title="link.title"
-						>{{ link.label }}</a
+						><img v-if="link.external" src="/icons/tk.svg" alt="" class="link-icon" />{{ link.label }}</a
 					>
 				</div>
 			</div>

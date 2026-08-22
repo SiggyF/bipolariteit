@@ -262,7 +262,7 @@ watch(
 
 		<div v-if="!compact" class="argument-links">
 			<a v-for="link in sourceLinks" :key="link.key" :href="link.href" target="_blank" rel="noopener" :title="link.title"
-				>{{ link.label }}</a
+				><img src="/icons/tk.svg" alt="" class="link-icon" />{{ link.label }}</a
 			>
 			<button
 				v-if="videoContext && argument.start_seconds !== null"
