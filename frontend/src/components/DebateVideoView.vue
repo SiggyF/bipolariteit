@@ -268,11 +268,19 @@ function dismissFloating() {
 					:seek-token="videoSeek.token"
 					:initial-muted="props.initialMuted"
 					:debate-href="props.debateHref"
+					:minimal="isFloating"
 					@timeupdate="(t) => (currentTime = t)"
 					@loadedmetadata="(d) => (duration = d)"
 					@seek="requestSeek"
 				>
-					<VideoOverlay :arguments="props.arguments" :current-time="currentTime" :off="off" :follow-paused="followPaused" @seek="requestSeek" />
+					<VideoOverlay
+						:arguments="props.arguments"
+						:current-time="currentTime"
+						:off="off"
+						:follow-paused="followPaused"
+						:minimal="isFloating"
+						@seek="requestSeek"
+					/>
 					<!-- Altijd dezelfde plek (dezelfde rij als play/pause, vergelijk
 					     YouTube's chat-knop) i.p.v. mee te verhuizen tussen boven de
 					     lijst en onder de video -- dat verspringen maakte de knop

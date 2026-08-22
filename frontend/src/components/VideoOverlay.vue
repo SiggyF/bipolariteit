@@ -22,7 +22,18 @@ import PartyLogo from "./PartyLogo.vue";
 // lijst nu niet mee, en waarom een paar seconden later opeens wel"): dit
 // badge maakt de (bestaande, tijdelijke) onderdrukking zichtbaar op de plek
 // waar je 'm merkt -- naast de vorig/volgend-knoppen.
-const props = defineProps<{ arguments: Argument[]; currentTime: number; off: Record<string, boolean>; followPaused?: boolean }>();
+// minimal: zwevende mini-player (DebateVideoView.vue's isFloating, issue
+// #173-vervolg). Op de smalle 320px-breedte verdrongen de vorig/volgend-
+// knoppen (samen met VideoPlayer.vue's eigen controlsrij, daar apart
+// gestript) de naamplaat/partij -- niet bruikbaar op dat formaat en de
+// argumentenlijst waar ze naartoe seeken is toch niet in beeld.
+const props = defineProps<{
+	arguments: Argument[];
+	currentTime: number;
+	off: Record<string, boolean>;
+	followPaused?: boolean;
+	minimal?: boolean;
+}>();
 const emit = defineEmits<{ seek: [seconds: number] }>();
 
 const colorByPerspective = new Map(PERSPECTIEVEN.map((p) => [p.naam, p.kleur]));
@@ -159,7 +170,7 @@ const badges = computed(() =>
 				     kaal naamplaatje -- zelfde patroon als ArgumentCard.vue al doet
 				     ("Volgens X, staatssecretaris van ..."). -->
 				<span v-else-if="nameplate.role_title" class="nameplate-party">{{ nameplate.role_title }}</span>
-				<div class="clock-group">
+				<div v-if="!minimal" class="clock-group">
 					<!-- Altijd zichtbaar, disabled i.p.v. verborgen bij het eerste/
 					     laatste argument (issue #134): een verdwijnende knop springt de
 					     layout en de disabled-state is dan niet te onderscheiden van
@@ -241,19 +252,32 @@ const badges = computed(() =>
 	text-align: center;
 }
 
-/* clamp() i.p.v. de vaste --step-*-tokens: schaalt continu met de
-   viewportbreedte, zodat een lange debattitel op smalle telefoons niet meer
-   buiten de kaart uitsteekt (voorheen: één vaste stap bij 900px, die op
-   bv. 360px-schermen alsnog kon overlopen). */
+/* clamp() i.p.v. de vaste --step-*-tokens: schaalt continu, zodat een lange
+   debattitel niet buiten de kaart uitsteekt (voorheen: één vaste stap bij
+   900px, die op bv. 360px-schermen alsnog kon overlopen). cqw (containerbreedte
+   van .video-stage in VideoPlayer.vue) i.p.v. vw: vw schaalt op de hele
+   viewport, dus bleef in de zwevende mini-player (DebateVideoView.vue's
+   isFloating, vast op min(320px, 100vw-...)) even groot als op een brede
+   desktop-viewport en liep daar ver over -- cqw volgt de werkelijke breedte
+   van het videovak zelf, ongeacht of dat de volle speler of de mini-player is. */
 .title-card-name {
 	font-family: var(--font-heading);
-	font-size: clamp(0.8rem, 3.2vw, var(--step-1));
+	font-size: clamp(0.6rem, 3.2cqw, var(--step-1));
 	overflow-wrap: break-word;
+	/* Harde ondergrens naast het schalende lettertype: een lange
+	   Kamerstuktitel (bv. "Initiatiefnota van het lid ... voor Iedereen") kan
+	   ook op het kleinste lettertype nog te veel regels vullen in de smalle
+	   mini-player en zo over het naamplaatje onderin heen groeien -- knip 'm
+	   daarom hard af na 3 regels i.p.v. de kaart open te laten groeien. */
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 3;
+	overflow: hidden;
 }
 
 .title-card-date {
 	font-family: var(--font-mono);
-	font-size: clamp(0.65rem, 2vw, var(--step--1));
+	font-size: clamp(0.6rem, 3cqw, var(--step--1));
 	color: rgba(255, 255, 255, 0.7);
 }
 
@@ -275,23 +299,32 @@ const badges = computed(() =>
 	color: #fff;
 }
 
+/* Zelfde cqw-redenering als .title-card-name hierboven: schaalt op de
+   werkelijke breedte van het videovak, dus ook correct in de zwevende
+   mini-player (vast 320px) op een brede desktop-viewport, waar dit voorheen
+   (vaste --step-1) net zo groot bleef als op de volle speler en over de
+   rand van de kaart heen liep. */
 .nameplate-name {
 	font-family: var(--font-heading);
 	font-style: italic;
-	font-size: var(--step-1);
+	font-size: clamp(0.65rem, 4.5cqw, var(--step-1));
 }
 
 /* Gedesatureerd: een vol partijlogo naast de warme videobeelden trekt te
    veel aandacht en oogt los van de rest van de overlay-typografie. */
-/* Desaturatie zit nu in de globale .party-logo-regel (main.css), hier alleen
-   nog de verticale uitlijning. */
+/* Desaturatie zit nu in de globale .party-logo-regel (main.css); breedte/
+   hoogte hier overschreven (i.p.v. de vaste 18px uit .party-logo) zodat het
+   logo meeschaalt met de rest van de naamplaat i.p.v. verhoudingsgewijs
+   groot te blijven in de mini-player. */
 .nameplate-logo {
 	align-self: center;
+	width: clamp(12px, 4cqw, 18px);
+	height: clamp(12px, 4cqw, 18px);
 }
 
 .nameplate-party {
 	font-family: var(--font-mono);
-	font-size: var(--step--1);
+	font-size: clamp(0.55rem, 2.8cqw, var(--step--1));
 	letter-spacing: 0.08em;
 	color: rgba(255, 255, 255, 0.7);
 	text-transform: uppercase;
@@ -306,7 +339,7 @@ const badges = computed(() =>
 
 .clock-indicator {
 	font-family: var(--font-mono);
-	font-size: var(--step--1);
+	font-size: clamp(0.55rem, 2.8cqw, var(--step--1));
 	color: rgba(255, 255, 255, 0.55);
 	background: none;
 	border: none;
@@ -369,6 +402,9 @@ const badges = computed(() =>
 	pointer-events: auto;
 }
 
+/* font-size hier (i.p.v. alleen op .badge-label) zodat het icoon en de
+   padding -- allebei in em, dus relatief aan dit lettertype -- in dezelfde
+   verhouding meeschalen als de tekst i.p.v. los van elkaar te bewegen. */
 .badge {
 	display: flex;
 	align-items: center;
@@ -379,6 +415,7 @@ const badges = computed(() =>
 	padding: 0.3em 0.6em;
 	border-radius: 3px;
 	cursor: default;
+	font-size: clamp(0.55rem, 2.8cqw, var(--step--1));
 }
 
 .badge-icon-circle {
@@ -400,7 +437,6 @@ const badges = computed(() =>
 
 .badge-label {
 	font-family: var(--font-heading);
-	font-size: var(--step--1);
 	white-space: nowrap;
 }
 
@@ -427,26 +463,14 @@ const badges = computed(() =>
 	opacity: 0;
 }
 
-/* Zelfde breakpoint als de kolomstapeling in DebateVideoView.vue: op een
-   gestapelde mobiele layout is de video zelf smaller dan op desktop, maar
-   deze badges/naamplaatje gebruiken de vaste (niet-vloeiende) --step-*-
-   tokens uit main.css, dus zonder dit blok blijven ze op mobiel even groot
-   als op desktop en nemen ze verhoudingsgewijs veel meer van het beeld in
-   (issue #149). */
-@media (max-width: 900px) {
-	.title-card-name,
-	.nameplate-name {
-		font-size: var(--step-0);
-	}
-
-	.title-card-date,
-	.intro-badge,
-	.nameplate-party,
-	.clock-indicator,
-	.badge-label {
-		font-size: 0.7rem;
-	}
-
+/* @container i.p.v. @media (issue #173-vervolg): de tekst zelf schaalt al
+   continu mee via cqw/clamp() hierboven, dus dat hoeft hier niet meer
+   herhaald. Wat overblijft is een knik in de vormgeving (kortere labels,
+   krappere padding) die moet reageren op de werkelijke breedte van het
+   videovak -- ook de zwevende mini-player (DebateVideoView.vue's
+   isFloating, vast op min(320px, 100vw-...)) op een brede desktop-viewport,
+   waar een @media-breakpoint op viewportbreedte nooit zou triggeren. */
+@container (max-width: 900px) {
 	.badge,
 	.intro-badge {
 		padding: 0.2em 0.45em;
