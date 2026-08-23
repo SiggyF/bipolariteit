@@ -54,7 +54,24 @@
       ],
       "settings": {
         "antigravity.workspaceMode": "container",
-        "antigravity.allowedTools": ["bash", "fileEdit", "webSearch"]
+        "antigravity.allowedTools": ["bash", "fileEdit", "webSearch", "terminal", "read", "write"],
+        "editor.formatOnSave": false,
+        "editor.codeActionsOnSave": {
+          "source.fixAll": "never",
+          "source.fixAll.eslint": "never"
+        },
+        "[vue]": {
+          "editor.formatOnSave": false
+        },
+        "[astro]": {
+          "editor.formatOnSave": false
+        },
+        "[typescript]": {
+          "editor.formatOnSave": false
+        },
+        "[javascript]": {
+          "editor.formatOnSave": false
+        }
       }      
     }
   },

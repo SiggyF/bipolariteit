@@ -768,6 +768,62 @@ const CA_ROW_LABEL_OFFSET: Record<string, CaLabelOffset> = {
 				</li>
 			</ol>
 
+			<h2 id="plenaire-kaart">Wat is de plenaire kaart?</h2>
+			<p>
+				De overzichtspagina van alle <a href="/onderwerpen/">onderwerpen</a> toont een interactieve <strong>plenaire kaart</strong>.
+				Hierin is elke sprekersbeurt uit de plenaire vergaderingen van de Tweede Kamer afgebeeld als één punt. Punten die dicht bij elkaar
+				liggen, behandelen inhoudelijk vergelijkbare onderwerpen; punten die ver van elkaar liggen, gaan over heel andere thema's.
+			</p>
+			<p>
+				De kaart stelt je in staat om te zien hoe de vier uitgelichte onderwerpen (stikstof, abortus, asiel en energietransitie)
+				zich verhouden tot het bredere parlementaire werk — van justitie en defensie tot zorg en buitenlandse zaken.
+			</p>
+
+			<h3>Hoe de plenaire kaart tot stand komt</h3>
+			<ol class="workflow" role="list">
+				<li class="workflow-step">
+					<p class="workflow-step-title"><span class="workflow-step-index">1</span> Tekst-embeddings (BGE-M3)</p>
+					<p class="workflow-step-detail">
+						Elke sprekersbeurt uit de officiële Handelingen wordt omgezet in een hoogdimensionale betekenisvector (embedding).
+						Woorden en zinsneden met een vergelijkbare betekenis komen dicht bij elkaar in deze vectorruimte te liggen.
+					</p>
+				</li>
+				<li class="workflow-arrow" aria-hidden="true">↓</li>
+				<li class="workflow-step">
+					<p class="workflow-step-title"><span class="workflow-step-index">2</span> Dimensiereductie (UMAP)</p>
+					<p class="workflow-step-detail">
+						Het UMAP-algoritme projecteert de tienduizenden vectoren naar een tweedimensionaal vlak. UMAP behoudt daarbij
+						de lokale topologische structuur: spreekbeurten over hetzelfde wetsvoorstel of beleidsterrein blijven in elkaars nabijheid.
+					</p>
+				</li>
+				<li class="workflow-arrow" aria-hidden="true">↓</li>
+				<li class="workflow-step">
+					<p class="workflow-step-title"><span class="workflow-step-index">3</span> Hiërarchische clustering (HDBSCAN condensed tree)</p>
+					<p class="workflow-step-detail">
+						In plaats van een vaste clusterdrempel loopt het algoritme de vertakkingsboom (condensed tree) van HDBSCAN top-down af.
+						Grote afsplitsingen worden overkoepelende <em>beleidsdomeinen</em> (coarse clusters); verdere sub-splitsingen worden
+						fijnmazige <em>deelthema's</em> (fine clusters).
+					</p>
+				</li>
+				<li class="workflow-arrow" aria-hidden="true">↓</li>
+				<li class="workflow-step">
+					<p class="workflow-step-title"><span class="workflow-step-index">4</span> Labeling &amp; duiding (LLM + TF-IDF)</p>
+					<p class="workflow-step-detail">
+						Per cluster worden de meest onderscheidende TF-IDF trefwoorden berekend (met uitsluiting van procedurele Kamertermen).
+						Een taalmodel voorziet elk cluster op basis van representatieve spreekbeurten van een herkenbare themanaam en een korte inhoudelijke duiding.
+					</p>
+				</li>
+				<li class="workflow-arrow" aria-hidden="true">↓</li>
+				<li class="workflow-step">
+					<p class="workflow-step-title"><span class="workflow-step-index">5</span> Renderen met inkt-blending (D3 Canvas)</p>
+					<p class="workflow-step-detail">
+						In de browser worden de circa 40.000 punten hardware-versneld getekend via een 2D Canvas met D3 Zoom.
+						Door inkt-blending (multiply-modus) worden dichte clusterkernen vanzelf dieper van kleur, en zoomt de kaart vloeiend
+						met behoud van 60 beelden per seconde.
+					</p>
+				</li>
+			</ol>
+
 			<h2>Transparantie &amp; reproduceerbaarheid</h2>
 			<p>
 				We claimen geen feilloosheid, wel traceerbaarheid: elk argument is te herleiden tot het exacte

@@ -32,7 +32,7 @@
 // side bij kan (jsDelivr's GitHub-CDN werkt alleen tegen publieke repo's).
 // `make publish-data` commit + pusht de submodule na deze stap.
 
-import { copyFileSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
+import { copyFileSync, existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { toLeanArgument } from "../src/lib/leanArgument";
@@ -98,11 +98,19 @@ function main(): void {
 		console.log(`${pad}: ${taggedArguments.length} argumenten`);
 	}
 
-	for (const bestand of ["plenair-map.json", "plenair-map-clusters.json"]) {
+	const publicDataDir = resolve(hier, "../public/data");
+	mkdirSync(publicDataDir, { recursive: true });
+
+	for (const bestand of ["plenair-map.json", "plenair-map-clusters.json", "plenair-map-videos.json"]) {
 		const bron = resolve(hier, "../../data/export", bestand);
-		const doel = resolve(UIT_DIR, bestand);
-		copyFileSync(bron, doel);
-		console.log(`${doel}: gekopieerd van ${bron}`);
+		if (existsSync(bron)) {
+			const doel = resolve(UIT_DIR, bestand);
+			copyFileSync(bron, doel);
+			console.log(`${doel}: gekopieerd van ${bron}`);
+
+			const publicDoel = resolve(publicDataDir, bestand);
+			copyFileSync(bron, publicDoel);
+		}
 	}
 }
 

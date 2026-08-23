@@ -1,0 +1,11 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PlenairBenchmark from "../../components/PlenairBenchmark.vue";
+
+const dataBaseUrl = import.meta.env.PUBLIC_DATA_BASE_URL ?? "https://cdn.jsdelivr.net/gh/bipolariteit/bipolariteit-data@main";
+---
+
+<BaseLayout title="Plenaire Kaart Performance Benchmark - Bipolariteit">
+	<PlenairBenchmark dataBaseUrl={dataBaseUrl} client:only="vue" />
+</BaseLayout>
+
