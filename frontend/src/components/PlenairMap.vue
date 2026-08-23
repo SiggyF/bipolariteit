@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref } from "vue";
-import { scaleLinear } from "d3-scale";
+import { scaleSqrt } from "d3-scale";
 import { useTheme } from "../lib/useTheme";
 import VChart from "vue-echarts";
 import { use } from "echarts/core";
@@ -36,6 +36,7 @@ type PlenairPoint = {
 type ClusterHullItem = {
 	cluster_id: number;
 	name: string;
+	duiding?: string;
 	parent_id?: number | null;
 	parent_name?: string | null;
 	terms?: string[];
@@ -65,27 +66,108 @@ const showFineHulls = ref(true);
 const showLabels = ref(true);
 const showPoints = ref(true);
 
+// Shoelace-formule: oppervlakte van een convex hull-polygoon in UMAP-eenheden.
+function hullArea(hull: [number, number][] | null): number {
+	if (!hull || hull.length < 3) return 0;
+	let sum = 0;
+	for (let i = 0; i < hull.length; i++) {
+		const [x1, y1] = hull[i];
+		const [x2, y2] = hull[(i + 1) % hull.length];
+		sum += x1 * y2 - x2 * y1;
+	}
+	return Math.abs(sum) / 2;
+}
+
+// Breekt een labeltekst over maximaal 2 regels (op het spatie-punt dat de
+// twee regels het meest gelijk in lengte maakt), zodat labels smaller
+// worden en er meer naast elkaar passen.
+function wrapLabelText(text: string, maxCharsPerLine = 14): string[] {
+	if (text.length <= maxCharsPerLine) return [text];
+	const words = text.split(" ");
+	if (words.length < 2) return [text];
+	let bestSplit = 1;
+	let bestDiff = Infinity;
+	for (let i = 1; i < words.length; i++) {
+		const diff = Math.abs(words.slice(0, i).join(" ").length - words.slice(i).join(" ").length);
+		if (diff < bestDiff) {
+			bestDiff = diff;
+			bestSplit = i;
+		}
+	}
+	return [words.slice(0, bestSplit).join(" "), words.slice(bestSplit).join(" ")];
+}
+
+type LabelBox = { x: number; y: number; width: number; height: number };
+
+// Schat de bounding box van een (mogelijk over 2 regels gebroken) label in
+// schermpixels, voor de collision-detection hieronder. Karakterbreedte is
+// een vaste schatting (geen canvas-tekstmeting nodig) -- precies genoeg om
+// overlap te vermijden, niet om exact te passen.
+function measureLabelBox(lines: string[], fontSize: number, x: number, y: number): LabelBox {
+	const padding = 3;
+	const charWidth = fontSize * 0.58;
+	const width = Math.max(...lines.map((l) => l.length)) * charWidth;
+	const height = lines.length * fontSize * 1.2;
+	return { x: x - width / 2 - padding, y: y - height / 2 - padding, width: width + padding * 2, height: height + padding * 2 };
+}
+
+function boxesOverlap(a: LabelBox, b: LabelBox): boolean {
+	return a.x < b.x + b.width && a.x + a.width > b.x && a.y < b.y + b.height && a.y + a.height > b.y;
+}
+
+// De boomwandeling-clustering (zie scripts/experiment_umap_documents.py::
+// build_hierarchical_clusters) laat aan het eind altijd één "restgroep"
+// over -- alles wat niet zinnig verder splitste. Die is inhoudelijk te
+// divers voor één label (topic_breakdown bevestigt dat, live gezien: 88%
+// "overig plenair" + brokstukken van alle 4 topics) en spreidt zich daarom
+// over een veel groter deel van de UMAP-kaart uit dan een samenhangend
+// onderwerp -- goed te herkennen aan een sterk uitschietende hull-
+// oppervlakte (live gemeten: 61-66 tegenover 1-7 voor de rest). Filter 'm
+// er daarom uit i.p.v. de LLM een misleidend specifieke naam te laten
+// verzinnen voor een groep die geen coherent onderwerp is.
+const HULL_AREA_HIDE_THRESHOLD = 15;
+
+// Zelfde X-herschaling als decodedPoints hieronder toepassen op
+// centroid/hull, anders komen de contouren en labels niet meer overeen
+// met de (al herschaalde) puntenwolk.
+function scaleClusterX(items: ClusterHullItem[], xScale: number): ClusterHullItem[] {
+	return items.map((c) => ({
+		...c,
+		centroid: [c.centroid[0] * xScale, c.centroid[1]] as [number, number],
+		hull: c.hull ? c.hull.map(([hx, hy]) => [hx * xScale, hy] as [number, number]) : null,
+	}));
+}
+
 const coarseClusters = computed<ClusterHullItem[]>(() => {
 	if (!props.clusters) return [];
+	const xScale = canvasAspectRatio.value > 0 ? canvasAspectRatio.value : 1.618;
 	if ("coarse" in props.clusters && Array.isArray(props.clusters.coarse)) {
-		return props.clusters.coarse;
+		return scaleClusterX(props.clusters.coarse.filter((c) => hullArea(c.hull) <= HULL_AREA_HIDE_THRESHOLD), xScale);
 	}
 	return [];
 });
 
 const fineClusters = computed<ClusterHullItem[]>(() => {
 	if (!props.clusters) return [];
+	const xScale = canvasAspectRatio.value > 0 ? canvasAspectRatio.value : 1.618;
 	if ("fine" in props.clusters && Array.isArray(props.clusters.fine)) {
-		return props.clusters.fine;
+		return scaleClusterX(props.clusters.fine.filter((c) => hullArea(c.hull) <= HULL_AREA_HIDE_THRESHOLD), xScale);
 	}
-	if (Array.isArray(props.clusters)) return props.clusters;
+	if (Array.isArray(props.clusters)) return scaleClusterX(props.clusters.filter((c) => hullArea(c.hull) <= HULL_AREA_HIDE_THRESHOLD), xScale);
 	return [];
 });
 
-const decodedPoints = computed<PlenairPoint[]>(() =>
-	props.points.points.map(([id, x, y, topicIdx, actorIdx, partyIdx, debateIdx, soortIdx, published_at, text, cluster]) => ({
+// UMAP-output is van zichzelf ~1:1 in X/Y (geen betekenisvolle eigen
+// aspect ratio, alleen lokale nabijheid telt) -- vermenigvuldig daarom
+// alle X-coördinaten met de canvas-aspectratio (breedte/hoogte), zodat de
+// data zelf het canvas vult i.p.v. dat er lege marge overblijft naast een
+// smaller-dan-canvas asvenster (zie axisBounds hieronder, die nu geen
+// aparte as meer hoeft te verbreden -- dat zat 'm hier, in de data).
+const decodedPoints = computed<PlenairPoint[]>(() => {
+	const xScale = canvasAspectRatio.value > 0 ? canvasAspectRatio.value : 1.618;
+	return props.points.points.map(([id, x, y, topicIdx, actorIdx, partyIdx, debateIdx, soortIdx, published_at, text, cluster]) => ({
 		id,
-		x,
+		x: x * xScale,
 		y,
 		topic: props.points.topics[topicIdx],
 		actor: props.points.actors[actorIdx],
@@ -95,8 +177,8 @@ const decodedPoints = computed<PlenairPoint[]>(() =>
 		published_at,
 		text,
 		cluster,
-	})),
-);
+	}));
+});
 
 const clusterLabels = computed(() => {
 	const map = new Map<number, { name: string; parent_name?: string | null; terms?: string[] }>();
@@ -167,6 +249,11 @@ onUnmounted(() => resizeObserver?.disconnect());
 
 const plotPoints = computed(() => decodedPoints.value);
 
+// decodedPoints se x is al met canvasAspectRatio herschaald (zie boven),
+// dus de data zelf heeft nu al de juiste verhouding voor het canvas --
+// hier alleen nog een symmetrische marge padden, geen aparte as meer
+// hoeven verbreden (dat gaf lege ruimte naast de data i.p.v. de data het
+// canvas te laten vullen).
 const axisBounds = computed(() => {
 	if (decodedPoints.value.length === 0) {
 		return { x: [-10, 10], y: [-10, 10] };
@@ -183,24 +270,9 @@ const axisBounds = computed(() => {
 	const spanX = (maxX - minX) * 1.08 || 1;
 	const spanY = (maxY - minY) * 1.08 || 1;
 
-	// Target aspect ratio comes directly from canvas width / height
-	const targetAspect = canvasAspectRatio.value > 0 ? canvasAspectRatio.value : 1.618;
-	const currentAspect = spanX / spanY;
-
-	let finalSpanX = spanX;
-	let finalSpanY = spanY;
-
-	if (currentAspect < targetAspect) {
-		// Canvas is wider than data -> widen X span to match canvas aspect ratio
-		finalSpanX = spanY * targetAspect;
-	} else {
-		// Canvas is taller than data -> heighten Y span to match canvas aspect ratio
-		finalSpanY = spanX / targetAspect;
-	}
-
 	return {
-		x: [cx - finalSpanX / 2, cx + finalSpanX / 2],
-		y: [cy - finalSpanY / 2, cy + finalSpanY / 2],
+		x: [cx - spanX / 2, cx + spanX / 2],
+		y: [cy - spanY / 2, cy + spanY / 2],
 	};
 });
 
@@ -232,8 +304,13 @@ function onDataZoom() {
 	zoomFactor.value = Math.min(6, 100 / visiblePercent);
 }
 
-const plenairSizeScale = scaleLinear().domain([1, 6]).range([4, 20]).clamp(true);
-const topicSizeScale = scaleLinear().domain([1, 6]).range([6, 26]).clamp(true);
+// scaleSqrt (i.p.v. scaleLinear): puntoppervlak groeit dan evenredig met de
+// zoomfactor i.p.v. de straal -- bij sterk overlappende punten (dichte
+// clusters, live geconstateerd bij ver inzoomen: een egale donkere klomp
+// door overlappende cirkels) groeit de straal zo minder snel door dan bij
+// een lineaire schaal, wat overlap beperkt.
+const plenairSizeScale = scaleSqrt().domain([1, 6]).range([3, 9]).clamp(true);
+const topicSizeScale = scaleSqrt().domain([1, 6]).range([4, 12]).clamp(true);
 
 const boxSelecting = ref(false);
 const boxStart = ref<{ x: number; y: number } | null>(null);
@@ -282,10 +359,30 @@ function onBoxPointerUp(e: PointerEvent) {
 
 	const chart = chartRef.value;
 	if (!chart?.convertFromPixel) return;
-	const xMin = Math.min(chart.convertFromPixel({ xAxisIndex: 0 }, boxStart.value.x), chart.convertFromPixel({ xAxisIndex: 0 }, boxCurrent.value.x));
-	const xMax = Math.max(chart.convertFromPixel({ xAxisIndex: 0 }, boxStart.value.x), chart.convertFromPixel({ xAxisIndex: 0 }, boxCurrent.value.x));
-	const yMin = Math.min(chart.convertFromPixel({ yAxisIndex: 0 }, boxStart.value.y), chart.convertFromPixel({ yAxisIndex: 0 }, boxCurrent.value.y));
-	const yMax = Math.max(chart.convertFromPixel({ yAxisIndex: 0 }, boxStart.value.y), chart.convertFromPixel({ yAxisIndex: 0 }, boxCurrent.value.y));
+	let xMin = Math.min(chart.convertFromPixel({ xAxisIndex: 0 }, boxStart.value.x), chart.convertFromPixel({ xAxisIndex: 0 }, boxCurrent.value.x));
+	let xMax = Math.max(chart.convertFromPixel({ xAxisIndex: 0 }, boxStart.value.x), chart.convertFromPixel({ xAxisIndex: 0 }, boxCurrent.value.x));
+	let yMin = Math.min(chart.convertFromPixel({ yAxisIndex: 0 }, boxStart.value.y), chart.convertFromPixel({ yAxisIndex: 0 }, boxCurrent.value.y));
+	let yMax = Math.max(chart.convertFromPixel({ yAxisIndex: 0 }, boxStart.value.y), chart.convertFromPixel({ yAxisIndex: 0 }, boxCurrent.value.y));
+
+	// Een sleepbox heeft zelden precies de aspect ratio van het canvas --
+	// zonder correctie zou de gezoomde weergave de UMAP-verhoudingen
+	// vervormen (data-aspect moet 1:1 blijven, zie axisBounds hierboven
+	// voor dezelfde aanpak op de volledige weergave). Breid hier de kortste
+	// as (t.o.v. het canvas) uit rond het midden van de sleepbox, zodat de
+	// aspect ratio ook na het zoomen constant blijft.
+	const cx = (xMin + xMax) / 2;
+	const cy = (yMin + yMax) / 2;
+	const targetAspect = canvasAspectRatio.value > 0 ? canvasAspectRatio.value : 1.618;
+	const currentAspect = (xMax - xMin) / (yMax - yMin);
+	if (currentAspect < targetAspect) {
+		const finalSpanX = (yMax - yMin) * targetAspect;
+		xMin = cx - finalSpanX / 2;
+		xMax = cx + finalSpanX / 2;
+	} else {
+		const finalSpanY = (xMax - xMin) / targetAspect;
+		yMin = cy - finalSpanY / 2;
+		yMax = cy + finalSpanY / 2;
+	}
 
 	chart.dispatchAction({ type: "dataZoom", dataZoomIndex: 0, startValue: xMin, endValue: xMax });
 	chart.dispatchAction({ type: "dataZoom", dataZoomIndex: 1, startValue: yMin, endValue: yMax });
@@ -308,21 +405,47 @@ const chartOption = computed(() => {
 			id: "coarse-hulls",
 			zlevel: 0,
 			z: 0,
-			silent: true,
+			// Twee vormen over elkaar: de gevulde polygon is silent (puur
+			// visueel, geen hover) -- anders blokkeert het hele vlak de hover op
+			// individuele punten eronder/erboven. Alleen de rand (fill:"none",
+			// dus geen interior-hittest, enkel de stroke) vangt hover op --
+			// daar zitten sowieso minder punten dan in de kern van een cluster.
 			renderItem: (_params: any, api: any) => {
 				const item = coarseClusters.value[_params.dataIndex];
 				const hull = item?.hull;
 				if (!hull || hull.length < 3) return;
 				const pts = hull.map(([hx, hy]) => api.coord([hx, hy]));
 				return {
-					type: "polygon",
-					shape: { points: pts },
-					style: {
-						fill: isDark.value ? "rgba(255, 255, 255, 0.04)" : "rgba(0, 0, 0, 0.03)",
-						stroke: isDark.value ? "rgba(255, 255, 255, 0.25)" : "rgba(0, 0, 0, 0.18)",
-						lineWidth: 1.5,
-						lineDash: [6, 4],
-					},
+					type: "group",
+					children: [
+						{
+							type: "polygon",
+							silent: true,
+							shape: { points: pts },
+							style: {
+								fill: isDark.value ? "rgba(255, 255, 255, 0.04)" : "rgba(0, 0, 0, 0.03)",
+								stroke: isDark.value ? "rgba(255, 255, 255, 0.25)" : "rgba(0, 0, 0, 0.18)",
+								lineWidth: 1.5,
+								lineDash: [6, 4],
+							},
+						},
+						{
+							type: "polygon",
+							shape: { points: pts },
+							style: {
+								fill: "none",
+								stroke: "rgba(0, 0, 0, 0.01)",
+								lineWidth: 10,
+							},
+							emphasis: {
+								style: {
+									fill: isDark.value ? "rgba(255, 255, 255, 0.09)" : "rgba(0, 0, 0, 0.06)",
+									stroke: isDark.value ? "rgba(255, 255, 255, 0.45)" : "rgba(0, 0, 0, 0.32)",
+									lineWidth: 2,
+								},
+							},
+						},
+					],
 				};
 			},
 			data: coarseClusters.value.map((c) => [c.centroid[0], c.centroid[1]]),
@@ -336,7 +459,8 @@ const chartOption = computed(() => {
 			id: "fine-hulls",
 			zlevel: 0,
 			z: 1,
-			silent: true,
+			// Zelfde twee-vormen-truc als coarse-hulls: gevulde vlak silent,
+			// alleen de rand (fill:"none") vangt hover.
 			renderItem: (_params: any, api: any) => {
 				const item = fineClusters.value[_params.dataIndex];
 				const hull = item?.hull;
@@ -344,17 +468,39 @@ const chartOption = computed(() => {
 				const pts = hull.map(([hx, hy]) => api.coord([hx, hy]));
 				const isSelected = hasFilter && props.selectedClusterIds?.has(item.cluster_id);
 				return {
-					type: "polygon",
-					shape: { points: pts },
-					style: {
-						fill: isSelected
-							? (isDark.value ? "rgba(255, 255, 255, 0.16)" : "rgba(0, 0, 0, 0.08)")
-							: (isDark.value ? "rgba(255, 255, 255, 0.02)" : "rgba(0, 0, 0, 0.015)"),
-						stroke: isSelected
-							? (isDark.value ? "#ffffff" : "#000000")
-							: (isDark.value ? "rgba(255, 255, 255, 0.35)" : "rgba(0, 0, 0, 0.22)"),
-						lineWidth: isSelected ? 2.5 : 1,
-					},
+					type: "group",
+					children: [
+						{
+							type: "polygon",
+							silent: true,
+							shape: { points: pts },
+							style: {
+								fill: isSelected
+									? (isDark.value ? "rgba(255, 255, 255, 0.16)" : "rgba(0, 0, 0, 0.08)")
+									: (isDark.value ? "rgba(255, 255, 255, 0.02)" : "rgba(0, 0, 0, 0.015)"),
+								stroke: isSelected
+									? (isDark.value ? "#ffffff" : "#000000")
+									: (isDark.value ? "rgba(255, 255, 255, 0.35)" : "rgba(0, 0, 0, 0.22)"),
+								lineWidth: isSelected ? 2.5 : 1,
+							},
+						},
+						{
+							type: "polygon",
+							shape: { points: pts },
+							style: {
+								fill: "none",
+								stroke: "rgba(0, 0, 0, 0.01)",
+								lineWidth: 10,
+							},
+							emphasis: {
+								style: {
+									fill: isDark.value ? "rgba(255, 255, 255, 0.12)" : "rgba(0, 0, 0, 0.07)",
+									stroke: isDark.value ? "#ffffff" : "#000000",
+									lineWidth: 2,
+								},
+							},
+						},
+					],
 				};
 			},
 			data: fineClusters.value.map((c) => [c.centroid[0], c.centroid[1]]),
@@ -362,54 +508,84 @@ const chartOption = computed(() => {
 	}
 
 	// 3. Centroid Topic Labels (Hierarchical Level of Detail based on zoom)
+	//
+	// Met tientallen coarse/fine-clusters tegelijk in beeld overlappen platte
+	// labels elkaar al snel (issue #184-vervolg). Standaardaanpak: label-
+	// ordening (grootste cluster claimt eerst ruimte) + collision-detection
+	// (een label dat een al-geplaatst label zou overlappen wordt
+	// overgeslagen, niet verschoven) + labels over 2 regels breken zodat ze
+	// smaller zijn. `placedLabelBoxes` is bewust gedeeld tussen de coarse-
+	// en fine-reeks (zelfde chartOption-berekening), zodat een fine-label
+	// ook een al-geplaatst coarse-label respecteert.
 	if (showLabels.value) {
+		// Gedeeld tussen coarse- en fine-reeks, zodat een fine-label ook een
+		// al-geplaatst coarse-label respecteert. Reset bij dataIndex 0: ECharts'
+		// custom series roept renderItem soms meermaals per render aan (een
+		// meet-pas vóór de eigenlijke tekenpas) -- zonder reset zou de eerste
+		// pas de array al vullen, waardoor de tekenpas daarna alles als
+		// "already placed" ziet en er niets zichtbaar wordt (live
+		// geconstateerd). "coarse-labels" is de eerste reeks die per pas
+		// dataIndex 0 raakt, dus dat is het juiste resetmoment voor de hele
+		// gedeelde array.
+		const placedLabelBoxes: LabelBox[] = [];
+
 		// A. Coarse Domain Labels (prominent at overview, softly fading on deep zoom)
 		if (coarseClusters.value.length > 0 && zoomFactor.value < 3.2) {
 			const coarseOpacity = zoomFactor.value > 2.0 ? Math.max(0.2, (3.2 - zoomFactor.value) / 1.2) : 1;
+			const orderedCoarse = [...coarseClusters.value].sort((a, b) => b.size - a.size);
 			seriesList.push({
 				type: "custom",
 				id: "coarse-labels",
 				zlevel: 1,
-				z: 3,
+				z: 4,
 				silent: true,
 				renderItem: (_params: any, api: any) => {
-					const item = coarseClusters.value[_params.dataIndex];
+					if (_params.dataIndex === 0) placedLabelBoxes.length = 0;
+					const item = orderedCoarse[_params.dataIndex];
 					if (!item?.centroid) return;
 					const [cx, cy] = item.centroid;
 					const [x, y] = api.coord([cx, cy]);
+					const fontSize = 14;
+					const lines = wrapLabelText(item.name, 16);
+					const box = measureLabelBox(lines, fontSize, x, y);
+					if (placedLabelBoxes.some((p) => boxesOverlap(box, p))) return;
+					placedLabelBoxes.push(box);
 					return {
 						type: "text",
 						style: {
-							text: item.name,
+							text: lines.join("\n"),
 							x,
 							y,
 							textAlign: "center",
 							textVerticalAlign: "middle",
-							font: "bold 14px system-ui, sans-serif",
+							lineHeight: fontSize * 1.2,
+							font: `bold ${fontSize}px system-ui, sans-serif`,
 							fill: ink.value,
 							opacity: coarseOpacity,
-							stroke: isDark.value ? "rgba(0, 0, 0, 0.85)" : "rgba(255, 255, 255, 0.95)",
-							lineWidth: 3.5,
+							stroke: isDark.value ? "rgba(0, 0, 0, 0.8)" : "rgba(255, 255, 255, 0.9)",
+							lineWidth: 2,
 						},
 					};
 				},
-				data: coarseClusters.value.map((c) => [c.centroid[0], c.centroid[1]]),
+				data: orderedCoarse.map((c) => [c.centroid[0], c.centroid[1]]),
 			});
 		}
 
 		// B. Fine Sub-Cluster Labels (revealed dynamically as user zooms in)
 		if (fineClusters.value.length > 0 && zoomFactor.value >= 1.5) {
-			const visibleFine = fineClusters.value.filter((item) => {
-				if (zoomFactor.value >= 3.0) return true;
-				if (zoomFactor.value >= 2.2) return item.size >= 40;
-				return item.size >= 100;
-			});
+			const visibleFine = fineClusters.value
+				.filter((item) => {
+					if (zoomFactor.value >= 3.0) return true;
+					if (zoomFactor.value >= 2.2) return item.size >= 40;
+					return item.size >= 100;
+				})
+				.sort((a, b) => b.size - a.size);
 
 			seriesList.push({
 				type: "custom",
 				id: "fine-labels",
 				zlevel: 1,
-				z: 4,
+				z: 5,
 				silent: true,
 				renderItem: (_params: any, api: any) => {
 					const item = visibleFine[_params.dataIndex];
@@ -417,18 +593,23 @@ const chartOption = computed(() => {
 					const [cx, cy] = item.centroid;
 					const [x, y] = api.coord([cx, cy]);
 					const fontSize = Math.min(13, Math.max(10, Math.round(9 + zoomFactor.value * 0.8)));
+					const lines = wrapLabelText(item.name, 14);
+					const box = measureLabelBox(lines, fontSize, x, y);
+					if (placedLabelBoxes.some((p) => boxesOverlap(box, p))) return;
+					placedLabelBoxes.push(box);
 					return {
 						type: "text",
 						style: {
-							text: item.name,
+							text: lines.join("\n"),
 							x,
 							y,
 							textAlign: "center",
 							textVerticalAlign: "middle",
+							lineHeight: fontSize * 1.2,
 							font: `600 ${fontSize}px system-ui, sans-serif`,
 							fill: ink.value,
-							stroke: isDark.value ? "rgba(0, 0, 0, 0.8)" : "rgba(255, 255, 255, 0.9)",
-							lineWidth: 2.5,
+							stroke: isDark.value ? "rgba(0, 0, 0, 0.75)" : "rgba(255, 255, 255, 0.85)",
+							lineWidth: 1.5,
 						},
 					};
 				},
@@ -445,7 +626,7 @@ const chartOption = computed(() => {
 			const baseSize =
 				(isPlenair ? plenairSizeScale(zoomFactor.value) : topicSizeScale(zoomFactor.value)) *
 				(isMobile.value ? 1.6 : 1);
-			const baseOpacity = Math.min(0.95, (isPlenair ? 0.075 : 0.14) * zoomFactor.value);
+			const baseOpacity = Math.min(0.6, (isPlenair ? 0.06 : 0.09) * zoomFactor.value);
 
 			seriesList.push({
 				id: topic,
@@ -454,8 +635,14 @@ const chartOption = computed(() => {
 				symbolSize: baseSize,
 				large: isPlenair && !hasFilter,
 				largeThreshold: 2000,
+				// Rendert boven de drempel in stukjes over meerdere frames i.p.v.
+				// alles in één keer -- voorkomt lange blocking renders bij elke
+				// zoom-stap op de ~33k "overig plenair"-punten (issue #184-vervolg,
+				// "zoomen gaat schokkerig").
+				progressive: 4000,
+				progressiveThreshold: 4000,
 				zlevel: isPlenair ? 0 : 1,
-				z: isPlenair ? 1 : 2,
+				z: isPlenair ? 2 : 3,
 				blendMode: isDark.value ? "screen" : "multiply",
 				itemStyle: {
 					color: TOPIC_COLOR[topic] ?? PLENAIR_COLOR,
@@ -495,6 +682,26 @@ const chartOption = computed(() => {
 			trigger: "item",
 			extraCssText: "max-width: 280px; white-space: normal; line-height: 1.35;",
 			formatter: (p: any) => {
+				// Hover op het hull-vlak zelf (i.t.t. een individueel punt of een
+				// label): toon clusterdetails i.p.v. spreekbeurt-info.
+				if (p.seriesId === "coarse-hulls" || p.seriesId === "fine-hulls") {
+					const item = (p.seriesId === "coarse-hulls" ? coarseClusters.value : fineClusters.value)[p.dataIndex];
+					if (!item) return "";
+					const parentLine = item.parent_name && item.parent_name !== item.name
+						? `<span style="opacity:0.75; font-size:0.9em;">${item.parent_name} &rarr; </span>`
+						: "";
+					const duidingLine = item.duiding ? `<br/>${item.duiding}` : "";
+					const termsLine = item.terms?.length
+						? `<br/><span style="opacity:0.65; font-size:0.85em;">${item.terms.slice(0, 6).join(", ")}</span>`
+						: "";
+					const topTopics = Object.entries(item.topic_breakdown || {})
+						.sort((a, b) => (b[1] as number) - (a[1] as number))
+						.slice(0, 3)
+						.map(([t, n]) => `${t} (${n})`)
+						.join(", ");
+					return `${parentLine}<strong>${item.name}</strong><br/><span style="opacity:0.7">${item.size} spreekbeurten${topTopics ? " &middot; " + topTopics : ""}</span>${duidingLine}${termsLine}`;
+				}
+
 				const d = p.data;
 				if (!d?.actor) return "";
 				const datum = d.published_at ? new Date(d.published_at).toLocaleDateString("nl-NL") : "";
@@ -505,12 +712,17 @@ const chartOption = computed(() => {
 			},
 		},
 		grid: { top: 16, left: 16, right: 16, bottom: 16, containLabel: false },
+		// throttle: 0 (elke scroll-tick direct verwerken) gaf schokkerig zoomen
+		// -- elke datazoom-event triggert via onDataZoom() een zoomFactor-update
+		// en dus een volledige chartOption-herberekening (label-collision-
+		// detection + tienduizenden scatterpunten). 30ms batcht dat tot een
+		// vloeiender aantal updates per zoom-gebaar.
 		dataZoom: [
 			{
 				type: "inside",
 				xAxisIndex: 0,
 				filterMode: "none",
-				throttle: 0,
+				throttle: 30,
 				zoomOnMouseWheel: true,
 				moveOnMouseMove: true,
 				moveOnMouseWheel: false,
@@ -519,7 +731,7 @@ const chartOption = computed(() => {
 				type: "inside",
 				yAxisIndex: 0,
 				filterMode: "none",
-				throttle: 0,
+				throttle: 30,
 				zoomOnMouseWheel: true,
 				moveOnMouseMove: true,
 				moveOnMouseWheel: false,
