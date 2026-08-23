@@ -308,8 +308,10 @@ function onDataZoom() {
 // zoomfactor i.p.v. de straal -- bij sterk overlappende punten (dichte
 // clusters, live geconstateerd bij ver inzoomen: een egale donkere klomp
 // door overlappende cirkels) groeit de straal zo minder snel door dan bij
-// een lineaire schaal, wat overlap beperkt.
-const plenairSizeScale = scaleSqrt().domain([1, 6]).range([3, 9]).clamp(true);
+// een lineaire schaal, wat overlap beperkt. Alleen nog voor de 4 getrackte
+// topics (klein genoeg om goedkoop met de zoom mee te schalen); "overig
+// plenair" heeft een vaste grootte, zie de large-mode-toelichting bij de
+// scatter-serie hieronder.
 const topicSizeScale = scaleSqrt().domain([1, 6]).range([4, 12]).clamp(true);
 
 const boxSelecting = ref(false);
@@ -671,15 +673,24 @@ const chartOption = computed(() => {
 		for (const topic of topics.value) {
 			const pts = pointsByTopic.value.get(topic) ?? [];
 			const isPlenair = topic === "plenair";
-			const baseSize =
-				(isPlenair ? plenairSizeScale(zoomFactor.value) : topicSizeScale(zoomFactor.value)) *
-				(isMobile.value ? 1.6 : 1);
+			// "overig plenair" (~33k punten, large-mode) krijgt bewust een VASTE
+			// grootte/dekking, niet meeschalend met zoomFactor: large-mode bakt
+			// symbolSize/opacity in een gedeelde buffer voor de hele batch, dus
+			// élke wijziging daarvan dwingt ECharts die buffer voor alle ~33k
+			// punten opnieuw op te bouwen -- op elke zoom-tick (elke ~30ms tijdens
+			// een zoom-gebaar). Live gemeten met Chrome DevTools Performance:
+			// ~500ms blokkerende hoofdthread-tijd per tick, ook nadat de Vue-kant
+			// (chartOption/pointsByTopic) al naar ~0ms was teruggebracht -- de
+			// kosten zaten dus in ECharts' eigen large-mode-buffer, niet in onze
+			// code. De 4 getrackte topics zijn klein genoeg (13-2791 punten, geen
+			// large-mode) om wel goedkoop met de zoom mee te schalen.
+			const baseSize = isPlenair
+				? 5 * (isMobile.value ? 1.6 : 1)
+				: topicSizeScale(zoomFactor.value) * (isMobile.value ? 1.6 : 1);
 			// De 4 getrackte topics (i.t.t. "overig plenair") mogen bij uitgezoomd
 			// beeld al goed zichtbaar zijn -- vandaar een ondergrens i.p.v. puur
 			// lineair met zoomFactor meeschalen vanaf bijna onzichtbaar.
-			const baseOpacity = isPlenair
-				? Math.min(0.6, 0.06 * zoomFactor.value)
-				: Math.max(0.35, Math.min(0.6, 0.09 * zoomFactor.value));
+			const baseOpacity = isPlenair ? 0.25 : Math.max(0.35, Math.min(0.6, 0.09 * zoomFactor.value));
 
 			// Een symbolSize-FUNCTIE i.p.v. een constante dwingt ECharts om 'm
 			// per punt aan te roepen -- op de ~33k "plenair"-punten met
