@@ -461,6 +461,117 @@ def ingest_file(conn, xml_path, meta_path, topic_keyword, also_keywords=()):
     return inserted
 
 
+def ingest_plenair_file(conn, xml_path, meta_path):
+    """Als ingest_file, maar zonder trefwoordfilter: elke <activiteit> in de
+    dag-XML wordt meegenomen (niet alleen de topic-matchende), en de
+    resulterende documents-rijen krijgen topic_id = NULL (schema staat dit
+    toe, schema.sql:26) in plaats van aan een topics-rij gekoppeld te
+    worden -- deze rijen horen niet bij één van de 4 gecureerde topics, ze
+    zijn juist de "omringende" plenaire context daaromheen (issue #156)."""
+    metadata = json.loads(meta_path.read_text())
+    tree = ET.parse(xml_path)
+    root = tree.getroot()
+    parent_map = build_parent_map(root)
+
+    source_id = get_or_create_source(conn)
+
+    inserted = 0
+    for activiteit in root.iter(NS + "activiteit"):
+        activiteit_titel = activiteit.findtext(NS + "titel") or metadata.get("activiteit_onderwerp")
+        activiteit_soort = activiteit.attrib.get("soort")
+        activiteit_aanvangstijd = activiteit.findtext(NS + "aanvangstijd") or metadata.get("activiteit_datum")
+        activiteit_eindtijd = activiteit.findtext(NS + "eindtijd")
+        for turn_el, spreker_el, tekst_el in find_speaking_turns(activiteit):
+            content = _text_of(tekst_el)
+            if not content:
+                continue
+
+            external_id = turn_el.attrib.get("objectid")
+            if external_id and document_exists(conn, source_id, external_id):
+                continue
+
+            name = _speaker_name(spreker_el)
+            party = _speaker_party(spreker_el)
+            speaker_role_title = _speaker_role_title(spreker_el)
+            if party is None and speaker_role_title is not None:
+                party = lookup_bewindspersoon_party(name)
+            actor_id = get_or_create_actor(conn, name, party)
+
+            published_at = turn_el.findtext(NS + "markeertijdbegin") or metadata.get("activiteit_datum")
+            voorzitter_turn = is_voorzitter_turn(turn_el, parent_map, content)
+            speaker_person_id = spreker_el.attrib.get("objectid")
+            turn_type = _local(turn_el.tag)
+
+            conn.execute(
+                """
+                INSERT INTO documents
+                    (source_id, topic_id, actor_id, external_id, title, content, published_at, raw_ref, url, activiteit_soort, activiteit_aanvangstijd, activiteit_eindtijd, tweedekamer_activiteit_url, is_voorzitter_turn, speaker_role_title, speaker_person_id, turn_type)
+                VALUES (?, NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """,
+                (
+                    source_id,
+                    actor_id,
+                    external_id,
+                    activiteit_titel,
+                    content,
+                    published_at,
+                    str(xml_path.relative_to(RAW_DIR)),
+                    metadata.get("source_resource_url"),
+                    activiteit_soort,
+                    activiteit_aanvangstijd,
+                    activiteit_eindtijd,
+                    metadata.get("tweedekamer_activiteit_url"),
+                    int(voorzitter_turn),
+                    speaker_role_title,
+                    speaker_person_id,
+                    turn_type,
+                ),
+            )
+            inserted += 1
+
+    conn.commit()
+    return inserted
+
+
+def ingest_plenair(raw_dir_name, raw_dir=RAW_DIR):
+    """Als ingest(), maar voor de topic-onafhankelijke plenaire crawl
+    (zie scripts/experiment_umap_documents.py / issue #156): scant
+    raw_dir/<raw_dir_name>/ (de pseudo-topic-map die
+    verslagen_periode.py gebruikt) en importeert alle activiteiten zonder
+    keyword-filter, met topic_id = NULL."""
+    db_path = db.DEFAULT_DB_PATH
+    if not db_path.exists():
+        db.init_db(db_path)
+
+    conn = db.connect(db_path)
+    # db.connect() zet WAL, wat een gedeeld geheugen-gemapt indexbestand
+    # (.db-shm) gebruikt -- op deze devcontainer draait de repo via een
+    # fakeowner-mount (macOS-hostbestandsdeling via Docker Desktop), waar
+    # mmap over die virtualisatiegrens herhaaldelijk SIGBUS gaf tijdens deze
+    # lange ingest-run (~30k+ rijen, minutenlang), nooit bij de kortere
+    # topic-crawls. DELETE-journaling gebruikt geen mmap, dus dit omzeilt het
+    # probleem voor dit ingestpad. journal_mode is database-breed (niet per
+    # connectie) voor de overgang uit WAL -- dus geen andere db.connect()
+    # (die WAL forceert) gelijktijdig laten draaien tijdens deze ingest, anders
+    # flipt die de hele database weer terug.
+    conn.execute("PRAGMA journal_mode = DELETE")
+    try:
+        total = 0
+        xml_dir = raw_dir / raw_dir_name
+        xml_files = sorted(xml_dir.glob("*.xml")) if xml_dir.exists() else []
+        for xml_path in xml_files:
+            meta_path = xml_path.with_suffix(".json")
+            if not meta_path.exists():
+                logger.warning("overslaan (geen metadata): %s", xml_path.name)
+                continue
+            count = ingest_plenair_file(conn, xml_path, meta_path)
+            logger.info("%s/%s: %d sprekerbeurten geïmporteerd", xml_path.parent.name, xml_path.name, count)
+            total += count
+        logger.info("Klaar: %d documenten geïmporteerd (topic_id NULL) uit '%s'.", total, raw_dir_name)
+    finally:
+        conn.close()
+
+
 def ingest(topic_keyword, raw_dir=RAW_DIR, also_dirs=(), also_keywords=()):
     """Scant standaard alleen raw_dir/<topic_keyword>/ -- de map waar de
     crawler onder dat exacte keyword naartoe schreef. also_dirs is de
@@ -497,8 +608,9 @@ def ingest(topic_keyword, raw_dir=RAW_DIR, also_dirs=(), also_keywords=()):
 
 
 if __name__ == "__main__":
+    logging.basicConfig(level=logging.INFO, format="%(message)s")
     parser = argparse.ArgumentParser()
-    parser.add_argument("--topic", required=True, help="Zelfde topic-keyword als gebruikt bij fetch_tk/scrapy, bv. stikstof")
+    parser.add_argument("--topic", help="Zelfde topic-keyword als gebruikt bij fetch_tk/scrapy, bv. stikstof")
     parser.add_argument(
         "--also-dir",
         action="append",
@@ -511,5 +623,15 @@ if __name__ == "__main__":
         default=[],
         help="Extra trefwoord waarop activiteiten en sprekerbeurten matchen (bv. --also-keyword migratie bij --topic asiel). Herhaalbaar.",
     )
+    parser.add_argument(
+        "--plenair-dir",
+        help="raw_dir/<naam>/-map van een topic-onafhankelijke verslagen_periode-crawl "
+        "(issue #156) importeren met topic_id NULL, i.p.v. het topic-gefilterde pad.",
+    )
     args = parser.parse_args()
-    ingest(args.topic, also_dirs=args.also_dir, also_keywords=args.also_keyword)
+    if args.plenair_dir:
+        ingest_plenair(args.plenair_dir)
+    elif args.topic:
+        ingest(args.topic, also_dirs=args.also_dir, also_keywords=args.also_keyword)
+    else:
+        parser.error("geef --topic of --plenair-dir op")
