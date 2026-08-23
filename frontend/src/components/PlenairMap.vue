@@ -626,7 +626,12 @@ const chartOption = computed(() => {
 			const baseSize =
 				(isPlenair ? plenairSizeScale(zoomFactor.value) : topicSizeScale(zoomFactor.value)) *
 				(isMobile.value ? 1.6 : 1);
-			const baseOpacity = Math.min(0.6, (isPlenair ? 0.06 : 0.09) * zoomFactor.value);
+			// De 4 getrackte topics (i.t.t. "overig plenair") mogen bij uitgezoomd
+			// beeld al goed zichtbaar zijn -- vandaar een ondergrens i.p.v. puur
+			// lineair met zoomFactor meeschalen vanaf bijna onzichtbaar.
+			const baseOpacity = isPlenair
+				? Math.min(0.6, 0.06 * zoomFactor.value)
+				: Math.max(0.35, Math.min(0.6, 0.09 * zoomFactor.value));
 
 			seriesList.push({
 				id: topic,
