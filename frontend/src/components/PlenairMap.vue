@@ -685,12 +685,12 @@ const chartOption = computed(() => {
 			// code. De 4 getrackte topics zijn klein genoeg (13-2791 punten, geen
 			// large-mode) om wel goedkoop met de zoom mee te schalen.
 			const baseSize = isPlenair
-				? 5 * (isMobile.value ? 1.6 : 1)
+				? 3 * (isMobile.value ? 1.6 : 1)
 				: topicSizeScale(zoomFactor.value) * (isMobile.value ? 1.6 : 1);
 			// De 4 getrackte topics (i.t.t. "overig plenair") mogen bij uitgezoomd
 			// beeld al goed zichtbaar zijn -- vandaar een ondergrens i.p.v. puur
 			// lineair met zoomFactor meeschalen vanaf bijna onzichtbaar.
-			const baseOpacity = isPlenair ? 0.25 : Math.max(0.35, Math.min(0.6, 0.09 * zoomFactor.value));
+			const baseOpacity = isPlenair ? 0.12 : Math.max(0.35, Math.min(0.6, 0.09 * zoomFactor.value));
 
 			// Een symbolSize-FUNCTIE i.p.v. een constante dwingt ECharts om 'm
 			// per punt aan te roepen -- op de ~33k "plenair"-punten met
