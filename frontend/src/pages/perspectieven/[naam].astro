@@ -4,52 +4,20 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import { PERSPECTIEVEN } from "../../lib/tagIcons.generated";
 import { slugify } from "../../lib/slug";
 import { perspectiefWeergaveNaam } from "../../lib/tagIcon";
+import { toLeanArgument } from "../../lib/leanArgument";
+import { derivePartyTagIndex, derivePersonTagIndex, serializePartyTagIndex, serializePersonTagIndex } from "../../lib/aggregate";
 import type { Argument } from "../../lib/types";
 
+// Alleen nog gebruikt om build-time de partij-/persoonindex over het hele
+// corpus uit te rekenen (zie hieronder) -- de ruwe argumentenlijst zelf gaat
+// niet meer als prop mee naar de client. De perspectief-gefilterde
+// argumentenlijst die de tijdlijn/kaart nodig hebben wordt door
+// PerspectiefView.vue client-side via jsDelivr gefetcht vanaf de publieke
+// bipolariteit/bipolariteit-data-repo (zie scripts/export_public_data.ts),
+// zodat deze pagina nooit meer de volledige dataset in de HTML bakt (issue
+// #163: Cloudflare Workers-assetlimiet van 25 MiB per bestand -- elke
+// perspectiefpagina zat hier ~18-21 MB overheen).
 const topicModules = import.meta.glob("../../../../data/export/topics/*.json", { eager: true });
-
-// PerspectiefView (tijdlijn + correspondentiekaart) toont nooit een losse
-// ArgumentCard en heeft dus nooit de zware, per-argument herhaalde velden
-// nodig (videolinks, quote_context, claims, oppositions, tag-`reden`) -- die
-// vormen het gros van de ruwe export (zie issue over de Cloudflare Workers
-// assetlimiet van 25 MiB per bestand: elk van de vier perspectiefpagina's
-// bevatte de volledige, ongefilterde argumentenlijst tweemaal). Alleen de
-// velden die matches()/buildTimeline()/buildCorrespondence() (lib/filters.ts,
-// lib/timeline.ts, lib/correspondence.ts) daadwerkelijk lezen blijven over.
-function toLeanArgument(argument: any): Argument {
-	return {
-		id: argument.id,
-		stance: argument.stance,
-		typology: argument.typology,
-		quote_text: argument.quote_text,
-		quote_context: null,
-		prompt_version: null,
-		start_seconds: null,
-		end_seconds: null,
-		actor: argument.actor,
-		document: {
-			id: argument.document.id,
-			url: null,
-			video_url: null,
-			published_at: argument.document.published_at,
-			speaker_video_url: null,
-			tweedekamer_activiteit_url: null,
-			redactie_review: null,
-			raw_video_url: null,
-		},
-		periode: argument.periode,
-		claims: [],
-		tags: argument.tags.map((tag: any) => ({
-			sleutel: tag.sleutel,
-			beschrijving: tag.beschrijving,
-			labelgroep: tag.labelgroep,
-			perspectief: tag.perspectief,
-			created_by: tag.created_by,
-			reden: null,
-		})),
-		oppositions: [],
-	};
-}
 
 function allArguments(): Argument[] {
 	return Object.values(topicModules).flatMap((mod: any) => mod.default.arguments.map(toLeanArgument));
@@ -64,9 +32,18 @@ export function getStaticPaths() {
 
 const { perspectief } = Astro.props;
 const argumentList = allArguments();
+const partyIndex = serializePartyTagIndex(derivePartyTagIndex(argumentList));
+const personIndex = serializePersonTagIndex(derivePersonTagIndex(argumentList));
+const dataBaseUrl = import.meta.env.PUBLIC_DATA_BASE_URL ?? "https://cdn.jsdelivr.net/gh/bipolariteit/bipolariteit-data@main";
 ---
 
 <BaseLayout title={`${perspectiefWeergaveNaam(perspectief)} - Bipolariteit`}>
 	<a href="/perspectieven/" class="back-link">&larr; alle perspectieven</a>
-	<PerspectiefView perspectief={perspectief} argumentList={argumentList} client:only="vue" />
+	<PerspectiefView
+		perspectief={perspectief}
+		partyIndex={partyIndex}
+		personIndex={personIndex}
+		dataBaseUrl={dataBaseUrl}
+		client:only="vue"
+	/>
 </BaseLayout>

@@ -1,23 +1,49 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, onMounted, ref } from "vue";
 import ArgumentTimeline from "./ArgumentTimeline.vue";
 import TagCorrespondenceMap from "./TagCorrespondenceMap.vue";
 import PerspectiefTagHeatmap from "./PerspectiefTagHeatmap.vue";
 import TopPersonsPerTag, { type TagMeta } from "./TopPersonsPerTag.vue";
 import { PERSPECTIEVEN } from "../lib/tagIcons.generated";
-import { filterTagsByPerspectief, derivePartyTagIndex, derivePersonTagIndex } from "../lib/aggregate";
+import {
+	deserializePartyTagIndex,
+	deserializePersonTagIndex,
+	type SerializedPartyTagIndexEntry,
+	type SerializedPersonTagIndexEntry,
+} from "../lib/aggregate";
 import { perspectiefWeergaveNaam } from "../lib/tagIcon";
+import { slugify } from "../lib/slug";
 import type { Argument } from "../lib/types";
 
-const props = defineProps<{ perspectief: string; argumentList: Argument[] }>();
+// De partij-/persoonindex wordt build-time over het volledige corpus
+// uitgerekend (Astro-pagina, zie [naam].astro) -- hun noemer moet alle
+// onderwerpen omvatten, niet alleen dit perspectief. Alleen de perspectief-
+// gefilterde, lean argumentenlijst voor de tijdlijn/correspondentiekaart
+// wordt hier client-side gefetcht in plaats van als prop meegebakken (issue
+// #163: die lijst was het gros van de 18-21 MB per perspectiefpagina).
+const props = defineProps<{
+	perspectief: string;
+	partyIndex: SerializedPartyTagIndexEntry[];
+	personIndex: SerializedPersonTagIndexEntry[];
+	dataBaseUrl: string;
+}>();
 
 const kleur = computed(() => PERSPECTIEVEN.find((p) => p.naam === props.perspectief)?.kleur ?? "#6f6558");
 
-// Correspondentiekaart schaalt op de perspectief-gefilterde lijst; de
-// heatmap en de top-5-per-tag rekenen op het volledige corpus, want hun
-// noemer (partij-/persoonstotaal) moet alles omvatten, niet alleen dit
-// perspectief (zie derivePartyTagIndex/derivePersonTagIndex).
-const scopedList = computed(() => filterTagsByPerspectief(props.argumentList, props.perspectief));
+type FetchStatus = "loading" | "ready" | "error";
+const status = ref<FetchStatus>("loading");
+const scopedList = ref<Argument[]>([]);
+
+onMounted(async () => {
+	try {
+		const response = await fetch(`${props.dataBaseUrl}/perspectieven/${slugify(props.perspectief)}.json`);
+		if (!response.ok) throw new Error(`onverwachte statuscode ${response.status}`);
+		scopedList.value = await response.json();
+		status.value = "ready";
+	} catch {
+		status.value = "error";
+	}
+});
 
 const totalToekenningen = computed(() => scopedList.value.reduce((sum, a) => sum + a.tags.length, 0));
 
@@ -37,8 +63,8 @@ const orderedTags = computed(() =>
 	[...tagMeta.value.values()].sort((a, b) => a.labelgroep.localeCompare(b.labelgroep, "nl") || a.sleutel.localeCompare(b.sleutel, "nl")),
 );
 
-const partyIndex = computed(() => derivePartyTagIndex(props.argumentList));
-const personIndex = computed(() => derivePersonTagIndex(props.argumentList));
+const partyIndex = computed(() => deserializePartyTagIndex(props.partyIndex));
+const personIndex = computed(() => deserializePersonTagIndex(props.personIndex));
 </script>
 
 <template>
@@ -47,14 +73,27 @@ const personIndex = computed(() => derivePersonTagIndex(props.argumentList));
 			<span class="perspectief-swatch" :style="{ background: kleur }"></span>
 			<h1>{{ perspectiefWeergaveNaam(perspectief) }}</h1>
 		</header>
-		<p class="panel-note">{{ totalToekenningen }} tagtoekenningen in dit perspectief, over alle onderwerpen heen.</p>
 
-		<ArgumentTimeline :argumentList="scopedList" :interactive="false" />
+		<p v-if="status === 'error'" class="panel-note panel-error">
+			Kon de argumentdata niet laden. Probeer de pagina te verversen.
+		</p>
+		<p v-else-if="status === 'loading'" class="panel-note">Bezig met laden&hellip;</p>
+		<template v-else>
+			<p class="panel-note">{{ totalToekenningen }} tagtoekenningen in dit perspectief, over alle onderwerpen heen.</p>
 
-		<TagCorrespondenceMap :argument-list="scopedList" />
+			<ArgumentTimeline :argumentList="scopedList" :interactive="false" />
+
+			<TagCorrespondenceMap :argument-list="scopedList" />
+		</template>
 
 		<PerspectiefTagHeatmap :tags="orderedTags" :party-index="partyIndex" :color="kleur" />
 
 		<TopPersonsPerTag :tags="orderedTags" :person-index="personIndex" :color="kleur" />
 	</section>
 </template>
+
+<style scoped>
+.panel-error {
+	color: var(--kleur-fout, #b3261e);
+}
+</style>
