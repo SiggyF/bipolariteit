@@ -58,6 +58,22 @@ def activiteiten_url(topic_keyword, soort, top):
     return build_url("Activiteit", filter=filter_expr, orderby="Datum desc", top=top)
 
 
+def vergaderingen_url(start_date, end_date, top):
+    """Rechtstreeks alle Plenaire Vergaderingen in een datumbereik, zonder
+    Activiteit-omweg -- voor een topic-onafhankelijke crawl (bv. "alle
+    plenaire debatten in kamerperiode X") is er geen trefwoord om vanuit
+    Activiteit te matchen, en Verslag heeft toch al een echte FK naar
+    Vergadering (verslagen_url_for_vergadering), dus de fragiele
+    datumheuristiek van vergadering_url_for_activiteit is hier niet nodig.
+
+    start_date/end_date zijn ISO-datums (YYYY-MM-DD), inclusief."""
+    filter_expr = (
+        f"Datum ge {start_date}T00:00:00Z and Datum le {end_date}T23:59:59Z "
+        f"and Kamer eq 'Tweede Kamer' and Soort eq 'Plenair' and Verwijderd eq false"
+    )
+    return build_url("Vergadering", filter=filter_expr, orderby="Datum desc", top=top)
+
+
 def vergadering_soort_for_activiteit(activiteit_soort):
     """Vergadering.Soort kent maar twee waarden ('Plenair'/'Commissie',
     geverifieerd live tegen de OData API) -- Activiteit.Soort heeft veel meer

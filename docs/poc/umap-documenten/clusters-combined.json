@@ -1,0 +1,936 @@
+[
+  {
+    "cluster_id": 0,
+    "size": 95371,
+    "keywords": [
+      "we",
+      "minister",
+      "wel",
+      "motie",
+      "voorzitter",
+      "gaat",
+      "vraag",
+      "heer"
+    ],
+    "topic_breakdown": {
+      "plenair": 81745,
+      "energietransitie": 6211,
+      "asiel": 4548,
+      "stikstof": 2589,
+      "abortus": 278
+    }
+  },
+  {
+    "cluster_id": 6,
+    "size": 261,
+    "keywords": [
+      "voorzitter",
+      "doorstroomhypotheek",
+      "slachtofferbeleid",
+      "voorzitter ten",
+      "voorzitter december",
+      "voorzitter windturbines",
+      "laatste gaat",
+      "tielen voorzitter"
+    ],
+    "topic_breakdown": {
+      "plenair": 238,
+      "energietransitie": 11,
+      "asiel": 8,
+      "stikstof": 4
+    }
+  },
+  {
+    "cluster_id": 8,
+    "size": 247,
+    "keywords": [
+      "wel voorzitter",
+      "dank wel",
+      "dank",
+      "voorzitter",
+      "wel",
+      "bedankt voorzitter",
+      "coulance voorzitter",
+      "dank coulance"
+    ],
+    "topic_breakdown": {
+      "plenair": 234,
+      "energietransitie": 9,
+      "asiel": 3,
+      "stikstof": 1
+    }
+  },
+  {
+    "cluster_id": 21,
+    "size": 244,
+    "keywords": [
+      "embryo",
+      "onderzoek",
+      "embryowet",
+      "we",
+      "ccmo",
+      "beschermwaardigheid",
+      "definitie",
+      "wet"
+    ],
+    "topic_breakdown": {
+      "plenair": 243,
+      "abortus": 1
+    }
+  },
+  {
+    "cluster_id": 5,
+    "size": 200,
+    "keywords": [
+      "schors",
+      "minuten",
+      "vijf minuten",
+      "schorsen",
+      "dank",
+      "uur",
+      "dank wel",
+      "we"
+    ],
+    "topic_breakdown": {
+      "plenair": 189,
+      "energietransitie": 7,
+      "stikstof": 2,
+      "asiel": 2
+    }
+  },
+  {
+    "cluster_id": 15,
+    "size": 193,
+    "keywords": [
+      "dank wel",
+      "dank",
+      "wel",
+      "oké dank",
+      "oké",
+      "nee dank",
+      "pardon",
+      "nee"
+    ],
+    "topic_breakdown": {
+      "plenair": 179,
+      "energietransitie": 8,
+      "asiel": 3,
+      "abortus": 2,
+      "stikstof": 1
+    }
+  },
+  {
+    "cluster_id": 1,
+    "size": 189,
+    "keywords": [
+      "laatste",
+      "laatste motie",
+      "motie",
+      "volgende motie",
+      "volgende",
+      "prima",
+      "optie",
+      "motie gaat"
+    ],
+    "topic_breakdown": {
+      "plenair": 171,
+      "asiel": 10,
+      "energietransitie": 6,
+      "stikstof": 2
+    }
+  },
+  {
+    "cluster_id": 28,
+    "size": 134,
+    "keywords": [
+      "dank wel",
+      "dank",
+      "wel",
+      "zei dank",
+      "dank dank",
+      "wel dank",
+      "wel succes",
+      "af dank"
+    ],
+    "topic_breakdown": {
+      "plenair": 116,
+      "energietransitie": 13,
+      "asiel": 5
+    }
+  },
+  {
+    "cluster_id": 12,
+    "size": 109,
+    "keywords": [
+      "tweede motie",
+      "tweede",
+      "motie",
+      "motie gaat",
+      "dank tweede",
+      "ditzelfde",
+      "motie lange",
+      "wel tweede"
+    ],
+    "topic_breakdown": {
+      "plenair": 101,
+      "asiel": 4,
+      "energietransitie": 3,
+      "stikstof": 1
+    }
+  },
+  {
+    "cluster_id": 24,
+    "size": 106,
+    "keywords": [
+      "tweede motie",
+      "tweede",
+      "motie",
+      "onze tweede",
+      "motie inderdaad",
+      "nummer twee",
+      "motie nummer",
+      "wel redden"
+    ],
+    "topic_breakdown": {
+      "plenair": 97,
+      "energietransitie": 5,
+      "asiel": 3,
+      "abortus": 1
+    }
+  },
+  {
+    "cluster_id": 42,
+    "size": 68,
+    "keywords": [
+      "slot voorzitter",
+      "slot",
+      "voorzitter",
+      "slotte voorzitter",
+      "ten slotte",
+      "slotte",
+      "ten",
+      "laatste voorzitter"
+    ],
+    "topic_breakdown": {
+      "plenair": 64,
+      "energietransitie": 3,
+      "asiel": 1
+    }
+  },
+  {
+    "cluster_id": 39,
+    "size": 66,
+    "keywords": [
+      "slot"
+    ],
+    "topic_breakdown": {
+      "plenair": 56,
+      "energietransitie": 7,
+      "asiel": 3
+    }
+  },
+  {
+    "cluster_id": 20,
+    "size": 65,
+    "keywords": [
+      "dank voorzitter",
+      "dank",
+      "voorzitter",
+      "merci",
+      "geweldig",
+      "ontstane impasse",
+      "abf",
+      "collega groot"
+    ],
+    "topic_breakdown": {
+      "plenair": 61,
+      "energietransitie": 3,
+      "stikstof": 1
+    }
+  },
+  {
+    "cluster_id": 23,
+    "size": 64,
+    "keywords": [
+      "dank",
+      "helder dank",
+      "helder",
+      "bedankt",
+      "merci",
+      "top",
+      "sorry",
+      "super dank"
+    ],
+    "topic_breakdown": {
+      "plenair": 56,
+      "asiel": 6,
+      "abortus": 1,
+      "energietransitie": 1
+    }
+  },
+  {
+    "cluster_id": 55,
+    "size": 63,
+    "keywords": [
+      "gastouders",
+      "gastouderopvang",
+      "we",
+      "kwaliteit",
+      "gastouder",
+      "staatssecretaris",
+      "gastouderbureaus",
+      "kinderen"
+    ],
+    "topic_breakdown": {
+      "plenair": 63
+    }
+  },
+  {
+    "cluster_id": 48,
+    "size": 56,
+    "keywords": [
+      "sullivan motie",
+      "minister boekholt",
+      "boekholt sullivan",
+      "boekholt",
+      "sullivan",
+      "oordeel kamer",
+      "motie stuk",
+      "oordeel"
+    ],
+    "topic_breakdown": {
+      "plenair": 55,
+      "energietransitie": 1
+    }
+  },
+  {
+    "cluster_id": 30,
+    "size": 51,
+    "keywords": [
+      "dank wel",
+      "dank",
+      "wel"
+    ],
+    "topic_breakdown": {
+      "plenair": 43,
+      "asiel": 5,
+      "energietransitie": 3
+    }
+  },
+  {
+    "cluster_id": 45,
+    "size": 51,
+    "keywords": [
+      "wel voorzitter",
+      "dank wel",
+      "dank",
+      "voorzitter",
+      "wel"
+    ],
+    "topic_breakdown": {
+      "plenair": 49,
+      "asiel": 1,
+      "energietransitie": 1
+    }
+  },
+  {
+    "cluster_id": 18,
+    "size": 50,
+    "keywords": [
+      "dank wel",
+      "dank",
+      "wel"
+    ],
+    "topic_breakdown": {
+      "plenair": 45,
+      "energietransitie": 3,
+      "stikstof": 1,
+      "asiel": 1
+    }
+  },
+  {
+    "cluster_id": 32,
+    "size": 48,
+    "keywords": [
+      "dank wel",
+      "dank",
+      "wel"
+    ],
+    "topic_breakdown": {
+      "plenair": 45,
+      "asiel": 2,
+      "energietransitie": 1
+    }
+  },
+  {
+    "cluster_id": 34,
+    "size": 48,
+    "keywords": [
+      "christenunie",
+      "ceder",
+      "heer ceder",
+      "namens christenunie",
+      "ceder christenunie",
+      "namens",
+      "dank",
+      "dank wel"
+    ],
+    "topic_breakdown": {
+      "plenair": 46,
+      "asiel": 1,
+      "energietransitie": 1
+    }
+  },
+  {
+    "cluster_id": 49,
+    "size": 48,
+    "keywords": [
+      "dank wel",
+      "dank",
+      "wel",
+      "wel dank"
+    ],
+    "topic_breakdown": {
+      "plenair": 47,
+      "energietransitie": 1
+    }
+  },
+  {
+    "cluster_id": 25,
+    "size": 46,
+    "keywords": [
+      "dank wel",
+      "dank",
+      "wel"
+    ],
+    "topic_breakdown": {
+      "plenair": 43,
+      "abortus": 1,
+      "asiel": 1,
+      "energietransitie": 1
+    }
+  },
+  {
+    "cluster_id": 3,
+    "size": 45,
+    "keywords": [
+      "zeker",
+      "zeker zeker"
+    ],
+    "topic_breakdown": {
+      "plenair": 34,
+      "asiel": 7,
+      "stikstof": 3,
+      "energietransitie": 1
+    }
+  },
+  {
+    "cluster_id": 14,
+    "size": 45,
+    "keywords": [
+      "dank voorzitter",
+      "dank",
+      "voorzitter"
+    ],
+    "topic_breakdown": {
+      "plenair": 38,
+      "asiel": 4,
+      "energietransitie": 2,
+      "stikstof": 1
+    }
+  },
+  {
+    "cluster_id": 19,
+    "size": 44,
+    "keywords": [
+      "dank wel",
+      "dank",
+      "wel"
+    ],
+    "topic_breakdown": {
+      "plenair": 40,
+      "energietransitie": 2,
+      "stikstof": 1,
+      "asiel": 1
+    }
+  },
+  {
+    "cluster_id": 26,
+    "size": 44,
+    "keywords": [
+      "dank wel",
+      "dank",
+      "wel"
+    ],
+    "topic_breakdown": {
+      "plenair": 41,
+      "abortus": 1,
+      "asiel": 1,
+      "energietransitie": 1
+    }
+  },
+  {
+    "cluster_id": 27,
+    "size": 43,
+    "keywords": [
+      "wel voorzitter",
+      "dank wel",
+      "dank",
+      "voorzitter",
+      "wel"
+    ],
+    "topic_breakdown": {
+      "plenair": 42,
+      "asiel": 1
+    }
+  },
+  {
+    "cluster_id": 31,
+    "size": 41,
+    "keywords": [
+      "dank wel",
+      "dank",
+      "wel"
+    ],
+    "topic_breakdown": {
+      "plenair": 39,
+      "asiel": 2
+    }
+  },
+  {
+    "cluster_id": 54,
+    "size": 39,
+    "keywords": [
+      "wel voorzitter",
+      "dank wel",
+      "dank",
+      "voorzitter",
+      "wel",
+      "tijd voorzitter",
+      "extra tijd",
+      "wel extra"
+    ],
+    "topic_breakdown": {
+      "plenair": 39
+    }
+  },
+  {
+    "cluster_id": 41,
+    "size": 36,
+    "keywords": [
+      "laatste motie",
+      "laatste",
+      "motie",
+      "motie gaat",
+      "polisadministratie",
+      "twee seconden",
+      "motie heel",
+      "seconden"
+    ],
+    "topic_breakdown": {
+      "plenair": 31,
+      "asiel": 3,
+      "energietransitie": 2
+    }
+  },
+  {
+    "cluster_id": 47,
+    "size": 36,
+    "keywords": [
+      "voorzitter",
+      "doorbraken",
+      "voorzitter nou",
+      "voorzitter weg",
+      "weg",
+      "nou"
+    ],
+    "topic_breakdown": {
+      "plenair": 32,
+      "energietransitie": 3,
+      "asiel": 1
+    }
+  },
+  {
+    "cluster_id": 10,
+    "size": 35,
+    "keywords": [
+      "pvdd dank",
+      "kamerlid kostić",
+      "kostić pvdd",
+      "pvdd",
+      "kostić",
+      "kamerlid",
+      "dank wel",
+      "dank"
+    ],
+    "topic_breakdown": {
+      "plenair": 32,
+      "stikstof": 2,
+      "energietransitie": 1
+    }
+  },
+  {
+    "cluster_id": 11,
+    "size": 35,
+    "keywords": [
+      "tweede",
+      "twee",
+      "ten tweede",
+      "ten",
+      "tel",
+      "nummer twee",
+      "nou twee",
+      "nou"
+    ],
+    "topic_breakdown": {
+      "plenair": 29,
+      "asiel": 3,
+      "energietransitie": 2,
+      "stikstof": 1
+    }
+  },
+  {
+    "cluster_id": 35,
+    "size": 35,
+    "keywords": [
+      "dank voorzitter",
+      "dank",
+      "voorzitter",
+      "bedankt voorzitter",
+      "bedankt"
+    ],
+    "topic_breakdown": {
+      "plenair": 32,
+      "energietransitie": 2,
+      "asiel": 1
+    }
+  },
+  {
+    "cluster_id": 40,
+    "size": 34,
+    "keywords": [
+      "dank wel",
+      "dank",
+      "wel"
+    ],
+    "topic_breakdown": {
+      "plenair": 31,
+      "energietransitie": 2,
+      "asiel": 1
+    }
+  },
+  {
+    "cluster_id": 17,
+    "size": 33,
+    "keywords": [
+      "dank"
+    ],
+    "topic_breakdown": {
+      "plenair": 25,
+      "energietransitie": 4,
+      "asiel": 3,
+      "stikstof": 1
+    }
+  },
+  {
+    "cluster_id": 22,
+    "size": 33,
+    "keywords": [
+      "nee",
+      "verre",
+      "nul"
+    ],
+    "topic_breakdown": {
+      "plenair": 31,
+      "abortus": 1,
+      "asiel": 1
+    }
+  },
+  {
+    "cluster_id": 51,
+    "size": 33,
+    "keywords": [
+      "tweede motie",
+      "tweede",
+      "motie"
+    ],
+    "topic_breakdown": {
+      "plenair": 32,
+      "energietransitie": 1
+    }
+  },
+  {
+    "cluster_id": 7,
+    "size": 30,
+    "keywords": [
+      "allang"
+    ],
+    "topic_breakdown": {
+      "plenair": 23,
+      "asiel": 3,
+      "stikstof": 2,
+      "energietransitie": 2
+    }
+  },
+  {
+    "cluster_id": 50,
+    "size": 30,
+    "keywords": [
+      "zover",
+      "voorzitter zover",
+      "zover voorzitter",
+      "voorzitter",
+      "minister aartsen",
+      "aartsen",
+      "zover mevrouw",
+      "nader order"
+    ],
+    "topic_breakdown": {
+      "plenair": 29,
+      "energietransitie": 1
+    }
+  },
+  {
+    "cluster_id": 33,
+    "size": 28,
+    "keywords": [
+      "dank voorzitter",
+      "dank",
+      "voorzitter",
+      "oké dank",
+      "oké"
+    ],
+    "topic_breakdown": {
+      "plenair": 25,
+      "energietransitie": 2,
+      "asiel": 1
+    }
+  },
+  {
+    "cluster_id": 37,
+    "size": 28,
+    "keywords": [
+      "alstublieft",
+      "graag",
+      "uitvoeriger",
+      "schriftelijk",
+      "kies",
+      "bedoel",
+      "oké",
+      "euro"
+    ],
+    "topic_breakdown": {
+      "plenair": 27,
+      "asiel": 1
+    }
+  },
+  {
+    "cluster_id": 4,
+    "size": 27,
+    "keywords": [
+      "aha"
+    ],
+    "topic_breakdown": {
+      "plenair": 22,
+      "energietransitie": 3,
+      "stikstof": 1,
+      "asiel": 1
+    }
+  },
+  {
+    "cluster_id": 16,
+    "size": 27,
+    "keywords": [
+      "laatste",
+      "absoluut",
+      "aller",
+      "aller allerlaatste",
+      "aller aller",
+      "allerlaatste",
+      "opmerking"
+    ],
+    "topic_breakdown": {
+      "plenair": 23,
+      "asiel": 2,
+      "stikstof": 1,
+      "energietransitie": 1
+    }
+  },
+  {
+    "cluster_id": 43,
+    "size": 27,
+    "keywords": [
+      "volgende motie",
+      "volgende",
+      "motie",
+      "heer kort",
+      "syrië",
+      "sancties",
+      "stoppen daarom",
+      "arbeidsongeschikten"
+    ],
+    "topic_breakdown": {
+      "plenair": 26,
+      "asiel": 1
+    }
+  },
+  {
+    "cluster_id": 46,
+    "size": 27,
+    "keywords": [
+      "dank wel",
+      "dank",
+      "wel"
+    ],
+    "topic_breakdown": {
+      "plenair": 26,
+      "asiel": 1
+    }
+  },
+  {
+    "cluster_id": 53,
+    "size": 27,
+    "keywords": [
+      "eén motie",
+      "voorzitter eén",
+      "eén",
+      "motie",
+      "voorzitter",
+      "voorzitter motie",
+      "motie voorzitter",
+      "voorzitter één"
+    ],
+    "topic_breakdown": {
+      "plenair": 27
+    }
+  },
+  {
+    "cluster_id": 9,
+    "size": 23,
+    "keywords": [
+      "dank voorzitter",
+      "dank",
+      "voorzitter"
+    ],
+    "topic_breakdown": {
+      "plenair": 21,
+      "stikstof": 1,
+      "energietransitie": 1
+    }
+  },
+  {
+    "cluster_id": 2,
+    "size": 22,
+    "keywords": [
+      "laatste",
+      "iedereen",
+      "laatste gaat",
+      "gehele",
+      "land",
+      "gaat"
+    ],
+    "topic_breakdown": {
+      "plenair": 21,
+      "stikstof": 1
+    }
+  },
+  {
+    "cluster_id": 13,
+    "size": 21,
+    "keywords": [
+      "dank wel",
+      "dank",
+      "wel"
+    ],
+    "topic_breakdown": {
+      "plenair": 18,
+      "stikstof": 1,
+      "asiel": 1,
+      "energietransitie": 1
+    }
+  },
+  {
+    "cluster_id": 52,
+    "size": 21,
+    "keywords": [
+      "laatste voorzitter",
+      "laatste",
+      "voorzitter",
+      "laatste mevrouw",
+      "allermooiste",
+      "allerlaatste voorzitter",
+      "bewaard",
+      "mevrouw voorzitter"
+    ],
+    "topic_breakdown": {
+      "plenair": 21
+    }
+  },
+  {
+    "cluster_id": 38,
+    "size": 18,
+    "keywords": [
+      "motie twee",
+      "twee",
+      "motie",
+      "motie drie",
+      "allebei motie",
+      "twee alinea",
+      "alinea",
+      "allebei"
+    ],
+    "topic_breakdown": {
+      "plenair": 15,
+      "energietransitie": 2,
+      "asiel": 1
+    }
+  },
+  {
+    "cluster_id": 29,
+    "size": 17,
+    "keywords": [
+      "zover"
+    ],
+    "topic_breakdown": {
+      "plenair": 15,
+      "asiel": 1,
+      "energietransitie": 1
+    }
+  },
+  {
+    "cluster_id": 44,
+    "size": 16,
+    "keywords": [
+      "derde motie",
+      "derde",
+      "motie",
+      "slotte derde",
+      "ten slotte",
+      "slotte",
+      "ten"
+    ],
+    "topic_breakdown": {
+      "plenair": 12,
+      "asiel": 2,
+      "energietransitie": 2
+    }
+  },
+  {
+    "cluster_id": 36,
+    "size": 15,
+    "keywords": [
+      "steun",
+      "sneu",
+      "kostić pvdd",
+      "kamerlid kostić",
+      "pvdd",
+      "kostić",
+      "kamerlid"
+    ],
+    "topic_breakdown": {
+      "plenair": 11,
+      "energietransitie": 3,
+      "asiel": 1
+    }
+  }
+]

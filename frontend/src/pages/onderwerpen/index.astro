@@ -1,6 +1,9 @@
 ---
 import topicsIndex from "../../../../data/export/topics-index.json";
+import plenairMapPoints from "../../../../data/export/plenair-map.json";
+import plenairMapClusters from "../../../../data/export/plenair-map-clusters.json";
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import PlenairMap from "../../components/PlenairMap.vue";
 import { TEGENSTELLING } from "../../lib/topics";
 ---
 
@@ -26,6 +29,12 @@ import { TEGENSTELLING } from "../../lib/topics";
 	<p class="topics-debatten-link">
 		<a href="/debatten/">Alle geanalyseerde debatten &rarr;</a>
 	</p>
+
+	<PlenairMap
+		points={plenairMapPoints}
+		clusters={plenairMapClusters}
+		client:only="vue"
+	/>
 </BaseLayout>
 
 <style>
