@@ -7,7 +7,9 @@ import { TEGENSTELLING } from "../../lib/topics";
 // De plenaire-kaart data (~6 MB) gaat niet meer als Astro-prop mee -- die
 // duwde deze indexpagina op ~9 MB. PlenairMap.vue fetcht 'm client-side
 // vanaf scripts/export_public_data.ts's output (issue #163).
-const dataBaseUrl = import.meta.env.PUBLIC_DATA_BASE_URL ?? "https://cdn.jsdelivr.net/gh/bipolariteit/bipolariteit-data@main";
+const dataBaseUrl =
+	import.meta.env.PUBLIC_DATA_BASE_URL ??
+	(import.meta.env.DEV ? "/data" : "https://cdn.jsdelivr.net/gh/bipolariteit/bipolariteit-data@main");
 ---
 
 <BaseLayout title="Onderwerpen - Bipolariteit">

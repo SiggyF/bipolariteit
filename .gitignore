@@ -32,6 +32,7 @@ data/debate_events/
 data/embeddings/
 node_modules/
 frontend/dist/
+frontend/public/data/
 # Per release gerenderd uit deploy/wrangler.template.jsonc.
 wrangler.generated.jsonc
 frontend/.astro/
