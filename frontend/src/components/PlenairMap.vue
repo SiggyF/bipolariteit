@@ -394,8 +394,50 @@ function onChartClick(params: any) {
 	}
 }
 
+const hasFilter = computed(() => (props.selectedClusterIds?.size ?? 0) > 0);
+
+// Puntendata per topic, losstaand van chartOption -- alleen afhankelijk van
+// de punten/selectie zelf, NIET van zoomFactor. chartOption herbouwt anders
+// bij elke zoom-tick (elke ~30ms tijdens een zoom-gebaar, zie dataZoom-
+// throttle) de volledige ~40k-punten-array opnieuw (met tooltip-tekst,
+// cluster-lookup, itemStyle, etc.) terwijl alleen de puntgrootte verandert
+// -- dat was de resterende schokkerigheid na de eerdere throttle/progressive-
+// fix (issue #184-vervolg). `isSelected`/`isDimmed` blijven wel in de data
+// staan (voor itemStyle, die niet zoom-afhankelijk is); alleen symbolSize
+// wordt in chartOption zelf als functie berekend, met de actuele baseSize
+// uit de zoom-afhankelijke sluiting.
+const pointsByTopic = computed(() => {
+	const filterActive = hasFilter.value;
+	const byTopic = new Map<string, any[]>();
+	for (const topic of topics.value) byTopic.set(topic, []);
+	for (const p of plotPoints.value) {
+		const isSelected = filterActive && p.cluster != null && props.selectedClusterIds!.has(p.cluster);
+		const isDimmed = filterActive && !isSelected;
+		const arr = byTopic.get(p.topic);
+		if (!arr) continue;
+		arr.push({
+			value: [p.x, p.y],
+			actor: p.actor,
+			party: p.party,
+			activiteit_soort: p.activiteit_soort ?? "",
+			debate_title: p.debate_title ?? "",
+			published_at: p.published_at,
+			text: p.text,
+			clusterId: p.cluster,
+			cluster: p.cluster != null ? clusterLabels.value.get(p.cluster) : undefined,
+			isSelected,
+			isDimmed,
+			itemStyle: isDimmed
+				? { opacity: 0.04, color: isDark.value ? "#555" : "#ccc" }
+				: isSelected
+				? { opacity: 0.95, color: TOPIC_COLOR[p.topic] ?? PLENAIR_COLOR }
+				: undefined,
+		});
+	}
+	return byTopic;
+});
+
 const chartOption = computed(() => {
-	const hasFilter = (props.selectedClusterIds?.size ?? 0) > 0;
 	const seriesList: any[] = [];
 
 	// 1. Coarse Domain Convex Hulls
@@ -466,7 +508,7 @@ const chartOption = computed(() => {
 				const hull = item?.hull;
 				if (!hull || hull.length < 3) return;
 				const pts = hull.map(([hx, hy]) => api.coord([hx, hy]));
-				const isSelected = hasFilter && props.selectedClusterIds?.has(item.cluster_id);
+				const isSelected = hasFilter.value && props.selectedClusterIds?.has(item.cluster_id);
 				return {
 					type: "group",
 					children: [
@@ -619,9 +661,15 @@ const chartOption = computed(() => {
 	}
 
 	// 4. Scatter Points (Speeches)
+	//
+	// De puntendata zelf komt uit pointsByTopic (hierboven, zoom-onafhankelijk
+	// gecachet) -- hier alleen de zoom-afhankelijke grootte/dekking, als een
+	// symbolSize-functie i.p.v. een vaste waarde per punt, zodat de dure
+	// per-punt data-array niet bij elke zoom-tick opnieuw hoeft te worden
+	// opgebouwd (issue #184-vervolg, "zoomen gaat schokkerig").
 	if (showPoints.value) {
 		for (const topic of topics.value) {
-			const pts = plotPoints.value.filter((p) => p.topic === topic);
+			const pts = pointsByTopic.value.get(topic) ?? [];
 			const isPlenair = topic === "plenair";
 			const baseSize =
 				(isPlenair ? plenairSizeScale(zoomFactor.value) : topicSizeScale(zoomFactor.value)) *
@@ -637,13 +685,15 @@ const chartOption = computed(() => {
 				id: topic,
 				name: topic,
 				type: "scatter",
-				symbolSize: baseSize,
-				large: isPlenair && !hasFilter,
+				symbolSize: (_value: any, params: any) => {
+					const d = params.data;
+					return d.isSelected ? baseSize * 1.4 : d.isDimmed ? Math.max(3, baseSize * 0.75) : baseSize;
+				},
+				large: isPlenair && !hasFilter.value,
 				largeThreshold: 2000,
 				// Rendert boven de drempel in stukjes over meerdere frames i.p.v.
 				// alles in één keer -- voorkomt lange blocking renders bij elke
-				// zoom-stap op de ~33k "overig plenair"-punten (issue #184-vervolg,
-				// "zoomen gaat schokkerig").
+				// zoom-stap op de ~33k "overig plenair"-punten.
 				progressive: 4000,
 				progressiveThreshold: 4000,
 				zlevel: isPlenair ? 0 : 1,
@@ -653,28 +703,7 @@ const chartOption = computed(() => {
 					color: TOPIC_COLOR[topic] ?? PLENAIR_COLOR,
 					opacity: baseOpacity,
 				},
-				data: pts.map((p) => {
-					const isSelected = hasFilter && p.cluster != null && props.selectedClusterIds!.has(p.cluster);
-					const isDimmed = hasFilter && !isSelected;
-
-					return {
-						value: [p.x, p.y],
-						actor: p.actor,
-						party: p.party,
-						activiteit_soort: p.activiteit_soort ?? "",
-						debate_title: p.debate_title ?? "",
-						published_at: p.published_at,
-						text: p.text,
-						clusterId: p.cluster,
-						cluster: p.cluster != null ? clusterLabels.value.get(p.cluster) : undefined,
-						itemStyle: isDimmed
-							? { opacity: 0.04, color: isDark.value ? "#555" : "#ccc" }
-							: isSelected
-							? { opacity: 0.95, color: TOPIC_COLOR[topic] ?? PLENAIR_COLOR }
-							: undefined,
-						symbolSize: isSelected ? baseSize * 1.4 : isDimmed ? Math.max(3, baseSize * 0.75) : undefined,
-					};
-				}),
+				data: pts,
 			});
 		}
 	}
