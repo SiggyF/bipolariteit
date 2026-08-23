@@ -579,23 +579,23 @@ def main():
     cached_vectors = None
     if not args.refresh and cache_path.exists():
         data = np.load(cache_path, allow_pickle=True)
-        # De cache is alleen geldig als hij exact dezelfde rijen (zelfde
-        # ids, zelfde volgorde) dekt als de huidige fetch_documents()-query
-        # -- anders zipt vectors[i] straks met het verkeerde document.
-        # Kan makkelijk misgaan als deze query en een lopende
-        # ingest_plenair()-crawl gelijktijdig draaien (documents.topic_id
-        # IS NULL groeit dan tussen twee runs in): dan negeren we de cache
-        # gewoon en embedden opnieuw, in plaats van stilzwijgend verkeerd
-        # te koppelen.
-        if list(data["ids"]) == current_ids:
+        cached_id_list = list(data["ids"])
+        if cached_id_list == current_ids:
             cached_vectors = data["vectors"]
-            logger.info("embeddings-cache geladen: %s", cache_path)
+            logger.info("embeddings-cache geladen: %s (exacte match, %d vectoren)", cache_path, len(cached_vectors))
         else:
-            logger.warning(
-                "embeddings-cache %s komt niet meer overeen met de huidige query "
-                "(%d gecachete ids vs. %d nu) -- cache genegeerd, opnieuw embedden",
-                cache_path, len(data["ids"]), len(current_ids),
-            )
+            cached_id_set = set(cached_id_list)
+            missing = set(current_ids) - cached_id_set
+            if not missing:
+                id_to_idx = {doc_id: idx for idx, doc_id in enumerate(cached_id_list)}
+                indices = [id_to_idx[doc_id] for doc_id in current_ids]
+                cached_vectors = data["vectors"][indices]
+                logger.info("embeddings-cache geladen via ID-subset: %s (%d/%d vectoren)", cache_path, len(cached_vectors), len(cached_id_list))
+            else:
+                logger.warning(
+                    "embeddings-cache %s mist %d van de %d gevraagde document-ids -- cache genegeerd, opnieuw embedden",
+                    cache_path, len(missing), len(current_ids),
+                )
 
     if cached_vectors is not None:
         vectors = cached_vectors
