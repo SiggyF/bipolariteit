@@ -38,6 +38,7 @@ from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 
 from pipeline.db import db
 from pipeline.paths import REPO_ROOT
+from pipeline.tag_arguments import call_llm
 from scripts.experiment_umap_arguments import DUTCH_STOPWORDS, detect_base_url, embed_texts, run_umap
 
 logger = logging.getLogger(__name__)
@@ -193,6 +194,126 @@ def run_clustering(coords, method, eps, min_samples, min_cluster_size):
     else:
         clustering = DBSCAN(eps=eps, min_samples=min_samples).fit(coords)
     return clustering.labels_
+
+
+def _condensed_tree_children_by_parent(clusterer):
+    """Condensed tree (van de `hdbscan`-package, i.t.t. sklearn.cluster.HDBSCAN
+    dat geen condensed_tree_ blootgeeft) als {parent_node_id: [(child, child_size), ...]}.
+    child_size==1 betekent: child is een losse puntindex die als ruis uit
+    parent viel; child_size>1 betekent: child is een nieuwe interne node-id
+    (een echte sub-cluster-splitsing)."""
+    full_tree = clusterer.condensed_tree_.to_pandas()
+    children_by_parent = {}
+    for parent, child, size in zip(full_tree["parent"], full_tree["child"], full_tree["child_size"]):
+        children_by_parent.setdefault(int(parent), []).append((int(child), int(size)))
+    root = int(full_tree["parent"].min())
+    return children_by_parent, root
+
+
+def build_hierarchical_clusters(coords, hdbscan_min_cluster_size, min_size_to_name):
+    """Vervangt vaste coarse/fine HDBSCAN-drempels door een boomwandeling
+    over de HDBSCAN condensed tree (zie notebooks/explore_plenary_umap_clusters.py
+    en docs/hierarchische-clustering-plenaire-spreekbeurten.md voor de
+    volledige uitleg/motivatie -- vaste drempels bleken op deze data telkens
+    in te storten tot 1-3 dominante clusters, ook op de volledige dataset).
+
+    Coarse-niveau: wandelt alleen de hoofdtak af (niet-recursief); bij elke
+    splitsing waarvan de kleinste kant >= min_size_to_name is, wordt die kant
+    een eigen coarse-domein (met zijn VOLLEDIGE, nog niet verder-gesplitste
+    puntenverzameling); te kleine subtakken versmelten met de rest van de
+    hoofdtak. Zodra de hoofdtak zelf geen zinnige splitsing meer heeft, wordt
+    wat overblijft (incl. versmolten restjes) het laatste coarse-domein.
+
+    Fine-niveau: binnen elk coarse-domein wordt dezelfde wandeling recursief
+    toegepast (dus ook op al benoemde subtakken, die zelf weer kunnen
+    splitsen -- bv. een subtak van 302 spreekbeurten bleek zelf in twee
+    groepen van 144 en 147 te splitsen) tot er geen zinnige splitsing meer
+    over is; dat laatste restje hoort dan bij hetzelfde coarse-domein.
+
+    Geeft (coarse_ids, fine_ids) terug: twee even lange arrays (int, één
+    label per punt in coords), analoog aan run_clustering()'s labels_.
+    fine_ids nest altijd binnen coarse_ids (elk fine-cluster hoort bij precies
+    één coarse-domein)."""
+    import hdbscan as hdbscan_pkg
+
+    n = len(coords)
+    clusterer = hdbscan_pkg.HDBSCAN(min_cluster_size=hdbscan_min_cluster_size).fit(coords)
+    children_by_parent, root = _condensed_tree_children_by_parent(clusterer)
+
+    def collect_points(node_id):
+        if node_id < n:
+            return [node_id]
+        points = []
+        for child, size in children_by_parent.get(node_id, []):
+            points.extend([child] if size == 1 else collect_points(child))
+        return points
+
+    def coarse_partition():
+        current, branches, carried = root, [], []
+        while True:
+            entries = children_by_parent.get(current, [])
+            real_children = [(ch, sz) for ch, sz in entries if sz > 1]
+            qualifying = [(ch, sz) for ch, sz in real_children if sz >= min_size_to_name]
+            carried.extend(ch for ch, sz in entries if sz == 1)
+            for child, size in real_children:
+                if size < min_size_to_name:
+                    carried.extend(collect_points(child))
+            if not qualifying:
+                branches.append((current, carried, True))
+                return branches
+            qualifying.sort(key=lambda cs: cs[1])
+            *smaller, (largest, _size) = qualifying
+            for child, _size in smaller:
+                branches.append((child, [], False))
+            current = largest
+            # let op: `carried` NIET resetten -- moet over de hele wandeling
+            # blijven optellen, anders raken eerder opgevangen te-kleine
+            # subtakken zoek zodra er weer een kwalificerende afsplitsing volgt.
+
+    def fine_partition(node_id):
+        current, leaves, merged = node_id, [], []
+        while True:
+            entries = children_by_parent.get(current, [])
+            real_children = [(ch, sz) for ch, sz in entries if sz > 1]
+            qualifying = [(ch, sz) for ch, sz in real_children if sz >= min_size_to_name]
+            merged.extend(ch for ch, sz in entries if sz == 1)
+            for child, size in real_children:
+                if size < min_size_to_name:
+                    merged.extend(collect_points(child))
+            if not qualifying:
+                leaves.append(merged)
+                return leaves
+            qualifying.sort(key=lambda cs: cs[1])
+            *smaller, (largest, _size) = qualifying
+            for child, _size in smaller:
+                leaves.extend(fine_partition(child))
+            current = largest
+
+    coarse_branches = coarse_partition()
+    coarse_ids = np.full(n, -1, dtype=int)
+    fine_ids = np.full(n, -1, dtype=int)
+    fine_label = 0
+    for coarse_label, (node_id, carried, is_terminal) in enumerate(coarse_branches):
+        own_pts = [] if is_terminal else collect_points(node_id)
+        coarse_ids[own_pts + carried] = coarse_label
+
+        fine_leaves = fine_partition(node_id)
+        if is_terminal and carried:
+            # de te-kleine subtakken die tijdens de coarse-wandeling zijn
+            # opgevangen horen bij hetzelfde "overgebleven" fine-cluster
+            if fine_leaves:
+                fine_leaves[-1] = fine_leaves[-1] + carried
+            else:
+                fine_leaves = [carried]
+        for leaf_pts in fine_leaves:
+            fine_ids[leaf_pts] = fine_label
+            fine_label += 1
+
+    logger.info(
+        "boomwandeling: %d coarse-domeinen, %d fine-sub-onderwerpen (min_cluster_size=%d, min_size_to_name=%d)",
+        len(coarse_branches), fine_label, hdbscan_min_cluster_size, min_size_to_name,
+    )
+    return coarse_ids, fine_ids
 
 
 def format_title_from_terms(terms):
@@ -502,6 +623,94 @@ def label_hierarchical_clusters(
     return coarse_summaries, fine_list, tree
 
 
+def _build_cluster_naming_prompt(tfidf_terms, example_texts, example_titles):
+    terms_str = ", ".join(tfidf_terms) if tfidf_terms else "(geen trefwoorden gevonden)"
+    titles_str = "\n".join(f"- {t}" for t in sorted(set(example_titles)) if t) or "(geen debattitels bekend)"
+    examples_str = "\n\n".join(f'"{t[:400]}"' for t in example_texts)
+    return f"""Je krijgt trefwoorden en voorbeeldfragmenten uit spreekbeurten uit
+Tweede Kamerdebatten, allemaal uit hetzelfde cluster van een UMAP-kaart
+(spreekbeurten die semantisch dicht bij elkaar liggen). Geef een korte,
+inhoudelijke naam voor het onderwerp van dit cluster.
+
+TF-IDF-trefwoorden: {terms_str}
+
+Debattitels waarin deze spreekbeurten voorkwamen:
+{titles_str}
+
+Voorbeeldfragmenten:
+{examples_str}
+
+Antwoord in exact dit formaat, zonder verdere uitleg:
+Naam: <2-4 woorden, het beleidsonderwerp>
+Duiding: <één zin, wat dit cluster inhoudelijk samenbindt>"""
+
+
+def _generate_llm_cluster_name(base_url, model, reasoning_effort, tfidf_terms, example_texts, example_titles):
+    prompt = _build_cluster_naming_prompt(tfidf_terms, example_texts, example_titles)
+    raw_content, _usage = call_llm(base_url, model, prompt, reasoning_effort=reasoning_effort, timeout=120)
+    name, duiding = None, None
+    for line in raw_content.splitlines():
+        if line.lower().startswith("naam:"):
+            name = line.split(":", 1)[1].strip()
+        elif line.lower().startswith("duiding:"):
+            duiding = line.split(":", 1)[1].strip()
+    return name or raw_content.strip()[:60], duiding or ""
+
+
+def label_clusters_with_llm(
+    coarse_ids, fine_ids, coarse_summaries, fine_list, tree,
+    texts, coords, rows, base_url, model, reasoning_effort, examples_per_cluster,
+):
+    """Vervangt de TF-IDF-naam van elk coarse- en fine-cluster (in-place) door
+    een LLM-gegenereerde naam + duiding, op basis van representatieve
+    spreekbeurten (dichtst bij het clustercentroïde) + debattitels. De
+    TF-IDF-termen zelf blijven bewaard (`terms`-veld) voor een eventueel
+    latere "cluster-detail"-weergave (issue vervolgen op #181), alleen
+    `name` wordt overschreven. Werkt ook `tree` (voor plenair-map-hierarchy.json)
+    en fine_list se `parent_name`-verwijzingen bij zodat alles consistent
+    naar de nieuwe namen wijst."""
+    def representative_examples(member_idx):
+        centroid = coords[member_idx].mean(axis=0)
+        dists = np.linalg.norm(coords[member_idx] - centroid, axis=1)
+        closest = member_idx[np.argsort(dists)[:examples_per_cluster]]
+        return [texts[i] for i in closest], [rows[i]["debate_title"] for i in closest]
+
+    total = len(coarse_summaries) + len(fine_list)
+    logger.info("LLM-naamgeving voor %d clusters (~%ds geschat, %.1fs/cluster live gemeten)", total, total * 7, 7.0)
+
+    llm_names_by_coarse_id = {}
+    for coarse_id, summary in coarse_summaries.items():
+        member_idx = np.where(coarse_ids == coarse_id)[0]
+        example_texts, example_titles = representative_examples(member_idx)
+        name, duiding = _generate_llm_cluster_name(
+            base_url, model, reasoning_effort, summary["terms"], example_texts, example_titles,
+        )
+        summary["name"] = name
+        summary["duiding"] = duiding
+        llm_names_by_coarse_id[coarse_id] = name
+        logger.info("coarse-domein %d (n=%d): LLM-naam '%s' -- %s", coarse_id, summary["size"], name, duiding)
+
+    for summary in fine_list:
+        member_idx = np.where(fine_ids == summary["cluster_id"])[0]
+        example_texts, example_titles = representative_examples(member_idx)
+        name, duiding = _generate_llm_cluster_name(
+            base_url, model, reasoning_effort, summary["terms"], example_texts, example_titles,
+        )
+        summary["name"] = name
+        summary["duiding"] = duiding
+        if summary["parent_id"] is not None:
+            summary["parent_name"] = llm_names_by_coarse_id.get(summary["parent_id"], summary["parent_name"])
+        logger.info("fine-sub-onderwerp %d (n=%d): LLM-naam '%s' -- %s", summary["cluster_id"], summary["size"], name, duiding)
+
+    fine_by_id = {s["cluster_id"]: s for s in fine_list}
+    for coarse_node in tree:
+        coarse_node["name"] = llm_names_by_coarse_id.get(coarse_node["id"], coarse_node["name"])
+        for child in coarse_node["children"]:
+            fine_summary = fine_by_id.get(child["id"])
+            if fine_summary is not None:
+                child["name"] = fine_summary["name"]
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--start", required=True, help="published_at ondergrens, ISO-datum (inclusief)")
@@ -527,15 +736,32 @@ def main():
     )
     parser.add_argument("--dbscan-min-samples", type=int, default=15)
     parser.add_argument(
-        "--hdbscan-min-cluster-size-coarse", type=int, default=200,
-        help="grof niveau: weinig, grote clusters -- role-woorden (minister/voorzitter) mogen hier "
-        "meewegen, zie label_clusters().",
+        "--hdbscan-min-cluster-size", type=int, default=15,
+        help="alleen bij --cluster-method hdbscan: granulariteit van de onderliggende condensed "
+        "tree waarover build_hierarchical_clusters() wandelt (zie die functie's docstring). "
+        "Vervangt de vroegere aparte coarse(200)/fine(15)-drempels, die op deze data telkens "
+        "instortten tot 1-3 dominante clusters -- zie docs/hierarchische-clustering-plenaire-spreekbeurten.md.",
     )
     parser.add_argument(
-        "--hdbscan-min-cluster-size-fine", type=int, default=15,
-        help="fijn niveau: veel, kleine (sub-onderwerp-)clusters -- domeinstopwoorden actief.",
+        "--cluster-min-size-to-name", type=int, default=200,
+        help="hoeveel spreekbeurten een afgesplitste subtak minstens moet hebben om een eigen "
+        "coarse/fine-cluster te worden tijdens de boomwandeling; kleinere subtakken versmelten "
+        "met de rest. Live getest op een steekproef van ~40k punten: 200 -> 31 coarse/48 fine.",
     )
     parser.add_argument("--cluster-top-terms", type=int, default=8, help="aantal TF-IDF-termen per cluster-label")
+    parser.add_argument(
+        "--skip-llm-naming", action="store_true",
+        help="LLM-naamgeving overslaan (TF-IDF-naam blijft dan staan) -- handig zonder LM Studio, "
+        "of om snel alleen de clustering/hulls te controleren.",
+    )
+    parser.add_argument("--llm-chat-model", default="qwen/qwen3.6-27b", help="zelfde default als pipeline/tag_arguments.py --model")
+    parser.add_argument(
+        "--llm-reasoning-effort", default="none",
+        help='"none" schakelt reasoning-tokens uit -- zonder deze parameter verstookt qwen3.6-27b '
+        "het volledige max_tokens-budget van call_llm() aan een onzichtbare <think>-redenering en "
+        "blijft er niets over voor het eigenlijke antwoord (live bevestigd, zie docs/handoff.md).",
+    )
+    parser.add_argument("--llm-examples-per-cluster", type=int, default=8, help="representatieve spreekbeurten per cluster in de LLM-naamgevingsprompt")
     args = parser.parse_args()
 
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
@@ -626,8 +852,9 @@ def main():
     cluster_ids, cluster_summaries, hierarchy = None, None, None
     if not args.skip_clustering:
         if args.cluster_method == "hdbscan":
-            coarse_ids = run_clustering(coords, "hdbscan", None, None, args.hdbscan_min_cluster_size_coarse)
-            fine_ids = run_clustering(coords, "hdbscan", None, None, args.hdbscan_min_cluster_size_fine)
+            coarse_ids, fine_ids = build_hierarchical_clusters(
+                coords, args.hdbscan_min_cluster_size, args.cluster_min_size_to_name,
+            )
             coarse_summaries, fine_summaries, hierarchy = label_hierarchical_clusters(
                 texts,
                 coords,
@@ -638,14 +865,21 @@ def main():
                 extra_stopwords=all_stopwords,
                 max_df=0.25,
             )
+
+            if not args.skip_llm_naming:
+                llm_base_url = detect_base_url(args.base_url)
+                label_clusters_with_llm(
+                    coarse_ids, fine_ids, coarse_summaries, fine_summaries, hierarchy,
+                    texts, coords, rows, llm_base_url, args.llm_chat_model,
+                    args.llm_reasoning_effort, args.llm_examples_per_cluster,
+                )
+
             cluster_ids = fine_ids
             cluster_summaries = {
                 "coarse": list(coarse_summaries.values()),
                 "fine": fine_summaries,
             }
 
-            n_noise = int((np.asarray(fine_ids) == -1).sum())
-            logger.info("HDBSCAN: %d grove domeinen, %d fijne sub-onderwerpen, %d ruis (van %d totaal)", len(coarse_summaries), len(fine_summaries), n_noise, len(texts))
             for coarse in hierarchy:
                 logger.info("Domein '%s' (n=%d, %d sub-onderwerpen):", coarse["name"], coarse["value"], len(coarse["children"]))
                 for child in coarse["children"][:5]:

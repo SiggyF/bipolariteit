@@ -43,7 +43,8 @@
   "customizations": {
     "vscode": {
       "extensions": [
-        "Vue.volar"
+        "Vue.volar",
+        "ms-toolsai.jupyter"
       ]
     }
   },
