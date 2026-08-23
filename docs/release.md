@@ -292,3 +292,61 @@ uv run python scripts/check_public_exposure.py www.bipolariteit.org --skip-dist-
 Dit is een sanity-check, geen volledige security-audit: de lijst gevoelige
 paden is niet uitputtend, en een `200` op een pad dat er niet op staat wordt
 niet gedetecteerd.
+
+# Argumentdata publiceren (issue #163)
+
+Perspectief-, onderwerp- en tagpagina's aggregeren over (een deel van) de
+volledige argumentenset. Die als Astro-prop in de HTML bakken duwde sommige
+pagina's tot 25+ MB (de Cloudflare Workers-assetlimiet is 25 MiB per bestand)
+en groeit onbegrensd mee met de dataset. In plaats daarvan wordt een lean,
+al-gefilterd JSON-bestand per pagina-instantie apart gepubliceerd en
+client-side gefetcht (`onMounted` in bv. `PerspectiefView.vue`).
+
+## Hoe het in elkaar zit
+
+- **`frontend/scripts/export_public_data.ts`** — leest `data/export/topics/*.json`
+  en schrijft per perspectief, per onderwerp en per tag een JSON-bestand naar
+  `data/export/gepubliceerd/`. De perspectiefbestanden zijn lean-gestript
+  (`toLeanArgument`, `frontend/src/lib/leanArgument.ts` — perspectiefpagina's
+  tonen nooit een losse `ArgumentCard`); de onderwerp- en tagbestanden zijn
+  ongestript, want `TopicView.vue`/`TagDetail.vue` renderen wél volledige
+  `ArgumentCard`s (videolinks, quote_context, claims, tag-`reden`).
+- **`data/export/gepubliceerd/`** is een **git submodule** op de publieke repo
+  <https://github.com/bipolariteit/bipolariteit-data> (zie `.gitmodules`). De
+  hoofdrepo (`SiggyF/bipolariteit`) blijft privé; alleen deze afgeleide data
+  — die toch al publiek in de site zelf zit — staat los en publiek.
+- **`scripts/publish_data.py`** commit + pusht wijzigingen in die submodule en
+  leegt daarna de jsDelivr-cache voor de gewijzigde bestanden.
+- **jsDelivr's GitHub-CDN** (`cdn.jsdelivr.net/gh/bipolariteit/bipolariteit-data@main/...`)
+  serveert de bestanden client-side, met `Access-Control-Allow-Origin: *` —
+  geen eigen hosting, geen custom domain, geen creditcard nodig. Werkt alleen
+  tegen publieke repo's.
+- Astro-pagina's geven de databasis-URL door als `dataBaseUrl`-prop, default
+  `import.meta.env.PUBLIC_DATA_BASE_URL ?? "https://cdn.jsdelivr.net/gh/bipolariteit/bipolariteit-data@main"`
+  (zie bv. `[naam].astro`).
+
+R2 (Cloudflare) is eerder overwogen maar afgewezen: het vereist een
+creditcard om te activeren, ook binnen de gratis tier. Zenodo is ook
+overwogen (DOI/archivering) maar past niet bij een "overschrijf de huidige
+data"-flow met live browser-fetch.
+
+## Data publiceren
+
+```sh
+make export            # SQLite -> data/export/topics/*.json (lokale DB nodig)
+make publish-data       # export_public_data.ts + commit/push van de submodule
+```
+
+Losgekoppeld van een frontend-release: `publish-data` draai je handmatig,
+alleen als de onderliggende dataset verandert, niet automatisch in CI. Een
+`make build`/`make release*` na een `make export` zonder `make publish-data`
+publiceert gewoon de frontend tegen de data die al op jsDelivr staat — die
+kunnen dus tijdelijk uit de pas lopen; niet fataal (het is dezelfde export,
+alleen een oudere versie), maar wel iets om aan te denken bij grote
+dataset-wijzigingen.
+
+## Lokale dev
+
+`make dev` fetcht gewoon de publieke jsDelivr-URL — geen mock/proxy nodig.
+Lokale wijzigingen aan `pipeline/build_static_data.py`'s outputvorm zijn dus
+pas zichtbaar in dev ná een `make publish-data`-run.

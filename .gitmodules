@@ -1,0 +1,3 @@
+[submodule "data/export/gepubliceerd"]
+	path = data/export/gepubliceerd
+	url = https://github.com/bipolariteit/bipolariteit-data.git

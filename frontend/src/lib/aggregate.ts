@@ -214,6 +214,31 @@ export function derivePersonTagIndex(argumentList: Argument[]): Map<string, Pers
 	return index;
 }
 
+// JSON-vriendelijke vorm van PartyTagIndexEntry/PersonTagIndexEntry -- Astro-
+// props moeten serialiseerbaar zijn en een Map overleeft die grens niet.
+// Gebruikt om derivePartyTagIndex/derivePersonTagIndex build-time te kunnen
+// uitrekenen (over het volledige corpus) en het resultaat als lichte prop
+// mee te geven, i.p.v. de ruwe argumentenlijst naar de client te sturen
+// zodat de index daar client-side herberekend kan worden (zie issue #163).
+export type SerializedPartyTagIndexEntry = { party: string; total: number; tagCounts: [string, number][] };
+export type SerializedPersonTagIndexEntry = { person: string; party: string | null; total: number; tagCounts: [string, number][] };
+
+export function serializePartyTagIndex(index: Map<string, PartyTagIndexEntry>): SerializedPartyTagIndexEntry[] {
+	return [...index.values()].map((e) => ({ party: e.party, total: e.total, tagCounts: [...e.tagCounts] }));
+}
+
+export function deserializePartyTagIndex(rows: SerializedPartyTagIndexEntry[]): Map<string, PartyTagIndexEntry> {
+	return new Map(rows.map((r) => [r.party, { party: r.party, total: r.total, tagCounts: new Map(r.tagCounts) }]));
+}
+
+export function serializePersonTagIndex(index: Map<string, PersonTagIndexEntry>): SerializedPersonTagIndexEntry[] {
+	return [...index.values()].map((e) => ({ person: e.person, party: e.party, total: e.total, tagCounts: [...e.tagCounts] }));
+}
+
+export function deserializePersonTagIndex(rows: SerializedPersonTagIndexEntry[]): Map<string, PersonTagIndexEntry> {
+	return new Map(rows.map((r) => [r.person, { person: r.person, party: r.party, total: r.total, tagCounts: new Map(r.tagCounts) }]));
+}
+
 export interface TopPersonRow {
 	person: string;
 	party: string | null;

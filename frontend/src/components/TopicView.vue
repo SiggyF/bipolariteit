@@ -14,23 +14,40 @@ import { DATE_FROM, DATE_TO, filters, initFiltersFromUrl, matches, matchesExcept
 
 // Alles wat op het filter reageert zit bewust in dit ene island: de grafieken
 // en de kolommen delen zo dezelfde argumentenlijst en dezelfde filterstore,
-// waardoor ze niet uit elkaar kunnen lopen. Als extra: het corpus (~7 MB)
-// wordt één keer geserialiseerd i.p.v. per island.
+// waardoor ze niet uit elkaar kunnen lopen.
 const props = defineProps<{
-	argumentList: Argument[];
 	topicSlug: string;
+	dataBaseUrl: string;
 }>();
 
-initFiltersFromUrl(props.argumentList);
+// Het corpus per onderwerp (~7-11 MB) werd voorheen als Astro-prop in de HTML
+// gebakken; dat duwde de grotere onderwerpen over de Cloudflare Workers-
+// assetlimiet van 25 MiB (issue #163). Nu client-side gefetcht, net als
+// PerspectiefView.vue.
+type FetchStatus = "loading" | "ready" | "error";
+const status = ref<FetchStatus>("loading");
+const argumentList = ref<Argument[]>([]);
 
-const filtered = computed(() => props.argumentList.filter(matches));
+onMounted(async () => {
+	try {
+		const response = await fetch(`${props.dataBaseUrl}/onderwerpen/${props.topicSlug}.json`);
+		if (!response.ok) throw new Error(`onverwachte statuscode ${response.status}`);
+		argumentList.value = await response.json();
+		initFiltersFromUrl(argumentList.value);
+		status.value = "ready";
+	} catch {
+		status.value = "error";
+	}
+});
+
+const filtered = computed(() => argumentList.value.filter(matches));
 
 // De tijdlijn slaat het datumbereik zelf over: klikken op een staaf zet het
 // datumfilter, maar de tijdlijn moet daarna alle debatdagen blijven tonen om
 // te laten zien wélke dag je selecteerde -- anders klapt de as in tot één
 // staaf na de eerste klik. Andere dimensies (partij, tag, ...) werken wel
 // gewoon door, net als bij de correspondentiekaart.
-const timelineList = computed(() => props.argumentList.filter((a) => matchesExcept(a, [DATE_FROM, DATE_TO])));
+const timelineList = computed(() => argumentList.value.filter((a) => matchesExcept(a, [DATE_FROM, DATE_TO])));
 
 // Kolommen tonen alleen de posities die het filter overlaat; filter je op
 // Pro, dan verdwijnen de andere twee kolommen in plaats van leeg te blijven.
@@ -59,35 +76,39 @@ onBeforeUnmount(() => mobileQuery.removeEventListener("change", onMobileQueryCha
 </script>
 
 <template>
-	<FilterBar :argumentList="argumentList" :matchCount="filtered.length" />
+	<p v-if="status === 'error'" class="no-results">Kon de argumentdata niet laden. Probeer de pagina te verversen.</p>
+	<p v-else-if="status === 'loading'" class="no-results">Bezig met laden&hellip;</p>
+	<template v-else>
+		<FilterBar :argumentList="argumentList" :matchCount="filtered.length" />
 
-	<TypologyStanceBars :argumentList="filtered" />
+		<TypologyStanceBars :argumentList="filtered" />
 
-	<TagCorrespondenceMap :argumentList="argumentList" />
+		<TagCorrespondenceMap :argumentList="argumentList" />
 
-	<ArgumentTimeline :argumentList="timelineList" />
+		<ArgumentTimeline :argumentList="timelineList" />
 
-	<DebateList :argumentList="filtered" />
+		<DebateList :argumentList="filtered" />
 
-	<ClaimsHighlights :argumentList="filtered" />
+		<ClaimsHighlights :argumentList="filtered" />
 
-	<StatsPanel :argumentList="filtered" />
-	<TagsPerParty :argumentList="filtered" />
+		<StatsPanel :argumentList="filtered" />
+		<TagsPerParty :argumentList="filtered" />
 
-	<p v-if="!filtered.length" class="no-results">
-		Geen argumenten voldoen aan dit filter. Verwijder een filter hierboven om er meer te zien.
-	</p>
+		<p v-if="!filtered.length" class="no-results">
+			Geen argumenten voldoen aan dit filter. Verwijder een filter hierboven om er meer te zien.
+		</p>
 
-	<ArgumentColumn v-else-if="isMobile" :argumentList="filtered" :topicSlug="topicSlug" label="Argumenten" stanceClass="column-single" />
+		<ArgumentColumn v-else-if="isMobile" :argumentList="filtered" :topicSlug="topicSlug" label="Argumenten" stanceClass="column-single" />
 
-	<div v-else class="columns">
-		<ArgumentColumn
-			v-for="column in columns"
-			:key="column.stance"
-			:argumentList="column.argumentList"
-			:topicSlug="topicSlug"
-			:label="column.label"
-			:stanceClass="`column-${column.stance}`"
-		/>
-	</div>
+		<div v-else class="columns">
+			<ArgumentColumn
+				v-for="column in columns"
+				:key="column.stance"
+				:argumentList="column.argumentList"
+				:topicSlug="topicSlug"
+				:label="column.label"
+				:stanceClass="`column-${column.stance}`"
+			/>
+		</div>
+	</template>
 </template>
