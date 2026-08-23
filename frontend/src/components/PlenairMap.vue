@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref } from "vue";
-import { scaleSqrt } from "d3-scale";
+import { scaleSqrt, scaleThreshold } from "d3-scale";
 import { useTheme } from "../lib/useTheme";
 import VChart from "vue-echarts";
 import { use } from "echarts/core";
@@ -308,11 +308,25 @@ function onDataZoom() {
 // zoomfactor i.p.v. de straal -- bij sterk overlappende punten (dichte
 // clusters, live geconstateerd bij ver inzoomen: een egale donkere klomp
 // door overlappende cirkels) groeit de straal zo minder snel door dan bij
-// een lineaire schaal, wat overlap beperkt. Alleen nog voor de 4 getrackte
-// topics (klein genoeg om goedkoop met de zoom mee te schalen); "overig
-// plenair" heeft een vaste grootte, zie de large-mode-toelichting bij de
-// scatter-serie hieronder.
+// een lineaire schaal, wat overlap beperkt.
 const topicSizeScale = scaleSqrt().domain([1, 6]).range([4, 12]).clamp(true);
+
+// "overig plenair" (large-mode, zie de toelichting bij de scatter-serie
+// hieronder) mag niet continu met zoomFactor meeschalen -- elke wijziging
+// van symbolSize/opacity dwingt ECharts de gedeelde large-mode-buffer voor
+// alle ~33k punten opnieuw op te bouwen. Een vaste grootte bleek zelf ook
+// niet te werken: bij ver inzoomen (waar de punten juist meer ruimte
+// tussen elkaar krijgen) werden ze zo klein/doorzichtig dat ze nauwelijks
+// nog zichtbaar waren. Compromis: een getrapte schaal met maar een paar
+// niveaus, zodat de buffer alleen bij het kruisen van een niveaugrens
+// opnieuw wordt opgebouwd (hooguit een paar keer tijdens een zoom-gebaar)
+// in plaats van op elke tick. scaleThreshold (i.p.v. scaleSqrt/scaleLinear)
+// is d3's primitief voor precies dit: een continue input op een klein
+// aantal discrete uitvoerniveaus afbeelden.
+const plenairSizeScale = scaleThreshold<number, number>().domain([1.5, 2.5, 4, 6]).range([3, 4.5, 6, 8, 8]);
+const plenairOpacityScale = scaleThreshold<number, number>()
+	.domain([1.5, 2.5, 4, 6])
+	.range([0.12, 0.16, 0.2, 0.26, 0.26]);
 
 const boxSelecting = ref(false);
 const boxStart = ref<{ x: number; y: number } | null>(null);
@@ -685,12 +699,14 @@ const chartOption = computed(() => {
 			// code. De 4 getrackte topics zijn klein genoeg (13-2791 punten, geen
 			// large-mode) om wel goedkoop met de zoom mee te schalen.
 			const baseSize = isPlenair
-				? 3 * (isMobile.value ? 1.6 : 1)
+				? plenairSizeScale(zoomFactor.value) * (isMobile.value ? 1.6 : 1)
 				: topicSizeScale(zoomFactor.value) * (isMobile.value ? 1.6 : 1);
 			// De 4 getrackte topics (i.t.t. "overig plenair") mogen bij uitgezoomd
 			// beeld al goed zichtbaar zijn -- vandaar een ondergrens i.p.v. puur
 			// lineair met zoomFactor meeschalen vanaf bijna onzichtbaar.
-			const baseOpacity = isPlenair ? 0.12 : Math.max(0.35, Math.min(0.6, 0.09 * zoomFactor.value));
+			const baseOpacity = isPlenair
+				? plenairOpacityScale(zoomFactor.value)
+				: Math.max(0.35, Math.min(0.6, 0.09 * zoomFactor.value));
 
 			// Een symbolSize-FUNCTIE i.p.v. een constante dwingt ECharts om 'm
 			// per punt aan te roepen -- op de ~33k "plenair"-punten met
