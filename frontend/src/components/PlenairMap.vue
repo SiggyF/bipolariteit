@@ -681,14 +681,27 @@ const chartOption = computed(() => {
 				? Math.min(0.6, 0.06 * zoomFactor.value)
 				: Math.max(0.35, Math.min(0.6, 0.09 * zoomFactor.value));
 
+			// Een symbolSize-FUNCTIE i.p.v. een constante dwingt ECharts om 'm
+			// per punt aan te roepen -- op de ~33k "plenair"-punten met
+			// large:true (large mode is juist bedoeld voor precies dít geval,
+			// duizenden identieke punten in één keer) verpest dat de large-mode-
+			// optimalisatie volledig (live gemeten met Chrome DevTools Performance:
+			// 353ms/tick in Vue's flushJobs, i.p.v. de eerdere ~189ms alleen-
+			// ECharts-tijd -- de functie-aanroep zelf was de bottleneck, niet de
+			// data-array). Zonder actieve selectie (hasFilter) is isSelected/
+			// isDimmed sowieso overal false, dus dan volstaat een simpele
+			// constante; de functie is alleen nodig zodra een cluster
+			// geselecteerd is (en dan staat large ook al uit).
 			seriesList.push({
 				id: topic,
 				name: topic,
 				type: "scatter",
-				symbolSize: (_value: any, params: any) => {
-					const d = params.data;
-					return d.isSelected ? baseSize * 1.4 : d.isDimmed ? Math.max(3, baseSize * 0.75) : baseSize;
-				},
+				symbolSize: hasFilter.value
+					? (_value: any, params: any) => {
+							const d = params.data;
+							return d.isSelected ? baseSize * 1.4 : d.isDimmed ? Math.max(3, baseSize * 0.75) : baseSize;
+						}
+					: baseSize,
 				large: isPlenair && !hasFilter.value,
 				largeThreshold: 2000,
 				// Rendert boven de drempel in stukjes over meerdere frames i.p.v.
