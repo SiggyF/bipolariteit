@@ -52,14 +52,39 @@ type ClustersExport = {
 };
 
 const props = defineProps<{
-	points: RawExport;
-	clusters?: ClustersExport | ClusterHullItem[];
+	dataBaseUrl: string;
 	selectedClusterIds?: Set<number>;
 }>();
 
 const emit = defineEmits<{
 	(e: "select-cluster", clusterId: number | null): void;
 }>();
+
+// De plenaire-kaart data (~6 MB punten + clusters) ging voorheen als
+// Astro-props mee in onderwerpen/index.astro, wat die indexpagina onnodig
+// zwaar maakte (issue #163) -- nu client-side gefetcht, net als de
+// perspectief-/onderwerp-/tagpagina's.
+type FetchStatus = "loading" | "ready" | "error";
+const status = ref<FetchStatus>("loading");
+const EMPTY_POINTS: RawExport = { topics: [], actors: [], parties: [], debates: [], soorten: [], points: [] };
+const pointsData = ref<RawExport>(EMPTY_POINTS);
+const clustersData = ref<ClustersExport | ClusterHullItem[] | undefined>(undefined);
+
+onMounted(async () => {
+	try {
+		const [pointsResponse, clustersResponse] = await Promise.all([
+			fetch(`${props.dataBaseUrl}/plenair-map.json`),
+			fetch(`${props.dataBaseUrl}/plenair-map-clusters.json`),
+		]);
+		if (!pointsResponse.ok) throw new Error(`onverwachte statuscode ${pointsResponse.status}`);
+		if (!clustersResponse.ok) throw new Error(`onverwachte statuscode ${clustersResponse.status}`);
+		pointsData.value = await pointsResponse.json();
+		clustersData.value = await clustersResponse.json();
+		status.value = "ready";
+	} catch {
+		status.value = "error";
+	}
+});
 
 const showCoarseHulls = ref(true);
 const showFineHulls = ref(true);
@@ -139,21 +164,21 @@ function scaleClusterX(items: ClusterHullItem[], xScale: number): ClusterHullIte
 }
 
 const coarseClusters = computed<ClusterHullItem[]>(() => {
-	if (!props.clusters) return [];
+	if (!clustersData.value) return [];
 	const xScale = canvasAspectRatio.value > 0 ? canvasAspectRatio.value : 1.618;
-	if ("coarse" in props.clusters && Array.isArray(props.clusters.coarse)) {
-		return scaleClusterX(props.clusters.coarse.filter((c) => hullArea(c.hull) <= HULL_AREA_HIDE_THRESHOLD), xScale);
+	if ("coarse" in clustersData.value && Array.isArray(clustersData.value.coarse)) {
+		return scaleClusterX(clustersData.value.coarse.filter((c) => hullArea(c.hull) <= HULL_AREA_HIDE_THRESHOLD), xScale);
 	}
 	return [];
 });
 
 const fineClusters = computed<ClusterHullItem[]>(() => {
-	if (!props.clusters) return [];
+	if (!clustersData.value) return [];
 	const xScale = canvasAspectRatio.value > 0 ? canvasAspectRatio.value : 1.618;
-	if ("fine" in props.clusters && Array.isArray(props.clusters.fine)) {
-		return scaleClusterX(props.clusters.fine.filter((c) => hullArea(c.hull) <= HULL_AREA_HIDE_THRESHOLD), xScale);
+	if ("fine" in clustersData.value && Array.isArray(clustersData.value.fine)) {
+		return scaleClusterX(clustersData.value.fine.filter((c) => hullArea(c.hull) <= HULL_AREA_HIDE_THRESHOLD), xScale);
 	}
-	if (Array.isArray(props.clusters)) return scaleClusterX(props.clusters.filter((c) => hullArea(c.hull) <= HULL_AREA_HIDE_THRESHOLD), xScale);
+	if (Array.isArray(clustersData.value)) return scaleClusterX(clustersData.value.filter((c) => hullArea(c.hull) <= HULL_AREA_HIDE_THRESHOLD), xScale);
 	return [];
 });
 
@@ -165,15 +190,15 @@ const fineClusters = computed<ClusterHullItem[]>(() => {
 // aparte as meer hoeft te verbreden -- dat zat 'm hier, in de data).
 const decodedPoints = computed<PlenairPoint[]>(() => {
 	const xScale = canvasAspectRatio.value > 0 ? canvasAspectRatio.value : 1.618;
-	return props.points.points.map(([id, x, y, topicIdx, actorIdx, partyIdx, debateIdx, soortIdx, published_at, text, cluster]) => ({
+	return pointsData.value.points.map(([id, x, y, topicIdx, actorIdx, partyIdx, debateIdx, soortIdx, published_at, text, cluster]) => ({
 		id,
 		x: x * xScale,
 		y,
-		topic: props.points.topics[topicIdx],
-		actor: props.points.actors[actorIdx],
-		party: props.points.parties[partyIdx],
-		debate_title: props.points.debates[debateIdx] || null,
-		activiteit_soort: props.points.soorten[soortIdx] || null,
+		topic: pointsData.value.topics[topicIdx],
+		actor: pointsData.value.actors[actorIdx],
+		party: pointsData.value.parties[partyIdx],
+		debate_title: pointsData.value.debates[debateIdx] || null,
+		activiteit_soort: pointsData.value.soorten[soortIdx] || null,
 		published_at,
 		text,
 		cluster,
@@ -839,62 +864,70 @@ const chartOption = computed(() => {
 			deelonderwerpen af.
 		</p>
 
-		<div class="topic-legend">
-			<span v-for="t in topics" :key="t" class="legend-item">
-				<span class="legend-dot" :style="{ backgroundColor: TOPIC_COLOR[t] ?? PLENAIR_COLOR }"></span>
-				<span class="legend-name">{{ t === 'plenair' ? 'overig plenair' : t }}</span>
-				<span class="legend-count">({{ topicCounts[t] ?? 0 }})</span>
-			</span>
-		</div>
-
-		<div class="map-controls-bar">
-			<div class="layer-toggles">
-				<label class="toggle-label">
-					<input v-model="showCoarseHulls" type="checkbox" />
-					<span>Beleidsdomeinen</span>
-				</label>
-				<label class="toggle-label">
-					<input v-model="showFineHulls" type="checkbox" />
-					<span>Deelonderwerpen</span>
-				</label>
-				<label class="toggle-label">
-					<input v-model="showLabels" type="checkbox" />
-					<span>Themalabels</span>
-				</label>
-				<label class="toggle-label">
-					<input v-model="showPoints" type="checkbox" />
-					<span>Sprekersbeurten</span>
-				</label>
+		<p v-if="status === 'error'" class="panel-note panel-error">Kon de kaartdata niet laden. Probeer de pagina te verversen.</p>
+		<p v-else-if="status === 'loading'" class="panel-note">Bezig met laden&hellip;</p>
+		<template v-else>
+			<div class="topic-legend">
+				<span v-for="t in topics" :key="t" class="legend-item">
+					<span class="legend-dot" :style="{ backgroundColor: TOPIC_COLOR[t] ?? PLENAIR_COLOR }"></span>
+					<span class="legend-name">{{ t === 'plenair' ? 'overig plenair' : t }}</span>
+					<span class="legend-count">({{ topicCounts[t] ?? 0 }})</span>
+				</span>
 			</div>
 
-			<span class="control-hint">
-				<template v-if="isMobile">Knijpen zoomt, één vinger pant</template>
-				<template v-else>Scrollen zoomt, slepen pant &middot; shift + slepen zoomt in op een gebied</template>
-			</span>
-		</div>
+			<div class="map-controls-bar">
+				<div class="layer-toggles">
+					<label class="toggle-label">
+						<input v-model="showCoarseHulls" type="checkbox" />
+						<span>Beleidsdomeinen</span>
+					</label>
+					<label class="toggle-label">
+						<input v-model="showFineHulls" type="checkbox" />
+						<span>Deelonderwerpen</span>
+					</label>
+					<label class="toggle-label">
+						<input v-model="showLabels" type="checkbox" />
+						<span>Themalabels</span>
+					</label>
+					<label class="toggle-label">
+						<input v-model="showPoints" type="checkbox" />
+						<span>Sprekersbeurten</span>
+					</label>
+				</div>
 
-		<div
-			ref="wrapperEl"
-			class="plenair-map-wrapper"
-			@pointerdown="onBoxPointerDown"
-			@pointermove="onBoxPointerMove"
-			@pointerup="onBoxPointerUp"
-			@pointercancel="onBoxPointerUp"
-		>
-			<VChart
-				ref="chartRef"
-				class="plenair-map-chart"
-				:option="chartOption"
-				autoresize
-				@datazoom="onDataZoom"
-				@click="onChartClick"
-			/>
-			<div class="plenair-map-boxzoom" :style="boxStyle"></div>
-		</div>
+				<span class="control-hint">
+					<template v-if="isMobile">Knijpen zoomt, één vinger pant</template>
+					<template v-else>Scrollen zoomt, slepen pant &middot; shift + slepen zoomt in op een gebied</template>
+				</span>
+			</div>
+
+			<div
+				ref="wrapperEl"
+				class="plenair-map-wrapper"
+				@pointerdown="onBoxPointerDown"
+				@pointermove="onBoxPointerMove"
+				@pointerup="onBoxPointerUp"
+				@pointercancel="onBoxPointerUp"
+			>
+				<VChart
+					ref="chartRef"
+					class="plenair-map-chart"
+					:option="chartOption"
+					autoresize
+					@datazoom="onDataZoom"
+					@click="onChartClick"
+				/>
+				<div class="plenair-map-boxzoom" :style="boxStyle"></div>
+			</div>
+		</template>
 	</section>
 </template>
 
 <style scoped>
+.panel-error {
+	color: var(--kleur-fout, #b3261e);
+}
+
 .topic-legend {
 	display: flex;
 	flex-wrap: wrap;

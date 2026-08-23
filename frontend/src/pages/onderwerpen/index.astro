@@ -1,10 +1,13 @@
 ---
 import topicsIndex from "../../../../data/export/topics-index.json";
-import plenairMapPoints from "../../../../data/export/plenair-map.json";
-import plenairMapClusters from "../../../../data/export/plenair-map-clusters.json";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import PlenairMap from "../../components/PlenairMap.vue";
 import { TEGENSTELLING } from "../../lib/topics";
+
+// De plenaire-kaart data (~6 MB) gaat niet meer als Astro-prop mee -- die
+// duwde deze indexpagina op ~9 MB. PlenairMap.vue fetcht 'm client-side
+// vanaf scripts/export_public_data.ts's output (issue #163).
+const dataBaseUrl = import.meta.env.PUBLIC_DATA_BASE_URL ?? "https://cdn.jsdelivr.net/gh/bipolariteit/bipolariteit-data@main";
 ---
 
 <BaseLayout title="Onderwerpen - Bipolariteit">
@@ -31,8 +34,7 @@ import { TEGENSTELLING } from "../../lib/topics";
 	</p>
 
 	<PlenairMap
-		points={plenairMapPoints}
-		clusters={plenairMapClusters}
+		dataBaseUrl={dataBaseUrl}
 		client:only="vue"
 	/>
 </BaseLayout>
