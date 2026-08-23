@@ -25,6 +25,11 @@ const topic = mod.default;
 const treeMod: any = Object.values(treeModules).find((m: any) => m.default.slug === slug);
 const argumentTree = treeMod ? treeMod.default : null;
 const description = topic.description ? parseTopicDescription(topic.description) : null;
+// De argumentenlijst zelf gaat niet meer als Astro-prop mee (~7-11 MB per
+// onderwerp, tegen de Cloudflare Workers-assetlimiet van 25 MiB aan voor de
+// grotere onderwerpen -- issue #163); TopicView.vue fetcht 'm client-side
+// vanaf scripts/export_public_data.ts's output.
+const dataBaseUrl = import.meta.env.PUBLIC_DATA_BASE_URL ?? "https://cdn.jsdelivr.net/gh/bipolariteit/bipolariteit-data@main";
 ---
 
 <BaseLayout title={`${topic.name} - Bipolariteit`} description={topic.description}>
@@ -68,8 +73,8 @@ const description = topic.description ? parseTopicDescription(topic.description)
 			    anders per island in de HTML terechtkomen. client:only omdat de
 			    filterstore de URL leest, wat op de server niet bestaat. */}
 			<TopicView
-				argumentList={topic.arguments}
 				topicSlug={topic.slug}
+				dataBaseUrl={dataBaseUrl}
 				client:only="vue"
 			/>
 

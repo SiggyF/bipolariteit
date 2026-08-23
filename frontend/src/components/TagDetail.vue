@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { displayPartyName } from "../lib/parties";
 import { slugify } from "../lib/slug";
 import { tagIconPath } from "../lib/tagIcon";
@@ -25,22 +25,38 @@ const props = defineProps<{
 	labelgroep: string;
 	perspectief: string;
 	deterministic: boolean;
-	// Alleen de argumenten met déze tag -- de partij-/persoonaggregatie over de
-	// volledige, ongefilterde argumentenlijst gebeurt build-time in
-	// [sleutel].astro, zodat hier niet tientallen MB's aan ruwe data per tag
-	// naar de client hoeft.
-	taggedArguments: TopicTaggedArgument[];
+	// De partij-/persoonaggregatie over de volledige, ongefilterde
+	// argumentenlijst gebeurt build-time in [sleutel].astro (klein, blijft een
+	// Astro-prop). De argumenten met déze tag zelf (tot ~10 MB voor de grootste
+	// tags) worden hieronder client-side gefetcht i.p.v. meegebakken (issue
+	// #163).
 	partyRows: TagPartyRow[];
 	topPersons: TopPersonRow[];
+	dataBaseUrl: string;
 }>();
 
 // Zelfde ondergrens als [sleutel].astro/PerspectiefTagHeatmap.vue: onder dit
 // partijtotaal is een percentage schijnnauwkeurig.
 const MIN_PARTY_TOTAL = 8;
 
+type FetchStatus = "loading" | "ready" | "error";
+const status = ref<FetchStatus>("loading");
+const taggedArguments = ref<TopicTaggedArgument[]>([]);
+
+onMounted(async () => {
+	try {
+		const response = await fetch(`${props.dataBaseUrl}/tags/${slugify(props.sleutel)}.json`);
+		if (!response.ok) throw new Error(`onverwachte statuscode ${response.status}`);
+		taggedArguments.value = await response.json();
+		status.value = "ready";
+	} catch {
+		status.value = "error";
+	}
+});
+
 const perTopic = computed(() => {
 	const byTopic = new Map<string, { topicSlug: string; topicName: string; count: number }>();
-	for (const argument of props.taggedArguments) {
+	for (const argument of taggedArguments.value) {
 		const existing = byTopic.get(argument.topicSlug);
 		if (existing) existing.count += 1;
 		else byTopic.set(argument.topicSlug, { topicSlug: argument.topicSlug, topicName: argument.topicName, count: 1 });
@@ -49,7 +65,7 @@ const perTopic = computed(() => {
 });
 
 const exampleArguments = computed(() =>
-	[...props.taggedArguments]
+	[...taggedArguments.value]
 		.sort((a, b) => (b.document.published_at ?? "").localeCompare(a.document.published_at ?? ""))
 		.slice(0, 5),
 );
@@ -92,7 +108,9 @@ function verhouding(row: { tagCount: number; total: number }): string {
 			partijen of personen -- daarom geen partij-/persoonranglijst hieronder.
 		</p>
 
-		<p v-if="!taggedArguments.length" class="no-results">Nog geen argumenten met deze tag.</p>
+		<p v-if="status === 'error'" class="no-results">Kon de argumentdata niet laden. Probeer de pagina te verversen.</p>
+		<p v-else-if="status === 'loading'" class="no-results">Bezig met laden&hellip;</p>
+		<p v-else-if="!taggedArguments.length" class="no-results">Nog geen argumenten met deze tag.</p>
 
 		<template v-else>
 			<p class="panel-note">{{ taggedArguments.length }} toekenningen, over {{ perTopic.length }} onderwerp(en).</p>

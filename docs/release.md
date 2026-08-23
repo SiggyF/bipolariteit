@@ -293,7 +293,7 @@ Dit is een sanity-check, geen volledige security-audit: de lijst gevoelige
 paden is niet uitputtend, en een `200` op een pad dat er niet op staat wordt
 niet gedetecteerd.
 
-# Argumentdata publiceren (data.bipolariteit.org / issue #163)
+# Argumentdata publiceren (issue #163)
 
 Perspectief-, onderwerp- en tagpagina's aggregeren over (een deel van) de
 volledige argumentenset. Die als Astro-prop in de HTML bakken duwde sommige
@@ -305,10 +305,12 @@ client-side gefetcht (`onMounted` in bv. `PerspectiefView.vue`).
 ## Hoe het in elkaar zit
 
 - **`frontend/scripts/export_public_data.ts`** — leest `data/export/topics/*.json`
-  en schrijft per perspectief (later ook onderwerp/tag) een lean, gefilterd
-  bestand naar `data/export/gepubliceerd/`. Hergebruikt `toLeanArgument`
-  (`frontend/src/lib/leanArgument.ts`) zodat de Astro-build en dit script niet
-  uit de pas kunnen lopen.
+  en schrijft per perspectief, per onderwerp en per tag een JSON-bestand naar
+  `data/export/gepubliceerd/`. De perspectiefbestanden zijn lean-gestript
+  (`toLeanArgument`, `frontend/src/lib/leanArgument.ts` — perspectiefpagina's
+  tonen nooit een losse `ArgumentCard`); de onderwerp- en tagbestanden zijn
+  ongestript, want `TopicView.vue`/`TagDetail.vue` renderen wél volledige
+  `ArgumentCard`s (videolinks, quote_context, claims, tag-`reden`).
 - **`data/export/gepubliceerd/`** is een **git submodule** op de publieke repo
   <https://github.com/bipolariteit/bipolariteit-data> (zie `.gitmodules`). De
   hoofdrepo (`SiggyF/bipolariteit`) blijft privé; alleen deze afgeleide data

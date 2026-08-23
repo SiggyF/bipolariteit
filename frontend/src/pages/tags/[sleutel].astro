@@ -3,18 +3,12 @@ import TagDetail from "../../components/TagDetail.vue";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { ALLE_TAGS } from "../../lib/taxonomy";
 import { slugify } from "../../lib/slug";
-import { derivePartyTagIndex, derivePersonTagIndex, deriveTopPersonsForTag, filterArgumentsByTag } from "../../lib/aggregate";
+import { derivePartyTagIndex, derivePersonTagIndex, deriveTopPersonsForTag } from "../../lib/aggregate";
 
 const topicModules = import.meta.glob("../../../../data/export/topics/*.json", { eager: true });
 
 function allArguments() {
-	return Object.values(topicModules).flatMap((mod: any) =>
-		mod.default.arguments.map((argument: any) => ({
-			...argument,
-			topicSlug: mod.default.slug,
-			topicName: mod.default.name,
-		})),
-	);
+	return Object.values(topicModules).flatMap((mod: any) => mod.default.arguments);
 }
 
 export function getStaticPaths() {
@@ -26,14 +20,14 @@ export function getStaticPaths() {
 
 const { tag } = Astro.props;
 const argumentList = allArguments();
+const dataBaseUrl = import.meta.env.PUBLIC_DATA_BASE_URL ?? "https://cdn.jsdelivr.net/gh/bipolariteit/bipolariteit-data@main";
 
-// Alleen de argumenten met déze tag gaan naar de client -- niet de volledige,
-// tientallen MB's grote argumentenlijst van alle onderwerpen samen (zie issue
-// over de Cloudflare Workers assetlimiet van 25 MiB per bestand). De
+// De argumenten met déze tag (tot ~10 MB voor de grootste tags) gaan niet meer
+// als Astro-prop mee -- TagDetail.vue fetcht ze client-side vanaf
+// scripts/export_public_data.ts's output (issue #163). De
 // partij-/persoonpercentages hebben wel de volledige lijst als noemer nodig
-// (alle onderwerpen), dus die aggregatie gebeurt hier, build-time, en alleen
+// (alle onderwerpen), dus die aggregatie blijft hier, build-time, en alleen
 // de kleine uitkomst (partyRows/topPersons) gaat mee als prop.
-const taggedArguments = filterArgumentsByTag(argumentList, tag.sleutel);
 
 // Zelfde ondergrens als TagDetail.vue/PerspectiefTagHeatmap.vue: onder dit
 // partijtotaal is een percentage schijnnauwkeurig.
@@ -62,9 +56,9 @@ if (!tag.deterministic) {
 		labelgroep={tag.labelgroep}
 		perspectief={tag.perspectief}
 		deterministic={tag.deterministic}
-		taggedArguments={taggedArguments}
 		partyRows={partyRows}
 		topPersons={topPersons}
+		dataBaseUrl={dataBaseUrl}
 		client:only="vue"
 	/>
 </BaseLayout>
