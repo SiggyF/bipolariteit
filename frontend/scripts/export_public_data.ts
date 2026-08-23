@@ -21,6 +21,9 @@
 //   filterArgumentsByTag deed in pages/tags/[sleutel].astro), met topicSlug/
 //   topicName toegevoegd -- TagDetail.vue toont argumenten uit meerdere
 //   onderwerpen door elkaar en heeft die annotatie per argument nodig.
+// - een kopie van data/export/plenair-map.json en -clusters.json (samen
+//   ~6 MB) naar data/export/gepubliceerd/. Die gingen als Astro-prop mee in
+//   onderwerpen/index.astro, PlenairMap.vue fetcht ze nu client-side.
 //
 // data/export/gepubliceerd/ is een git submodule op de publieke repo
 // bipolariteit/bipolariteit-data (.gitmodules) -- de hoofdrepo blijft
@@ -29,7 +32,7 @@
 // side bij kan (jsDelivr's GitHub-CDN werkt alleen tegen publieke repo's).
 // `make publish-data` commit + pusht de submodule na deze stap.
 
-import { mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
+import { copyFileSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { toLeanArgument } from "../src/lib/leanArgument";
@@ -93,6 +96,13 @@ function main(): void {
 		const pad = resolve(tagsDir, `${slugify(tag.sleutel)}.json`);
 		writeFileSync(pad, JSON.stringify(taggedArguments), "utf8");
 		console.log(`${pad}: ${taggedArguments.length} argumenten`);
+	}
+
+	for (const bestand of ["plenair-map.json", "plenair-map-clusters.json"]) {
+		const bron = resolve(hier, "../../data/export", bestand);
+		const doel = resolve(UIT_DIR, bestand);
+		copyFileSync(bron, doel);
+		console.log(`${doel}: gekopieerd van ${bron}`);
 	}
 }
 
