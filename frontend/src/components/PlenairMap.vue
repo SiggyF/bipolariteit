@@ -1111,15 +1111,6 @@ function onCanvasClick(e: MouseEvent) {
 				</div>
 
 				<div class="toolbar-right">
-					<button
-						class="btn-reset"
-						:class="{ 'btn-reset-hidden': pinnedItem == null && selectedTopicFilter == null }"
-						:tabindex="pinnedItem != null || selectedTopicFilter != null ? 0 : -1"
-						:aria-hidden="pinnedItem == null && selectedTopicFilter == null"
-						@click="resetView"
-					>
-						Wis selectie &larr;
-					</button>
 					<span class="control-hint">
 						<template v-if="isMobile">Knijpen zoomt, slepen pant &middot; tik op een punt of contour</template>
 						<template v-else>Scrollen zoomt op cursor, slepen pant &middot; klik om vast te zetten</template>
@@ -1359,29 +1350,6 @@ function onCanvasClick(e: MouseEvent) {
 	align-items: center;
 	gap: 0.75rem;
 	margin-left: auto;
-}
-
-.btn-reset {
-	background: var(--color-bg, #ffffff);
-	border: 1px solid var(--color-border, #e5e0d8);
-	border-radius: 6px;
-	padding: 0.3rem 0.65rem;
-	font-size: 0.8rem;
-	font-weight: 600;
-	cursor: pointer;
-	color: var(--color-ink, #221f1b);
-}
-
-.btn-reset:hover {
-	background: var(--color-surface, #ede9e1);
-}
-
-/* Blijft altijd in de flow (i.p.v. v-if) zodat de toolbar-rij niet van
-   hoogte/regelaantal verandert -- en de kaart daaronder niet verspringt --
-   op het moment dat een selectie wordt gemaakt (issue #198). */
-.btn-reset-hidden {
-	visibility: hidden;
-	pointer-events: none;
 }
 
 .control-hint {
