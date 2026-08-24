@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-23T13:19:35+02:00",
+  "generated_at": "2026-08-24T20:56:35+02:00",
   "topics": [
     {
       "slug": "stikstof",
@@ -161,11 +161,11 @@
       "name": "Energietransitie",
       "vanaf": "2023-12-06",
       "documents_total": 11723,
-      "documents_extracted": 837,
-      "arguments_total": 662,
-      "arguments_tagged": 482,
+      "documents_extracted": 1920,
+      "arguments_total": 1303,
+      "arguments_tagged": 483,
       "documents_redactie_checked": 0,
-      "arguments_ander_onderwerp": 84,
+      "arguments_ander_onderwerp": 90,
       "ander_onderwerp_top": [
         {
           "onderwerp": "armoedebeleid",
@@ -176,11 +176,15 @@
           "aantal": 3
         },
         {
-          "onderwerp": "steun aan Oekraïne",
-          "aantal": 2
+          "onderwerp": "openbaar vervoer",
+          "aantal": 3
         },
         {
-          "onderwerp": "openbaar vervoer",
+          "onderwerp": "Groninger gaswinning",
+          "aantal": 3
+        },
+        {
+          "onderwerp": "steun aan Oekraïne",
           "aantal": 2
         },
         {
@@ -202,34 +206,30 @@
         {
           "onderwerp": "werkgeversbeleid",
           "aantal": 1
-        },
-        {
-          "onderwerp": "vrachtwagenheffing",
-          "aantal": 1
         }
       ],
       "llm_calls_by_model": [
         {
           "stage": "extraction",
           "model": "qwen/qwen3.6-27b",
-          "n_calls": 480,
-          "total_duration_s": 8605.867510695942,
-          "avg_duration_s": 17.92889064728321,
-          "n_errors": 5,
-          "total_completion_tokens": 84048,
+          "n_calls": 1580,
+          "total_duration_s": 25237.899302868056,
+          "avg_duration_s": 15.973353989156998,
+          "n_errors": 22,
+          "total_completion_tokens": 236771,
           "first_call_at": "2026-08-13T09:24:46.527798+00:00",
-          "last_call_at": "2026-08-16T09:47:11.772272+00:00"
+          "last_call_at": "2026-08-24T17:59:28.879844+00:00"
         },
         {
           "stage": "tagging",
           "model": "qwen/qwen3.6-27b",
-          "n_calls": 485,
-          "total_duration_s": 30084.21622261696,
-          "avg_duration_s": 62.02931179921023,
-          "n_errors": 3,
-          "total_completion_tokens": 289850,
+          "n_calls": 487,
+          "total_duration_s": 30220.214474928915,
+          "avg_duration_s": 62.05382849061379,
+          "n_errors": 4,
+          "total_completion_tokens": 290555,
           "first_call_at": "2026-08-13T10:16:21.437585+00:00",
-          "last_call_at": "2026-08-23T11:17:53.304831+00:00"
+          "last_call_at": "2026-08-24T18:15:06.258787+00:00"
         }
       ]
     }

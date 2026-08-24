@@ -22,7 +22,8 @@ experiment_umap_arguments.py) of Plotly is gebruikt.
 
 Gebruik:
     uv run python scripts/experiment_umap_documents.py \
-        --start 2025-11-12 --end 2026-08-22 --label 2025-heden
+        --start 2025-11-12 --end 2026-08-22 --label 2025-heden \
+        --full-range-topics abortus
 """
 import argparse
 import json
@@ -163,7 +164,19 @@ def strip_speaker_prefix(content, actor_name):
     return content
 
 
-def fetch_documents(conn, start_date, end_date, min_content_len):
+def fetch_documents(conn, start_date, end_date, min_content_len, full_range_topic_slugs=()):
+    """full_range_topic_slugs: topics die ongeacht start_date/end_date altijd
+    volledig meegenomen worden. Nodig voor piekgedreven topics zoals abortus
+    (debatten in korte, verspreide pieken i.p.v. doorlopend zoals asiel/
+    energietransitie/stikstof) -- een enkele recente datumrange laat die
+    pieken bijna volledig buiten de kaart vallen (issue #186, punt 3)."""
+    date_or_full_range = "d.published_at >= ? AND d.published_at < ?"
+    params = [start_date, end_date]
+    if full_range_topic_slugs:
+        date_or_full_range = "({}) OR t.slug IN ({})".format(
+            date_or_full_range, ",".join("?" * len(full_range_topic_slugs))
+        )
+        params.extend(full_range_topic_slugs)
     rows = conn.execute(
         """
         SELECT d.id, d.content, d.published_at, d.activiteit_soort, d.title AS debate_title,
@@ -171,13 +184,13 @@ def fetch_documents(conn, start_date, end_date, min_content_len):
         FROM documents d
         JOIN actors ac ON ac.id = d.actor_id
         LEFT JOIN topics t ON t.id = d.topic_id
-        WHERE d.published_at >= ? AND d.published_at < ?
+        WHERE ({})
           AND length(d.content) >= ?
           AND (d.activiteit_soort IS NULL OR d.activiteit_soort NOT IN ({}))
           AND d.is_voorzitter_turn = 0
         ORDER BY d.id
-        """.format(",".join("?" * len(NOISE_ACTIVITEIT_SOORTEN))),
-        (start_date, end_date, min_content_len, *NOISE_ACTIVITEIT_SOORTEN),
+        """.format(date_or_full_range, ",".join("?" * len(NOISE_ACTIVITEIT_SOORTEN))),
+        (*params, min_content_len, *NOISE_ACTIVITEIT_SOORTEN),
     ).fetchall()
     return rows
 
@@ -716,6 +729,11 @@ def main():
     parser.add_argument("--start", required=True, help="published_at ondergrens, ISO-datum (inclusief)")
     parser.add_argument("--end", required=True, help="published_at bovengrens, ISO-datum (exclusief)")
     parser.add_argument("--label", required=True, help="korte periode-naam voor bestandsnamen, bv. 2025-heden")
+    parser.add_argument(
+        "--full-range-topics", default="",
+        help="komma-gescheiden topic-slugs die altijd volledig meegenomen worden, ongeacht "
+        "--start/--end (bv. abortus: piekgedreven debatten i.p.v. doorlopend, zie issue #186 punt 3)",
+    )
     parser.add_argument("--min-content-len", type=int, default=30)
     parser.add_argument("--base-url", default=None)
     parser.add_argument("--refresh", action="store_true", help="cache negeren en embeddings herberekenen")
@@ -768,8 +786,10 @@ def main():
     CACHE_DIR.mkdir(parents=True, exist_ok=True)
     cache_path = CACHE_DIR / f"{MODEL}_plenair-{args.label}.npz"
 
+    full_range_topic_slugs = [s.strip() for s in args.full_range_topics.split(",") if s.strip()]
+
     conn = db.connect()
-    rows = fetch_documents(conn, args.start, args.end, args.min_content_len)
+    rows = fetch_documents(conn, args.start, args.end, args.min_content_len, full_range_topic_slugs)
     db_stopwords = fetch_actor_and_party_stopwords(conn)
     conn.close()
     if not rows:
