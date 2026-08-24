@@ -1,11 +1,18 @@
 """
 Enrichmentstap: vult documents.video_url en documents.debatdirect_id via
-Debat Direct's zoek-API, geen LLM. Idem aan `tkconv`'s aanpak (zie
+Debat Direct's agenda-API, geen LLM. Idem aan `tkconv`'s aanpak (zie
 docs/tk-data-sources-overview.md #4): queryt Debat Direct op debatdatum,
 matcht de kandidaat met de dichtstbijzijnde starttijd t.o.v.
 documents.activiteit_aanvangstijd, met een duur-ratio-sanitycheck als extra
 filter tegen een verkeerde match. debatdirect_id is nodig voor de
 ondertitel-sync-stap (pipeline/fetch_subtitles.py).
+
+Gebruikt `https://cdn.debatdirect.tweedekamer.nl/api/agenda/{date}` (niet in
+docs/tk-data-sources-overview.md, ontdekt tijdens issue #198-vervolg): geeft
+de volledige dagagenda in één call terug (i.p.v. de gepagineerde `/search`),
+inclusief `startedAt`/`endedAt` (werkelijke i.p.v. geplande tijden). Wordt
+per unieke datum gecached binnen een run, want meerdere activiteiten delen
+vaak dezelfde datum.
 
 Matching gebeurt op activiteit-niveau (elke groep documenten met dezelfde
 (activiteit_aanvangstijd, activiteit_eindtijd) hoort bij één Kamerdebat),
@@ -16,11 +23,14 @@ Idempotent via documents.debatdirect_id IS NULL; een debat waarvoor geen
 bevredigende match gevonden wordt, blijft NULL (geen gok, geen foutieve link).
 
 Gebruik:
-    uv run python -m pipeline.enrich_video_url [--topic stikstof] [--dry-run]
+    uv run python -m pipeline.enrich_video_url [--topic stikstof|plenair] [--dry-run] [--limit N]
 
-Zonder --topic: alle topics, zodat een nieuw topic of een topic waarvoor
+Zonder --topic: alle topics plus de documenten zonder topic ("overig
+plenair" op de plenaire kaart), zodat een nieuw topic of een topic waarvoor
 deze stap nog nooit gedraaid is niet stilzwijgend achterblijft (zie issue
-#83). Draait ook automatisch mee in `make export`.
+#83). Draait ook automatisch mee in `make export`. --topic plenair verwerkt
+losstaand alleen de topic_id IS NULL-documenten (bv. voor een steekproef via
+--limit voordat de volledige ~144k-batch gedraaid wordt).
 """
 
 import argparse
@@ -33,9 +43,7 @@ from pipeline.db import db
 
 logger = logging.getLogger(__name__)
 
-SEARCH_URL = "https://cdn.debatdirect.tweedekamer.nl/search"
-PAGE_SIZE = 20
-MAX_PAGES = 5  # ruim boven het drukste dagaantal debatten dat we tot nu toe zagen (23)
+AGENDA_URL = "https://cdn.debatdirect.tweedekamer.nl/api/agenda/{date}"
 
 # Een kandidaat moet binnen dit venster starten t.o.v. onze activiteit_aanvangstijd
 # om als match te tellen -- ruim boven de "2 min vs. ~3 uur"-disambiguatie die al
@@ -56,23 +64,32 @@ MAX_DURATION_RATIO = 2.0
 EARLY_HOUR_THRESHOLD = 6
 
 
-def fetch_pending_activiteiten(conn, topic_id):
+def fetch_pending_activiteiten(conn, topic_id, limit=None):
     """Distincte (aanvangstijd, eindtijd)-paren zonder debatdirect_id, met de
     document-id's die bijgewerkt moeten worden zodra een match gevonden is.
     Sleutel op debatdirect_id i.p.v. video_url zodat rijen die al vóór dit
     veld bestonden (video_url dus al gevuld) hier ook doorheen lopen -- dit
-    dient meteen als backfill voor debatdirect_id, zonder los script."""
+    dient meteen als backfill voor debatdirect_id, zonder los script.
+
+    topic_id=None betekent topic_id IS NULL: documenten zonder topic
+    ("overig plenair" op de plenaire kaart), niet gedekt door een van de
+    vier gecureerde topics. limit beperkt het aantal activiteiten (niet
+    documenten) -- handig voor een steekproef voordat de volle batch draait."""
+    topic_clause = "topic_id IS NULL" if topic_id is None else "topic_id = ?"
+    params = () if topic_id is None else (topic_id,)
     rows = conn.execute(
-        """SELECT id, activiteit_aanvangstijd, activiteit_eindtijd
+        f"""SELECT id, activiteit_aanvangstijd, activiteit_eindtijd
            FROM documents
-           WHERE topic_id = ? AND debatdirect_id IS NULL AND activiteit_aanvangstijd IS NOT NULL
+           WHERE {topic_clause} AND debatdirect_id IS NULL AND activiteit_aanvangstijd IS NOT NULL
            ORDER BY id""",
-        (topic_id,),
+        params,
     ).fetchall()
 
     groups = {}
     for row in rows:
         key = (row["activiteit_aanvangstijd"], row["activiteit_eindtijd"])
+        if limit is not None and key not in groups and len(groups) >= limit:
+            continue
         groups.setdefault(key, []).append(row["id"])
     return groups
 
@@ -101,30 +118,13 @@ def search_dates_for(aanvangstijd):
     return [date_str]
 
 
-def search_debates(session, date_str):
-    hits = []
-    for page in range(MAX_PAGES):
-        resp = session.get(
-            SEARCH_URL,
-            params={
-                "van": date_str,
-                "tot": date_str,
-                "sortering": "relevant",
-                "appVersion": "1.0.0",
-                "platform": "web",
-                "totalFormat": "new",
-                "vanaf": page * PAGE_SIZE,
-            },
-            timeout=15,
-        )
-        resp.raise_for_status()
-        data = resp.json()
-        page_hits = [h["_source"] for h in data["hits"]["hits"]]
-        hits.extend(page_hits)
-        total = data["hits"]["total"]["value"]
-        if len(hits) >= total or not page_hits:
-            break
-    return hits
+def fetch_agenda(session, date_str):
+    """Volledige dagagenda in één call (geen paginering nodig, i.t.t. de
+    oudere `/search`-aanpak). Lege/onbekende datums geven netjes
+    `{"debates": []}` terug (bevestigd, ook voor duidelijk absurde datums)."""
+    resp = session.get(AGENDA_URL.format(date=date_str), timeout=15)
+    resp.raise_for_status()
+    return resp.json().get("debates", [])
 
 
 def find_best_match(candidates, our_start, our_end):
@@ -136,7 +136,9 @@ def find_best_match(candidates, our_start, our_end):
 
     best, best_diff = None, None
     for cand in candidates:
-        cand_start_dt = _parse_dt(cand.get("startsAt"))
+        # startedAt/endedAt (werkelijke tijden, agenda-API) zijn nauwkeuriger
+        # dan startsAt/endsAt (geplande tijden) -- gebruik ze als aanwezig.
+        cand_start_dt = _parse_dt(cand.get("startedAt") or cand.get("startsAt"))
         if cand_start_dt is None:
             continue
         diff = abs((cand_start_dt.replace(tzinfo=None) - our_start_dt).total_seconds())
@@ -144,7 +146,7 @@ def find_best_match(candidates, our_start, our_end):
             continue
 
         if our_duration and our_duration > 0:
-            cand_end_dt = _parse_dt(cand.get("endsAt"))
+            cand_end_dt = _parse_dt(cand.get("endedAt") or cand.get("endsAt"))
             if cand_end_dt:
                 cand_duration = (cand_end_dt.replace(tzinfo=None) - cand_start_dt.replace(tzinfo=None)).total_seconds()
                 if cand_duration <= 0:
@@ -168,52 +170,68 @@ def build_video_url(candidate):
     )
 
 
-def enrich(topic_keyword, dry_run=False):
+PLENAIR_KEYWORD = "plenair"  # magic --topic-waarde voor topic_id IS NULL ("overig plenair")
+
+
+def enrich(topic_keyword, dry_run=False, limit=None):
     conn = db.connect()
-    topic_row = conn.execute("SELECT id FROM topics WHERE slug = ?", (topic_keyword,)).fetchone()
-    if topic_row is None:
-        raise SystemExit(f"onbekende topic-slug: {topic_keyword}")
     try:
-        _enrich_topic(conn, topic_row["id"], dry_run=dry_run)
+        if topic_keyword == PLENAIR_KEYWORD:
+            _enrich_topic(conn, None, dry_run=dry_run, limit=limit)
+            return
+        topic_row = conn.execute("SELECT id FROM topics WHERE slug = ?", (topic_keyword,)).fetchone()
+        if topic_row is None:
+            raise SystemExit(f"onbekende topic-slug: {topic_keyword}")
+        _enrich_topic(conn, topic_row["id"], dry_run=dry_run, limit=limit)
     finally:
         conn.close()
 
 
-def enrich_all(dry_run=False):
-    """Alle topics in één keer, zodat een nieuw topic of een topic met
-    verouderde video_url-dekking nooit los onthouden hoeft te worden --
-    zie issue #83 (39% ontbrekende video_url's kwam doordat deze stap
-    per topic handmatig gedraaid moest worden en dat voor nieuwe topics
-    niet gebeurd was)."""
+def enrich_all(dry_run=False, limit=None):
+    """Alle topics in één keer, plus de documenten zonder topic ("overig
+    plenair"), zodat een nieuw topic of een topic met verouderde
+    video_url-dekking nooit los onthouden hoeft te worden -- zie issue #83
+    (39% ontbrekende video_url's kwam doordat deze stap per topic
+    handmatig gedraaid moest worden en dat voor nieuwe topics niet
+    gebeurd was)."""
     conn = db.connect()
     try:
         topic_rows = conn.execute("SELECT id, slug FROM topics ORDER BY slug").fetchall()
         for topic_row in topic_rows:
             logger.info("=== topic: %s ===", topic_row["slug"])
-            _enrich_topic(conn, topic_row["id"], dry_run=dry_run)
+            _enrich_topic(conn, topic_row["id"], dry_run=dry_run, limit=limit)
+        logger.info("=== topic: (geen topic / overig plenair) ===")
+        _enrich_topic(conn, None, dry_run=dry_run, limit=limit)
     finally:
         conn.close()
 
 
-def _enrich_topic(conn, topic_id, dry_run=False):
-    groups = fetch_pending_activiteiten(conn, topic_id)
+def _enrich_topic(conn, topic_id, dry_run=False, limit=None):
+    groups = fetch_pending_activiteiten(conn, topic_id, limit=limit)
     if not groups:
         logger.info("Geen documenten zonder debatdirect_id met een bekende activiteit_aanvangstijd.")
         return
 
     session = requests.Session()
+    agenda_by_date = {}  # datum-string -> debates, hergebruikt tussen activiteiten van dezelfde dag
+
+    def agenda_for(date_str):
+        if date_str not in agenda_by_date:
+            try:
+                agenda_by_date[date_str] = fetch_agenda(session, date_str)
+            except requests.RequestException as exc:
+                logger.error("Agenda-opvraag mislukt voor %s: %s", date_str, exc)
+                agenda_by_date[date_str] = []
+        return agenda_by_date[date_str]
+
     matched, unmatched = 0, 0
     for (aanvangstijd, eindtijd), document_ids in groups.items():
         date_strs = search_dates_for(aanvangstijd)
         candidates_by_key = {}
-        try:
-            for date_str in date_strs:
-                for cand in search_debates(session, date_str):
-                    key = (cand.get("slug"), cand.get("startsAt"))
-                    candidates_by_key[key] = cand
-        except requests.RequestException as exc:
-            logger.error("Zoekopdracht mislukt voor %s: %s", "/".join(date_strs), exc)
-            continue
+        for date_str in date_strs:
+            for cand in agenda_for(date_str):
+                key = (cand.get("slug"), cand.get("startsAt"))
+                candidates_by_key[key] = cand
         candidates = list(candidates_by_key.values())
 
         best = find_best_match(candidates, aanvangstijd, eindtijd)
@@ -247,13 +265,17 @@ def _enrich_topic(conn, topic_id, dry_run=False):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("--topic", help="topic-slug, bv. stikstof (default: alle topics)")
+    parser.add_argument(
+        "--topic",
+        help=f"topic-slug, bv. stikstof, of '{PLENAIR_KEYWORD}' voor documenten zonder topic (default: alle topics + {PLENAIR_KEYWORD})",
+    )
     parser.add_argument("--dry-run", action="store_true")
+    parser.add_argument("--limit", type=int, help="beperk tot de eerste N activiteiten (voor een steekproef)")
     args = parser.parse_args()
     if args.topic:
-        enrich(args.topic, dry_run=args.dry_run)
+        enrich(args.topic, dry_run=args.dry_run, limit=args.limit)
     else:
-        enrich_all(dry_run=args.dry_run)
+        enrich_all(dry_run=args.dry_run, limit=args.limit)
 
 
 if __name__ == "__main__":
