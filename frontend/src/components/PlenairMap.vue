@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, nextTick, onMounted, onUnmounted, ref, watch } from "vue";
-import { scaleSqrt } from "d3-scale";
+import { scaleLinear, scaleSqrt, scaleThreshold } from "d3-scale";
 import { select } from "d3-selection";
 import { zoom as d3zoom, zoomIdentity, type D3ZoomEvent } from "d3-zoom";
 import { useTheme } from "../lib/useTheme";
@@ -317,6 +317,84 @@ function screenToWorld(sx: number, sy: number): [number, number] {
 	return [wx, wy];
 }
 
+// Wereld-rechthoek van wat er nu zichtbaar is, met een marge zodat punten niet
+// abrupt pop-in/out geven bij pannen. Gebruikt om ver-buiten-beeld punten
+// vóór het tekenen te skippen (issue #186, zoomperformance) i.p.v. elk frame
+// alle ~40k punten te itereren en te arc()'en ongeacht wat er op het scherm past.
+function visibleWorldRect(marginFrac = 0.15) {
+	const w = canvasWidth.value;
+	const h = canvasHeight.value;
+	const marginX = w * marginFrac;
+	const marginY = h * marginFrac;
+	const [x0, y0] = screenToWorld(-marginX, -marginY);
+	const [x1, y1] = screenToWorld(w + marginX, h + marginY);
+	return {
+		minX: Math.min(x0, x1),
+		maxX: Math.max(x0, x1),
+		minY: Math.min(y0, y1),
+		maxY: Math.max(y0, y1),
+	};
+}
+
+// Deterministische pseudo-random score in [0,1) per punt-id, één keer
+// "getrokken" en daarna stabiel (puur een functie van het punt-id, nooit van
+// zoom/pan/canvasgrootte). randomSample() houdt een punt aan zodra zijn score
+// onder de keep-fractie voor het huidige zoomniveau ligt.
+//
+// Eerdere versie deed dit via een rooster-met-1-representant-per-cel i.p.v.
+// gewoon filteren op deze score. Twee problemen daarmee, live gezien: (1) de
+// gekozen representant kon bij een net iets andere celindeling een ander
+// onderliggend punt worden, zichtbaar als punten die van plek leken te
+// verspringen; (2) elke cel leverde precies 1 punt op ongeacht of er 2 of 500
+// punten in zaten, wat de werkelijke dichtheidsverdeling juist verborg i.p.v.
+// toonde. Puur proportioneel random samplen lost beide op: een getoond punt
+// staat altijd op zijn eigen vaste (x, y), nooit vervangen door een buurpunt;
+// en een gebied met 10x zoveel punten houdt na sampling nog steeds ~10x zoveel
+// over, dus de relatieve dichtheid blijft zichtbaar. Monotoon oplopend met
+// zoom (keepFraction groeit alleen maar), dus een eenmaal getoond punt
+// verdwijnt niet meer bij verder inzoomen -- zonder dat daar een rooster met
+// afgeronde zoomniveaus voor nodig is: de score van een punt verandert nooit,
+// alleen de drempel waar 'ie tegenaan gehouden wordt.
+function pointPriority(id: number): number {
+	let h = id ^ 0x9e3779b9;
+	h = Math.imul(h ^ (h >>> 16), 0x45d9f3b);
+	h = Math.imul(h ^ (h >>> 16), 0x45d9f3b);
+	h = h ^ (h >>> 16);
+	return (h >>> 0) / 4294967296;
+}
+
+function randomSample(points: PlenairPoint[], keepFraction: number): PlenairPoint[] {
+	if (keepFraction >= 1) return points;
+	return points.filter((p) => pointPriority(p.id) < keepFraction);
+}
+
+// Hoeveel fractie van de "overig plenair"-achtergrond getoond wordt op
+// mobiel (puur performance-gedreven, zie benchmark issue #186). Domein loopt
+// door tot zoom 16 (het maximum, scaleExtent), niet tot 8: plenairSizeScale
+// bevriest de puntgrootte vanaf zoom 8 (clamp), dus pas ná dat punt zorgt
+// verder inzoomen nog echt voor meer ruimte tussen de punten i.p.v. dat
+// grotere punten de winst van "meer punten tonen" weer opeten. Groeit daarom
+// bewust langzaam door tot het echte zoom-maximum.
+const plenairKeepFractionScale = scaleLinear().domain([1, 16]).range([0.08, 1]).clamp(true);
+
+// Hoeveel fractie van een topic-cluster getoond wordt, op mobiel én desktop:
+// dit is geen performance-fix (~6.300 topic-punten totaal is triviaal) maar
+// een legibiliteit-fix -- bij volledig tekenen verzadigden dichte UMAP-
+// clusters via de `multiply`-blending naar egale zwarte vlekken (live
+// gezien). Zelfde reden voor het domein tot 16 als bij plenairKeepFractionScale
+// hierboven: topicSizeScale bevriest ook pas bij zoom 8 -- bij een domein
+// tot 6 (eerdere versie) liep de sample-fractie al bijna vol terwijl de
+// punten ondertussen ook nog fors groeiden, met als resultaat dat dichte
+// clusters bij gematigd inzoomen nog steeds als zwarte vlek oogden (live
+// gezien, issue #186). Mobiel start op 30% van het desktop-startpunt (9%
+// i.p.v. 30%): kleiner scherm, dus dezelfde absolute puntdichtheid oogt er
+// dichter.
+const topicKeepFractionScaleDesktop = scaleLinear().domain([1, 16]).range([0.3, 1]).clamp(true);
+const topicKeepFractionScaleMobile = scaleLinear().domain([1, 16]).range([0.09, 1]).clamp(true);
+function topicKeepFraction(zoomLevel: number): number {
+	return (isMobile.value ? topicKeepFractionScaleMobile : topicKeepFractionScaleDesktop)(zoomLevel);
+}
+
 // -------------------------------------------------------------
 // Spatial Grid Index for Fast Hit-Testing
 // -------------------------------------------------------------
@@ -477,6 +555,9 @@ function findClusterLabelNearScreen(sx: number, sy: number): ClusterHullItem | n
 // -------------------------------------------------------------
 const plenairSizeScale = scaleSqrt().domain([1, 8]).range([2, 5.5]).clamp(true);
 const topicSizeScale = scaleSqrt().domain([1, 8]).range([4, 11]).clamp(true);
+// Minimale fine-cluster-grootte om een label te tonen: onder zoom 2.2 alleen
+// de grootste (>=90), tussen 2.2 en 3.0 ook middelgrote (>=40), vanaf 3.0 alle.
+const fineClusterMinSizeScale = scaleThreshold<number, number>().domain([2.2, 3.0]).range([90, 40, 0]);
 
 function render() {
 	if (!canvasRef.value) return;
@@ -516,9 +597,11 @@ function render() {
 		energietransitie: [],
 	};
 
+	const rect = visibleWorldRect();
 	const pts = decodedPoints.value;
 	for (let i = 0; i < pts.length; i++) {
 		const p = pts[i];
+		if (p.x < rect.minX || p.x > rect.maxX || p.y < rect.minY || p.y > rect.maxY) continue;
 		if (groups[p.topic]) {
 			groups[p.topic].push(p);
 		} else {
@@ -526,8 +609,25 @@ function render() {
 		}
 	}
 
-	const basePlenairR = plenairSizeScale(zoom.value) * (isMobile.value ? 1.3 : 1);
+	// Desktop-achtergrond 2x kleiner (0.5x i.p.v. 1x): bij volle 40k
+	// ongesamplede achtergrondpunten vielen de losse stippen te dominant op,
+	// live gezien op de uitgezoomde weergave.
+	const basePlenairR = plenairSizeScale(zoom.value) * (isMobile.value ? 1.3 : 0.5);
 	const baseTopicR = topicSizeScale(zoom.value) * (isMobile.value ? 1.3 : 1);
+
+	// Achtergrond ("overig plenair") alleen op mobiel dunnen: dat is puur
+	// performance-gedreven en desktop trekt de volle ~40k achtergrondpunten
+	// al probleemloos (zie benchmark issue #186). De topic-gekleurde clusters
+	// worden altijd gedund, op mobiel én desktop: dat is geen performance-fix
+	// maar een legibiliteit-fix (zie toelichting bij randomSample hierboven).
+	if (isMobile.value) {
+		groups.plenair = randomSample(groups.plenair, plenairKeepFractionScale(zoom.value));
+	}
+	const topicKeep = topicKeepFraction(zoom.value);
+	groups.stikstof = randomSample(groups.stikstof, topicKeep);
+	groups.abortus = randomSample(groups.abortus, topicKeep);
+	groups.asiel = randomSample(groups.asiel, topicKeep);
+	groups.energietransitie = randomSample(groups.energietransitie, topicKeep);
 
 	for (const [topic, topicPts] of Object.entries(groups)) {
 		if (topicPts.length === 0) continue;
@@ -708,7 +808,7 @@ function render() {
 
 	if (showFine) {
 		const visibleFine = fineClusters.value
-			.filter((c) => (zoom.value >= 3.0 ? true : zoom.value >= 2.2 ? c.size >= 40 : c.size >= 90))
+			.filter((c) => c.size >= fineClusterMinSizeScale(zoom.value))
 			.sort((a, b) => b.size - a.size);
 
 		for (const c of visibleFine) {
