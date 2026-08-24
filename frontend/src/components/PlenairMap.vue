@@ -60,9 +60,11 @@ type VideoLinkInfo = {
 	is_internal: boolean;
 };
 
+type ClusterLevel = "coarse" | "fine";
+
 type DisplayItem =
 	| { type: "point"; data: PlenairPoint; clusterInfo?: ClusterHullItem | null }
-	| { type: "cluster"; data: ClusterHullItem };
+	| { type: "cluster"; data: ClusterHullItem; level: ClusterLevel };
 
 const props = defineProps<{
 	dataBaseUrl: string;
@@ -129,7 +131,11 @@ const selectedTopicFilter = ref<string | null>(null);
 // Interactive Hover & Fixed Pinned Selection
 const hoveredItem = ref<DisplayItem | null>(null);
 const pinnedItem = ref<DisplayItem | null>(null);
-const activeClusterId = ref<number | null>(null);
+// Coarse- en fine-clusters hebben elk hun eigen id-ruimte (beide beginnen
+// vanaf 0), dus een enkel getal is niet genoeg om een actief cluster te
+// identificeren -- het niveau moet erbij (issue #198: coarse-selectie werd
+// hierdoor onterecht tegen fine-cluster-ids van punten vergeleken).
+const activeCluster = ref<{ id: number; level: ClusterLevel } | null>(null);
 
 const activeDisplayItem = computed<DisplayItem | null>(() => pinnedItem.value || hoveredItem.value || null);
 const isPinned = computed(() => pinnedItem.value != null);
@@ -149,6 +155,12 @@ const hoveredPoint = computed<PlenairPoint | null>(() => {
 const hoveredCluster = computed<ClusterHullItem | null>(() => {
 	if (hoveredItem.value?.type === "cluster") return hoveredItem.value.data;
 	if (pinnedItem.value?.type === "cluster") return pinnedItem.value.data;
+	return null;
+});
+
+const hoveredClusterLevel = computed<ClusterLevel | null>(() => {
+	if (hoveredItem.value?.type === "cluster") return hoveredItem.value.level;
+	if (pinnedItem.value?.type === "cluster") return pinnedItem.value.level;
 	return null;
 });
 
@@ -228,6 +240,40 @@ const fineClusters = computed<ClusterHullItem[]>(() => {
 	}
 	return [];
 });
+
+// Ongefilterde fine-clusterlijst (los van de hull-oppervlakte-drempel
+// hierboven) zodat lookups op cluster_id altijd het juiste fine-cluster
+// vinden, ook als de hull te klein is om te tekenen.
+const rawFineClusters = computed<ClusterHullItem[]>(() => {
+	const data = clustersData.value;
+	if (!data) return [];
+	if ("fine" in data && Array.isArray(data.fine)) return data.fine;
+	if (Array.isArray(data)) return data;
+	return [];
+});
+
+const fineClusterById = computed<Map<number, ClusterHullItem>>(() => {
+	const map = new Map<number, ClusterHullItem>();
+	for (const c of rawFineClusters.value) map.set(c.cluster_id, c);
+	return map;
+});
+
+// Elk punt bewaart alleen het fine-cluster-id (zie experiment_umap_documents.py);
+// deze map vertaalt dat naar het bijbehorende coarse-domein zodat een
+// coarse-selectie de juiste punten kan markeren.
+const fineParentMap = computed<Map<number, number>>(() => {
+	const map = new Map<number, number>();
+	for (const c of rawFineClusters.value) {
+		if (c.parent_id != null) map.set(c.cluster_id, c.parent_id);
+	}
+	return map;
+});
+
+function pointMatchesActiveCluster(p: PlenairPoint, ac: { id: number; level: ClusterLevel }): boolean {
+	if (p.cluster == null) return false;
+	if (ac.level === "fine") return p.cluster === ac.id;
+	return fineParentMap.value.get(p.cluster) === ac.id;
+}
 
 const decodedPoints = computed<PlenairPoint[]>(() => {
 	const raw = pointsData.value;
@@ -511,40 +557,42 @@ function wrapLabel(text: string, maxChars = 16): string[] {
 	return lines;
 }
 
-function getVisibleClusters(): ClusterHullItem[] {
+type LeveledCluster = { level: ClusterLevel; data: ClusterHullItem };
+
+function getVisibleClusters(): LeveledCluster[] {
 	const showCoarse = zoom.value < 2.3;
 	const showFine = zoom.value >= 1.7;
-	const list: ClusterHullItem[] = [];
-	if (showFine) list.push(...fineClusters.value);
-	if (showCoarse) list.push(...coarseClusters.value);
+	const list: LeveledCluster[] = [];
+	if (showFine) list.push(...fineClusters.value.map((data) => ({ level: "fine" as const, data })));
+	if (showCoarse) list.push(...coarseClusters.value.map((data) => ({ level: "coarse" as const, data })));
 	return list;
 }
 
 // 1. Precise visible contour boundary hit-testing (within 4.5px of drawn contour line)
-function findContourBoundaryNearScreen(sx: number, sy: number, maxBoundaryDist = 4.5): ClusterHullItem | null {
+function findContourBoundaryNearScreen(sx: number, sy: number, maxBoundaryDist = 4.5): LeveledCluster | null {
 	const visible = getVisibleClusters();
-	let bestCluster: ClusterHullItem | null = null;
+	let best: LeveledCluster | null = null;
 	let bestDist = Infinity;
 
 	for (const c of visible) {
-		if (!c.hull || c.hull.length < 3) continue;
-		const boundaryDist = distanceToHullBoundaryScreen(sx, sy, c.hull);
+		if (!c.data.hull || c.data.hull.length < 3) continue;
+		const boundaryDist = distanceToHullBoundaryScreen(sx, sy, c.data.hull);
 		if (boundaryDist <= maxBoundaryDist && boundaryDist < bestDist) {
 			bestDist = boundaryDist;
-			bestCluster = c;
+			best = c;
 		}
 	}
-	return bestCluster;
+	return best;
 }
 
-let renderedLabels: { cluster: ClusterHullItem; box: { x: number; y: number; w: number; h: number } }[] = [];
+let renderedLabels: { level: ClusterLevel; cluster: ClusterHullItem; box: { x: number; y: number; w: number; h: number } }[] = [];
 
 // 2. Visible cluster label hit-testing (cursor physically over the label box)
-function findClusterLabelNearScreen(sx: number, sy: number): ClusterHullItem | null {
+function findClusterLabelNearScreen(sx: number, sy: number): LeveledCluster | null {
 	for (let i = renderedLabels.length - 1; i >= 0; i--) {
 		const l = renderedLabels[i];
 		if (sx >= l.box.x && sx <= l.box.x + l.box.w && sy >= l.box.y && sy <= l.box.y + l.box.h) {
-			return l.cluster;
+			return { level: l.level, data: l.cluster };
 		}
 	}
 	return null;
@@ -585,9 +633,9 @@ function render() {
 	// 1. Draw Points with true Ink-blending (watercolor density)
 	ctx.globalCompositeOperation = isDark.value ? "screen" : "multiply";
 
-	const activeCId = activeClusterId.value;
+	const activeC = activeCluster.value;
 	const activeTopic = selectedTopicFilter.value;
-	const hasActiveFilter = activeCId != null || activeTopic != null;
+	const hasActiveFilter = activeC != null || activeTopic != null;
 
 	const groups: Record<string, PlenairPoint[]> = {
 		plenair: [],
@@ -638,7 +686,7 @@ function render() {
 		for (let i = 0; i < topicPts.length; i++) {
 			const p = topicPts[i];
 			const isPointSelected =
-				(activeCId != null && p.cluster === activeCId) || (activeTopic != null && p.topic === activeTopic);
+				(activeC != null && pointMatchesActiveCluster(p, activeC)) || (activeTopic != null && p.topic === activeTopic);
 			const isDimmed = hasActiveFilter && !isPointSelected;
 
 			ctx.fillStyle = isDimmed ? (isDark.value ? "#333" : "#ddd") : baseColor;
@@ -672,8 +720,8 @@ function render() {
 
 		for (const c of coarseClusters.value) {
 			if (!c.hull || c.hull.length < 3) continue;
-			const isClusterActive = activeClusterId.value === c.cluster_id;
-			const isClusterHovered = hoveredCluster.value?.cluster_id === c.cluster_id;
+			const isClusterActive = activeC?.level === "coarse" && activeC.id === c.cluster_id;
+			const isClusterHovered = hoveredClusterLevel.value === "coarse" && hoveredCluster.value?.cluster_id === c.cluster_id;
 			const pts = c.hull.map(([hx, hy]) => worldToScreen(hx, hy));
 
 			ctx.beginPath();
@@ -719,8 +767,8 @@ function render() {
 
 		for (const c of fineClusters.value) {
 			if (!c.hull || c.hull.length < 3) continue;
-			const isClusterActive = activeClusterId.value === c.cluster_id;
-			const isClusterHovered = hoveredCluster.value?.cluster_id === c.cluster_id;
+			const isClusterActive = activeC?.level === "fine" && activeC.id === c.cluster_id;
+			const isClusterHovered = hoveredClusterLevel.value === "fine" && hoveredCluster.value?.cluster_id === c.cluster_id;
 			const pts = c.hull.map(([hx, hy]) => worldToScreen(hx, hy));
 
 			ctx.beginPath();
@@ -762,7 +810,7 @@ function render() {
 	renderedLabels = [];
 	const placedBoxes: { x: number; y: number; w: number; h: number }[] = [];
 
-	function drawLabel(cluster: ClusterHullItem, fontSize: number, isBold = false) {
+	function drawLabel(cluster: ClusterHullItem, level: ClusterLevel, fontSize: number, isBold = false) {
 		const [x, y] = worldToScreen(cluster.centroid[0], cluster.centroid[1]);
 		if (x < -60 || x > w + 60 || y < -60 || y > h + 60) return;
 
@@ -780,7 +828,7 @@ function render() {
 			}
 		}
 		placedBoxes.push(box);
-		renderedLabels.push({ cluster, box });
+		renderedLabels.push({ level, cluster, box });
 
 		ctx.font = `${isBold ? "bold" : "600"} ${fontSize}px system-ui, sans-serif`;
 		ctx.textAlign = "center";
@@ -802,7 +850,7 @@ function render() {
 
 	if (showCoarse) {
 		for (const c of coarseClusters.value) {
-			drawLabel(c, 13.5, true);
+			drawLabel(c, "coarse", 13.5, true);
 		}
 	}
 
@@ -812,7 +860,7 @@ function render() {
 			.sort((a, b) => b.size - a.size);
 
 		for (const c of visibleFine) {
-			drawLabel(c, Math.min(12.5, Math.max(9.5, 9 + zoom.value * 0.7)), false);
+			drawLabel(c, "fine", Math.min(12.5, Math.max(9.5, 9 + zoom.value * 0.7)), false);
 		}
 	}
 
@@ -891,14 +939,14 @@ onMounted(() => {
 	}
 });
 
-watch([isDark, activeClusterId, selectedTopicFilter], () => {
+watch([isDark, activeCluster, selectedTopicFilter], () => {
 	triggerRender();
 });
 
 function resetView() {
 	pinnedItem.value = null;
 	hoveredItem.value = null;
-	activeClusterId.value = null;
+	activeCluster.value = null;
 	selectedTopicFilter.value = null;
 	emit("select-cluster", null);
 
@@ -912,7 +960,7 @@ function resetView() {
 
 function clearSelection() {
 	pinnedItem.value = null;
-	activeClusterId.value = null;
+	activeCluster.value = null;
 	emit("select-cluster", null);
 	triggerRender();
 }
@@ -939,7 +987,7 @@ function onPointerMove(e: PointerEvent) {
 	// 1. Precise contour boundary line (4.5px target on the visible line itself)
 	const contour = findContourBoundaryNearScreen(mx, my, 4.5);
 	if (contour) {
-		hoveredItem.value = { type: "cluster", data: contour };
+		hoveredItem.value = { type: "cluster", data: contour.data, level: contour.level };
 		triggerRender();
 		return;
 	}
@@ -947,7 +995,7 @@ function onPointerMove(e: PointerEvent) {
 	// 2. Direct hit on visible cluster label box
 	const labelCluster = findClusterLabelNearScreen(mx, my);
 	if (labelCluster) {
-		hoveredItem.value = { type: "cluster", data: labelCluster };
+		hoveredItem.value = { type: "cluster", data: labelCluster.data, level: labelCluster.level };
 		triggerRender();
 		return;
 	}
@@ -955,12 +1003,7 @@ function onPointerMove(e: PointerEvent) {
 	// 3. Individual speech points (12px target)
 	const pt = findNearestPoint(mx, my, 12);
 	if (pt) {
-		const clusterInfo =
-			pt.cluster != null
-				? fineClusters.value.find((c) => c.cluster_id === pt.cluster) ||
-				  coarseClusters.value.find((c) => c.cluster_id === pt.cluster) ||
-				  null
-				: null;
+		const clusterInfo = pt.cluster != null ? fineClusterById.value.get(pt.cluster) || null : null;
 		hoveredItem.value = { type: "point", data: pt, clusterInfo };
 		triggerRender();
 		return;
@@ -994,9 +1037,9 @@ function onCanvasClick(e: MouseEvent) {
 	// 1. Click on contour boundary line (6.0px target)
 	const contour = findContourBoundaryNearScreen(mx, my, 6.0);
 	if (contour) {
-		pinnedItem.value = { type: "cluster", data: contour };
-		activeClusterId.value = contour.cluster_id;
-		emit("select-cluster", contour.cluster_id);
+		pinnedItem.value = { type: "cluster", data: contour.data, level: contour.level };
+		activeCluster.value = { id: contour.data.cluster_id, level: contour.level };
+		emit("select-cluster", contour.data.cluster_id);
 		triggerRender();
 		return;
 	}
@@ -1004,33 +1047,29 @@ function onCanvasClick(e: MouseEvent) {
 	// 2. Click directly on visible cluster label box
 	const labelCluster = findClusterLabelNearScreen(mx, my);
 	if (labelCluster) {
-		pinnedItem.value = { type: "cluster", data: labelCluster };
-		activeClusterId.value = labelCluster.cluster_id;
-		emit("select-cluster", labelCluster.cluster_id);
+		pinnedItem.value = { type: "cluster", data: labelCluster.data, level: labelCluster.level };
+		activeCluster.value = { id: labelCluster.data.cluster_id, level: labelCluster.level };
+		emit("select-cluster", labelCluster.data.cluster_id);
 		triggerRender();
 		return;
 	}
 
-	// 3. Click directly on a speech point (14px target)
+	// 3. Click directly on a speech point (14px target). Alleen het punt zelf
+	// wordt gemarkeerd (ring), verder blijft de kaart ongewijzigd -- geen
+	// cluster-brede dimming/highlight (issue #198: puntselectie deed voorheen
+	// hetzelfde als clusterselectie, wat als "te veel" voelde).
 	const pt = findNearestPoint(mx, my, 14);
 	if (pt) {
-		const clusterInfo =
-			pt.cluster != null
-				? fineClusters.value.find((c) => c.cluster_id === pt.cluster) ||
-				  coarseClusters.value.find((c) => c.cluster_id === pt.cluster) ||
-				  null
-				: null;
+		const clusterInfo = pt.cluster != null ? fineClusterById.value.get(pt.cluster) || null : null;
 		pinnedItem.value = { type: "point", data: pt, clusterInfo };
-		activeClusterId.value = pt.cluster;
-		emit("select-cluster", pt.cluster);
 		triggerRender();
 		return;
 	}
 
 	// Click on empty space: unpin
-	if (pinnedItem.value != null || activeClusterId.value != null) {
+	if (pinnedItem.value != null || activeCluster.value != null) {
 		pinnedItem.value = null;
-		activeClusterId.value = null;
+		activeCluster.value = null;
 		emit("select-cluster", null);
 		triggerRender();
 	}
@@ -1072,7 +1111,13 @@ function onCanvasClick(e: MouseEvent) {
 				</div>
 
 				<div class="toolbar-right">
-					<button v-if="pinnedItem != null || selectedTopicFilter != null" class="btn-reset" @click="resetView">
+					<button
+						class="btn-reset"
+						:class="{ 'btn-reset-hidden': pinnedItem == null && selectedTopicFilter == null }"
+						:tabindex="pinnedItem != null || selectedTopicFilter != null ? 0 : -1"
+						:aria-hidden="pinnedItem == null && selectedTopicFilter == null"
+						@click="resetView"
+					>
 						Wis selectie &larr;
 					</button>
 					<span class="control-hint">
@@ -1329,6 +1374,14 @@ function onCanvasClick(e: MouseEvent) {
 
 .btn-reset:hover {
 	background: var(--color-surface, #ede9e1);
+}
+
+/* Blijft altijd in de flow (i.p.v. v-if) zodat de toolbar-rij niet van
+   hoogte/regelaantal verandert -- en de kaart daaronder niet verspringt --
+   op het moment dat een selectie wordt gemaakt (issue #198). */
+.btn-reset-hidden {
+	visibility: hidden;
+	pointer-events: none;
 }
 
 .control-hint {
