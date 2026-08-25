@@ -27,11 +27,11 @@ const props = defineProps<{
 	// zelf niet al die pagina zijn (bv. de homepage-teaser).
 	debateHref?: string | null;
 	// Zwevende mini-player (DebateVideoView.vue's isFloating): op de smalle
-	// 320px-breedte paste de volle knoppenrij niet en moest 'm horizontaal
-	// scrollen om bv. de argumentenlijst-toggle te bereiken -- een knop die
-	// daar sowieso niet werkt, want de argumentenlijst is dan niet in beeld.
-	// Herleid tot alleen afspelen/pauze + geluid; skip/tijd/debatlink/
-	// controls-extra horen bij de volle speler.
+	// 320px-breedte paste de volle knoppenrij niet en was een losse
+	// afspelen/pauze/geluid-balk ernaast overbodig -- VideoOverlay.vue's
+	// vorig/volgend-argumentknoppen en tag-badges zijn hier de enige
+	// bediening (issue #188-vervolg). De hele controls-row (incl. skip/tijd/
+	// debatlink/controls-extra) vervalt daarom in dit geval.
 	minimal?: boolean;
 }>();
 const emit = defineEmits<{ timeupdate: [seconds: number]; loadedmetadata: [duration: number]; seek: [seconds: number] }>();
@@ -200,8 +200,8 @@ defineExpose({ fatalError });
 			     positioneringscontext hier, i.p.v. de hele .video-player. -->
 			<slot />
 		</div>
-		<div v-if="!fatalError" class="controls-row">
-			<button v-if="!minimal" type="button" class="control-button" title="30 seconden terug" aria-label="30 seconden terug" @click="skipBy(-30)">
+		<div v-if="!fatalError && !minimal" class="controls-row">
+			<button type="button" class="control-button" title="30 seconden terug" aria-label="30 seconden terug" @click="skipBy(-30)">
 				<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
 					<path d="M11 19l-7-7 7-7" />
 					<path d="M18 19l-7-7 7-7" />
@@ -223,7 +223,7 @@ defineExpose({ fatalError });
 					<rect x="14" y="4.5" width="3.5" height="15" fill="currentColor" />
 				</svg>
 			</button>
-			<button v-if="!minimal" type="button" class="control-button" title="10 seconden vooruit" aria-label="10 seconden vooruit" @click="skipBy(10)">
+			<button type="button" class="control-button" title="10 seconden vooruit" aria-label="10 seconden vooruit" @click="skipBy(10)">
 				<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
 					<path d="M13 5l7 7-7 7" />
 					<path d="M6 5l7 7-7 7" />
@@ -249,9 +249,9 @@ defineExpose({ fatalError });
 					</template>
 				</svg>
 			</button>
-			<span v-if="!minimal" class="time-label">{{ formatClock(currentTime) }} / {{ formatClock(duration) }}</span>
+			<span class="time-label">{{ formatClock(currentTime) }} / {{ formatClock(duration) }}</span>
 			<a
-				v-if="debateHref && !minimal"
+				v-if="debateHref"
 				:href="debateHrefWithTime"
 				class="control-button debate-link-button"
 				title="Volledige debatpagina"
@@ -267,7 +267,7 @@ defineExpose({ fatalError });
 			     argumentenlijst-toggle op /debatten/[id]/ als die lijst is
 			     ingeklapt): hoort qua herkomst niet in deze kale mediaplayer,
 			     maar wel qua rij i.p.v. een aparte knoppenrij eronder. -->
-			<slot v-if="!minimal" name="controls-extra" />
+			<slot name="controls-extra" />
 		</div>
 	</div>
 </template>
