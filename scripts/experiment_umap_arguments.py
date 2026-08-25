@@ -62,8 +62,8 @@ def fetch_arguments(conn, topic_slug, min_quote_len):
              WHERE at.argument_id = a.id AND t.labelgroep = 'Stijlmiddelen'
              ORDER BY at.tag_sleutel LIMIT 1) AS stijl_tag,
             (SELECT at.tag_sleutel FROM argument_tags at JOIN tags t ON t.sleutel = at.tag_sleutel
-             WHERE at.argument_id = a.id AND t.labelgroep = 'Dialectische Kwaliteit'
-             ORDER BY at.tag_sleutel LIMIT 1) AS drogreden_tag
+             WHERE at.argument_id = a.id AND t.labelgroep = 'Debatzetten'
+             ORDER BY at.tag_sleutel LIMIT 1) AS debatzet_tag
         FROM arguments a
         JOIN topics t ON t.id = a.topic_id
         JOIN actors ac ON ac.id = a.actor_id
@@ -153,11 +153,11 @@ def main():
     label_dims = {
         "stance": [r["stance"] for r in rows],
         "partij": [r["party"] or "onbekend" for r in rows],
-        # bij meerdere Stijl-/Drogreden-tags op één argument (selectie='meervoud')
+        # bij meerdere Stijl-/Debatzet-tags op één argument (selectie='meervoud')
         # toont dit alleen de alfabetisch eerste -- grove aanname, prima voor een
         # eerste blik, niet geschikt om conclusies op te baseren.
         "stijl": [r["stijl_tag"] or "geen" for r in rows],
-        "drogreden": [r["drogreden_tag"] or "geen" for r in rows],
+        "debatzet": [r["debatzet_tag"] or "geen" for r in rows],
     }
     print(f"{len(texts)} argument-quotes voor topic '{args.topic_slug}' (min_quote_len={args.min_quote_len})")
 

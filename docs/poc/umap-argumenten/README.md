@@ -86,7 +86,7 @@ argumenten per topic (bewuste curatie-instructie aan Gemini, geen
 contextlimiet). Kan semantisch clusteren helpen signaleren welke
 deelonderwerpen daarbuiten vallen, zodat de boom gerichter aangevuld kan
 worden? Uitgewerkt als onderzoeksvraag in
-[`docs/onderzoeksvraag-argumentboom-coverage.md`](../../onderzoeksvraag-argumentboom-coverage.md) --
+[`docs/research/onderzoeksvraag-argumentboom-coverage.md`](../../research/onderzoeksvraag-argumentboom-coverage.md) --
 nog puur een idee, vereist grondig testen voor het gebouwd wordt.
 
 ## Sanity check: topic-scheiding op alle 4 topics gepoold

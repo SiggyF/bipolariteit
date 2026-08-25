@@ -7,7 +7,7 @@ Argument (spreker: {actor_name}{actor_party_suffix}, standpunt: {stance}, typolo
 {quote_context_block}
 
 Belangrijk:
-- Jij beoordeelt nooit of het argument klopt, terecht is, of overtuigend is. Dat geldt ook voor de labelgroep "Dialectische Kwaliteit": je labelt de argumentatieve VORM (bv. "dit is een ad-hominem-constructie"), nooit of dat gebruik van die vorm hier eerlijk, onterecht of overtuigend is. Een ad hominem of ander patroon kan een volkomen redelijk punt zijn -- dat is niet aan jou om te beoordelen.
+- Jij beoordeelt nooit of het argument klopt, terecht is, of overtuigend is. Dat geldt ook voor de labelgroep "Debatzetten": je labelt de argumentatieve VORM (bv. "dit is een ad-hominem-constructie"), nooit of dat gebruik van die vorm hier eerlijk, onterecht of overtuigend is. Een ad hominem of ander patroon kan een volkomen redelijk punt zijn -- dat is niet aan jou om te beoordelen.
 - Ken alleen tags toe die je uit onderstaande lijst kiest, letterlijk overgenomen (exacte sleutel, geen parafrase, geen nieuwe tags verzinnen).
 - Bij een labelgroep die "kies precies één" zegt: kies er ook echt maar één, of `null` als geen enkele optie past.
 - Bij een labelgroep die "kies nul of meer" zegt: een lege lijst `[]` mag als niets van toepassing is.

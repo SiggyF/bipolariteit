@@ -6,7 +6,7 @@ Zie [issue #74](https://github.com/SiggyF/bipolariteit/issues/74) voor de tracki
 
 5 nieuwe SVG-tekeningen in `icons/` (dit mapje) + een nieuwe groep-entry in `tag-styles.json`, in dezelfde stijl als de bestaande iconen (lijntekeningen, `fill: none`, `stroke-width: 2` — zie de andere bestanden in `icons/` als referentie).
 
-**Geen nieuwe kleur/perspectief nodig.** De labelgroep hoort bij het al bestaande perspectief "Filosofisch & Argumentatietheoretisch" (kleur `#B68235`, marker `circle`), naast de bestaande groepen Redeneerschema/Dialectische Kwaliteit/Metadiscussie.
+**Geen nieuwe kleur/perspectief nodig.** De labelgroep hoort bij het al bestaande perspectief "Filosofisch & Argumentatietheoretisch" (kleur `#B68235`, marker `circle`), naast de bestaande groepen Redeneerschema/Debatzetten/Metadiscussie.
 
 ## De 5 tags
 

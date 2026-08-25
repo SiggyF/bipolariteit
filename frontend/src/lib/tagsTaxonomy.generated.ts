@@ -56,28 +56,28 @@ export const TAXONOMIE: TaxonomiePerspectief[] = [
 				]
 			},
 			{
-				"naam": "Dialectische Kwaliteit",
-				"beschrijving": "Identificeert de aanwezigheid van veelvoorkomende drogredenen en overtreffingen van de discussieregels.",
+				"naam": "Debatzetten",
+				"beschrijving": "Identificeert veelvoorkomende tactische zetten in het debat.",
 				"deterministic": false,
 				"tags": [
 					{
-						"sleutel": "Drogreden-Ad-Hominem",
+						"sleutel": "Debatzet-Persoon-Aanspreken",
 						"beschrijving": "Persoonlijke aanval op de tegenstander (op de man spelen) in plaats van een inhoudelijke weerlegging."
 					},
 					{
-						"sleutel": "Drogreden-Stropop",
+						"sleutel": "Debatzet-Herformuleren",
 						"beschrijving": "Het vertekenen of overdrijven van het standpunt van de opponent om dit makkelijker te kunnen aanvallen."
 					},
 					{
-						"sleutel": "Drogreden-Vals-Dilemma",
+						"sleutel": "Debatzet-Keuze-Aanscherpen",
 						"beschrijving": "Zwart-wit denken; de situatie voorstellen alsof er slechts twee uiterste, elkaar uitsluitende opties bestaan."
 					},
 					{
-						"sleutel": "Drogreden-Ontduiken-Bewijslast",
+						"sleutel": "Debatzet-Bewijs-Vragen",
 						"beschrijving": "Doen alsof een claim geen bewijs behoeft of de tegenstander dwingen het tegendeel te bewijzen."
 					},
 					{
-						"sleutel": "Drogreden-Bespelen-Publiek",
+						"sleutel": "Debatzet-Gevoelens-Verwoorden",
 						"beschrijving": "Emotioneel argumenteren gericht op het oproepen van angst, woede of medelijden bij de toehoorder."
 					}
 				]

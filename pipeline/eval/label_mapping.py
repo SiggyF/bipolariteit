@@ -1,14 +1,14 @@
 """Mapping tussen de drogreden-labels uit `fallacy`-kolom van
 data/raw/elecdebate60to16/fallacy_second_version.csv (pierpaologoffredo/
 ElecDeb60to20) en onze eigen tag-taxonomie (data/tags.toml, labelgroep
-"Dialectische Kwaliteit"). Zie docs/eval-elecdebate.md voor de volledige
+"Debatzetten"). Zie docs/eval-elecdebate.md voor de volledige
 motivatie."""
 
 # Alleen labels met een echte inhoudelijke tegenhanger in onze taxonomie
 # worden gescoord.
 FALLACY_TAG_MAP = {
-    "Ad Hominem": "Drogreden-Ad-Hominem",
-    "Appeal to Emotion": "Drogreden-Bespelen-Publiek",
+    "Ad Hominem": "Debatzet-Persoon-Aanspreken",
+    "Appeal to Emotion": "Debatzet-Gevoelens-Verwoorden",
 }
 
 # ELECDEBATE-labels zonder tegenhanger, bewust buiten scope van deze eval
