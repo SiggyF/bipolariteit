@@ -48,13 +48,14 @@ export function findLatestDebate(argumentsByTopic: { slug: string; arguments: Ar
 	}
 
 	// Extractie, tagging en video-matching zijn losse pipeline-stages (zie
-	// Makefile: extract vs. tag vs. enrich_video_url) -- het net geëxtraheerde
-	// debat kan dus nog geen tags hebben, en een net getagd debat nog geen
-	// videomatch. "Laatste geanalyseerde debat" moet pas tonen zodra beide
-	// stappen klaar zijn: minstens één getagd argument, én minstens één
-	// argument met een videomatch (start_seconds), anders oogt de kop als
-	// klaar terwijl de tijdlijn leeg blijft en vorige/volgende niet werkt
-	// (issue #209).
+	// Makefile: extract -> tag -> fetch-debate-events/fetch-subtitles ->
+	// match-video-spans, dat arguments.start_seconds vult) -- het net
+	// geëxtraheerde debat kan dus nog geen tags hebben, en een net getagd
+	// debat nog geen videomatch (match-video-spans draait pas later/los).
+	// "Laatste geanalyseerde debat" moet pas tonen zodra beide stappen klaar
+	// zijn: minstens één getagd argument, én minstens één argument met een
+	// videomatch (start_seconds), anders oogt de kop als klaar terwijl de
+	// tijdlijn leeg blijft en vorige/volgende niet werkt (issue #209).
 	const latest = [...byDebateId.entries()]
 		.filter(([id]) => !BROKEN_VIDEO_DEBATE_IDS.has(id))
 		.filter(([, entry]) => entry.arguments.some((a) => a.tags.length > 0))
