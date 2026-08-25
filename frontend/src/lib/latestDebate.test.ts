@@ -55,6 +55,7 @@ describe("findLatestDebate", () => {
 		});
 		const working = argument({
 			id: 2,
+			start_seconds: 10,
 			document: { ...argument({ id: 2 }).document, raw_video_url: "https://example.com/werkend.m3u8", published_at: "2026-06-01T10:00:00" },
 		});
 		const result = findLatestDebate([{ slug: "stikstof", arguments: [broken, working] }]);
@@ -78,9 +79,25 @@ describe("findLatestDebate", () => {
 		});
 		const tagged = argument({
 			id: 2,
+			start_seconds: 10,
 			document: { ...argument({ id: 2 }).document, raw_video_url: "https://example.com/getagd.m3u8", published_at: "2026-06-11T10:00:00" },
 		});
 		const result = findLatestDebate([{ slug: "asiel", arguments: [untagged, tagged] }]);
+		expect(result?.earliestPublishedAt).toBe("2026-06-11T10:00:00");
+	});
+
+	it("slaat een getagd-maar-nog-niet-videomatched debat over, ook al is het recenter (issue #209)", () => {
+		const zonderVideomatch = argument({
+			id: 1,
+			start_seconds: null,
+			document: { ...argument({ id: 1 }).document, raw_video_url: "https://example.com/net-getagd.m3u8", published_at: "2026-07-02T10:03:00" },
+		});
+		const metVideomatch = argument({
+			id: 2,
+			start_seconds: 10,
+			document: { ...argument({ id: 2 }).document, raw_video_url: "https://example.com/eerder-getagd.m3u8", published_at: "2026-06-11T10:00:00" },
+		});
+		const result = findLatestDebate([{ slug: "energietransitie", arguments: [zonderVideomatch, metVideomatch] }]);
 		expect(result?.earliestPublishedAt).toBe("2026-06-11T10:00:00");
 	});
 });
