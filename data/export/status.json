@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-24T20:56:35+02:00",
+  "generated_at": "2026-08-25T18:55:03+02:00",
   "topics": [
     {
       "slug": "stikstof",
@@ -163,7 +163,7 @@
       "documents_total": 11723,
       "documents_extracted": 1920,
       "arguments_total": 1303,
-      "arguments_tagged": 483,
+      "arguments_tagged": 1123,
       "documents_redactie_checked": 0,
       "arguments_ander_onderwerp": 90,
       "ander_onderwerp_top": [
@@ -223,13 +223,13 @@
         {
           "stage": "tagging",
           "model": "qwen/qwen3.6-27b",
-          "n_calls": 487,
-          "total_duration_s": 30220.214474928915,
-          "avg_duration_s": 62.05382849061379,
-          "n_errors": 4,
-          "total_completion_tokens": 290555,
+          "n_calls": 1133,
+          "total_duration_s": 67865.41835785995,
+          "avg_duration_s": 59.89886880658425,
+          "n_errors": 10,
+          "total_completion_tokens": 666840,
           "first_call_at": "2026-08-13T10:16:21.437585+00:00",
-          "last_call_at": "2026-08-24T18:15:06.258787+00:00"
+          "last_call_at": "2026-08-25T16:53:30.140850+00:00"
         }
       ]
     }
