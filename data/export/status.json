@@ -1,11 +1,11 @@
 {
-  "generated_at": "2026-08-25T20:00:08+02:00",
+  "generated_at": "2026-08-25T21:00:03+02:00",
   "topics": [
     {
       "slug": "stikstof",
       "name": "Stikstof",
       "vanaf": "2023-12-06",
-      "documents_total": 4377,
+      "documents_total": 4381,
       "documents_extracted": 3885,
       "arguments_total": 1986,
       "arguments_tagged": 1537,
@@ -161,8 +161,8 @@
       "name": "Energietransitie",
       "vanaf": "2023-12-06",
       "documents_total": 11723,
-      "documents_extracted": 1920,
-      "arguments_total": 1303,
+      "documents_extracted": 1930,
+      "arguments_total": 1351,
       "arguments_tagged": 1123,
       "documents_redactie_checked": 0,
       "arguments_ander_onderwerp": 90,
@@ -212,13 +212,13 @@
         {
           "stage": "extraction",
           "model": "qwen/qwen3.6-27b",
-          "n_calls": 1580,
-          "total_duration_s": 25237.899302868056,
-          "avg_duration_s": 15.973353989156998,
+          "n_calls": 1590,
+          "total_duration_s": 26569.76483051805,
+          "avg_duration_s": 16.71054391856481,
           "n_errors": 22,
-          "total_completion_tokens": 236771,
+          "total_completion_tokens": 249482,
           "first_call_at": "2026-08-13T09:24:46.527798+00:00",
-          "last_call_at": "2026-08-24T17:59:28.879844+00:00"
+          "last_call_at": "2026-08-25T18:57:24.058247+00:00"
         },
         {
           "stage": "tagging",
