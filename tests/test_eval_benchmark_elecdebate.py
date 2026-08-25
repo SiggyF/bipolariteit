@@ -70,12 +70,12 @@ def test_attach_tags_to_extraction_items_copies_overlapping_tags():
         {"start": 50, "end": 60, "outcome": "gemist"},
     ]
     tagging_items = [
-        {"start": 5, "end": 10, "verwacht": ["Drogreden-Ad-Hominem"], "voorspeld": []},
+        {"start": 5, "end": 10, "verwacht": ["Debatzet-Persoon-Aanspreken"], "voorspeld": []},
     ]
 
     _attach_tags_to_extraction_items(extraction_items, tagging_items)
 
-    assert extraction_items[0]["verwacht"] == ["Drogreden-Ad-Hominem"]
+    assert extraction_items[0]["verwacht"] == ["Debatzet-Persoon-Aanspreken"]
     assert extraction_items[0]["voorspeld"] == []
     assert extraction_items[1]["verwacht"] == []
     assert extraction_items[1]["voorspeld"] == []
@@ -98,7 +98,7 @@ def _sample_merged():
         "span_overlap": PrecisionRecallF1(0.5, 0.5, 0.5, 5, 5, 5),
         "fallacy_tags": PrecisionRecallF1(1.0, 0.2, 0.33, 1, 0, 4),
         "extraction_items": [{"speaker": "TEST", "text": "een citaat", "outcome": "gevonden"}],
-        "tagging_items": [{"speaker": "TEST", "quote_text": "een citaat", "verwacht": ["Drogreden-Ad-Hominem"], "voorspeld": [], "outcome": "gemist"}],
+        "tagging_items": [{"speaker": "TEST", "quote_text": "een citaat", "verwacht": ["Debatzet-Persoon-Aanspreken"], "voorspeld": [], "outcome": "gemist"}],
     }
 
 

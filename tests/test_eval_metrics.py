@@ -31,7 +31,7 @@ def test_span_overlap_prf_no_spans_either_side():
 
 
 def test_label_set_prf():
-    result = label_set_prf({"Drogreden-Ad-Hominem", "Drogreden-Stropop"}, {"Drogreden-Ad-Hominem"})
+    result = label_set_prf({"Debatzet-Persoon-Aanspreken", "Debatzet-Herformuleren"}, {"Debatzet-Persoon-Aanspreken"})
     assert result.true_positives == 1
     assert result.false_positives == 1
     assert result.false_negatives == 0

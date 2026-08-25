@@ -19,13 +19,13 @@
           ]
         },
         {
-          "naam": "Dialectische Kwaliteit",
+          "naam": "Debatzetten",
           "tags": [
-            { "sleutel": "Drogreden-Ad-Hominem", "icon": "user-x" },
-            { "sleutel": "Drogreden-Stropop", "icon": "wind" },
-            { "sleutel": "Drogreden-Vals-Dilemma", "icon": "git-fork" },
-            { "sleutel": "Drogreden-Ontduiken-Bewijslast", "icon": "shield-off" },
-            { "sleutel": "Drogreden-Bespelen-Publiek", "icon": "megaphone" }
+            { "sleutel": "Debatzet-Persoon-Aanspreken", "icon": "user-x" },
+            { "sleutel": "Debatzet-Herformuleren", "icon": "wind" },
+            { "sleutel": "Debatzet-Keuze-Aanscherpen", "icon": "git-fork" },
+            { "sleutel": "Debatzet-Bewijs-Vragen", "icon": "shield-off" },
+            { "sleutel": "Debatzet-Gevoelens-Verwoorden", "icon": "megaphone" }
           ]
         },
         {

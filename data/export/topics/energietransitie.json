@@ -829,17 +829,17 @@
           "reden": "Het argument verwerpt de ene optie (klimaatideologie) en verdedigt de andere (effectief beleid) op basis van de verwachte praktische gevolgen: wat er gebeurt met de portemonnee en de effectiviteit."
         },
         {
-          "sleutel": "Drogreden-Stropop",
+          "sleutel": "Debatzet-Herformuleren",
           "beschrijving": "Het vertekenen of overdrijven van het standpunt van de opponent om dit makkelijker te kunnen aanvallen.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "Het standpunt van de tegenstander wordt gereduceerd tot een 'klimaatideologie', een vertekende weergave die het makkelijker maakt om het aan te vallen als irrationeel of dogmatisch."
         },
         {
-          "sleutel": "Drogreden-Vals-Dilemma",
+          "sleutel": "Debatzet-Keuze-Aanscherpen",
           "beschrijving": "Zwart-wit denken; de situatie voorstellen alsof er slechts twee uiterste, elkaar uitsluitende opties bestaan.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "Er wordt een keuze gepresenteerd tussen 'klimaatideologie' en 'beleid dat werkt voor de portemonnee', alsof deze twee opties elkaar volledig uitsluiten en er geen middenweg bestaat."
@@ -975,9 +975,9 @@
           "reden": "Het standpunt wordt aangevallen op basis van de verwachte nadelige praktische gevolgen (verergering van netcongestie) van het behoud van de salderingsregeling."
         },
         {
-          "sleutel": "Drogreden-Stropop",
+          "sleutel": "Debatzet-Herformuleren",
           "beschrijving": "Het vertekenen of overdrijven van het standpunt van de opponent om dit makkelijker te kunnen aanvallen.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker presenteert het standpunt van de opponent als een interne tegenstrijdigheid (zorgen over congestie én behoud saldering) om dit als onhoudbaar af te doen, zonder de nuance van het oorspronkelijke betoog te respecteren."
@@ -1438,9 +1438,9 @@
           "reden": "Het standpunt wordt verdedigd op basis van de verwachte praktische gevolgen: de ene optie levert niets op voor de portemonnee, de andere wel."
         },
         {
-          "sleutel": "Drogreden-Vals-Dilemma",
+          "sleutel": "Debatzet-Keuze-Aanscherpen",
           "beschrijving": "Zwart-wit denken; de situatie voorstellen alsof er slechts twee uiterste, elkaar uitsluitende opties bestaan.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker presenteert de situatie als een keuze tussen miljarden uitgeven zonder terugkeer voor de burger of investeren in de salderingsregeling, waarbij andere opties worden genegeerd."
@@ -2510,9 +2510,9 @@
           "reden": "Het argument wijst op de nadelige praktische gevolgen (structurele energiearmoede) van de huidige situatie om het standpunt te onderbouwen."
         },
         {
-          "sleutel": "Drogreden-Bespelen-Publiek",
+          "sleutel": "Debatzet-Gevoelens-Verwoorden",
           "beschrijving": "Emotioneel argumenteren gericht op het oproepen van angst, woede of medelijden bij de toehoorder.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker probeert medelijden op te roepen door specifiek te verwijzen naar 'een op de twaalf kinderen' die in armoede leven en 'aan hun lot overgelaten' zijn."
@@ -4302,17 +4302,17 @@
           "reden": "Het standpunt wordt verdedigd door te wijzen op de nadelige praktische gevolgen van het beleid: het wordt onbetaalbaar en onhaalbaar."
         },
         {
-          "sleutel": "Drogreden-Stropop",
+          "sleutel": "Debatzet-Herformuleren",
           "beschrijving": "Het vertekenen of overdrijven van het standpunt van de opponent om dit makkelijker te kunnen aanvallen.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "Het klimaatbeleid van D66 wordt gekarakteriseerd als 'doorgeslagen' en als beleid dat 'door de strot geduwd' wordt, een overdreven en vertekende weergave om het makkelijker aan te vallen."
         },
         {
-          "sleutel": "Drogreden-Bespelen-Publiek",
+          "sleutel": "Debatzet-Gevoelens-Verwoorden",
           "beschrijving": "Emotioneel argumenteren gericht op het oproepen van angst, woede of medelijden bij de toehoorder.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker probeert emotie op te roepen door te stellen dat 'de mensen' het beleid niet meer pikken en er niet op zitten te wachten, waardoor de toehoorder zich solidair voelt met de ontevreden burger."
@@ -5057,9 +5057,9 @@
           "reden": "Er wordt een directe oorzaak-gevolgrelatie gelegd: hoge kosten leiden tot energiearmoede, wat leidt tot minder gasverbruik."
         },
         {
-          "sleutel": "Drogreden-Bespelen-Publiek",
+          "sleutel": "Debatzet-Gevoelens-Verwoorden",
           "beschrijving": "Emotioneel argumenteren gericht op het oproepen van angst, woede of medelijden bij de toehoorder.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "Het argument gebruikt emotioneel geladen termen als 'ellende' en 'durfden niet meer' om medelijden op te roepen en de tegenstander te diskrediteren via het beeld van lijdende burgers."
@@ -5316,17 +5316,17 @@
           "reden": "Het standpunt wordt aangevallen op basis van de verwachte nadelige praktische gevolgen: een verwoest landschap en onbetrouwbare elektriciteitsvoorziening."
         },
         {
-          "sleutel": "Drogreden-Stropop",
+          "sleutel": "Debatzet-Herformuleren",
           "beschrijving": "Het vertekenen of overdrijven van het standpunt van de opponent om dit makkelijker te kunnen aanvallen.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De energietransitie wordt neergezet als een 'groen sprookje' dat leidt tot een 'totaal verkracht landschap' en stroomuitval, een overdreven en vertekend beeld dat makkelijker aan te vallen is dan het daadwerkelijke beleidsvoorstel."
         },
         {
-          "sleutel": "Drogreden-Bespelen-Publiek",
+          "sleutel": "Debatzet-Gevoelens-Verwoorden",
           "beschrijving": "Emotioneel argumenteren gericht op het oproepen van angst, woede of medelijden bij de toehoorder.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "Door termen als 'verkracht landschap' en 'belazeren' te gebruiken, probeert de spreker emoties zoals woede en wantrouwen op te roepen bij de toehoorder in plaats van puur feitelijke argumenten aan te dragen."
@@ -5807,9 +5807,9 @@
           "reden": "Het standpunt wordt aangevallen op basis van het nadelige praktische gevolg: de potentiële instabiliteit en uitval van het energiesysteem."
         },
         {
-          "sleutel": "Drogreden-Bespelen-Publiek",
+          "sleutel": "Debatzet-Gevoelens-Verwoorden",
           "beschrijving": "Emotioneel argumenteren gericht op het oproepen van angst, woede of medelijden bij de toehoorder.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker probeert angst op te roepen bij het publiek door het scenario van een totaal uitval van het energiesysteem ('over de kop gaan') te schetsen."
@@ -7480,9 +7480,9 @@
           "reden": "Het standpunt wordt verdedigd door de nadelige praktische gevolgen van het huidige beleid te schetsen: verlies van eigen rijkdom en hogere kosten voor import."
         },
         {
-          "sleutel": "Drogreden-Bespelen-Publiek",
+          "sleutel": "Debatzet-Gevoelens-Verwoorden",
           "beschrijving": "Emotioneel argumenteren gericht op het oproepen van angst, woede of medelijden bij de toehoorder.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "Het gebruik van het woord 'waanzin' en de dramatische formulering 'geven het weg' zijn bedoeld om emotie (woede/verbazing) op te roepen bij de toehoorder in plaats van louter feitelijke analyse."
@@ -7738,9 +7738,9 @@
           "reden": "De spreker stelt een directe oorzaak-gevolgrelatie: politieke keuzes (oorzaak) leiden direct tot hoge energierekeningen en economische vernietiging (gevolg)."
         },
         {
-          "sleutel": "Drogreden-Bespelen-Publiek",
+          "sleutel": "Debatzet-Gevoelens-Verwoorden",
           "beschrijving": "Emotioneel argumenteren gericht op het oproepen van angst, woede of medelijden bij de toehoorder.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De uitdrukking 'klimaatonzin' en de bewering dat de economie 'vernietigd' wordt, zijn emotioneel geladen termen die bedoeld zijn om woede en angst op te roepen bij de toehoorder."
@@ -9672,9 +9672,9 @@
           "reden": "Het argument bekritiseert het standpunt op basis van de verwachte praktische gevolgen: het fonds is slechts tijdelijk en dekt niet iedereen, waardoor het geen structurele oplossing kan zijn."
         },
         {
-          "sleutel": "Drogreden-Stropop",
+          "sleutel": "Debatzet-Herformuleren",
           "beschrijving": "Het vertekenen of overdrijven van het standpunt van de opponent om dit makkelijker te kunnen aanvallen.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker stelt dat anderen het fonds 'verkopen als de oplossing', terwijl hij zelf stelt dat het slechts een tijdelijke pleister is, waardoor hij een extreem standpunt van de tegenpartij construeert om dit aan te vallen."
@@ -11221,9 +11221,9 @@
           "reden": "Het argument valt het standpunt van het kabinet aan op basis van de nadelige praktische gevolgen voor de burger (hoge kosten, afhankelijkheid)."
         },
         {
-          "sleutel": "Drogreden-Bespelen-Publiek",
+          "sleutel": "Debatzet-Gevoelens-Verwoorden",
           "beschrijving": "Emotioneel argumenteren gericht op het oproepen van angst, woede of medelijden bij de toehoorder.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker gebruikt emotionele taal zoals 'burger als pinautomaat' en 'verzuipen in de kosten' om woede en medelijden op te roepen bij de toehoorder."
@@ -11363,9 +11363,9 @@
           "reden": "Het standpunt wordt verdedigd door de nadelige praktische gevolgen van het huidige beleid te schetsen (hogere zorgkosten, slechtere schoolprestaties)."
         },
         {
-          "sleutel": "Drogreden-Bespelen-Publiek",
+          "sleutel": "Debatzet-Gevoelens-Verwoorden",
           "beschrijving": "Emotioneel argumenteren gericht op het oproepen van angst, woede of medelijden bij de toehoorder.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker gebruikt emotioneel geladen taal ('schaamteloos', 'besparen op eten voor hun kinderen') om medelijden en woede op te roepen bij de toehoorder."
@@ -15701,9 +15701,9 @@
           "reden": "Het standpunt wordt onderbouwd door de nadelige praktische gevolgen (financiële verliesposten voor huurders) van de huidige situatie te benadrukken."
         },
         {
-          "sleutel": "Drogreden-Bespelen-Publiek",
+          "sleutel": "Debatzet-Gevoelens-Verwoorden",
           "beschrijving": "Emotioneel argumenteren gericht op het oproepen van angst, woede of medelijden bij de toehoorder.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "Het gebruik van woorden als 'schandalig' en het noemen van persoonlijke mails dient om emotie en medelijden op te roepen bij de toehoorder."
@@ -16603,9 +16603,9 @@
           "reden": "De spreker wijst op de nadelige consequentie van de minister's redenering (namelijk dat het impliceert dat burgers elke euro verliezen) om het standpunt van het kabinet te bekritiseren."
         },
         {
-          "sleutel": "Drogreden-Stropop",
+          "sleutel": "Debatzet-Herformuleren",
           "beschrijving": "Het vertekenen of overdrijven van het standpunt van de opponent om dit makkelijker te kunnen aanvallen.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker interpreteert de stelling van de minister dat extra inkomsten niet per definitie leiden tot meer middelen, als de bewering dat de staat elke euro van de burger 'afneemt' en uitgeeft, een vertekening die makkelijker aan te vallen is dan het oorspronkelijke budgettaire argument."
@@ -17413,9 +17413,9 @@
           "reden": "Het argument stelt dat de voorgestelde maatregelen leiden tot nadelige financiële gevolgen (hogere kosten voor burgers) in een al bestaande crisis."
         },
         {
-          "sleutel": "Drogreden-Stropop",
+          "sleutel": "Debatzet-Herformuleren",
           "beschrijving": "Het vertekenen of overdrijven van het standpunt van de opponent om dit makkelijker te kunnen aanvallen.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker presenteert het standpunt van het kabinet als 'alles dekken door het bij dezelfde mensen op te halen', een vereenvoudigde en aanvallende weergave van de maatregelen."
@@ -17518,9 +17518,9 @@
           "reden": "Het argument verdedigt een standpunt (geen geld uitgeven aan transitie) op basis van de verwachte praktische consequentie: het verlagen van de peperdureke rekeningen van burgers."
         },
         {
-          "sleutel": "Drogreden-Bespelen-Publiek",
+          "sleutel": "Debatzet-Gevoelens-Verwoorden",
           "beschrijving": "Emotioneel argumenteren gericht op het oproepen van angst, woede of medelijden bij de toehoorder.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker probeert empathie en onvrede op te roepen door te verwijzen naar mensen die zich 'blauw betalen' en zich zorgen maken over hun rekeningen."
@@ -21635,9 +21635,9 @@
           "reden": "Het argument wijst op de nadelige praktische gevolgen (huurders worden benadeeld/leed lijden) van de huidige situatie als reden om deze te veranderen."
         },
         {
-          "sleutel": "Drogreden-Bespelen-Publiek",
+          "sleutel": "Debatzet-Gevoelens-Verwoorden",
           "beschrijving": "Emotioneel argumenteren gericht op het oproepen van angst, woede of medelijden bij de toehoorder.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De term 'ongelooflijk de sjaak' en de retorische vraag 'Dat kunnen we toch niet laten gebeuren?' zijn bedoeld om medelijden en morele verontwaardiging op te roepen bij de toehoorder."
@@ -22859,9 +22859,9 @@
           "reden": "Het argument weegt de praktische gevolgen van de uiterste opties (tekort in brandstofketen versus afhankelijkheid) om een tussenweg te rechtvaardigen."
         },
         {
-          "sleutel": "Drogreden-Vals-Dilemma",
+          "sleutel": "Debatzet-Keuze-Aanscherpen",
           "beschrijving": "Zwart-wit denken; de situatie voorstellen alsof er slechts twee uiterste, elkaar uitsluitende opties bestaan.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker presenteert de situatie als een keuze tussen twee uitersten ('we stoppen gelijk' versus 'Russische afhankelijkheid afbouwen'), waarbij een middenweg gezocht moet worden, wat impliceert dat deze twee de enige relevante opties zijn."
@@ -23431,9 +23431,9 @@
           "reden": "De spreker trekt een vergelijking tussen de afhankelijkheid bij hernieuwbare energie en de afhankelijkheid van Rusland ('de Russische kaart trekken') om het risico te illustreren."
         },
         {
-          "sleutel": "Drogreden-Stropop",
+          "sleutel": "Debatzet-Herformuleren",
           "beschrijving": "Het vertekenen of overdrijven van het standpunt van de opponent om dit makkelijker te kunnen aanvallen.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker presenteert het standpunt van GroenLinks-PvdA als een eenzijdige, politiek gemotiveerde manipulatie die de 'schaduwkanten' bewust verzwijgt, in plaats van hun daadwerkelijke, genuanceerde positie weer te geven."
@@ -24014,9 +24014,9 @@
           "reden": "Het standpunt wordt verdedigd door te wijzen op de nadelige geopolitieke gevolgen (afhankelijkheid van dictaturen) van de energietransitie."
         },
         {
-          "sleutel": "Drogreden-Vals-Dilemma",
+          "sleutel": "Debatzet-Keuze-Aanscherpen",
           "beschrijving": "Zwart-wit denken; de situatie voorstellen alsof er slechts twee uiterste, elkaar uitsluitende opties bestaan.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker presenteert de energietransitie als een keuze tussen afhankelijkheid van drie specifieke 'onwelgevallige' regimes, alsof er geen andere opties of nuance bestaan."
@@ -24604,9 +24604,9 @@
           "reden": "De spreker gebruikt een vergelijking (analogie) tussen benzine in een kerncentrale en 'superbenzine uit Europa' om het standpunt van de opponent te illustreren en af te wijzen."
         },
         {
-          "sleutel": "Drogreden-Stropop",
+          "sleutel": "Debatzet-Herformuleren",
           "beschrijving": "Het vertekenen of overdrijven van het standpunt van de opponent om dit makkelijker te kunnen aanvallen.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker vertaalt het standpunt van de heer Klos naar een absurde vergelijking ('superbenzine uit Europa') om het makkelijker te kunnen afdoen als onzin, in plaats van het oorspronkelijke argument inhoudelijk aan te pakken."
@@ -28253,9 +28253,9 @@
           "reden": "Het argument stelt dat het huidige voorstel (oorzaak) leidt tot een zorgeloze en onzorgvuldige besteding van middelen (gevolg), wat ongewenst is."
         },
         {
-          "sleutel": "Drogreden-Stropop",
+          "sleutel": "Debatzet-Herformuleren",
           "beschrijving": "Het vertekenen of overdrijven van het standpunt van de opponent om dit makkelijker te kunnen aanvallen.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "Het voorstel wordt vereenvoudigd en vertekend tot '5 miljard hieruit halen en we zien wel wat er overblijft', wat een overdreven en onnauwkeurige weergave is van het oorspronkelijke plan."
@@ -30471,9 +30471,9 @@
           "reden": "Het argument verdedigt het standpunt (kernenergie is niet haalbaar/duur) op basis van de verwachte praktische gevolgen: de hoge kosten overschrijden de beschikbare middelen in het Klimaatfonds."
         },
         {
-          "sleutel": "Drogreden-Stropop",
+          "sleutel": "Debatzet-Herformuleren",
           "beschrijving": "Het vertekenen of overdrijven van het standpunt van de opponent om dit makkelijker te kunnen aanvallen.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker stelt dat het standpunt dat kernenergie duur is 'wordt geïmpliceerd' en 'met bedragen wordt gestrooid', waardoor hij een vertekende versie van het tegenstandersargument aanvalt in plaats van de feitelijke kostenclaim."
@@ -30723,9 +30723,9 @@
           "reden": "De spreker weerlegt het tegenstandersstandpunt door te wijzen op de praktische consequentie dat kerncentrales pas na 2040 klaar zijn, waardoor de huidige noodzaak tot verduurzaming niet wegvalt."
         },
         {
-          "sleutel": "Drogreden-Stropop",
+          "sleutel": "Debatzet-Herformuleren",
           "beschrijving": "Het vertekenen of overdrijven van het standpunt van de opponent om dit makkelijker te kunnen aanvallen.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker interpreteert het standpunt van de heer Erkens als de suggestie dat alle kosten voor netverzwaring en elektrificatie wegvallen bij kernenergie, een interpretatie die zij direct als 'onzin' bestempelt en weerlegt."
@@ -30959,9 +30959,9 @@
           "reden": "De claim dat systeemkosten lager worden met meer kernenergie wordt onderbouwd met de uitspraak 'Veel experts zeggen'."
         },
         {
-          "sleutel": "Drogreden-Stropop",
+          "sleutel": "Debatzet-Herformuleren",
           "beschrijving": "Het vertekenen of overdrijven van het standpunt van de opponent om dit makkelijker te kunnen aanvallen.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker stelt dat mevrouw Kröger doet alsof kerncentrales 'niet nodig' zijn, terwijl haar standpunt waarschijnlijk nuanceerder was (dat andere kosten ook gemaakt moeten worden), waardoor het standpunt van de opponent wordt vereenvoudigd om het makkelijker aan te vallen."
@@ -32193,9 +32193,9 @@
           "reden": "Het standpunt wordt verdedigd op basis van de verwachte praktische gevolgen: het opleveren van banen en betaalbare stroom."
         },
         {
-          "sleutel": "Drogreden-Stropop",
+          "sleutel": "Debatzet-Herformuleren",
           "beschrijving": "Het vertekenen of overdrijven van het standpunt van de opponent om dit makkelijker te kunnen aanvallen.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "Het standpunt van de tegenstander (GroenLinks) wordt gereduceerd tot een 'dogma', wat een vertekende en overdreven weergave is om het makkelijker aan te vallen."
@@ -35607,9 +35607,9 @@
           "reden": "Het argument wijst op de praktische onhaalbaarheid (negatieve consequentie) van het SP-beleid voor de energievoorziening, impliciet dat dit leidt tot een tekort of falen."
         },
         {
-          "sleutel": "Drogreden-Vals-Dilemma",
+          "sleutel": "Debatzet-Keuze-Aanscherpen",
           "beschrijving": "Zwart-wit denken; de situatie voorstellen alsof er slechts twee uiterste, elkaar uitsluitende opties bestaan.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "Het argument impliceert dat er geen andere optie is dan kern- of fossiele energie ('Hoe gaan we het dan wel voor elkaar krijgen?'), waardoor alternatieve energiemixen of transitiepaden buiten beschouwing worden gelaten."
@@ -35729,17 +35729,17 @@
           "reden": "Het argument verdedigt het standpunt voor publieke opslag op basis van de verwachte nadelige gevolgen van de huidige marktgerichte aanpak (mensen in de kou) en de positieve gevolgen van de voorgestelde oplossing (betaalbare warmte)."
         },
         {
-          "sleutel": "Drogreden-Bespelen-Publiek",
+          "sleutel": "Debatzet-Gevoelens-Verwoorden",
           "beschrijving": "Emotioneel argumenteren gericht op het oproepen van angst, woede of medelijden bij de toehoorder.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker gebruikt emotionele taal zoals 'grote, grote zorgen', 'koud' en 'in de kou zitten' om angst en medelijden op te roepen bij de toehoorder."
         },
         {
-          "sleutel": "Drogreden-Stropop",
+          "sleutel": "Debatzet-Herformuleren",
           "beschrijving": "Het vertekenen of overdrijven van het standpunt van de opponent om dit makkelijker te kunnen aanvallen.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker vereenvoudigt het standpunt van de VVD ('de heer Erkens') tot 'politiek is wisselvallig' en 'we moeten publiek gaan' om dit vervolgens aan te vallen als een lijn die inwoners de markt op jaagt."
@@ -36332,9 +36332,9 @@
           "reden": "Het argument stelt dat het bouwen van kerncentrales een betere consequentie heeft ('veel beter') dan het aanpassen van afstandsnormen voor windturbines."
         },
         {
-          "sleutel": "Drogreden-Stropop",
+          "sleutel": "Debatzet-Herformuleren",
           "beschrijving": "Het vertekenen of overdrijven van het standpunt van de opponent om dit makkelijker te kunnen aanvallen.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De tegenstander wordt neergezet als iemand die 'rommelt' met normen om windturbines 'dicht bij omwonenden te kunnen doordrukken', wat een vertekende en negatieve weergave is van het beleid om de energietransitie te versnellen."
@@ -37141,9 +37141,9 @@
           "reden": "Het standpunt wordt verdedigd op basis van de nadelige praktische gevolgen (mensen in de kou) die ontstaan als er niets wordt gedaan."
         },
         {
-          "sleutel": "Drogreden-Bespelen-Publiek",
+          "sleutel": "Debatzet-Gevoelens-Verwoorden",
           "beschrijving": "Emotioneel argumenteren gericht op het oproepen van angst, woede of medelijden bij de toehoorder.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker gebruikt emotionele taal ('letterlijk in de kou laten zitten') om medelijden en urgentie op te roepen bij de toehoorder."
@@ -37275,9 +37275,9 @@
           "reden": "De spreker redeneert vanuit de praktische consequentie dat begrotingen vaststaan en niet meer veranderd kunnen worden, waardoor het geld feitelijk niet beschikbaar is voor andere doeleinden."
         },
         {
-          "sleutel": "Drogreden-Vals-Dilemma",
+          "sleutel": "Debatzet-Keuze-Aanscherpen",
           "beschrijving": "Zwart-wit denken; de situatie voorstellen alsof er slechts twee uiterste, elkaar uitsluitende opties bestaan.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker presenteert de situatie als een keuze tussen slechts twee uitersten: óf men wil bewust kernenergie 'uit hollen', óf het geld is helemaal niet beschikbaar ('gebakken lucht'), terwijl andere nuance mogelijk is."
@@ -39727,9 +39727,9 @@
           "reden": "Er wordt een vergelijking getrokken met Polen, dat ook kerncentrales bouwt en een specifiek bedrag heeft gereserveerd, om de redelijkheid van het Nederlandse budget te onderbouwen."
         },
         {
-          "sleutel": "Drogreden-Stropop",
+          "sleutel": "Debatzet-Herformuleren",
           "beschrijving": "Het vertekenen of overdrijven van het standpunt van de opponent om dit makkelijker te kunnen aanvallen.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker interpreteert het standpunt van mevrouw Rooderkerk als het suggereren dat men het budget simpelweg kan halveren voor de halve ambitie ('zo werkt het niet'), een vereenvoudigde weergave die vervolgens wordt weerlegd."
@@ -41354,9 +41354,9 @@
           "reden": "Het argument impliceert dat het combineren van deze twee acties leidt tot een onhoudbare of logisch onmogelijke situatie (geen samenhang), wat een negatieve consequie van de huidige koers suggereert."
         },
         {
-          "sleutel": "Drogreden-Vals-Dilemma",
+          "sleutel": "Debatzet-Keuze-Aanscherpen",
           "beschrijving": "Zwart-wit denken; de situatie voorstellen alsof er slechts twee uiterste, elkaar uitsluitende opties bestaan.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker stelt dat twee beleidslijnen (kernenergie steunen en budgetkorting) 'niet samen kunnen gaan', waardoor een onmogelijke tegenstelling wordt geschapen alsof er geen middenpositie of nuance mogelijk is."
@@ -43297,9 +43297,9 @@
           "reden": "Het standpunt wordt verdedigd op basis van de gewenste praktische consequentie: dat Nederlanders financieel geholpen worden."
         },
         {
-          "sleutel": "Drogreden-Vals-Dilemma",
+          "sleutel": "Debatzet-Keuze-Aanscherpen",
           "beschrijving": "Zwart-wit denken; de situatie voorstellen alsof er slechts twee uiterste, elkaar uitsluitende opties bestaan.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "Het argument presenteert de situatie als een keuze tussen helpen van de Nederlander of geld geven aan buitenlandse doelen, alsof deze opties elkaar volledig uitsluiten."
@@ -44905,17 +44905,17 @@
           "reden": "Het standpunt wordt verdedigd op basis van de praktische noodzaak en gevolgen: omdat mensen naar de pomp moeten en het leven niet zonder fossiel kan, is afbouwen niet mogelijk."
         },
         {
-          "sleutel": "Drogreden-Stropop",
+          "sleutel": "Debatzet-Herformuleren",
           "beschrijving": "Het vertekenen of overdrijven van het standpunt van de opponent om dit makkelijker te kunnen aanvallen.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker vertekent het standpunt van D66 door te suggereren dat zij denken dat 'er op dit moment geen leven denkbaar is zonder fossiel' alleen in hun hoofd bestaat, in plaats van hun daadwerkelijke beleidsvoornemens aan te pakken."
         },
         {
-          "sleutel": "Drogreden-Ad-Hominem",
+          "sleutel": "Debatzet-Persoon-Aanspreken",
           "beschrijving": "Persoonlijke aanval op de tegenstander (op de man spelen) in plaats van een inhoudelijke weerlegging.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De opmerking 'misschien wel in het hoofd van een aantal D66'ers' is een persoonlijke aanval op de tegenstanders in plaats van een inhoudelijke weerlegging van hun energiebeleid."
@@ -45634,9 +45634,9 @@
           "reden": "De spreker adviseert om te praten met transporteurs en de industrie, impliciet omdat zij als experts in hun vakgebied de feitelijke werkelijkheid (dat het op diesel draait) het beste kennen."
         },
         {
-          "sleutel": "Drogreden-Stropop",
+          "sleutel": "Debatzet-Herformuleren",
           "beschrijving": "Het vertekenen of overdrijven van het standpunt van de opponent om dit makkelijker te kunnen aanvallen.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker presenteert het standpunt van de tegenpartij als een onrealistische 'fata morgana' waarin men denkt dat alles direct geregeld kan worden zonder fossiele brandstoffen, wat een vereenvoudigde en aanvallende weergave is van het beleid."
@@ -46063,9 +46063,9 @@
           "reden": "De claim dat het 'uit-en-te-na onderzocht en geboekstaafd' is, beroept zich op autoriteit van onderzoek en feitelijke vaststellingen om de onhaalbaarheid te staven."
         },
         {
-          "sleutel": "Drogreden-Stropop",
+          "sleutel": "Debatzet-Herformuleren",
           "beschrijving": "Het vertekenen of overdrijven van het standpunt van de opponent om dit makkelijker te kunnen aanvallen.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker presenteert het standpunt van de tegenpartij als een simplistische belofte ('we passen even het wereldklimaat aan'), die hij vervolgens als onhoudbaar bestrijdt, in plaats van het nuanceerdere beleid te weerleggen."
@@ -46839,9 +46839,9 @@
           "reden": "Het standpunt tegen kernenergie wordt verdedigd op basis van de verwachte nadelige praktische gevolgen: hoge kosten, vertraging (tien jaar) en financiële lasten."
         },
         {
-          "sleutel": "Drogreden-Stropop",
+          "sleutel": "Debatzet-Herformuleren",
           "beschrijving": "Het vertekenen of overdrijven van het standpunt van de opponent om dit makkelijker te kunnen aanvallen.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker karikatureert het standpunt van de tegenstander door het te reduceren tot een 'jongensdroom', wat een vertekende en verkleinende weergave is van het oorspronkelijke argument."
@@ -47374,9 +47374,9 @@
           "reden": "De spreker stelt dat de combinatie van hernieuwbare energie met opslag en waterstof leidt tot het positieve gevolg van een stabiel energiesysteem, wat de noodzaak van deze maatregel onderbouwt."
         },
         {
-          "sleutel": "Drogreden-Stropop",
+          "sleutel": "Debatzet-Herformuleren",
           "beschrijving": "Het vertekenen of overdrijven van het standpunt van de opponent om dit makkelijker te kunnen aanvallen.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker vat het standpunt van JA21 samen als het idee dat wind en zon per definitie 'wiebelstroom' zijn en nooit stabiel kunnen zijn, om dit vervolgens als 'pure onzin' af te doen, terwijl de tegenstander waarschijnlijk nuanceerde zorgen uitspreekt over stabiliteit zonder de technologie volledig af te wijzen."
@@ -47592,9 +47592,9 @@
           "reden": "Het standpunt wordt verdedigd op basis van de verwachte praktische gevolgen: windmolens lossen de prijscrisis niet op, terwijl prijsverlagingen wel direct verlichting bieden."
         },
         {
-          "sleutel": "Drogreden-Stropop",
+          "sleutel": "Debatzet-Herformuleren",
           "beschrijving": "Het vertekenen of overdrijven van het standpunt van de opponent om dit makkelijker te kunnen aanvallen.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker vertekent het standpunt van de tegenstander door te suggereren dat zij geloven dat windmolens de geopolitieke crisis in Iran direct oplossen, een extreme en onwaarschijnlijke interpretatie van hun positie."
@@ -47726,17 +47726,17 @@
           "reden": "Het standpunt wordt verdedigd op basis van de verwachte praktische gevolgen: het geld kan beter worden ingezet voor effectievere oplossingen."
         },
         {
-          "sleutel": "Drogreden-Stropop",
+          "sleutel": "Debatzet-Herformuleren",
           "beschrijving": "Het vertekenen of overdrijven van het standpunt van de opponent om dit makkelijker te kunnen aanvallen.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De tegenstander wordt beschuldigd van 'blind doorgaan' met een specifieke maatregel, wat een vereenvoudigde en negatieve weergave is van het standpunt om dit makkelijker aan te vallen."
         },
         {
-          "sleutel": "Drogreden-Vals-Dilemma",
+          "sleutel": "Debatzet-Keuze-Aanscherpen",
           "beschrijving": "Zwart-wit denken; de situatie voorstellen alsof er slechts twee uiterste, elkaar uitsluitende opties bestaan.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "Het argument stelt dat het geld óf in de huidige maatregel ('die trein') óf in 'echte oplossingen' gestoken kan worden, alsof deze opties strikt uitgesloten zijn van elkaar."
@@ -49853,9 +49853,9 @@
           "reden": "Er wordt een vergelijking getrokken tussen het huidige voorstel en het historische concept 'rekeningrijden' om de aard van het beleid te karakteriseren."
         },
         {
-          "sleutel": "Drogreden-Stropop",
+          "sleutel": "Debatzet-Herformuleren",
           "beschrijving": "Het vertekenen of overdrijven van het standpunt van de opponent om dit makkelijker te kunnen aanvallen.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker vertekent het huidige voorstel door het gelijk te stellen aan 'rekeningrijden via de achterdeur', een extreme en negatieve interpretatie die makkelijker aan te vallen is dan het oorspronkelijke beleid."
@@ -50552,9 +50552,9 @@
           "reden": "Het standpunt wordt aangevallen op basis van de verwachte nadelige praktische gevolgen (netcongestie) van de voorgestelde maatregel (elektrificatie)."
         },
         {
-          "sleutel": "Drogreden-Bespelen-Publiek",
+          "sleutel": "Debatzet-Gevoelens-Verwoorden",
           "beschrijving": "Emotioneel argumenteren gericht op het oproepen van angst, woede of medelijden bij de toehoorder.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "Het gebruik van de term 'rampscenario' is bedoeld om angst en ongerustheid op te roepen bij de toehoorder over de gevolgen van elektrificatie."
@@ -51330,9 +51330,9 @@
           "reden": "Het argument is gebaseerd op de verwachte praktische gevolgen: als het akkoord wordt aangepast, komt er geld vrij dat kan worden gebruikt om de koopkracht van mensen met financiële problemen te verbeteren."
         },
         {
-          "sleutel": "Drogreden-Stropop",
+          "sleutel": "Debatzet-Herformuleren",
           "beschrijving": "Het vertekenen of overdrijven van het standpunt van de opponent om dit makkelijker te kunnen aanvallen.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker presenteert de investeringen in klimaatsubsidies als 'klimaatonzinfondsen' en suggereert dat het coalitieakkoord moet worden 'opengebroken', waardoor het standpunt van de tegenstander wordt vereenvoudigd en negatief gekleurd om het makkelijker aan te vallen."
@@ -53494,9 +53494,9 @@
           "reden": "De spreker argumenteert dat algehele oproepen onwerkbaar zijn omdat ze leiden tot de praktische consequentie dat mensen zonder alternatief (zoals thuiszorgwerkers) in de problemen komen, en pleit daarom voor gerichte maatregelen."
         },
         {
-          "sleutel": "Drogreden-Stropop",
+          "sleutel": "Debatzet-Herformuleren",
           "beschrijving": "Het vertekenen of overdrijven van het standpunt van de opponent om dit makkelijker te kunnen aanvallen.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker stelt dat er een suggestie wordt gewekt dat 'iedereen' zijn auto kan laten staan, een extreme interpretatie van het tegenstandersstandpunt die hij vervolgens weerlegt."
@@ -57145,9 +57145,9 @@
           "reden": "Het argument stelt dat de maatregelen nutteloos zijn ('hebben de mensen er helemaal niets aan') als de voorwaarde (ruimte op het net) niet vervuld is."
         },
         {
-          "sleutel": "Drogreden-Stropop",
+          "sleutel": "Debatzet-Herformuleren",
           "beschrijving": "Het vertekenen of overdrijven van het standpunt van de opponent om dit makkelijker te kunnen aanvallen.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker presenteert het standpunt van de tegenstander als een onrealistische belofte ('fantastische staatssecretaris... gaat dit allemaal oplossen') om deze vervolgens aan te vallen met de realiteit van de netcapaciteit."
@@ -57565,9 +57565,9 @@
           "reden": "Het standpunt wordt aangevallen op basis van het nadelige praktische gevolg: de belofte lost het huidige financiële probleem niet op."
         },
         {
-          "sleutel": "Drogreden-Stropop",
+          "sleutel": "Debatzet-Herformuleren",
           "beschrijving": "Het vertekenen of overdrijven van het standpunt van de opponent om dit makkelijker te kunnen aanvallen.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "Het standpunt van het kabinet wordt vereenvoudigd tot 'een brief' die als betaalmiddel zou moeten dienen, wat een vertekening is van de werkelijke beleidsvoornemens."
@@ -57707,9 +57707,9 @@
           "reden": "Het argument aanvallen van het standpunt (meer elektrificatie) op basis van de verwachte nadelige praktische gevolgen (netcongestie, 'op slot gaan' van de provincie)."
         },
         {
-          "sleutel": "Drogreden-Bespelen-Publiek",
+          "sleutel": "Debatzet-Gevoelens-Verwoorden",
           "beschrijving": "Emotioneel argumenteren gericht op het oproepen van angst, woede of medelijden bij de toehoorder.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker gebruikt de alarmerende metafoor van 'met een blinddoek om met 120 km/u op een muur af rijden' om angst en urgentie op te roepen bij de toehoorders."
@@ -58733,9 +58733,9 @@
           "reden": "Het standpunt wordt verdedigd op basis van de praktische, voordelige gevolgen voor de burgers (verlaging van de lasten via de subsidie)."
         },
         {
-          "sleutel": "Drogreden-Stropop",
+          "sleutel": "Debatzet-Herformuleren",
           "beschrijving": "Het vertekenen of overdrijven van het standpunt van de opponent om dit makkelijker te kunnen aanvallen.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker presenteert het standpunt van mevrouw Keijzer als een absolute ontkening ('niemand heeft daar iets aan', 'het betekent niks'), wat een overdrijving is van de tegenstanders' positie om deze makkelijker te weerleggen."
@@ -58985,9 +58985,9 @@
           "reden": "De spreker trekt een directe vergelijking met Denemarken als precedent om te betogen dat Nederland dezelfde resultaten kan behalen ('Het idee dat wij niet zouden kunnen wat Denemarken kan, is onzin')."
         },
         {
-          "sleutel": "Drogreden-Stropop",
+          "sleutel": "Debatzet-Herformuleren",
           "beschrijving": "Het vertekenen of overdrijven van het standpunt van de opponent om dit makkelijker te kunnen aanvallen.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker presenteert een extreem en onwaarschijnlijk standpunt ('laat die aarde maar veel warmer worden') als het tegenstandersstandpunt om dit vervolgens af te doen als irrelevant ten opzichte van energieonafhankelijkheid."
@@ -60390,9 +60390,9 @@
           "reden": "Het standpunt wordt verdedigd op basis van de beoogde positieve consequentie van de maatregelen, namelijk dat ze mensen helpen."
         },
         {
-          "sleutel": "Drogreden-Ad-Hominem",
+          "sleutel": "Debatzet-Persoon-Aanspreken",
           "beschrijving": "Persoonlijke aanval op de tegenstander (op de man spelen) in plaats van een inhoudelijke weerlegging.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker bestempelt de tegenwerping van de heer Dijk direct als 'flauwekul', een persoonlijke afwijzing van de opponent in plaats van een inhoudelijke weerlegging."
@@ -60900,9 +60900,9 @@
           "reden": "De spreker beroept zich op eigen navraag gedaan in de sector ('Ik heb zelf ook navraag in de sector gedaan') als basis voor zijn bewering dat er geen grote overwinsten zijn."
         },
         {
-          "sleutel": "Drogreden-Stropop",
+          "sleutel": "Debatzet-Herformuleren",
           "beschrijving": "Het vertekenen of overdrijven van het standpunt van de opponent om dit makkelijker te kunnen aanvallen.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker stelt dat de tegenstander 'beelden neerzet' en de hele sector in de beklaagdenbank zet, wat een vertekende weergave is van de specifieke vraag naar het afromen van overwinsten."
@@ -61265,9 +61265,9 @@
           "reden": "Het argument verwerpt het standpunt van de opponent op basis van de voorspelde negatieve praktische consequentie: dat de hele industrie in duigen zal vallen."
         },
         {
-          "sleutel": "Drogreden-Stropop",
+          "sleutel": "Debatzet-Herformuleren",
           "beschrijving": "Het vertekenen of overdrijven van het standpunt van de opponent om dit makkelijker te kunnen aanvallen.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker presenteert het voorstel van de opponent als een extreem beleid dat leidt tot het volledig in duigen vallen van de hele industrie, wat een overdrijving is van het oorspronkelijke standpunt."
@@ -62400,17 +62400,17 @@
           "reden": "Het argument bekritiseert het beleidsvoorstel op basis van de nadelige gevolgen voor het lokale bedrijfsleven en het gebrek aan lastenverlichting."
         },
         {
-          "sleutel": "Drogreden-Stropop",
+          "sleutel": "Debatzet-Herformuleren",
           "beschrijving": "Het vertekenen of overdrijven van het standpunt van de opponent om dit makkelijker te kunnen aanvallen.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker presenteert het standpunt van de heer Bontenbal als een eenzijdige keuze voor uitgaven aan het buitenland en klimaat ten koste van lokale ondernemers, terwijl de nuance van het begrotingspakket wordt genegeerd."
         },
         {
-          "sleutel": "Drogreden-Vals-Dilemma",
+          "sleutel": "Debatzet-Keuze-Aanscherpen",
           "beschrijving": "Zwart-wit denken; de situatie voorstellen alsof er slechts twee uiterste, elkaar uitsluitende opties bestaan.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De situatie wordt gepresenteerd als een keuze tussen 'pakken van het bedrijfsleven' en 'niets doen' voor lastenverlichting, alsof er geen andere beleidsalternatieven bestaan."
@@ -64335,9 +64335,9 @@
           "reden": "Het argument aanvallen van het standpunt (het fonds) op basis van de verwachte nadelige praktische gevolgen (gezin kan rekeningen niet betalen)."
         },
         {
-          "sleutel": "Drogreden-Bespelen-Publiek",
+          "sleutel": "Debatzet-Gevoelens-Verwoorden",
           "beschrijving": "Emotioneel argumenteren gericht op het oproepen van angst, woede of medelijden bij de toehoorder.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker probeert medelijden op te roepen door te schetsen hoe gezinnen met vier kinderen hun rekeningen niet kunnen betalen, gericht op de emoties van de toehoorder."
@@ -65616,9 +65616,9 @@
           "reden": "Het argument leunt op de verklaring van minister O'Sullivan in The Guardian als autoriteit om de aard van het kabinetbeleid te definiëren."
         },
         {
-          "sleutel": "Drogreden-Stropop",
+          "sleutel": "Debatzet-Herformuleren",
           "beschrijving": "Het vertekenen of overdrijven van het standpunt van de opponent om dit makkelijker te kunnen aanvallen.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker reduceert het complexe beleidsplan van het kabinet tot de extreme kernwaarden 'rantsoenering' en 'afbouw van welvaart' om dit makkelijker te kunnen aanvallen."
@@ -65997,9 +65997,9 @@
           "reden": "Het argument attackeert het huidige beleid op basis van de nadelige praktische gevolgen voor burgers (ze hebben het zwaar, voelen zich niet gesteund)."
         },
         {
-          "sleutel": "Drogreden-Bespelen-Publiek",
+          "sleutel": "Debatzet-Gevoelens-Verwoorden",
           "beschrijving": "Emotioneel argumenteren gericht op het oproepen van angst, woede of medelijden bij de toehoorder.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker gebruikt emotionele taal zoals 'mensen voelen niet dat ze gesteund worden' en 'hebben het echt heel zwaar' om medelijden en urgentie op te roepen bij de toehoorder."
@@ -66429,9 +66429,9 @@
           "reden": "De spreker trekt een vergelijking met de situatie in Duitsland ('in Duitsland betalen onder de streep dus gewoon de consument...') om een punt te maken over de Nederlandse situatie."
         },
         {
-          "sleutel": "Drogreden-Stropop",
+          "sleutel": "Debatzet-Herformuleren",
           "beschrijving": "Het vertekenen of overdrijven van het standpunt van de opponent om dit makkelijker te kunnen aanvallen.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker presenteert het standpunt van de tegenstanders (Wilders/Jetten) als een eis om 'miljarden aan belastinggeld' uit te geven voor compensatie, wat een vereenvoudigde of overdreven weergave kan zijn van hun economische argumenten."
@@ -67194,9 +67194,9 @@
           "reden": "Het standpunt wordt verdedigd door de nadelige praktische gevolgen van het alternatief (generieke verlaging) te schetsen: hoge kosten en inefficiënte besteding van middelen."
         },
         {
-          "sleutel": "Drogreden-Vals-Dilemma",
+          "sleutel": "Debatzet-Keuze-Aanscherpen",
           "beschrijving": "Zwart-wit denken; de situatie voorstellen alsof er slechts twee uiterste, elkaar uitsluitende opties bestaan.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker presenteert een generieke verlaging van accijnzen als de 'enige route' om de kosten voor autorijders te verlagen, waardoor andere mogelijke oplossingen (zoals gerichte compensatie) worden uitgesloten."
@@ -67466,9 +67466,9 @@
           "reden": "Het argument leunt sterk op de autoriteit en de specifieke bevindingen van het Centraal Planbureau (CPB) om de ernst van de situatie te onderbouwen."
         },
         {
-          "sleutel": "Drogreden-Bespelen-Publiek",
+          "sleutel": "Debatzet-Gevoelens-Verwoorden",
           "beschrijving": "Emotioneel argumenteren gericht op het oproepen van angst, woede of medelijden bij de toehoorder.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker gebruikt emotionele taal ('kwetsbare mensen', 'moeilijk hebben', 'ademruimte') om medelijden op te roepen voor de groep die onder de hoge kosten lijdt."
@@ -71837,9 +71837,9 @@
           "reden": "Het standpunt wordt verdedigd op basis van de verwachte nadelige praktische gevolgen: een te lage opbrengst om de plannen te financieren."
         },
         {
-          "sleutel": "Drogreden-Stropop",
+          "sleutel": "Debatzet-Herformuleren",
           "beschrijving": "Het vertekenen of overdrijven van het standpunt van de opponent om dit makkelijker te kunnen aanvallen.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker stelt dat tegenstanders vermogens zien als 'oneindige bron' die 'niemand raakt', een vertekend beeld dat hij vervolgens weerlegt in plaats van het daadwerkelijke voorstel."
@@ -73441,9 +73441,9 @@
           "reden": "Het argument vergelijkt de praktische gevolgen van twee opties: het investeren in duurzame energie nu (positief gevolg: werkgelegenheid, transitie) versus wachten op kerncentrales (negatief gevolg: vertraging, gebrek aan onderbouwing)."
         },
         {
-          "sleutel": "Drogreden-Ontduiken-Bewijslast",
+          "sleutel": "Debatzet-Bewijs-Vragen",
           "beschrijving": "Doen alsof een claim geen bewijs behoeft of de tegenstander dwingen het tegendeel te bewijzen.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker draait de bewijslast om door de minister te vragen om een 'goede onderbouwing' te geven voor kerncentrales, terwijl zij zelf stelt dat het tegenovergestelde (duurzame energie) wel is aangetoond."
@@ -74276,9 +74276,9 @@
           "reden": "Het argument waarschuwt voor de nadelige consequentie (verlies van steun en legitimiteit) als het kabinet niet handelt volgens de voorgestelde lijn."
         },
         {
-          "sleutel": "Drogreden-Vals-Dilemma",
+          "sleutel": "Debatzet-Keuze-Aanscherpen",
           "beschrijving": "Zwart-wit denken; de situatie voorstellen alsof er slechts twee uiterste, elkaar uitsluitende opties bestaan.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker presenteert een zwart-wit keuze tussen helpen van Nederlandse gezinnen en het besteden van geld aan Afrika en Oekraïne, alsof deze opties strikt uitgesloten zijn."
@@ -74786,9 +74786,9 @@
           "reden": "Het argument is gebaseerd op de nadelige praktische consequentie dat burgers zich verwaarloosd voelen doordat hun financiële belangen niet aan de orde zijn gesteld."
         },
         {
-          "sleutel": "Drogreden-Bespelen-Publiek",
+          "sleutel": "Debatzet-Gevoelens-Verwoorden",
           "beschrijving": "Emotioneel argumenteren gericht op het oproepen van angst, woede of medelijden bij de toehoorder.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker probeert emoties op te roepen door te verwijzen naar de zorgen van 'de burger' en de situatie als 'zorgwekkend' te bestempelen."
@@ -75041,9 +75041,9 @@
           "reden": "Het standpunt wordt verdedigd op basis van de verwachte positieve praktische gevolgen: het aantrekken van bedrijvigheid en het stimuleren van de economie door middel van stabiele energie."
         },
         {
-          "sleutel": "Drogreden-Vals-Dilemma",
+          "sleutel": "Debatzet-Keuze-Aanscherpen",
           "beschrijving": "Zwart-wit denken; de situatie voorstellen alsof er slechts twee uiterste, elkaar uitsluitende opties bestaan.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker presenteert de keuze als een binair alternatief tussen 'schaarste verdelen' en 'schone-energieovervloed bouwen', waarbij andere opties of nuances buiten beschouwing worden gelaten."
@@ -76677,9 +76677,9 @@
           "reden": "Het argument verdedigt de keuze voor kernenergie op basis van de verwachte positieve consequentie (oplossen van netcongestie en stabiliteit) en de negatieve consequentie van het alternatief (instabiliteit)."
         },
         {
-          "sleutel": "Drogreden-Stropop",
+          "sleutel": "Debatzet-Herformuleren",
           "beschrijving": "Het vertekenen of overdrijven van het standpunt van de opponent om dit makkelijker te kunnen aanvallen.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "Het standpunt van Progressief Nederland wordt vereenvoudigd en vertekend als een 'groene droom' van 'onrendabele en instabiele energiebronnen' om dit makkelijker aan te vallen."
@@ -76933,9 +76933,9 @@
           "reden": "Het argument wijst op de praktische en financiële gevolgen (hoge kosten voor subsidies en netverzwaring) van het beleid om de stelling dat het 'gratis' is te weerleggen."
         },
         {
-          "sleutel": "Drogreden-Stropop",
+          "sleutel": "Debatzet-Herformuleren",
           "beschrijving": "Het vertekenen of overdrijven van het standpunt van de opponent om dit makkelijker te kunnen aanvallen.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker stelt dat de tegenstander doet alsof windenergie 'gratis' is, een extreme en waarschijnlijk niet gehanteerde positie die vervolgens wordt weerlegd."
@@ -77754,9 +77754,9 @@
           "reden": "Het standpunt wordt onderbouwd door de nadelige praktische gevolgen van de voorgestelde maatregel te schetsen, namelijk hoge kosten en de noodzaak tot het afsluiten van duurzame energiebronnen."
         },
         {
-          "sleutel": "Drogreden-Vals-Dilemma",
+          "sleutel": "Debatzet-Keuze-Aanscherpen",
           "beschrijving": "Zwart-wit denken; de situatie voorstellen alsof er slechts twee uiterste, elkaar uitsluitende opties bestaan.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker presenteert de situatie alsof er slechts twee uiterste opties zijn: óf de vraag enorm verhogen óf bestaande productie afsluiten, terwijl andere oplossingen (zoals netuitbreiding of opslag) buiten beschouwing worden gelaten."
@@ -78778,9 +78778,9 @@
           "reden": "Het argument impliceert dat de keuze voor de ene optie (kern of wind) directe gevolgen heeft voor de structuur van het energiesysteem ('ruggengraat'), waarmee de standpuntkeuze wordt onderbouwd op basis van deze systemische consequentie."
         },
         {
-          "sleutel": "Drogreden-Vals-Dilemma",
+          "sleutel": "Debatzet-Keuze-Aanscherpen",
           "beschrijving": "Zwart-wit denken; de situatie voorstellen alsof er slechts twee uiterste, elkaar uitsluitende opties bestaan.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker presenteert de energietransitie als een binair keuzevraagstuk waarbij alleen kernenergie of windenergie als 'ruggengraat' mogelijk zijn, waardoor andere opties of combinaties worden uitgesloten."
@@ -78993,9 +78993,9 @@
           "reden": "De spreker argumenteert op basis van de nadelige praktische gevolgen (geen economie van de toekomst) die voortvloeien uit het vasthouden aan de huidige route."
         },
         {
-          "sleutel": "Drogreden-Vals-Dilemma",
+          "sleutel": "Debatzet-Keuze-Aanscherpen",
           "beschrijving": "Zwart-wit denken; de situatie voorstellen alsof er slechts twee uiterste, elkaar uitsluitende opties bestaan.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker stelt dat kernenergie en wind op zee elkaar uitsluiten ('het kan niet allebei'), waardoor slechts twee uiterste opties worden gepresenteerd zonder ruimte voor een combinatie."
@@ -79114,9 +79114,9 @@
           "reden": "Het argument verdedigt de inzet van SMR's en centrales op basis van de verwachte positieve praktische gevolgen, namelijk decentrale regeling en vraagcreatie."
         },
         {
-          "sleutel": "Drogreden-Vals-Dilemma",
+          "sleutel": "Debatzet-Keuze-Aanscherpen",
           "beschrijving": "Zwart-wit denken; de situatie voorstellen alsof er slechts twee uiterste, elkaar uitsluitende opties bestaan.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker stelt expliciet dat er een 'vals dilemma' wordt gecreëerd door de keuze voor te stellen als een 'of-of', terwijl zij pleit voor een 'en-en' benadering."
@@ -79350,9 +79350,9 @@
           "reden": "De spreker beroept zich op onderzoek van TNO als autoriteit om de claim over de gelijke kosten van kernenergie te onderbouwen."
         },
         {
-          "sleutel": "Drogreden-Stropop",
+          "sleutel": "Debatzet-Herformuleren",
           "beschrijving": "Het vertekenen of overdrijven van het standpunt van de opponent om dit makkelijker te kunnen aanvallen.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker stelt dat de tegenstander doet alsof zon- en windenergie 'gratis' zijn, een vereenvoudigde en vertekende weergave van het standpunt van de opponent om dit aan te vallen."
@@ -79614,9 +79614,9 @@
           "reden": "Het argument verdedigt kernenergie op basis van de verwachte praktische gevolgen: het biedt 'baseload' en 'regelbaar vermogen' wat nodig is voor de 'robustheid van ons energiesysteem'."
         },
         {
-          "sleutel": "Drogreden-Stropop",
+          "sleutel": "Debatzet-Herformuleren",
           "beschrijving": "Het vertekenen of overdrijven van het standpunt van de opponent om dit makkelijker te kunnen aanvallen.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker presenteert het standpunt van de tegenstander als 'wensdenken' en suggereert dat zij miljarden verspillen, wat een vereenvoudigde en aanvallende weergave is van hun argumentatie voor duurzame investeringen."
@@ -80181,9 +80181,9 @@
           "reden": "Het argument verdedigt kernenergie op basis van de verwachte praktische consequentie: zonder kernenergie lukt de verduurzaming en onafhankelijkheid niet vanwege de instabiliteit van wind en zon."
         },
         {
-          "sleutel": "Drogreden-Vals-Dilemma",
+          "sleutel": "Debatzet-Keuze-Aanscherpen",
           "beschrijving": "Zwart-wit denken; de situatie voorstellen alsof er slechts twee uiterste, elkaar uitsluitende opties bestaan.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "Het argument presenteert de situatie alsof er slechts twee opties zijn: ofwel 'wiebelstroom' uit zon en wind, ofwel kernenergie, terwijl andere stabiliserende opties worden genegeerd."
@@ -80612,9 +80612,9 @@
           "reden": "De spreker stelt een directe oorzaak-gevolgrelatie: de vertraging wordt veroorzaakt door 'eindeloze processen' en uitstelgedrag van politici, niet door de kernenergie-technologie."
         },
         {
-          "sleutel": "Drogreden-Ad-Hominem",
+          "sleutel": "Debatzet-Persoon-Aanspreken",
           "beschrijving": "Persoonlijke aanval op de tegenstander (op de man spelen) in plaats van een inhoudelijke weerlegging.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker wijt de vertraging niet aan de technologie, maar aan de personen 'deze minister en de staatssecretaris' die beslissingen uitstellen."
@@ -81542,9 +81542,9 @@
           "reden": "De spreker beroept zich op de bevindingen van TNO om te onderbouwen dat regelbaar vermogen ook via opslag en netinrichting mogelijk is."
         },
         {
-          "sleutel": "Drogreden-Stropop",
+          "sleutel": "Debatzet-Herformuleren",
           "beschrijving": "Het vertekenen of overdrijven van het standpunt van de opponent om dit makkelijker te kunnen aanvallen.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker interpreteert het CDA-doel 'kernenergie een volwaardige plek geven' als het enige doel, terwijl zij stelt dat het werkelijke doel een schoon energiesysteem is, waardoor ze een vertekend standpunt van de opponent aanvalt."
@@ -84950,9 +84950,9 @@
           "reden": "Het standpunt wordt verdedigd op basis van de verwachte praktische gevolgen: kernenergie kost veel en levert niets op korte termijn, terwijl alternatieven direct opbrengst bieden."
         },
         {
-          "sleutel": "Drogreden-Stropop",
+          "sleutel": "Debatzet-Herformuleren",
           "beschrijving": "Het vertekenen of overdrijven van het standpunt van de opponent om dit makkelijker te kunnen aanvallen.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "Het standpunt van de opponent wordt vereenvoudigd tot 'hopen op een fabriek die niet gaat leveren', terwijl het oorspronkelijke voorstel waarschijnlijk complexer is dan deze negatieve weergave."
@@ -85877,9 +85877,9 @@
           "reden": "Het standpunt wordt aangevallen op basis van de verwachte nadelige praktische gevolgen: hogere kosten en het onderdrukken van goedkopere alternatieven."
         },
         {
-          "sleutel": "Drogreden-Stropop",
+          "sleutel": "Debatzet-Herformuleren",
           "beschrijving": "Het vertekenen of overdrijven van het standpunt van de opponent om dit makkelijker te kunnen aanvallen.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "Het standpunt van het kabinet wordt vereenvoudigd en overdreven door de gekozen energiebron als 'hele dure' en 'trage' te labelen, terwijl de nuance van het beleidsdoel wordt genegeerd om het makkelijker aan te vallen."
@@ -87112,9 +87112,9 @@
           "reden": "De spreker stelt een directe oorzaak-gevolgrelatie: het klimaat- en stikstofbeleid is de oorzaak waarom kerncentrales niet gebouwd kunnen worden, en het stoppen met dit beleid is de voorwaarde om ze wel te bouwen."
         },
         {
-          "sleutel": "Drogreden-Stropop",
+          "sleutel": "Debatzet-Herformuleren",
           "beschrijving": "Het vertekenen of overdrijven van het standpunt van de opponent om dit makkelijker te kunnen aanvallen.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker presenteert het klimaat- en stikstofbeleid als een irrationele, bureaucratische hindernis ('gezeur', 'geneuzel') die de bouw van kerncentrales onmogelijk maakt, waardoor het standpunt van de opponent wordt vereenvoudigd en vertekend om het makkelijker aan te vallen."
@@ -87346,9 +87346,9 @@
           "reden": "Het argument impliceert dat de nadelige consequentie (gevaar door opslag in gasputten) het plan onhoudbaar maakt."
         },
         {
-          "sleutel": "Drogreden-Bespelen-Publiek",
+          "sleutel": "Debatzet-Gevoelens-Verwoorden",
           "beschrijving": "Emotioneel argumenteren gericht op het oproepen van angst, woede of medelijden bij de toehoorder.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker gebruikt emotioneel geladen taal ('gevaarlijk', 'hoe haal je het in je hoofd') om angst en afkeer op te roepen bij het publiek voor het voorgestelde plan."
@@ -87825,9 +87825,9 @@
           "reden": "Het argument vergelijkt de praktische gevolgen (impact op natuur/oppervlakte) van verschillende energievormen om te concluderen dat kernenergie een betere optie is qua ruimtegebruik."
         },
         {
-          "sleutel": "Drogreden-Stropop",
+          "sleutel": "Debatzet-Herformuleren",
           "beschrijving": "Het vertekenen of overdrijven van het standpunt van de opponent om dit makkelijker te kunnen aanvallen.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker presenteert het standpunt van de tegenstander (PvdD) als inconsistent ('meten met twee maten') door te suggereren dat zij alleen oppervlakte beschouwen en de impact van productieketenen negeren, wat een vereenvoudiging is van hun bredere duurzaamheidsargumenten."
@@ -89109,9 +89109,9 @@
           "reden": "Het argument bekritiseert het kabinet op basis van het nadelige gevolg: het stilleggen van concrete duurzame projecten door de voorkeur voor kernenergie."
         },
         {
-          "sleutel": "Drogreden-Stropop",
+          "sleutel": "Debatzet-Herformuleren",
           "beschrijving": "Het vertekenen of overdrijven van het standpunt van de opponent om dit makkelijker te kunnen aanvallen.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "Het standpunt van het kabinet wordt vertekend door kernenergieplannen te karakteriseren als een 'hallucinante toekomstdroom', een overdrijving die het makkelijker maakt aan te vallen."
@@ -89369,9 +89369,9 @@
           "reden": "Er wordt een oorzaak-gevolgrelatie gelegd: de rivieren werden te heet (oorzaak), daarom werden de reactoren teruggeschroefd (gevolg/bewuste keuze)."
         },
         {
-          "sleutel": "Drogreden-Stropop",
+          "sleutel": "Debatzet-Herformuleren",
           "beschrijving": "Het vertekenen of overdrijven van het standpunt van de opponent om dit makkelijker te kunnen aanvallen.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker interpreteert de term 'wiebelstroom' van de opponent als een claim over oncontroleerbaarheid, terwijl hij stelt dat het om een bewuste ecologische keuze ging, waardoor hij een vertekend standpunt aanvalt."
@@ -90397,9 +90397,9 @@
           "reden": "Er wordt een vergelijking getrokken tussen de situatie in Nederland en de werking van centrales in Texas om de onbetrouwbaarheid van het tegenargument aan te tonen."
         },
         {
-          "sleutel": "Drogreden-Stropop",
+          "sleutel": "Debatzet-Herformuleren",
           "beschrijving": "Het vertekenen of overdrijven van het standpunt van de opponent om dit makkelijker te kunnen aanvallen.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker vereenvoudigt het tegenstandersstandpunt tot de absurde claim dat kerncentrales alleen maar uitvallen bij een paar dagen 35 graden, om dit vervolgens makkelijk te weerleggen."
@@ -93024,9 +93024,9 @@
           "reden": "Het argument stelt dat de huidige aanpak (geen duidelijke keuze maken) leidt tot het nadelige gevolg dat lopende afspraken en projecten in gevaar komen."
         },
         {
-          "sleutel": "Drogreden-Stropop",
+          "sleutel": "Debatzet-Herformuleren",
           "beschrijving": "Het vertekenen of overdrijven van het standpunt van de opponent om dit makkelijker te kunnen aanvallen.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker interpreteert de uitspraak van de staatssecretaris ('geen keuze voorligt') als een bewering dat er feitelijk geen keuze wordt gemaakt, om deze vervolgens aan te vallen als onjuist."
@@ -97697,9 +97697,9 @@
           "reden": "Er wordt een expliciete vergelijking getrokken tussen de kernenergiesector en de tabaksindustrie om een punt te maken over lobbygedrag."
         },
         {
-          "sleutel": "Drogreden-Bespelen-Publiek",
+          "sleutel": "Debatzet-Gevoelens-Verwoorden",
           "beschrijving": "Emotioneel argumenteren gericht op het oproepen van angst, woede of medelijden bij de toehoorder.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De vergelijking met de tabaksindustrie en het woord 'fabels' worden gebruikt om emotie en wantrouwen op te roepen bij de toehoorder."
@@ -98278,9 +98278,9 @@
           "reden": "Het argument verdedigt de voortzetting van de SMR-route op basis van het huidige, concrete feit dat deze technologie effectief wordt gebouwd, wat de haalbaarheid en urgentie onderstreept."
         },
         {
-          "sleutel": "Drogreden-Stropop",
+          "sleutel": "Debatzet-Herformuleren",
           "beschrijving": "Het vertekenen of overdrijven van het standpunt van de opponent om dit makkelijker te kunnen aanvallen.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker weerlegt een vermeend standpunt van de opponent ('dat ze echt nog in het denken zitten') dat niet expliciet in de tekst wordt vermeld, om dit vervolgens te corrigeren met het feit dat ze worden gebouwd."
@@ -99852,9 +99852,9 @@
           "reden": "Het argument stelt dat het huidige voorstel leidt tot het nadelige gevolg dat 'helemaal niets opgelost wordt voor de mensen', waarmee het standpunt wordt aangevallen op basis van deze praktische uitkomst."
         },
         {
-          "sleutel": "Drogreden-Stropop",
+          "sleutel": "Debatzet-Herformuleren",
           "beschrijving": "Het vertekenen of overdrijven van het standpunt van de opponent om dit makkelijker te kunnen aanvallen.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker stelt dat de tegenstanders doen alsof het om een 'semantische discussie' gaat, terwijl zij hun eigen voorstel als een 'bliksemafleider' bestempelen, waardoor de inhoudelijke discussie wordt vervangen door een aanval op de intenties en de aard van het politieke voorstel."
@@ -100293,9 +100293,9 @@
           "reden": "Het argument verdedigt het standpunt (zorgvuldig afbouwpad) op basis van de nadelige praktische gevolgen (verlies van terugverdientijd) die het tegenovergestelde beleid zou hebben."
         },
         {
-          "sleutel": "Drogreden-Stropop",
+          "sleutel": "Debatzet-Herformuleren",
           "beschrijving": "Het vertekenen of overdrijven van het standpunt van de opponent om dit makkelijker te kunnen aanvallen.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker stelt dat het formatieakkoord ervoor zorgt dat mensen 'in de kou staan', een overdrijving van de gevolgen van het beleid om het standpunt van de tegenpartij (VVD) makkelijker aan te vallen."
@@ -102392,9 +102392,9 @@
           "reden": "Het standpunt wordt verdedigd op basis van de verwachte nadelige consequentie van het tegenovergestelde beleid: het verdwijnen van bedrijven en productiecapaciteit."
         },
         {
-          "sleutel": "Drogreden-Stropop",
+          "sleutel": "Debatzet-Herformuleren",
           "beschrijving": "Het vertekenen of overdrijven van het standpunt van de opponent om dit makkelijker te kunnen aanvallen.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker weerlegt een vertekend standpunt van de tegenstander ('spekken van multinationals') door dit te herformuleren als een noodzakelijke maatregel voor bedrijfsbehoud."
@@ -104753,9 +104753,9 @@
           "reden": "Het standpunt wordt verdedigd op basis van de positieve praktische gevolgen (belastingverlaging, voordeel voor mensen) die het beleid oplevert."
         },
         {
-          "sleutel": "Drogreden-Stropop",
+          "sleutel": "Debatzet-Herformuleren",
           "beschrijving": "Het vertekenen of overdrijven van het standpunt van de opponent om dit makkelijker te kunnen aanvallen.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker presenteert het standpunt van GroenLinks-PvdA als het 'dwingen' van mensen om van gas af te gaan via belastingverhogingen, wat een vereenvoudigde en aanvallende weergave is van hun beleid om dit makkelijker te kunnen bekritiseren."
@@ -105365,9 +105365,9 @@
           "reden": "Het standpunt wordt verdedigd op basis van de nadelige praktische gevolgen (financiële schade) die de huidige maatregelen hebben voor burgers."
         },
         {
-          "sleutel": "Drogreden-Bespelen-Publiek",
+          "sleutel": "Debatzet-Gevoelens-Verwoorden",
           "beschrijving": "Emotioneel argumenteren gericht op het oproepen van angst, woede of medelijden bij de toehoorder.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De tekst roept medelijden op door te verwijzen naar mensen die hun 'zuurverdiende spaargeld' hebben gestort en die 'op kosten worden gejaagd'."
@@ -108310,9 +108310,9 @@
           "reden": "De spreker legt een oorzaak-gevolgrelatie uit: het schrappen van de salderingsregeling leidt tot terugleverkosten, en het amendement raakt alleen de groep met een surplus."
         },
         {
-          "sleutel": "Drogreden-Stropop",
+          "sleutel": "Debatzet-Herformuleren",
           "beschrijving": "Het vertekenen of overdrijven van het standpunt van de opponent om dit makkelijker te kunnen aanvallen.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker weerlegt een vertekende versie van het tegenstanders' standpunt door te stellen dat de media suggereren dat alle consumenten terugleverkosten betalen, terwijl het amendement volgens hem alleen een kleine groep raakt."
@@ -117929,9 +117929,9 @@
           "reden": "De spreker betoogt dat het huidige beleid (markt openstellen) onverstandig is vanwege de nadelige geopolitieke consequenties en de inconsequente positie ten opzichte van buitenlandse staatsbedrijven."
         },
         {
-          "sleutel": "Drogreden-Stropop",
+          "sleutel": "Debatzet-Herformuleren",
           "beschrijving": "Het vertekenen of overdrijven van het standpunt van de opponent om dit makkelijker te kunnen aanvallen.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker schetst het standpunt van de opponent als een naïeve overtuiging dat 'de rest van de wereld ook zo georganiseerd is' (vrije markt), terwijl dit waarschijnlijk niet het feitelijke standpunt is, om dit vervolgens aan te vallen."
@@ -119571,9 +119571,9 @@
           "reden": "Het standpunt wordt onderbouwd door de nadelige praktische gevolgen (onbetaalbare rekeningen) te schetsen die voortvloeien uit de doorberekening van kosten."
         },
         {
-          "sleutel": "Drogreden-Bespelen-Publiek",
+          "sleutel": "Debatzet-Gevoelens-Verwoorden",
           "beschrijving": "Emotioneel argumenteren gericht op het oproepen van angst, woede of medelijden bij de toehoorder.",
-          "labelgroep": "Dialectische Kwaliteit",
+          "labelgroep": "Debatzetten",
           "perspectief": "Filosofisch & Argumentatietheoretisch",
           "created_by": "llm",
           "reden": "De spreker roept angst op door te stellen dat huishoudens hun energierekening 'gewoon niet meer kunnen betalen', wat een emotionele reactie bij het publiek beoogt."
@@ -126256,116 +126256,116 @@
     "parties": [
       {
         "party": "50PLUS",
-        "x": -0.20928897589208484,
-        "y": 0.4392671828767473,
+        "x": -0.20928897589208473,
+        "y": 0.43926718287674693,
         "n": 32
       },
       {
         "party": "BBB",
-        "x": -0.3390413296027427,
-        "y": 0.12322243270679997,
+        "x": -0.33904132960274247,
+        "y": 0.12322243270679964,
         "n": 579
       },
       {
         "party": "CDA",
-        "x": -0.24593256132554644,
-        "y": -0.1424184877975699,
+        "x": -0.2459325613255463,
+        "y": -0.14241848779757005,
         "n": 722
       },
       {
         "party": "ChristenUnie",
-        "x": 0.025236841428952647,
-        "y": 0.13956876053879802,
+        "x": 0.02523684142895277,
+        "y": 0.13956876053879771,
         "n": 321
       },
       {
         "party": "D66",
-        "x": 0.4115031394179843,
-        "y": -0.18067444607513666,
+        "x": 0.41150313941798444,
+        "y": -0.18067444607513683,
         "n": 1128
       },
       {
         "party": "DENK",
-        "x": 0.40142961676556194,
-        "y": 0.534610734490574,
+        "x": 0.40142961676556216,
+        "y": 0.5346107344905736,
         "n": 149
       },
       {
         "party": "FVD",
         "x": -0.39898660212486625,
-        "y": 0.1516600283686337,
+        "y": 0.15166002836863335,
         "n": 205
       },
       {
         "party": "GroenLinks-PvdA",
-        "x": 0.5677367871882891,
-        "y": 0.0960135509998054,
+        "x": 0.5677367871882893,
+        "y": 0.09601355099980502,
         "n": 558
       },
       {
         "party": "Groep Markuszower",
-        "x": -0.2681584991852644,
-        "y": 0.022240198571873586,
+        "x": -0.2681584991852643,
+        "y": 0.022240198571873475,
         "n": 296
       },
       {
         "party": "JA21",
-        "x": -0.2607750650690747,
-        "y": -0.004818452218206027,
+        "x": -0.26077506506907455,
+        "y": -0.0048184522182063046,
         "n": 485
       },
       {
         "party": "Lid Keijzer",
-        "x": -0.2091326256104665,
-        "y": 0.09389168314185466,
+        "x": -0.20913262561046642,
+        "y": 0.09389168314185457,
         "n": 167
       },
       {
         "party": "NSC",
-        "x": -0.1154582495548341,
-        "y": 0.20447323320801497,
+        "x": -0.11545824955483407,
+        "y": 0.20447323320801472,
         "n": 172
       },
       {
         "party": "PRO",
-        "x": -0.034709998529971677,
-        "y": -0.19939690130054757,
+        "x": -0.03470999852997153,
+        "y": -0.1993969013005478,
         "n": 95
       },
       {
         "party": "PVV",
-        "x": -0.3451408728145779,
-        "y": 0.28792212085848906,
+        "x": -0.3451408728145777,
+        "y": 0.2879221208584885,
         "n": 389
       },
       {
         "party": "PvdD",
-        "x": 0.5480475066795556,
-        "y": -0.2588123232689211,
+        "x": 0.5480475066795557,
+        "y": -0.25881232326892145,
         "n": 395
       },
       {
         "party": "SGP",
         "x": -0.32665947837499737,
-        "y": 0.10631959511762194,
+        "y": 0.10631959511762146,
         "n": 409
       },
       {
         "party": "SP",
-        "x": 0.431819288670821,
-        "y": 0.45543033359187973,
+        "x": 0.4318192886708211,
+        "y": 0.45543033359187934,
         "n": 448
       },
       {
         "party": "VVD",
-        "x": -0.37222166576713334,
-        "y": -0.2512278229207345,
+        "x": -0.3722216657671332,
+        "y": -0.2512278229207344,
         "n": 938
       },
       {
         "party": "Volt",
-        "x": 0.5374640305040358,
-        "y": -0.2861171708276087,
+        "x": 0.537464030504036,
+        "y": -0.28611717082760896,
         "n": 159
       }
     ],
@@ -126374,8 +126374,8 @@
         "sleutel": "Bewijs-Anekdotisch",
         "beschrijving": "Onderbouwd met één specifiek praktijkgeval, incident, exemplar of persoonlijk verhaal.",
         "labelgroep": "Type Bewijsvoering",
-        "x": -0.06293984798745186,
-        "y": 0.12588808503857632,
+        "x": -0.06293984798745188,
+        "y": 0.12588808503857626,
         "n": 174
       },
       {
@@ -126383,7 +126383,7 @@
         "beschrijving": "Onderbouwd met een heldere, mechanistische of logische verklaring van oorzaak en gevolg.",
         "labelgroep": "Type Bewijsvoering",
         "x": -0.05849829266584283,
-        "y": -0.24969748384683924,
+        "y": -0.24969748384683937,
         "n": 386
       },
       {
@@ -126391,63 +126391,63 @@
         "beschrijving": "Onderbouwd met de consensus, verklaring of het oordeel van een erkend specialist.",
         "labelgroep": "Type Bewijsvoering",
         "x": 0.19802205912516693,
-        "y": 0.01642349818080207,
+        "y": 0.016423498180802014,
         "n": 131
       },
       {
         "sleutel": "Bewijs-Statistisch",
         "beschrijving": "Onderbouwd met kwantitatieve gegevens, cijfers, percentages of grootschalig representatief onderzoek.",
         "labelgroep": "Type Bewijsvoering",
-        "x": -0.035308609106496885,
-        "y": 0.20249378616308752,
+        "x": -0.035308609106496865,
+        "y": 0.20249378616308775,
         "n": 215
       },
       {
-        "sleutel": "Drogreden-Ad-Hominem",
-        "beschrijving": "Persoonlijke aanval op de tegenstander (op de man spelen) in plaats van een inhoudelijke weerlegging.",
-        "labelgroep": "Dialectische Kwaliteit",
-        "x": -0.10458690985882355,
-        "y": -0.24873239604137937,
-        "n": 3
-      },
-      {
-        "sleutel": "Drogreden-Bespelen-Publiek",
+        "sleutel": "Debatzet-Gevoelens-Verwoorden",
         "beschrijving": "Emotioneel argumenteren gericht op het oproepen van angst, woede of medelijden bij de toehoorder.",
-        "labelgroep": "Dialectische Kwaliteit",
+        "labelgroep": "Debatzetten",
         "x": -0.14190515084529506,
-        "y": 1.0224850328296682,
+        "y": 1.0224850328296686,
         "n": 28
       },
       {
-        "sleutel": "Drogreden-Stropop",
+        "sleutel": "Debatzet-Herformuleren",
         "beschrijving": "Het vertekenen of overdrijven van het standpunt van de opponent om dit makkelijker te kunnen aanvallen.",
-        "labelgroep": "Dialectische Kwaliteit",
+        "labelgroep": "Debatzetten",
         "x": -0.30036037079728023,
         "y": -0.15742796103833928,
         "n": 60
       },
       {
-        "sleutel": "Drogreden-Vals-Dilemma",
+        "sleutel": "Debatzet-Keuze-Aanscherpen",
         "beschrijving": "Zwart-wit denken; de situatie voorstellen alsof er slechts twee uiterste, elkaar uitsluitende opties bestaan.",
-        "labelgroep": "Dialectische Kwaliteit",
-        "x": -0.58771363315187,
-        "y": -0.22690644266464813,
+        "labelgroep": "Debatzetten",
+        "x": -0.5877136331518699,
+        "y": -0.22690644266464824,
         "n": 20
+      },
+      {
+        "sleutel": "Debatzet-Persoon-Aanspreken",
+        "beschrijving": "Persoonlijke aanval op de tegenstander (op de man spelen) in plaats van een inhoudelijke weerlegging.",
+        "labelgroep": "Debatzetten",
+        "x": -0.10458690985882348,
+        "y": -0.24873239604137948,
+        "n": 3
       },
       {
         "sleutel": "Frame-Conflict",
         "beschrijving": "De nadruk ligt op de felle strijd of meningsverschillen tussen personen, partijen of groepen.",
         "labelgroep": "Generieke Nieuwsframes",
-        "x": -0.15051279828356978,
-        "y": 0.061060818549682656,
+        "x": -0.15051279828356975,
+        "y": 0.06106081854968256,
         "n": 110
       },
       {
         "sleutel": "Frame-Economisch",
         "beschrijving": "De focus ligt op de financiële kosten, baten of budgettaire gevolgen van een kwestie.",
         "labelgroep": "Generieke Nieuwsframes",
-        "x": -0.04361609897506564,
-        "y": 0.01774870906840099,
+        "x": -0.04361609897506568,
+        "y": 0.017748709068401074,
         "n": 708
       },
       {
@@ -126455,7 +126455,7 @@
         "beschrijving": "Inzoomen op een specifiek, individueel incident, persoonlijk verhaal of een concrete casus.",
         "labelgroep": "Framing-Focus",
         "x": -0.20865024625442963,
-        "y": 0.1394258113442318,
+        "y": 0.13942581134423154,
         "n": 99
       },
       {
@@ -126463,15 +126463,15 @@
         "beschrijving": "De focus ligt op de menselijke kant, de emoties of het individuele leed (Human Interest).",
         "labelgroep": "Generieke Nieuwsframes",
         "x": 0.11751923242034532,
-        "y": 0.5973615969584619,
+        "y": 0.5973615969584625,
         "n": 95
       },
       {
         "sleutel": "Frame-Moraliteit",
         "beschrijving": "Inbranding vanuit ethische plichten, spirituele of religieuze principes.",
         "labelgroep": "Generieke Nieuwsframes",
-        "x": 0.5764240037392444,
-        "y": 0.10018726505407323,
+        "x": 0.5764240037392443,
+        "y": 0.10018726505407306,
         "n": 42
       },
       {
@@ -126479,23 +126479,23 @@
         "beschrijving": "Het benaderen van de kwestie vanuit een breder maatschappelijk, statistisch of historisch kader.",
         "labelgroep": "Framing-Focus",
         "x": -0.006501326702412512,
-        "y": -0.07169511456835478,
+        "y": -0.07169511456835483,
         "n": 1019
       },
       {
         "sleutel": "Frame-Verantwoordelijkheid",
         "beschrijving": "De nadruk ligt op de schuldvraag of de plicht tot het oplossen van het probleem.",
         "labelgroep": "Generieke Nieuwsframes",
-        "x": 0.12291295460636899,
-        "y": 0.02854049398823349,
+        "x": 0.12291295460636902,
+        "y": 0.028540493988233384,
         "n": 370
       },
       {
         "sleutel": "Ideologie-GAL",
         "beschrijving": "Progressief, ecologisch, kosmopolitisch (Green, Alternative, Libertarian).",
         "labelgroep": "Cultureel-Ideologische Breuklijn",
-        "x": 1.1500234767669602,
-        "y": -0.5165379062408231,
+        "x": 1.1500234767669604,
+        "y": -0.5165379062408237,
         "n": 267
       },
       {
@@ -126503,15 +126503,15 @@
         "beschrijving": "Gericht op herverdeling van welvaart, sterke collectieve voorzieningen en overheidsingrijpen.",
         "labelgroep": "Cultureel-Ideologische Breuklijn",
         "x": 1.001471090358764,
-        "y": 0.4660961347544316,
+        "y": 0.4660961347544322,
         "n": 218
       },
       {
         "sleutel": "Ideologie-Rechts-Economisch",
         "beschrijving": "Gericht op de vrije markt, deregulering en individuele verantwoordelijkheid.",
         "labelgroep": "Cultureel-Ideologische Breuklijn",
-        "x": -0.6355899122660332,
-        "y": -0.21895014893021522,
+        "x": -0.6355899122660333,
+        "y": -0.21895014893021517,
         "n": 425
       },
       {
@@ -126519,15 +126519,15 @@
         "beschrijving": "Conservatief, traditioneel, nationalistisch (Traditional, Authoritarian, Nationalist).",
         "labelgroep": "Cultureel-Ideologische Breuklijn",
         "x": -0.7902799649916694,
-        "y": 0.41888416140537776,
+        "y": 0.4188841614053774,
         "n": 204
       },
       {
         "sleutel": "Meta-Agenda-Tijdigheid",
         "beschrijving": "Uitingen over de chronologische geschiktheid, de prioriteitstelling of de urgentie van de discussie op dit specifieke moment.",
         "labelgroep": "Metadiscussie",
-        "x": 0.09246116907368004,
-        "y": -0.18725839601190858,
+        "x": 0.09246116907368006,
+        "y": -0.18725839601190894,
         "n": 109
       },
       {
@@ -126535,15 +126535,15 @@
         "beschrijving": "Uitingen over het formele mandaat, de wettelijke of constitutionele autoriteit, of de institutionele taakverdeling om over de kwestie te beslissen.",
         "labelgroep": "Metadiscussie",
         "x": -0.21725444754486892,
-        "y": -0.1677059116313751,
+        "y": -0.1677059116313754,
         "n": 32
       },
       {
         "sleutel": "Meta-Reikwijdte",
         "beschrijving": "Uitingen over de thematische grenzen van het debat, de toelaatbaarheid van specifieke beweringen, of de legitimiteit van bepaalde linguïstische framings.",
         "labelgroep": "Metadiscussie",
-        "x": -0.2100792649616459,
-        "y": -0.22050856509506706,
+        "x": -0.21007926496164592,
+        "y": -0.22050856509506694,
         "n": 27
       },
       {
@@ -126551,7 +126551,7 @@
         "beschrijving": "Uitingen over de formele procedure, de interactieve spelregels, het vergaderformat of de fysieke en institutionele context van de uitwisseling.",
         "labelgroep": "Metadiscussie",
         "x": -0.4572265008114278,
-        "y": -0.06862758500528594,
+        "y": -0.06862758500528603,
         "n": 35
       },
       {
@@ -126559,15 +126559,15 @@
         "beschrijving": "Gericht op respect voor traditie, legitieme hiërarchie, wetten en maatschappelijke orde.",
         "labelgroep": "Morele Fundamenten",
         "x": -0.4066601627678102,
-        "y": -0.2972402715366431,
+        "y": -0.29724027153664323,
         "n": 197
       },
       {
         "sleutel": "Moraliteit-Eerlijkheid",
         "beschrijving": "Gericht op gelijke kansen, gelijke rechten en onpartijdige behandeling (equality).",
         "labelgroep": "Morele Fundamenten",
-        "x": 0.19192980378764524,
-        "y": 0.2487484235250846,
+        "x": 0.1919298037876453,
+        "y": 0.2487484235250848,
         "n": 333
       },
       {
@@ -126575,15 +126575,15 @@
         "beschrijving": "Gericht op groeps-solidariteit, vaderlandsliefde en trouw aan de eigen gemeenschap (in-group).",
         "labelgroep": "Morele Fundamenten",
         "x": -0.40271022844484505,
-        "y": 0.1367795012463424,
+        "y": 0.13677950124634233,
         "n": 89
       },
       {
         "sleutel": "Moraliteit-Proportionaliteit",
         "beschrijving": "Gericht op rechtvaardigheid naar rato van inspanning; belonen naar werken en het straffen van profiteurs.",
         "labelgroep": "Morele Fundamenten",
-        "x": -0.040947660385541304,
-        "y": -0.09909392331775199,
+        "x": -0.04094766038554133,
+        "y": -0.099093923317752,
         "n": 63
       },
       {
@@ -126591,23 +126591,23 @@
         "beschrijving": "Gericht op individuele autonomie en weerstand tegen dwang of onderdrukking door dominante actoren.",
         "labelgroep": "Morele Fundamenten",
         "x": -0.3766342899234879,
-        "y": -0.08245708975748707,
+        "y": -0.08245708975748708,
         "n": 126
       },
       {
         "sleutel": "Moraliteit-Zorg",
         "beschrijving": "Gericht op empathie, compassie en het voorkomen van leed en schade bij kwetsbaren.",
         "labelgroep": "Morele Fundamenten",
-        "x": 0.36785943925912484,
-        "y": 0.13721394329943476,
+        "x": 0.36785943925912495,
+        "y": 0.13721394329943487,
         "n": 352
       },
       {
         "sleutel": "Moraliteit-Zuiverheid",
         "beschrijving": "Gericht op het vermijden van morele of fysieke besmetting; streven naar het schone, natuurlijke of verhevene.",
         "labelgroep": "Morele Fundamenten",
-        "x": 0.2624151430788078,
-        "y": -0.2646298238951977,
+        "x": 0.2624151430788079,
+        "y": -0.2646298238951983,
         "n": 23
       },
       {
@@ -126615,23 +126615,23 @@
         "beschrijving": "Vooraf het aantal elementen aankondigen (twee, drie, vijf, ...), gevolgd door een opsomming van precies dat aantal.",
         "labelgroep": "Stijlmiddelen",
         "x": -0.03543054211621198,
-        "y": -0.23232989621292044,
+        "y": -0.23232989621292052,
         "n": 38
       },
       {
         "sleutel": "Stijl-Antithese",
         "beschrijving": "Het naast elkaar plaatsen van twee tegengestelde begrippen of ideeën.",
         "labelgroep": "Stijlmiddelen",
-        "x": -0.03416104795447289,
-        "y": 0.10700506351357318,
+        "x": -0.03416104795447288,
+        "y": 0.1070050635135733,
         "n": 110
       },
       {
         "sleutel": "Stijl-Herhaling",
         "beschrijving": "Herhaling van hetzelfde woord of dezelfde woordgroep binnen het fragment, ter nadruk.",
         "labelgroep": "Stijlmiddelen",
-        "x": -0.15921360083110406,
-        "y": 0.07264814057937863,
+        "x": -0.15921360083110403,
+        "y": 0.07264814057937867,
         "n": 139
       },
       {
@@ -126639,31 +126639,31 @@
         "beschrijving": "Een vraag waarvan het antwoord al besloten ligt in de formulering zelf.",
         "labelgroep": "Stijlmiddelen",
         "x": -0.03201674994418492,
-        "y": 0.15438980727600485,
+        "y": 0.15438980727600476,
         "n": 259
       },
       {
         "sleutel": "Stijl-Slogan",
         "beschrijving": "Beknopte, pakkende frase.",
         "labelgroep": "Stijlmiddelen",
-        "x": -0.24777797407180488,
-        "y": 0.3241856108351707,
+        "x": -0.247777974071805,
+        "y": 0.3241856108351706,
         "n": 21
       },
       {
         "sleutel": "Walton-Analogie",
         "beschrijving": "Er wordt een vergelijking getrokken met een historische gebeurtenis, een andere specifieke casus of een precedent.",
         "labelgroep": "Redeneerschema",
-        "x": 0.0671537914911594,
-        "y": 0.324273812286128,
+        "x": 0.06715379149115938,
+        "y": 0.3242738122861282,
         "n": 62
       },
       {
         "sleutel": "Walton-Causaal",
         "beschrijving": "Argumentatie gebaseerd op een directe oorzaak-gevolgrelatie.",
         "labelgroep": "Redeneerschema",
-        "x": -0.3629462508134734,
-        "y": 0.021281134681197838,
+        "x": -0.36294625081347354,
+        "y": 0.021281134681197772,
         "n": 37
       },
       {
@@ -126671,7 +126671,7 @@
         "beschrijving": "Het verdedigen of aanvallen van een standpunt op basis van de verwachte praktische (voordelige of nadelige) gevolgen.",
         "labelgroep": "Redeneerschema",
         "x": -0.03681293024934881,
-        "y": -0.07714002107171784,
+        "y": -0.07714002107171788,
         "n": 857
       },
       {
@@ -126679,15 +126679,15 @@
         "beschrijving": "Het argument leunt op de autoriteit, bevindingen of de verklaring van een specialist of expert.",
         "labelgroep": "Redeneerschema",
         "x": 0.12260326958600823,
-        "y": -0.09183433231588566,
+        "y": -0.09183433231588582,
         "n": 86
       },
       {
         "sleutel": "Walton-Regel",
         "beschrijving": "Het argument beroept zich op een reeds gevestigde wet, formele regel of breed geaccepteerde maatschappelijke norm.",
         "labelgroep": "Redeneerschema",
-        "x": 0.06817039169548052,
-        "y": -0.09689400814257208,
+        "x": 0.06817039169548046,
+        "y": -0.09689400814257212,
         "n": 76
       }
     ]

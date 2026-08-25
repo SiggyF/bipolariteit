@@ -99,7 +99,7 @@ const introBadge = computed(() => {
 // Categorie + perspectief gaan niet meer altijd zichtbaar op de badge (te
 // veel tekst over het beeld), maar in de title-tooltip bij hover.
 //
-// sleutel is opgebouwd als "Categorie-Subtype" (bv. "Drogreden-Ad-Hominem");
+// sleutel is opgebouwd als "Categorie-Subtype" (bv. "Debatzet-Persoon-Aanspreken");
 // op mobiel is er geen ruimte voor het volledige label, dus valt de
 // categorie daar weg ("Ad Hominem") -- de volledige tekst blijft wel in de
 // title-tooltip en op desktop (zie de mobiele media query hieronder).
@@ -490,7 +490,7 @@ const badges = computed(() =>
 		height: 1.1em;
 	}
 
-	/* Geen ruimte voor "Drogreden Ad Hominem" -- toon alleen "Ad Hominem"
+	/* Geen ruimte voor "Debatzet Persoon Aanspreken" -- toon alleen "Persoon Aanspreken"
 	   (de volledige tekst blijft beschikbaar via de title-tooltip en op
 	   desktop, en staat er sowieso bij in de "nu in beeld"-kaart onder de
 	   video, zie ArgumentCard.vue). */
