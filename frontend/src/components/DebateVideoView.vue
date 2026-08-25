@@ -185,6 +185,7 @@ onUnmounted(() => {
 	sentinelObserver?.disconnect();
 	if (animatingTimer) clearTimeout(animatingTimer);
 	floatObserver?.disconnect();
+	playerColumnResizeObserver?.disconnect();
 });
 
 // Mini-player (YouTube/nieuwssites): overal waar sticky niet al voor "video
@@ -205,6 +206,22 @@ const playerColumnEl = ref<HTMLElement | null>(null);
 // isFloating direct weer uitzet en oneindig oscilleert. Dit ankerpunt blijft
 // altijd op zijn oorspronkelijke plek in de document-flow staan.
 const floatAnchorEl = ref<HTMLElement | null>(null);
+// Ankerpunt krijgt de hoogte van .player-column zelf (i.p.v. 0px) zodat zijn
+// ONDERrand overeenkomt met de onderkant van de video -- issue #188: met een
+// 0px-ankerpunt trad de mini-player al aan zodra je een klein stukje voorbij
+// de BOVENkant van de video scrolde, i.p.v. pas als de video daadwerkelijk
+// volledig uit beeld is.
+const playerColumnHeight = ref(0);
+let playerColumnResizeObserver: ResizeObserver | null = null;
+watch(playerColumnEl, (el) => {
+	playerColumnResizeObserver?.disconnect();
+	playerColumnResizeObserver = null;
+	if (!el) return;
+	playerColumnResizeObserver = new ResizeObserver(([entry]) => {
+		playerColumnHeight.value = entry.contentRect.height;
+	});
+	playerColumnResizeObserver.observe(el);
+});
 const isFloating = ref(false);
 const floatingDismissed = ref(false);
 const floatingPlaceholderHeight = ref(0);
@@ -223,10 +240,14 @@ watch(floatAnchorEl, (el) => {
 	if (!el) return;
 	floatObserver = new IntersectionObserver(
 		([entry]) => {
-			// boundingClientRect.top < 0 onderscheidt "voorbij de bovenkant
-			// gescrolld" van "nog niet in beeld gekomen" (bv. bij het eerste
-			// meten) -- beide geven isIntersecting: false.
-			if (!entry.isIntersecting && entry.boundingClientRect.top < 0 && !stickyHandlesVisibility()) {
+			// boundingClientRect.bottom < 0 (i.p.v. top < 0): het ankerpunt heeft
+			// nu dezelfde hoogte als .player-column (zie playerColumnHeight
+			// hierboven), dus de ONDERrand van het ankerpunt valt samen met de
+			// onderkant van de video. Pas als díe onderrand boven de viewport zit,
+			// is de video daadwerkelijk volledig uit beeld -- top < 0 gaf al
+			// isFloating zodra je een klein stukje voorbij de bovenkant scrolde
+			// (issue #188).
+			if (!entry.isIntersecting && entry.boundingClientRect.bottom < 0 && !stickyHandlesVisibility()) {
 				if (floatingDismissed.value) return;
 				if (playerColumnEl.value) floatingPlaceholderHeight.value = playerColumnEl.value.getBoundingClientRect().height;
 				isFloating.value = true;
@@ -248,7 +269,7 @@ function dismissFloating() {
 
 <template>
 	<div class="debate-video-view" :class="{ 'is-compact': !expanded, 'is-animating': animating, 'is-floating': isFloating }">
-		<div ref="floatAnchorEl" class="float-anchor" aria-hidden="true"></div>
+		<div ref="floatAnchorEl" class="float-anchor" :style="{ height: `${playerColumnHeight}px` }" aria-hidden="true"></div>
 		<div ref="playerColumnEl" class="player-column">
 			<button
 				v-if="isFloating"
@@ -488,7 +509,10 @@ function dismissFloating() {
    bleef zichtbaar, argumentenlijst scrolde eronderdoor). Absoluut
    gepositioneerd t.o.v. .debate-video-view (position: relative, zie
    hierboven) blijft dit ankerpunt op dezelfde documentplek -- vlak boven
-   waar .player-column staat -- zonder in de flex-berekening mee te tellen. */
+   waar .player-column staat -- zonder in de flex-berekening mee te tellen.
+   Hoogte komt inline uit playerColumnHeight (script-sectie): matcht de
+   hoogte van .player-column, zodat de onderrand van dit ankerpunt samenvalt
+   met de onderkant van de video (zie floatObserver hierboven, issue #188). */
 .float-anchor {
 	position: absolute;
 	top: 0;
