@@ -17,7 +17,7 @@ else
   RESOLVE_BASE_URL = scripts/detect_llm_base_url.sh
 endif
 
-.PHONY: help probe test test-js test-frontend ca-fixture status build dev dev-stop extract extract-agy tag tag-agy redactie validate export enrich-video fetch-debate-events fetch-subtitles match-video-spans tags-taxonomy db-init pipeline-status backup-db release release-dry release-www release-www-dry check-public-exposure argument-doc confrontatie-tree export-public-data publish-data
+.PHONY: help probe crawl ingest pipeline test test-js test-frontend ca-fixture status build dev dev-stop extract extract-agy tag tag-agy redactie validate export enrich-video fetch-debate-events fetch-subtitles match-video-spans check-video-urls tags-taxonomy db-init pipeline-status backup-db release release-dry release-www release-www-dry check-public-exposure argument-doc confrontatie-tree export-public-data publish-data
 
 help: ## Toon deze lijst
 	@grep -E '^[a-zA-Z_-]+:.*## ' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*## "}; {printf "  \033[36m%-16s\033[0m %s\n", $$1, $$2}'
@@ -41,6 +41,20 @@ test-frontend: ## Rooktest van de filterbalk in een echte browser (bouwt + serve
 probe: ## Tel TK-activiteiten per kandidaat-trefwoord, vóór een crawl. Vars: KEYWORDS
 	@test -n "$(KEYWORDS)" || { echo 'Gebruik: make probe KEYWORDS="asiel migratie"'; exit 1; }
 	PYTHONPATH=.:crawlers/tweede_kamer uv run python scripts/probe_topic_keywords.py $(KEYWORDS)
+
+crawl: ## Stage 0 -- TK-verslagen crawlen naar data/raw/tweede_kamer/, vóór ingest. Vars: TOPIC, LIMIT, SOORT (default "Plenair debat (debat)")
+	cd crawlers/tweede_kamer && uv run scrapy crawl verslagen -a topic=$(TOPIC) -a limit=$(LIMIT) $(if $(SOORT),-a soort="$(SOORT)",)
+
+ingest: ## Stage 0b -- gecrawlde VLOS-XML importeren naar SQLite (documents/actors), vóór extract. Vars: TOPIC
+	@test -n "$(TOPIC)" || { echo 'Gebruik: make ingest TOPIC=stikstof'; exit 1; }
+	uv run python -m pipeline.ingest.ingest_tk --topic $(TOPIC)
+
+pipeline: ## Volledige analyse-pipeline voor één topic op rij: crawl -> ingest -> extract -> tag -> export (zie docs/pipeline.md). Vars: TOPIC, LIMIT, SOORT, BASE_URL. redactie draait hier bewust niet in mee (experimenteel, niet in de reguliere workflow, zie docs/pipeline.md). Publiceren (tags-taxonomy/export-public-data/publish-data) is een bewuste losse stap erna.
+	$(MAKE) crawl TOPIC=$(TOPIC) LIMIT=$(LIMIT)
+	$(MAKE) ingest TOPIC=$(TOPIC)
+	$(MAKE) extract TOPIC=$(TOPIC) LIMIT=$(LIMIT)
+	$(MAKE) tag TOPIC=$(TOPIC) LIMIT=$(LIMIT)
+	$(MAKE) export
 
 status: ## Doorlopend overzicht van openstaand pipeline-werk per topic (scripts/pipeline_status.py)
 	PYTHONPATH=. uv run python scripts/pipeline_status.py
@@ -75,8 +89,11 @@ validate: ## Evalharnas draaien tegen een gouden validatiedataset (issue #62), z
 	@url=$$($(RESOLVE_BASE_URL)) || exit 1; \
 	uv run python -m pipeline.eval.benchmark_elecdebate data/raw/$(DATASET)/test.jsonl $(MODEL) --dataset $(DATASET) --base-url $$url --limit $(LIMIT)
 
-export: ## SQLite -> data/export/topics/<slug>.json + topics-index.json, voor alle topics (incl. video_url-enrichment)
+export: ## SQLite -> data/export/topics/<slug>.json + topics-index.json, voor alle topics (incl. video_url-enrichment + video-matching, zie issue #209)
 	uv run python -m pipeline.enrich_video_url
+	uv run python -m pipeline.fetch_debate_events
+	uv run python -m pipeline.fetch_subtitles
+	uv run python -m pipeline.match_argument_spans
 	uv run python -m pipeline.build_static_data
 
 enrich-video: ## Vult documents.video_url/debatdirect_id via Debat Direct, voor alle topics (geen LLM, geen netstroom nodig, gebruik pipeline.enrich_video_url --topic direct voor één topic)
