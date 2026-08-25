@@ -49,12 +49,11 @@ ingest: ## Stage 0b -- gecrawlde VLOS-XML importeren naar SQLite (documents/acto
 	@test -n "$(TOPIC)" || { echo 'Gebruik: make ingest TOPIC=stikstof'; exit 1; }
 	uv run python -m pipeline.ingest.ingest_tk --topic $(TOPIC)
 
-pipeline: ## Volledige analyse-pipeline voor één topic op rij: crawl -> ingest -> extract -> tag -> redactie -> export (zie docs/pipeline.md). Vars: TOPIC, LIMIT, SOORT, BASE_URL. Publiceren (tags-taxonomy/export-public-data/publish-data) is een bewuste losse stap erna.
+pipeline: ## Volledige analyse-pipeline voor één topic op rij: crawl -> ingest -> extract -> tag -> export (zie docs/pipeline.md). Vars: TOPIC, LIMIT, SOORT, BASE_URL. redactie draait hier bewust niet in mee (experimenteel, niet in de reguliere workflow, zie docs/pipeline.md). Publiceren (tags-taxonomy/export-public-data/publish-data) is een bewuste losse stap erna.
 	$(MAKE) crawl TOPIC=$(TOPIC) LIMIT=$(LIMIT)
 	$(MAKE) ingest TOPIC=$(TOPIC)
 	$(MAKE) extract TOPIC=$(TOPIC) LIMIT=$(LIMIT)
 	$(MAKE) tag TOPIC=$(TOPIC) LIMIT=$(LIMIT)
-	$(MAKE) redactie TOPIC=$(TOPIC) LIMIT=$(LIMIT)
 	$(MAKE) export
 
 status: ## Doorlopend overzicht van openstaand pipeline-werk per topic (scripts/pipeline_status.py)

@@ -8,10 +8,10 @@ wrangler), zie [release.md](release.md).
 ## De kernketen
 
 ```
-crawl -> ingest -> extract -> tag -> redactie -> export -> tags-taxonomy -> export-public-data -> publish-data
+crawl -> ingest -> extract -> tag -> export -> tags-taxonomy -> export-public-data -> publish-data
 ```
 
-`make pipeline TOPIC=<slug>` draait de eerste zes stappen (t/m `export`) op
+`make pipeline TOPIC=<slug>` draait de eerste vijf stappen (t/m `export`) op
 rij voor één topic. De laatste drie (`tags-taxonomy`, `export-public-data`,
 `publish-data`) zitten daar bewust niet in — zie [Publiceren](#publiceren-bewust-los).
 
@@ -21,12 +21,26 @@ rij voor één topic. De laatste drie (`tags-taxonomy`, `export-public-data`,
 | 0b | `ingest` | Segmenteert die XML per sprekerbeurt naar `documents`/`actors` in SQLite. Vars: `TOPIC`. | lokaal, geen netwerk |
 | 1 | `extract` | Destilleert argumenten (stance/typologie/quote) per document via een lokale LLM. Vars: `TOPIC`, `LIMIT`, `BASE_URL`. | **alleen op netstroom** (LLM) |
 | 1b | `tag` | Kent labels toe aan geëxtraheerde argumenten. Vars: `TOPIC`, `LIMIT`, `BASE_URL`. | **alleen op netstroom** (LLM) |
-| 2 | `redactie` | Bias-check + opposition-linking (het "redactielid" uit het motto, zie [plan.md](plan.md)). Vars: `TOPIC`, `LIMIT`, `BASE_URL`. | **alleen op netstroom** (LLM) |
-| 3 | `export` | SQLite -> `data/export/topics/<slug>.json`. Draait zelf ook `enrich_video_url`, `fetch_debate_events`, `fetch_subtitles` en `match_argument_spans` (video-koppeling, zie issue #209), daarna `build_static_data`. Geen vars nodig, draait voor alle topics. | lokaal + netwerk voor de video-koppeling, geen LLM |
+| 2 | `export` | SQLite -> `data/export/topics/<slug>.json`. Draait zelf ook `enrich_video_url`, `fetch_debate_events`, `fetch_subtitles` en `match_argument_spans` (video-koppeling, zie issue #209), daarna `build_static_data`. Geen vars nodig, draait voor alle topics. | lokaal + netwerk voor de video-koppeling, geen LLM |
 
 `extract`/`tag` hebben Docker/Gemini-varianten (`extract-agy`, `tag-agy`,
 Vars ook `AGY_MODEL`, `MIN_ID`) voor als er geen lokale LM Studio-instance
 beschikbaar is; die zitten niet in `make pipeline`, met de hand draaien.
+
+### redactie: bestaat, maar draait niet mee
+
+`redactie` (Stage 2 in de code, `pipeline/redactie_check.py`) is **niet**
+onderdeel van de reguliere workflow, ondanks de naam "Stage 2" in het
+script zelf. In de praktijk staat er maar een handvol rijen in
+`redactie_reviews` tegenover duizenden argumenten, en 0 `llm_calls` met
+`stage='redactie'` — de stap wordt in de praktijk niet gedraaid.
+
+Wat hij zou doen als je 'm wél draait: een corpus-brede pro/contra-
+balanscheck (geen LLM) plus opposition-linking tussen argumenten met
+tegenovergestelde standpunten (wel LLM, "het redactielid" uit het motto in
+[plan.md](plan.md)). Zie de module-docstring in `redactie_check.py` voor de
+volledige uitleg. Staat bewust bij [Ondersteunend / niet in de
+keten](#ondersteunend--niet-in-de-keten) hieronder, niet bij de kernketen.
 
 ### Vóór crawl: probe
 
@@ -85,6 +99,7 @@ vaste schakel:
 | `backup-db` | Kopie van `data/bipolariteit.db` wegschrijven. |
 | `check-video-urls` | Controleert of opgeslagen `raw_video_url`-manifesten nog afspeelbaar zijn. |
 | `validate` | Evalharnas tegen een gouden dataset, zie [eval-elecdebate.md](eval-elecdebate.md). |
+| `redactie` | Bias-check + opposition-linking -- bestaat, draait in de praktijk niet mee (zie hierboven). |
 | `argument-doc` | Exporteert pro/contra-argumenten van één topic als markdown, voor handmatig structureren. |
 | `confrontatie-tree` | Genereert de argumentenboom-export via Docker agy (Gemini) + `build_confrontatie_export`. |
 | `check-public-exposure` | Controleert dat er geen gevoelige bestanden publiek staan op een gegeven host. |
@@ -95,7 +110,7 @@ vaste schakel:
 
 ```
 make probe KEYWORDS="..."          # optioneel, vooraf peilen
-make pipeline TOPIC=<slug>         # crawl -> ingest -> extract -> tag -> redactie -> export
+make pipeline TOPIC=<slug>         # crawl -> ingest -> extract -> tag -> export
 make tags-taxonomy                 # als data/tags.toml gewijzigd is
 make export-public-data
 make publish-data                  # bewuste, losse publicatiestap
