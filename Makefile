@@ -143,16 +143,6 @@ dev-stop: ## Stop de achtergrond dev-server, incl. weesprocessen die de lockfile
 		if [ -n "$$still" ]; then kill -9 $$still 2>/dev/null || true; fi; \
 	fi
 
-LOCAL_DATA_PORT = 8899
-
-dev-local-data: export-public-data ## Als `dev`, maar de frontend haalt data/export/gepubliceerd/ lokaal op i.p.v. de (nog niet ververste) jsDelivr-CDN-kopie -- voor het testen van een niet-gepubliceerde exportwijziging (issue #112/#218)
-	@pgrep -f 'scripts/serve_local_data.py' >/dev/null || \
-		(nohup uv run python scripts/serve_local_data.py --port $(LOCAL_DATA_PORT) >/tmp/bipolariteit-local-data-server.log 2>&1 & sleep 1)
-	cd frontend && PUBLIC_DATA_BASE_URL=http://localhost:$(LOCAL_DATA_PORT) npx astro dev --background --host 0.0.0.0
-
-dev-local-data-stop: dev-stop ## Stopt zowel de dev-server als de lokale data-server van dev-local-data
-	@pkill -f 'scripts/serve_local_data.py' 2>/dev/null && echo "Lokale data-server gestopt." || echo "Lokale data-server was niet actief."
-
 # De ontwikkelbalk wordt bij het bouwen ingebakken, dus PUBLIC_RELEASE_TAG moet
 # mee met `npm run build` -- niet met het releasescript, dat draait pas als
 # dist/ al af is. Daarom bouwen deze targets zelf in plaats van `build` als
