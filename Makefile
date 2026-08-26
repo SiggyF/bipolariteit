@@ -131,8 +131,8 @@ publish-data: export-public-data ## Commit + push data/export/gepubliceerd/ (sub
 build: ## Frontend production build (frontend/dist/)
 	cd frontend && npm run build
 
-dev: ## Start de Astro dev-server op de achtergrond (0.0.0.0:4321, ook bereikbaar via localhost:4321). Data komt standaard van data/export/gepubliceerd/ (lokaal, via lokale-data-middleware.mjs) i.p.v. de jsDelivr-CDN -- overschrijf met DATA_BASE_URL=https://cdn.jsdelivr.net/gh/bipolariteit/bipolariteit-data@main om tegen de live data te testen
-	cd frontend && PUBLIC_DATA_BASE_URL=$(if $(DATA_BASE_URL),$(DATA_BASE_URL),/lokale-data) npx astro dev --background --host 0.0.0.0
+dev: ## Start de Astro dev-server op de achtergrond (0.0.0.0:4321, ook bereikbaar via localhost:4321). Data komt in dev standaard van data/export/gepubliceerd/ i.p.v. de jsDelivr-CDN (zie lib/dataBaseUrl.ts) -- overschrijf desgewenst met PUBLIC_DATA_BASE_URL=...
+	cd frontend && npx astro dev --background --host 0.0.0.0
 
 dev-stop: ## Stop de achtergrond dev-server, incl. weesprocessen die de lockfile kwijt is
 	cd frontend && npx astro dev stop

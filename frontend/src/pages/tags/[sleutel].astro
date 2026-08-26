@@ -4,6 +4,7 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import { ALLE_TAGS } from "../../lib/taxonomy";
 import { slugify } from "../../lib/slug";
 import { derivePartyTagIndex, derivePersonTagIndex, deriveTopPersonsForTag } from "../../lib/aggregate";
+import { resolveDataBaseUrl } from "../../lib/dataBaseUrl";
 
 const topicModules = import.meta.glob("../../../../data/export/topics/*.json", { eager: true });
 
@@ -20,7 +21,7 @@ export function getStaticPaths() {
 
 const { tag } = Astro.props;
 const argumentList = allArguments();
-const dataBaseUrl = import.meta.env.PUBLIC_DATA_BASE_URL ?? "https://cdn.jsdelivr.net/gh/bipolariteit/bipolariteit-data@main";
+const dataBaseUrl = resolveDataBaseUrl();
 
 // De argumenten met déze tag (tot ~10 MB voor de grootste tags) gaan niet meer
 // als Astro-prop mee -- TagDetail.vue fetcht ze client-side vanaf
