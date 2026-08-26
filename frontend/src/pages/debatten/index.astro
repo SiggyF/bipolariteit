@@ -1,98 +1,169 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import DebateCard from "../../components/DebateCard.vue";
+import { debateId } from "../../lib/debateId";
+import { debateThumbnailUrl } from "../../lib/debateThumbnail";
 import { groupByDebate } from "../../lib/groupByDebate";
-import { formatDate } from "../../lib/formatDate";
 
 // Bewust geen navigatie-ingang (issue #132-vervolg): onderwerpen zijn de
 // hoofdstructuur, debatten zijn secundair en alleen bereikbaar via de link
 // op /onderwerpen/. Wel een eigen route, zodat een debat linkbaar is los van
 // een specifiek onderwerp.
 const topicModules = import.meta.glob("../../../../data/export/topics/*.json", { eager: true });
+const topicNameBySlug = new Map(
+	Object.values(topicModules as any).map((mod: any) => [mod.default.slug, mod.default.name]),
+);
 const debates = groupByDebate(
 	Object.values(topicModules as any).map((mod: any) => ({ slug: mod.default.slug, arguments: mod.default.arguments })),
 );
+const maxArguments = Math.max(1, ...debates.map((d) => d.argumentCount));
+
+// Kaartendichtheid (#112, ontwerp:
+// docs/design/debattenlijst/Debattenkaarten.dc.html): de eerste paar
+// debatten uitgelicht met videostill, de volgende uitgebreid (kaart zonder
+// beeld), de rest compact als dichte rij. Verdeling 2/4/rest -- vaste
+// getallen i.p.v. een aparte configuratie, want dit is de enige plek die
+// de volle lijst toont (topic-pagina's gebruiken DebateList.vue met een
+// eigen, kleinere verdeling).
+const N_UITGELICHT = 2;
+const N_UITGEBREID = 4;
+const uitgelicht = debates.slice(0, N_UITGELICHT);
+const uitgebreid = debates.slice(N_UITGELICHT, N_UITGELICHT + N_UITGEBREID);
+const compact = debates.slice(N_UITGELICHT + N_UITGEBREID);
+
+// Videostill per uitgelicht debat -- zelfde aanpak als de "Uitgelicht"-sectie
+// op de homepage (index.astro): eerste argument met een gematchte
+// videospanne per debat.
+const uitgelichtIds = new Set(uitgelicht.map((d) => d.id));
+const thumbnailsByDebateId = new Map<string, string>();
+for (const mod of Object.values(topicModules as any) as any[]) {
+	for (const argument of mod.default.arguments) {
+		const rawVideoUrl = argument.document.raw_video_url;
+		if (!rawVideoUrl) continue;
+		const id = debateId(rawVideoUrl);
+		if (!uitgelichtIds.has(id) || thumbnailsByDebateId.has(id)) continue;
+		const url = debateThumbnailUrl(argument.document.video_url, argument.document.published_at, argument.start_seconds);
+		if (url) thumbnailsByDebateId.set(id, url);
+	}
+}
 ---
 
 <BaseLayout title="Debatten - Bipolariteit">
 	<a href="/onderwerpen/" class="back-link">&larr; alle onderwerpen</a>
 	<h1>Debatten</h1>
-	<p class="intro">Alle geanalyseerde debatten, meest recente eerst.</p>
+	<div class="intro-row">
+		<p class="intro">Alle geanalyseerde debatten, meest recente eerst.</p>
+		<span class="axis-legend mono">
+			<span class="axis-legend-swatch axis-legend-swatch--pro"></span>pro
+			<span class="axis-legend-sep" aria-hidden="true"></span>
+			contra<span class="axis-legend-swatch axis-legend-swatch--contra"></span>
+		</span>
+	</div>
 
-	<section class="debate-list">
-		<ul>
-			{debates.map((debate) => (
-				<li>
-					<a href={`/debatten/${debate.id}/`}>
-						<strong class="debate-title">{debate.name ?? "Debat"}</strong>
-						<span class="debate-date">{formatDate(debate.earliestPublishedAt)}</span>
-						<span class="debate-meta">{debate.argumentCount} argument{debate.argumentCount === 1 ? "" : "en"}</span>
-					</a>
-				</li>
-			))}
-		</ul>
+	<section class="debate-cards">
+		{uitgelicht.map((debate) => (
+			<DebateCard
+				debate={debate}
+				density="uitgelicht"
+				maxArguments={maxArguments}
+				topicName={topicNameBySlug.get(debate.topicSlug) ?? null}
+				thumbnailUrl={thumbnailsByDebateId.get(debate.id) ?? null}
+			/>
+		))}
+		{uitgebreid.map((debate) => (
+			<DebateCard
+				debate={debate}
+				density="uitgebreid"
+				maxArguments={maxArguments}
+				topicName={topicNameBySlug.get(debate.topicSlug) ?? null}
+			/>
+		))}
 	</section>
+
+	{compact.length > 0 && (
+		<section class="debate-cards-compact">
+			<span class="compact-heading mono">Eerder</span>
+			<div>
+				{compact.map((debate) => (
+					<DebateCard debate={debate} density="compact" maxArguments={maxArguments} />
+				))}
+			</div>
+		</section>
+	)}
 </BaseLayout>
 
 <style>
-	.debate-list {
-		margin: var(--space-4) 0;
+	.intro-row {
+		display: flex;
+		align-items: baseline;
+		justify-content: space-between;
+		gap: var(--space-2);
+		flex-wrap: wrap;
 	}
 
-	.debate-list ul {
-		list-style: none;
-		margin: 0;
-		padding: 0;
+	.axis-legend {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		font-size: 9.5px;
+		font-weight: 500;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+		color: var(--color-muted);
+		white-space: nowrap;
+	}
+
+	.axis-legend-swatch {
+		display: inline-block;
+		width: 22px;
+		height: 3px;
+	}
+
+	.axis-legend-swatch--pro {
+		background: var(--color-pro);
+	}
+
+	.axis-legend-swatch--contra {
+		background: var(--color-contra);
+	}
+
+	.axis-legend-sep {
+		display: inline-block;
+		width: 1px;
+		height: 11px;
+		background: var(--color-text);
+		margin: 0 0.15rem;
+	}
+
+	.debate-cards {
 		display: flex;
 		flex-direction: column;
-		gap: var(--space-1);
+		gap: var(--space-2);
+		margin-top: var(--space-3);
 	}
 
-	/* Grid i.p.v. flex: een lange titel wrapt naar meerdere regels, maar datum
-	   en meta blijven daardoor niet op de eigen (vaste) kolom staan als het een
-	   flex-rij met baseline-uitlijning is -- ze zwierven dan mee met het midden
-	   van de omhoog gegroeide titel. Vaste kolombreedtes lossen dat op. Zelfde
-	   patroon als DebateList.vue. */
-	.debate-list a {
-		display: grid;
-		grid-template-columns: 1fr auto auto;
-		align-items: baseline;
-		column-gap: var(--space-3);
-		row-gap: 2px;
-		padding: var(--space-1) var(--space-2);
-		background: var(--color-card-bg);
-		border: 1px solid var(--color-border);
-		border-radius: 4px;
-		text-decoration: none;
-		color: var(--color-text);
+	.debate-cards-compact {
+		margin-top: var(--space-4);
+		border-top: 1px solid var(--color-border);
+		padding-top: var(--space-2);
 	}
 
-	.debate-title {
-		min-width: 0;
-	}
-
-	.debate-date {
-		color: var(--color-muted);
+	.compact-heading {
+		display: block;
 		font-size: var(--step--1);
-		white-space: nowrap;
-		text-align: right;
+		font-weight: 500;
+		letter-spacing: 0.14em;
+		text-transform: uppercase;
+		color: var(--color-muted);
 	}
 
-	.debate-meta {
-		color: var(--color-muted);
-		font-family: var(--font-mono);
-		font-size: var(--step--1);
-		white-space: nowrap;
-		text-align: right;
+	.debate-cards-compact > div {
+		margin-top: var(--space-1);
 	}
 
 	@media (max-width: 640px) {
-		.debate-list a {
-			grid-template-columns: 1fr auto;
-		}
-
-		.debate-meta {
-			grid-column: 1 / -1;
-			text-align: left;
+		.debate-cards > :global(.debate-card--uitgelicht) {
+			grid-template-columns: 1fr;
 		}
 	}
 </style>

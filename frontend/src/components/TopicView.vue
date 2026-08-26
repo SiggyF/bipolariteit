@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref } from "vue";
 import FilterBar from "./FilterBar.vue";
-import ArgumentTimeline from "./ArgumentTimeline.vue";
 import DebateList from "./DebateList.vue";
 import ClaimsHighlights from "./ClaimsHighlights.vue";
 import StatsPanel from "./StatsPanel.vue";
@@ -10,7 +9,7 @@ import TagsPerParty from "./TagsPerParty.vue";
 import TagCorrespondenceMap from "./TagCorrespondenceMap.vue";
 import ArgumentColumn from "./ArgumentColumn.vue";
 import { STANCES, stanceLabel, type Argument } from "../lib/types";
-import { DATE_FROM, DATE_TO, filters, initFiltersFromUrl, matches, matchesExcept } from "../lib/filters";
+import { filters, initFiltersFromUrl, matches } from "../lib/filters";
 
 // Alles wat op het filter reageert zit bewust in dit ene island: de grafieken
 // en de kolommen delen zo dezelfde argumentenlijst en dezelfde filterstore,
@@ -41,13 +40,6 @@ onMounted(async () => {
 });
 
 const filtered = computed(() => argumentList.value.filter(matches));
-
-// De tijdlijn slaat het datumbereik zelf over: klikken op een staaf zet het
-// datumfilter, maar de tijdlijn moet daarna alle debatdagen blijven tonen om
-// te laten zien wélke dag je selecteerde -- anders klapt de as in tot één
-// staaf na de eerste klik. Andere dimensies (partij, tag, ...) werken wel
-// gewoon door, net als bij de correspondentiekaart.
-const timelineList = computed(() => argumentList.value.filter((a) => matchesExcept(a, [DATE_FROM, DATE_TO])));
 
 // Kolommen tonen alleen de posities die het filter overlaat; filter je op
 // Pro, dan verdwijnen de andere twee kolommen in plaats van leeg te blijven.
@@ -84,8 +76,6 @@ onBeforeUnmount(() => mobileQuery.removeEventListener("change", onMobileQueryCha
 		<TypologyStanceBars :argumentList="filtered" />
 
 		<TagCorrespondenceMap :argumentList="argumentList" />
-
-		<ArgumentTimeline :argumentList="timelineList" />
 
 		<DebateList :argumentList="filtered" />
 
