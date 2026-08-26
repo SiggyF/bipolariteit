@@ -11,7 +11,9 @@ import type { Argument } from "./types";
 // raw_video_url blijft wél staan (issue #112-vervolg: DebateList/DebateCard
 // op de perspectiefpagina groepeert/linkt debatten hierop) -- kost ~180
 // tekens/argument, op de huidige ~8800 argumenten per perspectief ca. +1,5MB,
-// ruim binnen de #163-limiet.
+// ruim binnen de #163-limiet. start_seconds/end_seconds ook (verwaarloosbare
+// grootte, twee getallen) -- debateThumbnailUrl() heeft start_seconds nodig
+// om de videostill op de uitgelichte debatkaart te tonen, anders altijd leeg.
 export function toLeanArgument(argument: any): Argument {
 	return {
 		id: argument.id,
@@ -20,8 +22,8 @@ export function toLeanArgument(argument: any): Argument {
 		quote_text: argument.quote_text,
 		quote_context: null,
 		prompt_version: null,
-		start_seconds: null,
-		end_seconds: null,
+		start_seconds: argument.start_seconds,
+		end_seconds: argument.end_seconds,
 		actor: argument.actor,
 		document: {
 			id: argument.document.id,

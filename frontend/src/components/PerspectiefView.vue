@@ -82,16 +82,16 @@ const personIndex = computed(() => deserializePersonTagIndex(props.personIndex))
 		<template v-else>
 			<p class="panel-note">{{ totalToekenningen }} tagtoekenningen in dit perspectief, over alle onderwerpen heen.</p>
 
-			<DebateList :argument-list="scopedList" :limit="12" :hide-untagged="true">
-				<template #extra="{ debate, density }">
-					<DebateCardTagBar :tag-counts="debate.tagCounts ?? []" :color="kleur" :density="density" />
-				</template>
-			</DebateList>
-
 			<TagCorrespondenceMap :argument-list="scopedList" />
 		</template>
 
 		<PerspectiefTagHeatmap :tags="orderedTags" :party-index="partyIndex" :color="kleur" />
+
+		<DebateList v-if="status === 'ready'" :argument-list="scopedList" :limit="12" :hide-untagged="true">
+			<template #extra="{ debate, density }">
+				<DebateCardTagBar :tag-counts="debate.tagCounts ?? []" :color="kleur" :density="density" />
+			</template>
+		</DebateList>
 
 		<TopPersonsPerTag :tags="orderedTags" :person-index="personIndex" :color="kleur" />
 	</section>
