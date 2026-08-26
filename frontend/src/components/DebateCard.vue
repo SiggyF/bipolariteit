@@ -83,13 +83,21 @@ const unclearWidth = computed(() => scaleWidth(props.debate.stance.unclear, prop
 
 .debate-card--uitgelicht {
 	display: grid;
-	grid-template-columns: 140px 1fr;
+	/* Vaste vierkante maat i.p.v. "auto" + stretch: die combinatie gaf een
+	   circulaire grid-berekening (de kolombreedte hangt af van de
+	   thumb-hoogte via aspect-ratio, de thumb-hoogte hangt af van de
+	   rijhoogte, de rijhoogte hangt af van de kolombreedte...) waardoor de
+	   thumb ongecontroleerd groeide. 200px is ruim hoger dan de vorige
+	   140x87.5px-versie en dekt in de praktijk de hoogte van de tekstkolom
+	   ernaast (titel t/m onduidelijk-regel) redelijk goed. */
+	grid-template-columns: 200px 1fr;
 	gap: var(--space-2);
 }
 
 .debate-card-thumb {
 	display: block;
-	aspect-ratio: 16 / 10;
+	width: 200px;
+	aspect-ratio: 1;
 	border: 1px solid var(--color-border);
 	border-radius: 2px;
 	background: var(--color-bg);
@@ -100,6 +108,7 @@ const unclearWidth = computed(() => scaleWidth(props.debate.stance.unclear, prop
 	width: 100%;
 	height: 100%;
 	object-fit: cover;
+	object-position: center;
 	display: block;
 }
 
