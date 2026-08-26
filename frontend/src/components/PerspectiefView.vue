@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue";
-import ArgumentTimeline from "./ArgumentTimeline.vue";
+import DebateCardTagBar from "./DebateCardTagBar.vue";
+import DebateList from "./DebateList.vue";
 import TagCorrespondenceMap from "./TagCorrespondenceMap.vue";
 import PerspectiefTagHeatmap from "./PerspectiefTagHeatmap.vue";
 import TopPersonsPerTag, { type TagMeta } from "./TopPersonsPerTag.vue";
@@ -81,7 +82,11 @@ const personIndex = computed(() => deserializePersonTagIndex(props.personIndex))
 		<template v-else>
 			<p class="panel-note">{{ totalToekenningen }} tagtoekenningen in dit perspectief, over alle onderwerpen heen.</p>
 
-			<ArgumentTimeline :argumentList="scopedList" :interactive="false" />
+			<DebateList :argument-list="scopedList" :limit="12" :hide-untagged="true">
+				<template #extra="{ debate, density }">
+					<DebateCardTagBar :tag-counts="debate.tagCounts ?? []" :color="kleur" :density="density" />
+				</template>
+			</DebateList>
 
 			<TagCorrespondenceMap :argument-list="scopedList" />
 		</template>
