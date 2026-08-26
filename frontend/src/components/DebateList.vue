@@ -3,6 +3,7 @@ import { computed } from "vue";
 import DebateCard from "./DebateCard.vue";
 import { debateId } from "../lib/debateId";
 import { debateName } from "../lib/debateName";
+import { debateThumbnailUrl } from "../lib/debateThumbnail";
 import type { Argument } from "../lib/types";
 import type { DebateSummary } from "../lib/groupByDebate";
 
@@ -14,8 +15,11 @@ import type { DebateSummary } from "../lib/groupByDebate";
 
 const props = defineProps<{ argumentList: Argument[] }>();
 
+const thumbnailsByDebateId = new Map<string, string>();
+
 const debates = computed<DebateSummary[]>(() => {
 	const perDebate = new Map<string, DebateSummary & { speakers: Set<string> }>();
+	thumbnailsByDebateId.clear();
 	for (const argument of props.argumentList) {
 		if (!argument.document.raw_video_url) continue;
 		const id = debateId(argument.document.raw_video_url);
@@ -44,25 +48,38 @@ const debates = computed<DebateSummary[]>(() => {
 		if (argument.stance === "pro" || argument.stance === "contra" || argument.stance === "unclear") {
 			entry.stance[argument.stance]++;
 		}
+		if (!thumbnailsByDebateId.has(id)) {
+			const url = debateThumbnailUrl(argument.document.video_url, argument.document.published_at, argument.start_seconds);
+			if (url) thumbnailsByDebateId.set(id, url);
+		}
 	}
 	return [...perDebate.values()]
 		.map(({ speakers, ...entry }) => ({ ...entry, speakerCount: speakers.size }))
 		.sort((a, b) => (b.earliestPublishedAt ?? "").localeCompare(a.earliestPublishedAt ?? ""));
 });
 
-// Dichtheid (#112, zie ook debatten/index.astro): op een onderwerp-pagina is
-// de lijst al gefilterd tot één topic, dus geen "uitgelicht"-tier met
-// videostill nodig -- de eerste paar debatten uitgebreid, de rest compact.
+// Dichtheid (#112, zie ook debatten/index.astro): 1 uitgelicht met
+// videostill, dan een paar uitgebreid, de rest compact.
+const N_UITGELICHT = 1;
 const N_UITGEBREID = 2;
 const maxArguments = computed(() => Math.max(1, ...debates.value.map((d) => d.argumentCount)));
-const uitgebreid = computed(() => debates.value.slice(0, N_UITGEBREID));
-const compact = computed(() => debates.value.slice(N_UITGEBREID));
+const uitgelicht = computed(() => debates.value.slice(0, N_UITGELICHT));
+const uitgebreid = computed(() => debates.value.slice(N_UITGELICHT, N_UITGELICHT + N_UITGEBREID));
+const compact = computed(() => debates.value.slice(N_UITGELICHT + N_UITGEBREID));
 </script>
 
 <template>
 	<section v-if="debates.length" class="debate-list">
 		<h2>Bekijk de debatten</h2>
 		<div class="debate-cards">
+			<DebateCard
+				v-for="debate in uitgelicht"
+				:key="debate.id"
+				:debate="debate"
+				density="uitgelicht"
+				:maxArguments="maxArguments"
+				:thumbnailUrl="thumbnailsByDebateId.get(debate.id) ?? null"
+			/>
 			<DebateCard v-for="debate in uitgebreid" :key="debate.id" :debate="debate" density="uitgebreid" :maxArguments="maxArguments" />
 		</div>
 		<div v-if="compact.length" class="debate-cards-compact">
