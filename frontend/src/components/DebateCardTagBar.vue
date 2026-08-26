@@ -2,11 +2,20 @@
 // Tag-verdeling i.p.v. de standaard pro/contra-as op een debatkaart (issue
 // #112-vervolg): gevuld via DebateCard.vue's "extra"-slot, alleen op de
 // perspectiefpagina (zie PerspectiefView.vue). Eén horizontale balk,
-// gesegmenteerd op tag-aandeel binnen dit debat. Top N expliciet, de rest
+// gesegmenteerd op tag-aandeel binnen dit debat, plus een legenda eronder --
+// identiteit mag nooit alleen op kleur/hover leunen (dataviz-skill: "identity
+// is never color-alone"), dus icoon+naam per getoonde tag, niet enkel een
+// hover-title. TOP_N=4 (dataviz-skill: "<=4 direct-labeled"), de rest
 // samengevoegd tot "overig" -- een perspectief bevat al gauw 15-20 tags
 // (data/tags.toml), te veel voor een leesbare balk op kaartbreedte.
+//
+// Kleur blijft alpha-tinten van de perspectiefkleur (geen los categorisch
+// palet per tag) -- zelfde principe als PerspectiefTagHeatmap.vue/
+// TagCorrespondenceMap.vue: de perspectiefkleur is de enige betekenisdrager,
+// tagidentiteit komt uit het icoon+de naam, niet uit een tweede kleurenset.
 import { computed } from "vue";
 import { withAlpha } from "../lib/colorShades";
+import { tagIconPath } from "../lib/tagIcon";
 import type { DebateTagCount } from "../lib/groupByDebate";
 
 const props = defineProps<{
@@ -15,7 +24,7 @@ const props = defineProps<{
 	density: "uitgelicht" | "uitgebreid" | "compact";
 }>();
 
-const TOP_N = 6;
+const TOP_N = 4;
 
 const total = computed(() => props.tagCounts.reduce((sum, t) => sum + t.count, 0));
 
@@ -26,7 +35,9 @@ const segments = computed(() => {
 
 	const result = top.map((tag, i) => ({
 		key: tag.sleutel,
-		label: `${tag.sleutel}: ${tag.count}`,
+		sleutel: tag.sleutel,
+		count: tag.count,
+		icon: tagIconPath(tag.sleutel),
 		width: total.value ? `${(tag.count / total.value) * 100}%` : "0%",
 		// Vaste rangorde-alpha (hoogste aandeel het meest gedekt) i.p.v. op een
 		// los maximum geschaald -- zelfde soort dekking-draagt-de-waarde-keuze
@@ -37,7 +48,9 @@ const segments = computed(() => {
 	if (restCount > 0) {
 		result.push({
 			key: "__overig",
-			label: `Overig: ${restCount}`,
+			sleutel: "Overig",
+			count: restCount,
+			icon: null,
 			width: total.value ? `${(restCount / total.value) * 100}%` : "0%",
 			background: "var(--color-border)",
 		});
@@ -48,19 +61,35 @@ const segments = computed(() => {
 
 <template>
 	<span class="tag-bar-wrap" :class="{ 'tag-bar-wrap--compact': density === 'compact' }">
-		<span v-if="segments.length" class="tag-bar">
+		<span v-if="segments.length" class="tag-bar" :title="segments.map((s) => `${s.sleutel}: ${s.count}`).join(', ')">
 			<span
 				v-for="segment in segments"
 				:key="segment.key"
 				class="tag-bar-segment"
 				:style="{ width: segment.width, background: segment.background }"
-				:title="segment.label"
 			></span>
 		</span>
-		<span class="tag-bar-legend mono">
-			<template v-if="tagCounts.length">{{ tagCounts.length }} tag{{ tagCounts.length === 1 ? "" : "s" }}, {{ total }} toekenning{{ total === 1 ? "" : "en" }}</template>
-			<template v-else>geen tags</template>
+
+		<span v-if="density !== 'compact' && segments.length" class="tag-bar-legend">
+			<span v-for="segment in segments" :key="segment.key" class="tag-bar-legend-item">
+				<svg
+					v-if="segment.icon"
+					class="tag-bar-legend-icon"
+					viewBox="0 0 24 24"
+					width="14"
+					height="14"
+					fill="none"
+					:stroke="color"
+					stroke-width="2"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+				>
+					<path :d="segment.icon" />
+				</svg>
+				<span class="mono">{{ segment.sleutel }} ({{ segment.count }})</span>
+			</span>
 		</span>
+		<span v-else-if="density !== 'compact'" class="tag-bar-legend mono">geen tags</span>
 	</span>
 </template>
 
@@ -84,7 +113,6 @@ const segments = computed(() => {
 
 .tag-bar {
 	display: flex;
-	flex: 1;
 	height: 10px;
 	border-radius: 2px;
 	overflow: hidden;
@@ -92,6 +120,7 @@ const segments = computed(() => {
 }
 
 .tag-bar-wrap--compact .tag-bar {
+	flex: 1;
 	height: 8px;
 }
 
@@ -100,15 +129,30 @@ const segments = computed(() => {
 	height: 100%;
 }
 
+/* 2px-tussenruimte tussen segmenten (dataviz-skill: "surface gap between
+   stacked segments") -- via een rand i.p.v. gap, zodat de balk zelf één
+   aaneengesloten breedte blijft (100% van de container). */
+.tag-bar-segment + .tag-bar-segment {
+	border-left: 2px solid var(--color-bg);
+}
+
 .tag-bar-legend {
-	display: block;
-	margin-top: 0.4rem;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem 0.9rem;
+	margin-top: 0.5rem;
 	font-size: var(--step--1);
 	color: var(--color-muted);
+}
+
+.tag-bar-legend-item {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.3rem;
 	white-space: nowrap;
 }
 
-.tag-bar-wrap--compact .tag-bar-legend {
-	margin-top: 0;
+.tag-bar-legend-icon {
+	flex-shrink: 0;
 }
 </style>
