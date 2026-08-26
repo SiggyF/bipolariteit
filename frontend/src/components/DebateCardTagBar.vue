@@ -15,8 +15,17 @@
 // versie): het icoon draagt nu de identiteit, dus kleur hoeft geen rangorde
 // meer te coderen -- en een vaste, voldoende donkere tint geeft het
 // icoonstroke-wit betrouwbaar contrast op elk segment.
+//
+// mixWithBase (ondoorzichtig) i.p.v. withAlpha (rgba-transparantie): een
+// compacte kaartrij heeft geen eigen kaartachtergrond (staat direct op
+// --color-bg), een uitgelichte/uitgebreide kaart wél (--color-card-bg,
+// een net iets andere tint) -- dezelfde rgba() zou dus per kaarttype een
+// andere kleur opleveren. --color-bg als vaste mengbasis houdt 'm overal
+// gelijk.
 import { computed } from "vue";
-import { withAlpha } from "../lib/colorShades";
+import { mixWithBase } from "../lib/colorShades";
+
+const PAGE_BG = "#f2efe7";
 import { tagIconPath } from "../lib/tagIcon";
 import type { DebateTagCount } from "../lib/groupByDebate";
 
@@ -45,8 +54,8 @@ const segments = computed(() => {
 			label: `${tag.sleutel}: ${tag.count}`,
 			width: `${fractie * 100}%`,
 			icon: fractie >= MIN_ICON_FRACTIE ? tagIconPath(tag.sleutel) : null,
-			background: withAlpha(props.color, 0.15),
-			border: withAlpha(props.color, 0.5),
+			background: mixWithBase(props.color, PAGE_BG, 0.15),
+			border: mixWithBase(props.color, PAGE_BG, 0.5),
 			iconStroke: props.color,
 		};
 	});
@@ -56,10 +65,9 @@ const segments = computed(() => {
 			label: `Overig: ${restCount}`,
 			width: total.value ? `${(restCount / total.value) * 100}%` : "0%",
 			icon: null,
-			// Zelfde lichte-vulling-principe als de tag-segmenten (withAlpha,
-			// niet de kale paginakleur) -- anders oogt "overig" bij een groot
-			// aandeel als een lege ruimte i.p.v. een segment.
-			background: withAlpha("#6f6558", 0.2),
+			// Zelfde lichte-vulling-principe als de tag-segmenten -- anders oogt
+			// "overig" bij een groot aandeel als een lege ruimte i.p.v. een segment.
+			background: mixWithBase("#6f6558", PAGE_BG, 0.2),
 			border: "var(--color-border)",
 			iconStroke: props.color,
 		});
