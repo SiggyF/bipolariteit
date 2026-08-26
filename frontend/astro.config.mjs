@@ -2,10 +2,11 @@
 import { defineConfig } from 'astro/config';
 
 import vue from '@astrojs/vue';
+import { lokaleDataMiddleware } from './lokale-data-middleware.mjs';
 
 // https://astro.build/config
 export default defineConfig({
-  integrations: [vue()],
+  integrations: [vue(), lokaleDataMiddleware()],
   // URL-consistentie (docs/taalconventie.md): routes hernoemd naar consistent
   // Nederlands + meervoud. Statische redirects (meta-refresh + canonical, geen
   // serverside 301 -- www.bipolariteit.org draait op Cloudflare Workers static
