@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { computed } from "vue";
+import DebateCard from "./DebateCard.vue";
 import { debateId } from "../lib/debateId";
 import { debateName } from "../lib/debateName";
-import { formatDate } from "../lib/formatDate";
 import type { Argument } from "../lib/types";
+import type { DebateSummary } from "../lib/groupByDebate";
 
 // Lijst van debatten binnen dit topic die als video bekeken kunnen worden
 // (issue #94) -- entry point vanaf de topicpagina naar /debat/[id]/. Alleen
@@ -13,16 +14,8 @@ import type { Argument } from "../lib/types";
 
 const props = defineProps<{ argumentList: Argument[] }>();
 
-interface DebateEntry {
-	id: string;
-	name: string | null;
-	earliestPublishedAt: string | null;
-	speakers: Set<string>;
-	argumentCount: number;
-}
-
-const debates = computed(() => {
-	const perDebate = new Map<string, DebateEntry>();
+const debates = computed<DebateSummary[]>(() => {
+	const perDebate = new Map<string, DebateSummary & { speakers: Set<string> }>();
 	for (const argument of props.argumentList) {
 		if (!argument.document.raw_video_url) continue;
 		const id = debateId(argument.document.raw_video_url);
@@ -30,10 +23,13 @@ const debates = computed(() => {
 		if (!entry) {
 			entry = {
 				id,
+				topicSlug: "",
 				name: debateName(argument.document.video_url),
 				earliestPublishedAt: argument.document.published_at,
-				speakers: new Set(),
+				speakerCount: 0,
 				argumentCount: 0,
+				stance: { pro: 0, contra: 0, unclear: 0 },
+				speakers: new Set(),
 			};
 			perDebate.set(id, entry);
 		}
@@ -45,26 +41,33 @@ const debates = computed(() => {
 		}
 		entry.speakers.add(argument.actor.name);
 		entry.argumentCount++;
+		if (argument.stance === "pro" || argument.stance === "contra" || argument.stance === "unclear") {
+			entry.stance[argument.stance]++;
+		}
 	}
-	return [...perDebate.values()].sort((a, b) => (b.earliestPublishedAt ?? "").localeCompare(a.earliestPublishedAt ?? ""));
+	return [...perDebate.values()]
+		.map(({ speakers, ...entry }) => ({ ...entry, speakerCount: speakers.size }))
+		.sort((a, b) => (b.earliestPublishedAt ?? "").localeCompare(a.earliestPublishedAt ?? ""));
 });
+
+// Dichtheid (#112, zie ook debatten/index.astro): op een onderwerp-pagina is
+// de lijst al gefilterd tot één topic, dus geen "uitgelicht"-tier met
+// videostill nodig -- de eerste paar debatten uitgebreid, de rest compact.
+const N_UITGEBREID = 2;
+const maxArguments = computed(() => Math.max(1, ...debates.value.map((d) => d.argumentCount)));
+const uitgebreid = computed(() => debates.value.slice(0, N_UITGEBREID));
+const compact = computed(() => debates.value.slice(N_UITGEBREID));
 </script>
 
 <template>
 	<section v-if="debates.length" class="debate-list">
 		<h2>Bekijk de debatten</h2>
-		<ul>
-			<li v-for="debate in debates" :key="debate.id">
-				<a :href="`/debatten/${debate.id}/`">
-					<strong class="debate-title">{{ debate.name ?? "Debat" }}</strong>
-					<span class="debate-date">{{ formatDate(debate.earliestPublishedAt) }}</span>
-					<span class="debate-meta">
-						{{ debate.argumentCount }} argument{{ debate.argumentCount === 1 ? "" : "en" }}, {{ debate.speakers.size }}
-						spreker{{ debate.speakers.size === 1 ? "" : "s" }}
-					</span>
-				</a>
-			</li>
-		</ul>
+		<div class="debate-cards">
+			<DebateCard v-for="debate in uitgebreid" :key="debate.id" :debate="debate" density="uitgebreid" :maxArguments="maxArguments" />
+		</div>
+		<div v-if="compact.length" class="debate-cards-compact">
+			<DebateCard v-for="debate in compact" :key="debate.id" :debate="debate" density="compact" :maxArguments="maxArguments" />
+		</div>
 	</section>
 </template>
 
@@ -73,60 +76,13 @@ const debates = computed(() => {
 	margin: var(--space-4) 0;
 }
 
-.debate-list ul {
-	list-style: none;
-	margin: 0;
-	padding: 0;
+.debate-cards {
 	display: flex;
 	flex-direction: column;
 	gap: var(--space-1);
 }
 
-/* Grid i.p.v. flex: een lange titel wrapt naar meerdere regels, maar datum
-   en meta blijven daardoor niet op de eigen (vaste) kolom staan als het een
-   flex-rij met baseline-uitlijning is -- ze zwierven dan mee met het midden
-   van de omhoog gegroeide titel. Vaste kolombreedtes lossen dat op. */
-.debate-list a {
-	display: grid;
-	grid-template-columns: 1fr auto auto;
-	align-items: baseline;
-	column-gap: var(--space-3);
-	row-gap: 2px;
-	padding: var(--space-1) var(--space-2);
-	background: var(--color-card-bg);
-	border: 1px solid var(--color-border);
-	border-radius: 4px;
-	text-decoration: none;
-	color: var(--color-text);
-}
-
-.debate-title {
-	min-width: 0;
-}
-
-.debate-date {
-	color: var(--color-muted);
-	font-size: var(--step--1);
-	white-space: nowrap;
-	text-align: right;
-}
-
-.debate-meta {
-	color: var(--color-muted);
-	font-family: var(--font-mono);
-	font-size: var(--step--1);
-	white-space: nowrap;
-	text-align: right;
-}
-
-@media (max-width: 640px) {
-	.debate-list a {
-		grid-template-columns: 1fr auto;
-	}
-
-	.debate-meta {
-		grid-column: 1 / -1;
-		text-align: left;
-	}
+.debate-cards-compact {
+	margin-top: var(--space-2);
 }
 </style>

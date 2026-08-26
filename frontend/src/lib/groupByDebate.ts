@@ -8,16 +8,25 @@ import type { Argument } from "./types";
 // findLatestDebate.ts/DebateList.vue/[id].astro: groeperen op
 // debateId(raw_video_url), niet document.id.
 
+export interface DebateStanceCounts {
+	pro: number;
+	contra: number;
+	unclear: number;
+}
+
 export interface DebateSummary {
 	id: string;
 	topicSlug: string;
 	name: string | null;
 	earliestPublishedAt: string | null;
 	argumentCount: number;
+	speakerCount: number;
+	/** Voor de debatkaarten (#112): pro/contra/onduidelijk-balk op de kaart. */
+	stance: DebateStanceCounts;
 }
 
 export function groupByDebate(argumentsByTopic: { slug: string; arguments: Argument[] }[]): DebateSummary[] {
-	const byDebateId = new Map<string, Omit<DebateSummary, "id">>();
+	const byDebateId = new Map<string, Omit<DebateSummary, "id"> & { speakers: Set<string> }>();
 
 	for (const topic of argumentsByTopic) {
 		for (const argument of topic.arguments) {
@@ -31,10 +40,17 @@ export function groupByDebate(argumentsByTopic: { slug: string; arguments: Argum
 					name: debateName(argument.document.video_url),
 					earliestPublishedAt: null,
 					argumentCount: 0,
+					speakerCount: 0,
+					speakers: new Set(),
+					stance: { pro: 0, contra: 0, unclear: 0 },
 				};
 				byDebateId.set(id, entry);
 			}
 			entry.argumentCount++;
+			entry.speakers.add(argument.actor.name);
+			if (argument.stance === "pro" || argument.stance === "contra" || argument.stance === "unclear") {
+				entry.stance[argument.stance]++;
+			}
 			if (
 				argument.document.published_at &&
 				(!entry.earliestPublishedAt || argument.document.published_at < entry.earliestPublishedAt)
@@ -43,8 +59,11 @@ export function groupByDebate(argumentsByTopic: { slug: string; arguments: Argum
 			}
 		}
 	}
+	for (const entry of byDebateId.values()) {
+		entry.speakerCount = entry.speakers.size;
+	}
 
 	return [...byDebateId.entries()]
-		.map(([id, entry]) => ({ id, ...entry }))
+		.map(([id, { speakers, ...entry }]) => ({ id, ...entry }))
 		.sort((a, b) => (b.earliestPublishedAt ?? "").localeCompare(a.earliestPublishedAt ?? ""));
 }
