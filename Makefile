@@ -49,7 +49,7 @@ ingest: ## Stage 0b -- gecrawlde VLOS-XML importeren naar SQLite (documents/acto
 	@test -n "$(TOPIC)" || { echo 'Gebruik: make ingest TOPIC=stikstof'; exit 1; }
 	uv run python -m pipeline.ingest.ingest_tk --topic $(TOPIC)
 
-pipeline: ## Volledige analyse-pipeline voor één topic op rij: crawl -> ingest -> extract -> tag -> export (zie docs/pipeline.md). Vars: TOPIC, LIMIT, SOORT, BASE_URL. redactie draait hier bewust niet in mee (experimenteel, niet in de reguliere workflow, zie docs/pipeline.md). Publiceren (tags-taxonomy/export-public-data/publish-data) is een bewuste losse stap erna.
+pipeline: ## Volledige analyse-pipeline voor één topic op rij: crawl -> ingest -> extract -> tag -> export (zie docs/pipeline.md). Vars: TOPIC, LIMIT, SOORT, BASE_URL. redactie draait hier bewust niet in mee (experimenteel, niet in de reguliere workflow, zie docs/pipeline.md). export regenereert ook data/export/gepubliceerd/ lokaal; publiceren naar bipolariteit-data (tags-taxonomy/publish-data) blijft een bewuste losse stap erna.
 	$(MAKE) crawl TOPIC=$(TOPIC) LIMIT=$(LIMIT)
 	$(MAKE) ingest TOPIC=$(TOPIC)
 	$(MAKE) extract TOPIC=$(TOPIC) LIMIT=$(LIMIT)
@@ -89,12 +89,13 @@ validate: ## Evalharnas draaien tegen een gouden validatiedataset (issue #62), z
 	@url=$$($(RESOLVE_BASE_URL)) || exit 1; \
 	uv run python -m pipeline.eval.benchmark_elecdebate data/raw/$(DATASET)/test.jsonl $(MODEL) --dataset $(DATASET) --base-url $$url --limit $(LIMIT)
 
-export: ## SQLite -> data/export/topics/<slug>.json + topics-index.json, voor alle topics (incl. video_url-enrichment + video-matching, zie issue #209)
+export: ## SQLite -> data/export/topics/<slug>.json + topics-index.json + data/export/gepubliceerd/ (lean, zie #163), voor alle topics (incl. video_url-enrichment + video-matching, zie issue #209). Publiceren naar bipolariteit-data blijft een losse stap (make publish-data)
 	uv run python -m pipeline.enrich_video_url
 	uv run python -m pipeline.fetch_debate_events
 	uv run python -m pipeline.fetch_subtitles
 	uv run python -m pipeline.match_argument_spans
 	uv run python -m pipeline.build_static_data
+	$(MAKE) export-public-data
 
 enrich-video: ## Vult documents.video_url/debatdirect_id via Debat Direct, voor alle topics (geen LLM, geen netstroom nodig, gebruik pipeline.enrich_video_url --topic direct voor één topic)
 	uv run python -m pipeline.enrich_video_url
@@ -130,7 +131,7 @@ publish-data: export-public-data ## Commit + push data/export/gepubliceerd/ (sub
 build: ## Frontend production build (frontend/dist/)
 	cd frontend && npm run build
 
-dev: ## Start de Astro dev-server op de achtergrond (0.0.0.0:4321, ook bereikbaar via localhost:4321)
+dev: ## Start de Astro dev-server op de achtergrond (0.0.0.0:4321, ook bereikbaar via localhost:4321). Data komt in dev standaard van data/export/gepubliceerd/ i.p.v. de jsDelivr-CDN (zie lib/dataBaseUrl.ts) -- overschrijf desgewenst met PUBLIC_DATA_BASE_URL=...
 	cd frontend && npx astro dev --background --host 0.0.0.0
 
 dev-stop: ## Stop de achtergrond dev-server, incl. weesprocessen die de lockfile kwijt is

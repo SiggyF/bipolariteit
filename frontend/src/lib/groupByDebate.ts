@@ -14,6 +14,13 @@ export interface DebateStanceCounts {
 	unclear: number;
 }
 
+export interface DebateTagCount {
+	sleutel: string;
+	beschrijving: string;
+	labelgroep: string;
+	count: number;
+}
+
 export interface DebateSummary {
 	id: string;
 	topicSlug: string;
@@ -23,6 +30,12 @@ export interface DebateSummary {
 	speakerCount: number;
 	/** Voor de debatkaarten (#112): pro/contra/onduidelijk-balk op de kaart. */
 	stance: DebateStanceCounts;
+	/** Aflopend gesorteerd op count. Alleen gevuld door DebateList.vue (niet
+	 * door groupByDebate() hieronder, dat voedt /debatten/ waar geen
+	 * perspectief-context is) -- voor de "extra"-slot op de perspectiefpagina
+	 * (issue #112-vervolg), die hiermee pro/contra vervangt door een
+	 * tag-verdeling. */
+	tagCounts?: DebateTagCount[];
 }
 
 export function groupByDebate(argumentsByTopic: { slug: string; arguments: Argument[] }[]): DebateSummary[] {

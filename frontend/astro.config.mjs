@@ -2,6 +2,8 @@
 import { defineConfig } from 'astro/config';
 
 import vue from '@astrojs/vue';
+import sirv from 'sirv';
+import path from 'node:path';
 
 // https://astro.build/config
 export default defineConfig({
@@ -22,5 +24,23 @@ export default defineConfig({
     '/perspectief': '/perspectieven',
     '/perspectief/[naam]': '/perspectieven/[naam]',
     '/debat/[id]': '/debatten/[id]',
-  }
+  },
+  vite: {
+    plugins: [
+      {
+        // Dev-only static server voor data/export/gepubliceerd/ (issue
+        // #112/#218), op hetzelfde /data-pad als de al bestaande
+        // plenair-map-data in public/data/ (die staat er ook in, als kopie --
+        // zie lib/dataBaseUrl.ts voor de ene plek waar dit pad vastligt).
+        // sirv (al een dependency via Astro/Vite zelf) i.p.v. zelf een
+        // bestandsserver bouwen. configureServer vuurt uitsluitend tijdens
+        // `astro dev`, raakt build/deploy dus op geen enkele manier.
+        name: 'local-data-middleware',
+        configureServer(server) {
+          const publishedDataDir = path.resolve('../data/export/gepubliceerd');
+          server.middlewares.use('/data', sirv(publishedDataDir, { dev: true }));
+        },
+      },
+    ],
+  },
 });

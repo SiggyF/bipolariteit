@@ -5,7 +5,10 @@
 // dezelfde pro/contra/onduidelijk-as; "compact" is een dichte rij met alleen
 // een kleine as. Balklengte via scaleWidth() (wortelschaal, zie
 // debateCardScale.ts) i.p.v. lineair, zodat een klein debat niet wegvalt
-// naast een debat met honderden argumenten.
+// naast een debat met honderden argumenten. De as zelf zit in de "extra"-slot
+// (default-content = deze as) zodat een andere pagina 'm kan vervangen door
+// iets anders zonder de rest van de kaart te herbouwen -- zie PerspectiefView
+// (issue #112-vervolg), die hier een tag-verdeling i.p.v. pro/contra toont.
 import { computed } from "vue";
 import { formatDate } from "../lib/formatDate";
 import { formatDateShort } from "../lib/formatDateShort";
@@ -49,19 +52,21 @@ const unclearWidth = computed(() => scaleWidth(props.debate.stance.unclear, prop
 				</template>
 			</span>
 
-			<span class="debate-card-axis" :class="{ 'debate-card-axis--compact': density === 'compact' }">
-				<span class="debate-card-axis-pro">
-					<span v-if="density !== 'compact'" class="mono debate-card-axis-count">{{ debate.stance.pro }}</span>
-					<span class="debate-card-axis-bar debate-card-axis-bar--pro" :style="{ width: proWidth }"></span>
+			<slot name="extra" :debate="debate" :density="density">
+				<span class="debate-card-axis" :class="{ 'debate-card-axis--compact': density === 'compact' }">
+					<span class="debate-card-axis-pro">
+						<span v-if="density !== 'compact'" class="mono debate-card-axis-count">{{ debate.stance.pro }}</span>
+						<span class="debate-card-axis-bar debate-card-axis-bar--pro" :style="{ width: proWidth }"></span>
+					</span>
+					<span class="debate-card-axis-contra">
+						<span class="debate-card-axis-bar debate-card-axis-bar--contra" :style="{ width: contraWidth }"></span>
+						<span class="debate-card-axis-bar debate-card-axis-bar--unclear" :style="{ width: unclearWidth }"></span>
+						<span v-if="density !== 'compact'" class="mono debate-card-axis-count">{{ debate.stance.contra }}</span>
+					</span>
 				</span>
-				<span class="debate-card-axis-contra">
-					<span class="debate-card-axis-bar debate-card-axis-bar--contra" :style="{ width: contraWidth }"></span>
-					<span class="debate-card-axis-bar debate-card-axis-bar--unclear" :style="{ width: unclearWidth }"></span>
-					<span v-if="density !== 'compact'" class="mono debate-card-axis-count">{{ debate.stance.contra }}</span>
-				</span>
-			</span>
 
-			<span v-if="density !== 'compact'" class="debate-card-unclear mono">{{ debate.stance.unclear }} onduidelijk</span>
+				<span v-if="density !== 'compact'" class="debate-card-unclear mono">{{ debate.stance.unclear }} onduidelijk</span>
+			</slot>
 		</span>
 	</a>
 </template>

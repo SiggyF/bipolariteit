@@ -4,6 +4,7 @@ import ArgumentTree from "../../components/ArgumentTree.vue";
 import FeedbackExport from "../../components/FeedbackExport.vue";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { parseTopicDescription } from "../../lib/parseTopicDescription";
+import { resolveDataBaseUrl } from "../../lib/dataBaseUrl";
 
 const topicModules = import.meta.glob("../../../../data/export/topics/*.json", { eager: true });
 
@@ -29,7 +30,7 @@ const description = topic.description ? parseTopicDescription(topic.description)
 // onderwerp, tegen de Cloudflare Workers-assetlimiet van 25 MiB aan voor de
 // grotere onderwerpen -- issue #163); TopicView.vue fetcht 'm client-side
 // vanaf scripts/export_public_data.ts's output.
-const dataBaseUrl = import.meta.env.PUBLIC_DATA_BASE_URL ?? "https://cdn.jsdelivr.net/gh/bipolariteit/bipolariteit-data@main";
+const dataBaseUrl = resolveDataBaseUrl();
 ---
 
 <BaseLayout title={`${topic.name} - Bipolariteit`} description={topic.description}>

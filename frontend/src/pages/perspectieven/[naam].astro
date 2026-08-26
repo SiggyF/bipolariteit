@@ -6,6 +6,7 @@ import { slugify } from "../../lib/slug";
 import { perspectiefWeergaveNaam } from "../../lib/tagIcon";
 import { toLeanArgument } from "../../lib/leanArgument";
 import { derivePartyTagIndex, derivePersonTagIndex, serializePartyTagIndex, serializePersonTagIndex } from "../../lib/aggregate";
+import { resolveDataBaseUrl } from "../../lib/dataBaseUrl";
 import type { Argument } from "../../lib/types";
 
 // Alleen nog gebruikt om build-time de partij-/persoonindex over het hele
@@ -34,7 +35,7 @@ const { perspectief } = Astro.props;
 const argumentList = allArguments();
 const partyIndex = serializePartyTagIndex(derivePartyTagIndex(argumentList));
 const personIndex = serializePersonTagIndex(derivePersonTagIndex(argumentList));
-const dataBaseUrl = import.meta.env.PUBLIC_DATA_BASE_URL ?? "https://cdn.jsdelivr.net/gh/bipolariteit/bipolariteit-data@main";
+const dataBaseUrl = resolveDataBaseUrl();
 ---
 
 <BaseLayout title={`${perspectiefWeergaveNaam(perspectief)} - Bipolariteit`}>
