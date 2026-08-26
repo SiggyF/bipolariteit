@@ -29,6 +29,7 @@ import requests
 
 from pipeline.db import db
 from pipeline.llm_log import record_llm_call
+from pipeline.match_argument_spans import normalize_text
 from pipeline.periodes import PeriodeIndex
 from pipeline.taxonomy import DERIVED_LABELGROEPEN, field_name_for
 
@@ -110,7 +111,11 @@ def build_tag_catalogue(conn):
         for sleutel, beschrijving in info["tags"]:
             catalogue_lines.append(f"- {sleutel}: {beschrijving}")
         catalogue_lines.append("")
-        tag_obj = {"sleutel": "<TAG_SLEUTEL>", "reden": "<korte argument-specifieke onderbouwing>"}
+        tag_obj = {
+            "sleutel": "<TAG_SLEUTEL>",
+            "reden": "<korte argument-specifieke onderbouwing (max 15 woorden)>",
+            "quote_fragment": "<letterlijk fragment uit de quote, of null>",
+        }
         skeleton[field] = tag_obj if info["selectie"] == "enkel" else [tag_obj]
     return "\n".join(catalogue_lines).strip(), json.dumps(skeleton, ensure_ascii=False, indent=2)
 
@@ -175,25 +180,85 @@ def _normalize_sleutel(sleutel):
 
 
 def _coerce_tag_entry(entry):
-    """Accepteert zowel het nieuwe {sleutel, reden}-object als (voor
-    achterwaartse compatibiliteit met oudere geplakte Gemini-antwoorden) een
-    kale sleutel-string zonder reden. Retourneert (sleutel, reden), _GEEN_TAG
-    als het model expliciet "geen tag" bedoelde, of None bij een echt
-    onherkenbare vorm."""
+    """Accepteert zowel het nieuwe {sleutel, reden, quote_fragment}-object als
+    (voor achterwaartse compatibiliteit met oudere geplakte Gemini-antwoorden)
+    een kale sleutel-string zonder reden/fragment. Retourneert
+    (sleutel, reden, quote_fragment), _GEEN_TAG als het model expliciet "geen
+    tag" bedoelde, of None bij een echt onherkenbare vorm."""
     if isinstance(entry, str):
-        return _normalize_sleutel(entry), None
+        return _normalize_sleutel(entry), None, None
     if isinstance(entry, dict) and "sleutel" in entry:
         sleutel = entry["sleutel"]
         if sleutel in _GEEN_TAG_WAARDEN:
             return _GEEN_TAG
         if isinstance(sleutel, str):
-            return _normalize_sleutel(sleutel), entry.get("reden")
+            quote_fragment = entry.get("quote_fragment")
+            if not isinstance(quote_fragment, str):
+                quote_fragment = None
+            return _normalize_sleutel(sleutel), entry.get("reden"), quote_fragment
     return None
 
 
-def _validate_tags(parsed, valid_tags):
-    """Retourneert lijst van (sleutel, reden) die geaccepteerd worden;
-    logt en slaat ongeldige velden/sleutels over i.p.v. de hele batch te laten falen."""
+# Proefdraai-classificatie van een quote_fragment (issue #109), puur voor
+# compliance-meting in deze experimentele fase -- schrijft nog niets naar de
+# database (argument_tags heeft nog geen quote_fragment-kolom).
+QF_GEEN_FRAGMENT = "geen_fragment"  # model gaf null: tag slaat op hele quote
+QF_GELDIG = "geldig"  # unieke, letterlijke substring van quote_text
+QF_GELDIG_MEERDELIG = "geldig_meerdelig"  # unieke match via ...-gat (zie hieronder), meerdere zinsdelen samen
+QF_NIET_GEVONDEN = "niet_gevonden"  # geen substring: geparafraseerd of verzonnen
+QF_AMBIGU = "ambigu"  # meer dan één voorkomen in quote_text -- welke bedoeld is, is niet af te leiden
+
+# In de proefdraai (issue #109) plakt het model bij tags die per definitie over
+# meerdere plekken in de quote gaan (vooral Stijl-Herhaling) regelmatig twee
+# losse zinsdelen aan elkaar met "..." i.p.v. één letterlijk aaneengesloten
+# fragment te geven (bv. "Mensen zijn gebaat... waar de mensen bij gebaat
+# zijn"). Dat is geen parafrase/verzinsel -- beide zinsdelen staan wél
+# letterlijk in de quote, alleen niet aaneengesloten. In plaats van dat af te
+# keuren als "niet_gevonden", elk los zinsdeel apart valideren en "..." als
+# jokerteken behandelen (regex .*?) tussen de delen: precies bruikbaar als
+# latere video-spanne (begin van het eerste deel tot eind van het laatste).
+_ELLIPSIS_RE = re.compile(r"\.\.\.|…")
+
+
+def classify_quote_fragment(quote_fragment, quote_text):
+    """Zelfde "nooit gokken"-principe als match_argument_spans.py: een
+    fragment dat niet uniek in quote_text voorkomt (bv. bij een
+    Stijl-Herhaling-tag, waar het gemarkeerde zinsdeel per definitie kan
+    herhalen) wordt niet gedisambigueerd, maar afgekeurd."""
+    if not quote_fragment or not quote_fragment.strip():
+        return QF_GEEN_FRAGMENT
+    haystack = normalize_text(quote_text)
+
+    delen = [normalize_text(deel) for deel in _ELLIPSIS_RE.split(quote_fragment)]
+    delen = [deel for deel in delen if deel]
+    if not delen:
+        return QF_GEEN_FRAGMENT
+
+    if len(delen) == 1:
+        needle = delen[0]
+        count = haystack.count(needle)
+        if count == 0:
+            return QF_NIET_GEVONDEN
+        if count > 1:
+            return QF_AMBIGU
+        return QF_GELDIG
+
+    pattern = ".*?".join(re.escape(deel) for deel in delen)
+    matches = list(re.finditer(pattern, haystack))
+    if not matches:
+        return QF_NIET_GEVONDEN
+    if len(matches) > 1:
+        return QF_AMBIGU
+    return QF_GELDIG_MEERDELIG
+
+
+def _validate_tags(parsed, valid_tags, quote_text, qf_stats=None):
+    """Retourneert lijst van (sleutel, reden, quote_fragment) die
+    geaccepteerd worden; logt en slaat ongeldige velden/sleutels over i.p.v.
+    de hele batch te laten falen. quote_fragment is alleen gezet als
+    classify_quote_fragment() 'geldig' oordeelt, anders None. qf_stats (als
+    meegegeven) telt de classificatie van elke toegekende tag -- bedoeld voor
+    de proefdraai-samenvatting, geen productiegedrag."""
     accepted = []
     for field, (selectie, _labelgroep, allowed) in valid_tags.items():
         value = parsed.get(field)
@@ -215,11 +280,15 @@ def _validate_tags(parsed, valid_tags):
         if selectie == "enkel" and len(coerced) > 1:
             logger.warning("    overgeslagen veld %r: enkelvoudige labelgroep kreeg meerdere tags: %s", field, coerced)
             continue
-        for sleutel, reden in coerced:
-            if sleutel in allowed:
-                accepted.append((sleutel, reden))
-            else:
+        for sleutel, reden, quote_fragment_raw in coerced:
+            if sleutel not in allowed:
                 logger.warning("    overgeslagen onbekende sleutel in %r: %r", field, sleutel)
+                continue
+            classification = classify_quote_fragment(quote_fragment_raw, quote_text)
+            if qf_stats is not None:
+                qf_stats[classification] += 1
+            quote_fragment = quote_fragment_raw if classification in (QF_GELDIG, QF_GELDIG_MEERDELIG) else None
+            accepted.append((sleutel, reden, quote_fragment, quote_fragment_raw, classification))
     return accepted
 
 
