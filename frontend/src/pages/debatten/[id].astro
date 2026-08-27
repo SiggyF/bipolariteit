@@ -3,6 +3,8 @@ import DebateVideoView from "../../components/DebateVideoView.vue";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { debateId } from "../../lib/debateId";
 import { debateName } from "../../lib/debateName";
+import { debateThumbnailUrl } from "../../lib/debateThumbnail";
+import { resolveDataBaseUrl } from "../../lib/dataBaseUrl";
 
 // Route puur op debateId(raw_video_url), niet genest onder een topic-slug:
 // welke links (persoon/topic-pagina's) hier precies naartoe gaan verwijzen
@@ -29,25 +31,43 @@ export function getStaticPaths() {
 		}
 	}
 
+	// De volledige argumentenlijst als Astro-prop naar een client:only-island
+	// serialiseerde vroeger de hele array in de pagina-HTML (issue #119, ~2.5
+	// MB per debat) -- DebateVideoView haalt 'm voortaan zelf client-side op
+	// (frontend/src/lib/onderwerpArguments.ts) en heeft hier alleen `id` +
+	// `topicSlug` nodig. `videoUrl`/`rawVideoUrl`/`posterUrl` blijven wel klein,
+	// server-side bepaalde props: de video moet meteen kunnen laden, zonder op
+	// die fetch te wachten.
 	return [...byDebateId.entries()].map(([id, entry]) => {
-		entry.arguments.sort((a, b) => {
-			if (a.start_seconds === null) return 1;
-			if (b.start_seconds === null) return -1;
-			return a.start_seconds - b.start_seconds;
-		});
-		return { params: { id }, props: entry };
+		let videoUrl: string | null = null;
+		let rawVideoUrl: string | null = null;
+		let posterUrl: string | null = null;
+		for (const argument of entry.arguments) {
+			videoUrl ??= argument.document.video_url ?? null;
+			rawVideoUrl ??= argument.document.raw_video_url ?? null;
+			posterUrl ??= debateThumbnailUrl(argument.document.video_url, argument.document.published_at, argument.start_seconds);
+		}
+		return { params: { id }, props: { topicSlug: entry.topicSlug, videoUrl, rawVideoUrl, posterUrl } };
 	});
 }
 
-const { arguments: argumentList, topicSlug } = Astro.props;
-const name = debateName(argumentList[0]?.document.video_url ?? null);
+const { topicSlug, videoUrl, rawVideoUrl, posterUrl } = Astro.props;
+const { id } = Astro.params;
+const name = debateName(videoUrl);
 const title = `${name ?? "Debat"} - Bipolariteit`;
 ---
 
 <BaseLayout title={title}>
 	<a href={`/onderwerpen/${topicSlug}/`} class="back-link">&larr; terug naar {topicSlug}</a>
 	<h1 class="debate-title">{name ?? "Debat"}</h1>
-	<DebateVideoView arguments={argumentList} topicSlug={topicSlug} client:only="vue" />
+	<DebateVideoView
+		debateId={id}
+		topicSlug={topicSlug}
+		dataBaseUrl={resolveDataBaseUrl()}
+		rawVideoUrl={rawVideoUrl}
+		posterUrl={posterUrl}
+		client:only="vue"
+	/>
 </BaseLayout>
 
 <style>

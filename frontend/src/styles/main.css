@@ -911,6 +911,20 @@ h3 {
 	background: var(--color-card-bg);
 }
 
+/* Zelfde fade-idioom als DebateVideoView.vue/VideoOverlay.vue's transities:
+   alleen opacity, geen beweging -- de sectie verschijnt nu async (issue #119,
+   claims komen pas binnen zodra de onderwerp-JSON gefetcht is) i.p.v. meteen
+   met de rest van de pagina te renderen. */
+.fade-enter-active,
+.fade-leave-active {
+	transition: opacity 0.2s;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+	opacity: 0;
+}
+
 .claims-highlights h2 {
 	font-size: var(--step-1);
 	margin: 0 0 var(--space-1);

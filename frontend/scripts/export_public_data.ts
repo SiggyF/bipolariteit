@@ -16,6 +16,12 @@
 //   volledige ArgumentCards (videolinks, quote_context, claims, tag-`reden`),
 //   in tegenstelling tot PerspectiefView -- er valt hier dus niets lean te
 //   maken zonder content te breken.
+// - per debat (raw_video_url, issue #119-vervolg) één bestand naar
+//   data/export/gepubliceerd/debatten/<debateId>.json. Ongestript, om
+//   dezelfde reden als onderwerpen/ hierboven -- DebateVideoView.vue/
+//   ClaimsHighlights.vue fetchen dit i.p.v. het hele onderwerp-bestand: een
+//   onderwerp als energietransitie/asiel beslaat tientallen debatten en tot
+//   ~11 MB, terwijl één debat daar maar een fractie van is.
 // - per tag één bestand naar data/export/gepubliceerd/tags/<slug>.json:
 //   ongestript, gefilterd tot de argumenten met die tag (zelfde als
 //   filterArgumentsByTag deed in pages/tags/[sleutel].astro), met topicSlug/
@@ -37,6 +43,7 @@ import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { toLeanArgument } from "../src/lib/leanArgument";
 import { filterArgumentsByTag, filterTagsByPerspectief } from "../src/lib/aggregate";
+import { groupByDebateId } from "../src/lib/debateId";
 import { slugify } from "../src/lib/slug";
 import { PERSPECTIEVEN } from "../src/lib/tagIcons.generated";
 import { ALLE_TAGS } from "../src/lib/taxonomy";
@@ -82,6 +89,16 @@ function main(): void {
 		const pad = resolve(onderwerpenDir, `${topic.slug}.json`);
 		writeFileSync(pad, JSON.stringify(topic.arguments), "utf8");
 		console.log(`${pad}: ${topic.arguments.length} argumenten`);
+	}
+
+	const debattenDir = resolve(UIT_DIR, "debatten");
+	mkdirSync(debattenDir, { recursive: true });
+
+	const argumentenPerDebat = groupByDebateId(topics.flatMap((topic) => topic.arguments));
+	for (const [id, debateArguments] of argumentenPerDebat) {
+		const pad = resolve(debattenDir, `${id}.json`);
+		writeFileSync(pad, JSON.stringify(debateArguments), "utf8");
+		console.log(`${pad}: ${debateArguments.length} argumenten`);
 	}
 
 	const fullArgumentList: TopicTaggedArgument[] = topics.flatMap((topic) =>
