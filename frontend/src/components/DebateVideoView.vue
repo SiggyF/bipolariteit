@@ -4,18 +4,23 @@ import ArgumentCard from "./ArgumentCard.vue";
 import VideoOverlay from "./VideoOverlay.vue";
 import VideoPlayer from "./VideoPlayer.vue";
 import VideoTimeline from "./VideoTimeline.vue";
-import { debateThumbnailUrl } from "../lib/debateThumbnail";
+import { useDebateArguments } from "../lib/debateArguments";
 import { PERSPECTIEVEN } from "../lib/tagIcons.generated";
 import { perspectiefWeergaveNaam } from "../lib/tagIcon";
-import type { Argument } from "../lib/types";
 import { activeArguments } from "../lib/videoLabels";
 import { requestSeek, videoSeek } from "../lib/videoSeek";
 import { notifyUserScroll, userScroll } from "../lib/userScroll";
 
 const props = withDefaults(
 	defineProps<{
-		arguments: Argument[];
+		debateId: string;
 		topicSlug: string;
+		dataBaseUrl: string;
+		// Direct meegegeven i.p.v. afgeleid uit de gefetchte argumentenlijst
+		// (zie `entry`/`arguments` hieronder): de video moet meteen kunnen
+		// laden, zonder te wachten op de onderwerp-JSON (issue #119).
+		rawVideoUrl: string | null;
+		posterUrl: string | null;
 		defaultExpanded?: boolean;
 		initialMuted?: boolean;
 		// Link naar de volledige /debat/[id]/-pagina; alleen zinvol op plekken
@@ -28,19 +33,13 @@ const props = withDefaults(
 	{ defaultExpanded: true, initialMuted: false },
 );
 
-const rawVideoUrl = props.arguments[0]?.document.raw_video_url ?? null;
-
-// Still voor het <video>-element z'n `poster` (issue: zwart vlak vóórdat
-// hls.js het manifest geladen heeft) -- eerste argument in dit debat met een
-// gematchte videospanne, zelfde aanpak als de homepage-kaarten
-// (frontend/src/pages/index.astro) en Python's _topic_image_url.
-const posterUrl = computed(() => {
-	for (const argument of props.arguments) {
-		const url = debateThumbnailUrl(argument.document.video_url, argument.document.published_at, argument.start_seconds);
-		if (url) return url;
-	}
-	return null;
-});
+// Gedeelde store (issue #119): meerdere islands op dezelfde pagina (deze
+// component en ClaimsHighlights.vue op de homepage) delen dezelfde fetch van
+// het per-debat gepubliceerde bestand i.p.v. elk apart de volledige lijst als
+// Astro-prop te krijgen. `arguments` blijft leeg tot `entry.status ===
+// "ready"`.
+const entry = useDebateArguments(props.debateId, props.dataBaseUrl);
+const argumentList = computed(() => entry.arguments);
 
 // Inklapbare argumentenlijst: elders (bv. de homepage-teaser van het laatste
 // debat) moet dezelfde view compact passen zonder de hele lijst permanent te
@@ -93,7 +92,7 @@ function togglePerspective(name: string) {
 
 // Welk argument(en) nu spelen, om de bijbehorende kaart in de lijst rechts
 // te benadrukken (zelfde idee als de overlay-badges: currentTime is leidend).
-const activeArgumentsList = computed(() => activeArguments(props.arguments, currentTime.value));
+const activeArgumentsList = computed(() => activeArguments(argumentList.value, currentTime.value));
 const activeArgumentIds = computed(() => new Set(activeArgumentsList.value.map((a) => a.id)));
 
 // Bij een lang debat (honderden argumenten) is de hele lijst in één keer
@@ -110,7 +109,17 @@ const activeArgumentIds = computed(() => new Set(activeArgumentsList.value.map((
 // ArgumentColumn.vue bestaat de lijst altijd, hier niet: `expanded` toggelt 'm
 // helemaal uit de DOM).
 const PAGE_SIZE = 50;
-const visibleArgumentCount = ref(Math.min(PAGE_SIZE, props.arguments.length));
+const visibleArgumentCount = ref(Math.min(PAGE_SIZE, argumentList.value.length));
+// De lijst is bij mount nog leeg (fetch loopt) -- zodra 'm gevuld raakt moet
+// de eerste pagina alsnog ingesteld worden, anders blijft visibleArgumentCount
+// op de 0 waarmee 'm hierboven initieel is berekend (issue #119: arguments
+// komt nu async binnen i.p.v. synchroon als prop).
+watch(
+	() => argumentList.value.length,
+	(length) => {
+		if (visibleArgumentCount.value === 0 && length > 0) visibleArgumentCount.value = Math.min(PAGE_SIZE, length);
+	},
+);
 // Watcht op een stabiele string-sleutel i.p.v. rechtstreeks op
 // activeArgumentIds: dat Set-object wordt bij elke currentTime-tick (~4x/s)
 // opnieuw aangemaakt, dus zonder dit vuurt de watcher ook wanneer de actieve
@@ -119,20 +128,20 @@ const activeArgumentKey = computed(() => activeArgumentsList.value.map((a) => a.
 watch(activeArgumentKey, () => {
 	const ids = activeArgumentIds.value;
 	if (ids.size === 0) return;
-	const activeIndex = props.arguments.findIndex((a) => ids.has(a.id));
+	const activeIndex = argumentList.value.findIndex((a) => ids.has(a.id));
 	if (activeIndex >= 0 && activeIndex + 1 > visibleArgumentCount.value) {
-		visibleArgumentCount.value = Math.min(activeIndex + 1 + PAGE_SIZE, props.arguments.length);
+		visibleArgumentCount.value = Math.min(activeIndex + 1 + PAGE_SIZE, argumentList.value.length);
 	}
 });
-const visibleArguments = computed(() => props.arguments.slice(0, visibleArgumentCount.value));
+const visibleArguments = computed(() => argumentList.value.slice(0, visibleArgumentCount.value));
 // Alleen relevant op de volle pagina (niet de compacte teaser, die heeft geen
 // scrollende argumentenlijst) -- gaat naar VideoOverlay.vue zodat de "lijst
 // volgt niet mee"-hint naast de vorig/volgend-knoppen verschijnt zolang
 // userScroll.ts' cooldown actief is (issue #147-vervolg).
 const followPaused = computed(() => !props.debateHref && userScroll.isScrolling);
-const hasMoreArguments = computed(() => visibleArgumentCount.value < props.arguments.length);
+const hasMoreArguments = computed(() => visibleArgumentCount.value < argumentList.value.length);
 function loadMoreArguments() {
-	visibleArgumentCount.value = Math.min(visibleArgumentCount.value + PAGE_SIZE, props.arguments.length);
+	visibleArgumentCount.value = Math.min(visibleArgumentCount.value + PAGE_SIZE, argumentList.value.length);
 }
 
 // IntersectionObserver i.p.v. een scroll-listener: observeert alleen de
@@ -159,7 +168,7 @@ watch(sentinelEl, (el) => {
 // het argument dat nu speelt (issue #135), met linkjes naar persoon/partij/
 // tag zodat die vanaf de homepage al bereikbaar zijn zonder eerst naar de
 // volledige debatpagina te hoeven.
-const nowPlaying = computed(() => activeArguments(props.arguments, currentTime.value)[0] ?? null);
+const nowPlaying = computed(() => activeArguments(argumentList.value, currentTime.value)[0] ?? null);
 
 // Onderdrukt de auto-volg-scroll in ArgumentCard.vue zolang de gebruiker zelf
 // aan het scrollen is (zie lib/userScroll.ts) -- window-niveau, want player-
@@ -281,10 +290,10 @@ function dismissFloating() {
 			>
 				×
 			</button>
-			<div v-if="rawVideoUrl" class="player-stage">
+			<div v-if="props.rawVideoUrl" class="player-stage">
 				<VideoPlayer
-					:src="rawVideoUrl"
-					:poster="posterUrl"
+					:src="props.rawVideoUrl"
+					:poster="props.posterUrl"
 					:seek-to="videoSeek.seconds"
 					:seek-token="videoSeek.token"
 					:initial-muted="props.initialMuted"
@@ -295,7 +304,7 @@ function dismissFloating() {
 					@seek="requestSeek"
 				>
 					<VideoOverlay
-						:arguments="props.arguments"
+						:arguments="argumentList"
 						:current-time="currentTime"
 						:off="off"
 						:follow-paused="followPaused"
@@ -325,13 +334,11 @@ function dismissFloating() {
 				</VideoPlayer>
 			</div>
 			<p v-else class="no-video">Voor dit debat is geen video beschikbaar.</p>
-			<VideoTimeline
-				v-if="rawVideoUrl && !isFloating"
-				:arguments="props.arguments"
-				:current-time="currentTime"
-				:duration="duration"
-				:off="off"
-			/>
+			<Transition v-if="props.rawVideoUrl && !isFloating" name="fade" mode="out-in">
+				<div v-if="entry.status === 'loading'" key="loading" class="timeline-skeleton" aria-hidden="true"></div>
+				<p v-else-if="entry.status === 'error'" key="error" class="status-hint">Kon de argumentdata niet laden. Probeer de pagina te verversen.</p>
+				<VideoTimeline v-else key="ready" :arguments="argumentList" :current-time="currentTime" :duration="duration" :off="off" />
+			</Transition>
 			<div v-if="!isFloating" class="perspective-filters" title="Verbergt of toont dit perspectief in de tag-badges op de video en in de tijdlijn hieronder">
 				<span class="perspective-filters-label">Filter op perspectief</span>
 				<button
@@ -354,37 +361,49 @@ function dismissFloating() {
 		     omhoog naar waar de video ooit stond. -->
 		<div v-if="isFloating" class="player-column-spacer" :style="{ height: `${floatingPlaceholderHeight}px` }" aria-hidden="true"></div>
 		<div v-if="!props.debateHref" class="argument-column">
-			<ol v-if="expanded" class="argument-list">
-				<li v-for="argument in visibleArguments" :key="argument.id">
-					<ArgumentCard
-						:argument="argument"
-						:topic-slug="props.topicSlug"
-						video-context
-						:playing="activeArgumentIds.has(argument.id)"
-						@seek="requestSeek"
-					/>
-				</li>
-				<li v-if="hasMoreArguments" ref="sentinelEl" class="column-load-more">
-					<button type="button" @click="loadMoreArguments">
-						meer laden ({{ props.arguments.length - visibleArgumentCount }} resterend)
-					</button>
-				</li>
-			</ol>
+			<Transition v-if="expanded" name="fade" mode="out-in">
+				<div v-if="entry.status === 'loading'" key="loading" class="argument-list-skeleton" aria-hidden="true">
+					<p class="status-hint">Argumenten laden&hellip;</p>
+				</div>
+				<p v-else-if="entry.status === 'error'" key="error" class="status-hint">Kon de argumentdata niet laden. Probeer de pagina te verversen.</p>
+				<ol v-else key="ready" class="argument-list">
+					<li v-for="argument in visibleArguments" :key="argument.id">
+						<ArgumentCard
+							:argument="argument"
+							:topic-slug="props.topicSlug"
+							video-context
+							:playing="activeArgumentIds.has(argument.id)"
+							@seek="requestSeek"
+						/>
+					</li>
+					<li v-if="hasMoreArguments" ref="sentinelEl" class="column-load-more">
+						<button type="button" @click="loadMoreArguments">
+							meer laden ({{ argumentList.length - visibleArgumentCount }} resterend)
+						</button>
+					</li>
+				</ol>
+			</Transition>
 		</div>
 		<!-- Compacte plek (debateHref gezet, bv. de homepage-teaser): geen ruimte
 		     voor de volledige lijst, wel voor één compacte "nu in beeld"-kaart
 		     (issue #135). -->
-		<div v-else-if="nowPlaying" class="now-playing">
-			<ArgumentCard
-				:argument="nowPlaying"
-				:topic-slug="props.topicSlug"
-				compact
-				video-context
-				:playing="true"
-				:arguments-in-debate="props.arguments"
-				:off="off"
-				@seek="requestSeek"
-			/>
+		<div v-else class="now-playing">
+			<Transition name="fade" mode="out-in">
+				<p v-if="entry.status === 'loading'" key="loading" class="status-hint">Argumenten laden&hellip;</p>
+				<p v-else-if="entry.status === 'error'" key="error" class="status-hint">Kon de argumentdata niet laden.</p>
+				<ArgumentCard
+					v-else-if="nowPlaying"
+					key="ready"
+					:argument="nowPlaying"
+					:topic-slug="props.topicSlug"
+					compact
+					video-context
+					:playing="true"
+					:arguments-in-debate="argumentList"
+					:off="off"
+					@seek="requestSeek"
+				/>
+			</Transition>
 		</div>
 	</div>
 </template>
@@ -550,6 +569,40 @@ function dismissFloating() {
 	background: var(--color-card-bg);
 	border: 1px solid var(--color-border);
 	border-radius: 4px;
+}
+
+/* Zelfde fade-idioom als VideoOverlay.vue's badge-transities
+   (.badge-enter-active e.a.): alleen opacity, geen beweging -- houdt de
+   overgang tussen skeleton en echte inhoud (issue #119: arguments komt async
+   binnen) rustig i.p.v. een layout-sprong of harde flits. */
+.fade-enter-active,
+.fade-leave-active {
+	transition: opacity 0.2s;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+	opacity: 0;
+}
+
+.status-hint {
+	color: var(--color-muted);
+	padding: var(--space-2) 0;
+	margin: 0;
+}
+
+/* Plaatshouders op de plek van de tijdlijn/argumentkaarten zolang de
+   onderwerp-JSON nog niet binnen is -- voorkomt dat de pagina springt zodra
+   de echte inhoud verschijnt. */
+.timeline-skeleton {
+	height: 28px;
+	border-radius: 4px;
+	background: var(--color-card-bg);
+	margin-top: var(--space-2);
+}
+
+.argument-list-skeleton {
+	padding: var(--space-2) 0;
 }
 
 .perspective-filters {

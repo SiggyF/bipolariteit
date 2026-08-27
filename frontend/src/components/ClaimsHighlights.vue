@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { displayPartyName } from "../lib/parties";
+import { useDebateArguments } from "../lib/debateArguments";
 import { requestScrollTo } from "../lib/scrollTarget";
 import { requestSeek } from "../lib/videoSeek";
 import type { Argument, Claim } from "../lib/types";
@@ -8,7 +9,8 @@ import type { Argument, Claim } from "../lib/types";
 const TARGET_COUNT = 6;
 
 const props = defineProps<{
-	argumentList: Argument[];
+	debateId: string;
+	dataBaseUrl: string;
 	// Alleen zinvol op plekken die zelf niet de topic-pagina zijn (bv. de
 	// homepage-teaser, zie DebateVideoView.vue's debateHref voor hetzelfde
 	// idee): daar bestaat geen argumentenlijst op de pagina zelf om naartoe te
@@ -25,6 +27,12 @@ const props = defineProps<{
 	// selectie" (default) niet.
 	heading?: string;
 }>();
+
+// Gedeelde store (issue #119): deelt dezelfde fetch/geparste array als
+// DebateVideoView.vue op dezelfde pagina i.p.v. zelf nog een keer hetzelfde
+// per-debat bestand op te halen.
+const entry = useDebateArguments(props.debateId, props.dataBaseUrl);
+const argumentList = computed(() => entry.arguments);
 
 interface Candidate {
 	argument: Argument;
@@ -49,7 +57,7 @@ function rankOf(key: string): number {
 const candidates = computed<Candidate[]>(() => {
 	const sourced: Candidate[] = [];
 	const unsourced: Candidate[] = [];
-	for (const argument of props.argumentList) {
+	for (const argument of argumentList.value) {
 		argument.claims.forEach((claim, i) => {
 			const candidate: Candidate = { argument, claim, key: `${argument.id}:${i}` };
 			(claim.attributed_source_text ? sourced : unsourced).push(candidate);
@@ -88,6 +96,7 @@ function displayClaimText(text: string): string {
 </script>
 
 <template>
+	<Transition name="fade">
 	<section v-if="candidates.length" class="claims-highlights">
 		<h2>{{ heading ?? "Wat wordt er beweerd?" }}</h2>
 		<p class="panel-note">Een willekeurige greep uit de claims in deze selectie. Klik om het bijbehorende argument te bekijken.</p>
@@ -112,4 +121,5 @@ function displayClaimText(text: string): string {
 			</li>
 		</ul>
 	</section>
+	</Transition>
 </template>
