@@ -113,6 +113,57 @@ const corpusVerbositeitStats = verbositeitStats
 function vsCorpus(waarde: number, gemiddelde: number, decimalen = 1): string {
 	return `${waarde.toFixed(decimalen)} (corpusgemiddelde: ${gemiddelde.toFixed(decimalen)})`;
 }
+
+// Elke badge: een korte, neutrale categorie-omschrijving (waar meet dit iets
+// over?), de technische term (voor wie de formule kent), dan pas het getal.
+const verbositeitBadges =
+	verbositeitStats && corpusVerbositeitStats
+		? [
+				{
+					categorie: "Zinsbouw",
+					term: "Gem. zinslengte",
+					waarde: verbositeitStats.gemZinslengte,
+					corpusGemiddelde: corpusVerbositeitStats.gemZinslengte,
+					decimalen: 1,
+					eenheid: "woorden",
+				},
+				{
+					categorie: "Zinsbouw",
+					term: "Flesch-Douma",
+					waarde: verbositeitStats.fleschDouma,
+					corpusGemiddelde: corpusVerbositeitStats.fleschDouma,
+					decimalen: 1,
+				},
+				{
+					categorie: "Zinsbouw",
+					term: "LIX",
+					waarde: verbositeitStats.lix,
+					corpusGemiddelde: corpusVerbositeitStats.lix,
+					decimalen: 1,
+				},
+				{
+					categorie: "Woordenschat",
+					term: "MSTTR",
+					waarde: verbositeitStats.msttr,
+					corpusGemiddelde: corpusVerbositeitStats.msttr,
+					decimalen: 2,
+				},
+				{
+					categorie: "Argumentdichtheid",
+					term: "Argumenten per 1000 tekens",
+					waarde: verbositeitStats.argumentenPer1000Tekens,
+					corpusGemiddelde: corpusVerbositeitStats.argumentenPer1000Tekens,
+					decimalen: 2,
+				},
+				{
+					categorie: "Onderbouwing",
+					term: "Claims per argument",
+					waarde: verbositeitStats.claimsPerArgument,
+					corpusGemiddelde: corpusVerbositeitStats.claimsPerArgument,
+					decimalen: 2,
+				},
+			]
+		: [];
 ---
 
 <BaseLayout title={`${name || "Persoon"} - Bipolariteit`}>
@@ -120,41 +171,6 @@ function vsCorpus(waarde: number, gemiddelde: number, decimalen = 1): string {
 		<a href={`/partijen/${slugify(canonicalPartyNaam)}/`} class="back-link">&larr; {displayPartyName(canonicalPartyNaam)}</a>
 	) : (
 		<a href="/personen/" class="back-link">&larr; alle personen</a>
-	)}
-	{verbositeitStats && corpusVerbositeitStats && (
-		<section class="verbositeit-stats" aria-label="Verbositeit en onderbouwing">
-			<h2>Langdradigheid en onderbouwing</h2>
-			<p class="verbositeit-toelichting">
-				Op basis van {verbositeitStats.nSprekerbeurten} sprekerbeurten. Puur tekststatistiek, geen oordeel over de
-				inhoud (zie <a href="https://github.com/SiggyF/bipolariteit/issues/155">issue #155</a>).
-			</p>
-			<dl class="verbositeit-grid">
-				<div class="verbositeit-badge" title={vsCorpus(verbositeitStats.gemZinslengte, corpusVerbositeitStats.gemZinslengte)}>
-					<dt>Gem. zinslengte</dt>
-					<dd>{verbositeitStats.gemZinslengte.toFixed(1)} <span class="verbositeit-eenheid">woorden</span></dd>
-				</div>
-				<div class="verbositeit-badge" title={vsCorpus(verbositeitStats.fleschDouma, corpusVerbositeitStats.fleschDouma)}>
-					<dt>Flesch-Douma</dt>
-					<dd>{verbositeitStats.fleschDouma.toFixed(1)}</dd>
-				</div>
-				<div class="verbositeit-badge" title={vsCorpus(verbositeitStats.lix, corpusVerbositeitStats.lix)}>
-					<dt>LIX</dt>
-					<dd>{verbositeitStats.lix.toFixed(1)}</dd>
-				</div>
-				<div class="verbositeit-badge" title={vsCorpus(verbositeitStats.msttr, corpusVerbositeitStats.msttr, 2)}>
-					<dt>MSTTR</dt>
-					<dd>{verbositeitStats.msttr.toFixed(2)}</dd>
-				</div>
-				<div class="verbositeit-badge" title={vsCorpus(verbositeitStats.argumentenPer1000Tekens, corpusVerbositeitStats.argumentenPer1000Tekens, 2)}>
-					<dt>Argumenten per 1000 tekens</dt>
-					<dd>{verbositeitStats.argumentenPer1000Tekens.toFixed(2)}</dd>
-				</div>
-				<div class="verbositeit-badge" title={vsCorpus(verbositeitStats.claimsPerArgument, corpusVerbositeitStats.claimsPerArgument, 2)}>
-					<dt>Claims per argument</dt>
-					<dd>{verbositeitStats.claimsPerArgument.toFixed(2)}</dd>
-				</div>
-			</dl>
-		</section>
 	)}
 	{name && (
 		<ActorTagUsage
@@ -164,7 +180,29 @@ function vsCorpus(waarde: number, gemiddelde: number, decimalen = 1): string {
 			favorieteTags={favorieteTags}
 			minstFavorieteTags={minstFavorieteTags}
 			client:only="vue"
-		/>
+		>
+			{verbositeitStats && corpusVerbositeitStats && (
+				<section class="verbositeit-stats" aria-label="Tekststatistieken" slot="voor-argumentlijst">
+					<h2>Tekststatistieken</h2>
+					<p class="verbositeit-toelichting">
+						Op basis van {verbositeitStats.nSprekerbeurten} sprekerbeurten. Puur tekststatistiek, geen oordeel over de
+						inhoud (zie <a href="https://github.com/SiggyF/bipolariteit/issues/155">issue #155</a>).
+					</p>
+					<dl class="verbositeit-grid">
+						{verbositeitBadges.map((badge) => (
+							<div class="verbositeit-badge" title={vsCorpus(badge.waarde, badge.corpusGemiddelde, badge.decimalen)}>
+								<dt class="verbositeit-categorie">{badge.categorie}</dt>
+								<dt class="verbositeit-term">{badge.term}</dt>
+								<dd>
+									{badge.waarde.toFixed(badge.decimalen)}
+									{badge.eenheid && <span class="verbositeit-eenheid">{badge.eenheid}</span>}
+								</dd>
+							</div>
+						))}
+					</dl>
+				</section>
+			)}
+		</ActorTagUsage>
 	)}
 </BaseLayout>
 
@@ -201,9 +239,16 @@ function vsCorpus(waarde: number, gemiddelde: number, decimalen = 1): string {
 		border-radius: 0.4rem;
 	}
 
-	.verbositeit-badge dt {
+	.verbositeit-categorie {
 		font-size: var(--step--1);
 		color: var(--color-muted);
+		text-transform: uppercase;
+		letter-spacing: 0.02em;
+	}
+
+	.verbositeit-term {
+		font-size: var(--step--1);
+		margin-top: 0.1rem;
 	}
 
 	.verbositeit-badge dd {
