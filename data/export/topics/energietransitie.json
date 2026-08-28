@@ -60829,7 +60829,136 @@
           "attributed_source_text": null
         }
       ],
-      "tags": [],
+      "tags": [
+        {
+          "sleutel": "Arena-Parlement",
+          "beschrijving": "Debat of uitspraak afkomstig uit de Eerste of Tweede Kamer.",
+          "labelgroep": "Issue Arena",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Bron is een Tweede Kamer-debat (documents.source.type = 'tweede_kamer')."
+        },
+        {
+          "sleutel": "Actor-Politicus",
+          "beschrijving": "Een gekozen volksvertegenwoordiger, bewindspersoon of partijvertegenwoordiger.",
+          "labelgroep": "Actor Type",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Spreker heeft een geregistreerde partij (PvdD)."
+        },
+        {
+          "sleutel": "Context-Plenair",
+          "beschrijving": "Groot plenair debat in de plenaire zaal; sterk ideologisch van aard (bijv. de Algemene Politieke Beschouwingen).",
+          "labelgroep": "Parlementaire Context",
+          "perspectief": "Methodologisch & Contextueel",
+          "created_by": "derived",
+          "reden": "Afgeleid van VLOS-activiteitsoort 'Plenair debat'."
+        },
+        {
+          "sleutel": "Walton-Consequentie",
+          "beschrijving": "Het verdedigen of aanvallen van een standpunt op basis van de verwachte praktische (voordelige of nadelige) gevolgen.",
+          "labelgroep": "Redeneerschema",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het standpunt wordt verdedigd op basis van de nadelige gevolgen van het huidige systeem (crises, hoge prijzen) en de verwachte positieve uitkomst van de voorgestelde oplossing (veilige, groene voorziening)."
+        },
+        {
+          "sleutel": "Frame-Thematisch",
+          "beschrijving": "Het benaderen van de kwestie vanuit een breder maatschappelijk, statistisch of historisch kader.",
+          "labelgroep": "Framing-Focus",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "Het argument benadert de energiecrisis vanuit een breed maatschappelijk en structureel kader (fossiele industrie, subsidies, systeemkritiek) in plaats van te focussen op een enkel incident."
+        },
+        {
+          "sleutel": "Frame-Economisch",
+          "beschrijving": "De focus ligt op de financiële kosten, baten of budgettaire gevolgen van een kwestie.",
+          "labelgroep": "Generieke Nieuwsframes",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "De focus ligt sterk op financiële aspecten zoals torenhoge prijzen, miljardenwinsten, subsidies en de betaalbaarheid van rekeningen."
+        },
+        {
+          "sleutel": "Frame-Verantwoordelijkheid",
+          "beschrijving": "De nadruk ligt op de schuldvraag of de plicht tot het oplossen van het probleem.",
+          "labelgroep": "Generieke Nieuwsframes",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "Er wordt expliciet schuld toegewezen aan de fossiele industrie en energiebedrijven voor het veroorzaken van de crisis en het misbruik van het systeem."
+        },
+        {
+          "sleutel": "Ideologie-GAL",
+          "beschrijving": "Progressief, ecologisch, kosmopolitisch (Green, Alternative, Libertarian).",
+          "labelgroep": "Cultureel-Ideologische Breuklijn",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "De spreker pleit voor een versnelling van de groene energietransitie en het afbouwen van fossiele industrie, wat kernpunten zijn van de progressieve en ecologische GAL-ideologie."
+        },
+        {
+          "sleutel": "Ideologie-Links-Economisch",
+          "beschrijving": "Gericht op herverdeling van welvaart, sterke collectieve voorzieningen en overheidsingrijpen.",
+          "labelgroep": "Cultureel-Ideologische Breuklijn",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "Er wordt kritiek geuit op de vrije markt en de winstjacht van energiebedrijven, terwijl er wordt gepleit voor overheidsingrijpen via het stopzetten van subsidies en het beschermen van consumenten."
+        },
+        {
+          "sleutel": "Moraliteit-Eerlijkheid",
+          "beschrijving": "Gericht op gelijke kansen, gelijke rechten en onpartijdige behandeling (equality).",
+          "labelgroep": "Morele Fundamenten",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "Er wordt gesproken over ongelijkheid waarbij bedrijven miljarden verdienen 'over de rug van gewone mensen' terwijl groene bedrijven in het 'verdomhoekje' zitten, wat wijst op een streven naar rechtvaardige behandeling."
+        },
+        {
+          "sleutel": "Moraliteit-Zorg",
+          "beschrijving": "Gericht op empathie, compassie en het voorkomen van leed en schade bij kwetsbaren.",
+          "labelgroep": "Morele Fundamenten",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "Er wordt aandacht besteed aan het leed van mensen die hun boodschappen en energierekening niet meer kunnen betalen, wat empathie voor kwetsbaren toont."
+        },
+        {
+          "sleutel": "Moraliteit-Vrijheid",
+          "beschrijving": "Gericht op individuele autonomie en weerstand tegen dwang of onderdrukking door dominante actoren.",
+          "labelgroep": "Morele Fundamenten",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "De afhankelijkheid van 'kwalijke regimes' wordt genoemd als een negatief aspect, wat wijst op een waarde van autonomie en vrijheid van externe dwang."
+        },
+        {
+          "sleutel": "Bewijs-Statistisch",
+          "beschrijving": "Onderbouwd met kwantitatieve gegevens, cijfers, percentages of grootschalig representatief onderzoek.",
+          "labelgroep": "Type Bewijsvoering",
+          "perspectief": "Methodologisch & Contextueel",
+          "created_by": "llm",
+          "reden": "Er wordt verwezen naar specifieke kwantitatieve gegevens, namelijk '40 miljard aan fossiele subsidies' en 'miljarden euro's extra' winst."
+        },
+        {
+          "sleutel": "Bewijs-Causaal",
+          "beschrijving": "Onderbouwd met een heldere, mechanistische of logische verklaring van oorzaak en gevolg.",
+          "labelgroep": "Type Bewijsvoering",
+          "perspectief": "Methodologisch & Contextueel",
+          "created_by": "llm",
+          "reden": "Er wordt een oorzaak-gevolgrelatie gelegd tussen de fossiele industrie en de afhankelijkheid van regimes, hoge prijzen en de energiecrisis."
+        },
+        {
+          "sleutel": "Stijl-Antithese",
+          "beschrijving": "Het naast elkaar plaatsen van twee tegengestelde begrippen of ideeën.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Er wordt een scherp contrast getrokken tussen de fossiele industrie die het goed doet en de groene/recyclebedrijven die in het verdomhoekje zitten."
+        },
+        {
+          "sleutel": "Stijl-Herhaling",
+          "beschrijving": "Herhaling van hetzelfde woord of dezelfde woordgroep binnen het fragment, ter nadruk.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De term 'fossiele' wordt herhaald in combinatie met 'industrie', 'crisis' en 'cirkel' om het centrale probleem te benadrukken."
+        }
+      ],
       "oppositions": []
     },
     {
@@ -66900,7 +67029,144 @@
         "regering": "Kabinet-Jetten"
       },
       "claims": [],
-      "tags": [],
+      "tags": [
+        {
+          "sleutel": "Arena-Parlement",
+          "beschrijving": "Debat of uitspraak afkomstig uit de Eerste of Tweede Kamer.",
+          "labelgroep": "Issue Arena",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Bron is een Tweede Kamer-debat (documents.source.type = 'tweede_kamer')."
+        },
+        {
+          "sleutel": "Actor-Politicus",
+          "beschrijving": "Een gekozen volksvertegenwoordiger, bewindspersoon of partijvertegenwoordiger.",
+          "labelgroep": "Actor Type",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Spreker heeft een geregistreerde partij (PVV)."
+        },
+        {
+          "sleutel": "Context-Plenair",
+          "beschrijving": "Groot plenair debat in de plenaire zaal; sterk ideologisch van aard (bijv. de Algemene Politieke Beschouwingen).",
+          "labelgroep": "Parlementaire Context",
+          "perspectief": "Methodologisch & Contextueel",
+          "created_by": "derived",
+          "reden": "Afgeleid van VLOS-activiteitsoort 'Plenair debat'."
+        },
+        {
+          "sleutel": "Walton-Consequentie",
+          "beschrijving": "Het verdedigen of aanvallen van een standpunt op basis van de verwachte praktische (voordelige of nadelige) gevolgen.",
+          "labelgroep": "Redeneerschema",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het argument attackeert het voorstel voor een fonds op basis van de verwachte praktische gevolgen: dat burgers er op korte termijn 'geen bal aan' hebben en dat lenen niet helpt bij de directe kostenproblemen."
+        },
+        {
+          "sleutel": "Debatzet-Keuze-Aanscherpen",
+          "beschrijving": "Zwart-wit denken; de situatie voorstellen alsof er slechts twee uiterste, elkaar uitsluitende opties bestaan.",
+          "labelgroep": "Debatzetten",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De spreker presenteert de situatie alsof er slechts twee opties zijn: ofwel directe prijsverlagingen nu, ofwel nutteloze leningen voor isolatie, waarbij andere beleidsmatige nuances worden genegeerd."
+        },
+        {
+          "sleutel": "Debatzet-Persoon-Aanspreken",
+          "beschrijving": "Persoonlijke aanval op de tegenstander (op de man spelen) in plaats van een inhoudelijke weerlegging.",
+          "labelgroep": "Debatzetten",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De spreker richt zich persoonlijk tot de minister-president met de dreigende uitspraak 'dan heeft deze minister-president hier niets meer te zoeken', wat een persoonlijke aanval is in plaats van een inhoudelijke weerlegging."
+        },
+        {
+          "sleutel": "Frame-Thematisch",
+          "beschrijving": "Het benaderen van de kwestie vanuit een breder maatschappelijk, statistisch of historisch kader.",
+          "labelgroep": "Framing-Focus",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "Het argument behandelt bredere maatschappelijke kwesties zoals algemene energierekeningen, boodschappenprijzen en overheidsbeleid, in plaats van te focussen op één specifiek individueel incident."
+        },
+        {
+          "sleutel": "Frame-Economisch",
+          "beschrijving": "De focus ligt op de financiële kosten, baten of budgettaire gevolgen van een kwestie.",
+          "labelgroep": "Generieke Nieuwsframes",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "De focus ligt volledig op financiële aspecten: lenen, accijnzen, benzineprijzen, boodschappenprijzen en energierekeningen."
+        },
+        {
+          "sleutel": "Frame-Conflict",
+          "beschrijving": "De nadruk ligt op de felle strijd of meningsverschillen tussen personen, partijen of groepen.",
+          "labelgroep": "Generieke Nieuwsframes",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "Er is sprake van een felle strijd tussen de spreker en de minister-president, waarbij de spreker eisen stelt en dreigt met politieke consequenties."
+        },
+        {
+          "sleutel": "Ideologie-Rechts-Economisch",
+          "beschrijving": "Gericht op de vrije markt, deregulering en individuele verantwoordelijkheid.",
+          "labelgroep": "Cultureel-Ideologische Breuklijn",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "De spreker pleit voor lagere accijnzen, goedkopere brandstof en energierekeningen, wat wijst op een voorkeur voor lagere overheidstarieven en individuele financiële ontlasting."
+        },
+        {
+          "sleutel": "Ideologie-TAN",
+          "beschrijving": "Conservatief, traditioneel, nationalistisch (Traditional, Authoritarian, Nationalist).",
+          "labelgroep": "Cultureel-Ideologische Breuklijn",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "De nadruk op directe, tastbare hulp aan 'de burgers' en de afwijzing van abstracte economische theorieën ('verhalen van economen') sluiten aan bij een populair-conservatieve, anti-elitaire instelling."
+        },
+        {
+          "sleutel": "Moraliteit-Zorg",
+          "beschrijving": "Gericht op empathie, compassie en het voorkomen van leed en schade bij kwetsbaren.",
+          "labelgroep": "Morele Fundamenten",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "De spreker betoont empathie voor de directe financiële lasten van burgers ('Dat is waar mensen nu mee geholpen zijn') en wil leed voorkomen door kosten te verlagen."
+        },
+        {
+          "sleutel": "Moraliteit-Vrijheid",
+          "beschrijving": "Gericht op individuele autonomie en weerstand tegen dwang of onderdrukking door dominante actoren.",
+          "labelgroep": "Morele Fundamenten",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "Er is weerstand tegen overheidsingrijpen via leningen en accijnzen, met een voorkeur voor individuele autonomie en lagere kosten voor burgers en bedrijven."
+        },
+        {
+          "sleutel": "Bewijs-Causaal",
+          "beschrijving": "Onderbouwd met een heldere, mechanistische of logische verklaring van oorzaak en gevolg.",
+          "labelgroep": "Type Bewijsvoering",
+          "perspectief": "Methodologisch & Contextueel",
+          "created_by": "llm",
+          "reden": "De spreker gebruikt een logische verklaring dat lenen voor isolatie geen directe oplossing biedt voor de huidige hoge energierekeningen ('geen bal aan om iets te lenen... en daar een jaar later profijt van te hebben')."
+        },
+        {
+          "sleutel": "Meta-Agenda-Tijdigheid",
+          "beschrijving": "Uitingen over de chronologische geschiktheid, de prioriteitstelling of de urgentie van de discussie op dit specifieke moment.",
+          "labelgroep": "Metadiscussie",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De spreker benadrukt de urgentie van het moment ('nu de komende weken en maanden', 'heel snel kan invoeren') en stelt dat de huidige maatregelen niet aansluiten bij de directe behoeften van dit moment."
+        },
+        {
+          "sleutel": "Stijl-Retorische-Vraag",
+          "beschrijving": "Een vraag waarvan het antwoord al besloten ligt in de formulering zelf.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De zin 'Wat hebben die eraan dat er een fonds komt...?' is een retorische vraag die impliceert dat het antwoord 'niets' is, zonder dat een daadwerkelijk antwoord wordt verwacht."
+        },
+        {
+          "sleutel": "Stijl-Herhaling",
+          "beschrijving": "Herhaling van hetzelfde woord of dezelfde woordgroep binnen het fragment, ter nadruk.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De spreker herhaalt de zinstructuur 'dat ik wil dat...' meerdere keren om zijn eisen aan de minister-president nadrukkelijk te benadrukken."
+        }
+      ],
       "oppositions": []
     },
     {
@@ -159081,7 +159347,80 @@
           "attributed_source_text": "spoedplan van de NVDE"
         }
       ],
-      "tags": [],
+      "tags": [
+        {
+          "sleutel": "Arena-Parlement",
+          "beschrijving": "Debat of uitspraak afkomstig uit de Eerste of Tweede Kamer.",
+          "labelgroep": "Issue Arena",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Bron is een Tweede Kamer-debat (documents.source.type = 'tweede_kamer')."
+        },
+        {
+          "sleutel": "Actor-Politicus",
+          "beschrijving": "Een gekozen volksvertegenwoordiger, bewindspersoon of partijvertegenwoordiger.",
+          "labelgroep": "Actor Type",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Spreker heeft een geregistreerde partij (BBB)."
+        },
+        {
+          "sleutel": "Context-Commissie",
+          "beschrijving": "Commissiedebat of wetgevingsoverleg; technisch en gedetailleerd van aard met een hogere argumentatieve kwaliteit.",
+          "labelgroep": "Parlementaire Context",
+          "perspectief": "Methodologisch & Contextueel",
+          "created_by": "derived",
+          "reden": "Afgeleid van VLOS-activiteitsoort 'Commissiedebat'."
+        },
+        {
+          "sleutel": "Walton-Consequentie",
+          "beschrijving": "Het verdedigen of aanvallen van een standpunt op basis van de verwachte praktische (voordelige of nadelige) gevolgen.",
+          "labelgroep": "Redeneerschema",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het argument verdedigt de data-deling op basis van het verwachte praktische gevolg: gerichter sturen en meer gerichte controles."
+        },
+        {
+          "sleutel": "Frame-Thematisch",
+          "beschrijving": "Het benaderen van de kwestie vanuit een breder maatschappelijk, statistisch of historisch kader.",
+          "labelgroep": "Framing-Focus",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "Het argument benadert de kwestie vanuit een algemeen beleidskader (omgevingsdiensten, spoedplan NVDE) in plaats van een specifiek individueel incident."
+        },
+        {
+          "sleutel": "Ideologie-GAL",
+          "beschrijving": "Progressief, ecologisch, kosmopolitisch (Green, Alternative, Libertarian).",
+          "labelgroep": "Cultureel-Ideologische Breuklijn",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "Het argument steunt de energietransitie en het gebruik van data voor gerichter sturen, wat past binnen de progressieve en ecologische agenda."
+        },
+        {
+          "sleutel": "Moraliteit-Autoriteit",
+          "beschrijving": "Gericht op respect voor traditie, legitieme hiërarchie, wetten en maatschappelijke orde.",
+          "labelgroep": "Morele Fundamenten",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "Het argument benadrukt het inzicht en de sturingsrol van overheidsinstanties (omgevingsdiensten) om orde en effectiviteit te bewerkstelligen."
+        },
+        {
+          "sleutel": "Bewijs-Causaal",
+          "beschrijving": "Onderbouwd met een heldere, mechanistische of logische verklaring van oorzaak en gevolg.",
+          "labelgroep": "Type Bewijsvoering",
+          "perspectief": "Methodologisch & Contextueel",
+          "created_by": "llm",
+          "reden": "Er wordt een logische oorzaak-gevolgrelatie gelegd: het delen van gegevens leidt tot inzicht, wat leidt tot gerichter sturen en controles."
+        },
+        {
+          "sleutel": "Bewijs-Expert",
+          "beschrijving": "Onderbouwd met de consensus, verklaring of het oordeel van een erkend specialist.",
+          "labelgroep": "Type Bewijsvoering",
+          "perspectief": "Methodologisch & Contextueel",
+          "created_by": "llm",
+          "reden": "Het argument beroept zich op de bevindingen uit het spoedplan van de NVDE als onderbouwing."
+        }
+      ],
       "oppositions": []
     },
     {
@@ -230436,8 +230775,8 @@
       "quote_text": "Concreet betekent dit dat het kabinet dit voorjaar inzet op het volgende. [...] Maar ik zeg alvast in algemene zin dat ik samen met collega's werk aan een pakket waarin de uitvoering van reeds afgesproken maatregelen nu echt vorm en inhoud moet krijgen. We moeten in die uitvoering een aantal zaken versnellen door de randvoorwaarden op orde te krijgen. We zullen ook een aantal aanvullende of alternatieve maatregelen moeten nemen om die doelen in beeld te brengen. [...] Door die gesprekken te voeren en door echt de diepte in te gaan in onderlinge overleggen en in bpo's, waarin we met alle bewindspersonen bij elkaar zitten, werken we aan een pakket waarmee we die doelen binnen bereik brengen, maar waarmee we dus ook versnelling aanbrengen in de uitvoering, omdat het onze stellige overtuiging is dat we nu ook in een fase van de transitie zitten waarin we tegen problemen in de uitvoering aanlopen ofwel waarin dingen in de uitvoering niet gaan zoals we gewild of gewenst of gedacht of gehoopt hadden. [...] Dus het is ook aan ons om te kijken waar in de uitvoering we dingen kunnen verbeteren of versnellen om die afspraken ook echt te kunnen realiseren.",
       "quote_context": null,
       "prompt_version": "0b12780c7cac",
-      "start_seconds": null,
-      "end_seconds": null,
+      "start_seconds": 15057.0,
+      "end_seconds": 15139.5,
       "actor": {
         "name": "Sophie Hermans",
         "party": "VVD",
@@ -230500,8 +230839,8 @@
       "quote_text": "De klimaat- en energietransitie vraagt een grote gezamenlijke inspanning van veel partijen in de samenleving, niet alleen hier in het parlement. Sterker nog: de echte transitie vindt natuurlijk plaats bij mensen thuis, op het industrieterrein. Ik was gisteren bij Chemelot. Alle bedrijven daar zijn bezig met het in de praktijk brengen van beleid en afspraken die wij hier maken. Daar wordt de echte CO2-reductie gerealiseerd. Daar zien we ook dat bedrijven steeds meer overgaan van gasgestookte installaties naar installaties op elektriciteit, die we dicht bij huis opwekken. [...] Het is aan ons om in z'n totaliteit een weging te maken om tot een pakket te komen waarin maatregelen zitten die voor zowel de mensen thuis als bedrijven, groot en klein, uitvoerbaar en haalbaar zijn.",
       "quote_context": null,
       "prompt_version": "0b12780c7cac",
-      "start_seconds": null,
-      "end_seconds": null,
+      "start_seconds": 15057.0,
+      "end_seconds": 15108.666666666666,
       "actor": {
         "name": "Sophie Hermans",
         "party": "VVD",
@@ -231005,8 +231344,8 @@
       "quote_text": "Energiebesparing kan Nederland helpen om energieonafhankelijker te worden. Een groot deel van onze energie importeren wij uit het buitenland. Daarnaast zorgt energiebesparing voor een lagere energierekening, minder CO2-uitstoot en minder netcongestie. De VVD vindt het daarom van belang dat we de komende jaren blijven inzetten op energiebesparing.",
       "quote_context": null,
       "prompt_version": "0b12780c7cac",
-      "start_seconds": null,
-      "end_seconds": null,
+      "start_seconds": 2040.0,
+      "end_seconds": 2059.5833333333335,
       "actor": {
         "name": "Arend Kisteman",
         "party": "VVD",
@@ -232638,8 +232977,8 @@
       "quote_text": "Voorzitter. De energiebesparingsplicht voor bedrijven moet snel worden verbeterd, anders krijg je scheefgroei en een oneerlijk speelveld. Slechts de helft van de bedrijven heeft de verplichte rapportage ingeleverd en nog minder bedrijven voldoen aan de besparingsplicht. De reactie van de minister op het rapport was afhoudend en vrijblijvend. Hoe gaat zij ondernemers helpen en het toezicht daadwerkelijk verbeteren? Lokale toezichthouders en omgevingsdiensten stellen nu andere prioriteiten. Worden daar afspraken over gemaakt, bijvoorbeeld afspraken over risicogestuurd toezicht? Ik krijg het signaal dat er vooral gekeerd wordt naar bedrijven die voldoen aan de informatieplicht en al maatregelen hebben genomen. Dat lijkt me niet de goede groep. Wordt het toezicht ook gericht op het helpen van bedrijven waar de grootste slagen gemaakt kunnen worden?",
       "quote_context": null,
       "prompt_version": "0b12780c7cac",
-      "start_seconds": null,
-      "end_seconds": null,
+      "start_seconds": 3853.0,
+      "end_seconds": 3903.4166666666665,
       "actor": {
         "name": "André Flach",
         "party": "SGP",
@@ -233491,8 +233830,8 @@
       "quote_text": "Mevrouw Kröger vroeg mij ook of we de vraag wat we nou doen om minder energie te gebruiken niet centraal moeten stellen bij alles wat we doen en bij de afwegingen die we maken. Die vraag komt eigenlijk bij alles wat ik doe voorbij. Dat is ook de reden dat ik bij het nadenken over en het vormgeven van dat pakket in het voorjaar expliciet wil kijken naar maatregelen die energiebesparing realiseren. Het mooiste zijn natuurlijk maatregelen die beide tegelijkertijd doen: CO2 reduceren en energie besparen. Maar ook energiebesparing als zodanig betrek ik daarbij, om de reden die ik net noemde: er zit veel potentieel en het is van groot belang om de verschillende doelen die we hebben te realiseren.",
       "quote_context": null,
       "prompt_version": "0b12780c7cac",
-      "start_seconds": null,
-      "end_seconds": null,
+      "start_seconds": 7165.0,
+      "end_seconds": 7215.0,
       "actor": {
         "name": "Sophie Hermans",
         "party": "VVD",
@@ -234527,8 +234866,8 @@
       "quote_text": "Dan doen we de mobiliteitssector echt tekort, want twee decennia geleden bedroeg de CO2-uitstoot van het wegverkeer ongeveer 41 megaton. Dat daalt richting de 23 megaton in 2030. Dus die daling is ingezet. Eerlijkheid gebiedt te zeggen dat we nog niet op die 23 megaton zitten, maar dat zal met het huidige nationale en Europese beleid moeten worden voortgezet, onder andere door de snelle groei van elektrische auto's in ons wagenpark.",
       "quote_context": "Over CO2-reductie in de mobiliteitssector",
       "prompt_version": "0b12780c7cac",
-      "start_seconds": null,
-      "end_seconds": null,
+      "start_seconds": 12874.0,
+      "end_seconds": 12903.583333333334,
       "actor": {
         "name": "Sophie Hermans",
         "party": "VVD",
@@ -234568,8 +234907,8 @@
       "quote_text": "Ik ben blij met de antwoorden van de minister die gaan over de energiebesparingsplicht voor bedrijven. Ze komt onder meer nog met een brief over de betere handhaving daarvan, want 40% van de ondernemers voldoet daar nog niet aan. De minister wil ook denken over het uitbreiden van het ontzorgingsprogramma voor het mkb naar grotere bedrijven. Denk dan bijvoorbeeld aan de ETS-bedrijven, waar nog een hele grote besparing te halen is en ook reductie van CO2, als zij echt gaan voldoen aan de energiebesparingsplicht.",
       "quote_context": "Steun voor strengere handhaving en uitbreiding van energiebesparingsplicht bij bedrijven om CO2-reductie te realiseren.",
       "prompt_version": "0b12780c7cac",
-      "start_seconds": null,
-      "end_seconds": null,
+      "start_seconds": 13164.0,
+      "end_seconds": 13199.0,
       "actor": {
         "name": "Ilana Rooderkerk",
         "party": "D66",
@@ -236385,8 +236724,8 @@
       "quote_text": "Kernenergie is een onmisbaar fundament onder een robuust, schoon en toekomstbestendig energiesysteem. Het is een betrouwbare, CO2-vrije energiebron, die ons land minder afhankelijk maakt. Kernenergie maakt Nederland veiliger, duurzamer en economisch sterker. De VVD pleit dan ook al langer voor het openhouden van de kerncentrale in Borssele. Dat dit nu mogelijk wordt gemaakt met deze wetswijziging, is goed nieuws voor onze leveringszekerheid en voor ons klimaat. Met Borssele kunnen wij een eigen, stabiele stroomvoorziening behouden. Bovendien draagt het openhouden ervan bij aan het behoud van specifieke nucleaire kennis en ervaring in Nederland. Kennis die wij in de toekomst keihard nodig hebben.",
       "quote_context": null,
       "prompt_version": "0b12780c7cac",
-      "start_seconds": null,
-      "end_seconds": null,
+      "start_seconds": 1989.0,
+      "end_seconds": 2031.0833333333333,
       "actor": {
         "name": "Alisha Müller",
         "party": "VVD",
@@ -236526,8 +236865,8 @@
       "quote_text": "Soms kijk ik ook met grote vraagtekens, vooral wat de Atomausstieg betreft: kerncentrales dicht, terwijl je vanuit geopolitiek perspectief minder afhankelijk wilt zijn. Kerncentrales dicht, terwijl bruinkoolcentrales overuren draaien: dat is niet bepaald goed voor de CO2-uitstoot. Die kant moeten we hier niet op.",
       "quote_context": null,
       "prompt_version": "0b12780c7cac",
-      "start_seconds": null,
-      "end_seconds": null,
+      "start_seconds": 2594.0,
+      "end_seconds": 2612.3333333333335,
       "actor": {
         "name": "André Flach",
         "party": "SGP",
@@ -236558,8 +236897,8 @@
       "quote_text": "De huidige kerncentrale produceert al vele jaren zonder subsidie CO2-vrije stroom. Het zorgt voor een betrouwbare basislast in ons energiesysteem. Daar hadden we er meer van moeten hebben.",
       "quote_context": null,
       "prompt_version": "0b12780c7cac",
-      "start_seconds": null,
-      "end_seconds": null,
+      "start_seconds": 2594.0,
+      "end_seconds": 2605.6666666666665,
       "actor": {
         "name": "André Flach",
         "party": "SGP",
@@ -236774,8 +237113,8 @@
       "quote_text": "De kerncentrale in Borssele is daar al sinds 1973 onderdeel van. Hij levert betrouwbaar CO2-arme stroom en bespaart daarmee jaarlijks bijna een megaton CO2-uitstoot. Toen sluiting van Borssele ter discussie stond in de eerste jaren van deze eeuw, zei de kernfysicus Jan Terlouw: \"De gevaren van klimaatverandering zijn veel groter dan die van kerncentrales.\" Volgens hem was het \"onverantwoord om een veilige kerncentrale te sluiten\". Op dat standpunt stelt mijn fractie zich nu ook.",
       "quote_context": null,
       "prompt_version": "0b12780c7cac",
-      "start_seconds": null,
-      "end_seconds": null,
+      "start_seconds": 2898.0,
+      "end_seconds": 2928.8333333333335,
       "actor": {
         "name": "Felix Klos",
         "party": "D66",
@@ -237553,8 +237892,8 @@
       "quote_text": "Nederland heeft behoefte aan betrouwbare, betaalbare en schone energie. In dat verhaal is kernenergie gewoon de basis, niet als ideologisch doel, maar omdat het werkt. Er is sprake van een stabiele productie, een extreem lage CO2-uitstoot — dat is alleen maar in het stukje onderhoud, bouw en eventuele afbraak het geval — en een belangrijke bijdrage aan leveringszekerheid.",
       "quote_context": null,
       "prompt_version": "0b12780c7cac",
-      "start_seconds": null,
-      "end_seconds": null,
+      "start_seconds": 4183.0,
+      "end_seconds": 4207.166666666667,
       "actor": {
         "name": "Henk Vermeer",
         "party": "BBB",
@@ -238070,8 +238409,8 @@
       "quote_text": "Dan kom ik bij energieopslag. Die kan op sommige plaatsen een rol spelen in het verminderen van congestie. Hoe staat het in dat kader met de aangenomen motie om die opslaglocaties in kaart te brengen? Het jaar loopt ten einde; ik ben benieuwd of het is gelukt. De hoge tarieven zijn nu vaak een bottleneck voor opslagprojecten. Om de CEO van een energiebedrijf te citeren: in België, waar het elektriciteitsnet half zo groot is, hebben we ongeveer tien keer zo veel batterijen in aanbouw. Het is toch niet de bedoeling dat we hier zo achterlopen? Er loopt momenteel een onderzoek van de ACM naar de tarieven voor batterijen. Wordt het onderzoek naar het invoedingstarief, waar een motie van mij over is aangenomen, hierbij betrokken? Tot nu toe ben ik niet helemaal tevreden over de voortgang, in ieder geval bij de ACM in dit dossier. Ik heb hier vaker gestaan met de vraag om een opslagdoel. De minister wil er niet aan, maar andere Europese landen hebben wel een dergelijke doel. Waarom wijkt Nederland hiervan af? Is een doel niet alsnog een goed idee, alleen al kijkend naar België?",
       "quote_context": null,
       "prompt_version": "0b12780c7cac",
-      "start_seconds": null,
-      "end_seconds": null,
+      "start_seconds": 423.0,
+      "end_seconds": 501.33333333333337,
       "actor": {
         "name": "Pieter Grinwis",
         "party": "ChristenUnie",
@@ -238701,8 +239040,8 @@
       "quote_text": "Dat ontlast niet enkel het net, maar biedt tegelijkertijd ook de kans om meer dan een tiende van de CO2-uitstootreductie die ontbreekt voor het halen van onze klimaatdoelen, op te vangen.",
       "quote_context": null,
       "prompt_version": "0b12780c7cac",
-      "start_seconds": null,
-      "end_seconds": null,
+      "start_seconds": 1495.0,
+      "end_seconds": 1507.9166666666667,
       "actor": {
         "name": "Sjoukje van Oosterhout",
         "party": "GroenLinks-PvdA",
@@ -238770,8 +239109,8 @@
       "quote_text": "Energie-efficiëntie is daar ook een heel belangrijk onderdeel van. Daar kan nog enorm veel CO2-reductie uit voortkomen en het geeft heel veel ruimte op het net.",
       "quote_context": null,
       "prompt_version": "0b12780c7cac",
-      "start_seconds": null,
-      "end_seconds": null,
+      "start_seconds": 1755.0,
+      "end_seconds": 1765.8333333333333,
       "actor": {
         "name": "Sjoukje van Oosterhout",
         "party": "GroenLinks-PvdA",
@@ -240870,8 +241209,8 @@
       "quote_text": "Als flexibiliteit structureel van de grond komt, dan kunnen netbeheerders het effect ervan ook meenemen in hun prognoses en scenario's. [...] Ik zeg daar wel bij — dat is ook de reden waarom we in die doorbraakaanpak niet alleen de netbeheerders en ACM aan tafel hebben uitgenodigd, maar ook het bedrijfsleven — dat we de bedrijven die op de wachtlijst staan, maar juist ook de bedrijven die daar niet op staan, heel hard nodig hebben voor die oplossing. Het gaat om bedrijven die een contract hebben waar mogelijk ruimte in zit en die, als zij hun proces flexibeler inrichten of met een flexibel contract gaan werken, ruimte vrij kunnen spelen voor bedrijven op de wachtlijst.",
       "quote_context": "De minister benadrukt dat vrijwillige flexibiliteit van bedrijven (marktgedrag) de oplossing is voor congestie, in plaats van alleen fysieke uitbreiding of dwang.",
       "prompt_version": "0b12780c7cac",
-      "start_seconds": null,
-      "end_seconds": null,
+      "start_seconds": 6569.0,
+      "end_seconds": 6616.916666666667,
       "actor": {
         "name": "Sophie Hermans",
         "party": "VVD",
@@ -241297,8 +241636,8 @@
       "quote_text": "De eerste versnellingsmaatregel wordt op 1 januari 2026 van kracht. Dat is de zogenaamde gedoogplicht van rechtswege in de ontwerpfase. De ontwerpfase houdt in dat er nog niet gebouwd wordt, maar dat er gewoon gekeerd wordt waar een station terecht kan komen. TenneT mag in die ontwerpfase bij grondeigenaren op het terrein komen om daar onderzoek naar te doen. Dat kan dan niet worden tegengehouden met lange procedures. Deze maatregel kan versnelling tot anderhalf jaar opleveren.",
       "quote_context": "Minister beschrijft specifieke overheidssturing (gedoogplicht) om procedures te versnellen en tegenwerking door grondeigenaren te voorkomen.",
       "prompt_version": "0b12780c7cac",
-      "start_seconds": null,
-      "end_seconds": null,
+      "start_seconds": 8605.0,
+      "end_seconds": 8636.666666666666,
       "actor": {
         "name": "Sophie Hermans",
         "party": "VVD",
@@ -242037,8 +242376,8 @@
       "quote_text": "De ISDE is er niet voor e-boilers, want de maatregel moet bijdragen aan CO2-reductie. Dat is bij elektrische boilers niet altijd het geval. Die kunnen ook het verbruik van eigen zonnestroom vergroten, maar op andere momenten de netcongestie verergeren.",
       "quote_context": "Antwoord op vraag van de heer Flach over inzet ISDE voor e-boilers",
       "prompt_version": "0b12780c7cac",
-      "start_seconds": null,
-      "end_seconds": null,
+      "start_seconds": 13911.0,
+      "end_seconds": 13927.25,
       "actor": {
         "name": "Sophie Hermans",
         "party": "VVD",
@@ -243360,8 +243699,8 @@
       "quote_text": "De VVD vindt het belangrijk dat bij de aanleg van de Delta Rhine Corridor vanuit het oogpunt van de toekomstbestendigheid ook ruimte overblijft voor de mogelijke aanleg van andere buizen dan alleen voor waterstof en CO2.",
       "quote_context": null,
       "prompt_version": "0b12780c7cac",
-      "start_seconds": null,
-      "end_seconds": null,
+      "start_seconds": 54.0,
+      "end_seconds": 69.0,
       "actor": {
         "name": "Silvio Erkens",
         "party": "VVD",
@@ -245156,8 +245495,8 @@
       "quote_text": "Het kabinet is van mening dat CCS-technieken echt nodig zijn om in de \"hard to abate\"-sectoren en bij restemissies ook de komende jaren tot forse CO2-emissiereductie te komen.",
       "quote_context": "Motie over SDE en CCS",
       "prompt_version": "0b12780c7cac",
-      "start_seconds": null,
-      "end_seconds": null,
+      "start_seconds": 1242.0,
+      "end_seconds": 1253.6666666666667,
       "actor": {
         "name": "Rob Jetten",
         "party": "D66",
@@ -245262,8 +245601,8 @@
       "quote_text": "Nee, bij CCS is er altijd sprake van een fossiele voedingsbron, want anders heb je CCS überhaupt niet nodig. Voor sommige partijen is het in de tijd tot 2030 wel de enige manier om tot een forse reductie van de CO2-uitstoot te komen. Er zijn vast allerlei technieken en opties beschikbaar, maar die gaan niet al voor 2030 het doel volledig bereiken. Het is meer een timingsissue, denk ik.",
       "quote_context": "Reactie op vraag over CCS (Carbon Capture and Storage) en de rol daarvan in de energietransitie tot 2030.",
       "prompt_version": "0b12780c7cac",
-      "start_seconds": null,
-      "end_seconds": null,
+      "start_seconds": 1410.0,
+      "end_seconds": 1438.75,
       "actor": {
         "name": "Rob Jetten",
         "party": "D66",
@@ -245482,8 +245821,8 @@
       "quote_text": "Dit is een stukje zuur, namelijk een CO2-heffing, maar die is gekoppeld aan extra subsidies voor de verduurzaming van de industrie en de maatwerkafspraken. Dus minder CO2-heffing betekent ook minder subsidies uit het Klimaatfonds.",
       "quote_context": "Onderbouwing van de noodzaak van de CO2-heffing door de koppeling aan subsidies voor verduurzaming.",
       "prompt_version": "0b12780c7cac",
-      "start_seconds": null,
-      "end_seconds": null,
+      "start_seconds": 1555.0,
+      "end_seconds": 1569.1666666666667,
       "actor": {
         "name": "Rob Jetten",
         "party": "D66",
@@ -245519,8 +245858,8 @@
       "quote_text": "Vorig jaar is bij de Voorjaarsnota al afgesproken dat we de CO2-heffing voor de industrie en de elektriciteitssector zouden aanscherpen op basis van een onafhankelijk PBL-advies. Als ik dat onafhankelijke PBL-advies had gevolgd, dan had u nu een CO2-heffing gezien die nog anderhalf tot twee keer hoger was dan waar het kabinet nu voor heeft gekozen. Sterker nog, we kiezen voor een differentiatie tussen de maatwerkbedrijven en de andere industrie, omdat we het handelingsperspectief van die cluster 6-bedrijven zo relevant vinden.",
       "quote_context": "Verdediging van de gekozen hoogte en differentiatie van de CO2-heffing, waarbij wordt verwezen naar het PBL-advies en het belang van handelingsperspectief voor specifieke bedrijven.",
       "prompt_version": "0b12780c7cac",
-      "start_seconds": null,
-      "end_seconds": null,
+      "start_seconds": 1555.0,
+      "end_seconds": 1588.75,
       "actor": {
         "name": "Rob Jetten",
         "party": "D66",
@@ -245788,8 +246127,8 @@
       "quote_text": "De politiek en overheid vragen bedrijven om te verduurzamen, maar we zien nu dat veel randvoorwaarden op het gebied van infrastructuur niet op tijd opgeleverd worden om te kúnnen verduurzamen. De Delta Rhine Corridor, cruciaal voor zowel de Rotterdamse haven als het Limburgse Chemelot, is nu al met zes jaar vertraagd van 2026 naar 2032. Hierdoor kunnen veel bedrijven niet verduurzamen en verliest Nederland zijn stevige uitgangspositie op het gebied van waterstof, CO2-opslag en ook de aanlanding van wind op zee richting Duitsland.",
       "quote_context": null,
       "prompt_version": "0b12780c7cac",
-      "start_seconds": null,
-      "end_seconds": null,
+      "start_seconds": 285.0,
+      "end_seconds": 319.5833333333333,
       "actor": {
         "name": "Silvio Erkens",
         "party": "VVD",
@@ -245930,8 +246269,8 @@
       "quote_text": "We zien dat de energierekening de komende jaren verder stijgt. Een van de belangrijkste oorzaken hiervan is de stijging van de zogehenden \"nettarieven\". Met de nettarieven bekostigen we de uitbreiding van ons stroomnet. Volgens Berenschot leidt een en ander de komende tien jaar tot een kostenstijging voor huishoudens van circa €150 tot €200 op de energierekening. Daarnaast veroorzaken de hoge tarieven extra pijn bij de Nederlandse energie-intensieve industrie, aangezien de businesscase voor elektrificatie slechter wordt en het gelijke speelveld al deels verdwenen is door het afschaffen van verschillende compensatieregelingen, zoals de IKC en de volumecorrectieregeling. In 2030 zijn de nettarieven in Nederland circa vijftien keer zo hoog als die in Frankrijk en circa vier à vijf keer zo hoog als die in Duitsland. Het gelijke speelveld is dus weg. De hoge nettarieven zijn een enorme belemmering voor verduurzaming, wat ervoor kan zorgen dat elektrificatie geen doorgang vindt en een steeds kleinere groep huishoudens en bedrijven voor een groter bedrag aan de lat staat. Als bedrijven niet de overstap naar geëlektriseerde productieprocessen maken, zal ook niet alle aanlanding van wind op zee worden afgenomen. Het betreft een destructieve spiraal die tot steeds hogere rekeningen zal leiden en de verduurzaming kan stoppen.",
       "quote_context": null,
       "prompt_version": "0b12780c7cac",
-      "start_seconds": null,
-      "end_seconds": null,
+      "start_seconds": 504.0,
+      "end_seconds": 587.3333333333334,
       "actor": {
         "name": "Silvio Erkens",
         "party": "VVD",
@@ -246693,8 +247032,8 @@
       "quote_text": "Ook energiehubs op bedrijventerreinen kunnen bijdragen aan minder piekbelasting en CO2-besparing. Er zijn meer dan 1.000 kansrijke locaties. Er is een gebiedsgerichte aanpak nodig, omdat het niet eenvoudig is. Onderzoekers pleiten voor een versnelde inzet op faciliterende wet- en regelgeving. Netbeheerders moeten eerder data over netgebruik delen. Gemeenten hebben behoefte aan een expertteam. Cable pooling moet mogelijk zijn zonder een nieuwe bv te hoeven vormen.",
       "quote_context": null,
       "prompt_version": "0b12780c7cac",
-      "start_seconds": null,
-      "end_seconds": null,
+      "start_seconds": 1602.0,
+      "end_seconds": 1629.0833333333333,
       "actor": {
         "name": "André Flach",
         "party": "SGP",
@@ -247533,8 +247872,8 @@
       "quote_text": "Het verbranden van biomassa, waaronder bomen, stoot juist veel CO2 uit en is daarom geen écht duurzame techniek.",
       "quote_context": "Spreker pleit voor het stoppen met biomassa voor elektriciteitsopwekking omdat het niet duurzaam is.",
       "prompt_version": "0b12780c7cac",
-      "start_seconds": null,
-      "end_seconds": null,
+      "start_seconds": 2705.0,
+      "end_seconds": 2712.5,
       "actor": {
         "name": "Ilana Rooderkerk",
         "party": "D66",
@@ -248664,8 +249003,8 @@
       "quote_text": "In antwoord op de vraag van mevrouw Rooderkerk kan ik zeggen dat de middelen die voor kerncentrales gereserveerd zijn, niet ten koste gaan van de inzet op de andere technieken die nodig zijn voor de energietransitie. Naast het reserveren van financiële middelen maken het kabinet en ik een integrale afweging van het hele systeem, bijvoorbeeld via het Nationaal Plan Energiesysteem. Het kabinet zet dus in op meerdere technieken om een CO2-vrij energiesysteem te realiseren, bijvoorbeeld wind op zee, hernieuwbare energie op land en kerncentrales. En nogmaals, dat blijkt dus ook uit het Nationaal Plan Energiesysteem.",
       "quote_context": "Antwoord op vraag over of investeringen in kernenergie ten koste gaan van andere hernieuwbare bronnen.",
       "prompt_version": "0b12780c7cac",
-      "start_seconds": null,
-      "end_seconds": null,
+      "start_seconds": 9119.0,
+      "end_seconds": 9158.583333333334,
       "actor": {
         "name": "Sophie Hermans",
         "party": "VVD",
@@ -249417,8 +249756,8 @@
       "quote_text": "Alles overziend zou ik graag eens verder nadenken over de gedachte of we, gezien alle projecten die er zijn in Borssele, niet met een masterplan moeten komen waarin alles een plek krijgt, zodat de mensen daar ook weten waar ze aan toe zijn. [...] Er komt namelijk zo veel bij kijken, ook op het gebied van bijvoorbeeld wonen en beschikbare arbeidskrachten, dat het een groot deel van dat eiland en zelfs een aantal eilanden zal beheersen.",
       "quote_context": "Over de aanpak van energieprojecten in Borssele",
       "prompt_version": "0b12780c7cac",
-      "start_seconds": null,
-      "end_seconds": null,
+      "start_seconds": 11827.0,
+      "end_seconds": 11858.666666666666,
       "actor": {
         "name": "André Flach",
         "party": "SGP",
@@ -249481,8 +249820,8 @@
       "quote_text": "Ik wil ook terugkomen op de informatiepositie van deze Kamer voor Prinsjesdag, want het lijkt er veel op dat de informatiepositie van de Kamer achteruitgaat. In het regeerakkoord van Rutte IV stonden door het toenmalige kabinet al de klimaatmaatregelen genoemd met daarbij een tabel met heel duidelijk de inschatting van het CO2-effect. In 2022 gaf het PBL op 20 september een voorlopige raming van de klimaatcijfers. In 2023 ontvingen we de ramingen van de KEV op hoofdlijnen al op 19 september. Al die jaren was er dus wel degelijk met Prinsjesdag inzicht in de CO2-effecten van het kabinetsbeleid. Deze minister lijkt dit nu niet te willen doen. Daardoor kunnen wij volgende week bij de APB onze controlerende taak niet goed uitvoeren.",
       "quote_context": null,
       "prompt_version": "0b12780c7cac",
-      "start_seconds": null,
-      "end_seconds": null,
+      "start_seconds": 11936.0,
+      "end_seconds": 11986.416666666666,
       "actor": {
         "name": "Ilana Rooderkerk",
         "party": "D66",
@@ -251591,8 +251930,8 @@
       "quote_text": "We hebben een rapport van Oxfam Novib gezien en daar staat in dat de 1% rijkste Nederlanders negen keer zoveel CO2 uitstoot als de 50% armste Nederlanders. Wordt dit in het maatregelenpakket ook als uitgangspunt genomen en wordt er ook gekeken naar belastingen op bijvoorbeeld SUV's of andere vervuilende vervoersmiddelen, zodat echt die rijkste mensen betalen voor de schade die nu wordt veroorzaakt aan het klimaat?",
       "quote_context": null,
       "prompt_version": "0b12780c7cac",
-      "start_seconds": null,
-      "end_seconds": null,
+      "start_seconds": 1597.0,
+      "end_seconds": 1624.5,
       "actor": {
         "name": "Christine Teunissen",
         "party": "PvdD",
@@ -253762,8 +254101,8 @@
       "quote_text": "Voor mij is groene groei het samenbrengen van verduurzaming en concurrentiekracht. We hebben in Nederland al gezien dat het kan. Onze economie is blijven groeien, terwijl we ook belangrijke stappen hebben gezet in de verduurzaming van de economie. De CO2-uitstoot daalde. Dan wordt er vaak gesproken van de zogenaamde \"ontkoppeling\". De Grinwis zei, niet onterecht, tegen mij: dat is een deel, maar het gaat ook over impact die je hebt als economie. Je moet kijken naar de bestaande economie en de bestaande industrie in Nederland en hoe je die kunt ombouwen naar groene, duurzame bedrijven, maar we moeten ons ook focussen op het opbouwen van nieuwe bedrijvigheid. We moeten ondernemers stimuleren die werken aan nieuwe technologieën en nieuwe klimaattoepassingen ontwikkelen. Zo bouwen we een schoner en welvarender land voor deze en volgende generaties. Ik kijk ook echt met een optimistische blik. Ik geloof echt — dat is voor mij ook groene groei — dat het kan. Tijdens de werkbezoeken die ik de afgelopen maanden heb afgelegd bij grote en kleine bedrijven, bij de industrie, heb ik ongelofelijke drive en motivatie gezien om die bijdrage te leveren, omdat die ondernemers zien: dit is de toekomst van onze economie.",
       "quote_context": "Definitie van groene groei als combinatie van verduurzaming en economische groei/concurrentiekracht, in plaats van krimp.",
       "prompt_version": "0b12780c7cac",
-      "start_seconds": null,
-      "end_seconds": null,
+      "start_seconds": 7016.0,
+      "end_seconds": 7098.083333333333,
       "actor": {
         "name": "Sophie Hermans",
         "party": "VVD",
@@ -254263,8 +254602,8 @@
       "quote_text": "We hebben het nog nauwelijks gehad over gedragsverandering en wat voor grote veranderingen en CO2-reductie die kan bewerkstelligen. Het zou me verbazen als dat niet terugkomt in de extra maatregelen van de minister, want gedragsverandering is een van de grote pijlers die we nu nog kunnen gebruiken om de CO2-uitstoot terug te dringen.",
       "quote_context": null,
       "prompt_version": "0b12780c7cac",
-      "start_seconds": null,
-      "end_seconds": null,
+      "start_seconds": 13420.0,
+      "end_seconds": 13442.083333333334,
       "actor": {
         "name": "Christine Teunissen",
         "party": "PvdD",
@@ -254923,8 +255262,8 @@
       "quote_text": "Het is echt bizar om miljarden aan klimaatgeld opzij te zetten voor projecten waarvan het totaal onduidelijk is of die ooit gerealiseerd worden. Deze minister moet zelfs bedrijven betalen om überhaupt te onderzoeken of er ooit een kerncentrale gaat komen. Het is bizar dat we dat geld of in ieder geval een deel daarvan niet nu aanwenden om gewoon écht CO2-winst te boeken en écht iets te doen voor mensen. Ik vind dat asociaal.",
       "quote_context": null,
       "prompt_version": "0b12780c7cac",
-      "start_seconds": null,
-      "end_seconds": null,
+      "start_seconds": 15602.0,
+      "end_seconds": 15632.833333333334,
       "actor": {
         "name": "Suzanne Kröger",
         "party": "GroenLinks-PvdA",
@@ -256917,8 +257256,8 @@
       "quote_text": "Om die kansen, ook voor lokaal eigenaarschap en die wijkaanpak, te benutten, herhaal ik nog maar eens onze voorstellen voor een grootschalig isolatieoffensief... Daarmee verbeteren we wijk voor wijk de kwaliteit van woningen, ontzorgen we bewoners zo veel mogelijk, geven we huurders het recht op een huurkorting als verhuurders niet zelf in actie komen of niet meewerken en zorgen we dat postcodes met de hoogste energiearmoede als eerste geholpen worden.",
       "quote_context": "Pleiten voor een grootschalig, overheidsgestuurd isolatieoffensief met focus op sociale rechtvaardigheid (energiearmoede, huurdersrechten), wat past bij het pro-standpunt van actieve overheidssturing en klimaatrechtvaardigheid.",
       "prompt_version": "0b12780c7cac",
-      "start_seconds": null,
-      "end_seconds": null,
+      "start_seconds": 333.0,
+      "end_seconds": 362.1666666666667,
       "actor": {
         "name": "Suzanne Kröger",
         "party": "GroenLinks-PvdA",
@@ -256949,8 +257288,8 @@
       "quote_text": "Het benutten van die kansen vraagt natuurlijk ook om voldoende waarborgen waarmee huishoudens ervan op aan kunnen dat hun energierekening na de overstap op een nieuwe warmtebron niet ineens hoger wordt... Het is naar onze mening onze opdracht om te zorgen dat het maatschappelijk meest wenselijke alternatief ook het meest aantrekkelijke alternatief voor mensen is... We weten immers van wijken waar de belofte dat huishoudens niet méér zouden gaan betalen in de praktijk niet is uitgekomen. Ik noem de Gentiaanbuurt in Amsterdam-Noord... waar sommige bewoners nu honderden euro's meer dreigen te moeten gaan betalen. Dat is voor veel kwetsbare bewoners absoluut problematisch, omdat ze dat geld gewoon niet kunnen missen.",
       "quote_context": "Argumenteert voor overheidsinterventie/waarborgen om betaalbaarheid te garanderen voor kwetsbaren, omdat marktmechanismen of eerdere beloften falen. Dit steunt het pro-standpunt van actieve overheidssturing en bescherming van burgers tegen financiële druk tijdens de transitie.",
       "prompt_version": "0b12780c7cac",
-      "start_seconds": null,
-      "end_seconds": null,
+      "start_seconds": 333.0,
+      "end_seconds": 378.8333333333333,
       "actor": {
         "name": "Suzanne Kröger",
         "party": "GroenLinks-PvdA",
@@ -257749,8 +258088,8 @@
       "quote_text": "Betaalbaarheid is voor de VVD van groot belang. In het Klimaatakkoord is dat onder de term \"woonlastenneutraliteit\" toegevoegd. In deze wet staat die term niet, omdat de regering beargumenteert dat dit niet in elk geval gegarandeerd kan worden en ook tot onrechtvaardige situaties kan leiden. Hoe ga je bijvoorbeeld om met een situatie waarin twee identieke woningen een identieke investering vergen, maar de energierekening niet vergelijkbaar is omdat er in de woningen meer mensen wonen? De onrendabele top zal dus verschillen, net als de subsidiebehoefte. We snappen deze argumentatie. Maar tegelijkertijd heeft de minister geen alternatief in de wet gezet voor wat betaalbaarheid voor burgers dan wel moet zijn. Er komt enkel een richtlijn voor gemeentes. Dat is voor ons écht te vrijblijvend. We hebben per amendement, samen met de SP en het NSC, voorgesteld om betaalbaarheid steviger in de wet te borgen.",
       "quote_context": "Kritiek op het ontbreken van wettelijke borging van betaalbaarheid/woonlastenneutraliteit.",
       "prompt_version": "0b12780c7cac",
-      "start_seconds": null,
-      "end_seconds": null,
+      "start_seconds": 2115.0,
+      "end_seconds": 2174.5833333333335,
       "actor": {
         "name": "Silvio Erkens",
         "party": "VVD",
@@ -258551,8 +258890,8 @@
       "quote_text": "Als je niet op het warmtenet wilt, kun je ook een alternatief kiezen dat net zo duurzaam is. [...] Mijn fractie zou graag willen werken vanuit dat vertrouwen. Als iemand dus aangeeft dat hij het graag anders wil, moet hem dat toegestaan worden.",
       "quote_context": null,
       "prompt_version": "0b12780c7cac",
-      "start_seconds": null,
-      "end_seconds": null,
+      "start_seconds": 5759.0,
+      "end_seconds": 5776.916666666667,
       "actor": {
         "name": "Wytske Postma",
         "party": "NSC",
@@ -258583,8 +258922,8 @@
       "quote_text": "Wij hebben aan de betaalbaarheid iets anders gekoppeld, namelijk doenvermogen. Zijn mensen in staat om deze transitie mee te maken? [...] Het zijn juist wijken waar mensen goed op de centjes moeten letten en soms ook keihard moeten werken om rond te komen, zodat ze helemaal geen zin, tijd of energie hebben om te zorgen voor die transitie en alles wat daarbij nodig is.",
       "quote_context": null,
       "prompt_version": "0b12780c7cac",
-      "start_seconds": null,
-      "end_seconds": null,
+      "start_seconds": 5759.0,
+      "end_seconds": 5785.666666666667,
       "actor": {
         "name": "Wytske Postma",
         "party": "NSC",
@@ -258615,8 +258954,8 @@
       "quote_text": "Mensen schrokken van de hoogte van die rekening en dat is het niet zo heel gek, omdat de vaste tarieven bij warmte een veel groter deel uitmaken van je rekening dan de variabele tarieven. Mensen die eigenlijk weinig stoken, zijn daardoor dus in het nadeel. [...] Het principe \"niet meer dan anders\" moet echt een reddingsboei zijn die mensen vast kunnen grijpen.",
       "quote_context": null,
       "prompt_version": "0b12780c7cac",
-      "start_seconds": null,
-      "end_seconds": null,
+      "start_seconds": 5759.0,
+      "end_seconds": 5784.833333333333,
       "actor": {
         "name": "Wytske Postma",
         "party": "NSC",
@@ -259900,8 +260239,8 @@
       "quote_text": "Ik ben hier zo fel over omdat ik vind dat we zorgvuldiger met wetgeving moeten omgaan. We kiezen hier in de Tweede Kamer te vaak voor te grote stappen, snel thuis. De kernvraag die op tafel ligt, gaat uiteindelijk gewoon terug naar de essentie: hoe betalen we die warmtetransitie en met name die collectieve oplossing en wie betaalt de rekening? Ik denk dat we daar een apart debat over moeten voeren; ik denk dat mevrouw Kröger daar ook een voorstander van is. Als we willen dat warmtebedrijven gaan investeren in warmtenetten, moet de businesscase kloppen. Als we ook willen dat er voldoende draagvlak is voor warmtenetten en dat de energierekening betaalbaar is, moeten we ervoor zorgen dat de aansluiting op die warmtenetten betaalbaar blijft voor klanten. Dat betekent dat we dat ergens moeten gaan financieren. Daar moeten we het dus eerlijk met elkaar over hebben.",
       "quote_context": "Argument dat de huidige aanpak te snel gaat ('te grote stappen') en dat de focus moet liggen op de betaalbaarheid en financiering van de transitie voor zowel bedrijven als burgers, in plaats van op snelheid.",
       "prompt_version": "0b12780c7cac",
-      "start_seconds": null,
-      "end_seconds": null,
+      "start_seconds": 11505.0,
+      "end_seconds": 11565.416666666666,
       "actor": {
         "name": "Henri Bontenbal",
         "party": "CDA",
@@ -260682,8 +261021,8 @@
       "quote_text": "De transitie in de gebouwde omgeving is namelijk enorm aan het versnellen. In 2010 stootten we met elkaar nog 30 megaton uit. Dat ligt nu rond de 18 megaton. Via 13 megaton in 2030 moeten we door richting een CO2-vrije gebouwde omgeving in 2050. We liggen dus eigenlijk best wel op koers, zou je kunnen zeggen. Maar het moet sneller. Dat moet ook echt. De gaskraan in Groningen gaat namelijk dicht. We moeten minder afhankelijk worden van buitenlandse energie. We moeten op termijn ook gewoon stoppen met fossiele brandstoffen, vanwege klimaatverandering.",
       "quote_context": "De minister stelt dat de transitie versnelt en op koers ligt, maar benadrukt dat versnelling noodzakelijk is vanwege het sluiten van de gaskraan, energieonafhankelijkheid en klimaatdoelen.",
       "prompt_version": "0b12780c7cac",
-      "start_seconds": null,
-      "end_seconds": null,
+      "start_seconds": 15358.0,
+      "end_seconds": 15395.916666666666,
       "actor": {
         "name": "Hugo de Jonge",
         "party": "CDA",
@@ -261168,8 +261507,8 @@
       "quote_text": "Inmiddels ziet de wereld er een beetje ingewikkelder uit. Daarom is het ook echt te complex om het centraal vast te leggen, want de aard van de bebouwing maakt uit: de beschikbaarheid van bronnen, zoals warmte, elektriciteit en op termijn misschien ook waterstof of groen gas, de leeftijd van het aardgasnet, de eigendomssituatie — veel particulieren, veel corpo's of veel vve's — de uitvoeringscapaciteit bij gemeentes en netbeheerders, en meer subjectieve elementen zoals draagvlak, doenvermogen en archeologie. Kortom, ik denk dat we niet in staat zouden zijn om dat helemaal centralistisch te regelen. Als we dat wel zouden kunnen, zou ik het misschien nog niet doen, maar ik denk ook dat we het echt niet kunnen. Ik denk dat we onszelf overschatten als we dat zouden denken.",
       "quote_context": "De minister argumenteert tegen centrale sturing en objectieve criteria voor gasvrije wijken vanwege de complexiteit en lokale verschillen.",
       "prompt_version": "0b12780c7cac",
-      "start_seconds": null,
-      "end_seconds": null,
+      "start_seconds": 16485.0,
+      "end_seconds": 16537.916666666668,
       "actor": {
         "name": "Hugo de Jonge",
         "party": "CDA",
@@ -262005,8 +262344,8 @@
       "quote_text": "Kan nou iedereen het meemaken, ook vanuit doenvermogen bezien? Dat vraagt mevrouw Postma terecht, want ik denk dat heel veel mensen die hulp gewoon nodig hebben. Daarom hebben we in de aanpak zoals we die hebben gepresenteerd, gezegd dat we eigenlijk zo'n 2,5 miljoen huizen zouden moeten willen helpen. Ongeveer een miljoen is huur. Dat gaat via de corporatie. Ongeveer 750.000 gaan via het individuele spoor. Daar zijn mensen echt mans genoeg om op de zolderkamer via verbeterjehuis.nl zelf een verbetering te realiseren met alle subsidies die daarachter zitten. En ongeveer 750.000 zullen we wijkgericht moeten doen. Dat zijn met name de wijken waar gemeenten aan de slag moeten en waar ze dus ook de Wgiwvoor gaan gebruiken, met alle hulp en ondersteuning die daarbij hoort.",
       "quote_context": "Aanpak van betaalbaarheid en ondersteuning per huizensoort.",
       "prompt_version": "0b12780c7cac",
-      "start_seconds": null,
-      "end_seconds": null,
+      "start_seconds": 19395.0,
+      "end_seconds": 19447.5,
       "actor": {
         "name": "Hugo de Jonge",
         "party": "CDA",
@@ -262054,8 +262393,8 @@
       "quote_text": "Wat hebben we geleerd van het Programma Aardgasvrije Wijken, vraagt mevrouw Postma. Nou, dat zijn wijken die echt nog heel erg aan het pionieren waren. We hebben daar soms geleerd hoe het juist niet moet, maar we hebben daar vaak ook geleerd hoe het juist wel kan. Dat gaat toch heel erg om samen optrekken met bewoners. Ik denk dus dat de wijken die beter in staat zijn geweest om die participatie vorm te geven — dat onderstreept eigenlijk uw eigen punt — de wijken zijn waar mensen ook tevredener zijn met de snelheid en het resultaat. Daar voelen mensen gewoon meer eigenaarschap en meer betrokkenheid.",
       "quote_context": "Lessen uit het Programma Aardgasvrije Wijken over participatie.",
       "prompt_version": "0b12780c7cac",
-      "start_seconds": null,
-      "end_seconds": null,
+      "start_seconds": 19395.0,
+      "end_seconds": 19439.166666666668,
       "actor": {
         "name": "Hugo de Jonge",
         "party": "CDA",
@@ -262243,8 +262582,8 @@
       "quote_text": "De heer Vermeer vraagt of het tussendoel van 2040 past bij het aardgasvrij maken via warmtenetten. Het tussendoel van 2040 heeft natuurlijk betrekking op de CO2-reductie en niet per se op de manier van verwarmen waarmee je die bereikt. Dat is eigenlijk de normering voor onszelf, om zo voldoende pressie uit te oefenen om 2050 ook daadwerkelijk te halen. Ik zou dus eigenlijk willen zeggen: het staat er los van. Tegelijkertijd is het volgende wel waar. Wetende dat het elektriciteitsnet volloopt en je waarschijnlijk niet heel Nederland zal kunnen bedienen via een warmtepomp en wetende dat je er wel moet willen zijn in 2050, zullen we wel warmtenetten nodig hebben om de diversiteit van de warmtevoorziening ook daadwerkelijk ten volle te kunnen benutten.",
       "quote_context": "Noodzaak van warmtenetten vanwege netcongestie.",
       "prompt_version": "0b12780c7cac",
-      "start_seconds": null,
-      "end_seconds": null,
+      "start_seconds": 19395.0,
+      "end_seconds": 19446.25,
       "actor": {
         "name": "Hugo de Jonge",
         "party": "CDA",
@@ -263187,8 +263526,8 @@
       "quote_text": "Draait het bij Groene Groei primair om het vergroten van het aandeel hernieuwbare energie en het halen van de klimaatdoelen of primair om zorgen voor een betaalbare, betrouwbare energievoorziening waarbij iedereen, huishoudens en bedrijven, nu maar zeker ook in de toekomst, toegang heeft tot voldoende en betaalbare energie? ... Toch stel ik die vraag, omdat die twee zeker niet altijd samengaan. Zie bijvoorbeeld de aanhoudende problemen rond energiearmoede. Maar zie ook de toenemende problemen rond netcongestie: het feit dat het überhaupt hebben van een elektriciteitsaansluiting vandaag de dag niet meer vanzelfsprekend is.",
       "quote_context": null,
       "prompt_version": "0b12780c7cac",
-      "start_seconds": null,
-      "end_seconds": null,
+      "start_seconds": 1755.0,
+      "end_seconds": 1793.3333333333333,
       "actor": {
         "name": "Alexander Kops",
         "party": "PVV",
@@ -263748,8 +264087,8 @@
       "quote_text": "Dat strookt eigenlijk niet met wat de heren Grinwis en Bontenbal betogen, die namelijk zeggen: dit zijn de doelen, zoveel ton CO2, dit moeten we gaan doen en dat moeten we gaan doen. Ik zei namelijk: nou nee, we moeten het niet meer alleen hebben over klimaatdoelen in de zin van \"dit moeten we halen en dat moeten we halen en lukt dat niet, dan komen we met aanvullend beleid\". We moeten vooral ook eens heel goed gaan kijken naar de uitvoerbaarheid en haalbaarheid van al die maatregelen, de bestaande maatregelen. Daar zou het veel en veel meer over moeten gaan.",
       "quote_context": null,
       "prompt_version": "0b12780c7cac",
-      "start_seconds": null,
-      "end_seconds": null,
+      "start_seconds": 2721.0,
+      "end_seconds": 2763.0833333333335,
       "actor": {
         "name": "Alexander Kops",
         "party": "PVV",
@@ -263958,8 +264297,8 @@
       "quote_text": "Ten eerste, zeker, iedere maatregel die bijdraagt aan het bestrijden van netcongestie is mooi meegenomen, maar in alle eerlijkheid zijn deze maatregelen natuurlijk wel klein bier vergeleken met de enorme opgaven waar we nu voor staan. TenneT, de landelijke netbeheerder, zegt immers maar liefst 4.000 voetbalvelden aan ruimte nodig te hebben tot 2045 voor de uitbreiding en verzwaring van het net. Topvrouw Van Beek stelt dat het een van de grootste verbouwingen in Nederland ooit wordt en dat de Deltawerken er eigenlijk nog bij in de niet vallen qua omvang en complexiteit. Nou, dat is nogal wat. Een op de drie straten in Nederland zal open moeten. Daarvoor is ruimte nodig, en daarvoor zijn vergunningen nodig.",
       "quote_context": null,
       "prompt_version": "0b12780c7cac",
-      "start_seconds": null,
-      "end_seconds": null,
+      "start_seconds": 3421.0,
+      "end_seconds": 3469.3333333333335,
       "actor": {
         "name": "Alexander Kops",
         "party": "PVV",
@@ -265326,8 +265665,8 @@
       "quote_text": "De Klimaat- en Energieverkenning toont aan dat we circa 90% van de gestelde klimaatambities in 2030 gaan waarmaken. We koersen af op 49% reductie. Er is dus ook geen reden om te doemdenken, zou ik zeggen tegen mijn linkse collega's. Tegelijkertijd zien we dat de laatste 10%, het stapje van 49% naar 55%, zeer onwaarschijnlijk is geworden, namelijk minder dan 5% kans. Dat betekent dat er een tandje bij moet om te zorgen voor meer grip op de energierekeningen, schonere lucht en een sterke Nederlandse economie.",
       "quote_context": "Beoordeling van de haalbaarheid van de huidige klimaatdoelen op basis van de Klimaat- en Energieverkenning.",
       "prompt_version": "0b12780c7cac",
-      "start_seconds": null,
-      "end_seconds": null,
+      "start_seconds": 5630.0,
+      "end_seconds": 5665.833333333333,
       "actor": {
         "name": "Silvio Erkens",
         "party": "VVD",
@@ -265371,8 +265710,8 @@
       "quote_text": "De belangrijkste reden dat we achter beginnen te lopen, is dat veel plannen vastlopen in een vollopend stroomnet en een trage vergunningverlening. We hebben het te complex gemaakt met elkaar. Meer papier op papier stapelen met nieuwe beleidsreflexen gaat dit niet oplossen. De samenleving schikt zich dus niet naar papier uit de kokers van de politiek; dat hebben we de laatste jaren gemerkt. De focus moet nu komen te liggen op de uitvoering. Door trage vergunningverlening voor de uitbreiding van het stroomnet liggen veel mooie projecten stil. Het is dus ontzettend mooi dat minister Hermans heeft aangekondigd het mes te zetten in al die procedures omtrent het uitbreiden van het stroomnet. Wanneer kan de Kamer de eerste resultaten hiervan verwachten? De versnelling in de uitruil van energie-infrastructuur moet de hoofdprioriteit gaan zijn in ons klimaatbeleid de komende twee jaar.",
       "quote_context": "Kritiek op de uitvoering en bureaucratie, met voorkeur voor versnelling van infrastructuur in plaats van nieuwe beleidsmaatregelen.",
       "prompt_version": "0b12780c7cac",
-      "start_seconds": null,
-      "end_seconds": null,
+      "start_seconds": 5630.0,
+      "end_seconds": 5687.916666666667,
       "actor": {
         "name": "Silvio Erkens",
         "party": "VVD",
@@ -268817,8 +269156,8 @@
       "quote_text": "Klimaatbeleid faalt als je huishoudens opzadelt met hoge kosten voor klimaatmaatregelen, maar vervolgens als overheid je eigen kas en die van Shell & co spekt met grijze keuzes, zoals oliewinning bij Schoonebeek of gaswinning uit kleine velden.",
       "quote_context": null,
       "prompt_version": "0b12780c7cac",
-      "start_seconds": null,
-      "end_seconds": null,
+      "start_seconds": 18.0,
+      "end_seconds": 33.41666666666667,
       "actor": {
         "name": "Sandra Beckerman",
         "party": "SP",
@@ -269147,8 +269486,8 @@
       "quote_text": "Wij kiezen voor 1,7 miljard om te zorgen dat de ongelijkheid tussen gasgeduiperden wordt aangepakt. Decennialang stookte Groningen Nederland warm. Nog steeds wachten geen duizenden, maar tienduizenden geduiperden. Wat doet de overheid? Ze helpt de eerste wel, de tweede een beetje en de derde niet.",
       "quote_context": null,
       "prompt_version": "0b12780c7cac",
-      "start_seconds": null,
-      "end_seconds": null,
+      "start_seconds": 18.0,
+      "end_seconds": 36.75,
       "actor": {
         "name": "Sandra Beckerman",
         "party": "SP",
@@ -269399,8 +269738,8 @@
       "quote_text": "De BBB heeft in het hoofdlijnenakkoord ook stevig ingezet op het aanpakken van de knelpunten rond netcapaciteit, en dat is broodnodig. Bedrijven willen verduurzamen maar worden belemmerd door een overbelast elektriciteitsnet. Voorbeelden als Gulpener, dat fossielvrij bier wil bouwen, en de producent van Red Band en Venco, die CO2-neutraal snoep wil maken, laten zien dat de industrie wel wil, maar de capaciteit van het net onvoldoende is.",
       "quote_context": null,
       "prompt_version": "0b12780c7cac",
-      "start_seconds": null,
-      "end_seconds": null,
+      "start_seconds": 352.0,
+      "end_seconds": 379.9166666666667,
       "actor": {
         "name": "Henk Vermeer",
         "party": "BBB",
@@ -269594,8 +269933,8 @@
       "quote_text": "De heer Vermeer schetst eigenlijk dat alles langer gaat duren en dat er niet zo veel kan in de komende vier, vijf jaar, maar het commitment in het hoofdlijnenakkoord, in de Klimaatwet, is 55% CO2-reductie in 2030. Daar moet ongelofelijk veel voor gebeuren.",
       "quote_context": null,
       "prompt_version": "0b12780c7cac",
-      "start_seconds": null,
-      "end_seconds": null,
+      "start_seconds": 996.0,
+      "end_seconds": 1013.9166666666666,
       "actor": {
         "name": "Suzanne Kröger",
         "party": "GroenLinks-PvdA",
@@ -270066,8 +270405,8 @@
       "quote_text": "Het PBL zegt dat ook. Het gaat om 4 megaton. We hebben veel te veel tekorten in de uitstoot, niet alleen van CO2 maar natuurlijk ook van methaan. Er moet gewoon veel meer gebeuren. Er moet echt beleid komen om dit tegen te gaan.",
       "quote_context": "Referentie naar het probleem op landbouwgebied",
       "prompt_version": "0b12780c7cac",
-      "start_seconds": null,
-      "end_seconds": null,
+      "start_seconds": 1767.0,
+      "end_seconds": 1785.3333333333333,
       "actor": {
         "name": "Ilana Rooderkerk",
         "party": "D66",
@@ -270744,8 +271083,8 @@
       "quote_text": "Een van die zaken is: krimp het aantal dieren in de veehouderij, hervorm de landbouw. De intensieve landbouw stoot niet alleen heel veel methaan uit, maar neemt ook nog eens de helft van Nederland in beslag en zorgt ervoor dat we niet kunnen bouwen én de natuur niet kunnen versterken. Een krimp van het aantal dieren in de veehouderij is onvermijdelijk. Dat zeg ik niet, dat zegt Laura van Geest in het rapport dat deze Kamer wilde voor additionele maatregelen. Dat is inmiddels zes jaar geleden. Er ligt geen plan. Als we zorgen voor het einde van de bio-industrie, levert dat ontzettend veel land, water en CO2-reductie op en met name een reductie van de zeer schadelijke methaanuitstoot.",
       "quote_context": null,
       "prompt_version": "0b12780c7cac",
-      "start_seconds": null,
-      "end_seconds": null,
+      "start_seconds": 2893.0,
+      "end_seconds": 2942.1666666666665,
       "actor": {
         "name": "Christine Teunissen",
         "party": "PvdD",
@@ -270797,8 +271136,8 @@
       "quote_text": "Zorg voor een progressieve energiebelasting. De sterkste schouders dragen de zwaarste lasten. Dat zorgt voor een lagere energierekening voor mensen in armoede en het bespaart ruim 5 megaton CO2.",
       "quote_context": null,
       "prompt_version": "0b12780c7cac",
-      "start_seconds": null,
-      "end_seconds": null,
+      "start_seconds": 2893.0,
+      "end_seconds": 2905.0833333333335,
       "actor": {
         "name": "Christine Teunissen",
         "party": "PvdD",
@@ -270838,8 +271177,8 @@
       "quote_text": "Voer rekeningrijden in: tot 4,6 megaton CO2-reductie.",
       "quote_context": null,
       "prompt_version": "0b12780c7cac",
-      "start_seconds": null,
-      "end_seconds": null,
+      "start_seconds": 2893.0,
+      "end_seconds": 2895.9166666666665,
       "actor": {
         "name": "Christine Teunissen",
         "party": "PvdD",
@@ -271273,8 +271612,8 @@
       "quote_text": "Een stijgende temperatuur redt bovendien levens; wereldwijd sterven er namelijk nog altijd veel meer mensen door kou dan door warmte, volgens een studie in The Lancet. De zeespiegel is slechts mondjesmaat gestegen. Door de hoge CO2-concentratie is de planeet juist groener geworden, wat tevens leidt tot hogere landbouwopbrengsten. Niets, maar dan ook helemaal niets, wijst erop dat we te maken hebben met een klimaatprobleem, laat staan met een klimaatcrisis. Helemaal niets. Integendeel. Ondertussen verwoesten we onze economie en welvaart om groene krimp te realiseren. Laten we bij zinnen komen en kiezen voor vooruitgang en groei, in plaats van verdoemenis en krimp.",
       "quote_context": "Argument dat klimaatverandering positieve effecten heeft en geen crisis is, terwijl de transitie de economie schaadt",
       "prompt_version": "0b12780c7cac",
-      "start_seconds": null,
-      "end_seconds": null,
+      "start_seconds": 3576.0,
+      "end_seconds": 3618.0833333333335,
       "actor": {
         "name": "Pepijn van Houwelingen",
         "party": "FVD",
@@ -271314,8 +271653,8 @@
       "quote_text": "De industrie zit in een spagaat. Ik noem het voorbeeld van Yara in Sluiskil, dat ik onlangs bezocht. Het bedrijf concurreert met Chinese fabrikanten, van kunstmest in dit geval, met twee keer zoveel CO2-uitstoot per eenheid product. Laten we mét onze industrie verduurzamen, in plaats van bedrijven over de grens te duwen met een negatieve klimaatimpact tot gevolg.",
       "quote_context": "Argumentatie voor behoud van industriële concurrentiekracht en tegen verplaatsing van vervuiling naar het buitenland.",
       "prompt_version": "0b12780c7cac",
-      "start_seconds": null,
-      "end_seconds": null,
+      "start_seconds": 3942.0,
+      "end_seconds": 3966.1666666666665,
       "actor": {
         "name": "André Flach",
         "party": "SGP",
@@ -271686,8 +272025,8 @@
       "quote_text": "Bovendien is de focus op uitstoot in de antwoorden te beperkt. Wat ontbreekt in die benadering is de impact die het gebruik van grondstoffen heeft op onze aarde. We kunnen, volledig CO2-neutraal, torens bouwen die tot in de wolken reiken, maar ons grondstoffengebruik is eindig. Daarbij kan verduurzaming zelfs gepaard gaan met meer grondstoffengebruik. Een voorbeeld: het wagenpark volledig elektrificeren kun je aanmerken als groene groei, maar ondertussen gebruikt een elektrische auto zes keer meer zeldzame metalen. Ik vraag een reflectie van de minister hierop. Heeft zij het vertrouwen dat ze een minister van Groene Groei kan zijn, ook als dat betekent dat het niet alleen gaat om uitstoot van broeikasgassen in Nederland, maar ook om uitstoot buiten onze grenzen? Daarbij gaat het dus niet allen om de impact van de kabinetskeuzes op de uitstoot elders, maar ook om het grondstoffenperspectief, dat moet worden meegenomen. Volgens mij zijn er weinig doelen zo ver buiten bereik als het doel om in 2050 een volledig circulaire economie te hebben, terwijl de materialentransitie misschien wel belangrijker is dan de energietransitie, qua duurzaamheid en geopolitiek. Kan de minister het PBL vragen om in de KEV voortaan ook jaarlijks in kaart te brengen in hoeverre we op koers liggen om dit grondstoffen- c.q. circulariteitsdoel te halen? Want dat inzicht ontbreekt.",
       "quote_context": "Argument voor een bredere definitie van duurzaamheid (inclusief circulariteit/grondstoffen) en meer overheidsmonitoring/sturing hierop, wat aansluit bij de pro-pool van actieve overheidssturing en ambitieuze doelen.",
       "prompt_version": "0b12780c7cac",
-      "start_seconds": null,
-      "end_seconds": null,
+      "start_seconds": 4219.0,
+      "end_seconds": 4308.583333333333,
       "actor": {
         "name": "Pieter Grinwis",
         "party": "ChristenUnie",
@@ -272229,8 +272568,8 @@
       "quote_text": "Concreet vindt Nieuw Sociaal Contract het daarbij belangrijk dat de CO2-reductie apart wordt geadresseerd. Er is nu nog geen landelijk erkende meetmethodiek. Wij horen echter wel dat daar in de sector aan wordt gewerkt. En dat brengt ons bij de vraag welke rol de minister voor zichzelf ziet bij het geaccrediteerd krijgen en het hanteren van een landelijk erkende meetmethodiek in samenwerking met de sector.",
       "quote_context": null,
       "prompt_version": "0b12780c7cac",
-      "start_seconds": null,
-      "end_seconds": null,
+      "start_seconds": 51.0,
+      "end_seconds": 78.08333333333334,
       "actor": {
         "name": "Merlien Welzijn",
         "party": "NSC",
@@ -272598,121 +272937,121 @@
   "tag_correspondence": {
     "inertia_pct": [
       46.0,
-      14.5
+      14.6
     ],
     "parties": [
       {
         "party": "50PLUS",
-        "x": -0.12541375291277568,
-        "y": 0.5666020368832724,
+        "x": -0.126465190606765,
+        "y": 0.563070843921803,
         "n": 32
       },
       {
         "party": "BBB",
-        "x": -0.32278699100875774,
-        "y": 0.08028031524340747,
-        "n": 1130
+        "x": -0.3189306272671333,
+        "y": 0.0700434954199862,
+        "n": 1136
       },
       {
         "party": "CDA",
-        "x": -0.2680222160330347,
-        "y": -0.09366855188051422,
+        "x": -0.26875607836700194,
+        "y": -0.09973383823958977,
         "n": 1004
       },
       {
         "party": "ChristenUnie",
-        "x": 0.032374934374542086,
-        "y": 0.06330768296369221,
+        "x": 0.03154551194935914,
+        "y": 0.05025852985593298,
         "n": 471
       },
       {
         "party": "D66",
-        "x": 0.41453682098560946,
-        "y": -0.15213412281046837,
+        "x": 0.4150374066639324,
+        "y": -0.1545590399068873,
         "n": 1323
       },
       {
         "party": "DENK",
-        "x": 0.47132627189115206,
-        "y": 0.5652479152739702,
-        "n": 149
+        "x": 0.4007777926588954,
+        "y": 0.5583954627640593,
+        "n": 161
       },
       {
         "party": "FVD",
-        "x": -0.3953464402878323,
-        "y": 0.29035819890838493,
+        "x": -0.3933762653504027,
+        "y": 0.3000141582178123,
         "n": 362
       },
       {
         "party": "GroenLinks-PvdA",
-        "x": 0.5917519158739122,
-        "y": 0.0003220086488052059,
+        "x": 0.5917850237089052,
+        "y": -0.002080414243735446,
         "n": 1113
       },
       {
         "party": "Groep Markuszower",
-        "x": -0.2030399962521175,
-        "y": 0.17243865309022402,
+        "x": -0.19988693499012525,
+        "y": 0.20480942602392777,
         "n": 296
       },
       {
         "party": "JA21",
-        "x": -0.23604546262470202,
-        "y": 0.01832825581661614,
+        "x": -0.23479803379170328,
+        "y": 0.034053834749914656,
         "n": 679
       },
       {
         "party": "Lid Keijzer",
-        "x": -0.17705308672908796,
-        "y": 0.20438269170570766,
+        "x": -0.17741427963205023,
+        "y": 0.20194242646638363,
         "n": 179
       },
       {
         "party": "NSC",
-        "x": 0.025712977238604273,
-        "y": 0.275011581136553,
+        "x": 0.024207828524122472,
+        "y": 0.2623900993734265,
         "n": 208
       },
       {
         "party": "PRO",
-        "x": -0.03662311984153653,
-        "y": -0.12249948942658134,
+        "x": -0.036838389942922954,
+        "y": -0.11975331812917019,
         "n": 95
       },
       {
         "party": "PVV",
-        "x": -0.27093828333831144,
-        "y": 0.41880090767203315,
-        "n": 389
+        "x": -0.27232034685632983,
+        "y": 0.43012818237123424,
+        "n": 403
       },
       {
         "party": "PvdD",
-        "x": 0.5317450390825541,
-        "y": -0.2660407416127254,
-        "n": 622
+        "x": 0.5321355065450135,
+        "y": -0.23594891040689822,
+        "n": 635
       },
       {
         "party": "SGP",
-        "x": -0.3248227676466827,
-        "y": 0.0694598321079572,
+        "x": -0.3249240256925015,
+        "y": 0.06330965662568576,
         "n": 652
       },
       {
         "party": "SP",
-        "x": 0.523810905163805,
-        "y": 0.4721042556198711,
+        "x": 0.523257619029731,
+        "y": 0.4572478136072906,
         "n": 532
       },
       {
         "party": "VVD",
-        "x": -0.3451712725062748,
-        "y": -0.23197444561027536,
+        "x": -0.34568938749649136,
+        "y": -0.23846500386919967,
         "n": 1839
       },
       {
         "party": "Volt",
-        "x": 0.5138519537686976,
-        "y": -0.28607443600403487,
+        "x": 0.5146508585452862,
+        "y": -0.28291957108374244,
         "n": 159
       }
     ],
@@ -272721,328 +273060,328 @@
         "sleutel": "Bewijs-Anekdotisch",
         "beschrijving": "Onderbouwd met één specifiek praktijkgeval, incident, exemplar of persoonlijk verhaal.",
         "labelgroep": "Type Bewijsvoering",
-        "x": -0.032793429251032215,
-        "y": 0.06738619825634631,
+        "x": -0.032014035587920764,
+        "y": 0.059869614726610496,
         "n": 251
       },
       {
         "sleutel": "Bewijs-Causaal",
         "beschrijving": "Onderbouwd met een heldere, mechanistische of logische verklaring van oorzaak en gevolg.",
         "labelgroep": "Type Bewijsvoering",
-        "x": -0.12808471848762365,
-        "y": -0.18907261052561766,
-        "n": 628
+        "x": -0.12702424817540872,
+        "y": -0.1885804328417511,
+        "n": 632
       },
       {
         "sleutel": "Bewijs-Expert",
         "beschrijving": "Onderbouwd met de consensus, verklaring of het oordeel van een erkend specialist.",
         "labelgroep": "Type Bewijsvoering",
-        "x": 0.07056245228775558,
-        "y": -0.04292939079829987,
-        "n": 203
+        "x": 0.06433884171217105,
+        "y": -0.04001051610609433,
+        "n": 204
       },
       {
         "sleutel": "Bewijs-Statistisch",
         "beschrijving": "Onderbouwd met kwantitatieve gegevens, cijfers, percentages of grootschalig representatief onderzoek.",
         "labelgroep": "Type Bewijsvoering",
-        "x": 0.024136676162590555,
-        "y": 0.2687694287126837,
-        "n": 289
+        "x": 0.023993399916683405,
+        "y": 0.27018914926077364,
+        "n": 290
       },
       {
         "sleutel": "Debatzet-Bewijs-Vragen",
         "beschrijving": "Doen alsof een claim geen bewijs behoeft of de tegenstander dwingen het tegendeel te bewijzen.",
         "labelgroep": "Debatzetten",
-        "x": 0.1788395532832348,
-        "y": 0.05670869632460799,
+        "x": 0.18252173568931665,
+        "y": 0.1494202223629972,
         "n": 2
       },
       {
         "sleutel": "Debatzet-Gevoelens-Verwoorden",
         "beschrijving": "Emotioneel argumenteren gericht op het oproepen van angst, woede of medelijden bij de toehoorder.",
         "labelgroep": "Debatzetten",
-        "x": 0.08506536296335276,
-        "y": 1.1115107057403122,
+        "x": 0.07084927796820654,
+        "y": 1.124904024840658,
         "n": 38
       },
       {
         "sleutel": "Debatzet-Herformuleren",
         "beschrijving": "Het vertekenen of overdrijven van het standpunt van de opponent om dit makkelijker te kunnen aanvallen.",
         "labelgroep": "Debatzetten",
-        "x": -0.20456238301170396,
-        "y": 0.03146054115577334,
-        "n": 68
+        "x": -0.18516630443595467,
+        "y": 0.09378577279134868,
+        "n": 69
       },
       {
         "sleutel": "Debatzet-Keuze-Aanscherpen",
         "beschrijving": "Zwart-wit denken; de situatie voorstellen alsof er slechts twee uiterste, elkaar uitsluitende opties bestaan.",
         "labelgroep": "Debatzetten",
-        "x": -0.17172039871540407,
-        "y": -0.08804706944341804,
-        "n": 39
+        "x": -0.18500217691740292,
+        "y": -0.011154583966246854,
+        "n": 40
       },
       {
         "sleutel": "Debatzet-Persoon-Aanspreken",
         "beschrijving": "Persoonlijke aanval op de tegenstander (op de man spelen) in plaats van een inhoudelijke weerlegging.",
         "labelgroep": "Debatzetten",
-        "x": -0.17083948418946526,
-        "y": 0.0664170268483096,
-        "n": 4
+        "x": -0.055240947403689206,
+        "y": 0.8605315960798003,
+        "n": 6
       },
       {
         "sleutel": "Frame-Conflict",
         "beschrijving": "De nadruk ligt op de felle strijd of meningsverschillen tussen personen, partijen of groepen.",
         "labelgroep": "Generieke Nieuwsframes",
-        "x": 0.02311851760486283,
-        "y": 0.18173559217471955,
-        "n": 139
+        "x": 0.0266410104750788,
+        "y": 0.2300459242195898,
+        "n": 141
       },
       {
         "sleutel": "Frame-Economisch",
         "beschrijving": "De focus ligt op de financiële kosten, baten of budgettaire gevolgen van een kwestie.",
         "labelgroep": "Generieke Nieuwsframes",
-        "x": -0.060946540028885186,
-        "y": 0.013046768608234663,
-        "n": 1038
+        "x": -0.061245968096534854,
+        "y": 0.008519419850609907,
+        "n": 1041
       },
       {
         "sleutel": "Frame-Episodisch",
         "beschrijving": "Inzoomen op een specifiek, individueel incident, persoonlijk verhaal of een concrete casus.",
         "labelgroep": "Framing-Focus",
-        "x": -0.11508589594792289,
-        "y": 0.1174746024096942,
+        "x": -0.11429904807478072,
+        "y": 0.11159661028079185,
         "n": 127
       },
       {
         "sleutel": "Frame-Menselijk-Belang",
         "beschrijving": "De focus ligt op de menselijke kant, de emoties of het individuele leed (Human Interest).",
         "labelgroep": "Generieke Nieuwsframes",
-        "x": 0.24253790563276645,
-        "y": 0.711105974198744,
+        "x": 0.23525155233235057,
+        "y": 0.6941502030720618,
         "n": 110
       },
       {
         "sleutel": "Frame-Moraliteit",
         "beschrijving": "Inbranding vanuit ethische plichten, spirituele of religieuze principes.",
         "labelgroep": "Generieke Nieuwsframes",
-        "x": 0.4968357920931765,
-        "y": 0.01719616901467268,
+        "x": 0.4958443882579849,
+        "y": 0.023716756777686202,
         "n": 61
       },
       {
         "sleutel": "Frame-Thematisch",
         "beschrijving": "Het benaderen van de kwestie vanuit een breder maatschappelijk, statistisch of historisch kader.",
         "labelgroep": "Framing-Focus",
-        "x": -0.043616660005667836,
-        "y": -0.06970966001517227,
-        "n": 1552
+        "x": -0.04417889745957069,
+        "y": -0.07232070462194935,
+        "n": 1556
       },
       {
         "sleutel": "Frame-Verantwoordelijkheid",
         "beschrijving": "De nadruk ligt op de schuldvraag of de plicht tot het oplossen van het probleem.",
         "labelgroep": "Generieke Nieuwsframes",
-        "x": 0.1537169879099882,
-        "y": -0.012720962556898328,
-        "n": 535
+        "x": 0.15500659288096824,
+        "y": -0.016616957255421335,
+        "n": 536
       },
       {
         "sleutel": "Ideologie-GAL",
         "beschrijving": "Progressief, ecologisch, kosmopolitisch (Green, Alternative, Libertarian).",
         "labelgroep": "Cultureel-Ideologische Breuklijn",
-        "x": 1.0860945565814837,
-        "y": -0.48880529513633214,
-        "n": 421
+        "x": 1.086135294778527,
+        "y": -0.4727683598824194,
+        "n": 423
       },
       {
         "sleutel": "Ideologie-Links-Economisch",
         "beschrijving": "Gericht op herverdeling van welvaart, sterke collectieve voorzieningen en overheidsingrijpen.",
         "labelgroep": "Cultureel-Ideologische Breuklijn",
-        "x": 1.117777322703181,
-        "y": 0.4170247556227801,
-        "n": 289
+        "x": 1.1128044574799054,
+        "y": 0.39339551123095773,
+        "n": 290
       },
       {
         "sleutel": "Ideologie-Rechts-Economisch",
         "beschrijving": "Gericht op de vrije markt, deregulering en individuele verantwoordelijkheid.",
         "labelgroep": "Cultureel-Ideologische Breuklijn",
-        "x": -0.6395950277591677,
-        "y": -0.17184956510299987,
-        "n": 673
+        "x": -0.6413419468238046,
+        "y": -0.17924723520852512,
+        "n": 674
       },
       {
         "sleutel": "Ideologie-TAN",
         "beschrijving": "Conservatief, traditioneel, nationalistisch (Traditional, Authoritarian, Nationalist).",
         "labelgroep": "Cultureel-Ideologische Breuklijn",
-        "x": -0.7561828687849775,
-        "y": 0.500228082677344,
-        "n": 288
+        "x": -0.7492746492323265,
+        "y": 0.5036880590906321,
+        "n": 290
       },
       {
         "sleutel": "Meta-Agenda-Tijdigheid",
         "beschrijving": "Uitingen over de chronologische geschiktheid, de prioriteitstelling of de urgentie van de discussie op dit specifieke moment.",
         "labelgroep": "Metadiscussie",
-        "x": 0.05351846790891743,
-        "y": -0.1505603111508736,
-        "n": 154
+        "x": 0.04769701329643171,
+        "y": -0.1367562026159166,
+        "n": 155
       },
       {
         "sleutel": "Meta-Bevoegdheid",
         "beschrijving": "Uitingen over het formele mandaat, de wettelijke of constitutionele autoriteit, of de institutionele taakverdeling om over de kwestie te beslissen.",
         "labelgroep": "Metadiscussie",
-        "x": -0.13180500612465382,
-        "y": -0.19365154970858253,
+        "x": -0.1310691976786737,
+        "y": -0.220401310057895,
         "n": 56
       },
       {
         "sleutel": "Meta-Reikwijdte",
         "beschrijving": "Uitingen over de thematische grenzen van het debat, de toelaatbaarheid van specifieke beweringen, of de legitimiteit van bepaalde linguïstische framings.",
         "labelgroep": "Metadiscussie",
-        "x": -0.2438809828757683,
-        "y": -0.09020148991236435,
+        "x": -0.24903882960401885,
+        "y": -0.09854926566576525,
         "n": 31
       },
       {
         "sleutel": "Meta-Vorm-Setting",
         "beschrijving": "Uitingen over de formele procedure, de interactieve spelregels, het vergaderformat of de fysieke en institutionele context van de uitwisseling.",
         "labelgroep": "Metadiscussie",
-        "x": -0.49282482185039267,
-        "y": -0.1513221025437901,
+        "x": -0.49450282209705315,
+        "y": -0.16806911391635745,
         "n": 54
       },
       {
         "sleutel": "Moraliteit-Autoriteit",
         "beschrijving": "Gericht op respect voor traditie, legitieme hiërarchie, wetten en maatschappelijke orde.",
         "labelgroep": "Morele Fundamenten",
-        "x": -0.42899795926720347,
-        "y": -0.2945117644760289,
-        "n": 300
+        "x": -0.4312843963634621,
+        "y": -0.3097732972809475,
+        "n": 301
       },
       {
         "sleutel": "Moraliteit-Eerlijkheid",
         "beschrijving": "Gericht op gelijke kansen, gelijke rechten en onpartijdige behandeling (equality).",
         "labelgroep": "Morele Fundamenten",
-        "x": 0.2489593055334498,
-        "y": 0.20529626914757831,
-        "n": 443
+        "x": 0.24744132670416227,
+        "y": 0.18680335296769343,
+        "n": 444
       },
       {
         "sleutel": "Moraliteit-Loyaliteit",
         "beschrijving": "Gericht op groeps-solidariteit, vaderlandsliefde en trouw aan de eigen gemeenschap (in-group).",
         "labelgroep": "Morele Fundamenten",
-        "x": -0.4054727984803504,
-        "y": 0.15186595448863996,
-        "n": 148
+        "x": -0.39451588132895177,
+        "y": 0.1600737687058299,
+        "n": 149
       },
       {
         "sleutel": "Moraliteit-Proportionaliteit",
         "beschrijving": "Gericht op rechtvaardigheid naar rato van inspanning; belonen naar werken en het straffen van profiteurs.",
         "labelgroep": "Morele Fundamenten",
-        "x": -0.17410215008757016,
-        "y": 0.04721858168792246,
+        "x": -0.17250651513862958,
+        "y": 0.039682676973743364,
         "n": 91
       },
       {
         "sleutel": "Moraliteit-Vrijheid",
         "beschrijving": "Gericht op individuele autonomie en weerstand tegen dwang of onderdrukking door dominante actoren.",
         "labelgroep": "Morele Fundamenten",
-        "x": -0.3948315097529902,
-        "y": 0.0012754365944093384,
-        "n": 186
+        "x": -0.3789695720638154,
+        "y": 0.01969168226973243,
+        "n": 189
       },
       {
         "sleutel": "Moraliteit-Zorg",
         "beschrijving": "Gericht op empathie, compassie en het voorkomen van leed en schade bij kwetsbaren.",
         "labelgroep": "Morele Fundamenten",
-        "x": 0.4768980922515721,
-        "y": 0.14683090365000193,
-        "n": 464
+        "x": 0.47247925997946333,
+        "y": 0.14932753457852893,
+        "n": 466
       },
       {
         "sleutel": "Moraliteit-Zuiverheid",
         "beschrijving": "Gericht op het vermijden van morele of fysieke besmetting; streven naar het schone, natuurlijke of verhevene.",
         "labelgroep": "Morele Fundamenten",
-        "x": 0.2794061552743204,
-        "y": -0.41802922584102076,
+        "x": 0.2823131907453297,
+        "y": -0.37348842120355014,
         "n": 43
       },
       {
         "sleutel": "Stijl-Aangekondigde-Opsomming",
         "beschrijving": "Vooraf het aantal elementen aankondigen (twee, drie, vijf, ...), gevolgd door een opsomming van precies dat aantal.",
         "labelgroep": "Stijlmiddelen",
-        "x": -0.11508614888589729,
-        "y": -0.08855064867251548,
+        "x": -0.11532198279723291,
+        "y": -0.08681429048855839,
         "n": 54
       },
       {
         "sleutel": "Stijl-Antithese",
         "beschrijving": "Het naast elkaar plaatsen van twee tegengestelde begrippen of ideeën.",
         "labelgroep": "Stijlmiddelen",
-        "x": 0.04295323559931082,
-        "y": 0.0960716295209659,
-        "n": 155
+        "x": 0.054673679368623704,
+        "y": 0.10377579278731186,
+        "n": 157
       },
       {
         "sleutel": "Stijl-Herhaling",
         "beschrijving": "Herhaling van hetzelfde woord of dezelfde woordgroep binnen het fragment, ter nadruk.",
         "labelgroep": "Stijlmiddelen",
-        "x": -0.051457161028000485,
-        "y": 0.20268062925578054,
-        "n": 187
+        "x": -0.04317005163280508,
+        "y": 0.2302460166550294,
+        "n": 190
       },
       {
         "sleutel": "Stijl-Retorische-Vraag",
         "beschrijving": "Een vraag waarvan het antwoord al besloten ligt in de formulering zelf.",
         "labelgroep": "Stijlmiddelen",
-        "x": 0.03200172717325513,
-        "y": 0.08450486383346993,
-        "n": 409
+        "x": 0.029399691777749374,
+        "y": 0.08782848418581699,
+        "n": 410
       },
       {
         "sleutel": "Stijl-Slogan",
         "beschrijving": "Beknopte, pakkende frase.",
         "labelgroep": "Stijlmiddelen",
-        "x": 0.01589823290128709,
-        "y": 0.3012101173836759,
+        "x": 0.017601612281504517,
+        "y": 0.32051486730082474,
         "n": 27
       },
       {
         "sleutel": "Walton-Analogie",
         "beschrijving": "Er wordt een vergelijking getrokken met een historische gebeurtenis, een andere specifieke casus of een precedent.",
         "labelgroep": "Redeneerschema",
-        "x": 0.04384684683435019,
-        "y": 0.23134659149080053,
+        "x": 0.04034511168279144,
+        "y": 0.21983345579044258,
         "n": 86
       },
       {
         "sleutel": "Walton-Causaal",
         "beschrijving": "Argumentatie gebaseerd op een directe oorzaak-gevolgrelatie.",
         "labelgroep": "Redeneerschema",
-        "x": -0.3681769734439831,
-        "y": 0.25152589508830714,
+        "x": -0.37476675315727603,
+        "y": 0.25668447445748466,
         "n": 54
       },
       {
         "sleutel": "Walton-Consequentie",
         "beschrijving": "Het verdedigen of aanvallen van een standpunt op basis van de verwachte praktische (voordelige of nadelige) gevolgen.",
         "labelgroep": "Redeneerschema",
-        "x": -0.04534225888620826,
-        "y": -0.06504797741227406,
-        "n": 1283
+        "x": -0.04513049757270702,
+        "y": -0.06697466756013656,
+        "n": 1287
       },
       {
         "sleutel": "Walton-Expertise",
         "beschrijving": "Het argument leunt op de autoriteit, bevindingen of de verklaring van een specialist of expert.",
         "labelgroep": "Redeneerschema",
-        "x": -0.0750928915523828,
-        "y": -0.08567132807336368,
+        "x": -0.0770059161676599,
+        "y": -0.0858550259634959,
         "n": 131
       },
       {
         "sleutel": "Walton-Regel",
         "beschrijving": "Het argument beroept zich op een reeds gevestigde wet, formele regel of breed geaccepteerde maatschappelijke norm.",
         "labelgroep": "Redeneerschema",
-        "x": 0.02991665786988774,
-        "y": -0.2775740253424006,
+        "x": 0.02876021635079263,
+        "y": -0.29140972563245887,
         "n": 122
       }
     ]
