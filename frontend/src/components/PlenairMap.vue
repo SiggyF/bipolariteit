@@ -146,6 +146,11 @@ const activePointVideo = computed<VideoLinkInfo | null>(() => {
 	return videosData.value[docId] || null;
 });
 
+// Dezelfde href als activePointVideo: voor interne links wijst die al naar de
+// debatpagina zelf (geen timestamp-fragment), dus bruikbaar als "bekijk
+// debat"-link voor de titel-badge hieronder.
+const activePointDebateLink = computed<VideoLinkInfo | null>(() => activePointVideo.value);
+
 const hoveredPoint = computed<PlenairPoint | null>(() => {
 	if (hoveredItem.value?.type === "point") return hoveredItem.value.data;
 	if (pinnedItem.value?.type === "point") return pinnedItem.value.data;
