@@ -146,6 +146,11 @@ const activePointVideo = computed<VideoLinkInfo | null>(() => {
 	return videosData.value[docId] || null;
 });
 
+// Dezelfde href als activePointVideo: voor interne links wijst die al naar de
+// debatpagina zelf (geen timestamp-fragment), dus bruikbaar als "bekijk
+// debat"-link voor de titel-badge hieronder.
+const activePointDebateLink = computed<VideoLinkInfo | null>(() => activePointVideo.value);
+
 const hoveredPoint = computed<PlenairPoint | null>(() => {
 	if (hoveredItem.value?.type === "point") return hoveredItem.value.data;
 	if (pinnedItem.value?.type === "point") return pinnedItem.value.data;
@@ -172,8 +177,25 @@ function updateIsMobile() {
 	isMobile.value = window.innerWidth <= 840;
 }
 
+// Grove hardware-inschatting (issue #226): desktop ging er voorheen van uit
+// dat elke desktop de volle ~40k achtergrondpunten probleemloos trekt (zie
+// benchmark issue #186) -- dat klopt niet voor bijv. een sober uitgeruste
+// kantoor-/ambtenarenlaptop met weinig cores/geheugen en een integrated GPU.
+// hardwareConcurrency/deviceMemory zijn geen perfecte proxy voor GPU-kracht,
+// maar wel een goedkope, breed ondersteunde (op deviceMemory na, Safari mist
+// die) heuristiek zonder dat er een canvas-benchmark bij render nodig is.
+const isLowPerfDevice = ref(false);
+
+function updateIsLowPerfDevice() {
+	if (typeof navigator === "undefined") return;
+	const cores = navigator.hardwareConcurrency ?? 8;
+	const mem = (navigator as unknown as { deviceMemory?: number }).deviceMemory ?? 8;
+	isLowPerfDevice.value = cores <= 4 || mem <= 4;
+}
+
 onMounted(() => {
 	updateIsMobile();
+	updateIsLowPerfDevice();
 	window.addEventListener("resize", updateIsMobile);
 	window.addEventListener("resize", updateCanvasDimensions);
 });
@@ -617,9 +639,16 @@ function render() {
 	const w = canvasWidth.value;
 	const h = canvasHeight.value;
 
-	if (canvas.width !== w * dpr || canvas.height !== h * dpr) {
-		canvas.width = w * dpr;
-		canvas.height = h * dpr;
+	// Math.round: canvas.width/height accepteert alleen integers en kapt
+	// intern af (niet rondt af) bij een fractionele devicePixelRatio (bv. 1.5,
+	// gangbaar op Windows/oudere laptops) -- die afkapping maakte de backing
+	// store net iets kleiner dan de CSS-box, met afgekapte buitenranden tot
+	// gevolg (issue #205).
+	const backingW = Math.round(w * dpr);
+	const backingH = Math.round(h * dpr);
+	if (canvas.width !== backingW || canvas.height !== backingH) {
+		canvas.width = backingW;
+		canvas.height = backingH;
 	}
 
 	ctx.save();
@@ -663,12 +692,13 @@ function render() {
 	const basePlenairR = plenairSizeScale(zoom.value) * (isMobile.value ? 1.3 : 0.5);
 	const baseTopicR = topicSizeScale(zoom.value) * (isMobile.value ? 1.3 : 1);
 
-	// Achtergrond ("overig plenair") alleen op mobiel dunnen: dat is puur
-	// performance-gedreven en desktop trekt de volle ~40k achtergrondpunten
-	// al probleemloos (zie benchmark issue #186). De topic-gekleurde clusters
-	// worden altijd gedund, op mobiel én desktop: dat is geen performance-fix
-	// maar een legibiliteit-fix (zie toelichting bij randomSample hierboven).
-	if (isMobile.value) {
+	// Achtergrond ("overig plenair") dunnen op mobiel én op ingeschat
+	// laagperformante desktops (issue #226) -- een gemiddelde desktop trekt de
+	// volle ~40k achtergrondpunten probleemloos (zie benchmark issue #186),
+	// maar niet elke desktop is gemiddeld. De topic-gekleurde clusters worden
+	// altijd gedund, op mobiel én desktop: dat is geen performance-fix maar
+	// een legibiliteit-fix (zie toelichting bij randomSample hierboven).
+	if (isMobile.value || isLowPerfDevice.value) {
 		groups.plenair = randomSample(groups.plenair, plenairKeepFractionScale(zoom.value));
 	}
 	const topicKeep = topicKeepFraction(zoom.value);
