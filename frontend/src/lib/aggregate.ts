@@ -1,4 +1,4 @@
-import { NO_PARTY, TYPOLOGIES, type Argument, type Stance, type Typology } from "./types";
+import { NO_PARTY, TYPOLOGIES, type Argument, type Sprekerbeurt, type Stance, type Typology } from "./types";
 
 // Afgeleide cijfers voor de grafieken. Stonden eerder voorberekend in de
 // export (build_stats/build_tags_per_party); nu leiden we ze af uit dezelfde
@@ -83,6 +83,111 @@ export function deriveStats(argumentList: Argument[]) {
 	}));
 	byParty.sort((a, b) => b.pro_pct - a.pro_pct);
 	return { overall: stanceCounts(argumentList), by_party: byParty };
+}
+
+// Leesbaarheids-/dichtheidsmaten per spreker (issue #155), afgeleid uit de
+// platte sprekerbeurten- en argumentenlijst -- zelfde reductie-vorm als
+// aggregeer_per_actor() in scripts/experiment_verbositeit.py, hier per actor
+// (of over het volledige corpus) toegepast op de al gefilterde lijsten.
+export interface VerbositeitStats {
+	nSprekerbeurten: number;
+	nArgumenten: number;
+	gemSprekerbeurtLengte: number;
+	gemZinslengte: number;
+	fleschDouma: number;
+	lix: number;
+	// Word-count-gewogen gemiddelde van per-sprekerbeurt TTR (Mean Segmental
+	// TTR): Σ(unique_word_count) / Σ(word_count). Reconstrueerbaar uit alleen
+	// de opgeslagen per-document tellingen (geen ruwe tekst nodig), en minder
+	// gevoelig voor totale spreektijd dan een kale corpus-brede TTR.
+	msttr: number;
+	tokensPerZin: number;
+	argumentenPer1000Tekens: number;
+	claimsPerArgument: number;
+	gemQuoteLengte: number;
+}
+
+export function deriveVerbositeitStats(sprekerbeurtList: Sprekerbeurt[], argumentList: Argument[]): VerbositeitStats {
+	const totaalTekens = sprekerbeurtList.reduce((sum, s) => sum + s.char_count, 0);
+	const totaalWoorden = sprekerbeurtList.reduce((sum, s) => sum + s.word_count, 0);
+	const totaalZinnen = sprekerbeurtList.reduce((sum, s) => sum + s.sentence_count, 0);
+	const totaalLettergrepen = sprekerbeurtList.reduce((sum, s) => sum + s.syllable_count, 0);
+	const totaalLangeWoorden = sprekerbeurtList.reduce((sum, s) => sum + s.long_word_count, 0);
+	const totaalUniekeWoorden = sprekerbeurtList.reduce((sum, s) => sum + s.unique_word_count, 0);
+	const totaalTokens = sprekerbeurtList.reduce((sum, s) => sum + s.token_count, 0);
+
+	const nArgumenten = argumentList.length;
+	const totaalClaims = argumentList.reduce((sum, a) => sum + a.claims.length, 0);
+	const totaalQuoteLengte = argumentList.reduce((sum, a) => sum + a.quote_text.length, 0);
+
+	const gemZinslengte = totaalZinnen ? totaalWoorden / totaalZinnen : 0;
+	const gemLettergrepenPerWoord = totaalWoorden ? totaalLettergrepen / totaalWoorden : 0;
+
+	return {
+		nSprekerbeurten: sprekerbeurtList.length,
+		nArgumenten,
+		gemSprekerbeurtLengte: sprekerbeurtList.length ? totaalTekens / sprekerbeurtList.length : 0,
+		gemZinslengte,
+		fleschDouma: 206.84 - 0.93 * gemZinslengte - 77 * gemLettergrepenPerWoord,
+		lix: gemZinslengte + (totaalWoorden ? (totaalLangeWoorden * 100) / totaalWoorden : 0),
+		msttr: totaalWoorden ? totaalUniekeWoorden / totaalWoorden : 0,
+		tokensPerZin: totaalZinnen ? totaalTokens / totaalZinnen : 0,
+		argumentenPer1000Tekens: totaalTekens ? (nArgumenten * 1000) / totaalTekens : 0,
+		claimsPerArgument: nArgumenten ? totaalClaims / nArgumenten : 0,
+		gemQuoteLengte: nArgumenten ? totaalQuoteLengte / nArgumenten : 0,
+	};
+}
+
+export function median(values: number[]): number {
+	if (!values.length) return 0;
+	const sorted = [...values].sort((a, b) => a - b);
+	const mid = Math.floor(sorted.length / 2);
+	return sorted.length % 2 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2;
+}
+
+/** Mediaan per verbositeitsmaat over alle sprekers (elk met minstens
+ * `minSprekerbeurten` sprekerbeurten), i.p.v. het gemiddelde over de gepoolde
+ * corpustekst -- bij deze dichtheidsmaten (0,03 tot 1,6 argumenten/1000
+ * tekens) trekt een enkele extreme spreker het gemiddelde flink omhoog, de
+ * mediaan is dan een representatiever "typische spreker"-ijkpunt. */
+export function deriveVerbositeitMedians(
+	sprekerbeurtList: Sprekerbeurt[],
+	argumentList: Argument[],
+	minSprekerbeurten: number,
+): VerbositeitStats {
+	const sprekerbeurtenPerActor = new Map<string, Sprekerbeurt[]>();
+	for (const s of sprekerbeurtList) {
+		const bucket = sprekerbeurtenPerActor.get(s.actor.name);
+		if (bucket) bucket.push(s);
+		else sprekerbeurtenPerActor.set(s.actor.name, [s]);
+	}
+	const argumentenPerActor = new Map<string, Argument[]>();
+	for (const a of argumentList) {
+		const bucket = argumentenPerActor.get(a.actor.name);
+		if (bucket) bucket.push(a);
+		else argumentenPerActor.set(a.actor.name, [a]);
+	}
+
+	const perActor: VerbositeitStats[] = [];
+	for (const [actor, sprekerbeurten] of sprekerbeurtenPerActor) {
+		if (sprekerbeurten.length < minSprekerbeurten) continue;
+		perActor.push(deriveVerbositeitStats(sprekerbeurten, argumentenPerActor.get(actor) ?? []));
+	}
+
+	const veld = (key: keyof VerbositeitStats) => median(perActor.map((s) => s[key]));
+	return {
+		nSprekerbeurten: veld("nSprekerbeurten"),
+		nArgumenten: veld("nArgumenten"),
+		gemSprekerbeurtLengte: veld("gemSprekerbeurtLengte"),
+		gemZinslengte: veld("gemZinslengte"),
+		fleschDouma: veld("fleschDouma"),
+		lix: veld("lix"),
+		msttr: veld("msttr"),
+		tokensPerZin: veld("tokensPerZin"),
+		argumentenPer1000Tekens: veld("argumentenPer1000Tekens"),
+		claimsPerArgument: veld("claimsPerArgument"),
+		gemQuoteLengte: veld("gemQuoteLengte"),
+	};
 }
 
 export interface PartyTagCount {
