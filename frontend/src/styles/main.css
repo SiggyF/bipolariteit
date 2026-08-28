@@ -578,6 +578,22 @@ h3 {
 	flex-shrink: 0;
 }
 
+.party-row-name {
+	display: flex;
+	align-items: center;
+	gap: var(--space-2);
+}
+
+.party-row-name .card-tile-logo {
+	width: 24px;
+	height: 24px;
+}
+
+.party-row-name .card-tile-logo img {
+	max-width: 20px;
+	max-height: 20px;
+}
+
 .person-row-who {
 	display: flex;
 	align-items: center;
