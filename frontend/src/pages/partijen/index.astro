@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import EntityTabs from "../../components/EntityTabs.astro";
+import PartyIcon from "../../components/PartyIcon.astro";
 import { displayPartyName, canonicalParty } from "../../lib/parties";
 import { slugify } from "../../lib/slug";
 import { NO_PARTY } from "../../lib/types";
@@ -26,8 +27,11 @@ const parties = [...counts.entries()].sort((a, b) => b[1] - a[1]);
 	<ul class="topic-list">
 		{parties.map(([party, count]) => (
 			<li>
-				<a href={`/partijen/${slugify(party)}/`}>
-					<span class="topic-name">{displayPartyName(party)}</span>
+				<a href={`/partijen/${slugify(party)}/`} class="party-row">
+					<span class="party-row-name">
+						<PartyIcon party={party} />
+						<span class="topic-name">{displayPartyName(party)}</span>
+					</span>
 					<span class="topic-count">{count} argumenten</span>
 				</a>
 			</li>
