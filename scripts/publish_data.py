@@ -17,6 +17,12 @@ client-side uit, met CORS voor alle origins.
 Losgekoppeld van de release-workflows: data-publicatie heeft een eigen
 cadans (verandert alleen als de dataset zelf verandert), niet die van een
 frontend-release. Zie docs/release.md.
+
+Naast het pushen naar bipolariteit-data zet dit script ook de resterende
+hoofdrepo-wijzigingen (submodule-pointer + eventuele export-json's buiten
+de submodule) op een eigen branch en opent er een PR voor in
+SiggyF/bipolariteit -- mergen blijft een bewuste, aparte stap (zie #222).
+Draait daarom alleen vanaf de main-branch van de hoofdrepo.
 """
 
 from __future__ import annotations
@@ -25,6 +31,7 @@ import argparse
 import logging
 import subprocess
 import sys
+from datetime import datetime
 from pathlib import Path
 
 import requests
@@ -39,6 +46,76 @@ DATA_BRANCH = "main"
 
 def git(*args: str, cwd: Path = SUBMODULE) -> subprocess.CompletedProcess:
     return subprocess.run(["git", *args], cwd=cwd, capture_output=True, text=True)
+
+
+def open_main_repo_pr() -> int:
+    """Rond de derde stap af die na publicatie altijd bleef liggen: de
+    submodule-pointer (`data/export/gepubliceerd`) en/of de export-json's
+    buiten de submodule zijn na publicatie gewijzigd in de hoofdrepo, maar
+    nooit gecommit. Zet ze op een eigen branch en open er een PR voor --
+    mergen blijft een bewuste, aparte stap (zie #222).
+    """
+    status = git("status", "--porcelain", "--", "data/export", cwd=REPO)
+    files = [line[3:] for line in status.stdout.splitlines() if line.strip()]
+    if not files:
+        return 0
+
+    logger.info("%d gewijzigd bestand(en) in de hoofdrepo (%s):", len(files), REPO)
+    for file in files:
+        logger.info("  %s", file)
+
+    original_branch = subprocess.run(
+        ["git", "rev-parse", "--abbrev-ref", "HEAD"], cwd=REPO, capture_output=True, text=True
+    ).stdout.strip()
+    branch_name = f"data/publish-data-{datetime.now():%Y%m%d-%H%M%S}"
+
+    checkout = git("checkout", "-b", branch_name, cwd=REPO)
+    if checkout.returncode != 0:
+        logger.error("git checkout -b %s faalde: %s", branch_name, checkout.stderr)
+        return checkout.returncode
+
+    try:
+        add = git("add", "--", *files, cwd=REPO)
+        if add.returncode != 0:
+            logger.error("git add faalde: %s", add.stderr)
+            return add.returncode
+
+        commit = git(
+            "commit", "-m", "data: submodule-pointer en export-data bijwerken na publish-data", cwd=REPO
+        )
+        if commit.returncode != 0:
+            logger.error("git commit faalde: %s", commit.stderr)
+            return commit.returncode
+
+        push = git("push", "-u", "origin", branch_name, cwd=REPO)
+        if push.returncode != 0:
+            logger.error("git push faalde: %s", push.stderr)
+            return push.returncode
+
+        pr = subprocess.run(
+            [
+                "gh",
+                "pr",
+                "create",
+                "--title",
+                "data: submodule-pointer en export-data bijwerken na publish-data",
+                "--body",
+                "Automatisch geopend door `scripts/publish_data.py` na `make publish-data` "
+                "(submodule al gepubliceerd naar bipolariteit-data; dit zet de resterende "
+                "hoofdrepo-wijzigingen erbij, zie #222).",
+            ],
+            cwd=REPO,
+            capture_output=True,
+            text=True,
+        )
+        if pr.returncode != 0:
+            logger.error("gh pr create faalde: %s", pr.stderr)
+            return pr.returncode
+
+        logger.info("PR geopend: %s", pr.stdout.strip())
+        return 0
+    finally:
+        git("checkout", original_branch, cwd=REPO)
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -59,15 +136,28 @@ def main(argv: list[str] | None = None) -> int:
         )
         return 1
 
-    status = git("status", "--porcelain")
-    bestanden = [regel[3:] for regel in status.stdout.splitlines() if regel.strip()]
-    if not bestanden:
-        logger.info("geen wijzigingen in %s -- niets te publiceren", SUBMODULE)
-        return 0
+    main_repo_branch = subprocess.run(
+        ["git", "rev-parse", "--abbrev-ref", "HEAD"], cwd=REPO, capture_output=True, text=True
+    ).stdout.strip()
+    if main_repo_branch != "main":
+        logger.error(
+            "hoofdrepo staat op branch '%s', niet 'main' -- checkout eerst main "
+            "(publiceren vanaf een andere branch levert een verkeerde submodule-pointer-PR op)",
+            main_repo_branch,
+        )
+        return 1
 
-    logger.info("%d gewijzigd bestand(en) in %s:", len(bestanden), SUBMODULE)
-    for bestand in bestanden:
-        logger.info("  %s", bestand)
+    status = git("status", "--porcelain")
+    files = [line[3:] for line in status.stdout.splitlines() if line.strip()]
+    if not files:
+        logger.info("geen wijzigingen in %s -- niets te publiceren", SUBMODULE)
+        if args.dry_run:
+            return 0
+        return open_main_repo_pr()
+
+    logger.info("%d gewijzigd bestand(en) in %s:", len(files), SUBMODULE)
+    for file in files:
+        logger.info("  %s", file)
 
     if args.dry_run:
         logger.info("dry-run, niet gecommit/gepusht")
@@ -84,16 +174,16 @@ def main(argv: list[str] | None = None) -> int:
         logger.error("git push faalde: %s", push.stderr)
         return push.returncode
 
-    for bestand in bestanden:
-        purge_url = f"https://purge.jsdelivr.net/gh/{DATA_REPO}@{DATA_BRANCH}/{bestand}"
+    for file in files:
+        purge_url = f"https://purge.jsdelivr.net/gh/{DATA_REPO}@{DATA_BRANCH}/{file}"
         response = requests.get(purge_url, timeout=30)
         if response.ok:
-            logger.info("jsDelivr-cache geleegd voor %s", bestand)
+            logger.info("jsDelivr-cache geleegd voor %s", file)
         else:
-            logger.warning("jsDelivr-purge voor %s gaf status %s (niet fataal)", bestand, response.status_code)
+            logger.warning("jsDelivr-purge voor %s gaf status %s (niet fataal)", file, response.status_code)
 
     logger.info("klaar: gepubliceerd naar https://github.com/%s", DATA_REPO)
-    return 0
+    return open_main_repo_pr()
 
 
 if __name__ == "__main__":
