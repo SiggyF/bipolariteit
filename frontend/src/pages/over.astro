@@ -188,7 +188,7 @@ const CA_ROW_LABEL_OFFSET: Record<string, CaLabelOffset> = {
 				</li>
 			</ul>
 
-			<h2>Wat is een argument?</h2>
+			<h2 id="wat-is-een-argument">Wat is een argument?</h2>
 			<p>
 				Een argument heeft altijd twee delen, en beide moeten letterlijk in het citaat staan: een <strong>standpunt</strong> (pro/contra/onduidelijk)
 				én een <strong>reden of onderbouwing</strong> die dat standpunt ondersteunt. Geen onderbouwing betekent geen argument,
@@ -552,6 +552,45 @@ const CA_ROW_LABEL_OFFSET: Record<string, CaLabelOffset> = {
 			<p class="panel-note">
 				Bij weinig getagde argumenten is dit minder betrouwbaar; hover over een badge voor de exacte aantallen
 				en de ratio.
+			</p>
+
+			<h2 id="tekststatistieken-methode">Hoe tekststatistieken worden berekend</h2>
+			<p>
+				Elke <a href="/personen/">persoonspagina</a> toont een blokje <strong>tekststatistieken</strong>: puur
+				tekstuele kenmerken van iemands sprekerbeurten (zinsbouw, woordvariatie, argument- en
+				onderbouwingsdichtheid), los van wat er inhoudelijk gezegd wordt. Dit zijn beschrijvende
+				tekstmetingen, geen oordeel over de kwaliteit van iemands bijdrage.
+			</p>
+			<ul>
+				<li>
+					<strong>Zinsbouw</strong> (gem. zinslengte, Flesch-Douma, LIX): standaardmaten uit de
+					leesbaarheidsliteratuur, hier toegepast op gesproken transcripten in plaats van geschreven tekst
+					-- de uitkomst zegt dus iets over zinsbouw en woordlengte, niet over hoe "leesbaar" een
+					gesproken bijdrage was. Lettergrepen worden geteld met een vocaal-groepen-heuristiek (geen
+					volwaardige Nederlandse afbreekregels), dus de exacte score is indicatief.
+				</li>
+				<li>
+					<strong>Woordvariatie</strong> (MSTTR, Mean Segmental Type-Token Ratio): het aandeel unieke
+					woorden, gemiddeld per sprekerbeurt in plaats van over de hele gepoolde tekst -- een kale
+					type-token ratio daalt vanzelf naarmate een tekst langer wordt, MSTTR corrigeert daarvoor.
+				</li>
+				<li>
+					<strong>Argumentdichtheid</strong> (argumenten per 1000 tekens): hoeveel geëxtraheerde
+					argumenten (zie <a href="#wat-is-een-argument">hierboven</a>) een spreker haalt uit een gegeven
+					hoeveelheid gesproken tekst.
+				</li>
+				<li>
+					<strong>Onderbouwing</strong> (claims per argument): hoe vaak een argument vergezeld gaat van
+					een concreet genoemd cijfer, feit of bron (zie claims verderop).
+				</li>
+			</ul>
+			<p>
+				Elke maat toont ook de <strong>mediaan</strong> over alle sprekers met minstens 3 sprekerbeurten,
+				als ijkpunt voor een "typische" spreker. Bij deze dichtheidsmaten ligt de verdeling scheef -- een
+				enkele spreker met veel argumenten per 1000 tekens trekt een gemiddelde flink omhoog, de mediaan
+				is dan representatiever dan een gemiddelde. De richtingaanduiding (bv. "hoger = complexer") is
+				puur beschrijvend: een hogere of lagere waarde is geen betere of slechtere bijdrage, alleen een
+				ander soort formulering.
 			</p>
 
 			<h2 id="correspondentiekaart-methode">Wat is een correspondentiekaart?</h2>

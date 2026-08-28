@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { countByTypologyAndStance, deriveVerbositeitStats } from "./aggregate";
+import { countByTypologyAndStance, deriveVerbositeitMedians, deriveVerbositeitStats, median } from "./aggregate";
 import type { Argument, Sprekerbeurt, Stance, Typology } from "./types";
 
 function argument(typology: Typology, stance: Stance): Argument {
@@ -102,5 +102,45 @@ describe("deriveVerbositeitStats", () => {
 			[],
 		);
 		expect(stats.msttr).toBeCloseTo((8 + 27) / (10 + 90), 5);
+	});
+});
+
+describe("median", () => {
+	it("neemt het middelste element bij een oneven aantal", () => {
+		expect(median([3, 1, 2])).toBe(2);
+	});
+
+	it("middelt de twee middelste elementen bij een even aantal", () => {
+		expect(median([1, 2, 3, 4])).toBe(2.5);
+	});
+
+	it("geeft 0 terug voor een lege lijst", () => {
+		expect(median([])).toBe(0);
+	});
+});
+
+describe("deriveVerbositeitMedians", () => {
+	it("berekent de mediaan per maat over sprekers, niet over de gepoolde tekst", () => {
+		// Drie sprekers met flink uiteenlopende gem. sprekerbeurtlengte (char_count) --
+		// de mediaan moet de middelste spreker zijn, niet vertekend door de outlier.
+		const sprekers = [
+			[sprekerbeurt({ id: 1, actor: { name: "Laag", party: null }, char_count: 100 })],
+			[sprekerbeurt({ id: 2, actor: { name: "Midden", party: null }, char_count: 300 })],
+			[sprekerbeurt({ id: 3, actor: { name: "Hoog", party: null }, char_count: 10000 })],
+		].flat();
+
+		const medianen = deriveVerbositeitMedians(sprekers, [], 1);
+		expect(medianen.gemSprekerbeurtLengte).toBe(300);
+	});
+
+	it("negeert sprekers onder de ondergrens", () => {
+		const sprekers = [
+			sprekerbeurt({ id: 1, actor: { name: "Weinig", party: null }, char_count: 5000 }),
+			sprekerbeurt({ id: 2, actor: { name: "Genoeg", party: null }, char_count: 100 }),
+			sprekerbeurt({ id: 3, actor: { name: "Genoeg", party: null }, char_count: 100 }),
+		];
+
+		const medianen = deriveVerbositeitMedians(sprekers, [], 2);
+		expect(medianen.gemSprekerbeurtLengte).toBe(100);
 	});
 });

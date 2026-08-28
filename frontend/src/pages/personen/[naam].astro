@@ -6,7 +6,7 @@ import { slugify } from "../../lib/slug";
 import { NO_PARTY } from "../../lib/types";
 import { PERSPECTIEVEN } from "../../lib/tagIcons.generated";
 import { berekenTagSignalen, signaalTitle, signaalDetail } from "../../lib/tagSignalen";
-import { deriveVerbositeitStats } from "../../lib/aggregate";
+import { deriveVerbositeitStats, deriveVerbositeitMedians } from "../../lib/aggregate";
 
 const topicModules = import.meta.glob("../../../../data/export/topics/*.json", { eager: true });
 
@@ -95,10 +95,11 @@ const minstFavorieteTags = minstFavoriet.map((signaal) => ({
 	detail: signaalDetail(signaal, personTotal, globalTagCount, globalTagTotal),
 }));
 
-// Verbositeit/dichtheid (issue #155): statisch per persoon, reageert niet op
-// FilterBar, dus platte Astro-markup i.p.v. een prop naar de client:only
-// Vue-island -- zo belandt geen van deze cijfers (en zeker niet de
-// onderliggende tekststatistieken) in de client-JS-bundle.
+// Tekststatistieken: statisch per persoon, reageert niet op FilterBar, dus
+// platte Astro-markup i.p.v. een prop naar de client:only Vue-island -- zo
+// belandt geen van deze cijfers (en zeker niet de onderliggende
+// tekststatistieken) in de client-JS-bundle. Methodologie: zie
+// /over/#tekststatistieken-methode.
 const allSprekerbeurtenList = allSprekerbeurten();
 const personSprekerbeurten = allSprekerbeurtenList.filter((s: any) => s.actor.name === name);
 // Onder deze ondergrens zegt een gemiddelde te weinig -- zelfde soort
@@ -106,61 +107,71 @@ const personSprekerbeurten = allSprekerbeurtenList.filter((s: any) => s.actor.na
 const MIN_SPREKERBEURTEN = 3;
 const verbositeitStats =
 	personSprekerbeurten.length >= MIN_SPREKERBEURTEN ? deriveVerbositeitStats(personSprekerbeurten, argumentList) : null;
-const corpusVerbositeitStats = verbositeitStats
-	? deriveVerbositeitStats(allSprekerbeurtenList, allArgs)
-	: null;
+// Mediaan i.p.v. gemiddelde als corpus-ijkpunt: deze dichtheidsmaten zijn
+// scheef verdeeld (een enkele spreker met veel argumenten per 1000 tekens
+// trekt een gemiddelde omhoog), de mediaan is dan representatiever voor een
+// "typische" spreker.
+const corpusMedianen = verbositeitStats ? deriveVerbositeitMedians(allSprekerbeurtenList, allArgs, MIN_SPREKERBEURTEN) : null;
 
-function vsCorpus(waarde: number, gemiddelde: number, decimalen = 1): string {
-	return `${waarde.toFixed(decimalen)} (corpusgemiddelde: ${gemiddelde.toFixed(decimalen)})`;
+function badgeTitel(mediaan: number, decimalen: number): string {
+	return `Mediaan over alle sprekers: ${mediaan.toFixed(decimalen)}`;
 }
 
 // Elke badge: een korte, neutrale categorie-omschrijving (waar meet dit iets
-// over?), de technische term (voor wie de formule kent), dan pas het getal.
+// over?), de technische term (voor wie de formule kent), het getal, en de
+// mediaan over alle sprekers als ijkpunt -- plus een neutrale duiding van de
+// richting (geen "goed/slecht", puur wat een hogere/lagere waarde betekent).
 const verbositeitBadges =
-	verbositeitStats && corpusVerbositeitStats
+	verbositeitStats && corpusMedianen
 		? [
 				{
 					categorie: "Zinsbouw",
 					term: "Gem. zinslengte",
 					waarde: verbositeitStats.gemZinslengte,
-					corpusGemiddelde: corpusVerbositeitStats.gemZinslengte,
+					mediaan: corpusMedianen.gemZinslengte,
 					decimalen: 1,
 					eenheid: "woorden",
+					richting: "hoger = langere zinnen",
 				},
 				{
 					categorie: "Zinsbouw",
 					term: "Flesch-Douma",
 					waarde: verbositeitStats.fleschDouma,
-					corpusGemiddelde: corpusVerbositeitStats.fleschDouma,
+					mediaan: corpusMedianen.fleschDouma,
 					decimalen: 1,
+					richting: "hoger = leesbaarder",
 				},
 				{
 					categorie: "Zinsbouw",
 					term: "LIX",
 					waarde: verbositeitStats.lix,
-					corpusGemiddelde: corpusVerbositeitStats.lix,
+					mediaan: corpusMedianen.lix,
 					decimalen: 1,
+					richting: "hoger = complexer",
 				},
 				{
 					categorie: "Woordenschat",
 					term: "MSTTR",
 					waarde: verbositeitStats.msttr,
-					corpusGemiddelde: corpusVerbositeitStats.msttr,
+					mediaan: corpusMedianen.msttr,
 					decimalen: 2,
+					richting: "hoger = meer woordvariatie",
 				},
 				{
 					categorie: "Argumentdichtheid",
 					term: "Argumenten per 1000 tekens",
 					waarde: verbositeitStats.argumentenPer1000Tekens,
-					corpusGemiddelde: corpusVerbositeitStats.argumentenPer1000Tekens,
+					mediaan: corpusMedianen.argumentenPer1000Tekens,
 					decimalen: 2,
+					richting: "hoger = dichter beargumenteerd",
 				},
 				{
 					categorie: "Onderbouwing",
 					term: "Claims per argument",
 					waarde: verbositeitStats.claimsPerArgument,
-					corpusGemiddelde: corpusVerbositeitStats.claimsPerArgument,
+					mediaan: corpusMedianen.claimsPerArgument,
 					decimalen: 2,
+					richting: "hoger = vaker met een claim onderbouwd",
 				},
 			]
 		: [];
@@ -181,22 +192,24 @@ const verbositeitBadges =
 			minstFavorieteTags={minstFavorieteTags}
 			client:only="vue"
 		>
-			{verbositeitStats && corpusVerbositeitStats && (
+			{verbositeitStats && corpusMedianen && (
 				<section class="verbositeit-stats" aria-label="Tekststatistieken" slot="voor-argumentlijst">
-					<h2>Tekststatistieken</h2>
-					<p class="verbositeit-toelichting">
-						Op basis van {verbositeitStats.nSprekerbeurten} sprekerbeurten. Puur tekststatistiek, geen oordeel over de
-						inhoud (zie <a href="https://github.com/SiggyF/bipolariteit/issues/155">issue #155</a>).
-					</p>
+					<h2>
+						Tekststatistieken
+						<a href="/over/#tekststatistieken-methode" class="info-link" title="Hoe deze cijfers berekend worden" aria-label="Uitleg: hoe tekststatistieken berekend worden">?</a>
+					</h2>
+					<p class="verbositeit-toelichting">Op basis van {verbositeitStats.nSprekerbeurten} sprekerbeurten.</p>
 					<dl class="verbositeit-grid">
 						{verbositeitBadges.map((badge) => (
-							<div class="verbositeit-badge" title={vsCorpus(badge.waarde, badge.corpusGemiddelde, badge.decimalen)}>
+							<div class="verbositeit-badge" title={badgeTitel(badge.mediaan, badge.decimalen)}>
 								<dt class="verbositeit-categorie">{badge.categorie}</dt>
 								<dt class="verbositeit-term">{badge.term}</dt>
-								<dd>
+								<dd class="verbositeit-waarde">
 									{badge.waarde.toFixed(badge.decimalen)}
 									{badge.eenheid && <span class="verbositeit-eenheid">{badge.eenheid}</span>}
 								</dd>
+								<dd class="verbositeit-mediaan">mediaan {badge.mediaan.toFixed(badge.decimalen)}</dd>
+								<dd class="verbositeit-richting">{badge.richting}</dd>
 							</div>
 						))}
 					</dl>
@@ -216,6 +229,9 @@ const verbositeitBadges =
 	}
 
 	.verbositeit-stats h2 {
+		display: flex;
+		align-items: center;
+		gap: var(--space-1);
 		font-size: var(--step-0);
 		margin: 0 0 var(--space-1);
 	}
@@ -234,6 +250,9 @@ const verbositeitBadges =
 	}
 
 	.verbositeit-badge {
+		display: flex;
+		flex-direction: column;
+		gap: 0.15rem;
 		padding: var(--space-1) var(--space-2);
 		border: 1px solid var(--color-border);
 		border-radius: 0.4rem;
@@ -243,16 +262,19 @@ const verbositeitBadges =
 		font-size: var(--step--1);
 		color: var(--color-muted);
 		text-transform: uppercase;
-		letter-spacing: 0.02em;
+		letter-spacing: 0.04em;
 	}
 
 	.verbositeit-term {
 		font-size: var(--step--1);
-		margin-top: 0.1rem;
+		font-weight: 600;
 	}
 
 	.verbositeit-badge dd {
 		margin: 0;
+	}
+
+	.verbositeit-waarde {
 		font-family: var(--font-mono);
 		font-size: var(--step-0);
 		font-weight: 600;
@@ -263,5 +285,17 @@ const verbositeitBadges =
 		font-size: var(--step--1);
 		font-weight: 400;
 		color: var(--color-muted);
+	}
+
+	.verbositeit-mediaan {
+		font-family: var(--font-mono);
+		font-size: var(--step--1);
+		color: var(--color-muted);
+	}
+
+	.verbositeit-richting {
+		font-size: var(--step--1);
+		color: var(--color-muted);
+		font-style: italic;
 	}
 </style>

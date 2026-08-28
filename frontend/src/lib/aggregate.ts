@@ -138,6 +138,58 @@ export function deriveVerbositeitStats(sprekerbeurtList: Sprekerbeurt[], argumen
 	};
 }
 
+export function median(values: number[]): number {
+	if (!values.length) return 0;
+	const sorted = [...values].sort((a, b) => a - b);
+	const mid = Math.floor(sorted.length / 2);
+	return sorted.length % 2 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2;
+}
+
+/** Mediaan per verbositeitsmaat over alle sprekers (elk met minstens
+ * `minSprekerbeurten` sprekerbeurten), i.p.v. het gemiddelde over de gepoolde
+ * corpustekst -- bij deze dichtheidsmaten (0,03 tot 1,6 argumenten/1000
+ * tekens) trekt een enkele extreme spreker het gemiddelde flink omhoog, de
+ * mediaan is dan een representatiever "typische spreker"-ijkpunt. */
+export function deriveVerbositeitMedians(
+	sprekerbeurtList: Sprekerbeurt[],
+	argumentList: Argument[],
+	minSprekerbeurten: number,
+): VerbositeitStats {
+	const sprekerbeurtenPerActor = new Map<string, Sprekerbeurt[]>();
+	for (const s of sprekerbeurtList) {
+		const bucket = sprekerbeurtenPerActor.get(s.actor.name);
+		if (bucket) bucket.push(s);
+		else sprekerbeurtenPerActor.set(s.actor.name, [s]);
+	}
+	const argumentenPerActor = new Map<string, Argument[]>();
+	for (const a of argumentList) {
+		const bucket = argumentenPerActor.get(a.actor.name);
+		if (bucket) bucket.push(a);
+		else argumentenPerActor.set(a.actor.name, [a]);
+	}
+
+	const perActor: VerbositeitStats[] = [];
+	for (const [actor, sprekerbeurten] of sprekerbeurtenPerActor) {
+		if (sprekerbeurten.length < minSprekerbeurten) continue;
+		perActor.push(deriveVerbositeitStats(sprekerbeurten, argumentenPerActor.get(actor) ?? []));
+	}
+
+	const veld = (key: keyof VerbositeitStats) => median(perActor.map((s) => s[key]));
+	return {
+		nSprekerbeurten: veld("nSprekerbeurten"),
+		nArgumenten: veld("nArgumenten"),
+		gemSprekerbeurtLengte: veld("gemSprekerbeurtLengte"),
+		gemZinslengte: veld("gemZinslengte"),
+		fleschDouma: veld("fleschDouma"),
+		lix: veld("lix"),
+		msttr: veld("msttr"),
+		tokensPerZin: veld("tokensPerZin"),
+		argumentenPer1000Tekens: veld("argumentenPer1000Tekens"),
+		claimsPerArgument: veld("claimsPerArgument"),
+		gemQuoteLengte: veld("gemQuoteLengte"),
+	};
+}
+
 export interface PartyTagCount {
 	party: string;
 	tag_count: number;
