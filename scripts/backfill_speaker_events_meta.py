@@ -17,6 +17,17 @@ hoeven reproduceren.
 
 Gebruik:
     uv run python scripts/backfill_speaker_events_meta.py [--dry-run]
+
+Performance (#145): dit is het enige backfillscript dat de volledige
+brondata scant (**/*.xml, 500+ bestanden tot ~4MB), en kostte in de
+#130-rollout >45 min. De oorzaak was een ontbrekende index op
+documents.external_id (elke lookup hier -- en in document_exists() bij
+élke reguliere ingest -- deed een full table scan), niet xml.etree zelf;
+zie docs/handoff.md. Een lxml-overstap voor de parse zelf is uitgeprobeerd
+en weer teruggedraaid: ~15% sneller op een steekproef, maar dat woog niet op
+tegen een nieuwe dependency en een handmatige workaround (lxml's .find(tag)
+bleek zelf trager dan ElementTree's) voor een script dat met de index-fix
+al in ~10s klaar is.
 """
 
 import argparse

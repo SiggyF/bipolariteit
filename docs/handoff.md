@@ -737,3 +737,40 @@ Gebruiker wees erop dat Debat Direct ook direct naar een specifieke spreker binn
 - **Besluit (issue #112, comment)**: `ArgumentTimeline.vue` wordt uitgefaseerd. Vervanging: de bestaande debattenlijst (`frontend/src/pages/debatten/index.astro` + `DebateList.vue`) wordt een kaartenweergave (stance-verdeling/top-tag i.p.v. kale tekstregel), plus een nieuw "volgende debat"-blok bovenaan gevoed door een nog te bouwen lichte agenda-fetch op de bestaande TK OData `Activiteit`-bron (status "Gepland" i.p.v. "Afgerond" — geen nieuwe externe bron, wel nieuwe pipeline-scope). Doel: een gevoel van een actuele, levende site voor terugkerende bezoekers.
 - **Design-pakket klaargezet**: `data/export/design-handoff/debattenlijst-tijdlijn/` (+ `.zip`), met README (doel, waarom de tijdlijn wegvalt, bestaande implementatie, openstaande agenda-vraag), `styling-tokens.md`, screenshots (homepage, debattenlijst, huidige tijdlijn, debatdetail, sparsity-analyse) en een `icons/`-subset (Context-Plenair/-Commissie/-Vragenuur/-Tweeminutendebat, uit `docs/design/tag-iconografie/`).
 - **Screenshot-valkuil, geen echte bug**: een eerste `fullPage`-Playwright-screenshot van een lang debat (687 argumenten) toonde 13.500px lege ruimte. Bleek `content-visibility:auto` + `contain-intrinsic-size:0 220px` op argumentkaarten (`DebateVideoView.vue:647-648`, bewuste performance-optimalisatie) die niet promoot zonder echt scrollen — en terugscrollen vóór de capture reproduceerde het probleem opnieuw. Losse viewport-shots stitchen gaf op zijn beurt een vals "9x herhaalde video"-artefact door de bewuste `position:sticky` op de video. Opgelost door gewoon een normale (niet-fullPage) viewport-screenshot te gebruiken.
+
+## Issue #145: backfillscript-traagheid bleek een ontbrekende index, niet XML-parsing
+
+`scripts/backfill_speaker_events_meta.py` (de #130-rollout) kostte destijds >45
+min over de volledige brondata (**/*.xml). Het issue vermoedde `xml.etree.ElementTree`
+(geen streaming) als oorzaak. Bij het oppakken bleek dat maar een klein deel van het
+verhaal -- en de "pure Python"-aanname zelf klopte niet: CPython gebruikt voor
+`xml.etree.ElementTree` standaard de ingebouwde `_elementtree` C-extensie (net als
+`lxml` op libxml2 leunt), dus het verschil tussen beide is geen C-vs.-Python maar
+expat vs. libxml2 plus API-verschillen -- vandaar dat de winst van de lxml-overstap
+hieronder ook maar ~15% bleek, niet de dramatische versnelling die de C-parser-framing
+deed vermoeden:
+
+- **Werkelijke bottleneck**: `documents.external_id` had geen index. Elke
+  `SELECT ... WHERE external_id = ?` (dit backfillscript, de overige
+  `scripts/backfill_*.py`, én `document_exists()` in `ingest_tk.py` — dus ook
+  élke reguliere ingest-run) deed een full table scan over 191k+ rijen,
+  gemeten ~55ms per lookup. Bij tienduizenden sprekerbeurten per volledige
+  scan liep dat op tot uren. Fix: `CREATE INDEX idx_documents_external_id ON
+  documents(external_id)` (schema.sql + eenmalig toegepast op de live DB,
+  zelfde patroon als eerdere kolom-toevoegingen) — 25.000x sneller per lookup
+  (0,002ms), volledige dry-run van 505 bestanden nu ~10s.
+- **XML-parsing was al niet het probleem**: `ET.parse()` + `root.iter()` +
+  `.find()` op de eerste 40 bestanden kostte ~0,9s, geen quadratische
+  blow-up. Een lxml-overstap is uitgeprobeerd en weer teruggedraaid:
+  `lxml.etree.iterparse` (streaming) bleek zelfs 3x trager (Python-overhead
+  per generatorstap overheerst de C-parsewinst), en lxml's `.find(tag)`
+  bleek zelf trager dan ElementTree's (`lxml.etree.parse()` + een
+  handmatige kind-tag-scan i.p.v. `.find()` haalde nog ~15% t.o.v.
+  ElementTree, functioneel identiek geverifieerd). Met de index-fix draait
+  het script al in ~10s, dus die 15% + een nieuwe dependency + een
+  workaround voor lxml's trage `.find()` wogen niet op tegen gewoon
+  `xml.etree.ElementTree` laten staan.
+
+Les: de sys-tijd-observatie in het issue (~16 min sys vs ~6 min user) wees
+naar syscall/filesystem-overhead, maar dat bleek zelf een symptoom van de
+64k+ SQLite full-table-scans, niet van XML-bestandslezen op zich.
