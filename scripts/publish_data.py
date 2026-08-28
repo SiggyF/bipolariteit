@@ -130,6 +130,9 @@ def open_main_repo_pr() -> int:
         return 0
     finally:
         git("checkout", original_branch, cwd=REPO)
+        pull = git("pull", "origin", original_branch, cwd=REPO)
+        if pull.returncode != 0:
+            logger.warning("git pull na merge faalde: %s -- lokale %s kan achterlopen", pull.stderr, original_branch)
 
 
 def main(argv: list[str] | None = None) -> int:
