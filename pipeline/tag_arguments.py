@@ -24,6 +24,7 @@ import re
 import time
 from datetime import datetime, timezone
 from pathlib import Path
+from typing import NamedTuple
 
 import requests
 
@@ -137,12 +138,18 @@ def _extract_json(raw_text):
     return json.loads(candidate)
 
 
-def call_llm(base_url, model, prompt, reasoning_effort, timeout):
+class LLMResponse(NamedTuple):
+    content: str
+    usage: dict
+    finish_reason: str | None
+
+
+def call_llm(base_url, model, prompt, reasoning_effort, timeout, max_tokens):
     payload = {
         "model": model,
         "messages": [{"role": "user", "content": prompt}],
         "temperature": 0.1,
-        "max_tokens": 1000,
+        "max_tokens": max_tokens,
     }
     if reasoning_effort:
         payload["reasoning_effort"] = reasoning_effort
@@ -150,9 +157,11 @@ def call_llm(base_url, model, prompt, reasoning_effort, timeout):
     resp = requests.post(f"{base_url}/chat/completions", json=payload, timeout=timeout)
     resp.raise_for_status()
     data = resp.json()
-    message = data["choices"][0]["message"]
+    choice = data["choices"][0]
+    content = choice["message"].get("content", "")
     usage = data.get("usage", {})
-    return message.get("content", ""), usage
+    finish_reason = choice.get("finish_reason")
+    return LLMResponse(content, usage, finish_reason)
 
 
 # Sentinel voor "het model bedoelde hier expliciet geen tag" -- onderscheiden
@@ -304,6 +313,10 @@ def main():
     parser.add_argument("--reasoning-effort", default="none")
     parser.add_argument("--timeout", type=float, default=120.0)
     parser.add_argument(
+        "--max-tokens", type=int, default=2000,
+        help="max_tokens per argument (default 2000; 1000 kapte volle taglijsten af)",
+    )
+    parser.add_argument(
         "--vanaf",
         default=None,
         help="ISO-datum; overschrijft [verwerking].vanaf uit data/politieke-periodes.toml "
@@ -349,7 +362,11 @@ def main():
         llm_tags = []
         raw_content = None
         try:
-            raw_content, usage = call_llm(args.base_url, args.model, prompt, args.reasoning_effort, args.timeout)
+            raw_content, usage, finish_reason = call_llm(
+                args.base_url, args.model, prompt, args.reasoning_effort, args.timeout, args.max_tokens
+            )
+            if finish_reason == "length":
+                raise ValueError(f"antwoord afgekapt op max_tokens={args.max_tokens} (verhoog --max-tokens)")
             parsed = _extract_json(raw_content)
             llm_tags = _validate_tags(parsed, valid_tags)
         except Exception as exc:
