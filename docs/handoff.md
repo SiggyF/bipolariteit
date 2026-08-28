@@ -737,3 +737,33 @@ Gebruiker wees erop dat Debat Direct ook direct naar een specifieke spreker binn
 - **Besluit (issue #112, comment)**: `ArgumentTimeline.vue` wordt uitgefaseerd. Vervanging: de bestaande debattenlijst (`frontend/src/pages/debatten/index.astro` + `DebateList.vue`) wordt een kaartenweergave (stance-verdeling/top-tag i.p.v. kale tekstregel), plus een nieuw "volgende debat"-blok bovenaan gevoed door een nog te bouwen lichte agenda-fetch op de bestaande TK OData `Activiteit`-bron (status "Gepland" i.p.v. "Afgerond" — geen nieuwe externe bron, wel nieuwe pipeline-scope). Doel: een gevoel van een actuele, levende site voor terugkerende bezoekers.
 - **Design-pakket klaargezet**: `data/export/design-handoff/debattenlijst-tijdlijn/` (+ `.zip`), met README (doel, waarom de tijdlijn wegvalt, bestaande implementatie, openstaande agenda-vraag), `styling-tokens.md`, screenshots (homepage, debattenlijst, huidige tijdlijn, debatdetail, sparsity-analyse) en een `icons/`-subset (Context-Plenair/-Commissie/-Vragenuur/-Tweeminutendebat, uit `docs/design/tag-iconografie/`).
 - **Screenshot-valkuil, geen echte bug**: een eerste `fullPage`-Playwright-screenshot van een lang debat (687 argumenten) toonde 13.500px lege ruimte. Bleek `content-visibility:auto` + `contain-intrinsic-size:0 220px` op argumentkaarten (`DebateVideoView.vue:647-648`, bewuste performance-optimalisatie) die niet promoot zonder echt scrollen — en terugscrollen vóór de capture reproduceerde het probleem opnieuw. Losse viewport-shots stitchen gaf op zijn beurt een vals "9x herhaalde video"-artefact door de bewuste `position:sticky` op de video. Opgelost door gewoon een normale (niet-fullPage) viewport-screenshot te gebruiken.
+
+## Issue #145: backfillscript-traagheid bleek een ontbrekende index, niet XML-parsing
+
+`scripts/backfill_speaker_events_meta.py` (de #130-rollout) kostte destijds >45
+min over de volledige brondata (**/*.xml). Het issue vermoedde `xml.etree.ElementTree`
+(pure Python, geen streaming) als oorzaak. Bij het oppakken bleek dat maar een klein deel
+van het verhaal:
+
+- **Werkelijke bottleneck**: `documents.external_id` had geen index. Elke
+  `SELECT ... WHERE external_id = ?` (dit backfillscript, de overige
+  `scripts/backfill_*.py`, én `document_exists()` in `ingest_tk.py` — dus ook
+  élke reguliere ingest-run) deed een full table scan over 191k+ rijen,
+  gemeten ~55ms per lookup. Bij tienduizenden sprekerbeurten per volledige
+  scan liep dat op tot uren. Fix: `CREATE INDEX idx_documents_external_id ON
+  documents(external_id)` (schema.sql + eenmalig toegepast op de live DB,
+  zelfde patroon als eerdere kolom-toevoegingen) — 25.000x sneller per lookup
+  (0,002ms), volledige dry-run van 505 bestanden nu ~10s.
+- **XML-parsing was al niet het probleem**: `ET.parse()` + `root.iter()` +
+  `.find()` op de eerste 40 bestanden kostte ~0,9s, geen quadratische
+  blow-up. `lxml.etree.iterparse` (streaming) bleek zelfs 3x trager
+  (Python-overhead per generatorstap overheerst de C-parsewinst), en
+  lxml's `.find(tag)` bleek zelf trager dan ElementTree's. Wel toegepast:
+  `lxml.etree.parse()` (volledige boom, C-parser) + een handmatige
+  kind-tag-scan i.p.v. `.find()` — ~15% sneller dan ElementTree, functioneel
+  identiek geverifieerd (zelfde resultaatset, andere traversal-volgorde).
+  `lxml` toegevoegd als directe dependency (was al transitief aanwezig).
+
+Les: de sys-tijd-observatie in het issue (~16 min sys vs ~6 min user) wees
+naar syscall/filesystem-overhead, maar dat bleek zelf een symptoom van de
+64k+ SQLite full-table-scans, niet van XML-bestandslezen op zich.

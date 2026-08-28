@@ -17,11 +17,23 @@ hoeven reproduceren.
 
 Gebruik:
     uv run python scripts/backfill_speaker_events_meta.py [--dry-run]
+
+Performance (#145): dit is het enige backfillscript dat de volledige
+brondata scant (**/*.xml, 500+ bestanden tot ~4MB), en kostte in de
+#130-rollout >45 min met xml.etree.ElementTree. Vervangen door lxml (een
+C-parser i.p.v. de pure-Python xml.etree) -- gemeten op de eerste 40
+bestanden ~15% sneller. `.find(tag)` bleek op lxml juist trager dan op
+ElementTree (elke aanroep herbouwt een xpath-achtig pad); de handmatige
+kind-scan hieronder is op lxml zowel sneller als functioneel identiek.
+Ook lxml.etree.iterparse (streaming, boom niet in geheugen) is bewust niet
+gebruikt: gemeten 3x trager dan gewoon parse() door de Python-overhead van
+één generatorstap per XML-element.
 """
 
 import argparse
 import logging
-import xml.etree.ElementTree as ET
+
+from lxml import etree
 
 from pipeline.db import db
 from pipeline.ingest.ingest_tk import NS, _local
@@ -30,19 +42,31 @@ from pipeline.paths import RAW_DIR_TWEEDE_KAMER as RAW_DIR
 logging.basicConfig(level=logging.INFO, format="%(message)s")
 logger = logging.getLogger(__name__)
 
+SPREKER_TAG = NS + "spreker"
+TEKST_TAG = NS + "tekst"
+
+
+def _iter_turns(root):
+    """Levert (turn_el, spreker_el) voor elk element met zowel een directe
+    <spreker> als <tekst> (zie find_speaking_turns in ingest_tk.py)."""
+    for turn_el in root.iter():
+        spreker_el = tekst_el = None
+        for child in turn_el:
+            if child.tag == SPREKER_TAG:
+                spreker_el = child
+            elif child.tag == TEKST_TAG:
+                tekst_el = child
+        if spreker_el is not None and tekst_el is not None:
+            yield turn_el, spreker_el
+
 
 def backfill(dry_run=False):
     conn = db.connect(db.DEFAULT_DB_PATH)
     try:
         updated = 0
         for xml_path in sorted(RAW_DIR.glob("**/*.xml")):
-            root = ET.parse(xml_path).getroot()
-
-            for turn_el in root.iter():
-                spreker_el = turn_el.find(NS + "spreker")
-                tekst_el = turn_el.find(NS + "tekst")
-                if spreker_el is None or tekst_el is None:
-                    continue
+            root = etree.parse(str(xml_path)).getroot()
+            for turn_el, spreker_el in _iter_turns(root):
                 external_id = turn_el.attrib.get("objectid")
                 speaker_person_id = spreker_el.attrib.get("objectid")
                 turn_type = _local(turn_el.tag)

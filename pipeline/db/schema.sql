@@ -117,6 +117,11 @@ CREATE TABLE redactie_reviews (
 );
 
 CREATE INDEX idx_documents_topic ON documents(topic_id);
+-- document_exists() (ingest_tk.py, elke ingest-run) en alle scripts/backfill_*.py
+-- zoeken op external_id; zonder index is dat een full table scan (191k+ rijen,
+-- gemeten ~55ms per lookup) -- bij tienduizenden sprekerbeurten per backfill/ingest
+-- was dit de eigenlijke bottleneck achter #145, niet de XML-parse zelf.
+CREATE INDEX IF NOT EXISTS idx_documents_external_id ON documents(external_id);
 CREATE INDEX idx_arguments_topic_stance ON arguments(topic_id, stance);
 CREATE INDEX idx_arguments_document ON arguments(document_id);
 CREATE INDEX idx_claims_argument ON claims(argument_id);
