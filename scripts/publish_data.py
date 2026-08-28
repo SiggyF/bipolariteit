@@ -41,6 +41,27 @@ def git(*args: str, cwd: Path = SUBMODULE) -> subprocess.CompletedProcess:
     return subprocess.run(["git", *args], cwd=cwd, capture_output=True, text=True)
 
 
+def warn_about_pending_main_repo_changes() -> None:
+    """Waarschuw als de hoofdrepo na publicatie nog los werk heeft: de
+    submodule-pointer (`data/export/gepubliceerd`) en/of de export-json's
+    buiten de submodule. Dat blijft altijd een aparte, bewuste commit/PR in
+    SiggyF/bipolariteit -- dit script commit/pusht daar zelf niets (zie #222).
+    """
+    status = git("status", "--porcelain", "--", "data/export", cwd=REPO)
+    files = [line[3:] for line in status.stdout.splitlines() if line.strip()]
+    if not files:
+        return
+
+    logger.warning(
+        "%d gewijzigd bestand(en) in de hoofdrepo (%s) nog niet gecommit -- "
+        "maak hiervoor een aparte PR (submodule-pointer + eventuele export-json's):",
+        len(files),
+        REPO,
+    )
+    for file in files:
+        logger.warning("  %s", file)
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
@@ -60,14 +81,15 @@ def main(argv: list[str] | None = None) -> int:
         return 1
 
     status = git("status", "--porcelain")
-    bestanden = [regel[3:] for regel in status.stdout.splitlines() if regel.strip()]
-    if not bestanden:
+    files = [line[3:] for line in status.stdout.splitlines() if line.strip()]
+    if not files:
         logger.info("geen wijzigingen in %s -- niets te publiceren", SUBMODULE)
+        warn_about_pending_main_repo_changes()
         return 0
 
-    logger.info("%d gewijzigd bestand(en) in %s:", len(bestanden), SUBMODULE)
-    for bestand in bestanden:
-        logger.info("  %s", bestand)
+    logger.info("%d gewijzigd bestand(en) in %s:", len(files), SUBMODULE)
+    for file in files:
+        logger.info("  %s", file)
 
     if args.dry_run:
         logger.info("dry-run, niet gecommit/gepusht")
@@ -84,15 +106,16 @@ def main(argv: list[str] | None = None) -> int:
         logger.error("git push faalde: %s", push.stderr)
         return push.returncode
 
-    for bestand in bestanden:
-        purge_url = f"https://purge.jsdelivr.net/gh/{DATA_REPO}@{DATA_BRANCH}/{bestand}"
+    for file in files:
+        purge_url = f"https://purge.jsdelivr.net/gh/{DATA_REPO}@{DATA_BRANCH}/{file}"
         response = requests.get(purge_url, timeout=30)
         if response.ok:
-            logger.info("jsDelivr-cache geleegd voor %s", bestand)
+            logger.info("jsDelivr-cache geleegd voor %s", file)
         else:
-            logger.warning("jsDelivr-purge voor %s gaf status %s (niet fataal)", bestand, response.status_code)
+            logger.warning("jsDelivr-purge voor %s gaf status %s (niet fataal)", file, response.status_code)
 
     logger.info("klaar: gepubliceerd naar https://github.com/%s", DATA_REPO)
+    warn_about_pending_main_repo_changes()
     return 0
 
 
