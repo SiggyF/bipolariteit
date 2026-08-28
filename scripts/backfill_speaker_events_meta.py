@@ -20,14 +20,18 @@ Gebruik:
 
 Performance (#145): dit is het enige backfillscript dat de volledige
 brondata scant (**/*.xml, 500+ bestanden tot ~4MB), en kostte in de
-#130-rollout >45 min met xml.etree.ElementTree. Vervangen door lxml (een
-C-parser i.p.v. de pure-Python xml.etree) -- gemeten op de eerste 40
-bestanden ~15% sneller. `.find(tag)` bleek op lxml juist trager dan op
-ElementTree (elke aanroep herbouwt een xpath-achtig pad); de handmatige
-kind-scan hieronder is op lxml zowel sneller als functioneel identiek.
-Ook lxml.etree.iterparse (streaming, boom niet in geheugen) is bewust niet
-gebruikt: gemeten 3x trager dan gewoon parse() door de Python-overhead van
-één generatorstap per XML-element.
+#130-rollout >45 min -- de eigenlijke oorzaak bleek een ontbrekende index op
+documents.external_id, zie docs/handoff.md. Los daarvan hier overgezet naar
+lxml i.p.v. xml.etree.ElementTree: gemeten op de eerste 40 bestanden ~15%
+sneller. Niet omdat ElementTree "pure Python" zou zijn -- CPython gebruikt
+er standaard de ingebouwde `_elementtree` C-extensie voor, net als lxml op
+libxml2 leunt -- het verschil zit in expat vs. libxml2 en API-details.
+`.find(tag)` bleek op lxml juist trager dan op ElementTree (elke aanroep
+herbouwt een xpath-achtig pad); de handmatige kind-scan hieronder is op
+lxml zowel sneller als functioneel identiek. Ook lxml.etree.iterparse
+(streaming, boom niet in geheugen) is bewust niet gebruikt: gemeten 3x
+trager dan gewoon parse() door de Python-overhead van één generatorstap
+per XML-element.
 """
 
 import argparse

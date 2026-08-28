@@ -742,8 +742,13 @@ Gebruiker wees erop dat Debat Direct ook direct naar een specifieke spreker binn
 
 `scripts/backfill_speaker_events_meta.py` (de #130-rollout) kostte destijds >45
 min over de volledige brondata (**/*.xml). Het issue vermoedde `xml.etree.ElementTree`
-(pure Python, geen streaming) als oorzaak. Bij het oppakken bleek dat maar een klein deel
-van het verhaal:
+(geen streaming) als oorzaak. Bij het oppakken bleek dat maar een klein deel van het
+verhaal -- en de "pure Python"-aanname zelf klopte niet: CPython gebruikt voor
+`xml.etree.ElementTree` standaard de ingebouwde `_elementtree` C-extensie (net als
+`lxml` op libxml2 leunt), dus het verschil tussen beide is geen C-vs.-Python maar
+expat vs. libxml2 plus API-verschillen -- vandaar dat de winst van de lxml-overstap
+hieronder ook maar ~15% bleek, niet de dramatische versnelling die de C-parser-framing
+deed vermoeden:
 
 - **Werkelijke bottleneck**: `documents.external_id` had geen index. Elke
   `SELECT ... WHERE external_id = ?` (dit backfillscript, de overige
