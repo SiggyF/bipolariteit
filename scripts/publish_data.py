@@ -20,9 +20,10 @@ frontend-release. Zie docs/release.md.
 
 Naast het pushen naar bipolariteit-data zet dit script ook de resterende
 hoofdrepo-wijzigingen (submodule-pointer + eventuele export-json's buiten
-de submodule) op een eigen branch en opent er een PR voor in
-SiggyF/bipolariteit -- mergen blijft een bewuste, aparte stap (zie #222).
-Draait daarom alleen vanaf de main-branch van de hoofdrepo.
+de submodule) op een eigen branch, opent er een PR voor in
+SiggyF/bipolariteit en merged die meteen -- data-only PR's, dus geen
+losse reviewstap nodig (zie #222). Draait daarom alleen vanaf de
+main-branch van de hoofdrepo.
 """
 
 from __future__ import annotations
@@ -52,8 +53,9 @@ def open_main_repo_pr() -> int:
     """Rond de derde stap af die na publicatie altijd bleef liggen: de
     submodule-pointer (`data/export/gepubliceerd`) en/of de export-json's
     buiten de submodule zijn na publicatie gewijzigd in de hoofdrepo, maar
-    nooit gecommit. Zet ze op een eigen branch en open er een PR voor --
-    mergen blijft een bewuste, aparte stap (zie #222).
+    nooit gecommit. Zet ze op een eigen branch, open er een PR voor en
+    merge die meteen -- puur gegenereerde data, geen reviewstap nodig
+    (zie #222).
     """
     status = git("status", "--porcelain", "--", "data/export", cwd=REPO)
     files = [line[3:] for line in status.stdout.splitlines() if line.strip()]
@@ -112,7 +114,19 @@ def open_main_repo_pr() -> int:
             logger.error("gh pr create faalde: %s", pr.stderr)
             return pr.returncode
 
-        logger.info("PR geopend: %s", pr.stdout.strip())
+        pr_url = pr.stdout.strip()
+        logger.info("PR geopend: %s", pr_url)
+
+        merge = subprocess.run(
+            ["gh", "pr", "merge", pr_url, "--merge"], cwd=REPO, capture_output=True, text=True
+        )
+        if merge.returncode != 0:
+            logger.error(
+                "gh pr merge faalde: %s -- PR staat nog open, merge %s handmatig", merge.stderr, pr_url
+            )
+            return merge.returncode
+
+        logger.info("PR gemerged: %s", pr_url)
         return 0
     finally:
         git("checkout", original_branch, cwd=REPO)
