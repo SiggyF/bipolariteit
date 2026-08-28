@@ -14,8 +14,10 @@ Twee soorten maten, per actor geaggregeerd:
   Lettergreeptelling is een vocaal-groepen-heuristiek (geen echte NL-
   hyphenator), dus Flesch-Douma en LIX zijn indicatief, geen exacte score.
 - Tokenizer-maat (o200k_base via tiktoken, geen LLM-forward-pass): tokens
-  per zin en tokens per teken, als taalmodel-bewuste informatiedichtheid --
-  minder tokens per teken = voorspelbaardere/eenvoudigere formuleringen.
+  per zin, als taalmodel-bewuste informatiedichtheid. Tokens per teken
+  (compressie) is uitgeprobeerd maar bleek nauwelijks te variëren tussen
+  sprekers (~0.22-0.24) -- weggelaten, geen onderscheidende maat op dit
+  schaalniveau.
 
 Nog niet geintegreerd in de pipeline of export -- eerst los bekijken of dit
 iets zinnigs oplevert (zie issue #155), bv. voor topic asiel.
@@ -192,7 +194,6 @@ def main():
         gem_quote_lengte = s["totaal_quote_lengte"] / s["n_argumenten"] if s["n_argumenten"] else 0.0
         gem_beurtlengte = s["totaal_tekens"] / s["n_documenten"] if s["n_documenten"] else 0.0
         tokens_per_zin = s["totaal_tokens"] / s["totaal_zinnen"] if s["totaal_zinnen"] else 0.0
-        tokens_per_teken = s["totaal_tokens"] / s["totaal_tekens"] if s["totaal_tekens"] else 0.0
 
         rijen.append(
             {
@@ -209,7 +210,6 @@ def main():
                 "lix": lix,
                 "ttr": ttr,
                 "tokens_per_zin": tokens_per_zin,
-                "tokens_per_teken": tokens_per_teken,
             }
         )
 
@@ -225,7 +225,7 @@ def main():
         f"{'spreker':<28}{'partij':<8}{'beurten':>8}{'argum.':>7}"
         f"{'arg/1000tek':>12}{'claims/arg':>11}{'quote-len':>10}"
         f"{'beurt-len':>10}{'zinslengte':>11}{'Flesch-D':>9}{'LIX':>6}{'TTR':>6}"
-        f"{'tok/zin':>8}{'tok/tek':>8}"
+        f"{'tok/zin':>8}"
     )
     print(header)
     print("-" * len(header))
@@ -235,7 +235,7 @@ def main():
             f"{r['argumenten_per_1000']:>12.2f}{r['claims_per_argument']:>11.2f}"
             f"{r['gem_quote_lengte']:>10.0f}{r['gem_beurtlengte']:>10.0f}"
             f"{r['gem_zinslengte']:>11.1f}{r['flesch_douma']:>9.1f}{r['lix']:>6.1f}{r['ttr']:>6.2f}"
-            f"{r['tokens_per_zin']:>8.1f}{r['tokens_per_teken']:>8.2f}"
+            f"{r['tokens_per_zin']:>8.1f}"
         )
 
     print(
@@ -244,8 +244,7 @@ def main():
         "Flesch-Douma hoger = leesbaarder, LIX hoger = complexer, "
         "TTR = lexicale diversiteit (let op: gevoelig voor tekstlengte, dus "
         "alleen indicatief tussen sprekers met vergelijkbaar volume), "
-        "tok/zin en tok/tek = tiktoken o200k_base-tokens per zin resp. per "
-        "teken (hoger tok/tek = minder voorspelbare/complexere formuleringen)."
+        "tok/zin = tiktoken o200k_base-tokens per zin."
     )
 
 
