@@ -27,6 +27,10 @@ bekend ankerpunt) is aan de matching-stap, niet aan het ophalen.
 Cachet naar data/subtitles/<debatdirect_id>.vtt (niet ingecheckt, zie
 .gitignore) en slaat een debat over waarvoor die file al bestaat -- geen
 database-boekhouding nodig, het bestand zelf is de idempotentie-vlag.
+Een debat zonder ondertitel-track (bv. ouder dan Debat Direct's live-
+ondertiteling) krijgt in plaats daarvan een lege <debatdirect_id>.no-subs
+-- anders zou elke run diezelfde detail-API-call en INFO-melding blijven
+herhalen voor een resultaat dat nooit meer verandert.
 
 Gebruik:
     uv run python -m pipeline.fetch_subtitles [--topic stikstof] [--force]
@@ -178,7 +182,8 @@ def _fetch_topic(conn, topic_id, last_fetch_by_path, force=False):
 
     for debatdirect_id, needs_raw_video_url in debates:
         cache_path = SUBTITLES_DIR / f"{debatdirect_id}.vtt"
-        needs_vtt = force or not cache_path.exists()
+        no_subs_marker = SUBTITLES_DIR / f"{debatdirect_id}.no-subs"
+        needs_vtt = force or not (cache_path.exists() or no_subs_marker.exists())
         # raw_video_url en de VTT-cache zijn onafhankelijk idempotent -- een
         # debat met een verse cache maar een nog lege raw_video_url (bv.
         # documenten toegevoegd ná een eerdere run) moet toch nog een keer
@@ -216,6 +221,7 @@ def _fetch_topic(conn, topic_id, last_fetch_by_path, force=False):
 
         if vtt_text is None:
             logger.info("Geen ondertitel-track voor debat %s.", debatdirect_id)
+            no_subs_marker.write_text("")
             skipped_no_subs += 1
             continue
 
