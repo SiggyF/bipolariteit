@@ -206,7 +206,7 @@ const verbositeitBadges =
 								<dt class="verbositeit-term">{badge.term}</dt>
 								<dd class="verbositeit-waarde">
 									{badge.waarde.toFixed(badge.decimalen)}
-									{badge.eenheid && <span class="verbositeit-eenheid"> {badge.eenheid}</span>}
+									{badge.eenheid && <span class="verbositeit-eenheid">{badge.eenheid}</span>}
 								</dd>
 								<dd class="verbositeit-mediaan">mediaan {badge.mediaan.toFixed(badge.decimalen)}</dd>
 								<dd class="verbositeit-richting">{badge.richting}</dd>
@@ -251,17 +251,23 @@ const verbositeitBadges =
 		background: var(--color-bg);
 	}
 
-	.verbositeit-categorie {
-		font-family: var(--font-body);
+	/* Twee lettertypes in dit hele blok: --font-body voor alle tekst,
+	   --font-mono uitsluitend voor de twee getallen (waarde/mediaan) --
+	   verder alleen gewicht/kleur/grootte als onderscheid, geen extra
+	   font-family's of cursief erbij. */
+	.verbositeit-categorie,
+	.verbositeit-richting {
 		font-size: 0.7rem;
 		color: var(--color-muted);
+	}
+
+	.verbositeit-categorie {
 		text-transform: uppercase;
 		letter-spacing: 0.04em;
 	}
 
 	.verbositeit-term {
-		font-family: var(--font-heading);
-		font-weight: 700;
+		font-weight: 600;
 		font-size: var(--step--1);
 		line-height: 1.25;
 	}
@@ -278,9 +284,8 @@ const verbositeitBadges =
 	}
 
 	.verbositeit-eenheid {
-		font-family: var(--font-body);
+		margin-left: 0.3em;
 		font-size: var(--step--1);
-		font-weight: 400;
 		color: var(--color-muted);
 	}
 
@@ -293,10 +298,6 @@ const verbositeitBadges =
 	}
 
 	.verbositeit-richting {
-		font-family: var(--font-body);
-		font-size: 0.7rem;
-		color: var(--color-muted);
-		font-style: italic;
 		line-height: 1.3;
 	}
 </style>
