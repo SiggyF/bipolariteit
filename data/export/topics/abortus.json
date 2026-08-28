@@ -49255,6 +49255,5902 @@
     }
   ],
   "argument_count": 439,
+  "sprekerbeurten": [
+    {
+      "id": 5354,
+      "actor": {
+        "name": "Lisa Vliegenthart",
+        "party": "GroenLinks-PvdA"
+      },
+      "char_count": 4668,
+      "word_count": 694,
+      "sentence_count": 43,
+      "syllable_count": 1293,
+      "long_word_count": 222,
+      "unique_word_count": 332,
+      "token_count": 967
+    },
+    {
+      "id": 5355,
+      "actor": {
+        "name": "Judith Tielen",
+        "party": "VVD"
+      },
+      "char_count": 347,
+      "word_count": 54,
+      "sentence_count": 4,
+      "syllable_count": 102,
+      "long_word_count": 13,
+      "unique_word_count": 37,
+      "token_count": 81
+    },
+    {
+      "id": 5356,
+      "actor": {
+        "name": "Judith Tielen",
+        "party": "VVD"
+      },
+      "char_count": 1387,
+      "word_count": 224,
+      "sentence_count": 18,
+      "syllable_count": 378,
+      "long_word_count": 58,
+      "unique_word_count": 123,
+      "token_count": 324
+    },
+    {
+      "id": 5357,
+      "actor": {
+        "name": "Lisa Vliegenthart",
+        "party": "GroenLinks-PvdA"
+      },
+      "char_count": 1407,
+      "word_count": 238,
+      "sentence_count": 12,
+      "syllable_count": 388,
+      "long_word_count": 60,
+      "unique_word_count": 115,
+      "token_count": 307
+    },
+    {
+      "id": 5358,
+      "actor": {
+        "name": "Lisa Vliegenthart",
+        "party": "GroenLinks-PvdA"
+      },
+      "char_count": 237,
+      "word_count": 34,
+      "sentence_count": 3,
+      "syllable_count": 65,
+      "long_word_count": 12,
+      "unique_word_count": 29,
+      "token_count": 55
+    },
+    {
+      "id": 5359,
+      "actor": {
+        "name": "Judith Tielen",
+        "party": "VVD"
+      },
+      "char_count": 663,
+      "word_count": 115,
+      "sentence_count": 8,
+      "syllable_count": 181,
+      "long_word_count": 23,
+      "unique_word_count": 85,
+      "token_count": 150
+    },
+    {
+      "id": 5360,
+      "actor": {
+        "name": "Wieke Paulusma",
+        "party": "D66"
+      },
+      "char_count": 681,
+      "word_count": 109,
+      "sentence_count": 6,
+      "syllable_count": 185,
+      "long_word_count": 32,
+      "unique_word_count": 79,
+      "token_count": 154
+    },
+    {
+      "id": 5361,
+      "actor": {
+        "name": "Wieke Paulusma",
+        "party": "D66"
+      },
+      "char_count": 880,
+      "word_count": 147,
+      "sentence_count": 12,
+      "syllable_count": 240,
+      "long_word_count": 34,
+      "unique_word_count": 86,
+      "token_count": 200
+    },
+    {
+      "id": 5362,
+      "actor": {
+        "name": "Sarah Dobbe",
+        "party": "SP"
+      },
+      "char_count": 3864,
+      "word_count": 631,
+      "sentence_count": 40,
+      "syllable_count": 1065,
+      "long_word_count": 156,
+      "unique_word_count": 291,
+      "token_count": 865
+    },
+    {
+      "id": 5363,
+      "actor": {
+        "name": "René Claassen",
+        "party": "PVV"
+      },
+      "char_count": 2528,
+      "word_count": 385,
+      "sentence_count": 24,
+      "syllable_count": 720,
+      "long_word_count": 112,
+      "unique_word_count": 204,
+      "token_count": 521
+    },
+    {
+      "id": 5364,
+      "actor": {
+        "name": "Judith Tielen",
+        "party": "VVD"
+      },
+      "char_count": 1178,
+      "word_count": 183,
+      "sentence_count": 14,
+      "syllable_count": 320,
+      "long_word_count": 49,
+      "unique_word_count": 115,
+      "token_count": 257
+    },
+    {
+      "id": 5365,
+      "actor": {
+        "name": "Sarah Dobbe",
+        "party": "SP"
+      },
+      "char_count": 772,
+      "word_count": 130,
+      "sentence_count": 8,
+      "syllable_count": 218,
+      "long_word_count": 32,
+      "unique_word_count": 86,
+      "token_count": 165
+    },
+    {
+      "id": 5366,
+      "actor": {
+        "name": "Judith Tielen",
+        "party": "VVD"
+      },
+      "char_count": 2472,
+      "word_count": 404,
+      "sentence_count": 26,
+      "syllable_count": 678,
+      "long_word_count": 98,
+      "unique_word_count": 206,
+      "token_count": 536
+    },
+    {
+      "id": 5367,
+      "actor": {
+        "name": "Harry Bevers",
+        "party": "VVD"
+      },
+      "char_count": 5021,
+      "word_count": 784,
+      "sentence_count": 49,
+      "syllable_count": 1395,
+      "long_word_count": 212,
+      "unique_word_count": 344,
+      "token_count": 1077
+    },
+    {
+      "id": 5368,
+      "actor": {
+        "name": "Mirjam Bikker",
+        "party": "ChristenUnie"
+      },
+      "char_count": 815,
+      "word_count": 133,
+      "sentence_count": 6,
+      "syllable_count": 223,
+      "long_word_count": 29,
+      "unique_word_count": 92,
+      "token_count": 179
+    },
+    {
+      "id": 5369,
+      "actor": {
+        "name": "Harry Bevers",
+        "party": "VVD"
+      },
+      "char_count": 1007,
+      "word_count": 175,
+      "sentence_count": 12,
+      "syllable_count": 276,
+      "long_word_count": 30,
+      "unique_word_count": 101,
+      "token_count": 218
+    },
+    {
+      "id": 5370,
+      "actor": {
+        "name": "Mirjam Bikker",
+        "party": "ChristenUnie"
+      },
+      "char_count": 747,
+      "word_count": 125,
+      "sentence_count": 7,
+      "syllable_count": 200,
+      "long_word_count": 25,
+      "unique_word_count": 72,
+      "token_count": 171
+    },
+    {
+      "id": 5371,
+      "actor": {
+        "name": "Harry Bevers",
+        "party": "VVD"
+      },
+      "char_count": 1026,
+      "word_count": 173,
+      "sentence_count": 9,
+      "syllable_count": 283,
+      "long_word_count": 41,
+      "unique_word_count": 99,
+      "token_count": 222
+    },
+    {
+      "id": 5372,
+      "actor": {
+        "name": "Caroline van der Plas",
+        "party": "BBB"
+      },
+      "char_count": 1423,
+      "word_count": 254,
+      "sentence_count": 16,
+      "syllable_count": 386,
+      "long_word_count": 43,
+      "unique_word_count": 128,
+      "token_count": 337
+    },
+    {
+      "id": 5373,
+      "actor": {
+        "name": "Sarah Dobbe",
+        "party": "SP"
+      },
+      "char_count": 943,
+      "word_count": 151,
+      "sentence_count": 9,
+      "syllable_count": 270,
+      "long_word_count": 40,
+      "unique_word_count": 92,
+      "token_count": 207
+    },
+    {
+      "id": 5374,
+      "actor": {
+        "name": "Mirjam Bikker",
+        "party": "ChristenUnie"
+      },
+      "char_count": 4855,
+      "word_count": 790,
+      "sentence_count": 59,
+      "syllable_count": 1313,
+      "long_word_count": 178,
+      "unique_word_count": 343,
+      "token_count": 1109
+    },
+    {
+      "id": 5375,
+      "actor": {
+        "name": "Caroline van der Plas",
+        "party": "BBB"
+      },
+      "char_count": 833,
+      "word_count": 154,
+      "sentence_count": 11,
+      "syllable_count": 225,
+      "long_word_count": 23,
+      "unique_word_count": 100,
+      "token_count": 196
+    },
+    {
+      "id": 5376,
+      "actor": {
+        "name": "Mirjam Bikker",
+        "party": "ChristenUnie"
+      },
+      "char_count": 1000,
+      "word_count": 171,
+      "sentence_count": 12,
+      "syllable_count": 262,
+      "long_word_count": 35,
+      "unique_word_count": 106,
+      "token_count": 231
+    },
+    {
+      "id": 5377,
+      "actor": {
+        "name": "Diederik van Dijk",
+        "party": "SGP"
+      },
+      "char_count": 4077,
+      "word_count": 621,
+      "sentence_count": 45,
+      "syllable_count": 1140,
+      "long_word_count": 174,
+      "unique_word_count": 320,
+      "token_count": 905
+    },
+    {
+      "id": 5378,
+      "actor": {
+        "name": "Elke Slagt-Tichelman",
+        "party": "GroenLinks-PvdA"
+      },
+      "char_count": 4730,
+      "word_count": 759,
+      "sentence_count": 63,
+      "syllable_count": 1313,
+      "long_word_count": 202,
+      "unique_word_count": 341,
+      "token_count": 1046
+    },
+    {
+      "id": 5379,
+      "actor": {
+        "name": "Diederik van Dijk",
+        "party": "SGP"
+      },
+      "char_count": 840,
+      "word_count": 134,
+      "sentence_count": 8,
+      "syllable_count": 214,
+      "long_word_count": 35,
+      "unique_word_count": 93,
+      "token_count": 211
+    },
+    {
+      "id": 5380,
+      "actor": {
+        "name": "Elke Slagt-Tichelman",
+        "party": "GroenLinks-PvdA"
+      },
+      "char_count": 1124,
+      "word_count": 189,
+      "sentence_count": 17,
+      "syllable_count": 296,
+      "long_word_count": 44,
+      "unique_word_count": 113,
+      "token_count": 247
+    },
+    {
+      "id": 5381,
+      "actor": {
+        "name": "Diederik van Dijk",
+        "party": "SGP"
+      },
+      "char_count": 499,
+      "word_count": 89,
+      "sentence_count": 8,
+      "syllable_count": 132,
+      "long_word_count": 15,
+      "unique_word_count": 63,
+      "token_count": 131
+    },
+    {
+      "id": 5382,
+      "actor": {
+        "name": "Gideon van Meijeren",
+        "party": "FVD"
+      },
+      "char_count": 897,
+      "word_count": 153,
+      "sentence_count": 9,
+      "syllable_count": 246,
+      "long_word_count": 29,
+      "unique_word_count": 102,
+      "token_count": 203
+    },
+    {
+      "id": 5383,
+      "actor": {
+        "name": "Sarah Dobbe",
+        "party": "SP"
+      },
+      "char_count": 648,
+      "word_count": 111,
+      "sentence_count": 7,
+      "syllable_count": 184,
+      "long_word_count": 23,
+      "unique_word_count": 87,
+      "token_count": 152
+    },
+    {
+      "id": 5384,
+      "actor": {
+        "name": "Sarah Dobbe",
+        "party": "SP"
+      },
+      "char_count": 4466,
+      "word_count": 722,
+      "sentence_count": 50,
+      "syllable_count": 1235,
+      "long_word_count": 191,
+      "unique_word_count": 311,
+      "token_count": 950
+    },
+    {
+      "id": 5385,
+      "actor": {
+        "name": "Caroline van der Plas",
+        "party": "BBB"
+      },
+      "char_count": 3357,
+      "word_count": 556,
+      "sentence_count": 32,
+      "syllable_count": 925,
+      "long_word_count": 127,
+      "unique_word_count": 244,
+      "token_count": 749
+    },
+    {
+      "id": 5386,
+      "actor": {
+        "name": "Harry Bevers",
+        "party": "VVD"
+      },
+      "char_count": 1290,
+      "word_count": 229,
+      "sentence_count": 9,
+      "syllable_count": 347,
+      "long_word_count": 48,
+      "unique_word_count": 126,
+      "token_count": 277
+    },
+    {
+      "id": 5387,
+      "actor": {
+        "name": "Mirjam Bikker",
+        "party": "ChristenUnie"
+      },
+      "char_count": 1241,
+      "word_count": 223,
+      "sentence_count": 6,
+      "syllable_count": 338,
+      "long_word_count": 40,
+      "unique_word_count": 122,
+      "token_count": 285
+    },
+    {
+      "id": 5388,
+      "actor": {
+        "name": "Caroline van der Plas",
+        "party": "BBB"
+      },
+      "char_count": 1758,
+      "word_count": 317,
+      "sentence_count": 22,
+      "syllable_count": 457,
+      "long_word_count": 55,
+      "unique_word_count": 154,
+      "token_count": 415
+    },
+    {
+      "id": 5389,
+      "actor": {
+        "name": "Sarah Dobbe",
+        "party": "SP"
+      },
+      "char_count": 888,
+      "word_count": 161,
+      "sentence_count": 9,
+      "syllable_count": 257,
+      "long_word_count": 24,
+      "unique_word_count": 91,
+      "token_count": 203
+    },
+    {
+      "id": 5390,
+      "actor": {
+        "name": "Wieke Paulusma",
+        "party": "D66"
+      },
+      "char_count": 1354,
+      "word_count": 232,
+      "sentence_count": 12,
+      "syllable_count": 369,
+      "long_word_count": 44,
+      "unique_word_count": 135,
+      "token_count": 309
+    },
+    {
+      "id": 5392,
+      "actor": {
+        "name": "Wieke Paulusma",
+        "party": "D66"
+      },
+      "char_count": 4117,
+      "word_count": 700,
+      "sentence_count": 44,
+      "syllable_count": 1129,
+      "long_word_count": 148,
+      "unique_word_count": 289,
+      "token_count": 884
+    },
+    {
+      "id": 5393,
+      "actor": {
+        "name": "Mirjam Bikker",
+        "party": "ChristenUnie"
+      },
+      "char_count": 823,
+      "word_count": 139,
+      "sentence_count": 9,
+      "syllable_count": 223,
+      "long_word_count": 34,
+      "unique_word_count": 90,
+      "token_count": 181
+    },
+    {
+      "id": 5394,
+      "actor": {
+        "name": "Wieke Paulusma",
+        "party": "D66"
+      },
+      "char_count": 1264,
+      "word_count": 223,
+      "sentence_count": 9,
+      "syllable_count": 345,
+      "long_word_count": 41,
+      "unique_word_count": 118,
+      "token_count": 273
+    },
+    {
+      "id": 5395,
+      "actor": {
+        "name": "Vincent Karremans",
+        "party": "VVD"
+      },
+      "char_count": 421,
+      "word_count": 68,
+      "sentence_count": 4,
+      "syllable_count": 117,
+      "long_word_count": 19,
+      "unique_word_count": 51,
+      "token_count": 104
+    },
+    {
+      "id": 5396,
+      "actor": {
+        "name": "Vincent Karremans",
+        "party": "VVD"
+      },
+      "char_count": 7619,
+      "word_count": 1148,
+      "sentence_count": 76,
+      "syllable_count": 2135,
+      "long_word_count": 352,
+      "unique_word_count": 460,
+      "token_count": 1644
+    },
+    {
+      "id": 5397,
+      "actor": {
+        "name": "Mirjam Bikker",
+        "party": "ChristenUnie"
+      },
+      "char_count": 1647,
+      "word_count": 285,
+      "sentence_count": 15,
+      "syllable_count": 436,
+      "long_word_count": 54,
+      "unique_word_count": 148,
+      "token_count": 399
+    },
+    {
+      "id": 5398,
+      "actor": {
+        "name": "Vincent Karremans",
+        "party": "VVD"
+      },
+      "char_count": 1436,
+      "word_count": 244,
+      "sentence_count": 18,
+      "syllable_count": 382,
+      "long_word_count": 48,
+      "unique_word_count": 136,
+      "token_count": 321
+    },
+    {
+      "id": 5399,
+      "actor": {
+        "name": "Mirjam Bikker",
+        "party": "ChristenUnie"
+      },
+      "char_count": 1012,
+      "word_count": 181,
+      "sentence_count": 8,
+      "syllable_count": 276,
+      "long_word_count": 34,
+      "unique_word_count": 92,
+      "token_count": 220
+    },
+    {
+      "id": 5400,
+      "actor": {
+        "name": "Vincent Karremans",
+        "party": "VVD"
+      },
+      "char_count": 3721,
+      "word_count": 610,
+      "sentence_count": 41,
+      "syllable_count": 1006,
+      "long_word_count": 147,
+      "unique_word_count": 256,
+      "token_count": 834
+    },
+    {
+      "id": 5401,
+      "actor": {
+        "name": "Alexander Kops",
+        "party": "PVV"
+      },
+      "char_count": 784,
+      "word_count": 130,
+      "sentence_count": 6,
+      "syllable_count": 218,
+      "long_word_count": 30,
+      "unique_word_count": 77,
+      "token_count": 174
+    },
+    {
+      "id": 5402,
+      "actor": {
+        "name": "Vincent Karremans",
+        "party": "VVD"
+      },
+      "char_count": 3492,
+      "word_count": 598,
+      "sentence_count": 38,
+      "syllable_count": 944,
+      "long_word_count": 113,
+      "unique_word_count": 254,
+      "token_count": 779
+    },
+    {
+      "id": 5403,
+      "actor": {
+        "name": "Diederik van Dijk",
+        "party": "SGP"
+      },
+      "char_count": 800,
+      "word_count": 141,
+      "sentence_count": 6,
+      "syllable_count": 224,
+      "long_word_count": 26,
+      "unique_word_count": 82,
+      "token_count": 190
+    },
+    {
+      "id": 5404,
+      "actor": {
+        "name": "Vincent Karremans",
+        "party": "VVD"
+      },
+      "char_count": 678,
+      "word_count": 120,
+      "sentence_count": 7,
+      "syllable_count": 183,
+      "long_word_count": 23,
+      "unique_word_count": 72,
+      "token_count": 159
+    },
+    {
+      "id": 5405,
+      "actor": {
+        "name": "Diederik van Dijk",
+        "party": "SGP"
+      },
+      "char_count": 849,
+      "word_count": 139,
+      "sentence_count": 8,
+      "syllable_count": 229,
+      "long_word_count": 29,
+      "unique_word_count": 86,
+      "token_count": 207
+    },
+    {
+      "id": 5406,
+      "actor": {
+        "name": "Vincent Karremans",
+        "party": "VVD"
+      },
+      "char_count": 1029,
+      "word_count": 187,
+      "sentence_count": 11,
+      "syllable_count": 271,
+      "long_word_count": 29,
+      "unique_word_count": 99,
+      "token_count": 244
+    },
+    {
+      "id": 5407,
+      "actor": {
+        "name": "Mirjam Bikker",
+        "party": "ChristenUnie"
+      },
+      "char_count": 1221,
+      "word_count": 224,
+      "sentence_count": 10,
+      "syllable_count": 335,
+      "long_word_count": 37,
+      "unique_word_count": 125,
+      "token_count": 293
+    },
+    {
+      "id": 5408,
+      "actor": {
+        "name": "Vincent Karremans",
+        "party": "VVD"
+      },
+      "char_count": 1303,
+      "word_count": 226,
+      "sentence_count": 13,
+      "syllable_count": 350,
+      "long_word_count": 51,
+      "unique_word_count": 144,
+      "token_count": 298
+    },
+    {
+      "id": 5409,
+      "actor": {
+        "name": "Vincent Karremans",
+        "party": "VVD"
+      },
+      "char_count": 3251,
+      "word_count": 544,
+      "sentence_count": 36,
+      "syllable_count": 890,
+      "long_word_count": 134,
+      "unique_word_count": 264,
+      "token_count": 712
+    },
+    {
+      "id": 5410,
+      "actor": {
+        "name": "Vincent Karremans",
+        "party": "VVD"
+      },
+      "char_count": 583,
+      "word_count": 92,
+      "sentence_count": 8,
+      "syllable_count": 164,
+      "long_word_count": 28,
+      "unique_word_count": 69,
+      "token_count": 116
+    },
+    {
+      "id": 5411,
+      "actor": {
+        "name": "Elke Slagt-Tichelman",
+        "party": "GroenLinks-PvdA"
+      },
+      "char_count": 322,
+      "word_count": 49,
+      "sentence_count": 4,
+      "syllable_count": 88,
+      "long_word_count": 15,
+      "unique_word_count": 42,
+      "token_count": 72
+    },
+    {
+      "id": 5412,
+      "actor": {
+        "name": "Vincent Karremans",
+        "party": "VVD"
+      },
+      "char_count": 391,
+      "word_count": 52,
+      "sentence_count": 4,
+      "syllable_count": 120,
+      "long_word_count": 19,
+      "unique_word_count": 46,
+      "token_count": 86
+    },
+    {
+      "id": 5413,
+      "actor": {
+        "name": "Sarah Dobbe",
+        "party": "SP"
+      },
+      "char_count": 922,
+      "word_count": 154,
+      "sentence_count": 11,
+      "syllable_count": 252,
+      "long_word_count": 38,
+      "unique_word_count": 88,
+      "token_count": 193
+    },
+    {
+      "id": 5414,
+      "actor": {
+        "name": "Vincent Karremans",
+        "party": "VVD"
+      },
+      "char_count": 2248,
+      "word_count": 335,
+      "sentence_count": 24,
+      "syllable_count": 643,
+      "long_word_count": 112,
+      "unique_word_count": 187,
+      "token_count": 462
+    },
+    {
+      "id": 5415,
+      "actor": {
+        "name": "Vincent Karremans",
+        "party": "VVD"
+      },
+      "char_count": 71,
+      "word_count": 10,
+      "sentence_count": 1,
+      "syllable_count": 20,
+      "long_word_count": 4,
+      "unique_word_count": 10,
+      "token_count": 18
+    },
+    {
+      "id": 5416,
+      "actor": {
+        "name": "Vincent Karremans",
+        "party": "VVD"
+      },
+      "char_count": 2986,
+      "word_count": 457,
+      "sentence_count": 32,
+      "syllable_count": 850,
+      "long_word_count": 127,
+      "unique_word_count": 214,
+      "token_count": 644
+    },
+    {
+      "id": 5417,
+      "actor": {
+        "name": "Diederik van Dijk",
+        "party": "SGP"
+      },
+      "char_count": 920,
+      "word_count": 157,
+      "sentence_count": 13,
+      "syllable_count": 250,
+      "long_word_count": 30,
+      "unique_word_count": 100,
+      "token_count": 207
+    },
+    {
+      "id": 5418,
+      "actor": {
+        "name": "Vincent Karremans",
+        "party": "VVD"
+      },
+      "char_count": 2653,
+      "word_count": 443,
+      "sentence_count": 33,
+      "syllable_count": 735,
+      "long_word_count": 96,
+      "unique_word_count": 191,
+      "token_count": 583
+    },
+    {
+      "id": 5419,
+      "actor": {
+        "name": "Vincent Karremans",
+        "party": "VVD"
+      },
+      "char_count": 4097,
+      "word_count": 659,
+      "sentence_count": 38,
+      "syllable_count": 1149,
+      "long_word_count": 163,
+      "unique_word_count": 268,
+      "token_count": 900
+    },
+    {
+      "id": 5420,
+      "actor": {
+        "name": "Vincent Karremans",
+        "party": "VVD"
+      },
+      "char_count": 731,
+      "word_count": 117,
+      "sentence_count": 11,
+      "syllable_count": 204,
+      "long_word_count": 31,
+      "unique_word_count": 79,
+      "token_count": 162
+    },
+    {
+      "id": 5421,
+      "actor": {
+        "name": "Diederik van Dijk",
+        "party": "SGP"
+      },
+      "char_count": 688,
+      "word_count": 118,
+      "sentence_count": 8,
+      "syllable_count": 188,
+      "long_word_count": 23,
+      "unique_word_count": 88,
+      "token_count": 159
+    },
+    {
+      "id": 5423,
+      "actor": {
+        "name": "Mirjam Bikker",
+        "party": "ChristenUnie"
+      },
+      "char_count": 2925,
+      "word_count": 478,
+      "sentence_count": 34,
+      "syllable_count": 802,
+      "long_word_count": 119,
+      "unique_word_count": 220,
+      "token_count": 661
+    },
+    {
+      "id": 5425,
+      "actor": {
+        "name": "Jan Paternotte",
+        "party": "D66"
+      },
+      "char_count": 1026,
+      "word_count": 174,
+      "sentence_count": 8,
+      "syllable_count": 279,
+      "long_word_count": 46,
+      "unique_word_count": 103,
+      "token_count": 226
+    },
+    {
+      "id": 5426,
+      "actor": {
+        "name": "Mirjam Bikker",
+        "party": "ChristenUnie"
+      },
+      "char_count": 1842,
+      "word_count": 320,
+      "sentence_count": 14,
+      "syllable_count": 509,
+      "long_word_count": 67,
+      "unique_word_count": 164,
+      "token_count": 413
+    },
+    {
+      "id": 5427,
+      "actor": {
+        "name": "Jan Paternotte",
+        "party": "D66"
+      },
+      "char_count": 937,
+      "word_count": 167,
+      "sentence_count": 12,
+      "syllable_count": 258,
+      "long_word_count": 27,
+      "unique_word_count": 101,
+      "token_count": 215
+    },
+    {
+      "id": 5428,
+      "actor": {
+        "name": "Mirjam Bikker",
+        "party": "ChristenUnie"
+      },
+      "char_count": 1445,
+      "word_count": 249,
+      "sentence_count": 19,
+      "syllable_count": 382,
+      "long_word_count": 46,
+      "unique_word_count": 136,
+      "token_count": 331
+    },
+    {
+      "id": 5430,
+      "actor": {
+        "name": "Jan Paternotte",
+        "party": "D66"
+      },
+      "char_count": 1360,
+      "word_count": 244,
+      "sentence_count": 14,
+      "syllable_count": 367,
+      "long_word_count": 44,
+      "unique_word_count": 137,
+      "token_count": 314
+    },
+    {
+      "id": 5431,
+      "actor": {
+        "name": "Mirjam Bikker",
+        "party": "ChristenUnie"
+      },
+      "char_count": 1770,
+      "word_count": 310,
+      "sentence_count": 16,
+      "syllable_count": 476,
+      "long_word_count": 50,
+      "unique_word_count": 160,
+      "token_count": 400
+    },
+    {
+      "id": 5432,
+      "actor": {
+        "name": "Jan Paternotte",
+        "party": "D66"
+      },
+      "char_count": 215,
+      "word_count": 36,
+      "sentence_count": 2,
+      "syllable_count": 59,
+      "long_word_count": 5,
+      "unique_word_count": 34,
+      "token_count": 55
+    },
+    {
+      "id": 5434,
+      "actor": {
+        "name": "Daniëlle Hirsch",
+        "party": "GroenLinks-PvdA"
+      },
+      "char_count": 1173,
+      "word_count": 196,
+      "sentence_count": 9,
+      "syllable_count": 313,
+      "long_word_count": 43,
+      "unique_word_count": 111,
+      "token_count": 261
+    },
+    {
+      "id": 5435,
+      "actor": {
+        "name": "Mirjam Bikker",
+        "party": "ChristenUnie"
+      },
+      "char_count": 1285,
+      "word_count": 215,
+      "sentence_count": 9,
+      "syllable_count": 350,
+      "long_word_count": 49,
+      "unique_word_count": 129,
+      "token_count": 286
+    },
+    {
+      "id": 5436,
+      "actor": {
+        "name": "Daniëlle Hirsch",
+        "party": "GroenLinks-PvdA"
+      },
+      "char_count": 766,
+      "word_count": 135,
+      "sentence_count": 6,
+      "syllable_count": 202,
+      "long_word_count": 27,
+      "unique_word_count": 79,
+      "token_count": 179
+    },
+    {
+      "id": 5437,
+      "actor": {
+        "name": "Mirjam Bikker",
+        "party": "ChristenUnie"
+      },
+      "char_count": 811,
+      "word_count": 134,
+      "sentence_count": 6,
+      "syllable_count": 219,
+      "long_word_count": 33,
+      "unique_word_count": 90,
+      "token_count": 181
+    },
+    {
+      "id": 5439,
+      "actor": {
+        "name": "Sarah Dobbe",
+        "party": "SP"
+      },
+      "char_count": 806,
+      "word_count": 141,
+      "sentence_count": 8,
+      "syllable_count": 218,
+      "long_word_count": 27,
+      "unique_word_count": 87,
+      "token_count": 184
+    },
+    {
+      "id": 5440,
+      "actor": {
+        "name": "Mirjam Bikker",
+        "party": "ChristenUnie"
+      },
+      "char_count": 1444,
+      "word_count": 250,
+      "sentence_count": 12,
+      "syllable_count": 395,
+      "long_word_count": 49,
+      "unique_word_count": 132,
+      "token_count": 322
+    },
+    {
+      "id": 5441,
+      "actor": {
+        "name": "Sarah Dobbe",
+        "party": "SP"
+      },
+      "char_count": 528,
+      "word_count": 92,
+      "sentence_count": 7,
+      "syllable_count": 138,
+      "long_word_count": 18,
+      "unique_word_count": 62,
+      "token_count": 126
+    },
+    {
+      "id": 5442,
+      "actor": {
+        "name": "Mirjam Bikker",
+        "party": "ChristenUnie"
+      },
+      "char_count": 1310,
+      "word_count": 230,
+      "sentence_count": 20,
+      "syllable_count": 345,
+      "long_word_count": 45,
+      "unique_word_count": 122,
+      "token_count": 298
+    },
+    {
+      "id": 5444,
+      "actor": {
+        "name": "Mirjam Bikker",
+        "party": "ChristenUnie"
+      },
+      "char_count": 1888,
+      "word_count": 309,
+      "sentence_count": 18,
+      "syllable_count": 525,
+      "long_word_count": 73,
+      "unique_word_count": 170,
+      "token_count": 392
+    },
+    {
+      "id": 5446,
+      "actor": {
+        "name": "Chris Stoffer",
+        "party": "SGP"
+      },
+      "char_count": 2779,
+      "word_count": 457,
+      "sentence_count": 26,
+      "syllable_count": 764,
+      "long_word_count": 117,
+      "unique_word_count": 213,
+      "token_count": 639
+    },
+    {
+      "id": 5448,
+      "actor": {
+        "name": "Jan Paternotte",
+        "party": "D66"
+      },
+      "char_count": 936,
+      "word_count": 150,
+      "sentence_count": 7,
+      "syllable_count": 255,
+      "long_word_count": 40,
+      "unique_word_count": 99,
+      "token_count": 201
+    },
+    {
+      "id": 5449,
+      "actor": {
+        "name": "Chris Stoffer",
+        "party": "SGP"
+      },
+      "char_count": 1729,
+      "word_count": 315,
+      "sentence_count": 24,
+      "syllable_count": 450,
+      "long_word_count": 43,
+      "unique_word_count": 144,
+      "token_count": 418
+    },
+    {
+      "id": 5451,
+      "actor": {
+        "name": "Chris Stoffer",
+        "party": "SGP"
+      },
+      "char_count": 889,
+      "word_count": 143,
+      "sentence_count": 7,
+      "syllable_count": 251,
+      "long_word_count": 42,
+      "unique_word_count": 91,
+      "token_count": 197
+    },
+    {
+      "id": 5453,
+      "actor": {
+        "name": "Jan Paternotte",
+        "party": "D66"
+      },
+      "char_count": 4697,
+      "word_count": 771,
+      "sentence_count": 52,
+      "syllable_count": 1291,
+      "long_word_count": 192,
+      "unique_word_count": 377,
+      "token_count": 1060
+    },
+    {
+      "id": 5455,
+      "actor": {
+        "name": "Gideon van Meijeren",
+        "party": "FVD"
+      },
+      "char_count": 235,
+      "word_count": 39,
+      "sentence_count": 3,
+      "syllable_count": 64,
+      "long_word_count": 11,
+      "unique_word_count": 31,
+      "token_count": 60
+    },
+    {
+      "id": 5456,
+      "actor": {
+        "name": "Jan Paternotte",
+        "party": "D66"
+      },
+      "char_count": 278,
+      "word_count": 43,
+      "sentence_count": 2,
+      "syllable_count": 83,
+      "long_word_count": 8,
+      "unique_word_count": 34,
+      "token_count": 63
+    },
+    {
+      "id": 5457,
+      "actor": {
+        "name": "Gideon van Meijeren",
+        "party": "FVD"
+      },
+      "char_count": 1180,
+      "word_count": 185,
+      "sentence_count": 11,
+      "syllable_count": 318,
+      "long_word_count": 43,
+      "unique_word_count": 112,
+      "token_count": 305
+    },
+    {
+      "id": 5458,
+      "actor": {
+        "name": "Jan Paternotte",
+        "party": "D66"
+      },
+      "char_count": 339,
+      "word_count": 64,
+      "sentence_count": 6,
+      "syllable_count": 87,
+      "long_word_count": 9,
+      "unique_word_count": 40,
+      "token_count": 93
+    },
+    {
+      "id": 5459,
+      "actor": {
+        "name": "Gideon van Meijeren",
+        "party": "FVD"
+      },
+      "char_count": 699,
+      "word_count": 110,
+      "sentence_count": 7,
+      "syllable_count": 192,
+      "long_word_count": 30,
+      "unique_word_count": 76,
+      "token_count": 175
+    },
+    {
+      "id": 5460,
+      "actor": {
+        "name": "Jan Paternotte",
+        "party": "D66"
+      },
+      "char_count": 1204,
+      "word_count": 202,
+      "sentence_count": 13,
+      "syllable_count": 332,
+      "long_word_count": 48,
+      "unique_word_count": 130,
+      "token_count": 263
+    },
+    {
+      "id": 5462,
+      "actor": {
+        "name": "Gideon van Meijeren",
+        "party": "FVD"
+      },
+      "char_count": 845,
+      "word_count": 135,
+      "sentence_count": 10,
+      "syllable_count": 237,
+      "long_word_count": 38,
+      "unique_word_count": 91,
+      "token_count": 199
+    },
+    {
+      "id": 5464,
+      "actor": {
+        "name": "Jan Paternotte",
+        "party": "D66"
+      },
+      "char_count": 408,
+      "word_count": 67,
+      "sentence_count": 3,
+      "syllable_count": 107,
+      "long_word_count": 15,
+      "unique_word_count": 50,
+      "token_count": 102
+    },
+    {
+      "id": 5466,
+      "actor": {
+        "name": "Chris Stoffer",
+        "party": "SGP"
+      },
+      "char_count": 802,
+      "word_count": 137,
+      "sentence_count": 11,
+      "syllable_count": 222,
+      "long_word_count": 29,
+      "unique_word_count": 80,
+      "token_count": 196
+    },
+    {
+      "id": 5467,
+      "actor": {
+        "name": "Jan Paternotte",
+        "party": "D66"
+      },
+      "char_count": 920,
+      "word_count": 150,
+      "sentence_count": 8,
+      "syllable_count": 245,
+      "long_word_count": 33,
+      "unique_word_count": 92,
+      "token_count": 201
+    },
+    {
+      "id": 5468,
+      "actor": {
+        "name": "Chris Stoffer",
+        "party": "SGP"
+      },
+      "char_count": 872,
+      "word_count": 160,
+      "sentence_count": 7,
+      "syllable_count": 242,
+      "long_word_count": 21,
+      "unique_word_count": 93,
+      "token_count": 222
+    },
+    {
+      "id": 5469,
+      "actor": {
+        "name": "Jan Paternotte",
+        "party": "D66"
+      },
+      "char_count": 1359,
+      "word_count": 229,
+      "sentence_count": 6,
+      "syllable_count": 374,
+      "long_word_count": 45,
+      "unique_word_count": 133,
+      "token_count": 297
+    },
+    {
+      "id": 5471,
+      "actor": {
+        "name": "Chris Stoffer",
+        "party": "SGP"
+      },
+      "char_count": 1032,
+      "word_count": 177,
+      "sentence_count": 8,
+      "syllable_count": 278,
+      "long_word_count": 34,
+      "unique_word_count": 123,
+      "token_count": 232
+    },
+    {
+      "id": 5472,
+      "actor": {
+        "name": "Jan Paternotte",
+        "party": "D66"
+      },
+      "char_count": 1309,
+      "word_count": 228,
+      "sentence_count": 11,
+      "syllable_count": 352,
+      "long_word_count": 48,
+      "unique_word_count": 133,
+      "token_count": 286
+    },
+    {
+      "id": 5474,
+      "actor": {
+        "name": "Isa Kahraman",
+        "party": "NSC"
+      },
+      "char_count": 913,
+      "word_count": 150,
+      "sentence_count": 5,
+      "syllable_count": 268,
+      "long_word_count": 34,
+      "unique_word_count": 97,
+      "token_count": 200
+    },
+    {
+      "id": 5475,
+      "actor": {
+        "name": "Jan Paternotte",
+        "party": "D66"
+      },
+      "char_count": 1157,
+      "word_count": 181,
+      "sentence_count": 7,
+      "syllable_count": 331,
+      "long_word_count": 54,
+      "unique_word_count": 122,
+      "token_count": 237
+    },
+    {
+      "id": 5476,
+      "actor": {
+        "name": "Isa Kahraman",
+        "party": "NSC"
+      },
+      "char_count": 692,
+      "word_count": 111,
+      "sentence_count": 6,
+      "syllable_count": 203,
+      "long_word_count": 33,
+      "unique_word_count": 72,
+      "token_count": 153
+    },
+    {
+      "id": 5477,
+      "actor": {
+        "name": "Jan Paternotte",
+        "party": "D66"
+      },
+      "char_count": 489,
+      "word_count": 85,
+      "sentence_count": 5,
+      "syllable_count": 137,
+      "long_word_count": 17,
+      "unique_word_count": 64,
+      "token_count": 116
+    },
+    {
+      "id": 5479,
+      "actor": {
+        "name": "Isa Kahraman",
+        "party": "NSC"
+      },
+      "char_count": 1198,
+      "word_count": 202,
+      "sentence_count": 10,
+      "syllable_count": 339,
+      "long_word_count": 42,
+      "unique_word_count": 111,
+      "token_count": 283
+    },
+    {
+      "id": 5480,
+      "actor": {
+        "name": "Jan Paternotte",
+        "party": "D66"
+      },
+      "char_count": 1867,
+      "word_count": 334,
+      "sentence_count": 21,
+      "syllable_count": 504,
+      "long_word_count": 60,
+      "unique_word_count": 167,
+      "token_count": 409
+    },
+    {
+      "id": 5481,
+      "actor": {
+        "name": "Isa Kahraman",
+        "party": "NSC"
+      },
+      "char_count": 774,
+      "word_count": 131,
+      "sentence_count": 7,
+      "syllable_count": 209,
+      "long_word_count": 26,
+      "unique_word_count": 81,
+      "token_count": 180
+    },
+    {
+      "id": 5482,
+      "actor": {
+        "name": "Jan Paternotte",
+        "party": "D66"
+      },
+      "char_count": 989,
+      "word_count": 176,
+      "sentence_count": 8,
+      "syllable_count": 269,
+      "long_word_count": 36,
+      "unique_word_count": 103,
+      "token_count": 234
+    },
+    {
+      "id": 5484,
+      "actor": {
+        "name": "Mirjam Bikker",
+        "party": "ChristenUnie"
+      },
+      "char_count": 981,
+      "word_count": 157,
+      "sentence_count": 7,
+      "syllable_count": 278,
+      "long_word_count": 39,
+      "unique_word_count": 96,
+      "token_count": 220
+    },
+    {
+      "id": 5485,
+      "actor": {
+        "name": "Jan Paternotte",
+        "party": "D66"
+      },
+      "char_count": 1443,
+      "word_count": 264,
+      "sentence_count": 11,
+      "syllable_count": 384,
+      "long_word_count": 37,
+      "unique_word_count": 130,
+      "token_count": 319
+    },
+    {
+      "id": 5486,
+      "actor": {
+        "name": "Mirjam Bikker",
+        "party": "ChristenUnie"
+      },
+      "char_count": 968,
+      "word_count": 167,
+      "sentence_count": 13,
+      "syllable_count": 244,
+      "long_word_count": 32,
+      "unique_word_count": 95,
+      "token_count": 230
+    },
+    {
+      "id": 5487,
+      "actor": {
+        "name": "Jan Paternotte",
+        "party": "D66"
+      },
+      "char_count": 971,
+      "word_count": 155,
+      "sentence_count": 8,
+      "syllable_count": 277,
+      "long_word_count": 48,
+      "unique_word_count": 99,
+      "token_count": 204
+    },
+    {
+      "id": 5488,
+      "actor": {
+        "name": "Mirjam Bikker",
+        "party": "ChristenUnie"
+      },
+      "char_count": 804,
+      "word_count": 130,
+      "sentence_count": 7,
+      "syllable_count": 226,
+      "long_word_count": 32,
+      "unique_word_count": 82,
+      "token_count": 182
+    },
+    {
+      "id": 5489,
+      "actor": {
+        "name": "Jan Paternotte",
+        "party": "D66"
+      },
+      "char_count": 1066,
+      "word_count": 189,
+      "sentence_count": 10,
+      "syllable_count": 282,
+      "long_word_count": 36,
+      "unique_word_count": 112,
+      "token_count": 244
+    },
+    {
+      "id": 5491,
+      "actor": {
+        "name": "Isa Kahraman",
+        "party": "NSC"
+      },
+      "char_count": 1330,
+      "word_count": 226,
+      "sentence_count": 12,
+      "syllable_count": 369,
+      "long_word_count": 52,
+      "unique_word_count": 107,
+      "token_count": 299
+    },
+    {
+      "id": 5492,
+      "actor": {
+        "name": "Jan Paternotte",
+        "party": "D66"
+      },
+      "char_count": 30,
+      "word_count": 5,
+      "sentence_count": 1,
+      "syllable_count": 8,
+      "long_word_count": 1,
+      "unique_word_count": 5,
+      "token_count": 12
+    },
+    {
+      "id": 5494,
+      "actor": {
+        "name": "Jan Paternotte",
+        "party": "D66"
+      },
+      "char_count": 398,
+      "word_count": 67,
+      "sentence_count": 2,
+      "syllable_count": 113,
+      "long_word_count": 15,
+      "unique_word_count": 58,
+      "token_count": 85
+    },
+    {
+      "id": 5496,
+      "actor": {
+        "name": "Jan Paternotte",
+        "party": "D66"
+      },
+      "char_count": 3301,
+      "word_count": 535,
+      "sentence_count": 30,
+      "syllable_count": 916,
+      "long_word_count": 143,
+      "unique_word_count": 269,
+      "token_count": 723
+    },
+    {
+      "id": 5498,
+      "actor": {
+        "name": "Chris Stoffer",
+        "party": "SGP"
+      },
+      "char_count": 944,
+      "word_count": 171,
+      "sentence_count": 5,
+      "syllable_count": 253,
+      "long_word_count": 29,
+      "unique_word_count": 94,
+      "token_count": 201
+    },
+    {
+      "id": 5499,
+      "actor": {
+        "name": "Jan Paternotte",
+        "party": "D66"
+      },
+      "char_count": 649,
+      "word_count": 105,
+      "sentence_count": 9,
+      "syllable_count": 174,
+      "long_word_count": 22,
+      "unique_word_count": 82,
+      "token_count": 154
+    },
+    {
+      "id": 5501,
+      "actor": {
+        "name": "Jan Paternotte",
+        "party": "D66"
+      },
+      "char_count": 610,
+      "word_count": 100,
+      "sentence_count": 6,
+      "syllable_count": 165,
+      "long_word_count": 22,
+      "unique_word_count": 68,
+      "token_count": 137
+    },
+    {
+      "id": 5503,
+      "actor": {
+        "name": "Chris Stoffer",
+        "party": "SGP"
+      },
+      "char_count": 1212,
+      "word_count": 222,
+      "sentence_count": 16,
+      "syllable_count": 331,
+      "long_word_count": 31,
+      "unique_word_count": 137,
+      "token_count": 288
+    },
+    {
+      "id": 5505,
+      "actor": {
+        "name": "Jan Paternotte",
+        "party": "D66"
+      },
+      "char_count": 1280,
+      "word_count": 230,
+      "sentence_count": 9,
+      "syllable_count": 347,
+      "long_word_count": 39,
+      "unique_word_count": 126,
+      "token_count": 291
+    },
+    {
+      "id": 5507,
+      "actor": {
+        "name": "Chris Stoffer",
+        "party": "SGP"
+      },
+      "char_count": 53,
+      "word_count": 9,
+      "sentence_count": 1,
+      "syllable_count": 12,
+      "long_word_count": 2,
+      "unique_word_count": 9,
+      "token_count": 14
+    },
+    {
+      "id": 5509,
+      "actor": {
+        "name": "Chris Stoffer",
+        "party": "SGP"
+      },
+      "char_count": 587,
+      "word_count": 106,
+      "sentence_count": 8,
+      "syllable_count": 153,
+      "long_word_count": 19,
+      "unique_word_count": 76,
+      "token_count": 150
+    },
+    {
+      "id": 5511,
+      "actor": {
+        "name": "Jan Paternotte",
+        "party": "D66"
+      },
+      "char_count": 374,
+      "word_count": 72,
+      "sentence_count": 4,
+      "syllable_count": 99,
+      "long_word_count": 10,
+      "unique_word_count": 52,
+      "token_count": 93
+    },
+    {
+      "id": 5513,
+      "actor": {
+        "name": "Sarah Dobbe",
+        "party": "SP"
+      },
+      "char_count": 4288,
+      "word_count": 660,
+      "sentence_count": 40,
+      "syllable_count": 1204,
+      "long_word_count": 203,
+      "unique_word_count": 315,
+      "token_count": 895
+    },
+    {
+      "id": 5515,
+      "actor": {
+        "name": "Isa Kahraman",
+        "party": "NSC"
+      },
+      "char_count": 2395,
+      "word_count": 372,
+      "sentence_count": 19,
+      "syllable_count": 682,
+      "long_word_count": 109,
+      "unique_word_count": 195,
+      "token_count": 522
+    },
+    {
+      "id": 5517,
+      "actor": {
+        "name": "Jan Paternotte",
+        "party": "D66"
+      },
+      "char_count": 466,
+      "word_count": 77,
+      "sentence_count": 3,
+      "syllable_count": 137,
+      "long_word_count": 20,
+      "unique_word_count": 59,
+      "token_count": 107
+    },
+    {
+      "id": 5518,
+      "actor": {
+        "name": "Isa Kahraman",
+        "party": "NSC"
+      },
+      "char_count": 738,
+      "word_count": 127,
+      "sentence_count": 7,
+      "syllable_count": 204,
+      "long_word_count": 25,
+      "unique_word_count": 76,
+      "token_count": 157
+    },
+    {
+      "id": 5520,
+      "actor": {
+        "name": "Sarah Dobbe",
+        "party": "SP"
+      },
+      "char_count": 506,
+      "word_count": 80,
+      "sentence_count": 4,
+      "syllable_count": 139,
+      "long_word_count": 21,
+      "unique_word_count": 58,
+      "token_count": 117
+    },
+    {
+      "id": 5521,
+      "actor": {
+        "name": "Isa Kahraman",
+        "party": "NSC"
+      },
+      "char_count": 511,
+      "word_count": 87,
+      "sentence_count": 7,
+      "syllable_count": 136,
+      "long_word_count": 14,
+      "unique_word_count": 58,
+      "token_count": 123
+    },
+    {
+      "id": 5522,
+      "actor": {
+        "name": "Sarah Dobbe",
+        "party": "SP"
+      },
+      "char_count": 512,
+      "word_count": 97,
+      "sentence_count": 4,
+      "syllable_count": 133,
+      "long_word_count": 15,
+      "unique_word_count": 62,
+      "token_count": 132
+    },
+    {
+      "id": 5523,
+      "actor": {
+        "name": "Isa Kahraman",
+        "party": "NSC"
+      },
+      "char_count": 1009,
+      "word_count": 179,
+      "sentence_count": 10,
+      "syllable_count": 275,
+      "long_word_count": 37,
+      "unique_word_count": 85,
+      "token_count": 255
+    },
+    {
+      "id": 5525,
+      "actor": {
+        "name": "Sarah Dobbe",
+        "party": "SP"
+      },
+      "char_count": 51,
+      "word_count": 11,
+      "sentence_count": 1,
+      "syllable_count": 13,
+      "long_word_count": 1,
+      "unique_word_count": 11,
+      "token_count": 18
+    },
+    {
+      "id": 5527,
+      "actor": {
+        "name": "Sarah Dobbe",
+        "party": "SP"
+      },
+      "char_count": 819,
+      "word_count": 142,
+      "sentence_count": 9,
+      "syllable_count": 215,
+      "long_word_count": 26,
+      "unique_word_count": 82,
+      "token_count": 203
+    },
+    {
+      "id": 5528,
+      "actor": {
+        "name": "Isa Kahraman",
+        "party": "NSC"
+      },
+      "char_count": 592,
+      "word_count": 103,
+      "sentence_count": 9,
+      "syllable_count": 160,
+      "long_word_count": 19,
+      "unique_word_count": 72,
+      "token_count": 138
+    },
+    {
+      "id": 5530,
+      "actor": {
+        "name": "Daniëlle Hirsch",
+        "party": "GroenLinks-PvdA"
+      },
+      "char_count": 1358,
+      "word_count": 218,
+      "sentence_count": 11,
+      "syllable_count": 374,
+      "long_word_count": 57,
+      "unique_word_count": 117,
+      "token_count": 278
+    },
+    {
+      "id": 5531,
+      "actor": {
+        "name": "Isa Kahraman",
+        "party": "NSC"
+      },
+      "char_count": 1059,
+      "word_count": 188,
+      "sentence_count": 8,
+      "syllable_count": 292,
+      "long_word_count": 30,
+      "unique_word_count": 104,
+      "token_count": 230
+    },
+    {
+      "id": 5532,
+      "actor": {
+        "name": "Daniëlle Hirsch",
+        "party": "GroenLinks-PvdA"
+      },
+      "char_count": 751,
+      "word_count": 136,
+      "sentence_count": 7,
+      "syllable_count": 194,
+      "long_word_count": 22,
+      "unique_word_count": 87,
+      "token_count": 168
+    },
+    {
+      "id": 5533,
+      "actor": {
+        "name": "Isa Kahraman",
+        "party": "NSC"
+      },
+      "char_count": 324,
+      "word_count": 54,
+      "sentence_count": 2,
+      "syllable_count": 94,
+      "long_word_count": 12,
+      "unique_word_count": 36,
+      "token_count": 75
+    },
+    {
+      "id": 5535,
+      "actor": {
+        "name": "Isa Kahraman",
+        "party": "NSC"
+      },
+      "char_count": 1181,
+      "word_count": 187,
+      "sentence_count": 12,
+      "syllable_count": 330,
+      "long_word_count": 45,
+      "unique_word_count": 122,
+      "token_count": 249
+    },
+    {
+      "id": 5537,
+      "actor": {
+        "name": "Gideon van Meijeren",
+        "party": "FVD"
+      },
+      "char_count": 1474,
+      "word_count": 245,
+      "sentence_count": 15,
+      "syllable_count": 402,
+      "long_word_count": 64,
+      "unique_word_count": 143,
+      "token_count": 356
+    },
+    {
+      "id": 5539,
+      "actor": {
+        "name": "Gideon van Meijeren",
+        "party": "FVD"
+      },
+      "char_count": 151,
+      "word_count": 23,
+      "sentence_count": 1,
+      "syllable_count": 40,
+      "long_word_count": 8,
+      "unique_word_count": 20,
+      "token_count": 43
+    },
+    {
+      "id": 5541,
+      "actor": {
+        "name": "Jan Paternotte",
+        "party": "D66"
+      },
+      "char_count": 174,
+      "word_count": 33,
+      "sentence_count": 2,
+      "syllable_count": 46,
+      "long_word_count": 3,
+      "unique_word_count": 30,
+      "token_count": 47
+    },
+    {
+      "id": 5542,
+      "actor": {
+        "name": "Gideon van Meijeren",
+        "party": "FVD"
+      },
+      "char_count": 34,
+      "word_count": 6,
+      "sentence_count": 1,
+      "syllable_count": 8,
+      "long_word_count": 1,
+      "unique_word_count": 6,
+      "token_count": 13
+    },
+    {
+      "id": 5543,
+      "actor": {
+        "name": "Jan Paternotte",
+        "party": "D66"
+      },
+      "char_count": 487,
+      "word_count": 79,
+      "sentence_count": 4,
+      "syllable_count": 135,
+      "long_word_count": 20,
+      "unique_word_count": 59,
+      "token_count": 104
+    },
+    {
+      "id": 5545,
+      "actor": {
+        "name": "Gideon van Meijeren",
+        "party": "FVD"
+      },
+      "char_count": 448,
+      "word_count": 73,
+      "sentence_count": 3,
+      "syllable_count": 125,
+      "long_word_count": 20,
+      "unique_word_count": 54,
+      "token_count": 115
+    },
+    {
+      "id": 5547,
+      "actor": {
+        "name": "Gideon van Meijeren",
+        "party": "FVD"
+      },
+      "char_count": 2458,
+      "word_count": 398,
+      "sentence_count": 19,
+      "syllable_count": 685,
+      "long_word_count": 98,
+      "unique_word_count": 206,
+      "token_count": 561
+    },
+    {
+      "id": 5549,
+      "actor": {
+        "name": "Gideon van Meijeren",
+        "party": "FVD"
+      },
+      "char_count": 52,
+      "word_count": 9,
+      "sentence_count": 1,
+      "syllable_count": 14,
+      "long_word_count": 2,
+      "unique_word_count": 9,
+      "token_count": 16
+    },
+    {
+      "id": 5551,
+      "actor": {
+        "name": "Daniëlle Hirsch",
+        "party": "GroenLinks-PvdA"
+      },
+      "char_count": 6064,
+      "word_count": 951,
+      "sentence_count": 69,
+      "syllable_count": 1661,
+      "long_word_count": 277,
+      "unique_word_count": 421,
+      "token_count": 1358
+    },
+    {
+      "id": 5553,
+      "actor": {
+        "name": "Mirjam Bikker",
+        "party": "ChristenUnie"
+      },
+      "char_count": 699,
+      "word_count": 113,
+      "sentence_count": 9,
+      "syllable_count": 191,
+      "long_word_count": 28,
+      "unique_word_count": 74,
+      "token_count": 161
+    },
+    {
+      "id": 5554,
+      "actor": {
+        "name": "Daniëlle Hirsch",
+        "party": "GroenLinks-PvdA"
+      },
+      "char_count": 911,
+      "word_count": 161,
+      "sentence_count": 9,
+      "syllable_count": 242,
+      "long_word_count": 25,
+      "unique_word_count": 86,
+      "token_count": 196
+    },
+    {
+      "id": 5555,
+      "actor": {
+        "name": "Mirjam Bikker",
+        "party": "ChristenUnie"
+      },
+      "char_count": 1161,
+      "word_count": 199,
+      "sentence_count": 8,
+      "syllable_count": 314,
+      "long_word_count": 38,
+      "unique_word_count": 118,
+      "token_count": 251
+    },
+    {
+      "id": 5556,
+      "actor": {
+        "name": "Daniëlle Hirsch",
+        "party": "GroenLinks-PvdA"
+      },
+      "char_count": 1627,
+      "word_count": 266,
+      "sentence_count": 10,
+      "syllable_count": 447,
+      "long_word_count": 60,
+      "unique_word_count": 145,
+      "token_count": 339
+    },
+    {
+      "id": 5559,
+      "actor": {
+        "name": "Eric van der Burg",
+        "party": "VVD"
+      },
+      "char_count": 5619,
+      "word_count": 961,
+      "sentence_count": 51,
+      "syllable_count": 1534,
+      "long_word_count": 197,
+      "unique_word_count": 342,
+      "token_count": 1218
+    },
+    {
+      "id": 5561,
+      "actor": {
+        "name": "Daniëlle Hirsch",
+        "party": "GroenLinks-PvdA"
+      },
+      "char_count": 1252,
+      "word_count": 218,
+      "sentence_count": 9,
+      "syllable_count": 326,
+      "long_word_count": 38,
+      "unique_word_count": 123,
+      "token_count": 270
+    },
+    {
+      "id": 5562,
+      "actor": {
+        "name": "Eric van der Burg",
+        "party": "VVD"
+      },
+      "char_count": 1869,
+      "word_count": 319,
+      "sentence_count": 15,
+      "syllable_count": 509,
+      "long_word_count": 73,
+      "unique_word_count": 159,
+      "token_count": 398
+    },
+    {
+      "id": 5565,
+      "actor": {
+        "name": "Gideon van Meijeren",
+        "party": "FVD"
+      },
+      "char_count": 626,
+      "word_count": 116,
+      "sentence_count": 7,
+      "syllable_count": 175,
+      "long_word_count": 20,
+      "unique_word_count": 78,
+      "token_count": 148
+    },
+    {
+      "id": 5567,
+      "actor": {
+        "name": "Gideon van Meijeren",
+        "party": "FVD"
+      },
+      "char_count": 33,
+      "word_count": 6,
+      "sentence_count": 1,
+      "syllable_count": 8,
+      "long_word_count": 1,
+      "unique_word_count": 6,
+      "token_count": 12
+    },
+    {
+      "id": 5570,
+      "actor": {
+        "name": "Wieke Paulusma",
+        "party": "D66"
+      },
+      "char_count": 1577,
+      "word_count": 250,
+      "sentence_count": 17,
+      "syllable_count": 440,
+      "long_word_count": 71,
+      "unique_word_count": 148,
+      "token_count": 338
+    },
+    {
+      "id": 5572,
+      "actor": {
+        "name": "Wieke Paulusma",
+        "party": "D66"
+      },
+      "char_count": 955,
+      "word_count": 152,
+      "sentence_count": 11,
+      "syllable_count": 267,
+      "long_word_count": 45,
+      "unique_word_count": 99,
+      "token_count": 219
+    },
+    {
+      "id": 5574,
+      "actor": {
+        "name": "Chris Stoffer",
+        "party": "SGP"
+      },
+      "char_count": 596,
+      "word_count": 104,
+      "sentence_count": 6,
+      "syllable_count": 156,
+      "long_word_count": 18,
+      "unique_word_count": 66,
+      "token_count": 144
+    },
+    {
+      "id": 5575,
+      "actor": {
+        "name": "Wieke Paulusma",
+        "party": "D66"
+      },
+      "char_count": 1991,
+      "word_count": 332,
+      "sentence_count": 25,
+      "syllable_count": 545,
+      "long_word_count": 69,
+      "unique_word_count": 174,
+      "token_count": 437
+    },
+    {
+      "id": 5577,
+      "actor": {
+        "name": "Wieke Paulusma",
+        "party": "D66"
+      },
+      "char_count": 2561,
+      "word_count": 415,
+      "sentence_count": 19,
+      "syllable_count": 716,
+      "long_word_count": 107,
+      "unique_word_count": 187,
+      "token_count": 554
+    },
+    {
+      "id": 5579,
+      "actor": {
+        "name": "Mirjam Bikker",
+        "party": "ChristenUnie"
+      },
+      "char_count": 741,
+      "word_count": 123,
+      "sentence_count": 11,
+      "syllable_count": 197,
+      "long_word_count": 28,
+      "unique_word_count": 84,
+      "token_count": 171
+    },
+    {
+      "id": 5580,
+      "actor": {
+        "name": "Wieke Paulusma",
+        "party": "D66"
+      },
+      "char_count": 1276,
+      "word_count": 212,
+      "sentence_count": 14,
+      "syllable_count": 345,
+      "long_word_count": 51,
+      "unique_word_count": 126,
+      "token_count": 281
+    },
+    {
+      "id": 5581,
+      "actor": {
+        "name": "Mirjam Bikker",
+        "party": "ChristenUnie"
+      },
+      "char_count": 634,
+      "word_count": 112,
+      "sentence_count": 5,
+      "syllable_count": 171,
+      "long_word_count": 24,
+      "unique_word_count": 69,
+      "token_count": 152
+    },
+    {
+      "id": 5582,
+      "actor": {
+        "name": "Wieke Paulusma",
+        "party": "D66"
+      },
+      "char_count": 514,
+      "word_count": 88,
+      "sentence_count": 4,
+      "syllable_count": 140,
+      "long_word_count": 22,
+      "unique_word_count": 61,
+      "token_count": 117
+    },
+    {
+      "id": 5584,
+      "actor": {
+        "name": "Chris Stoffer",
+        "party": "SGP"
+      },
+      "char_count": 1158,
+      "word_count": 215,
+      "sentence_count": 17,
+      "syllable_count": 311,
+      "long_word_count": 31,
+      "unique_word_count": 116,
+      "token_count": 264
+    },
+    {
+      "id": 5585,
+      "actor": {
+        "name": "Wieke Paulusma",
+        "party": "D66"
+      },
+      "char_count": 800,
+      "word_count": 142,
+      "sentence_count": 10,
+      "syllable_count": 219,
+      "long_word_count": 20,
+      "unique_word_count": 86,
+      "token_count": 186
+    },
+    {
+      "id": 5586,
+      "actor": {
+        "name": "Chris Stoffer",
+        "party": "SGP"
+      },
+      "char_count": 987,
+      "word_count": 180,
+      "sentence_count": 14,
+      "syllable_count": 254,
+      "long_word_count": 28,
+      "unique_word_count": 102,
+      "token_count": 223
+    },
+    {
+      "id": 5587,
+      "actor": {
+        "name": "Wieke Paulusma",
+        "party": "D66"
+      },
+      "char_count": 961,
+      "word_count": 165,
+      "sentence_count": 12,
+      "syllable_count": 252,
+      "long_word_count": 29,
+      "unique_word_count": 106,
+      "token_count": 223
+    },
+    {
+      "id": 5589,
+      "actor": {
+        "name": "Isa Kahraman",
+        "party": "NSC"
+      },
+      "char_count": 886,
+      "word_count": 147,
+      "sentence_count": 12,
+      "syllable_count": 249,
+      "long_word_count": 33,
+      "unique_word_count": 94,
+      "token_count": 209
+    },
+    {
+      "id": 5590,
+      "actor": {
+        "name": "Wieke Paulusma",
+        "party": "D66"
+      },
+      "char_count": 569,
+      "word_count": 92,
+      "sentence_count": 4,
+      "syllable_count": 153,
+      "long_word_count": 27,
+      "unique_word_count": 61,
+      "token_count": 119
+    },
+    {
+      "id": 5591,
+      "actor": {
+        "name": "Isa Kahraman",
+        "party": "NSC"
+      },
+      "char_count": 715,
+      "word_count": 129,
+      "sentence_count": 7,
+      "syllable_count": 193,
+      "long_word_count": 24,
+      "unique_word_count": 71,
+      "token_count": 176
+    },
+    {
+      "id": 5592,
+      "actor": {
+        "name": "Wieke Paulusma",
+        "party": "D66"
+      },
+      "char_count": 387,
+      "word_count": 69,
+      "sentence_count": 6,
+      "syllable_count": 107,
+      "long_word_count": 16,
+      "unique_word_count": 55,
+      "token_count": 95
+    },
+    {
+      "id": 5593,
+      "actor": {
+        "name": "Isa Kahraman",
+        "party": "NSC"
+      },
+      "char_count": 430,
+      "word_count": 78,
+      "sentence_count": 3,
+      "syllable_count": 123,
+      "long_word_count": 13,
+      "unique_word_count": 48,
+      "token_count": 102
+    },
+    {
+      "id": 5594,
+      "actor": {
+        "name": "Wieke Paulusma",
+        "party": "D66"
+      },
+      "char_count": 262,
+      "word_count": 51,
+      "sentence_count": 2,
+      "syllable_count": 69,
+      "long_word_count": 9,
+      "unique_word_count": 37,
+      "token_count": 63
+    },
+    {
+      "id": 5595,
+      "actor": {
+        "name": "Gideon van Meijeren",
+        "party": "FVD"
+      },
+      "char_count": 666,
+      "word_count": 106,
+      "sentence_count": 5,
+      "syllable_count": 188,
+      "long_word_count": 29,
+      "unique_word_count": 77,
+      "token_count": 155
+    },
+    {
+      "id": 5596,
+      "actor": {
+        "name": "Wieke Paulusma",
+        "party": "D66"
+      },
+      "char_count": 371,
+      "word_count": 61,
+      "sentence_count": 4,
+      "syllable_count": 99,
+      "long_word_count": 17,
+      "unique_word_count": 52,
+      "token_count": 85
+    },
+    {
+      "id": 5597,
+      "actor": {
+        "name": "Gideon van Meijeren",
+        "party": "FVD"
+      },
+      "char_count": 1329,
+      "word_count": 199,
+      "sentence_count": 11,
+      "syllable_count": 375,
+      "long_word_count": 61,
+      "unique_word_count": 121,
+      "token_count": 291
+    },
+    {
+      "id": 5599,
+      "actor": {
+        "name": "Wieke Paulusma",
+        "party": "D66"
+      },
+      "char_count": 651,
+      "word_count": 118,
+      "sentence_count": 8,
+      "syllable_count": 176,
+      "long_word_count": 23,
+      "unique_word_count": 86,
+      "token_count": 158
+    },
+    {
+      "id": 5601,
+      "actor": {
+        "name": "Gideon van Meijeren",
+        "party": "FVD"
+      },
+      "char_count": 51,
+      "word_count": 10,
+      "sentence_count": 1,
+      "syllable_count": 13,
+      "long_word_count": 1,
+      "unique_word_count": 10,
+      "token_count": 17
+    },
+    {
+      "id": 5603,
+      "actor": {
+        "name": "Gideon van Meijeren",
+        "party": "FVD"
+      },
+      "char_count": 59,
+      "word_count": 12,
+      "sentence_count": 1,
+      "syllable_count": 15,
+      "long_word_count": 1,
+      "unique_word_count": 11,
+      "token_count": 18
+    },
+    {
+      "id": 5605,
+      "actor": {
+        "name": "Gideon van Meijeren",
+        "party": "FVD"
+      },
+      "char_count": 925,
+      "word_count": 152,
+      "sentence_count": 6,
+      "syllable_count": 258,
+      "long_word_count": 35,
+      "unique_word_count": 97,
+      "token_count": 202
+    },
+    {
+      "id": 5606,
+      "actor": {
+        "name": "Wieke Paulusma",
+        "party": "D66"
+      },
+      "char_count": 473,
+      "word_count": 80,
+      "sentence_count": 4,
+      "syllable_count": 132,
+      "long_word_count": 21,
+      "unique_word_count": 64,
+      "token_count": 110
+    },
+    {
+      "id": 5608,
+      "actor": {
+        "name": "Jan Paternotte",
+        "party": "D66"
+      },
+      "char_count": 158,
+      "word_count": 27,
+      "sentence_count": 2,
+      "syllable_count": 42,
+      "long_word_count": 4,
+      "unique_word_count": 25,
+      "token_count": 43
+    },
+    {
+      "id": 5610,
+      "actor": {
+        "name": "Jan Paternotte",
+        "party": "D66"
+      },
+      "char_count": 531,
+      "word_count": 91,
+      "sentence_count": 5,
+      "syllable_count": 149,
+      "long_word_count": 23,
+      "unique_word_count": 63,
+      "token_count": 122
+    },
+    {
+      "id": 5611,
+      "actor": {
+        "name": "Wieke Paulusma",
+        "party": "D66"
+      },
+      "char_count": 710,
+      "word_count": 123,
+      "sentence_count": 7,
+      "syllable_count": 195,
+      "long_word_count": 30,
+      "unique_word_count": 78,
+      "token_count": 169
+    },
+    {
+      "id": 5613,
+      "actor": {
+        "name": "Wieke Paulusma",
+        "party": "D66"
+      },
+      "char_count": 3387,
+      "word_count": 578,
+      "sentence_count": 41,
+      "syllable_count": 918,
+      "long_word_count": 135,
+      "unique_word_count": 260,
+      "token_count": 750
+    },
+    {
+      "id": 5615,
+      "actor": {
+        "name": "Wieke Paulusma",
+        "party": "D66"
+      },
+      "char_count": 39,
+      "word_count": 5,
+      "sentence_count": 1,
+      "syllable_count": 10,
+      "long_word_count": 3,
+      "unique_word_count": 5,
+      "token_count": 11
+    },
+    {
+      "id": 5616,
+      "actor": {
+        "name": "Mirjam Bikker",
+        "party": "ChristenUnie"
+      },
+      "char_count": 446,
+      "word_count": 74,
+      "sentence_count": 8,
+      "syllable_count": 123,
+      "long_word_count": 19,
+      "unique_word_count": 53,
+      "token_count": 103
+    },
+    {
+      "id": 5618,
+      "actor": {
+        "name": "David van Weel",
+        "party": "VVD"
+      },
+      "char_count": 3840,
+      "word_count": 609,
+      "sentence_count": 35,
+      "syllable_count": 1096,
+      "long_word_count": 181,
+      "unique_word_count": 282,
+      "token_count": 820
+    },
+    {
+      "id": 5620,
+      "actor": {
+        "name": "Jan Paternotte",
+        "party": "D66"
+      },
+      "char_count": 727,
+      "word_count": 126,
+      "sentence_count": 7,
+      "syllable_count": 201,
+      "long_word_count": 28,
+      "unique_word_count": 89,
+      "token_count": 162
+    },
+    {
+      "id": 5622,
+      "actor": {
+        "name": "Jan Paternotte",
+        "party": "D66"
+      },
+      "char_count": 32,
+      "word_count": 5,
+      "sentence_count": 1,
+      "syllable_count": 9,
+      "long_word_count": 1,
+      "unique_word_count": 5,
+      "token_count": 12
+    },
+    {
+      "id": 5623,
+      "actor": {
+        "name": "David van Weel",
+        "party": "VVD"
+      },
+      "char_count": 548,
+      "word_count": 99,
+      "sentence_count": 7,
+      "syllable_count": 150,
+      "long_word_count": 19,
+      "unique_word_count": 73,
+      "token_count": 128
+    },
+    {
+      "id": 5624,
+      "actor": {
+        "name": "Jan Paternotte",
+        "party": "D66"
+      },
+      "char_count": 764,
+      "word_count": 130,
+      "sentence_count": 5,
+      "syllable_count": 210,
+      "long_word_count": 31,
+      "unique_word_count": 86,
+      "token_count": 168
+    },
+    {
+      "id": 5625,
+      "actor": {
+        "name": "David van Weel",
+        "party": "VVD"
+      },
+      "char_count": 365,
+      "word_count": 64,
+      "sentence_count": 3,
+      "syllable_count": 105,
+      "long_word_count": 14,
+      "unique_word_count": 50,
+      "token_count": 78
+    },
+    {
+      "id": 5627,
+      "actor": {
+        "name": "Daniëlle Hirsch",
+        "party": "GroenLinks-PvdA"
+      },
+      "char_count": 771,
+      "word_count": 126,
+      "sentence_count": 6,
+      "syllable_count": 212,
+      "long_word_count": 33,
+      "unique_word_count": 84,
+      "token_count": 167
+    },
+    {
+      "id": 5628,
+      "actor": {
+        "name": "David van Weel",
+        "party": "VVD"
+      },
+      "char_count": 2368,
+      "word_count": 389,
+      "sentence_count": 26,
+      "syllable_count": 647,
+      "long_word_count": 87,
+      "unique_word_count": 210,
+      "token_count": 526
+    },
+    {
+      "id": 5629,
+      "actor": {
+        "name": "Sarah Dobbe",
+        "party": "SP"
+      },
+      "char_count": 568,
+      "word_count": 96,
+      "sentence_count": 7,
+      "syllable_count": 150,
+      "long_word_count": 18,
+      "unique_word_count": 64,
+      "token_count": 129
+    },
+    {
+      "id": 5630,
+      "actor": {
+        "name": "David van Weel",
+        "party": "VVD"
+      },
+      "char_count": 854,
+      "word_count": 140,
+      "sentence_count": 9,
+      "syllable_count": 240,
+      "long_word_count": 30,
+      "unique_word_count": 97,
+      "token_count": 182
+    },
+    {
+      "id": 5632,
+      "actor": {
+        "name": "David van Weel",
+        "party": "VVD"
+      },
+      "char_count": 712,
+      "word_count": 106,
+      "sentence_count": 7,
+      "syllable_count": 191,
+      "long_word_count": 32,
+      "unique_word_count": 72,
+      "token_count": 140
+    },
+    {
+      "id": 5633,
+      "actor": {
+        "name": "Daniëlle Hirsch",
+        "party": "GroenLinks-PvdA"
+      },
+      "char_count": 733,
+      "word_count": 125,
+      "sentence_count": 5,
+      "syllable_count": 195,
+      "long_word_count": 22,
+      "unique_word_count": 72,
+      "token_count": 159
+    },
+    {
+      "id": 5635,
+      "actor": {
+        "name": "David van Weel",
+        "party": "VVD"
+      },
+      "char_count": 406,
+      "word_count": 61,
+      "sentence_count": 4,
+      "syllable_count": 106,
+      "long_word_count": 15,
+      "unique_word_count": 44,
+      "token_count": 93
+    },
+    {
+      "id": 5637,
+      "actor": {
+        "name": "Daniëlle Hirsch",
+        "party": "GroenLinks-PvdA"
+      },
+      "char_count": 148,
+      "word_count": 24,
+      "sentence_count": 1,
+      "syllable_count": 36,
+      "long_word_count": 6,
+      "unique_word_count": 24,
+      "token_count": 38
+    },
+    {
+      "id": 5639,
+      "actor": {
+        "name": "David van Weel",
+        "party": "VVD"
+      },
+      "char_count": 243,
+      "word_count": 41,
+      "sentence_count": 3,
+      "syllable_count": 68,
+      "long_word_count": 12,
+      "unique_word_count": 37,
+      "token_count": 54
+    },
+    {
+      "id": 5641,
+      "actor": {
+        "name": "David van Weel",
+        "party": "VVD"
+      },
+      "char_count": 61,
+      "word_count": 10,
+      "sentence_count": 1,
+      "syllable_count": 16,
+      "long_word_count": 2,
+      "unique_word_count": 10,
+      "token_count": 16
+    },
+    {
+      "id": 5643,
+      "actor": {
+        "name": "David van Weel",
+        "party": "VVD"
+      },
+      "char_count": 1489,
+      "word_count": 228,
+      "sentence_count": 16,
+      "syllable_count": 413,
+      "long_word_count": 66,
+      "unique_word_count": 133,
+      "token_count": 315
+    },
+    {
+      "id": 5645,
+      "actor": {
+        "name": "Judith Tielen",
+        "party": "VVD"
+      },
+      "char_count": 3108,
+      "word_count": 485,
+      "sentence_count": 28,
+      "syllable_count": 877,
+      "long_word_count": 140,
+      "unique_word_count": 229,
+      "token_count": 682
+    },
+    {
+      "id": 5647,
+      "actor": {
+        "name": "Judith Tielen",
+        "party": "VVD"
+      },
+      "char_count": 37,
+      "word_count": 5,
+      "sentence_count": 1,
+      "syllable_count": 10,
+      "long_word_count": 1,
+      "unique_word_count": 5,
+      "token_count": 11
+    },
+    {
+      "id": 5649,
+      "actor": {
+        "name": "Sarah Dobbe",
+        "party": "SP"
+      },
+      "char_count": 496,
+      "word_count": 86,
+      "sentence_count": 4,
+      "syllable_count": 140,
+      "long_word_count": 18,
+      "unique_word_count": 66,
+      "token_count": 113
+    },
+    {
+      "id": 5650,
+      "actor": {
+        "name": "Judith Tielen",
+        "party": "VVD"
+      },
+      "char_count": 397,
+      "word_count": 65,
+      "sentence_count": 6,
+      "syllable_count": 110,
+      "long_word_count": 16,
+      "unique_word_count": 50,
+      "token_count": 86
+    },
+    {
+      "id": 5652,
+      "actor": {
+        "name": "Jan Paternotte",
+        "party": "D66"
+      },
+      "char_count": 37,
+      "word_count": 7,
+      "sentence_count": 1,
+      "syllable_count": 10,
+      "long_word_count": 1,
+      "unique_word_count": 7,
+      "token_count": 14
+    },
+    {
+      "id": 5654,
+      "actor": {
+        "name": "Jan Paternotte",
+        "party": "D66"
+      },
+      "char_count": 36,
+      "word_count": 7,
+      "sentence_count": 1,
+      "syllable_count": 10,
+      "long_word_count": 1,
+      "unique_word_count": 7,
+      "token_count": 14
+    },
+    {
+      "id": 5656,
+      "actor": {
+        "name": "Jan Paternotte",
+        "party": "D66"
+      },
+      "char_count": 49,
+      "word_count": 9,
+      "sentence_count": 1,
+      "syllable_count": 13,
+      "long_word_count": 1,
+      "unique_word_count": 9,
+      "token_count": 17
+    },
+    {
+      "id": 5658,
+      "actor": {
+        "name": "Jan Paternotte",
+        "party": "D66"
+      },
+      "char_count": 116,
+      "word_count": 20,
+      "sentence_count": 1,
+      "syllable_count": 32,
+      "long_word_count": 5,
+      "unique_word_count": 20,
+      "token_count": 28
+    },
+    {
+      "id": 5660,
+      "actor": {
+        "name": "Judith Tielen",
+        "party": "VVD"
+      },
+      "char_count": 963,
+      "word_count": 152,
+      "sentence_count": 11,
+      "syllable_count": 264,
+      "long_word_count": 41,
+      "unique_word_count": 99,
+      "token_count": 214
+    },
+    {
+      "id": 5662,
+      "actor": {
+        "name": "Mirjam Bikker",
+        "party": "ChristenUnie"
+      },
+      "char_count": 613,
+      "word_count": 98,
+      "sentence_count": 8,
+      "syllable_count": 168,
+      "long_word_count": 24,
+      "unique_word_count": 67,
+      "token_count": 141
+    },
+    {
+      "id": 5663,
+      "actor": {
+        "name": "Mirjam Bikker",
+        "party": "ChristenUnie"
+      },
+      "char_count": 51,
+      "word_count": 7,
+      "sentence_count": 1,
+      "syllable_count": 14,
+      "long_word_count": 2,
+      "unique_word_count": 7,
+      "token_count": 16
+    },
+    {
+      "id": 5664,
+      "actor": {
+        "name": "Mirjam Bikker",
+        "party": "ChristenUnie"
+      },
+      "char_count": 42,
+      "word_count": 6,
+      "sentence_count": 1,
+      "syllable_count": 11,
+      "long_word_count": 2,
+      "unique_word_count": 6,
+      "token_count": 14
+    },
+    {
+      "id": 5666,
+      "actor": {
+        "name": "Chris Stoffer",
+        "party": "SGP"
+      },
+      "char_count": 275,
+      "word_count": 51,
+      "sentence_count": 4,
+      "syllable_count": 72,
+      "long_word_count": 6,
+      "unique_word_count": 43,
+      "token_count": 69
+    },
+    {
+      "id": 5667,
+      "actor": {
+        "name": "Chris Stoffer",
+        "party": "SGP"
+      },
+      "char_count": 34,
+      "word_count": 7,
+      "sentence_count": 1,
+      "syllable_count": 8,
+      "long_word_count": 1,
+      "unique_word_count": 7,
+      "token_count": 12
+    },
+    {
+      "id": 5669,
+      "actor": {
+        "name": "Jan Paternotte",
+        "party": "D66"
+      },
+      "char_count": 82,
+      "word_count": 15,
+      "sentence_count": 2,
+      "syllable_count": 22,
+      "long_word_count": 2,
+      "unique_word_count": 15,
+      "token_count": 25
+    },
+    {
+      "id": 5670,
+      "actor": {
+        "name": "Jan Paternotte",
+        "party": "D66"
+      },
+      "char_count": 698,
+      "word_count": 122,
+      "sentence_count": 7,
+      "syllable_count": 184,
+      "long_word_count": 22,
+      "unique_word_count": 83,
+      "token_count": 156
+    },
+    {
+      "id": 5672,
+      "actor": {
+        "name": "Jan Paternotte",
+        "party": "D66"
+      },
+      "char_count": 763,
+      "word_count": 131,
+      "sentence_count": 7,
+      "syllable_count": 217,
+      "long_word_count": 33,
+      "unique_word_count": 88,
+      "token_count": 167
+    },
+    {
+      "id": 5674,
+      "actor": {
+        "name": "Sarah Dobbe",
+        "party": "SP"
+      },
+      "char_count": 82,
+      "word_count": 16,
+      "sentence_count": 2,
+      "syllable_count": 22,
+      "long_word_count": 2,
+      "unique_word_count": 16,
+      "token_count": 23
+    },
+    {
+      "id": 5675,
+      "actor": {
+        "name": "Sarah Dobbe",
+        "party": "SP"
+      },
+      "char_count": 31,
+      "word_count": 6,
+      "sentence_count": 1,
+      "syllable_count": 8,
+      "long_word_count": 1,
+      "unique_word_count": 6,
+      "token_count": 11
+    },
+    {
+      "id": 5677,
+      "actor": {
+        "name": "Isa Kahraman",
+        "party": "NSC"
+      },
+      "char_count": 1010,
+      "word_count": 177,
+      "sentence_count": 9,
+      "syllable_count": 280,
+      "long_word_count": 34,
+      "unique_word_count": 112,
+      "token_count": 226
+    },
+    {
+      "id": 5679,
+      "actor": {
+        "name": "Gideon van Meijeren",
+        "party": "FVD"
+      },
+      "char_count": 1158,
+      "word_count": 184,
+      "sentence_count": 11,
+      "syllable_count": 324,
+      "long_word_count": 48,
+      "unique_word_count": 125,
+      "token_count": 267
+    },
+    {
+      "id": 5680,
+      "actor": {
+        "name": "Eric van der Burg",
+        "party": "VVD"
+      },
+      "char_count": 58,
+      "word_count": 10,
+      "sentence_count": 1,
+      "syllable_count": 16,
+      "long_word_count": 3,
+      "unique_word_count": 10,
+      "token_count": 15
+    },
+    {
+      "id": 5681,
+      "actor": {
+        "name": "Sarah Dobbe",
+        "party": "SP"
+      },
+      "char_count": 259,
+      "word_count": 46,
+      "sentence_count": 3,
+      "syllable_count": 71,
+      "long_word_count": 7,
+      "unique_word_count": 41,
+      "token_count": 64
+    },
+    {
+      "id": 5683,
+      "actor": {
+        "name": "Gideon van Meijeren",
+        "party": "FVD"
+      },
+      "char_count": 274,
+      "word_count": 50,
+      "sentence_count": 2,
+      "syllable_count": 73,
+      "long_word_count": 8,
+      "unique_word_count": 43,
+      "token_count": 67
+    },
+    {
+      "id": 5685,
+      "actor": {
+        "name": "Daniëlle Hirsch",
+        "party": "GroenLinks-PvdA"
+      },
+      "char_count": 671,
+      "word_count": 107,
+      "sentence_count": 7,
+      "syllable_count": 181,
+      "long_word_count": 27,
+      "unique_word_count": 76,
+      "token_count": 154
+    },
+    {
+      "id": 5686,
+      "actor": {
+        "name": "Eric van der Burg",
+        "party": "VVD"
+      },
+      "char_count": 160,
+      "word_count": 27,
+      "sentence_count": 2,
+      "syllable_count": 42,
+      "long_word_count": 7,
+      "unique_word_count": 25,
+      "token_count": 35
+    },
+    {
+      "id": 5687,
+      "actor": {
+        "name": "Wieke Paulusma",
+        "party": "D66"
+      },
+      "char_count": 313,
+      "word_count": 53,
+      "sentence_count": 4,
+      "syllable_count": 82,
+      "long_word_count": 11,
+      "unique_word_count": 41,
+      "token_count": 70
+    },
+    {
+      "id": 5689,
+      "actor": {
+        "name": "David van Weel",
+        "party": "VVD"
+      },
+      "char_count": 2232,
+      "word_count": 395,
+      "sentence_count": 36,
+      "syllable_count": 618,
+      "long_word_count": 75,
+      "unique_word_count": 179,
+      "token_count": 575
+    },
+    {
+      "id": 5691,
+      "actor": {
+        "name": "David van Weel",
+        "party": "VVD"
+      },
+      "char_count": 48,
+      "word_count": 7,
+      "sentence_count": 1,
+      "syllable_count": 14,
+      "long_word_count": 2,
+      "unique_word_count": 6,
+      "token_count": 13
+    },
+    {
+      "id": 5693,
+      "actor": {
+        "name": "David van Weel",
+        "party": "VVD"
+      },
+      "char_count": 696,
+      "word_count": 114,
+      "sentence_count": 10,
+      "syllable_count": 192,
+      "long_word_count": 26,
+      "unique_word_count": 78,
+      "token_count": 164
+    },
+    {
+      "id": 5694,
+      "actor": {
+        "name": "Jan Paternotte",
+        "party": "D66"
+      },
+      "char_count": 163,
+      "word_count": 26,
+      "sentence_count": 1,
+      "syllable_count": 46,
+      "long_word_count": 8,
+      "unique_word_count": 22,
+      "token_count": 40
+    },
+    {
+      "id": 5695,
+      "actor": {
+        "name": "David van Weel",
+        "party": "VVD"
+      },
+      "char_count": 59,
+      "word_count": 9,
+      "sentence_count": 2,
+      "syllable_count": 16,
+      "long_word_count": 3,
+      "unique_word_count": 8,
+      "token_count": 16
+    },
+    {
+      "id": 5696,
+      "actor": {
+        "name": "Jan Paternotte",
+        "party": "D66"
+      },
+      "char_count": 578,
+      "word_count": 100,
+      "sentence_count": 4,
+      "syllable_count": 149,
+      "long_word_count": 16,
+      "unique_word_count": 72,
+      "token_count": 142
+    },
+    {
+      "id": 5697,
+      "actor": {
+        "name": "David van Weel",
+        "party": "VVD"
+      },
+      "char_count": 268,
+      "word_count": 40,
+      "sentence_count": 2,
+      "syllable_count": 75,
+      "long_word_count": 12,
+      "unique_word_count": 35,
+      "token_count": 54
+    },
+    {
+      "id": 5698,
+      "actor": {
+        "name": "Daniëlle Hirsch",
+        "party": "GroenLinks-PvdA"
+      },
+      "char_count": 40,
+      "word_count": 5,
+      "sentence_count": 1,
+      "syllable_count": 8,
+      "long_word_count": 2,
+      "unique_word_count": 5,
+      "token_count": 13
+    },
+    {
+      "id": 5700,
+      "actor": {
+        "name": "Daniëlle Hirsch",
+        "party": "GroenLinks-PvdA"
+      },
+      "char_count": 446,
+      "word_count": 65,
+      "sentence_count": 4,
+      "syllable_count": 115,
+      "long_word_count": 22,
+      "unique_word_count": 45,
+      "token_count": 87
+    },
+    {
+      "id": 5701,
+      "actor": {
+        "name": "David van Weel",
+        "party": "VVD"
+      },
+      "char_count": 490,
+      "word_count": 75,
+      "sentence_count": 5,
+      "syllable_count": 127,
+      "long_word_count": 17,
+      "unique_word_count": 44,
+      "token_count": 103
+    },
+    {
+      "id": 5703,
+      "actor": {
+        "name": "Judith Tielen",
+        "party": "VVD"
+      },
+      "char_count": 732,
+      "word_count": 126,
+      "sentence_count": 12,
+      "syllable_count": 200,
+      "long_word_count": 28,
+      "unique_word_count": 80,
+      "token_count": 182
+    },
+    {
+      "id": 5705,
+      "actor": {
+        "name": "Mirjam Bikker",
+        "party": "ChristenUnie"
+      },
+      "char_count": 388,
+      "word_count": 65,
+      "sentence_count": 3,
+      "syllable_count": 108,
+      "long_word_count": 13,
+      "unique_word_count": 55,
+      "token_count": 85
+    },
+    {
+      "id": 5706,
+      "actor": {
+        "name": "Judith Tielen",
+        "party": "VVD"
+      },
+      "char_count": 940,
+      "word_count": 161,
+      "sentence_count": 11,
+      "syllable_count": 253,
+      "long_word_count": 30,
+      "unique_word_count": 101,
+      "token_count": 215
+    },
+    {
+      "id": 5707,
+      "actor": {
+        "name": "Mirjam Bikker",
+        "party": "ChristenUnie"
+      },
+      "char_count": 777,
+      "word_count": 132,
+      "sentence_count": 9,
+      "syllable_count": 213,
+      "long_word_count": 27,
+      "unique_word_count": 79,
+      "token_count": 173
+    },
+    {
+      "id": 5708,
+      "actor": {
+        "name": "Judith Tielen",
+        "party": "VVD"
+      },
+      "char_count": 486,
+      "word_count": 80,
+      "sentence_count": 5,
+      "syllable_count": 135,
+      "long_word_count": 19,
+      "unique_word_count": 65,
+      "token_count": 107
+    },
+    {
+      "id": 5710,
+      "actor": {
+        "name": "Jan Paternotte",
+        "party": "D66"
+      },
+      "char_count": 66,
+      "word_count": 11,
+      "sentence_count": 1,
+      "syllable_count": 18,
+      "long_word_count": 3,
+      "unique_word_count": 11,
+      "token_count": 18
+    },
+    {
+      "id": 5711,
+      "actor": {
+        "name": "Judith Tielen",
+        "party": "VVD"
+      },
+      "char_count": 1200,
+      "word_count": 200,
+      "sentence_count": 14,
+      "syllable_count": 329,
+      "long_word_count": 45,
+      "unique_word_count": 117,
+      "token_count": 278
+    },
+    {
+      "id": 5713,
+      "actor": {
+        "name": "Sarah Dobbe",
+        "party": "SP"
+      },
+      "char_count": 286,
+      "word_count": 46,
+      "sentence_count": 3,
+      "syllable_count": 76,
+      "long_word_count": 10,
+      "unique_word_count": 37,
+      "token_count": 71
+    },
+    {
+      "id": 5714,
+      "actor": {
+        "name": "Judith Tielen",
+        "party": "VVD"
+      },
+      "char_count": 856,
+      "word_count": 156,
+      "sentence_count": 10,
+      "syllable_count": 238,
+      "long_word_count": 29,
+      "unique_word_count": 99,
+      "token_count": 210
+    },
+    {
+      "id": 5716,
+      "actor": {
+        "name": "Isa Kahraman",
+        "party": "NSC"
+      },
+      "char_count": 685,
+      "word_count": 118,
+      "sentence_count": 8,
+      "syllable_count": 188,
+      "long_word_count": 24,
+      "unique_word_count": 74,
+      "token_count": 155
+    },
+    {
+      "id": 5717,
+      "actor": {
+        "name": "Judith Tielen",
+        "party": "VVD"
+      },
+      "char_count": 923,
+      "word_count": 158,
+      "sentence_count": 16,
+      "syllable_count": 254,
+      "long_word_count": 31,
+      "unique_word_count": 103,
+      "token_count": 215
+    },
+    {
+      "id": 5718,
+      "actor": {
+        "name": "Gideon van Meijeren",
+        "party": "FVD"
+      },
+      "char_count": 368,
+      "word_count": 63,
+      "sentence_count": 6,
+      "syllable_count": 101,
+      "long_word_count": 17,
+      "unique_word_count": 49,
+      "token_count": 91
+    },
+    {
+      "id": 5719,
+      "actor": {
+        "name": "Judith Tielen",
+        "party": "VVD"
+      },
+      "char_count": 89,
+      "word_count": 16,
+      "sentence_count": 1,
+      "syllable_count": 24,
+      "long_word_count": 3,
+      "unique_word_count": 15,
+      "token_count": 27
+    },
+    {
+      "id": 5721,
+      "actor": {
+        "name": "Diederik van Dijk",
+        "party": "SGP"
+      },
+      "char_count": 1295,
+      "word_count": 212,
+      "sentence_count": 14,
+      "syllable_count": 359,
+      "long_word_count": 54,
+      "unique_word_count": 123,
+      "token_count": 293
+    },
+    {
+      "id": 5722,
+      "actor": {
+        "name": "Diederik van Dijk",
+        "party": "SGP"
+      },
+      "char_count": 1051,
+      "word_count": 181,
+      "sentence_count": 17,
+      "syllable_count": 292,
+      "long_word_count": 40,
+      "unique_word_count": 119,
+      "token_count": 248
+    },
+    {
+      "id": 5723,
+      "actor": {
+        "name": "Elke Slagt-Tichelman",
+        "party": "GroenLinks-PvdA"
+      },
+      "char_count": 1194,
+      "word_count": 190,
+      "sentence_count": 15,
+      "syllable_count": 317,
+      "long_word_count": 50,
+      "unique_word_count": 129,
+      "token_count": 264
+    },
+    {
+      "id": 5724,
+      "actor": {
+        "name": "Sarah Dobbe",
+        "party": "SP"
+      },
+      "char_count": 2336,
+      "word_count": 389,
+      "sentence_count": 28,
+      "syllable_count": 635,
+      "long_word_count": 85,
+      "unique_word_count": 173,
+      "token_count": 512
+    },
+    {
+      "id": 5725,
+      "actor": {
+        "name": "Wieke Paulusma",
+        "party": "D66"
+      },
+      "char_count": 1663,
+      "word_count": 262,
+      "sentence_count": 16,
+      "syllable_count": 450,
+      "long_word_count": 67,
+      "unique_word_count": 151,
+      "token_count": 354
+    },
+    {
+      "id": 5726,
+      "actor": {
+        "name": "Vincent Karremans",
+        "party": "VVD"
+      },
+      "char_count": 3662,
+      "word_count": 603,
+      "sentence_count": 34,
+      "syllable_count": 1021,
+      "long_word_count": 145,
+      "unique_word_count": 267,
+      "token_count": 799
+    },
+    {
+      "id": 5727,
+      "actor": {
+        "name": "Sarah Dobbe",
+        "party": "SP"
+      },
+      "char_count": 504,
+      "word_count": 88,
+      "sentence_count": 4,
+      "syllable_count": 131,
+      "long_word_count": 16,
+      "unique_word_count": 56,
+      "token_count": 113
+    },
+    {
+      "id": 5728,
+      "actor": {
+        "name": "Vincent Karremans",
+        "party": "VVD"
+      },
+      "char_count": 1501,
+      "word_count": 240,
+      "sentence_count": 15,
+      "syllable_count": 419,
+      "long_word_count": 60,
+      "unique_word_count": 132,
+      "token_count": 331
+    },
+    {
+      "id": 5729,
+      "actor": {
+        "name": "Vincent Karremans",
+        "party": "VVD"
+      },
+      "char_count": 5553,
+      "word_count": 887,
+      "sentence_count": 75,
+      "syllable_count": 1551,
+      "long_word_count": 236,
+      "unique_word_count": 363,
+      "token_count": 1248
+    },
+    {
+      "id": 5730,
+      "actor": {
+        "name": "Sarah Dobbe",
+        "party": "SP"
+      },
+      "char_count": 909,
+      "word_count": 154,
+      "sentence_count": 11,
+      "syllable_count": 248,
+      "long_word_count": 36,
+      "unique_word_count": 93,
+      "token_count": 202
+    },
+    {
+      "id": 5731,
+      "actor": {
+        "name": "Vincent Karremans",
+        "party": "VVD"
+      },
+      "char_count": 1078,
+      "word_count": 178,
+      "sentence_count": 14,
+      "syllable_count": 295,
+      "long_word_count": 43,
+      "unique_word_count": 109,
+      "token_count": 237
+    },
+    {
+      "id": 5732,
+      "actor": {
+        "name": "Vincent Karremans",
+        "party": "VVD"
+      },
+      "char_count": 307,
+      "word_count": 50,
+      "sentence_count": 5,
+      "syllable_count": 85,
+      "long_word_count": 12,
+      "unique_word_count": 44,
+      "token_count": 70
+    },
+    {
+      "id": 5733,
+      "actor": {
+        "name": "Diederik van Dijk",
+        "party": "SGP"
+      },
+      "char_count": 3832,
+      "word_count": 587,
+      "sentence_count": 43,
+      "syllable_count": 1064,
+      "long_word_count": 173,
+      "unique_word_count": 296,
+      "token_count": 844
+    },
+    {
+      "id": 5734,
+      "actor": {
+        "name": "Fleur Agema",
+        "party": "PVV"
+      },
+      "char_count": 3041,
+      "word_count": 487,
+      "sentence_count": 32,
+      "syllable_count": 844,
+      "long_word_count": 123,
+      "unique_word_count": 223,
+      "token_count": 679
+    },
+    {
+      "id": 5735,
+      "actor": {
+        "name": "Fleur Agema",
+        "party": "PVV"
+      },
+      "char_count": 1491,
+      "word_count": 213,
+      "sentence_count": 9,
+      "syllable_count": 424,
+      "long_word_count": 72,
+      "unique_word_count": 122,
+      "token_count": 314
+    },
+    {
+      "id": 5736,
+      "actor": {
+        "name": "Gideon van Meijeren",
+        "party": "FVD"
+      },
+      "char_count": 3581,
+      "word_count": 571,
+      "sentence_count": 24,
+      "syllable_count": 1013,
+      "long_word_count": 156,
+      "unique_word_count": 263,
+      "token_count": 789
+    },
+    {
+      "id": 5737,
+      "actor": {
+        "name": "Sophie Hermans",
+        "party": "VVD"
+      },
+      "char_count": 6678,
+      "word_count": 1048,
+      "sentence_count": 56,
+      "syllable_count": 1861,
+      "long_word_count": 276,
+      "unique_word_count": 433,
+      "token_count": 1490
+    },
+    {
+      "id": 5738,
+      "actor": {
+        "name": "Gideon van Meijeren",
+        "party": "FVD"
+      },
+      "char_count": 1108,
+      "word_count": 174,
+      "sentence_count": 14,
+      "syllable_count": 301,
+      "long_word_count": 49,
+      "unique_word_count": 116,
+      "token_count": 260
+    },
+    {
+      "id": 5739,
+      "actor": {
+        "name": "Gideon van Meijeren",
+        "party": "FVD"
+      },
+      "char_count": 867,
+      "word_count": 142,
+      "sentence_count": 8,
+      "syllable_count": 239,
+      "long_word_count": 37,
+      "unique_word_count": 94,
+      "token_count": 201
+    },
+    {
+      "id": 5740,
+      "actor": {
+        "name": "Sophie Hermans",
+        "party": "VVD"
+      },
+      "char_count": 600,
+      "word_count": 105,
+      "sentence_count": 7,
+      "syllable_count": 169,
+      "long_word_count": 21,
+      "unique_word_count": 66,
+      "token_count": 140
+    },
+    {
+      "id": 5741,
+      "actor": {
+        "name": "René Claassen",
+        "party": "PVV"
+      },
+      "char_count": 2851,
+      "word_count": 451,
+      "sentence_count": 29,
+      "syllable_count": 793,
+      "long_word_count": 133,
+      "unique_word_count": 237,
+      "token_count": 612
+    },
+    {
+      "id": 5742,
+      "actor": {
+        "name": "Vincent Karremans",
+        "party": "VVD"
+      },
+      "char_count": 3663,
+      "word_count": 606,
+      "sentence_count": 40,
+      "syllable_count": 1009,
+      "long_word_count": 141,
+      "unique_word_count": 275,
+      "token_count": 833
+    },
+    {
+      "id": 5743,
+      "actor": {
+        "name": "Wieke Paulusma",
+        "party": "D66"
+      },
+      "char_count": 194,
+      "word_count": 30,
+      "sentence_count": 3,
+      "syllable_count": 54,
+      "long_word_count": 10,
+      "unique_word_count": 24,
+      "token_count": 47
+    },
+    {
+      "id": 5745,
+      "actor": {
+        "name": "Sophie Hermans",
+        "party": "VVD"
+      },
+      "char_count": 5650,
+      "word_count": 925,
+      "sentence_count": 54,
+      "syllable_count": 1547,
+      "long_word_count": 248,
+      "unique_word_count": 373,
+      "token_count": 1224
+    },
+    {
+      "id": 5747,
+      "actor": {
+        "name": "Mirjam Bikker",
+        "party": "ChristenUnie"
+      },
+      "char_count": 895,
+      "word_count": 148,
+      "sentence_count": 15,
+      "syllable_count": 244,
+      "long_word_count": 31,
+      "unique_word_count": 99,
+      "token_count": 197
+    },
+    {
+      "id": 5748,
+      "actor": {
+        "name": "Sophie Hermans",
+        "party": "VVD"
+      },
+      "char_count": 1744,
+      "word_count": 292,
+      "sentence_count": 20,
+      "syllable_count": 481,
+      "long_word_count": 73,
+      "unique_word_count": 140,
+      "token_count": 379
+    },
+    {
+      "id": 5749,
+      "actor": {
+        "name": "Mirjam Bikker",
+        "party": "ChristenUnie"
+      },
+      "char_count": 1121,
+      "word_count": 187,
+      "sentence_count": 9,
+      "syllable_count": 312,
+      "long_word_count": 42,
+      "unique_word_count": 111,
+      "token_count": 245
+    },
+    {
+      "id": 5750,
+      "actor": {
+        "name": "Sophie Hermans",
+        "party": "VVD"
+      },
+      "char_count": 992,
+      "word_count": 176,
+      "sentence_count": 7,
+      "syllable_count": 279,
+      "long_word_count": 36,
+      "unique_word_count": 100,
+      "token_count": 222
+    },
+    {
+      "id": 5752,
+      "actor": {
+        "name": "Mirjam Bikker",
+        "party": "ChristenUnie"
+      },
+      "char_count": 488,
+      "word_count": 80,
+      "sentence_count": 9,
+      "syllable_count": 132,
+      "long_word_count": 20,
+      "unique_word_count": 68,
+      "token_count": 118
+    },
+    {
+      "id": 5753,
+      "actor": {
+        "name": "Sophie Hermans",
+        "party": "VVD"
+      },
+      "char_count": 1091,
+      "word_count": 195,
+      "sentence_count": 11,
+      "syllable_count": 300,
+      "long_word_count": 41,
+      "unique_word_count": 106,
+      "token_count": 245
+    },
+    {
+      "id": 5754,
+      "actor": {
+        "name": "Diederik van Dijk",
+        "party": "SGP"
+      },
+      "char_count": 739,
+      "word_count": 120,
+      "sentence_count": 9,
+      "syllable_count": 199,
+      "long_word_count": 31,
+      "unique_word_count": 95,
+      "token_count": 164
+    },
+    {
+      "id": 5755,
+      "actor": {
+        "name": "Sophie Hermans",
+        "party": "VVD"
+      },
+      "char_count": 1144,
+      "word_count": 187,
+      "sentence_count": 6,
+      "syllable_count": 315,
+      "long_word_count": 45,
+      "unique_word_count": 103,
+      "token_count": 258
+    },
+    {
+      "id": 5756,
+      "actor": {
+        "name": "Diederik van Dijk",
+        "party": "SGP"
+      },
+      "char_count": 598,
+      "word_count": 102,
+      "sentence_count": 6,
+      "syllable_count": 169,
+      "long_word_count": 20,
+      "unique_word_count": 80,
+      "token_count": 136
+    },
+    {
+      "id": 5757,
+      "actor": {
+        "name": "Sophie Hermans",
+        "party": "VVD"
+      },
+      "char_count": 687,
+      "word_count": 117,
+      "sentence_count": 6,
+      "syllable_count": 192,
+      "long_word_count": 23,
+      "unique_word_count": 69,
+      "token_count": 142
+    },
+    {
+      "id": 5759,
+      "actor": {
+        "name": "Wieke Paulusma",
+        "party": "D66"
+      },
+      "char_count": 858,
+      "word_count": 148,
+      "sentence_count": 9,
+      "syllable_count": 220,
+      "long_word_count": 33,
+      "unique_word_count": 93,
+      "token_count": 195
+    },
+    {
+      "id": 5760,
+      "actor": {
+        "name": "Sophie Hermans",
+        "party": "VVD"
+      },
+      "char_count": 1245,
+      "word_count": 220,
+      "sentence_count": 14,
+      "syllable_count": 327,
+      "long_word_count": 41,
+      "unique_word_count": 129,
+      "token_count": 281
+    },
+    {
+      "id": 5762,
+      "actor": {
+        "name": "Diederik van Dijk",
+        "party": "SGP"
+      },
+      "char_count": 3384,
+      "word_count": 542,
+      "sentence_count": 34,
+      "syllable_count": 959,
+      "long_word_count": 150,
+      "unique_word_count": 261,
+      "token_count": 756
+    },
+    {
+      "id": 5764,
+      "actor": {
+        "name": "Sophie Hermans",
+        "party": "VVD"
+      },
+      "char_count": 688,
+      "word_count": 124,
+      "sentence_count": 4,
+      "syllable_count": 189,
+      "long_word_count": 23,
+      "unique_word_count": 85,
+      "token_count": 165
+    },
+    {
+      "id": 5765,
+      "actor": {
+        "name": "Diederik van Dijk",
+        "party": "SGP"
+      },
+      "char_count": 1053,
+      "word_count": 186,
+      "sentence_count": 7,
+      "syllable_count": 293,
+      "long_word_count": 31,
+      "unique_word_count": 108,
+      "token_count": 241
+    },
+    {
+      "id": 5766,
+      "actor": {
+        "name": "Sophie Hermans",
+        "party": "VVD"
+      },
+      "char_count": 851,
+      "word_count": 143,
+      "sentence_count": 6,
+      "syllable_count": 235,
+      "long_word_count": 37,
+      "unique_word_count": 90,
+      "token_count": 182
+    },
+    {
+      "id": 5767,
+      "actor": {
+        "name": "Diederik van Dijk",
+        "party": "SGP"
+      },
+      "char_count": 475,
+      "word_count": 83,
+      "sentence_count": 1,
+      "syllable_count": 126,
+      "long_word_count": 19,
+      "unique_word_count": 61,
+      "token_count": 112
+    },
+    {
+      "id": 5769,
+      "actor": {
+        "name": "Wieke Paulusma",
+        "party": "D66"
+      },
+      "char_count": 728,
+      "word_count": 119,
+      "sentence_count": 7,
+      "syllable_count": 186,
+      "long_word_count": 30,
+      "unique_word_count": 75,
+      "token_count": 176
+    },
+    {
+      "id": 5770,
+      "actor": {
+        "name": "Diederik van Dijk",
+        "party": "SGP"
+      },
+      "char_count": 905,
+      "word_count": 159,
+      "sentence_count": 8,
+      "syllable_count": 246,
+      "long_word_count": 29,
+      "unique_word_count": 94,
+      "token_count": 214
+    },
+    {
+      "id": 5772,
+      "actor": {
+        "name": "Mirjam Bikker",
+        "party": "ChristenUnie"
+      },
+      "char_count": 6705,
+      "word_count": 1113,
+      "sentence_count": 69,
+      "syllable_count": 1879,
+      "long_word_count": 261,
+      "unique_word_count": 394,
+      "token_count": 1416
+    },
+    {
+      "id": 5774,
+      "actor": {
+        "name": "Wieke Paulusma",
+        "party": "D66"
+      },
+      "char_count": 3775,
+      "word_count": 599,
+      "sentence_count": 35,
+      "syllable_count": 1077,
+      "long_word_count": 177,
+      "unique_word_count": 268,
+      "token_count": 821
+    },
+    {
+      "id": 5776,
+      "actor": {
+        "name": "Mirjam Bikker",
+        "party": "ChristenUnie"
+      },
+      "char_count": 1433,
+      "word_count": 233,
+      "sentence_count": 15,
+      "syllable_count": 391,
+      "long_word_count": 52,
+      "unique_word_count": 143,
+      "token_count": 330
+    },
+    {
+      "id": 5777,
+      "actor": {
+        "name": "Wieke Paulusma",
+        "party": "D66"
+      },
+      "char_count": 1980,
+      "word_count": 342,
+      "sentence_count": 20,
+      "syllable_count": 542,
+      "long_word_count": 80,
+      "unique_word_count": 169,
+      "token_count": 448
+    },
+    {
+      "id": 5779,
+      "actor": {
+        "name": "Mirjam Bikker",
+        "party": "ChristenUnie"
+      },
+      "char_count": 1870,
+      "word_count": 321,
+      "sentence_count": 24,
+      "syllable_count": 511,
+      "long_word_count": 57,
+      "unique_word_count": 173,
+      "token_count": 413
+    },
+    {
+      "id": 5780,
+      "actor": {
+        "name": "Wieke Paulusma",
+        "party": "D66"
+      },
+      "char_count": 1090,
+      "word_count": 183,
+      "sentence_count": 8,
+      "syllable_count": 300,
+      "long_word_count": 47,
+      "unique_word_count": 107,
+      "token_count": 239
+    },
+    {
+      "id": 5782,
+      "actor": {
+        "name": "Mirjam Bikker",
+        "party": "ChristenUnie"
+      },
+      "char_count": 375,
+      "word_count": 70,
+      "sentence_count": 2,
+      "syllable_count": 102,
+      "long_word_count": 10,
+      "unique_word_count": 48,
+      "token_count": 87
+    },
+    {
+      "id": 5783,
+      "actor": {
+        "name": "Wieke Paulusma",
+        "party": "D66"
+      },
+      "char_count": 1015,
+      "word_count": 167,
+      "sentence_count": 11,
+      "syllable_count": 268,
+      "long_word_count": 38,
+      "unique_word_count": 104,
+      "token_count": 221
+    },
+    {
+      "id": 5785,
+      "actor": {
+        "name": "Diederik van Dijk",
+        "party": "SGP"
+      },
+      "char_count": 834,
+      "word_count": 139,
+      "sentence_count": 5,
+      "syllable_count": 225,
+      "long_word_count": 38,
+      "unique_word_count": 91,
+      "token_count": 184
+    },
+    {
+      "id": 5786,
+      "actor": {
+        "name": "Wieke Paulusma",
+        "party": "D66"
+      },
+      "char_count": 402,
+      "word_count": 74,
+      "sentence_count": 3,
+      "syllable_count": 109,
+      "long_word_count": 12,
+      "unique_word_count": 60,
+      "token_count": 92
+    },
+    {
+      "id": 5787,
+      "actor": {
+        "name": "Diederik van Dijk",
+        "party": "SGP"
+      },
+      "char_count": 449,
+      "word_count": 73,
+      "sentence_count": 5,
+      "syllable_count": 121,
+      "long_word_count": 20,
+      "unique_word_count": 55,
+      "token_count": 102
+    },
+    {
+      "id": 5788,
+      "actor": {
+        "name": "Wieke Paulusma",
+        "party": "D66"
+      },
+      "char_count": 842,
+      "word_count": 156,
+      "sentence_count": 9,
+      "syllable_count": 236,
+      "long_word_count": 29,
+      "unique_word_count": 92,
+      "token_count": 182
+    },
+    {
+      "id": 5790,
+      "actor": {
+        "name": "Daniëlle Jansen",
+        "party": "NSC"
+      },
+      "char_count": 3577,
+      "word_count": 541,
+      "sentence_count": 30,
+      "syllable_count": 1023,
+      "long_word_count": 186,
+      "unique_word_count": 246,
+      "token_count": 721
+    },
+    {
+      "id": 5792,
+      "actor": {
+        "name": "Sophie Hermans",
+        "party": "VVD"
+      },
+      "char_count": 288,
+      "word_count": 50,
+      "sentence_count": 3,
+      "syllable_count": 78,
+      "long_word_count": 12,
+      "unique_word_count": 39,
+      "token_count": 68
+    },
+    {
+      "id": 5793,
+      "actor": {
+        "name": "Daniëlle Jansen",
+        "party": "NSC"
+      },
+      "char_count": 114,
+      "word_count": 19,
+      "sentence_count": 2,
+      "syllable_count": 32,
+      "long_word_count": 3,
+      "unique_word_count": 19,
+      "token_count": 29
+    },
+    {
+      "id": 5795,
+      "actor": {
+        "name": "Vicky Maeijer",
+        "party": "PVV"
+      },
+      "char_count": 4900,
+      "word_count": 789,
+      "sentence_count": 64,
+      "syllable_count": 1361,
+      "long_word_count": 211,
+      "unique_word_count": 327,
+      "token_count": 1085
+    },
+    {
+      "id": 5798,
+      "actor": {
+        "name": "Lisa Westerveld",
+        "party": "GroenLinks-PvdA"
+      },
+      "char_count": 5901,
+      "word_count": 968,
+      "sentence_count": 70,
+      "syllable_count": 1671,
+      "long_word_count": 260,
+      "unique_word_count": 364,
+      "token_count": 1276
+    },
+    {
+      "id": 5801,
+      "actor": {
+        "name": "Elke Slagt-Tichelman",
+        "party": "GroenLinks-PvdA"
+      },
+      "char_count": 155,
+      "word_count": 26,
+      "sentence_count": 1,
+      "syllable_count": 38,
+      "long_word_count": 8,
+      "unique_word_count": 23,
+      "token_count": 43
+    },
+    {
+      "id": 5804,
+      "actor": {
+        "name": "Elke Slagt-Tichelman",
+        "party": "GroenLinks-PvdA"
+      },
+      "char_count": 6297,
+      "word_count": 1021,
+      "sentence_count": 59,
+      "syllable_count": 1766,
+      "long_word_count": 248,
+      "unique_word_count": 370,
+      "token_count": 1415
+    },
+    {
+      "id": 5806,
+      "actor": {
+        "name": "Mirjam Bikker",
+        "party": "ChristenUnie"
+      },
+      "char_count": 810,
+      "word_count": 137,
+      "sentence_count": 9,
+      "syllable_count": 225,
+      "long_word_count": 28,
+      "unique_word_count": 91,
+      "token_count": 180
+    },
+    {
+      "id": 5807,
+      "actor": {
+        "name": "Elke Slagt-Tichelman",
+        "party": "GroenLinks-PvdA"
+      },
+      "char_count": 587,
+      "word_count": 93,
+      "sentence_count": 6,
+      "syllable_count": 156,
+      "long_word_count": 24,
+      "unique_word_count": 69,
+      "token_count": 137
+    },
+    {
+      "id": 5808,
+      "actor": {
+        "name": "Mirjam Bikker",
+        "party": "ChristenUnie"
+      },
+      "char_count": 198,
+      "word_count": 33,
+      "sentence_count": 1,
+      "syllable_count": 55,
+      "long_word_count": 6,
+      "unique_word_count": 29,
+      "token_count": 47
+    },
+    {
+      "id": 5809,
+      "actor": {
+        "name": "Elke Slagt-Tichelman",
+        "party": "GroenLinks-PvdA"
+      },
+      "char_count": 570,
+      "word_count": 89,
+      "sentence_count": 5,
+      "syllable_count": 157,
+      "long_word_count": 23,
+      "unique_word_count": 62,
+      "token_count": 135
+    },
+    {
+      "id": 5811,
+      "actor": {
+        "name": "Elke Slagt-Tichelman",
+        "party": "GroenLinks-PvdA"
+      },
+      "char_count": 2838,
+      "word_count": 476,
+      "sentence_count": 30,
+      "syllable_count": 783,
+      "long_word_count": 107,
+      "unique_word_count": 214,
+      "token_count": 661
+    },
+    {
+      "id": 5813,
+      "actor": {
+        "name": "Daniëlle Jansen",
+        "party": "NSC"
+      },
+      "char_count": 877,
+      "word_count": 161,
+      "sentence_count": 12,
+      "syllable_count": 231,
+      "long_word_count": 28,
+      "unique_word_count": 94,
+      "token_count": 212
+    },
+    {
+      "id": 5814,
+      "actor": {
+        "name": "Elke Slagt-Tichelman",
+        "party": "GroenLinks-PvdA"
+      },
+      "char_count": 4035,
+      "word_count": 694,
+      "sentence_count": 53,
+      "syllable_count": 1109,
+      "long_word_count": 139,
+      "unique_word_count": 298,
+      "token_count": 914
+    },
+    {
+      "id": 5816,
+      "actor": {
+        "name": "Daniëlle Jansen",
+        "party": "NSC"
+      },
+      "char_count": 701,
+      "word_count": 130,
+      "sentence_count": 7,
+      "syllable_count": 181,
+      "long_word_count": 27,
+      "unique_word_count": 84,
+      "token_count": 158
+    },
+    {
+      "id": 5817,
+      "actor": {
+        "name": "Elke Slagt-Tichelman",
+        "party": "GroenLinks-PvdA"
+      },
+      "char_count": 5611,
+      "word_count": 870,
+      "sentence_count": 54,
+      "syllable_count": 1568,
+      "long_word_count": 236,
+      "unique_word_count": 380,
+      "token_count": 1259
+    },
+    {
+      "id": 5819,
+      "actor": {
+        "name": "Mirjam Bikker",
+        "party": "ChristenUnie"
+      },
+      "char_count": 1504,
+      "word_count": 249,
+      "sentence_count": 14,
+      "syllable_count": 413,
+      "long_word_count": 55,
+      "unique_word_count": 139,
+      "token_count": 315
+    },
+    {
+      "id": 5820,
+      "actor": {
+        "name": "Elke Slagt-Tichelman",
+        "party": "GroenLinks-PvdA"
+      },
+      "char_count": 925,
+      "word_count": 151,
+      "sentence_count": 10,
+      "syllable_count": 256,
+      "long_word_count": 40,
+      "unique_word_count": 100,
+      "token_count": 211
+    },
+    {
+      "id": 5821,
+      "actor": {
+        "name": "Mirjam Bikker",
+        "party": "ChristenUnie"
+      },
+      "char_count": 292,
+      "word_count": 52,
+      "sentence_count": 3,
+      "syllable_count": 75,
+      "long_word_count": 9,
+      "unique_word_count": 43,
+      "token_count": 72
+    },
+    {
+      "id": 5822,
+      "actor": {
+        "name": "Elke Slagt-Tichelman",
+        "party": "GroenLinks-PvdA"
+      },
+      "char_count": 4887,
+      "word_count": 815,
+      "sentence_count": 47,
+      "syllable_count": 1367,
+      "long_word_count": 201,
+      "unique_word_count": 333,
+      "token_count": 1099
+    },
+    {
+      "id": 5824,
+      "actor": {
+        "name": "Diederik van Dijk",
+        "party": "SGP"
+      },
+      "char_count": 634,
+      "word_count": 104,
+      "sentence_count": 6,
+      "syllable_count": 170,
+      "long_word_count": 29,
+      "unique_word_count": 82,
+      "token_count": 148
+    },
+    {
+      "id": 5825,
+      "actor": {
+        "name": "Elke Slagt-Tichelman",
+        "party": "GroenLinks-PvdA"
+      },
+      "char_count": 555,
+      "word_count": 94,
+      "sentence_count": 6,
+      "syllable_count": 151,
+      "long_word_count": 21,
+      "unique_word_count": 64,
+      "token_count": 132
+    },
+    {
+      "id": 5826,
+      "actor": {
+        "name": "Diederik van Dijk",
+        "party": "SGP"
+      },
+      "char_count": 505,
+      "word_count": 85,
+      "sentence_count": 7,
+      "syllable_count": 131,
+      "long_word_count": 17,
+      "unique_word_count": 65,
+      "token_count": 116
+    },
+    {
+      "id": 5827,
+      "actor": {
+        "name": "Elke Slagt-Tichelman",
+        "party": "GroenLinks-PvdA"
+      },
+      "char_count": 251,
+      "word_count": 37,
+      "sentence_count": 3,
+      "syllable_count": 69,
+      "long_word_count": 12,
+      "unique_word_count": 33,
+      "token_count": 60
+    },
+    {
+      "id": 5829,
+      "actor": {
+        "name": "Vicky Maeijer",
+        "party": "PVV"
+      },
+      "char_count": 726,
+      "word_count": 123,
+      "sentence_count": 9,
+      "syllable_count": 203,
+      "long_word_count": 28,
+      "unique_word_count": 83,
+      "token_count": 169
+    },
+    {
+      "id": 5830,
+      "actor": {
+        "name": "Elke Slagt-Tichelman",
+        "party": "GroenLinks-PvdA"
+      },
+      "char_count": 296,
+      "word_count": 52,
+      "sentence_count": 4,
+      "syllable_count": 80,
+      "long_word_count": 11,
+      "unique_word_count": 46,
+      "token_count": 69
+    },
+    {
+      "id": 5831,
+      "actor": {
+        "name": "Vicky Maeijer",
+        "party": "PVV"
+      },
+      "char_count": 1030,
+      "word_count": 173,
+      "sentence_count": 13,
+      "syllable_count": 279,
+      "long_word_count": 41,
+      "unique_word_count": 99,
+      "token_count": 234
+    },
+    {
+      "id": 5832,
+      "actor": {
+        "name": "Elke Slagt-Tichelman",
+        "party": "GroenLinks-PvdA"
+      },
+      "char_count": 921,
+      "word_count": 147,
+      "sentence_count": 7,
+      "syllable_count": 256,
+      "long_word_count": 34,
+      "unique_word_count": 82,
+      "token_count": 213
+    },
+    {
+      "id": 5834,
+      "actor": {
+        "name": "Vicky Maeijer",
+        "party": "PVV"
+      },
+      "char_count": 339,
+      "word_count": 57,
+      "sentence_count": 4,
+      "syllable_count": 88,
+      "long_word_count": 12,
+      "unique_word_count": 50,
+      "token_count": 79
+    },
+    {
+      "id": 5835,
+      "actor": {
+        "name": "Elke Slagt-Tichelman",
+        "party": "GroenLinks-PvdA"
+      },
+      "char_count": 163,
+      "word_count": 22,
+      "sentence_count": 2,
+      "syllable_count": 39,
+      "long_word_count": 11,
+      "unique_word_count": 19,
+      "token_count": 41
+    },
+    {
+      "id": 5836,
+      "actor": {
+        "name": "Sophie Hermans",
+        "party": "VVD"
+      },
+      "char_count": 648,
+      "word_count": 113,
+      "sentence_count": 6,
+      "syllable_count": 176,
+      "long_word_count": 29,
+      "unique_word_count": 80,
+      "token_count": 147
+    },
+    {
+      "id": 5837,
+      "actor": {
+        "name": "Elke Slagt-Tichelman",
+        "party": "GroenLinks-PvdA"
+      },
+      "char_count": 363,
+      "word_count": 66,
+      "sentence_count": 6,
+      "syllable_count": 98,
+      "long_word_count": 12,
+      "unique_word_count": 49,
+      "token_count": 95
+    },
+    {
+      "id": 5839,
+      "actor": {
+        "name": "Mirjam Bikker",
+        "party": "ChristenUnie"
+      },
+      "char_count": 420,
+      "word_count": 70,
+      "sentence_count": 3,
+      "syllable_count": 116,
+      "long_word_count": 16,
+      "unique_word_count": 55,
+      "token_count": 93
+    },
+    {
+      "id": 5840,
+      "actor": {
+        "name": "Elke Slagt-Tichelman",
+        "party": "GroenLinks-PvdA"
+      },
+      "char_count": 916,
+      "word_count": 159,
+      "sentence_count": 11,
+      "syllable_count": 250,
+      "long_word_count": 25,
+      "unique_word_count": 98,
+      "token_count": 201
+    },
+    {
+      "id": 5842,
+      "actor": {
+        "name": "Wieke Paulusma",
+        "party": "D66"
+      },
+      "char_count": 814,
+      "word_count": 137,
+      "sentence_count": 9,
+      "syllable_count": 219,
+      "long_word_count": 34,
+      "unique_word_count": 86,
+      "token_count": 185
+    },
+    {
+      "id": 5843,
+      "actor": {
+        "name": "Elke Slagt-Tichelman",
+        "party": "GroenLinks-PvdA"
+      },
+      "char_count": 2389,
+      "word_count": 390,
+      "sentence_count": 26,
+      "syllable_count": 660,
+      "long_word_count": 102,
+      "unique_word_count": 209,
+      "token_count": 528
+    },
+    {
+      "id": 5845,
+      "actor": {
+        "name": "Mirjam Bikker",
+        "party": "ChristenUnie"
+      },
+      "char_count": 453,
+      "word_count": 83,
+      "sentence_count": 6,
+      "syllable_count": 121,
+      "long_word_count": 16,
+      "unique_word_count": 61,
+      "token_count": 112
+    },
+    {
+      "id": 5846,
+      "actor": {
+        "name": "Elke Slagt-Tichelman",
+        "party": "GroenLinks-PvdA"
+      },
+      "char_count": 341,
+      "word_count": 54,
+      "sentence_count": 4,
+      "syllable_count": 90,
+      "long_word_count": 11,
+      "unique_word_count": 45,
+      "token_count": 85
+    },
+    {
+      "id": 5848,
+      "actor": {
+        "name": "Sophie Hermans",
+        "party": "VVD"
+      },
+      "char_count": 578,
+      "word_count": 92,
+      "sentence_count": 4,
+      "syllable_count": 160,
+      "long_word_count": 29,
+      "unique_word_count": 69,
+      "token_count": 126
+    },
+    {
+      "id": 5849,
+      "actor": {
+        "name": "Elke Slagt-Tichelman",
+        "party": "GroenLinks-PvdA"
+      },
+      "char_count": 534,
+      "word_count": 83,
+      "sentence_count": 5,
+      "syllable_count": 151,
+      "long_word_count": 25,
+      "unique_word_count": 55,
+      "token_count": 121
+    },
+    {
+      "id": 5850,
+      "actor": {
+        "name": "Sophie Hermans",
+        "party": "VVD"
+      },
+      "char_count": 278,
+      "word_count": 47,
+      "sentence_count": 1,
+      "syllable_count": 76,
+      "long_word_count": 12,
+      "unique_word_count": 37,
+      "token_count": 69
+    },
+    {
+      "id": 5851,
+      "actor": {
+        "name": "Elke Slagt-Tichelman",
+        "party": "GroenLinks-PvdA"
+      },
+      "char_count": 674,
+      "word_count": 122,
+      "sentence_count": 8,
+      "syllable_count": 172,
+      "long_word_count": 18,
+      "unique_word_count": 83,
+      "token_count": 159
+    },
+    {
+      "id": 5853,
+      "actor": {
+        "name": "Pia Dijkstra",
+        "party": "D66"
+      },
+      "char_count": 5078,
+      "word_count": 815,
+      "sentence_count": 46,
+      "syllable_count": 1435,
+      "long_word_count": 229,
+      "unique_word_count": 342,
+      "token_count": 1114
+    },
+    {
+      "id": 5855,
+      "actor": {
+        "name": "Mirjam Bikker",
+        "party": "ChristenUnie"
+      },
+      "char_count": 772,
+      "word_count": 131,
+      "sentence_count": 6,
+      "syllable_count": 200,
+      "long_word_count": 33,
+      "unique_word_count": 87,
+      "token_count": 174
+    },
+    {
+      "id": 5856,
+      "actor": {
+        "name": "Pia Dijkstra",
+        "party": "D66"
+      },
+      "char_count": 261,
+      "word_count": 42,
+      "sentence_count": 2,
+      "syllable_count": 71,
+      "long_word_count": 11,
+      "unique_word_count": 37,
+      "token_count": 58
+    },
+    {
+      "id": 5858,
+      "actor": {
+        "name": "Diederik van Dijk",
+        "party": "SGP"
+      },
+      "char_count": 417,
+      "word_count": 75,
+      "sentence_count": 4,
+      "syllable_count": 112,
+      "long_word_count": 15,
+      "unique_word_count": 64,
+      "token_count": 99
+    },
+    {
+      "id": 5859,
+      "actor": {
+        "name": "Pia Dijkstra",
+        "party": "D66"
+      },
+      "char_count": 338,
+      "word_count": 46,
+      "sentence_count": 1,
+      "syllable_count": 96,
+      "long_word_count": 20,
+      "unique_word_count": 39,
+      "token_count": 69
+    },
+    {
+      "id": 5860,
+      "actor": {
+        "name": "Sophie Hermans",
+        "party": "VVD"
+      },
+      "char_count": 167,
+      "word_count": 27,
+      "sentence_count": 2,
+      "syllable_count": 48,
+      "long_word_count": 9,
+      "unique_word_count": 24,
+      "token_count": 41
+    },
+    {
+      "id": 5861,
+      "actor": {
+        "name": "Pia Dijkstra",
+        "party": "D66"
+      },
+      "char_count": 945,
+      "word_count": 171,
+      "sentence_count": 8,
+      "syllable_count": 253,
+      "long_word_count": 32,
+      "unique_word_count": 111,
+      "token_count": 202
+    },
+    {
+      "id": 5863,
+      "actor": {
+        "name": "Diederik van Dijk",
+        "party": "SGP"
+      },
+      "char_count": 730,
+      "word_count": 118,
+      "sentence_count": 5,
+      "syllable_count": 197,
+      "long_word_count": 31,
+      "unique_word_count": 80,
+      "token_count": 161
+    },
+    {
+      "id": 5864,
+      "actor": {
+        "name": "Pia Dijkstra",
+        "party": "D66"
+      },
+      "char_count": 849,
+      "word_count": 155,
+      "sentence_count": 11,
+      "syllable_count": 230,
+      "long_word_count": 27,
+      "unique_word_count": 100,
+      "token_count": 195
+    },
+    {
+      "id": 5865,
+      "actor": {
+        "name": "Diederik van Dijk",
+        "party": "SGP"
+      },
+      "char_count": 732,
+      "word_count": 128,
+      "sentence_count": 9,
+      "syllable_count": 197,
+      "long_word_count": 26,
+      "unique_word_count": 88,
+      "token_count": 169
+    },
+    {
+      "id": 5866,
+      "actor": {
+        "name": "Pia Dijkstra",
+        "party": "D66"
+      },
+      "char_count": 1094,
+      "word_count": 176,
+      "sentence_count": 12,
+      "syllable_count": 302,
+      "long_word_count": 49,
+      "unique_word_count": 106,
+      "token_count": 241
+    },
+    {
+      "id": 5868,
+      "actor": {
+        "name": "Diederik van Dijk",
+        "party": "SGP"
+      },
+      "char_count": 586,
+      "word_count": 93,
+      "sentence_count": 7,
+      "syllable_count": 155,
+      "long_word_count": 22,
+      "unique_word_count": 72,
+      "token_count": 136
+    },
+    {
+      "id": 5869,
+      "actor": {
+        "name": "Pia Dijkstra",
+        "party": "D66"
+      },
+      "char_count": 234,
+      "word_count": 41,
+      "sentence_count": 2,
+      "syllable_count": 62,
+      "long_word_count": 9,
+      "unique_word_count": 34,
+      "token_count": 49
+    },
+    {
+      "id": 5870,
+      "actor": {
+        "name": "Diederik van Dijk",
+        "party": "SGP"
+      },
+      "char_count": 432,
+      "word_count": 74,
+      "sentence_count": 6,
+      "syllable_count": 118,
+      "long_word_count": 18,
+      "unique_word_count": 59,
+      "token_count": 102
+    },
+    {
+      "id": 5871,
+      "actor": {
+        "name": "Pia Dijkstra",
+        "party": "D66"
+      },
+      "char_count": 535,
+      "word_count": 92,
+      "sentence_count": 8,
+      "syllable_count": 145,
+      "long_word_count": 18,
+      "unique_word_count": 67,
+      "token_count": 120
+    },
+    {
+      "id": 5873,
+      "actor": {
+        "name": "Pia Dijkstra",
+        "party": "D66"
+      },
+      "char_count": 39,
+      "word_count": 4,
+      "sentence_count": 1,
+      "syllable_count": 9,
+      "long_word_count": 3,
+      "unique_word_count": 4,
+      "token_count": 9
+    },
+    {
+      "id": 5875,
+      "actor": {
+        "name": "Vicky Maeijer",
+        "party": "PVV"
+      },
+      "char_count": 806,
+      "word_count": 140,
+      "sentence_count": 9,
+      "syllable_count": 214,
+      "long_word_count": 35,
+      "unique_word_count": 93,
+      "token_count": 181
+    },
+    {
+      "id": 5876,
+      "actor": {
+        "name": "Pia Dijkstra",
+        "party": "D66"
+      },
+      "char_count": 1186,
+      "word_count": 198,
+      "sentence_count": 18,
+      "syllable_count": 320,
+      "long_word_count": 48,
+      "unique_word_count": 112,
+      "token_count": 261
+    },
+    {
+      "id": 5878,
+      "actor": {
+        "name": "Vicky Maeijer",
+        "party": "PVV"
+      },
+      "char_count": 888,
+      "word_count": 157,
+      "sentence_count": 9,
+      "syllable_count": 236,
+      "long_word_count": 31,
+      "unique_word_count": 97,
+      "token_count": 205
+    },
+    {
+      "id": 5879,
+      "actor": {
+        "name": "Pia Dijkstra",
+        "party": "D66"
+      },
+      "char_count": 811,
+      "word_count": 148,
+      "sentence_count": 11,
+      "syllable_count": 216,
+      "long_word_count": 28,
+      "unique_word_count": 95,
+      "token_count": 182
+    },
+    {
+      "id": 5881,
+      "actor": {
+        "name": "Pia Dijkstra",
+        "party": "D66"
+      },
+      "char_count": 50,
+      "word_count": 5,
+      "sentence_count": 1,
+      "syllable_count": 13,
+      "long_word_count": 4,
+      "unique_word_count": 5,
+      "token_count": 12
+    },
+    {
+      "id": 5883,
+      "actor": {
+        "name": "Pia Dijkstra",
+        "party": "D66"
+      },
+      "char_count": 2012,
+      "word_count": 327,
+      "sentence_count": 22,
+      "syllable_count": 556,
+      "long_word_count": 89,
+      "unique_word_count": 180,
+      "token_count": 439
+    },
+    {
+      "id": 5885,
+      "actor": {
+        "name": "Mirjam Bikker",
+        "party": "ChristenUnie"
+      },
+      "char_count": 915,
+      "word_count": 162,
+      "sentence_count": 8,
+      "syllable_count": 240,
+      "long_word_count": 26,
+      "unique_word_count": 101,
+      "token_count": 210
+    },
+    {
+      "id": 5886,
+      "actor": {
+        "name": "Pia Dijkstra",
+        "party": "D66"
+      },
+      "char_count": 2913,
+      "word_count": 494,
+      "sentence_count": 33,
+      "syllable_count": 778,
+      "long_word_count": 108,
+      "unique_word_count": 225,
+      "token_count": 653
+    },
+    {
+      "id": 5887,
+      "actor": {
+        "name": "Mirjam Bikker",
+        "party": "ChristenUnie"
+      },
+      "char_count": 98,
+      "word_count": 14,
+      "sentence_count": 2,
+      "syllable_count": 27,
+      "long_word_count": 5,
+      "unique_word_count": 14,
+      "token_count": 27
+    },
+    {
+      "id": 5888,
+      "actor": {
+        "name": "Pia Dijkstra",
+        "party": "D66"
+      },
+      "char_count": 157,
+      "word_count": 28,
+      "sentence_count": 3,
+      "syllable_count": 41,
+      "long_word_count": 5,
+      "unique_word_count": 25,
+      "token_count": 39
+    },
+    {
+      "id": 5889,
+      "actor": {
+        "name": "Mirjam Bikker",
+        "party": "ChristenUnie"
+      },
+      "char_count": 84,
+      "word_count": 14,
+      "sentence_count": 1,
+      "syllable_count": 23,
+      "long_word_count": 3,
+      "unique_word_count": 13,
+      "token_count": 24
+    },
+    {
+      "id": 5890,
+      "actor": {
+        "name": "Pia Dijkstra",
+        "party": "D66"
+      },
+      "char_count": 760,
+      "word_count": 124,
+      "sentence_count": 8,
+      "syllable_count": 219,
+      "long_word_count": 39,
+      "unique_word_count": 83,
+      "token_count": 166
+    },
+    {
+      "id": 5891,
+      "actor": {
+        "name": "Mirjam Bikker",
+        "party": "ChristenUnie"
+      },
+      "char_count": 109,
+      "word_count": 17,
+      "sentence_count": 1,
+      "syllable_count": 29,
+      "long_word_count": 4,
+      "unique_word_count": 15,
+      "token_count": 27
+    },
+    {
+      "id": 5893,
+      "actor": {
+        "name": "Mirjam Bikker",
+        "party": "ChristenUnie"
+      },
+      "char_count": 42,
+      "word_count": 5,
+      "sentence_count": 1,
+      "syllable_count": 11,
+      "long_word_count": 2,
+      "unique_word_count": 5,
+      "token_count": 14
+    },
+    {
+      "id": 5895,
+      "actor": {
+        "name": "Mirjam Bikker",
+        "party": "ChristenUnie"
+      },
+      "char_count": 259,
+      "word_count": 39,
+      "sentence_count": 4,
+      "syllable_count": 74,
+      "long_word_count": 12,
+      "unique_word_count": 31,
+      "token_count": 64
+    },
+    {
+      "id": 5896,
+      "actor": {
+        "name": "Pia Dijkstra",
+        "party": "D66"
+      },
+      "char_count": 70,
+      "word_count": 12,
+      "sentence_count": 1,
+      "syllable_count": 19,
+      "long_word_count": 4,
+      "unique_word_count": 11,
+      "token_count": 15
+    },
+    {
+      "id": 5898,
+      "actor": {
+        "name": "Mirjam Bikker",
+        "party": "ChristenUnie"
+      },
+      "char_count": 715,
+      "word_count": 118,
+      "sentence_count": 6,
+      "syllable_count": 198,
+      "long_word_count": 25,
+      "unique_word_count": 84,
+      "token_count": 156
+    },
+    {
+      "id": 5899,
+      "actor": {
+        "name": "Pia Dijkstra",
+        "party": "D66"
+      },
+      "char_count": 7066,
+      "word_count": 1125,
+      "sentence_count": 72,
+      "syllable_count": 1976,
+      "long_word_count": 320,
+      "unique_word_count": 413,
+      "token_count": 1510
+    },
+    {
+      "id": 5901,
+      "actor": {
+        "name": "Sophie Hermans",
+        "party": "VVD"
+      },
+      "char_count": 2666,
+      "word_count": 458,
+      "sentence_count": 27,
+      "syllable_count": 728,
+      "long_word_count": 113,
+      "unique_word_count": 192,
+      "token_count": 584
+    },
+    {
+      "id": 5903,
+      "actor": {
+        "name": "Diederik van Dijk",
+        "party": "SGP"
+      },
+      "char_count": 359,
+      "word_count": 59,
+      "sentence_count": 5,
+      "syllable_count": 99,
+      "long_word_count": 16,
+      "unique_word_count": 46,
+      "token_count": 87
+    },
+    {
+      "id": 5904,
+      "actor": {
+        "name": "Diederik van Dijk",
+        "party": "SGP"
+      },
+      "char_count": 56,
+      "word_count": 10,
+      "sentence_count": 1,
+      "syllable_count": 14,
+      "long_word_count": 2,
+      "unique_word_count": 10,
+      "token_count": 18
+    },
+    {
+      "id": 5906,
+      "actor": {
+        "name": "Mirjam Bikker",
+        "party": "ChristenUnie"
+      },
+      "char_count": 985,
+      "word_count": 164,
+      "sentence_count": 11,
+      "syllable_count": 271,
+      "long_word_count": 39,
+      "unique_word_count": 96,
+      "token_count": 221
+    },
+    {
+      "id": 5907,
+      "actor": {
+        "name": "Mirjam Bikker",
+        "party": "ChristenUnie"
+      },
+      "char_count": 879,
+      "word_count": 155,
+      "sentence_count": 11,
+      "syllable_count": 243,
+      "long_word_count": 26,
+      "unique_word_count": 104,
+      "token_count": 209
+    },
+    {
+      "id": 5909,
+      "actor": {
+        "name": "Wieke Paulusma",
+        "party": "D66"
+      },
+      "char_count": 1207,
+      "word_count": 195,
+      "sentence_count": 12,
+      "syllable_count": 341,
+      "long_word_count": 55,
+      "unique_word_count": 116,
+      "token_count": 263
+    },
+    {
+      "id": 5911,
+      "actor": {
+        "name": "Daniëlle Jansen",
+        "party": "NSC"
+      },
+      "char_count": 702,
+      "word_count": 113,
+      "sentence_count": 7,
+      "syllable_count": 194,
+      "long_word_count": 30,
+      "unique_word_count": 80,
+      "token_count": 152
+    },
+    {
+      "id": 5912,
+      "actor": {
+        "name": "Wieke Paulusma",
+        "party": "D66"
+      },
+      "char_count": 550,
+      "word_count": 96,
+      "sentence_count": 5,
+      "syllable_count": 152,
+      "long_word_count": 19,
+      "unique_word_count": 63,
+      "token_count": 129
+    },
+    {
+      "id": 5913,
+      "actor": {
+        "name": "Daniëlle Jansen",
+        "party": "NSC"
+      },
+      "char_count": 302,
+      "word_count": 50,
+      "sentence_count": 4,
+      "syllable_count": 83,
+      "long_word_count": 14,
+      "unique_word_count": 44,
+      "token_count": 68
+    },
+    {
+      "id": 5915,
+      "actor": {
+        "name": "Wieke Paulusma",
+        "party": "D66"
+      },
+      "char_count": 123,
+      "word_count": 18,
+      "sentence_count": 2,
+      "syllable_count": 32,
+      "long_word_count": 6,
+      "unique_word_count": 17,
+      "token_count": 36
+    },
+    {
+      "id": 5916,
+      "actor": {
+        "name": "Daniëlle Jansen",
+        "party": "NSC"
+      },
+      "char_count": 188,
+      "word_count": 33,
+      "sentence_count": 2,
+      "syllable_count": 52,
+      "long_word_count": 7,
+      "unique_word_count": 28,
+      "token_count": 44
+    },
+    {
+      "id": 5918,
+      "actor": {
+        "name": "Vicky Maeijer",
+        "party": "PVV"
+      },
+      "char_count": 965,
+      "word_count": 159,
+      "sentence_count": 12,
+      "syllable_count": 256,
+      "long_word_count": 37,
+      "unique_word_count": 105,
+      "token_count": 206
+    },
+    {
+      "id": 5921,
+      "actor": {
+        "name": "Elke Slagt-Tichelman",
+        "party": "GroenLinks-PvdA"
+      },
+      "char_count": 798,
+      "word_count": 123,
+      "sentence_count": 10,
+      "syllable_count": 228,
+      "long_word_count": 31,
+      "unique_word_count": 81,
+      "token_count": 184
+    },
+    {
+      "id": 5923,
+      "actor": {
+        "name": "Sophie Hermans",
+        "party": "VVD"
+      },
+      "char_count": 87,
+      "word_count": 13,
+      "sentence_count": 1,
+      "syllable_count": 23,
+      "long_word_count": 5,
+      "unique_word_count": 13,
+      "token_count": 23
+    },
+    {
+      "id": 5925,
+      "actor": {
+        "name": "Sophie Hermans",
+        "party": "VVD"
+      },
+      "char_count": 239,
+      "word_count": 43,
+      "sentence_count": 3,
+      "syllable_count": 63,
+      "long_word_count": 8,
+      "unique_word_count": 37,
+      "token_count": 59
+    },
+    {
+      "id": 5926,
+      "actor": {
+        "name": "Elke Slagt-Tichelman",
+        "party": "GroenLinks-PvdA"
+      },
+      "char_count": 514,
+      "word_count": 87,
+      "sentence_count": 4,
+      "syllable_count": 135,
+      "long_word_count": 21,
+      "unique_word_count": 58,
+      "token_count": 116
+    },
+    {
+      "id": 5928,
+      "actor": {
+        "name": "Pia Dijkstra",
+        "party": "D66"
+      },
+      "char_count": 1130,
+      "word_count": 186,
+      "sentence_count": 13,
+      "syllable_count": 305,
+      "long_word_count": 52,
+      "unique_word_count": 115,
+      "token_count": 250
+    },
+    {
+      "id": 5930,
+      "actor": {
+        "name": "Diederik van Dijk",
+        "party": "SGP"
+      },
+      "char_count": 433,
+      "word_count": 74,
+      "sentence_count": 6,
+      "syllable_count": 113,
+      "long_word_count": 14,
+      "unique_word_count": 59,
+      "token_count": 110
+    },
+    {
+      "id": 5931,
+      "actor": {
+        "name": "Pia Dijkstra",
+        "party": "D66"
+      },
+      "char_count": 898,
+      "word_count": 156,
+      "sentence_count": 14,
+      "syllable_count": 247,
+      "long_word_count": 27,
+      "unique_word_count": 107,
+      "token_count": 215
+    },
+    {
+      "id": 5933,
+      "actor": {
+        "name": "Sophie Hermans",
+        "party": "VVD"
+      },
+      "char_count": 388,
+      "word_count": 70,
+      "sentence_count": 4,
+      "syllable_count": 100,
+      "long_word_count": 12,
+      "unique_word_count": 56,
+      "token_count": 96
+    },
+    {
+      "id": 5934,
+      "actor": {
+        "name": "Pia Dijkstra",
+        "party": "D66"
+      },
+      "char_count": 111,
+      "word_count": 16,
+      "sentence_count": 2,
+      "syllable_count": 28,
+      "long_word_count": 7,
+      "unique_word_count": 15,
+      "token_count": 23
+    },
+    {
+      "id": 5936,
+      "actor": {
+        "name": "Mirjam Bikker",
+        "party": "ChristenUnie"
+      },
+      "char_count": 387,
+      "word_count": 65,
+      "sentence_count": 5,
+      "syllable_count": 101,
+      "long_word_count": 13,
+      "unique_word_count": 54,
+      "token_count": 96
+    },
+    {
+      "id": 5937,
+      "actor": {
+        "name": "Pia Dijkstra",
+        "party": "D66"
+      },
+      "char_count": 595,
+      "word_count": 102,
+      "sentence_count": 6,
+      "syllable_count": 168,
+      "long_word_count": 26,
+      "unique_word_count": 67,
+      "token_count": 129
+    },
+    {
+      "id": 5938,
+      "actor": {
+        "name": "Mirjam Bikker",
+        "party": "ChristenUnie"
+      },
+      "char_count": 996,
+      "word_count": 176,
+      "sentence_count": 10,
+      "syllable_count": 270,
+      "long_word_count": 38,
+      "unique_word_count": 108,
+      "token_count": 218
+    },
+    {
+      "id": 5939,
+      "actor": {
+        "name": "Pia Dijkstra",
+        "party": "D66"
+      },
+      "char_count": 337,
+      "word_count": 58,
+      "sentence_count": 4,
+      "syllable_count": 91,
+      "long_word_count": 13,
+      "unique_word_count": 44,
+      "token_count": 74
+    },
+    {
+      "id": 5941,
+      "actor": {
+        "name": "Pia Dijkstra",
+        "party": "D66"
+      },
+      "char_count": 63,
+      "word_count": 11,
+      "sentence_count": 2,
+      "syllable_count": 16,
+      "long_word_count": 2,
+      "unique_word_count": 10,
+      "token_count": 16
+    },
+    {
+      "id": 5943,
+      "actor": {
+        "name": "Pia Dijkstra",
+        "party": "D66"
+      },
+      "char_count": 44,
+      "word_count": 8,
+      "sentence_count": 2,
+      "syllable_count": 11,
+      "long_word_count": 2,
+      "unique_word_count": 6,
+      "token_count": 14
+    }
+  ],
   "tag_correspondence": {
     "inertia_pct": [
       52.4,

@@ -249,6 +249,11 @@ const ICOON_STER = "M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 
 				</ul>
 			</section>
 
+			<!-- Server-gerenderde Astro-slot (bv. tekststatistieken op de
+			     persoonspagina) -- géén prop, zodat de onderliggende data nooit
+			     in de client-JS-bundle van dit client:only-eiland belandt. -->
+			<slot name="voor-argumentlijst" />
+
 			<section class="stats-panel">
 				<h2>Voorbeeldargumenten</h2>
 				<ArgumentCard v-for="argument in exampleArguments" :key="argument.id" :argument="argument" :topic-slug="argument.topicSlug" />

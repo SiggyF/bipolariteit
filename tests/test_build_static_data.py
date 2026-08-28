@@ -1,7 +1,9 @@
 import sqlite3
 from pathlib import Path
 
-from pipeline.build_static_data import _speaker_event_url, fetch_llm_call_stats, fetch_recent_llm_calls
+import json
+
+from pipeline.build_static_data import _speaker_event_url, fetch_llm_call_stats, fetch_recent_llm_calls, fetch_sprekerbeurten
 from pipeline.extract_arguments import PROMPT_VERSION as EXTRACT_PROMPT_VERSION
 from pipeline.llm_log import record_llm_call
 
@@ -87,6 +89,50 @@ def _fresh_conn():
         "INSERT INTO documents (id, source_id, topic_id, actor_id, content) VALUES (1, 1, 1, 1, 'de sprekerbeurt')"
     )
     return conn
+
+
+class _FakePeriodeIndex:
+    """Stand-in voor pipeline.periodes.PeriodeIndex (leest normaliter
+    data/politieke-periodes.toml) -- deze tests hebben alleen .drempel nodig."""
+
+    def __init__(self, drempel="2020-01-01"):
+        self.drempel = drempel
+
+
+def test_fetch_sprekerbeurten_includes_documents_without_arguments():
+    # issue #155: sprekerbeurten zonder geëxtraheerde arguments moeten toch
+    # meetellen als noemer voor tekstvolume-gebaseerde ratio's.
+    conn = _fresh_conn()
+    stats = {"word_count": 3, "sentence_count": 1, "syllable_count": 5, "long_word_count": 1, "unique_word_count": 3, "token_count": 4}
+    conn.execute(
+        "UPDATE documents SET published_at = '2026-01-01T00:00:00', text_stats = ? WHERE id = 1",
+        (json.dumps(stats),),
+    )
+
+    sprekerbeurten = fetch_sprekerbeurten(conn, topic_id=1, periode_index=_FakePeriodeIndex())
+
+    assert len(sprekerbeurten) == 1
+    assert sprekerbeurten[0]["actor"]["name"] == "Test Kamerlid"
+    assert sprekerbeurten[0]["word_count"] == 3
+    assert sprekerbeurten[0]["char_count"] == len("de sprekerbeurt")
+
+
+def test_fetch_sprekerbeurten_excludes_voorzitter_turns_and_missing_actor():
+    conn = _fresh_conn()
+    stats = json.dumps({"word_count": 1, "sentence_count": 1, "syllable_count": 1, "long_word_count": 0, "unique_word_count": 1, "token_count": 1})
+    conn.execute(
+        "UPDATE documents SET published_at = '2026-01-01T00:00:00', text_stats = ?, is_voorzitter_turn = 1 WHERE id = 1",
+        (stats,),
+    )
+    conn.execute(
+        "INSERT INTO documents (id, source_id, topic_id, actor_id, content, published_at, text_stats) "
+        "VALUES (2, 1, 1, NULL, 'zonder actor', '2026-01-01T00:00:00', ?)",
+        (stats,),
+    )
+
+    sprekerbeurten = fetch_sprekerbeurten(conn, topic_id=1, periode_index=_FakePeriodeIndex())
+
+    assert sprekerbeurten == []
 
 
 def test_fetch_llm_call_stats_aggregates_per_stage_and_model():
