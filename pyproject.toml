@@ -3,7 +3,6 @@ name = "bipolariteit"
 version = "0.1.0"
 requires-python = ">=3.12"
 dependencies = [
-    "lxml>=6.1.1",
     "numpy>=2.5.1",
     "prince>=0.20.1",
     "python-dotenv>=1.2.3",

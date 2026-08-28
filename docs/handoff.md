@@ -761,13 +761,15 @@ deed vermoeden:
   (0,002ms), volledige dry-run van 505 bestanden nu ~10s.
 - **XML-parsing was al niet het probleem**: `ET.parse()` + `root.iter()` +
   `.find()` op de eerste 40 bestanden kostte ~0,9s, geen quadratische
-  blow-up. `lxml.etree.iterparse` (streaming) bleek zelfs 3x trager
-  (Python-overhead per generatorstap overheerst de C-parsewinst), en
-  lxml's `.find(tag)` bleek zelf trager dan ElementTree's. Wel toegepast:
-  `lxml.etree.parse()` (volledige boom, C-parser) + een handmatige
-  kind-tag-scan i.p.v. `.find()` — ~15% sneller dan ElementTree, functioneel
-  identiek geverifieerd (zelfde resultaatset, andere traversal-volgorde).
-  `lxml` toegevoegd als directe dependency (was al transitief aanwezig).
+  blow-up. Een lxml-overstap is uitgeprobeerd en weer teruggedraaid:
+  `lxml.etree.iterparse` (streaming) bleek zelfs 3x trager (Python-overhead
+  per generatorstap overheerst de C-parsewinst), en lxml's `.find(tag)`
+  bleek zelf trager dan ElementTree's (`lxml.etree.parse()` + een
+  handmatige kind-tag-scan i.p.v. `.find()` haalde nog ~15% t.o.v.
+  ElementTree, functioneel identiek geverifieerd). Met de index-fix draait
+  het script al in ~10s, dus die 15% + een nieuwe dependency + een
+  workaround voor lxml's trage `.find()` wogen niet op tegen gewoon
+  `xml.etree.ElementTree` laten staan.
 
 Les: de sys-tijd-observatie in het issue (~16 min sys vs ~6 min user) wees
 naar syscall/filesystem-overhead, maar dat bleek zelf een symptoom van de
