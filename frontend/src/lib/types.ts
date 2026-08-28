@@ -52,6 +52,24 @@ export interface Argument {
 	oppositions: { argument_id: number; relation_type: string; confidence: number | null }[];
 }
 
+// Vorm van één sprekerbeurt in data/export/topics/<slug>.json (zie
+// pipeline/build_static_data.py: fetch_sprekerbeurten). Bewust geen content
+// zelf -- alleen kleine afgeleide tellingen (issue #155), zodat de volledige
+// tekst nooit in de JS-bundle belandt. Bevat, i.t.t. Argument, ook
+// sprekerbeurten zonder geëxtraheerde arguments -- nodig als volledige
+// noemer voor tekstvolume-gebaseerde ratio's.
+export interface Sprekerbeurt {
+	id: number;
+	actor: { name: string; party: string | null };
+	char_count: number;
+	word_count: number;
+	sentence_count: number;
+	syllable_count: number;
+	long_word_count: number;
+	unique_word_count: number;
+	token_count: number;
+}
+
 // Sentinel voor argumenten waarvan de spreker geen partij heeft. Eén plek,
 // zodat filter, statistieken en grafieken gegarandeerd hetzelfde bedoelen.
 export const NO_PARTY = "Onbekend";

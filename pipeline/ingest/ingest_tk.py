@@ -29,6 +29,7 @@ from pipeline.db import db
 
 logger = logging.getLogger(__name__)
 from pipeline.paths import RAW_DIR_TWEEDE_KAMER as RAW_DIR
+from pipeline.text_stats import compute_document_stats
 
 NS = "{http://www.tweedekamer.nl/ggm/vergaderverslag/v1.0}"
 
@@ -428,12 +429,16 @@ def ingest_file(conn, xml_path, meta_path, topic_keyword, also_keywords=()):
             voorzitter_turn = is_voorzitter_turn(turn_el, parent_map, content)
             speaker_person_id = spreker_el.attrib.get("objectid")
             turn_type = _local(turn_el.tag)
+            # Voorzitterbeurten blijven buiten de tekststatistieken, zelfde
+            # filter als scripts/backfill_document_tekststatistieken.py --
+            # dit zijn procedurele beurten, geen inhoudelijke bijdragen.
+            text_stats = None if voorzitter_turn else json.dumps(compute_document_stats(content))
 
             conn.execute(
                 """
                 INSERT INTO documents
-                    (source_id, topic_id, actor_id, external_id, title, content, published_at, raw_ref, url, activiteit_soort, activiteit_aanvangstijd, activiteit_eindtijd, tweedekamer_activiteit_url, is_voorzitter_turn, speaker_role_title, speaker_person_id, turn_type)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    (source_id, topic_id, actor_id, external_id, title, content, published_at, raw_ref, url, activiteit_soort, activiteit_aanvangstijd, activiteit_eindtijd, tweedekamer_activiteit_url, is_voorzitter_turn, speaker_role_title, speaker_person_id, turn_type, text_stats)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                 (
                     source_id,
@@ -453,6 +458,7 @@ def ingest_file(conn, xml_path, meta_path, topic_keyword, also_keywords=()):
                     speaker_role_title,
                     speaker_person_id,
                     turn_type,
+                    text_stats,
                 ),
             )
             inserted += 1
@@ -501,12 +507,16 @@ def ingest_plenair_file(conn, xml_path, meta_path):
             voorzitter_turn = is_voorzitter_turn(turn_el, parent_map, content)
             speaker_person_id = spreker_el.attrib.get("objectid")
             turn_type = _local(turn_el.tag)
+            # Voorzitterbeurten blijven buiten de tekststatistieken, zelfde
+            # filter als scripts/backfill_document_tekststatistieken.py --
+            # dit zijn procedurele beurten, geen inhoudelijke bijdragen.
+            text_stats = None if voorzitter_turn else json.dumps(compute_document_stats(content))
 
             conn.execute(
                 """
                 INSERT INTO documents
-                    (source_id, topic_id, actor_id, external_id, title, content, published_at, raw_ref, url, activiteit_soort, activiteit_aanvangstijd, activiteit_eindtijd, tweedekamer_activiteit_url, is_voorzitter_turn, speaker_role_title, speaker_person_id, turn_type)
-                VALUES (?, NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    (source_id, topic_id, actor_id, external_id, title, content, published_at, raw_ref, url, activiteit_soort, activiteit_aanvangstijd, activiteit_eindtijd, tweedekamer_activiteit_url, is_voorzitter_turn, speaker_role_title, speaker_person_id, turn_type, text_stats)
+                VALUES (?, NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                 (
                     source_id,
@@ -525,6 +535,7 @@ def ingest_plenair_file(conn, xml_path, meta_path):
                     speaker_role_title,
                     speaker_person_id,
                     turn_type,
+                    text_stats,
                 ),
             )
             inserted += 1

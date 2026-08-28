@@ -8,6 +8,7 @@ dependencies = [
     "python-dotenv>=1.2.3",
     "requests>=2.34.2",
     "scrapy>=2.17.0",
+    "tiktoken>=0.14.0",
 ]
 
 [build-system]

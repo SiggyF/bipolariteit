@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { countByTypologyAndStance } from "./aggregate";
-import type { Argument, Stance, Typology } from "./types";
+import { countByTypologyAndStance, deriveVerbositeitStats } from "./aggregate";
+import type { Argument, Sprekerbeurt, Stance, Typology } from "./types";
 
 function argument(typology: Typology, stance: Stance): Argument {
 	return {
@@ -51,5 +51,56 @@ describe("countByTypologyAndStance", () => {
 		const rows = countByTypologyAndStance([]);
 		expect(rows).toHaveLength(5);
 		expect(rows.every((r) => r.total === 0)).toBe(true);
+	});
+});
+
+function sprekerbeurt(overrides: Partial<Sprekerbeurt> = {}): Sprekerbeurt {
+	return {
+		id: 1,
+		actor: { name: "Iemand", party: null },
+		char_count: 100,
+		word_count: 20,
+		sentence_count: 2,
+		syllable_count: 30,
+		long_word_count: 4,
+		unique_word_count: 15,
+		token_count: 25,
+		...overrides,
+	};
+}
+
+describe("deriveVerbositeitStats", () => {
+	it("telt sprekerbeurten mee die geen argument opleverden, als volume-noemer", () => {
+		const stats = deriveVerbositeitStats([sprekerbeurt({ char_count: 1000 }), sprekerbeurt({ char_count: 1000 })], [
+			argument("factual", "pro"),
+		]);
+		expect(stats.nSprekerbeurten).toBe(2);
+		expect(stats.nArgumenten).toBe(1);
+		expect(stats.argumentenPer1000Tekens).toBeCloseTo(0.5, 5);
+	});
+
+	it("berekent claims/argument en gem. quote-lengte uit de argumentenlijst", () => {
+		const arg1 = argument("factual", "pro");
+		arg1.quote_text = "een citaat van tien.";
+		arg1.claims = [{ claim_text: "x", attributed_source_text: null }];
+		const arg2 = argument("factual", "contra");
+		arg2.quote_text = "kort";
+
+		const stats = deriveVerbositeitStats([sprekerbeurt()], [arg1, arg2]);
+		expect(stats.claimsPerArgument).toBeCloseTo(0.5, 5);
+		expect(stats.gemQuoteLengte).toBeCloseTo((arg1.quote_text.length + arg2.quote_text.length) / 2, 5);
+	});
+
+	it("geeft nullen terug zonder sprekerbeurten of argumenten, i.p.v. NaN/Infinity", () => {
+		const stats = deriveVerbositeitStats([], []);
+		expect(Object.values(stats).every((v) => Number.isFinite(v))).toBe(true);
+	});
+
+	it("msttr = totaal unieke woorden / totaal woorden, gewogen naar sprekerbeurtlengte", () => {
+		const stats = deriveVerbositeitStats(
+			[sprekerbeurt({ word_count: 10, unique_word_count: 8 }), sprekerbeurt({ word_count: 90, unique_word_count: 27 })],
+			[],
+		);
+		expect(stats.msttr).toBeCloseTo((8 + 27) / (10 + 90), 5);
 	});
 });

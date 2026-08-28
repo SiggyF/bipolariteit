@@ -521,6 +521,42 @@ def fetch_recent_llm_calls(conn, topic_row, limit=300):
     return calls
 
 
+def fetch_sprekerbeurten(conn, topic_id, periode_index):
+    """Platte lijst van alle kwalificerende sprekerbeurten voor dit topic,
+    INCLUSIEF beurten zonder geëxtraheerde arguments (issue #155) -- nodig
+    als volledige noemer voor tekstvolume-gebaseerde ratio's (bv. argumenten
+    per 1000 tekens), want `arguments` bevat alleen beurten die minstens één
+    argument opleverden. Zelfde documentfilter als
+    scripts/experiment_verbositeit.py's fetch_documenten(). Bewust geen
+    content zelf -- alleen de kleine text_stats-JSON, uitgepakt naar platte
+    velden zodat de frontend niet zelf JSON-in-JSON hoeft te parsen."""
+    rows = conn.execute(
+        """SELECT d.id, length(d.content) AS char_count, d.text_stats,
+                  ac.name AS actor_name, ac.party AS actor_party
+           FROM documents d
+           JOIN actors ac ON ac.id = d.actor_id
+           WHERE d.topic_id = ?
+             AND d.is_voorzitter_turn = 0
+             AND d.actor_id IS NOT NULL
+             AND d.content IS NOT NULL AND length(d.content) > 0
+             AND d.published_at >= ?
+             AND d.text_stats IS NOT NULL""",
+        (topic_id, periode_index.drempel),
+    ).fetchall()
+    result = []
+    for row in rows:
+        stats = json.loads(row["text_stats"])
+        result.append(
+            {
+                "id": row["id"],
+                "actor": {"name": row["actor_name"], "party": row["actor_party"]},
+                "char_count": row["char_count"],
+                **stats,
+            }
+        )
+    return result
+
+
 def build_topic_export(conn, topic_row, periode_index):
     """Eén platte argumentenlijst, geen voorgeaggregeerde cijfers. De frontend
     leidt statistieken, tags-per-partij en de stance-kolommen zelf af uit deze
@@ -537,6 +573,7 @@ def build_topic_export(conn, topic_row, periode_index):
         "description": topic_row["description"],
         "arguments": arguments,
         "argument_count": len(arguments),
+        "sprekerbeurten": fetch_sprekerbeurten(conn, topic_row["id"], periode_index),
         "tag_correspondence": build_correspondence_analysis(tag_rows),
         "image_url": _topic_image_url(arguments),
     }
