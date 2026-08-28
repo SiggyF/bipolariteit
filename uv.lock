@@ -199,7 +199,6 @@ experiments = [
     { name = "matplotlib" },
     { name = "nltk" },
     { name = "pandas" },
-    { name = "tiktoken" },
     { name = "tqdm" },
     { name = "umap-learn" },
 ]
@@ -224,7 +223,6 @@ experiments = [
     { name = "matplotlib", specifier = ">=3.11.1" },
     { name = "nltk", specifier = ">=3.10.3" },
     { name = "pandas", specifier = ">=3.0.5" },
-    { name = "tiktoken", specifier = ">=0.14.0" },
     { name = "tqdm", specifier = ">=4.70.0" },
     { name = "umap-learn", specifier = ">=0.5.12" },
 ]
