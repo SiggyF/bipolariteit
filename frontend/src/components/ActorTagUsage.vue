@@ -10,7 +10,7 @@ import { displayPartyName } from "../lib/parties";
 import { deriveTagUsage, bucketSmallCounts } from "../lib/aggregate";
 import { slugify } from "../lib/slug";
 import { PERSPECTIEVEN } from "../lib/tagIcons.generated";
-import { tagIconPath } from "../lib/tagIcon";
+import { tagIconPath, tagIconDataUri } from "../lib/tagIcon";
 import PartyLogo from "./PartyLogo.vue";
 import ArgumentCard from "./ArgumentCard.vue";
 import FilterBar from "./FilterBar.vue";
@@ -120,6 +120,28 @@ function renderMedianTik(_params: any, api: any) {
 	return { type: "line", shape: { x1: xMed, y1: y - capHalf, x2: xMed, y2: y + capHalf }, style: { stroke: color, lineWidth: 2 } };
 }
 
+// Tagicoontje voor de as-labels: ECharts' as-labels zijn tekst + optionele
+// rich-text-afbeeldingen, geen losse SVG-elementen -- vandaar de data-URI
+// (tagIconDataUri) i.p.v. het <svg><path> patroon dat de rest van de site
+// gebruikt (bv. TagSignaalBadge.astro). Rich-stijlen zijn een vaste set
+// sleutel->stijl, dus één stijl per tagsleutel (niet per rij-index) zodat
+// dezelfde tag op andere pagina's dezelfde stijlsleutel hergebruikt.
+function richKeyFor(sleutel: string): string {
+	return `icon_${sleutel.replace(/[^a-zA-Z0-9]/g, "_")}`;
+}
+
+const yAxisRich = computed(() => {
+	const rich: Record<string, any> = {};
+	const color = isDark.value ? "#f2ede3" : "#221f1b";
+	for (const r of chartRows.value) {
+		const key = richKeyFor(r.sleutel);
+		if (rich[key]) continue;
+		const uri = tagIconDataUri(r.sleutel, color);
+		if (uri) rich[key] = { height: 12, width: 12, backgroundColor: { image: uri } };
+	}
+	return rich;
+});
+
 const chartOption = computed(() => ({
 	backgroundColor: "transparent",
 	textStyle: { fontFamily: "inherit" },
@@ -133,7 +155,11 @@ const chartOption = computed(() => ({
 	yAxis: {
 		type: "category",
 		data: chartRows.value.map((r) => r.sleutel),
-		axisLabel: { color: isDark.value ? "#f2ede3" : "#221f1b" },
+		axisLabel: {
+			color: isDark.value ? "#f2ede3" : "#221f1b",
+			formatter: (sleutel: string) => (tagIconPath(sleutel) ? `{${richKeyFor(sleutel)}|}  ${sleutel}` : sleutel),
+			rich: yAxisRich.value,
+		},
 	},
 	series: [
 		{
@@ -263,12 +289,21 @@ const ICOON_STER = "M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 
 			<p class="panel-note">{{ totalArguments }} argumenten in totaal, over {{ perTopic.length }} onderwerp(en).</p>
 
 			<section class="stats-panel">
-				<h2>Tags</h2>
+				<h2>
+					Tags
+					<a v-if="medianRows.length" href="/over/#tag-mediaan-methode" class="info-link" title="Wat betekent de tik boven een balk?" aria-label="Uitleg: wat de mediaan-tik boven een balk betekent">?</a>
+				</h2>
 				<p class="panel-note">
-					Alleen LLM-toegekende tags.
+					Hoeveel argumenten van {{ mode === "persoon" ? "deze spreker" : "deze partij" }} elke tag toegekend
+					kregen. Drie labelgroepen die automatisch uit metadata volgen (bv. wie iemand is, in welke setting
+					het gezegd werd) staan er niet bij -- die zeggen niets over de eigen argumentatiestijl, alleen
+					door het taalmodel zelf herkende tags tellen mee.
 					<template v-if="mode === 'persoon'">
 						Tags met minder dan {{ PERSON_TAG_THRESHOLD }} toekenningen zijn samengevoegd tot "overig" -- bij deze
 						volumes zegt een enkele toekenning weinig.
+					</template>
+					<template v-if="medianRows.length">
+						De tik boven een balk is de mediaan voor die tag over {{ mode === "persoon" ? "alle sprekers" : "alle partijen" }} heen.
 					</template>
 				</p>
 				<p v-if="!tagRows.length" class="panel-note">Geen getagde argumenten.</p>
