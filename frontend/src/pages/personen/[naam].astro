@@ -70,6 +70,7 @@ const tagBeschrijving = new Map<string, string>();
 // tag doorgaans".
 const allPersonNames = new Set<string>();
 const tagCountPerPerson = new Map<string, Map<string, number>>();
+const tagTotalPerPerson = new Map<string, number>();
 
 for (const argument of allArgs) {
 	allPersonNames.add(argument.actor.name);
@@ -85,13 +86,24 @@ for (const argument of allArgs) {
 		const perPerson = tagCountPerPerson.get(argument.actor.name) ?? new Map<string, number>();
 		perPerson.set(tag.sleutel, (perPerson.get(tag.sleutel) ?? 0) + 1);
 		tagCountPerPerson.set(argument.actor.name, perPerson);
+		tagTotalPerPerson.set(argument.actor.name, (tagTotalPerPerson.get(argument.actor.name) ?? 0) + 1);
 	}
 }
 
+// Aandeel i.p.v. kale telling als basis voor de whisker: personen verschillen
+// enorm in totaalvolume (een paar honderd vs. een enkel argument), dus de
+// verdeling van kale tellingen over alle personen zou gedomineerd worden door
+// de meest actieve sprekers. Terugschalen naar déze persoon se eigen totaal
+// houdt de whisker op dezelfde as als de balk (aantallen), maar zonder die
+// scheeftrekking.
 const tagBoxplot: Record<string, BoxplotStats> = {};
 for (const sleutel of globalTagCount.keys()) {
-	const counts = [...allPersonNames].map((p) => tagCountPerPerson.get(p)?.get(sleutel) ?? 0);
-	tagBoxplot[sleutel] = boxplotStats(counts);
+	const aandelen = [...allPersonNames].map((p) => {
+		const total = tagTotalPerPerson.get(p) ?? 0;
+		return total ? (tagCountPerPerson.get(p)?.get(sleutel) ?? 0) / total : 0;
+	});
+	const stats = boxplotStats(aandelen);
+	tagBoxplot[sleutel] = { median: stats.median * personTotal, q1: stats.q1 * personTotal, q3: stats.q3 * personTotal };
 }
 
 const { favorieten, minstFavoriet } = berekenTagSignalen(personTagCount, personTotal, globalTagCount, globalTagTotal, { topN: 3 });

@@ -44,6 +44,7 @@ const argumentList = allArgs.filter((a: any) => a.actor.party && canonicalParty(
 // nooit gebruikten (0).
 const allParties = new Set<string>();
 const tagCountPerParty = new Map<string, Map<string, number>>();
+const tagTotalPerParty = new Map<string, number>();
 const globalTagCount = new Map<string, number>();
 
 for (const argument of allArgs) {
@@ -56,13 +57,26 @@ for (const argument of allArgs) {
 		const perParty = tagCountPerParty.get(argPartij) ?? new Map<string, number>();
 		perParty.set(tag.sleutel, (perParty.get(tag.sleutel) ?? 0) + 1);
 		tagCountPerParty.set(argPartij, perParty);
+		tagTotalPerParty.set(argPartij, (tagTotalPerParty.get(argPartij) ?? 0) + 1);
 	}
 }
 
+// Aandeel i.p.v. kale telling: partijen verschillen enorm in totaalvolume
+// (VVD ~1845 vs. DENK ~98 argumenten), dus de verdeling van kale tellingen
+// over alle partijen zou gedomineerd worden door de grootste partijen --
+// zichtbaar als een whisker die bij een kleine partij vrijwel elke balk
+// overschrijdt, ook als die partij een tag juist relatief vaak gebruikt.
+// Terugschalen naar déze partij se eigen totaal houdt de whisker op dezelfde
+// as als de balk (aantallen).
+const partyTotal = tagTotalPerParty.get(party ?? "") ?? 0;
 const tagBoxplot: Record<string, BoxplotStats> = {};
 for (const sleutel of globalTagCount.keys()) {
-	const counts = [...allParties].map((p) => tagCountPerParty.get(p)?.get(sleutel) ?? 0);
-	tagBoxplot[sleutel] = boxplotStats(counts);
+	const aandelen = [...allParties].map((p) => {
+		const total = tagTotalPerParty.get(p) ?? 0;
+		return total ? (tagCountPerParty.get(p)?.get(sleutel) ?? 0) / total : 0;
+	});
+	const stats = boxplotStats(aandelen);
+	tagBoxplot[sleutel] = { median: stats.median * partyTotal, q1: stats.q1 * partyTotal, q3: stats.q3 * partyTotal };
 }
 ---
 
