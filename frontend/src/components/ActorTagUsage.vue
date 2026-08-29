@@ -128,18 +128,16 @@ function renderMedianTik(_params: any, api: any) {
 	return { type: "line", shape: { x1: xMed, y1: y - capHalf, x2: xMed, y2: y + capHalf }, style: { stroke: color, lineWidth: 2 } };
 }
 
-// Partijgenoten-mediaan als klein zwart-wit partijicoontje i.p.v. een tik
+// Partijgenoten-mediaan als klein grijstinten partijicoontje i.p.v. een tik
 // (issue #202-vervolg): alleen op de persoonspagina, als losstaand symbool
 // naast de tik voor het Kamerbrede mediaan zodat de twee referentiepunten uit
-// elkaar te houden zijn. De kleur wordt hier (client-side, dus thema-bewust)
-// toegevoegd aan de kleurloze SVG-markup die de pagina aanlevert -- zie
-// partyIconSvgRaw hierboven.
-const partyIconUri = computed(() => {
-	if (!props.partyIconSvgRaw) return null;
-	const color = isDark.value ? MEDIAAN_KLEUR.dark : MEDIAAN_KLEUR.light;
-	const svg = props.partyIconSvgRaw.replace("<svg ", `<svg fill="${color}" `);
-	return `data:image/svg+xml;base64,${btoa(svg)}`;
-});
+// elkaar te houden zijn. De grijswaarden zitten al in partyIconSvgRaw (zie
+// lib/partyIconMono.ts) -- hier alleen base64-encoderen, geen kleur meer
+// toevoegen, want dat zou het per-laag contrast dat de leesbaarheid van het
+// silhouet geeft weer plat zetten.
+const partyIconUri = computed(() =>
+	props.partyIconSvgRaw ? `data:image/svg+xml;base64,${btoa(props.partyIconSvgRaw)}` : null,
+);
 
 const partyMedianRows = computed(() => {
 	if (!props.tagPartyMedian || !partyIconUri.value) return [];
@@ -157,7 +155,7 @@ function renderPartyIcon(_params: any, api: any) {
 
 	const y = api.coord([0, idx])[1];
 	const x = api.coord([waarde, idx])[0];
-	const size = 11;
+	const size = 13;
 
 	return { type: "image", style: { image: partyIconUri.value!, x: x - size / 2, y: y - size / 2, width: size, height: size } };
 }
