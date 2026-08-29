@@ -14,6 +14,8 @@ zonder LLM. De overige labelgroepen gaan naar het lokale LLM (created_by='llm').
 Gebruik:
     uv run python -m pipeline.tag_arguments --topic stikstof --limit 15
     uv run python -m pipeline.tag_arguments --topic stikstof --limit 15 --dry-run
+    uv run python -m pipeline.tag_arguments --topic stikstof --ids 101,204,309
+    uv run python -m pipeline.tag_arguments --topic stikstof --ids-file gefaald.txt
 """
 
 import argparse
@@ -279,11 +281,33 @@ def insert_llm_tags(conn, argument_id, tag_reden_pairs):
         )
 
 
-def fetch_untagged_arguments(conn, topic_id, limit, min_id=0, vanaf=None):
+def fetch_untagged_arguments(conn, topic_id, limit, min_id=0, vanaf=None, ids=None):
     """`vanaf` is een ISO-datum op de publicatiedatum van het brondocument;
     zelfde drempel als bij de extractie ([verwerking].vanaf), zodat we
     geen argumenten taggen uit een periode die we verder buiten beschouwing
-    laten. De data blijft staan, alleen deze query ziet 'm niet."""
+    laten. De data blijft staan, alleen deze query ziet 'm niet.
+
+    `ids`, indien gegeven, beperkt de selectie tot precies die argument-id's
+    (bv. een gerichte hertag-batch na een gefaalde eerdere poging) -- min_id/
+    vanaf worden dan genegeerd, `tagged_at IS NULL` blijft wel gelden zodat
+    dit nooit per ongeluk een al goed getagd argument overschrijft."""
+    if ids is not None:
+        if not ids:
+            return []
+        placeholders = ",".join("?" for _ in ids)
+        return conn.execute(
+            f"""SELECT ar.id, ar.document_id, ar.actor_id, ar.stance, ar.typology,
+                      ar.quote_text, ar.quote_context,
+                      act.name AS actor_name, act.party AS actor_party
+               FROM arguments ar
+               JOIN actors act ON act.id = ar.actor_id
+               WHERE ar.topic_id = ?
+                 AND ar.id IN ({placeholders})
+                 AND ar.tagged_at IS NULL
+               ORDER BY ar.id""",
+            (topic_id, *ids),
+        ).fetchall()
+
     if vanaf is None:
         vanaf = PeriodeIndex().drempel
     return conn.execute(
@@ -308,6 +332,16 @@ def main():
     parser.add_argument("--topic", required=True, help="topic-slug, bv. stikstof")
     parser.add_argument("--limit", type=int, default=15, help="max aantal arguments deze run (default 15)")
     parser.add_argument("--min-id", type=int, default=0, help="alleen arguments met id >= deze waarde")
+    parser.add_argument(
+        "--ids", default=None,
+        help="komma-gescheiden lijst van specifieke argument-id's (bv. na een gefaalde run) -- "
+             "i.p.v. de gebruikelijke min-id/limit-scan; negeert --min-id/--limit/--vanaf",
+    )
+    parser.add_argument(
+        "--ids-file", default=None,
+        help="pad naar een bestand met één argument-id per regel (# begint een commentaarregel); "
+             "combineerbaar met --ids",
+    )
     parser.add_argument("--model", default="qwen/qwen3.6-27b")
     parser.add_argument("--base-url", default="http://localhost:1234/v1")
     parser.add_argument("--reasoning-effort", default="none")
@@ -334,10 +368,29 @@ def main():
     valid_tags = load_valid_tags(conn)
     tag_catalogue, tag_json_skeleton = build_tag_catalogue(conn)
 
-    arguments = fetch_untagged_arguments(conn, topic_id, args.limit, args.min_id, args.vanaf)
+    ids = None
+    if args.ids or args.ids_file:
+        ids = []
+        if args.ids:
+            ids.extend(int(x) for x in args.ids.split(",") if x.strip())
+        if args.ids_file:
+            for regel in Path(args.ids_file).read_text().splitlines():
+                regel = regel.split("#", 1)[0].strip()
+                if regel:
+                    ids.append(int(regel))
+        ids = sorted(set(ids))
+
+    arguments = fetch_untagged_arguments(conn, topic_id, args.limit, args.min_id, args.vanaf, ids=ids)
     if not arguments:
         logger.info("Geen ongetagde argumenten (al verwerkt, of geen argumenten voor deze topic).")
         return
+    if ids is not None and len(arguments) < len(ids):
+        gevonden = {row["id"] for row in arguments}
+        gemist = [i for i in ids if i not in gevonden]
+        logger.warning(
+            "%d van %d opgegeven id's niet meegenomen (verkeerde topic, al getagd, of bestaat niet): %s",
+            len(gemist), len(ids), gemist,
+        )
 
     logger.info(
         "Model: %s | reasoning_effort=%r | prompt_version=%s | %d argumenten",
