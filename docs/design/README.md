@@ -60,6 +60,21 @@ overgenomen (eigen "dc-runtime", laadt React via een CDN — geen
 productiecode); deze map is wat overblijft nu de echte implementatie het
 heeft overgenomen.
 
+## `deelknoppen-preview/`
+
+Ontwerp voor de deelknop + og:image-preview (issue #172), geïmplementeerd in
+`frontend/src/components/ShareMenu.astro` en `BaseHead.astro`:
+één deelknop naast de themaschakelaar in `SiteNav.astro` (dropdown met X,
+LinkedIn, Bluesky, WhatsApp, Facebook, e-mail, "link kopiëren"), plus twee
+og:image-scenario's -- A (één vaste 1200×630-afbeelding, geïmplementeerd als
+`frontend/public/og/default.png`) en B (per-pagina opgebouwd, met
+paginatitel/stance-balk -- nog niet gebouwd, bewust een latere stap). Het
+`.dc.html`-bestand is hier wél overgenomen (in tegenstelling tot
+`argumentenboom/`/`videoplayer/` hieronder) omdat het geen eigen "dc-runtime"
+laadt via een CDN, alleen inline SVG/CSS op de bestaande site-tokens.
+Het bijbehorende briefingpakket (screenshots, sjabloonzinnen per paginatype)
+staat in `data/export/design-handoff/deelknoppen-preview/` (niet ingecheckt).
+
 ## `videoplayer/`
 
 Ontwerp voor visuele argumenttype-annotaties op een video-embed (issue #94):

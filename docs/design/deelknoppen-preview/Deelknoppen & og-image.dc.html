@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/classical-974e6ac3-dcd9-4446-a833-ca68e8f583ba/styles.css">
+<script src="_ds/classical-974e6ac3-dcd9-4446-a833-ca68e8f583ba/_ds_bundle.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Display&family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Work+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  body { margin: 0; background: #f2efe7; color: #221f1b; font-family: "Work Sans", system-ui, sans-serif; }
+  a { color: #33456e; }
+  a:hover { color: #22304e; }
+</style>
+</helmet>
+
+<div style="background:#f2efe7;color:#221f1b;font-family:'Work Sans',system-ui,sans-serif;padding:56px 40px 96px;display:flex;flex-direction:column;align-items:center;gap:0">
+
+  <div style="width:100%;max-width:1040px;display:flex;flex-direction:column;gap:64px">
+
+    <header style="display:flex;flex-direction:column;gap:20px">
+      <div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:0.78rem;letter-spacing:0.08em;text-transform:uppercase;color:#6f6558">Ontwerppakket · issue #172 · bipolariteit.nl</div>
+      <h1 style="font-family:'Libre Caslon Display','Libre Caslon Text',Georgia,serif;font-weight:400;font-size:3.4rem;line-height:1.05;margin:0;letter-spacing:-0.01em">Deelknoppen &amp; deelvoorbeeld</h1>
+      <p style="font-size:1.25rem;line-height:1.55;max-width:62ch;margin:0;color:#221f1b">Eén deelknop in de sitenavigatie, op elke pagina. Een deelmenu met acht bestemmingen, een deeltekst-sjabloon per paginatype, en twee scenario's voor de afbeelding die meereist bij een gedeelde link.</p>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:4px">
+        <span style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:0.75rem;padding:5px 10px;border:1px solid #ddd5c4;border-radius:3px;color:#6f6558;background:#fbf9f4">Alle zes detailpaginatypes</span>
+        <span style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:0.75rem;padding:5px 10px;border:1px solid #ddd5c4;border-radius:3px;color:#6f6558;background:#fbf9f4">Licht thema</span>
+        <span style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:0.75rem;padding:5px 10px;border:1px solid #ddd5c4;border-radius:3px;color:#6f6558;background:#fbf9f4">Bestaande tokens, geen nieuwe kleuren</span>
+      </div>
+      <div style="height:1px;background:#221f1b;opacity:0.55;margin-top:12px"></div>
+    </header>
+
+    <section style="display:flex;flex-direction:column;gap:28px">
+      <div style="display:flex;align-items:baseline;gap:16px">
+        <span style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:0.8rem;color:#9c3b32;letter-spacing:0.06em">01</span>
+        <h2 style="font-family:'Libre Caslon Text',Georgia,serif;font-weight:400;font-size:1.953rem;margin:0">Plaatsing: in de sitenavigatie</h2>
+      </div>
+      <p style="max-width:66ch;margin:0;line-height:1.6;color:#221f1b">De knop staat rechts in <span style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:0.9em">SiteNav.astro</span>, direct links van de themaschakelaar, en gaat dus elke pagina mee — ook de homepage en overzichtspagina's. Eén knop, geen rij van acht: de contentkolom (max. 760px) blijft daarmee onaangeroerd en de detailpagina's houden hun kop.</p>
+
+      <div style="border:1px solid #ddd5c4;border-radius:4px;background:#fbf9f4;overflow:hidden">
+        <div style="background:#f2efe7;border-bottom:1px solid #ddd5c4;padding:9px 20px;text-align:center;font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:0.72rem;color:#6f6558"><span style="color:#9c3b32">ONTWIKKELVERSIE</span>, geen officiële publicatie.</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:24px;padding:16px 24px;border-bottom:2px solid #221f1b">
+          <div style="display:flex;align-items:center;gap:12px">
+            <svg width="34" height="16" viewBox="0 0 34 16" fill="none" stroke="#221f1b" stroke-width="1.3"><ellipse cx="10" cy="8" rx="9" ry="6"></ellipse><ellipse cx="24" cy="8" rx="9" ry="6"></ellipse></svg>
+            <span style="font-family:'Libre Caslon Text',Georgia,serif;font-size:1.25rem">Bipolariteit</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:18px;font-size:0.95rem;color:#33456e">
+            <span>Home</span><span>Onderwerpen</span><span>Verkennen</span><span>Over dit platform</span>
+            <div style="display:flex;align-items:center;gap:8px;padding:7px 12px 7px 10px;border:1px solid #33456e;border-radius:3px;color:#33456e;background:transparent">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.6" y1="10.5" x2="15.4" y2="6.5"></line><line x1="8.6" y1="13.5" x2="15.4" y2="17.5"></line></svg>
+              <span style="font-size:0.9rem">Delen</span>
+            </div>
+            <div style="width:28px;height:26px;border:1px solid #ddd5c4;border-radius:3px;display:flex;align-items:center;justify-content:center;color:#6f6558;font-size:0.7rem">☾</div>
+          </div>
+        </div>
+        <div style="display:flex;justify-content:flex-end;padding:0 24px">
+          <div style="width:340px;margin-top:-1px;border:1px solid #ddd5c4;border-top:none;border-radius:0 0 4px 4px;background:#fbf9f4;box-shadow:0 8px 20px rgba(34,31,27,0.07);padding:18px 18px 14px;display:flex;flex-direction:column;gap:14px">
+            <div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:0.7rem;letter-spacing:0.09em;text-transform:uppercase;color:#6f6558">Deel deze pagina</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+              <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:3px;font-size:0.9rem;color:#221f1b;background:#f2efe7">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#33456e" stroke-width="1.5" stroke-linecap="round"><path d="M4 4l16 16M20 4L4 20"></path></svg><span>X</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:3px;font-size:0.9rem;color:#221f1b">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#33456e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"></rect><path d="M7.5 10.5v6M7.5 7.6v.1M11.5 16.5v-6M11.5 13c0-1.4 1-2.5 2.4-2.5s2.6 1 2.6 2.6v3.4"></path></svg><span>LinkedIn</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:3px;font-size:0.9rem;color:#221f1b">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#33456e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5c0 6 4.5 10 9 14 4.5-4 9-8 9-14 0-2-1.6-3-3-2.2C16.5 3.9 13.5 7 12 10 10.5 7 7.5 3.9 6 2.8 4.6 2 3 3 3 5z"></path></svg><span>Bluesky</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:3px;font-size:0.9rem;color:#221f1b">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#33456e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 01-12.5 7.3L3 20.5l1.8-5.3A8.4 8.4 0 1121 11.5z"></path><path d="M8.8 9c.3 2.6 3.6 5.9 6.2 6.2l1.2-1.5 2 1c-.4 1.3-1.7 1.9-3 1.6-3-.7-6-3.7-6.7-6.7-.3-1.3.3-2.6 1.6-3l1 2z"></path></svg><span>WhatsApp</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:3px;font-size:0.9rem;color:#221f1b">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#33456e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"></rect><path d="M14.5 8h-1.2c-.9 0-1.3.5-1.3 1.4V21M9.8 12.5h4.6"></path></svg><span>Facebook</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:3px;font-size:0.9rem;color:#221f1b">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#33456e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="M3.5 6.5L12 13l8.5-6.5"></path></svg><span>E-mail</span>
+              </div>
+            </div>
+            <div style="height:1px;background:#ddd5c4"></div>
+            <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:3px;font-size:0.9rem;color:#221f1b">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#33456e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13.5a4 4 0 006 .5l2.5-2.5a4 4 0 00-5.7-5.7L11.5 7"></path><path d="M14 10.5a4 4 0 00-6-.5L5.5 12.5a4 4 0 005.7 5.7L12.5 17"></path></svg><span>Link kopiëren</span>
+            </div>
+            <div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:0.68rem;color:#6f6558;line-height:1.5;padding-top:2px">Geen third-party scripts — alleen <span style="color:#221f1b">share-intent</span>-links en <span style="color:#221f1b">navigator.clipboard</span>.</div>
+          </div>
+        </div>
+        <div style="padding:120px 24px 24px"></div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:start">
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:0.7rem;letter-spacing:0.09em;text-transform:uppercase;color:#6f6558">Desktop — gesloten en open</div>
+          <p style="margin:0;line-height:1.6;font-size:0.95rem;max-width:46ch">De knop is een outline-knop in <span style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:0.9em">--color-accent</span>, zoals de rest van de nav-interactie. Klik opent het menu eronder, uitgelijnd op de rechterrand; Escape en een klik buiten sluiten het. Hover op een regel: achtergrond <span style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:0.9em">#f2efe7</span>, geen kleurverandering van tekst of icoon.</p>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:0.7rem;letter-spacing:0.09em;text-transform:uppercase;color:#6f6558">Mobiel — Web Share API</div>
+          <p style="margin:0;line-height:1.6;font-size:0.95rem;max-width:46ch">Bestaat <span style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:0.9em">navigator.share</span>, dan is de knop een icoonknop van 44×44 in de mobiele nav die direct het systeemdeelvenster opent — geen eigen menu. Zonder ondersteuning valt hij terug op hetzelfde menu, als een vel dat vanaf de onderkant opkomt.</p>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:32px;flex-wrap:wrap;align-items:flex-start">
+        <div style="width:300px;border:1px solid #ddd5c4;border-radius:4px;background:#fbf9f4;padding:0;overflow:hidden">
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:2px solid #221f1b">
+            <div style="display:flex;align-items:center;gap:10px">
+              <svg width="28" height="14" viewBox="0 0 34 16" fill="none" stroke="#221f1b" stroke-width="1.3"><ellipse cx="10" cy="8" rx="9" ry="6"></ellipse><ellipse cx="24" cy="8" rx="9" ry="6"></ellipse></svg>
+              <span style="font-family:'Libre Caslon Text',Georgia,serif;font-size:1.05rem">Bipolariteit</span>
+            </div>
+            <div style="display:flex;gap:8px">
+              <div style="width:40px;height:40px;border:1px solid #33456e;border-radius:3px;display:flex;align-items:center;justify-content:center;color:#33456e">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.6" y1="10.5" x2="15.4" y2="6.5"></line><line x1="8.6" y1="13.5" x2="15.4" y2="17.5"></line></svg>
+              </div>
+              <div style="width:40px;height:40px;border:1px solid #ddd5c4;border-radius:3px;display:flex;align-items:center;justify-content:center;color:#6f6558">▸</div>
+            </div>
+          </div>
+          <div style="padding:20px 16px 24px;display:flex;flex-direction:column;gap:10px">
+            <div style="font-family:'Libre Caslon Display',Georgia,serif;font-size:1.8rem">Stikstof</div>
+            <div style="height:8px;background:#ddd5c4;border-radius:2px;width:90%"></div>
+            <div style="height:8px;background:#ddd5c4;border-radius:2px;width:70%"></div>
+          </div>
+        </div>
+
+        <div style="flex:1;min-width:320px;display:flex;flex-direction:column;gap:14px">
+          <div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:0.7rem;letter-spacing:0.09em;text-transform:uppercase;color:#6f6558">Maatvoering &amp; toestanden</div>
+          <div style="display:grid;grid-template-columns:auto 1fr;gap:10px 20px;font-size:0.92rem;line-height:1.5">
+            <span style="font-family:'IBM Plex Mono',ui-monospace,monospace;color:#6f6558">knop</span><span>hoogte 36px desktop / 44×44 mobiel · 1px <span style="font-family:'IBM Plex Mono',ui-monospace,monospace">#33456e</span> · radius 3px · padding 7px 12px</span>
+            <span style="font-family:'IBM Plex Mono',ui-monospace,monospace;color:#6f6558">icoon</span><span>20px kader, 16–18px getekend · stroke 1.6px · <span style="font-family:'IBM Plex Mono',ui-monospace,monospace">currentColor</span> · ronde uiteinden, zoals <span style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:0.9em">public/icons/</span></span>
+            <span style="font-family:'IBM Plex Mono',ui-monospace,monospace;color:#6f6558">hover</span><span>knop krijgt vulling <span style="font-family:'IBM Plex Mono',ui-monospace,monospace">#fbf9f4</span>; menuregel <span style="font-family:'IBM Plex Mono',ui-monospace,monospace">#f2efe7</span></span>
+            <span style="font-family:'IBM Plex Mono',ui-monospace,monospace;color:#6f6558">actief</span><span>rand en tekst naar <span style="font-family:'IBM Plex Mono',ui-monospace,monospace">#22304e</span> (accent, 12% donkerder)</span>
+            <span style="font-family:'IBM Plex Mono',ui-monospace,monospace;color:#6f6558">focus</span><span>outline 2px <span style="font-family:'IBM Plex Mono',ui-monospace,monospace">#33456e</span>, offset 2px — ook op elke menuregel</span>
+            <span style="font-family:'IBM Plex Mono',ui-monospace,monospace;color:#6f6558">menu</span><span>breedte 340px · 1px <span style="font-family:'IBM Plex Mono',ui-monospace,monospace">#ddd5c4</span> · <span style="font-family:'IBM Plex Mono',ui-monospace,monospace">#fbf9f4</span> · schaduw 0 8px 20px rgba(34,31,27,0.07)</span>
+            <span style="font-family:'IBM Plex Mono',ui-monospace,monospace;color:#6f6558">bevestiging</span><span>na kopiëren wisselt de regel 2s naar “Gekopieerd” met vinkje, in <span style="font-family:'IBM Plex Mono',ui-monospace,monospace">#1f6f66</span></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div style="height:1px;background:#ddd5c4"></div>
+
+    <section style="display:flex;flex-direction:column;gap:24px">
+      <div style="display:flex;align-items:baseline;gap:16px">
+        <span style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:0.8rem;color:#9c3b32;letter-spacing:0.06em">02</span>
+        <h2 style="font-family:'Libre Caslon Text',Georgia,serif;font-weight:400;font-size:1.953rem;margin:0">Deeltekst per paginatype</h2>
+      </div>
+      <p style="max-width:66ch;margin:0;line-height:1.6">Eén sjabloonzin per paginatype, ingevuld met wat de pagina al weet. Dezelfde zin dient als <span style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:0.9em">og:title</span> en als deeltekst bij X, Bluesky, WhatsApp en e-mail. Neutraal geformuleerd: de site beschrijft wie wat zegt, en oordeelt niet.</p>
+      <div style="border:1px solid #ddd5c4;border-radius:4px;overflow:hidden;background:#fbf9f4">
+        <div style="display:grid;grid-template-columns:130px 1fr 1fr;gap:0;background:#f2efe7;border-bottom:1px solid #ddd5c4;font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:0.68rem;letter-spacing:0.08em;text-transform:uppercase;color:#6f6558">
+          <div style="padding:10px 16px">Paginatype</div><div style="padding:10px 16px">Sjabloon</div><div style="padding:10px 16px">Voorbeeld</div>
+        </div>
+        <div style="display:grid;grid-template-columns:130px 1fr 1fr;border-bottom:1px solid #ddd5c4;font-size:0.9rem;line-height:1.5">
+          <div style="padding:14px 16px;font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:0.78rem;color:#6f6558">onderwerp</div>
+          <div style="padding:14px 16px;color:#6f6558">Wie zegt wat over {onderwerp} — {n} argumenten uit de Tweede Kamer</div>
+          <div style="padding:14px 16px">Wie zegt wat over stikstof — 1.845 argumenten uit de Tweede Kamer</div>
+        </div>
+        <div style="display:grid;grid-template-columns:130px 1fr 1fr;border-bottom:1px solid #ddd5c4;font-size:0.9rem;line-height:1.5">
+          <div style="padding:14px 16px;font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:0.78rem;color:#6f6558">partij</div>
+          <div style="padding:14px 16px;color:#6f6558">Waar {partij} op leunt: argumenten en stijl over {n} onderwerpen</div>
+          <div style="padding:14px 16px">Waar VVD op leunt: argumenten en stijl over 4 onderwerpen</div>
+        </div>
+        <div style="display:grid;grid-template-columns:130px 1fr 1fr;border-bottom:1px solid #ddd5c4;font-size:0.9rem;line-height:1.5">
+          <div style="padding:14px 16px;font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:0.78rem;color:#6f6558">persoon</div>
+          <div style="padding:14px 16px;color:#6f6558">Hoe {persoon} ({partij}) argumenteert — {n} argumenten geprofileerd</div>
+          <div style="padding:14px 16px">Hoe Sophie Hermans (VVD) argumenteert — 490 argumenten geprofileerd</div>
+        </div>
+        <div style="display:grid;grid-template-columns:130px 1fr 1fr;border-bottom:1px solid #ddd5c4;font-size:0.9rem;line-height:1.5">
+          <div style="padding:14px 16px;font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:0.78rem;color:#6f6558">tag</div>
+          <div style="padding:14px 16px;color:#6f6558">{tag}: welke partijen dit argumenttype gebruiken</div>
+          <div style="padding:14px 16px">Walton-Causaal: welke partijen dit argumenttype gebruiken</div>
+        </div>
+        <div style="display:grid;grid-template-columns:130px 1fr 1fr;border-bottom:1px solid #ddd5c4;font-size:0.9rem;line-height:1.5">
+          <div style="padding:14px 16px;font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:0.78rem;color:#6f6558">perspectief</div>
+          <div style="padding:14px 16px;color:#6f6558">Het debat door de bril van {perspectief} — {n} tagtoekenningen</div>
+          <div style="padding:14px 16px">Het debat door de bril van Filosofisch &amp; Argumentatietheoretisch — 8.552 tagtoekenningen</div>
+        </div>
+        <div style="display:grid;grid-template-columns:130px 1fr 1fr;font-size:0.9rem;line-height:1.5">
+          <div style="padding:14px 16px;font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:0.78rem;color:#6f6558">debat</div>
+          <div style="padding:14px 16px;color:#6f6558">{debat} ({datum}) — wie zei wat, fragment voor fragment</div>
+          <div style="padding:14px 16px">Kernenergie (2 juli 2026) — wie zei wat, fragment voor fragment</div>
+        </div>
+      </div>
+      <p style="max-width:66ch;margin:0;line-height:1.6;font-size:0.92rem;color:#6f6558">Achter elke deeltekst komt de canonieke URL. Op X en Bluesky wordt de zin afgekapt boven 240 tekens; houd sjabloon plus langste titel daaronder. Bij ontbrekende cijfers vervalt het getaldeel zonder de zin te breken.</p>
+    </section>
+
+    <div style="height:1px;background:#ddd5c4"></div>
+
+    <section style="display:flex;flex-direction:column;gap:24px">
+      <div style="display:flex;align-items:baseline;gap:16px">
+        <span style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:0.8rem;color:#9c3b32;letter-spacing:0.06em">03</span>
+        <h2 style="font-family:'Libre Caslon Text',Georgia,serif;font-weight:400;font-size:1.953rem;margin:0">De afbeelding bij een gedeelde link</h2>
+      </div>
+      <p style="max-width:66ch;margin:0;line-height:1.6">Plak je een URL in WhatsApp, LinkedIn of Slack, dan haalt die app een kaartje op: een plaatje, een titel en een regel tekst. Dat plaatje is de <span style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:0.9em">og:image</span> — 1200×630px, aangewezen met één meta-tag in de <span style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:0.9em">&lt;head&gt;</span>. Ontbreekt hij, dan toont de app een kale grijze regel. Hieronder twee scenario's: één vaste afbeelding voor de hele site, en een per pagina opgebouwde kaart.</p>
+
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div style="display:flex;align-items:baseline;gap:12px">
+          <span style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:0.7rem;letter-spacing:0.09em;text-transform:uppercase;color:#6f6558">Scenario A — één vaste afbeelding</span>
+          <span style="font-size:0.85rem;color:#6f6558">nu te bouwen, één bestand</span>
+        </div>
+        <div style="display:flex;gap:28px;flex-wrap:wrap;align-items:flex-start">
+          <div style="width:600px;height:315px;overflow:hidden;border:1px solid #ddd5c4;border-radius:4px;flex:none">
+            <div style="width:1200px;height:630px;transform:scale(0.5);transform-origin:top left;background:#f2efe7;position:relative;display:flex;flex-direction:column;justify-content:space-between;padding:80px;box-sizing:border-box">
+              <div style="position:absolute;left:0;top:0;width:100%;height:14px;display:flex">
+                <div style="flex:1;background:#1f6f66"></div><div style="flex:1;background:#9c3b32"></div>
+              </div>
+              <div style="display:flex;align-items:center;gap:24px">
+                <svg width="86" height="40" viewBox="0 0 34 16" fill="none" stroke="#221f1b" stroke-width="1.1"><ellipse cx="10" cy="8" rx="9" ry="6"></ellipse><ellipse cx="24" cy="8" rx="9" ry="6"></ellipse></svg>
+                <span style="font-family:'Libre Caslon Display',Georgia,serif;font-size:58px;color:#221f1b">Bipolariteit</span>
+              </div>
+              <div style="font-family:'Libre Caslon Text',Georgia,serif;font-size:56px;line-height:1.2;color:#221f1b;max-width:900px">Wie zegt wat. Kamerleden geprofileerd op argumenten en stijl in gepolariseerde debatten.</div>
+              <div style="display:flex;align-items:flex-end;justify-content:space-between">
+                <span style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:26px;letter-spacing:0.1em;color:#6f6558">BIPOLARITEIT.NL</span>
+                <span style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:22px;letter-spacing:0.08em;color:#9c3b32">ONTWIKKELVERSIE</span>
+              </div>
+            </div>
+          </div>
+          <div style="flex:1;min-width:280px;display:flex;flex-direction:column;gap:10px;font-size:0.92rem;line-height:1.6">
+            <p style="margin:0">Eén PNG in <span style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:0.9em">public/og/default.png</span>, gebruikt op elke pagina. De pro/contra-balk bovenaan is het enige merkteken dat verklapt waar de site over gaat.</p>
+            <p style="margin:0;color:#6f6558">Alle tekst blijft 80px van de rand. Vlakke kleuren, geen fotografie: onder 300&nbsp;KB zonder moeite. Titel en omschrijving per pagina komen alsnog uit <span style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:0.9em">BaseHead.astro</span>, dus de kaart is niet nietszeggend.</p>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:14px;margin-top:20px">
+        <div style="display:flex;align-items:baseline;gap:12px">
+          <span style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:0.7rem;letter-spacing:0.09em;text-transform:uppercase;color:#6f6558">Scenario B — per pagina opgebouwd</span>
+          <span style="font-size:0.85rem;color:#6f6558">zelfde raster, gevulde velden</span>
+        </div>
+        <p style="max-width:66ch;margin:0;line-height:1.6;font-size:0.95rem">Eén raster voor alle zes paginatypes: kicker met paginatype, titel in Libre Caslon Display, één regel bewijs onderaan. Wat wisselt is de strook onder de titel — daar staat het cijfer dat het paginatype eigen is. Alles bestaat al als data op de pagina; er komt geen nieuwe tekst bij.</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px">
+
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <div style="width:100%;max-width:500px;height:262px;overflow:hidden;border:1px solid #ddd5c4;border-radius:4px">
+              <div style="width:1200px;height:630px;transform:scale(0.4167);transform-origin:top left;background:#f2efe7;position:relative;display:flex;flex-direction:column;justify-content:space-between;padding:80px;box-sizing:border-box">
+                <div style="position:absolute;left:0;top:0;width:100%;height:14px;display:flex"><div style="flex:1;background:#1f6f66"></div><div style="flex:1;background:#9c3b32"></div></div>
+                <div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:26px;letter-spacing:0.14em;color:#6f6558">ONDERWERP</div>
+                <div style="display:flex;flex-direction:column;gap:36px">
+                  <div style="font-family:'Libre Caslon Display',Georgia,serif;font-size:104px;line-height:1;color:#221f1b">Stikstof</div>
+                  <div style="display:flex;flex-direction:column;gap:14px;max-width:920px">
+                    <div style="display:flex;height:26px;border:1px solid #ddd5c4">
+                      <div style="width:54%;background:#1f6f66"></div><div style="width:31%;background:#9c3b32"></div><div style="width:15%;background:#948a79"></div>
+                    </div>
+                    <div style="display:flex;justify-content:space-between;font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:24px;color:#6f6558">
+                      <span style="color:#1f6f66">54% PRO</span><span style="color:#9c3b32">31% CONTRA</span><span>15% ONDUIDELIJK</span>
+                    </div>
+                  </div>
+                </div>
+                <div style="display:flex;align-items:flex-end;justify-content:space-between">
+                  <span style="font-family:'Work Sans',sans-serif;font-size:28px;color:#221f1b">1.845 argumenten · 47 Kamerleden</span>
+                  <div style="display:flex;align-items:center;gap:16px">
+                    <svg width="58" height="27" viewBox="0 0 34 16" fill="none" stroke="#221f1b" stroke-width="1.2"><ellipse cx="10" cy="8" rx="9" ry="6"></ellipse><ellipse cx="24" cy="8" rx="9" ry="6"></ellipse></svg>
+                    <span style="font-family:'Libre Caslon Text',Georgia,serif;font-size:34px;color:#221f1b">Bipolariteit</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div style="font-size:0.85rem;color:#6f6558">Onderwerp — pro/contra-verdeling als strook.</div>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <div style="width:100%;max-width:500px;height:262px;overflow:hidden;border:1px solid #ddd5c4;border-radius:4px">
+              <div style="width:1200px;height:630px;transform:scale(0.4167);transform-origin:top left;background:#f2efe7;position:relative;display:flex;flex-direction:column;justify-content:space-between;padding:80px;box-sizing:border-box">
+                <div style="position:absolute;left:0;top:0;width:100%;height:14px;display:flex"><div style="flex:1;background:#1f6f66"></div><div style="flex:1;background:#9c3b32"></div></div>
+                <div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:26px;letter-spacing:0.14em;color:#6f6558">PERSOON · VVD</div>
+                <div style="display:flex;flex-direction:column;gap:36px">
+                  <div style="font-family:'Libre Caslon Display',Georgia,serif;font-size:104px;line-height:1;color:#221f1b">Sophie Hermans</div>
+                  <div style="display:flex;gap:16px;flex-wrap:wrap">
+                    <span style="border:1px solid #ddd5c4;border-left:5px solid #b68235;padding:12px 22px;font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:24px;color:#221f1b">Ideologie-Rechts-Economisch</span>
+                    <span style="border:1px solid #ddd5c4;border-left:5px solid #b68235;padding:12px 22px;font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:24px;color:#221f1b">Frame-Economisch</span>
+                  </div>
+                </div>
+                <div style="display:flex;align-items:flex-end;justify-content:space-between">
+                  <span style="font-family:'Work Sans',sans-serif;font-size:28px;color:#221f1b">490 argumenten · 2 onderwerpen</span>
+                  <div style="display:flex;align-items:center;gap:16px">
+                    <svg width="58" height="27" viewBox="0 0 34 16" fill="none" stroke="#221f1b" stroke-width="1.2"><ellipse cx="10" cy="8" rx="9" ry="6"></ellipse><ellipse cx="24" cy="8" rx="9" ry="6"></ellipse></svg>
+                    <span style="font-family:'Libre Caslon Text',Georgia,serif;font-size:34px;color:#221f1b">Bipolariteit</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div style="font-size:0.85rem;color:#6f6558">Persoon — de twee favoriete tags. Partij in de kicker.</div>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <div style="width:100%;max-width:500px;height:262px;overflow:hidden;border:1px solid #ddd5c4;border-radius:4px">
+              <div style="width:1200px;height:630px;transform:scale(0.4167);transform-origin:top left;background:#f2efe7;position:relative;display:flex;flex-direction:column;justify-content:space-between;padding:80px;box-sizing:border-box">
+                <div style="position:absolute;left:0;top:0;width:100%;height:14px;display:flex"><div style="flex:1;background:#1f6f66"></div><div style="flex:1;background:#9c3b32"></div></div>
+                <div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:26px;letter-spacing:0.14em;color:#6f6558">TAG · REDENEERSCHEMA</div>
+                <div style="display:flex;flex-direction:column;gap:30px">
+                  <div style="font-family:'Libre Caslon Display',Georgia,serif;font-size:96px;line-height:1;color:#221f1b">Walton-Causaal</div>
+                  <div style="font-family:'Libre Caslon Text',Georgia,serif;font-style:italic;font-size:34px;color:#6f6558;max-width:900px">Argumentatie gebaseerd op een directe oorzaak-gevolgrelatie.</div>
+                  <div style="display:flex;gap:10px;align-items:flex-end;height:96px">
+                    <div style="width:54px;height:100%;background:#b68235"></div>
+                    <div style="width:54px;height:88%;background:#b68235"></div>
+                    <div style="width:54px;height:60%;background:#b68235"></div>
+                    <div style="width:54px;height:52%;background:#b68235"></div>
+                    <div style="width:54px;height:42%;background:#b68235"></div>
+                    <div style="width:54px;height:34%;background:#b68235"></div>
+                    <div style="width:54px;height:26%;background:#b68235"></div>
+                  </div>
+                </div>
+                <div style="display:flex;align-items:flex-end;justify-content:space-between">
+                  <span style="font-family:'Work Sans',sans-serif;font-size:28px;color:#221f1b">253 toekenningen · 4 onderwerpen</span>
+                  <div style="display:flex;align-items:center;gap:16px">
+                    <svg width="58" height="27" viewBox="0 0 34 16" fill="none" stroke="#221f1b" stroke-width="1.2"><ellipse cx="10" cy="8" rx="9" ry="6"></ellipse><ellipse cx="24" cy="8" rx="9" ry="6"></ellipse></svg>
+                    <span style="font-family:'Libre Caslon Text',Georgia,serif;font-size:34px;color:#221f1b">Bipolariteit</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div style="font-size:0.85rem;color:#6f6558">Tag — omschrijving plus de top-7 partijen als staafjes, in de perspectiefkleur.</div>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <div style="width:100%;max-width:500px;height:262px;overflow:hidden;border:1px solid #ddd5c4;border-radius:4px">
+              <div style="width:1200px;height:630px;transform:scale(0.4167);transform-origin:top left;background:#f2efe7;position:relative;display:flex;flex-direction:column;justify-content:space-between;padding:80px;box-sizing:border-box">
+                <div style="position:absolute;left:0;top:0;width:100%;height:14px;display:flex"><div style="flex:1;background:#1f6f66"></div><div style="flex:1;background:#9c3b32"></div></div>
+                <div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:26px;letter-spacing:0.14em;color:#6f6558">DEBAT · 2 JULI 2026</div>
+                <div style="display:flex;flex-direction:column;gap:34px">
+                  <div style="font-family:'Libre Caslon Display',Georgia,serif;font-size:104px;line-height:1;color:#221f1b">Kernenergie</div>
+                  <div style="border-left:5px solid #1f6f66;padding-left:28px;font-family:'Libre Caslon Text',Georgia,serif;font-size:36px;line-height:1.35;color:#221f1b;max-width:940px">“Kernenergie is de ruggengraat van een schoon, betaalbaar en soeverein energiesysteem.”<span style="font-family:'Work Sans',sans-serif;font-size:26px;color:#6f6558"> — Daniël van den Berg (JA21)</span></div>
+                </div>
+                <div style="display:flex;align-items:flex-end;justify-content:space-between">
+                  <span style="font-family:'Work Sans',sans-serif;font-size:28px;color:#221f1b">86 fragmenten · 23 sprekers</span>
+                  <div style="display:flex;align-items:center;gap:16px">
+                    <svg width="58" height="27" viewBox="0 0 34 16" fill="none" stroke="#221f1b" stroke-width="1.2"><ellipse cx="10" cy="8" rx="9" ry="6"></ellipse><ellipse cx="24" cy="8" rx="9" ry="6"></ellipse></svg>
+                    <span style="font-family:'Libre Caslon Text',Georgia,serif;font-size:34px;color:#221f1b">Bipolariteit</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div style="font-size:0.85rem;color:#6f6558">Debat — één citaat, afgekapt op 140 tekens. Partij en onderwerp volgen hetzelfde raster.</div>
+          </div>
+
+        </div>
+        <p style="max-width:66ch;margin:0;line-height:1.6;font-size:0.92rem;color:#6f6558">Titels langer dan 26 tekens zakken naar 76px en mogen op twee regels; daarboven wordt afgekapt met een beletselteken. De onderste regel is altijd één zin met de twee cijfers die de pagina zelf al toont — nooit een nieuw cijfer.</p>
+      </div>
+    </section>
+
+    <div style="height:1px;background:#ddd5c4"></div>
+
+    <section style="display:flex;flex-direction:column;gap:22px">
+      <div style="display:flex;align-items:baseline;gap:16px">
+        <span style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:0.8rem;color:#9c3b32;letter-spacing:0.06em">04</span>
+        <h2 style="font-family:'Libre Caslon Text',Georgia,serif;font-weight:400;font-size:1.953rem;margin:0">Voor de bouwkant</h2>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:start">
+        <div style="border:1px solid #ddd5c4;border-radius:4px;background:#fbf9f4;padding:22px;display:flex;flex-direction:column;gap:12px">
+          <div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:0.7rem;letter-spacing:0.09em;text-transform:uppercase;color:#6f6558">Meta-tags in BaseHead.astro</div>
+          <pre style="margin:0;font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:0.76rem;line-height:1.7;color:#221f1b;white-space:pre-wrap">&lt;meta property="og:title" content={shareTitle} /&gt;
+&lt;meta property="og:description" content={description} /&gt;
+&lt;meta property="og:image" content={ogImage} /&gt;
+&lt;meta property="og:image:width" content="1200" /&gt;
+&lt;meta property="og:image:height" content="630" /&gt;
+&lt;meta property="og:url" content={canonical} /&gt;
+&lt;meta property="og:type" content="website" /&gt;
+&lt;meta name="twitter:card" content="summary_large_image" /&gt;</pre>
+          <div style="font-size:0.88rem;line-height:1.6;color:#6f6558"><span style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:0.9em">ogImage</span> valt terug op <span style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:0.9em">/og/default.png</span> — scenario B kan er later per pagina overheen zonder dat de rest verandert.</div>
+        </div>
+        <div style="border:1px solid #ddd5c4;border-radius:4px;background:#fbf9f4;padding:22px;display:flex;flex-direction:column;gap:12px">
+          <div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:0.7rem;letter-spacing:0.09em;text-transform:uppercase;color:#6f6558">Waarden in dit ontwerp</div>
+          <div style="display:grid;grid-template-columns:auto 1fr;gap:8px 18px;font-size:0.88rem;line-height:1.5">
+            <span style="font-family:'IBM Plex Mono',ui-monospace,monospace;color:#6f6558">kleuren</span><span>uitsluitend uit <span style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:0.9em">styling-tokens.md</span>, licht thema</span>
+            <span style="font-family:'IBM Plex Mono',ui-monospace,monospace;color:#6f6558">nieuw</span><span><span style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:0.9em">#22304e</span> — actieve staat van de deelknop, accent 12% donkerder</span>
+            <span style="font-family:'IBM Plex Mono',ui-monospace,monospace;color:#6f6558">tagkleur</span><span><span style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:0.9em">#b68235</span> in de tag-kaart komt uit de perspectiefkleur van de tag, niet uit het palet</span>
+            <span style="font-family:'IBM Plex Mono',ui-monospace,monospace;color:#6f6558">og-type</span><span>Libre Caslon Display 104/96/76px · Libre Caslon Text italic 34–36px · Work Sans 28px · IBM Plex Mono 22–26px, letterspacing 0.14em</span>
+            <span style="font-family:'IBM Plex Mono',ui-monospace,monospace;color:#6f6558">marges</span><span>80px rondom; niets buiten die veilige zone</span>
+            <span style="font-family:'IBM Plex Mono',ui-monospace,monospace;color:#6f6558">export</span><span>PNG-8 volstaat — vlakke kleuren, ±40&nbsp;KB per kaart</span>
+          </div>
+        </div>
+      </div>
+      <div style="border-left:3px solid #9c3b32;padding:4px 0 4px 20px;max-width:66ch">
+        <p style="margin:0;line-height:1.6;font-size:0.95rem">Nog open: of scenario B bij de build gerenderd wordt (één PNG per pagina in <span style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:0.9em">dist/og/</span>) of on-demand. Het ontwerp is voor beide gelijk — het raster is één HTML-sjabloon met zes invullingen.</p>
+      </div>
+    </section>
+
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1160}}"></script>
+</body>
+</html>
