@@ -4,10 +4,10 @@ import VChart from "vue-echarts";
 import { use } from "echarts/core";
 import { CanvasRenderer } from "echarts/renderers";
 import { BarChart, CustomChart } from "echarts/charts";
-import { TooltipComponent, GridComponent, MarkLineComponent } from "echarts/components";
+import { TooltipComponent, GridComponent } from "echarts/components";
 import { useTheme } from "../lib/useTheme";
 import { displayPartyName } from "../lib/parties";
-import { deriveTagUsage, bucketSmallCounts, median } from "../lib/aggregate";
+import { deriveTagUsage, bucketSmallCounts } from "../lib/aggregate";
 import type { BoxplotStats } from "../lib/aggregate";
 import { slugify } from "../lib/slug";
 import { PERSPECTIEVEN } from "../lib/tagIcons.generated";
@@ -19,7 +19,7 @@ import { initFiltersFromUrl, matches } from "../lib/filters";
 import type { Argument } from "../lib/types";
 import type { TagSignaal } from "../lib/tagSignalen";
 
-use([CanvasRenderer, BarChart, CustomChart, TooltipComponent, GridComponent, MarkLineComponent]);
+use([CanvasRenderer, BarChart, CustomChart, TooltipComponent, GridComponent]);
 
 export interface TopicTaggedArgument extends Argument {
 	topicSlug: string;
@@ -91,13 +91,7 @@ const isDark = useTheme();
 const PERSPECTIEF_KLEUR = new Map(PERSPECTIEVEN.map((p) => [p.naam, p.kleur]));
 const ONBEKENDE_KLEUR = "#6f6558";
 
-// Mediaan i.p.v. gemiddelde als referentielijn (issue #202) -- zelfde
-// redenering als deriveVerbositeitMedians: bij een paar veelgebruikte tags
-// en een lange staart van zelden gebruikte, trekt een gemiddelde te hard
-// omhoog om nog "typisch" te zijn.
-const medianCount = computed(() => median(chartRows.value.map((r) => r.count)));
-
-// Boxplot-achtige whisker per tag (issue #202-vervolg): mediaan-tik + IQR
+// Boxplot-achtige whisker per tag (issue #202): mediaan-tik + IQR
 // (P25-P75) van het gebruik van díe tag over alle personen/partijen heen,
 // bovenop de eigen balk -- zo zie je per tag of deze persoon/partij daar
 // boven- of ondergemiddeld op zit, i.p.v. alleen één referentielijn voor de
@@ -163,14 +157,6 @@ const chartOption = computed(() => ({
 				itemStyle: { color: PERSPECTIEF_KLEUR.get(r.perspectief) ?? ONBEKENDE_KLEUR },
 			})),
 			barMaxWidth: 22,
-			markLine: {
-				silent: true,
-				symbol: "none",
-				animation: false,
-				lineStyle: { type: "dashed", color: isDark.value ? "#f2ede3" : "#221f1b" },
-				label: { formatter: "mediaan: {c}", color: isDark.value ? "#f2ede3" : "#221f1b", position: "insideEndTop" },
-				data: [{ xAxis: medianCount.value }],
-			},
 		},
 		...(boxplotRows.value.length
 			? [
