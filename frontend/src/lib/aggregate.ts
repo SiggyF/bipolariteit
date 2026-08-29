@@ -145,6 +145,31 @@ export function median(values: number[]): number {
 	return sorted.length % 2 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2;
 }
 
+/** Lineaire interpolatie tussen de twee omringende waarden (dezelfde
+ * conventie als numpy's default "linear"), op een al gesorteerde array. */
+export function quantile(sortedValues: number[], q: number): number {
+	if (!sortedValues.length) return 0;
+	const pos = (sortedValues.length - 1) * q;
+	const base = Math.floor(pos);
+	const rest = pos - base;
+	const next = sortedValues[base + 1];
+	return next === undefined ? sortedValues[base] : sortedValues[base] + rest * (next - sortedValues[base]);
+}
+
+export interface BoxplotStats {
+	median: number;
+	q1: number;
+	q3: number;
+}
+
+/** Mediaan + IQR (P25-P75) over een reeks waarden -- bedoeld om per tag de
+ * spreiding te tonen over alle personen/partijen heen (zie ActorTagUsage.vue),
+ * als boxplot-achtige whisker bovenop de eigen balk van één persoon/partij. */
+export function boxplotStats(values: number[]): BoxplotStats {
+	const sorted = [...values].sort((a, b) => a - b);
+	return { median: median(sorted), q1: quantile(sorted, 0.25), q3: quantile(sorted, 0.75) };
+}
+
 /** Mediaan per verbositeitsmaat over alle sprekers (elk met minstens
  * `minSprekerbeurten` sprekerbeurten), i.p.v. het gemiddelde over de gepoolde
  * corpustekst -- bij deze dichtheidsmaten (0,03 tot 1,6 argumenten/1000

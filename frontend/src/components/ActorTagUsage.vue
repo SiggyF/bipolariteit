@@ -3,11 +3,12 @@ import { computed } from "vue";
 import VChart from "vue-echarts";
 import { use } from "echarts/core";
 import { CanvasRenderer } from "echarts/renderers";
-import { BarChart } from "echarts/charts";
+import { BarChart, CustomChart } from "echarts/charts";
 import { TooltipComponent, GridComponent, MarkLineComponent } from "echarts/components";
 import { useTheme } from "../lib/useTheme";
 import { displayPartyName } from "../lib/parties";
 import { deriveTagUsage, bucketSmallCounts, median } from "../lib/aggregate";
+import type { BoxplotStats } from "../lib/aggregate";
 import { slugify } from "../lib/slug";
 import { PERSPECTIEVEN } from "../lib/tagIcons.generated";
 import { tagIconPath } from "../lib/tagIcon";
@@ -18,7 +19,7 @@ import { initFiltersFromUrl, matches } from "../lib/filters";
 import type { Argument } from "../lib/types";
 import type { TagSignaal } from "../lib/tagSignalen";
 
-use([CanvasRenderer, BarChart, TooltipComponent, GridComponent, MarkLineComponent]);
+use([CanvasRenderer, BarChart, CustomChart, TooltipComponent, GridComponent, MarkLineComponent]);
 
 export interface TopicTaggedArgument extends Argument {
 	topicSlug: string;
@@ -41,6 +42,11 @@ const props = defineProps<{
 	 * over alle personen heen, niet alleen deze persoon z'n argumentList. */
 	favorieteTags?: TagSignaalWeergave[];
 	minstFavorieteTags?: TagSignaalWeergave[];
+	/** Per tag: mediaan + IQR (P25-P75) van het gebruik over alle
+	 * personen/partijen heen (afhankelijk van `mode`) -- al berekend door de
+	 * aanroepende pagina, zelfde reden als favorieteTags. Getoond als
+	 * boxplot-achtige whisker bovenop de eigen balk. */
+	tagBoxplot?: Record<string, BoxplotStats>;
 }>();
 
 initFiltersFromUrl(props.argumentList);
@@ -91,6 +97,49 @@ const ONBEKENDE_KLEUR = "#6f6558";
 // omhoog om nog "typisch" te zijn.
 const medianCount = computed(() => median(chartRows.value.map((r) => r.count)));
 
+// Boxplot-achtige whisker per tag (issue #202-vervolg): mediaan-tik + IQR
+// (P25-P75) van het gebruik van díe tag over alle personen/partijen heen,
+// bovenop de eigen balk -- zo zie je per tag of deze persoon/partij daar
+// boven- of ondergemiddeld op zit, i.p.v. alleen één referentielijn voor de
+// hele grafiek. `tagBoxplot` ontbreekt op een `overig`-rij (bucketSmallCounts
+// heeft geen eigen sleutel) en wordt dan overgeslagen.
+const boxplotRows = computed(() => {
+	if (!props.tagBoxplot) return [];
+	return chartRows.value
+		.map((r, i) => {
+			const stats = props.tagBoxplot![r.sleutel];
+			return stats ? [i, stats.q1, stats.q3, stats.median] : null;
+		})
+		.filter((row): row is number[] => row !== null);
+});
+
+const WHISKER_KLEUR = { light: "#221f1b", dark: "#f2ede3" };
+
+function renderWhisker(_params: any, api: any) {
+	const idx = api.value(0) as number;
+	const q1 = api.value(1) as number;
+	const q3 = api.value(2) as number;
+	const med = api.value(3) as number;
+
+	const y = api.coord([0, idx])[1];
+	const xQ1 = api.coord([q1, idx])[0];
+	const xQ3 = api.coord([q3, idx])[0];
+	const xMed = api.coord([med, idx])[0];
+	const capHalf = 4;
+	const color = isDark.value ? WHISKER_KLEUR.dark : WHISKER_KLEUR.light;
+	const style = { stroke: color, lineWidth: 1.5 };
+
+	return {
+		type: "group",
+		children: [
+			{ type: "line", shape: { x1: xQ1, y1: y, x2: xQ3, y2: y }, style },
+			{ type: "line", shape: { x1: xQ1, y1: y - capHalf, x2: xQ1, y2: y + capHalf }, style },
+			{ type: "line", shape: { x1: xQ3, y1: y - capHalf, x2: xQ3, y2: y + capHalf }, style },
+			{ type: "line", shape: { x1: xMed, y1: y - capHalf - 2, x2: xMed, y2: y + capHalf + 2 }, style: { ...style, lineWidth: 2.5 } },
+		],
+	};
+}
+
 const chartOption = computed(() => ({
 	backgroundColor: "transparent",
 	textStyle: { fontFamily: "inherit" },
@@ -123,6 +172,19 @@ const chartOption = computed(() => ({
 				data: [{ xAxis: medianCount.value }],
 			},
 		},
+		...(boxplotRows.value.length
+			? [
+					{
+						type: "custom",
+						silent: true,
+						z: 10,
+						data: boxplotRows.value,
+						encode: { x: [1, 2, 3], y: 0 },
+						renderItem: renderWhisker,
+						tooltip: { show: false },
+					},
+				]
+			: []),
 	],
 }));
 

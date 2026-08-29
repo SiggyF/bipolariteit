@@ -6,7 +6,7 @@ import { slugify } from "../../lib/slug";
 import { NO_PARTY } from "../../lib/types";
 import { PERSPECTIEVEN } from "../../lib/tagIcons.generated";
 import { berekenTagSignalen, signaalTitle, signaalDetail } from "../../lib/tagSignalen";
-import { deriveVerbositeitStats, deriveVerbositeitMedians } from "../../lib/aggregate";
+import { deriveVerbositeitStats, deriveVerbositeitMedians, boxplotStats, type BoxplotStats } from "../../lib/aggregate";
 
 const topicModules = import.meta.glob("../../../../data/export/topics/*.json", { eager: true });
 
@@ -63,7 +63,16 @@ const globalTagCount = new Map<string, number>();
 let globalTagTotal = 0;
 const tagBeschrijving = new Map<string, string>();
 
+// Voor de boxplot-whisker op de taghistogram (issue #202-vervolg): per tag
+// de verdeling van het gebruik over alle personen heen, inclusief personen
+// die een tag nooit gebruikten (0) -- zonder die nullen zou de mediaan een
+// vertekend beeld geven van "hoe vaak gebruikt een willekeurige spreker deze
+// tag doorgaans".
+const allPersonNames = new Set<string>();
+const tagCountPerPerson = new Map<string, Map<string, number>>();
+
 for (const argument of allArgs) {
+	allPersonNames.add(argument.actor.name);
 	for (const tag of argument.tags) {
 		if (tag.created_by !== "llm") continue;
 		if (!tagBeschrijving.has(tag.sleutel)) tagBeschrijving.set(tag.sleutel, tag.beschrijving);
@@ -73,7 +82,16 @@ for (const argument of allArgs) {
 			personTagCount.set(tag.sleutel, (personTagCount.get(tag.sleutel) ?? 0) + 1);
 			personTotal++;
 		}
+		const perPerson = tagCountPerPerson.get(argument.actor.name) ?? new Map<string, number>();
+		perPerson.set(tag.sleutel, (perPerson.get(tag.sleutel) ?? 0) + 1);
+		tagCountPerPerson.set(argument.actor.name, perPerson);
 	}
+}
+
+const tagBoxplot: Record<string, BoxplotStats> = {};
+for (const sleutel of globalTagCount.keys()) {
+	const counts = [...allPersonNames].map((p) => tagCountPerPerson.get(p)?.get(sleutel) ?? 0);
+	tagBoxplot[sleutel] = boxplotStats(counts);
 }
 
 const { favorieten, minstFavoriet } = berekenTagSignalen(personTagCount, personTotal, globalTagCount, globalTagTotal, { topN: 3 });
@@ -190,6 +208,7 @@ const verbositeitBadges =
 			argumentList={argumentList}
 			favorieteTags={favorieteTags}
 			minstFavorieteTags={minstFavorieteTags}
+			tagBoxplot={tagBoxplot}
 			client:only="vue"
 		>
 			{verbositeitStats && corpusMedianen && (
