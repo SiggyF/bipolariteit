@@ -176,7 +176,7 @@ function medianTooltip(params: any) {
 	const [idx, waarde] = params.value as number[];
 	const sleutel = chartRows.value[idx]?.sleutel ?? "";
 	const over = props.mode === "persoon" ? "alle sprekers" : "alle partijen";
-	return `<strong>${sleutel}</strong><br/>mediaan over ${over}: ${waarde.toFixed(1)}`;
+	return `<strong>${sleutel}</strong><br/>mediaan over ${over}: ${Math.round(waarde * 100)}%`;
 }
 
 // Partijgenoten-mediaan als klein grijstinten partijicoontje i.p.v. een tik
@@ -217,7 +217,7 @@ function renderPartyIcon(_params: any, api: any) {
 function partyMedianTooltip(params: any) {
 	const [idx, waarde] = params.value as number[];
 	const sleutel = chartRows.value[idx]?.sleutel ?? "";
-	return `<strong>${sleutel}</strong><br/>mediaan over fractiegenoten: ${waarde.toFixed(1)}`;
+	return `<strong>${sleutel}</strong><br/>mediaan over fractiegenoten: ${Math.round(waarde * 100)}%`;
 }
 
 // Tagicoontje voor de as-labels: ECharts' as-labels zijn tekst + optionele
@@ -249,7 +249,10 @@ const chartOption = computed(() => ({
 	grid: { left: 90, right: 24, top: 8, bottom: 16 },
 	xAxis: {
 		type: "value",
-		axisLabel: { color: isDark.value ? "#a89e8c" : "#6f6558" },
+		axisLabel: {
+			color: isDark.value ? "#a89e8c" : "#6f6558",
+			formatter: (waarde: number) => `${Math.round(waarde * 100)}%`,
+		},
 		splitLine: { lineStyle: { color: isDark.value ? "#453f36" : "#ddd5c4" } },
 	},
 	yAxis: {
@@ -265,10 +268,15 @@ const chartOption = computed(() => ({
 		{
 			type: "bar",
 			data: chartRows.value.map((r) => ({
-				value: r.count,
+				value: taggedArgumentCount.value ? r.count / taggedArgumentCount.value : 0,
+				count: r.count,
 				itemStyle: { color: PERSPECTIEF_KLEUR.get(r.perspectief) ?? ONBEKENDE_KLEUR },
 			})),
 			barMaxWidth: BAR_MAX_WIDTH,
+			tooltip: {
+				formatter: (params: any) =>
+					`<strong>${params.name}</strong><br/>${Math.round(params.value * 100)}% (${params.data.count} van ${taggedArgumentCount.value} getagde argumenten)`,
+			},
 		},
 		// z: het partij-icoontje (breder) tekent ónder de mediaan-streep, niet
 		// erboven -- anders verdwijnt de dunne streep volledig als beide zo goed
@@ -303,6 +311,15 @@ const chartOption = computed(() => ({
 const chartHeight = computed(() => `${Math.max(160, chartRows.value.length * 28 + 24)}px`);
 
 const totalArguments = computed(() => filteredList.value.length);
+
+// Noemer voor de tag-percentages in de taghistogram (issue #202): alleen
+// argumenten met minstens één LLM-tag, niet alle argumenten -- bijna de helft
+// heeft er geen (te kort, buiten de taxonomie, ...), en die als nul
+// meetellen zou elk percentage verdunnen t.o.v. wat er in de mediaan-
+// berekening (server-side, dezelfde definitie) gebeurt.
+const taggedArgumentCount = computed(
+	() => filteredList.value.filter((a) => a.tags.some((t) => t.created_by === "llm")).length,
+);
 
 const perTopic = computed(() => {
 	const byTopic = new Map<string, { topicSlug: string; topicName: string; count: number }>();
@@ -408,10 +425,11 @@ const ICOON_STER = "M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 
 					<a v-if="medianRows.length" href="/over/#tag-mediaan-methode" class="info-link" title="Wat betekent de tik boven een balk?" aria-label="Uitleg: wat de mediaan-tik boven een balk betekent">?</a>
 				</h2>
 				<p class="panel-note">
-					Hoeveel argumenten van {{ mode === "persoon" ? "deze spreker" : "deze partij" }} elke tag toegekend
-					kregen. Drie labelgroepen die automatisch uit metadata volgen (bv. wie iemand is, in welke setting
-					het gezegd werd) staan er niet bij -- die zeggen niets over de eigen argumentatiestijl, alleen
-					door het taalmodel zelf herkende tags tellen mee.
+					In hoeveel procent van de getagde argumenten van {{ mode === "persoon" ? "deze spreker" : "deze partij" }}
+					elke tag voorkomt (argumenten zonder enige LLM-tag tellen niet mee in de noemer). Drie
+					labelgroepen die automatisch uit metadata volgen (bv. wie iemand is, in welke setting het gezegd
+					werd) staan er niet bij -- die zeggen niets over de eigen argumentatiestijl, alleen door het
+					taalmodel zelf herkende tags tellen mee.
 					<template v-if="mode === 'persoon'">
 						Tags met minder dan {{ PERSON_TAG_THRESHOLD }} toekenningen zijn samengevoegd tot "overig" -- bij deze
 						volumes zegt een enkele toekenning weinig.

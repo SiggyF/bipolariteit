@@ -44,38 +44,41 @@ const argumentList = allArgs.filter((a: any) => a.actor.party && canonicalParty(
 // gebruikten (0).
 const allParties = new Set<string>();
 const tagCountPerParty = new Map<string, Map<string, number>>();
-const tagTotalPerParty = new Map<string, number>();
+const argCountPerParty = new Map<string, number>();
 const globalTagCount = new Map<string, number>();
 
 for (const argument of allArgs) {
 	if (!argument.actor.party || argument.actor.party === NO_PARTY) continue;
 	const argPartij = canonicalParty(argument.actor.party);
 	allParties.add(argPartij);
+	// Alleen argumenten met minstens één LLM-tag tellen mee als noemer -- zie
+	// personen/[naam].astro voor de toelichting.
+	if (argument.tags.some((t: any) => t.created_by === "llm")) {
+		argCountPerParty.set(argPartij, (argCountPerParty.get(argPartij) ?? 0) + 1);
+	}
 	for (const tag of argument.tags) {
 		if (tag.created_by !== "llm") continue;
 		globalTagCount.set(tag.sleutel, (globalTagCount.get(tag.sleutel) ?? 0) + 1);
 		const perParty = tagCountPerParty.get(argPartij) ?? new Map<string, number>();
 		perParty.set(tag.sleutel, (perParty.get(tag.sleutel) ?? 0) + 1);
 		tagCountPerParty.set(argPartij, perParty);
-		tagTotalPerParty.set(argPartij, (tagTotalPerParty.get(argPartij) ?? 0) + 1);
 	}
 }
 
-// Aandeel i.p.v. kale telling: partijen verschillen enorm in totaalvolume
-// (VVD ~1845 vs. DENK ~98 argumenten), dus de verdeling van kale tellingen
-// over alle partijen zou gedomineerd worden door de grootste partijen --
-// zichtbaar als een mediaan die bij een kleine partij vrijwel elke balk
-// overschrijdt, ook als die partij een tag juist relatief vaak gebruikt.
-// Terugschalen naar déze partij z'n eigen totaal houdt de mediaanlijn op
-// dezelfde as als de balk (aantallen).
-const partyTotal = tagTotalPerParty.get(party ?? "") ?? 0;
+// Tags per argument (niet per tag-toekenning of kaal totaal) als basis voor
+// de mediaan: partijen verschillen enorm in totaalvolume (VVD ~1845 vs. DENK
+// ~98 argumenten), dus "9 van de 98 argumenten kregen deze tag" (9%) is
+// direct vergelijkbaar tussen partijen, in tegenstelling tot een kale
+// telling of een aandeel van de partij se eigen tag-portfolio. Dezelfde
+// schaal als de balk zelf (client-side ook per argument gedeeld, zie
+// ActorTagUsage.vue), dus geen terugschaling meer nodig.
 const tagMedian: Record<string, number> = {};
 for (const sleutel of globalTagCount.keys()) {
-	const aandelen = [...allParties].map((p) => {
-		const total = tagTotalPerParty.get(p) ?? 0;
-		return total ? (tagCountPerParty.get(p)?.get(sleutel) ?? 0) / total : 0;
+	const rates = [...allParties].map((p) => {
+		const totalArgs = argCountPerParty.get(p) ?? 0;
+		return totalArgs ? (tagCountPerParty.get(p)?.get(sleutel) ?? 0) / totalArgs : 0;
 	});
-	tagMedian[sleutel] = median(aandelen) * partyTotal;
+	tagMedian[sleutel] = median(rates);
 }
 ---
 

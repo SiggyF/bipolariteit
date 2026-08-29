@@ -70,13 +70,19 @@ const tagBeschrijving = new Map<string, string>();
 // vaak gebruikt een willekeurige spreker deze tag doorgaans".
 const allPersonNames = new Set<string>();
 const tagCountPerPerson = new Map<string, Map<string, number>>();
-const tagTotalPerPerson = new Map<string, number>();
+const argCountPerPerson = new Map<string, number>();
 const partyOfPerson = new Map<string, string>();
 
 for (const argument of allArgs) {
 	allPersonNames.add(argument.actor.name);
 	if (argument.actor.party && !partyOfPerson.has(argument.actor.name)) {
 		partyOfPerson.set(argument.actor.name, canonicalParty(argument.actor.party));
+	}
+	// Alleen argumenten met minstens één LLM-tag tellen mee als noemer -- bijna
+	// de helft van alle argumenten heeft er geen (bv. te kort, of buiten de
+	// taxonomie), en die als nul meetellen zou elk percentage verdunnen.
+	if (argument.tags.some((t: any) => t.created_by === "llm")) {
+		argCountPerPerson.set(argument.actor.name, (argCountPerPerson.get(argument.actor.name) ?? 0) + 1);
 	}
 	for (const tag of argument.tags) {
 		if (tag.created_by !== "llm") continue;
@@ -90,24 +96,25 @@ for (const argument of allArgs) {
 		const perPerson = tagCountPerPerson.get(argument.actor.name) ?? new Map<string, number>();
 		perPerson.set(tag.sleutel, (perPerson.get(tag.sleutel) ?? 0) + 1);
 		tagCountPerPerson.set(argument.actor.name, perPerson);
-		tagTotalPerPerson.set(argument.actor.name, (tagTotalPerPerson.get(argument.actor.name) ?? 0) + 1);
 	}
 }
 
-// Aandeel i.p.v. kale telling als basis voor de mediaan: personen verschillen
-// enorm in totaalvolume (een paar honderd vs. een enkel argument), dus de
-// verdeling van kale tellingen over alle personen zou gedomineerd worden door
-// de meest actieve sprekers. Terugschalen naar déze persoon z'n eigen totaal
-// houdt de mediaanlijn op dezelfde as als de balk (aantallen), maar zonder
-// die scheeftrekking.
+// Tags per argument (niet per tag-toekenning) als basis voor de mediaan: een
+// kale telling, of zelfs een aandeel van iemands eigen tag-portfolio, laat
+// zich lastig interpreteren zodra personen enorm verschillen in hoeveel ze
+// aan het woord komen. "9 van de 490 argumenten kregen deze tag" (16%) is
+// direct vergelijkbaar tussen sprekers, ook tussen een minister met 944
+// toekenningen en een achterbanker met een handvol. Dezelfde schaal als de
+// balk zelf (client-side ook per argument gedeeld, zie ActorTagUsage.vue),
+// dus geen terugschaling meer nodig.
 function tagMedianOver(personen: string[]): Record<string, number> {
 	const result: Record<string, number> = {};
 	for (const sleutel of globalTagCount.keys()) {
-		const aandelen = personen.map((p) => {
-			const total = tagTotalPerPerson.get(p) ?? 0;
-			return total ? (tagCountPerPerson.get(p)?.get(sleutel) ?? 0) / total : 0;
+		const rates = personen.map((p) => {
+			const totalArgs = argCountPerPerson.get(p) ?? 0;
+			return totalArgs ? (tagCountPerPerson.get(p)?.get(sleutel) ?? 0) / totalArgs : 0;
 		});
-		result[sleutel] = median(aandelen) * personTotal;
+		result[sleutel] = median(rates);
 	}
 	return result;
 }
