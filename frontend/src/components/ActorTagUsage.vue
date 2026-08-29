@@ -50,6 +50,10 @@ const props = defineProps<{
 	 * partijgenoten van deze spreker. Laat zien of iemand ook binnen de eigen
 	 * fractie op- of onderscheidt, niet alleen t.o.v. de volledige Kamer. */
 	tagPartyMedian?: Record<string, number>;
+	/** Ruwe, kleurloze SVG-markup van het partijlogo (zie lib/partyIconMono.ts,
+	 * alleen server-side leesbaar) -- de kleur wordt hier pas toegevoegd zodat
+	 * die met het thema (licht/donker) mee kan schakelen. */
+	partyIconSvgRaw?: string | null;
 }>();
 
 initFiltersFromUrl(props.argumentList);
@@ -124,11 +128,21 @@ function renderMedianTik(_params: any, api: any) {
 	return { type: "line", shape: { x1: xMed, y1: y - capHalf, x2: xMed, y2: y + capHalf }, style: { stroke: color, lineWidth: 2 } };
 }
 
-// Partijgenoten-mediaan als open cirkel i.p.v. een tik (issue #202-vervolg):
-// alleen op de persoonspagina, als losstaand symbool naast de tik voor het
-// Kamerbrede mediaan zodat de twee referentiepunten uit elkaar te houden zijn.
+// Partijgenoten-mediaan als klein zwart-wit partijicoontje i.p.v. een tik
+// (issue #202-vervolg): alleen op de persoonspagina, als losstaand symbool
+// naast de tik voor het Kamerbrede mediaan zodat de twee referentiepunten uit
+// elkaar te houden zijn. De kleur wordt hier (client-side, dus thema-bewust)
+// toegevoegd aan de kleurloze SVG-markup die de pagina aanlevert -- zie
+// partyIconSvgRaw hierboven.
+const partyIconUri = computed(() => {
+	if (!props.partyIconSvgRaw) return null;
+	const color = isDark.value ? MEDIAAN_KLEUR.dark : MEDIAAN_KLEUR.light;
+	const svg = props.partyIconSvgRaw.replace("<svg ", `<svg fill="${color}" `);
+	return `data:image/svg+xml;base64,${btoa(svg)}`;
+});
+
 const partyMedianRows = computed(() => {
-	if (!props.tagPartyMedian) return [];
+	if (!props.tagPartyMedian || !partyIconUri.value) return [];
 	return chartRows.value
 		.map((r, i) => {
 			const waarde = props.tagPartyMedian![r.sleutel];
@@ -137,16 +151,15 @@ const partyMedianRows = computed(() => {
 		.filter((row): row is number[] => row !== null);
 });
 
-function renderPartyMedianCirkel(_params: any, api: any) {
+function renderPartyIcon(_params: any, api: any) {
 	const idx = api.value(0) as number;
 	const waarde = api.value(1) as number;
 
 	const y = api.coord([0, idx])[1];
 	const x = api.coord([waarde, idx])[0];
-	const r = 5;
-	const color = isDark.value ? MEDIAAN_KLEUR.dark : MEDIAAN_KLEUR.light;
+	const size = 11;
 
-	return { type: "circle", shape: { cx: x, cy: y, r }, style: { stroke: color, fill: "transparent", lineWidth: 1.5 } };
+	return { type: "image", style: { image: partyIconUri.value!, x: x - size / 2, y: y - size / 2, width: size, height: size } };
 }
 
 // Tagicoontje voor de as-labels: ECharts' as-labels zijn tekst + optionele
@@ -220,7 +233,7 @@ const chartOption = computed(() => ({
 						z: 11,
 						data: partyMedianRows.value,
 						encode: { x: [1], y: 0 },
-						renderItem: renderPartyMedianCirkel,
+						renderItem: renderPartyIcon,
 						tooltip: { show: false },
 					},
 				]
@@ -344,13 +357,19 @@ const ICOON_STER = "M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 
 						Tags met minder dan {{ PERSON_TAG_THRESHOLD }} toekenningen zijn samengevoegd tot "overig" -- bij deze
 						volumes zegt een enkele toekenning weinig.
 					</template>
-					<template v-if="medianRows.length">
-						De tik boven een balk is de mediaan voor die tag over {{ mode === "persoon" ? "alle sprekers" : "alle partijen" }} heen.
-					</template>
-					<template v-if="partyMedianRows.length">
-						Het rondje is diezelfde mediaan, maar dan alleen over de fractiegenoten van deze spreker.
-					</template>
 				</p>
+				<ul v-if="medianRows.length || partyMedianRows.length" class="chart-legend">
+					<li v-if="medianRows.length">
+						<svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true">
+							<line x1="6" y1="1" x2="6" y2="11" stroke="currentColor" stroke-width="2" />
+						</svg>
+						mediaan over {{ mode === "persoon" ? "alle sprekers" : "alle partijen" }}
+					</li>
+					<li v-if="partyMedianRows.length">
+						<img :src="partyIconUri!" width="12" height="12" alt="" />
+						mediaan over fractiegenoten
+					</li>
+				</ul>
 				<p v-if="!tagRows.length" class="panel-note">Geen getagde argumenten.</p>
 				<VChart v-else class="tag-usage-chart" :option="chartOption" :style="{ height: chartHeight }" autoresize />
 			</section>

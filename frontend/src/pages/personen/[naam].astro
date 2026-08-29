@@ -7,6 +7,7 @@ import { NO_PARTY } from "../../lib/types";
 import { PERSPECTIEVEN } from "../../lib/tagIcons.generated";
 import { berekenTagSignalen, signaalTitle, signaalDetail } from "../../lib/tagSignalen";
 import { deriveVerbositeitStats, deriveVerbositeitMedians, median } from "../../lib/aggregate";
+import { partyIconMonoSvgRaw } from "../../lib/partyIconMono";
 
 const topicModules = import.meta.glob("../../../../data/export/topics/*.json", { eager: true });
 
@@ -120,6 +121,7 @@ const tagPartyMedian =
 	canonicalPartyNaam && canonicalPartyNaam !== NO_PARTY
 		? tagMedianOver([...allPersonNames].filter((p) => partyOfPerson.get(p) === canonicalPartyNaam))
 		: undefined;
+const partyIconSvgRaw = canonicalPartyNaam && canonicalPartyNaam !== NO_PARTY ? partyIconMonoSvgRaw(canonicalPartyNaam) : null;
 
 const { favorieten, minstFavoriet } = berekenTagSignalen(personTagCount, personTotal, globalTagCount, globalTagTotal, { topN: 3 });
 
@@ -237,6 +239,7 @@ const verbositeitBadges =
 			minstFavorieteTags={minstFavorieteTags}
 			tagMedian={tagMedian}
 			tagPartyMedian={tagPartyMedian}
+			partyIconSvgRaw={partyIconSvgRaw}
 			client:only="vue"
 		>
 			{verbositeitStats && corpusMedianen && (
