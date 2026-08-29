@@ -115,6 +115,17 @@ const medianRows = computed(() => {
 });
 
 const MEDIAAN_KLEUR = { light: "#221f1b", dark: "#f2ede3" };
+const MEDIAAN_RGB = { light: "34, 31, 27", dark: "242, 237, 227" };
+
+// Zelfde plafond als de balken zelf (barMaxWidth hieronder) -- op smalle
+// balken (weinig rijen, dus brede category-band) mag de tik/het icoontje niet
+// breder uitvallen dan de balk ooit zelf wordt.
+const BAR_MAX_WIDTH = 22;
+
+function barHalfHoogte(api: any): number {
+	const bandHeight = api.size!([0, 1])[1] as number;
+	return Math.min(bandHeight, BAR_MAX_WIDTH) / 2;
+}
 
 function renderMedianTik(_params: any, api: any) {
 	const idx = api.value(0) as number;
@@ -122,10 +133,43 @@ function renderMedianTik(_params: any, api: any) {
 
 	const y = api.coord([0, idx])[1];
 	const xMed = api.coord([med, idx])[0];
-	const capHalf = 6;
+	const capHalf = barHalfHoogte(api);
 	const color = isDark.value ? MEDIAAN_KLEUR.dark : MEDIAAN_KLEUR.light;
+	const rgb = isDark.value ? MEDIAAN_RGB.dark : MEDIAAN_RGB.light;
 
-	return { type: "line", shape: { x1: xMed, y1: y - capHalf, x2: xMed, y2: y + capHalf }, style: { stroke: color, lineWidth: 2 } };
+	// Zachte gloed achter de streep i.p.v. een harde lijn -- zelfde
+	// "radiotuner-naald"-idee als de video-afspeelkop (VideoTimeline.vue),
+	// maar dan met de vervaging alleen links-rechts, niet omhoog-omlaag (op
+	// verzoek). `shadowBlur` blurt altijd rondom (isotroop), dus i.p.v.
+	// daarvan een losse band achter de streep met een horizontale
+	// kleur-naar-transparant gradient -- exact zo hoog als de streep zelf,
+	// dus geen verticale vervaging.
+	const glowHalfWidth = 4;
+	return {
+		type: "group",
+		children: [
+			{
+				type: "rect",
+				shape: { x: xMed - glowHalfWidth, y: y - capHalf, width: glowHalfWidth * 2, height: capHalf * 2 },
+				style: {
+					fill: {
+						type: "linear",
+						x: 0,
+						y: 0,
+						x2: 1,
+						y2: 0,
+						colorStops: [
+							{ offset: 0, color: `rgba(${rgb}, 0)` },
+							{ offset: 0.5, color: `rgba(${rgb}, 0.55)` },
+							{ offset: 1, color: `rgba(${rgb}, 0)` },
+						],
+					},
+				},
+				silent: true,
+			},
+			{ type: "line", shape: { x1: xMed, y1: y - capHalf, x2: xMed, y2: y + capHalf }, style: { stroke: color, lineWidth: 2 } },
+		],
+	};
 }
 
 // Partijgenoten-mediaan als klein grijstinten partijicoontje i.p.v. een tik
@@ -155,7 +199,7 @@ function renderPartyIcon(_params: any, api: any) {
 
 	const y = api.coord([0, idx])[1];
 	const x = api.coord([waarde, idx])[0];
-	const size = 13;
+	const size = barHalfHoogte(api) * 2;
 
 	return { type: "image", style: { image: partyIconUri.value!, x: x - size / 2, y: y - size / 2, width: size, height: size } };
 }
@@ -208,7 +252,7 @@ const chartOption = computed(() => ({
 				value: r.count,
 				itemStyle: { color: PERSPECTIEF_KLEUR.get(r.perspectief) ?? ONBEKENDE_KLEUR },
 			})),
-			barMaxWidth: 22,
+			barMaxWidth: BAR_MAX_WIDTH,
 		},
 		...(medianRows.value.length
 			? [
