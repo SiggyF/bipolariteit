@@ -108,6 +108,9 @@
 	/* Distinct accent hue for links/interactive chrome — kept separate from
 	   --color-pro so hyperlinks don't implicitly read as "pro"-colored. */
 	--color-accent: #33456e;
+	/* Actieve staat van interactieve chrome (bv. de open deelknop) -- 12%
+	   donkerder dan --color-accent, uit het ontwerppakket bij issue #172. */
+	--color-accent-active: #22304e;
 
 	/* Warme, van --color-text/--color-accent goed te onderscheiden kleur voor
 	   "onderbouwing" in de argumentdefinitie (about-pagina, issue #89) --
@@ -272,6 +275,115 @@ a:hover {
 
 .theme-toggle:hover {
 	border-color: var(--color-accent);
+}
+
+/* Deelknop + dropdown (ShareMenu.astro, issue #172). Positie/maten uit het
+   ontwerppakket: data/export/design-handoff/deelknoppen-preview/. */
+.share-menu {
+	position: relative;
+}
+
+.share-menu-trigger {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	height: 1.75rem;
+	padding: 0 12px 0 10px;
+	background: none;
+	border: 1px solid var(--color-accent);
+	border-radius: 3px;
+	color: var(--color-accent);
+	font-family: var(--font-body);
+	font-size: var(--step--1);
+	cursor: pointer;
+}
+
+.share-menu-trigger:hover {
+	background: var(--color-card-bg);
+}
+
+.share-menu-trigger[aria-expanded="true"] {
+	border-color: var(--color-accent-active);
+	color: var(--color-accent-active);
+}
+
+.share-menu-trigger:focus-visible,
+.share-menu-item:focus-visible {
+	outline: 2px solid var(--color-accent);
+	outline-offset: 2px;
+}
+
+.share-menu-panel {
+	position: absolute;
+	right: 0;
+	top: calc(100% + 6px);
+	width: 340px;
+	max-width: calc(100vw - 2 * var(--space-3));
+	background: var(--color-card-bg);
+	border: 1px solid var(--color-border);
+	border-radius: 4px;
+	box-shadow: 0 8px 20px rgba(34, 31, 27, 0.15);
+	padding: 18px 18px 14px;
+	display: flex;
+	flex-direction: column;
+	gap: 14px;
+	z-index: 20;
+}
+
+.share-menu-panel[hidden] {
+	display: none;
+}
+
+.share-menu-label {
+	font-family: var(--font-mono);
+	font-size: 0.7rem;
+	letter-spacing: 0.09em;
+	text-transform: uppercase;
+	color: var(--color-muted);
+}
+
+.share-menu-grid {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 6px;
+}
+
+.share-menu-item {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	padding: 8px 10px;
+	border: none;
+	border-radius: 3px;
+	background: none;
+	color: var(--color-text);
+	font-family: var(--font-body);
+	font-size: var(--step--1);
+	text-decoration: none;
+	cursor: pointer;
+	text-align: left;
+}
+
+.share-menu-item svg {
+	color: var(--color-accent);
+	flex-shrink: 0;
+}
+
+.share-menu-item:hover {
+	background: var(--color-bg);
+}
+
+.share-menu-divider {
+	height: 1px;
+	background: var(--color-border);
+}
+
+.share-menu-copy {
+	width: 100%;
+}
+
+.share-menu-copy.is-copied span {
+	color: var(--color-pro);
 }
 
 /* Mobiele tabbalk (SiteTabBar.astro, issue #133): onzichtbaar boven het
@@ -3026,5 +3138,6 @@ a.card-item:hover {
 	--color-contra: #cf6b5f;
 	--color-unclear: #a89e8c;
 	--color-accent: #7d97c4;
+	--color-accent-active: #9db3d9;
 	--color-onderbouwing: #d1a44f;
 }

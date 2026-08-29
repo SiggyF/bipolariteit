@@ -7,14 +7,15 @@ import "../styles/main.css";
 interface Props {
 	title?: string;
 	description?: string;
+	image?: string;
 	class?: string;
 }
 
-const { title, description, class: className } = Astro.props;
+const { title, description, image, class: className } = Astro.props;
 ---
 
 <html lang="nl">
-	<BaseHead title={title} description={description} />
+	<BaseHead title={title} description={description} image={image} />
 	<body>
 		<SiteNav />
 		<main class={className}>
