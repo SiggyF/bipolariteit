@@ -70,9 +70,13 @@ const tagBeschrijving = new Map<string, string>();
 const allPersonNames = new Set<string>();
 const tagCountPerPerson = new Map<string, Map<string, number>>();
 const tagTotalPerPerson = new Map<string, number>();
+const partyOfPerson = new Map<string, string>();
 
 for (const argument of allArgs) {
 	allPersonNames.add(argument.actor.name);
+	if (argument.actor.party && !partyOfPerson.has(argument.actor.name)) {
+		partyOfPerson.set(argument.actor.name, canonicalParty(argument.actor.party));
+	}
 	for (const tag of argument.tags) {
 		if (tag.created_by !== "llm") continue;
 		if (!tagBeschrijving.has(tag.sleutel)) tagBeschrijving.set(tag.sleutel, tag.beschrijving);
@@ -95,14 +99,27 @@ for (const argument of allArgs) {
 // de meest actieve sprekers. Terugschalen naar déze persoon z'n eigen totaal
 // houdt de mediaanlijn op dezelfde as als de balk (aantallen), maar zonder
 // die scheeftrekking.
-const tagMedian: Record<string, number> = {};
-for (const sleutel of globalTagCount.keys()) {
-	const aandelen = [...allPersonNames].map((p) => {
-		const total = tagTotalPerPerson.get(p) ?? 0;
-		return total ? (tagCountPerPerson.get(p)?.get(sleutel) ?? 0) / total : 0;
-	});
-	tagMedian[sleutel] = median(aandelen) * personTotal;
+function tagMedianOver(personen: string[]): Record<string, number> {
+	const result: Record<string, number> = {};
+	for (const sleutel of globalTagCount.keys()) {
+		const aandelen = personen.map((p) => {
+			const total = tagTotalPerPerson.get(p) ?? 0;
+			return total ? (tagCountPerPerson.get(p)?.get(sleutel) ?? 0) / total : 0;
+		});
+		result[sleutel] = median(aandelen) * personTotal;
+	}
+	return result;
 }
+
+const tagMedian = tagMedianOver([...allPersonNames]);
+
+// Partijgenoten-mediaan (naast de mediaan over alle sprekers): laat zien of
+// deze spreker ook binnen de eigen fractie op- of onderscheidt, niet alleen
+// t.o.v. de volledige Kamer.
+const tagPartyMedian =
+	canonicalPartyNaam && canonicalPartyNaam !== NO_PARTY
+		? tagMedianOver([...allPersonNames].filter((p) => partyOfPerson.get(p) === canonicalPartyNaam))
+		: undefined;
 
 const { favorieten, minstFavoriet } = berekenTagSignalen(personTagCount, personTotal, globalTagCount, globalTagTotal, { topN: 3 });
 
@@ -219,6 +236,7 @@ const verbositeitBadges =
 			favorieteTags={favorieteTags}
 			minstFavorieteTags={minstFavorieteTags}
 			tagMedian={tagMedian}
+			tagPartyMedian={tagPartyMedian}
 			client:only="vue"
 		>
 			{verbositeitStats && corpusMedianen && (

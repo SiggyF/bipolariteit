@@ -46,6 +46,10 @@ const props = defineProps<{
 	 * zelfde reden als favorieteTags. Getoond als een tik bovenop de eigen
 	 * balk. */
 	tagMedian?: Record<string, number>;
+	/** Persoonspagina alleen: mediaan van het gebruik over alleen de
+	 * partijgenoten van deze spreker. Laat zien of iemand ook binnen de eigen
+	 * fractie op- of onderscheidt, niet alleen t.o.v. de volledige Kamer. */
+	tagPartyMedian?: Record<string, number>;
 }>();
 
 initFiltersFromUrl(props.argumentList);
@@ -120,6 +124,31 @@ function renderMedianTik(_params: any, api: any) {
 	return { type: "line", shape: { x1: xMed, y1: y - capHalf, x2: xMed, y2: y + capHalf }, style: { stroke: color, lineWidth: 2 } };
 }
 
+// Partijgenoten-mediaan als open cirkel i.p.v. een tik (issue #202-vervolg):
+// alleen op de persoonspagina, als losstaand symbool naast de tik voor het
+// Kamerbrede mediaan zodat de twee referentiepunten uit elkaar te houden zijn.
+const partyMedianRows = computed(() => {
+	if (!props.tagPartyMedian) return [];
+	return chartRows.value
+		.map((r, i) => {
+			const waarde = props.tagPartyMedian![r.sleutel];
+			return waarde === undefined ? null : [i, waarde];
+		})
+		.filter((row): row is number[] => row !== null);
+});
+
+function renderPartyMedianCirkel(_params: any, api: any) {
+	const idx = api.value(0) as number;
+	const waarde = api.value(1) as number;
+
+	const y = api.coord([0, idx])[1];
+	const x = api.coord([waarde, idx])[0];
+	const r = 5;
+	const color = isDark.value ? MEDIAAN_KLEUR.dark : MEDIAAN_KLEUR.light;
+
+	return { type: "circle", shape: { cx: x, cy: y, r }, style: { stroke: color, fill: "transparent", lineWidth: 1.5 } };
+}
+
 // Tagicoontje voor de as-labels: ECharts' as-labels zijn tekst + optionele
 // rich-text-afbeeldingen, geen losse SVG-elementen -- vandaar de data-URI
 // (tagIconDataUri) i.p.v. het <svg><path> patroon dat de rest van de site
@@ -179,6 +208,19 @@ const chartOption = computed(() => ({
 						data: medianRows.value,
 						encode: { x: [1], y: 0 },
 						renderItem: renderMedianTik,
+						tooltip: { show: false },
+					},
+				]
+			: []),
+		...(partyMedianRows.value.length
+			? [
+					{
+						type: "custom",
+						silent: true,
+						z: 11,
+						data: partyMedianRows.value,
+						encode: { x: [1], y: 0 },
+						renderItem: renderPartyMedianCirkel,
 						tooltip: { show: false },
 					},
 				]
@@ -304,6 +346,9 @@ const ICOON_STER = "M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 
 					</template>
 					<template v-if="medianRows.length">
 						De tik boven een balk is de mediaan voor die tag over {{ mode === "persoon" ? "alle sprekers" : "alle partijen" }} heen.
+					</template>
+					<template v-if="partyMedianRows.length">
+						Het rondje is diezelfde mediaan, maar dan alleen over de fractiegenoten van deze spreker.
 					</template>
 				</p>
 				<p v-if="!tagRows.length" class="panel-note">Geen getagde argumenten.</p>
