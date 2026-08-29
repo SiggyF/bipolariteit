@@ -2,20 +2,53 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import EntityTabs from "../../components/EntityTabs.astro";
 import PartyIcon from "../../components/PartyIcon.astro";
+import TagSignaalBadge from "../../components/TagSignaalBadge.astro";
 import { displayPartyName, canonicalParty } from "../../lib/parties";
 import { slugify } from "../../lib/slug";
 import { NO_PARTY } from "../../lib/types";
+import { PERSPECTIEVEN } from "../../lib/tagIcons.generated";
+import { berekenTagSignalen, signaalTitle } from "../../lib/tagSignalen";
 
 const topicModules = import.meta.glob("../../../../data/export/topics/*.json", { eager: true });
 
+const PERSPECTIEF_KLEUR = new Map(PERSPECTIEVEN.map((p) => [p.naam, p.kleur]));
+const TAG_PERSPECTIEF = new Map<string, string>();
+for (const perspectief of PERSPECTIEVEN) {
+	for (const sleutel of Object.keys(perspectief.tags)) TAG_PERSPECTIEF.set(sleutel, perspectief.naam);
+}
+const ONBEKENDE_KLEUR = "#6f6558";
+
 const counts = new Map<string, number>();
+const tagBeschrijving = new Map<string, string>();
+
+// Zelfde redenering als bij personen (zie personen/index.astro): alleen
+// LLM-toegekende tags karakteriseren een partij's eigen argumentatiestijl.
+const tagCountByParty = new Map<string, Map<string, number>>();
+const tagTotalByParty = new Map<string, number>();
+const globalTagCount = new Map<string, number>();
+let globalTagTotal = 0;
+
 for (const mod of Object.values(topicModules) as any[]) {
 	for (const argument of mod.default.arguments) {
 		if (!argument.actor.party || argument.actor.party === NO_PARTY) continue;
 		const party = canonicalParty(argument.actor.party);
 		counts.set(party, (counts.get(party) ?? 0) + 1);
+
+		const partyTagCount = tagCountByParty.get(party) ?? new Map<string, number>();
+		for (const tag of argument.tags) {
+			if (tag.created_by !== "llm") continue;
+			if (!tagBeschrijving.has(tag.sleutel)) tagBeschrijving.set(tag.sleutel, tag.beschrijving);
+			partyTagCount.set(tag.sleutel, (partyTagCount.get(tag.sleutel) ?? 0) + 1);
+			tagTotalByParty.set(party, (tagTotalByParty.get(party) ?? 0) + 1);
+			globalTagCount.set(tag.sleutel, (globalTagCount.get(tag.sleutel) ?? 0) + 1);
+			globalTagTotal++;
+		}
+		tagCountByParty.set(party, partyTagCount);
 	}
 }
+
+const ICOON_STER = "M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14l-5-4.87 6.91-1.01L12 2z";
+
 const parties = [...counts.entries()].sort((a, b) => b[1] - a[1]);
 ---
 
@@ -23,18 +56,58 @@ const parties = [...counts.entries()].sort((a, b) => b[1] - a[1]);
 	<a href="/onderwerpen/" class="back-link">&larr; alle onderwerpen</a>
 	<EntityTabs />
 	<h1>Partijen</h1>
-	<p class="intro">Welke tags een partij gebruikt en hoe vaak, over alle onderwerpen heen.</p>
-	<ul class="topic-list">
-		{parties.map(([party, count]) => (
-			<li>
-				<a href={`/partijen/${slugify(party)}/`} class="party-row">
-					<span class="party-row-name">
-						<PartyIcon party={party} />
-						<span class="topic-name">{displayPartyName(party)}</span>
-					</span>
-					<span class="topic-count">{count} argumenten</span>
-				</a>
-			</li>
-		))}
+	<p class="intro">
+		Welke tags een partij gebruikt en hoe vaak, over alle onderwerpen heen. Favoriet/minst favoriet is t.o.v. het
+		gemiddelde over alle partijen.
+	</p>
+	<div class="person-list-head">
+		<span>Partij</span>
+		<span class="person-list-head-signalen">
+			<svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" stroke="none"><path d={ICOON_STER} /></svg>
+			favoriet
+			<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.75"><path d={ICOON_STER} /></svg>
+			minst favoriet
+			<a href="/over/#favoriete-tags-methode" class="info-link" title="Hoe favoriet/minst favoriet bepaald wordt" aria-label="Uitleg: hoe favoriet en minst favoriet bepaald worden">?</a>
+		</span>
+		<span>Argumenten</span>
+	</div>
+	<ul class="topic-list person-list">
+		{parties.map(([party, count]) => {
+			const partyTagCount = tagCountByParty.get(party) ?? new Map<string, number>();
+			const partyTotal = tagTotalByParty.get(party) ?? 0;
+			const { favorieten, minstFavoriet } = berekenTagSignalen(partyTagCount, partyTotal, globalTagCount, globalTagTotal);
+			const favoriet = favorieten[0] ?? null;
+			const minFavoriet = minstFavoriet[0] ?? null;
+			return (
+				<li>
+					<a href={`/partijen/${slugify(party)}/`} class="person-row">
+						<span class="party-row-name">
+							<PartyIcon party={party} />
+							<span class="topic-name">{displayPartyName(party)}</span>
+						</span>
+						<span class="person-row-signalen">
+							{favoriet ? (
+								<TagSignaalBadge
+									signaal={favoriet}
+									soort="favoriet"
+									accentColor={PERSPECTIEF_KLEUR.get(TAG_PERSPECTIEF.get(favoriet.sleutel) ?? "") ?? ONBEKENDE_KLEUR}
+									title={signaalTitle(favoriet, "favoriet", partyTotal, globalTagCount, globalTagTotal, tagBeschrijving)}
+								/>
+							) : (
+								<span class="tag-signaal tag-signaal-leeg">geen uitgesproken favoriet</span>
+							)}
+							{minFavoriet && (
+								<TagSignaalBadge
+									signaal={minFavoriet}
+									soort="minst-favoriet"
+									title={signaalTitle(minFavoriet, "minst favoriet", partyTotal, globalTagCount, globalTagTotal, tagBeschrijving)}
+								/>
+							)}
+						</span>
+						<span class="topic-count">{count} argumenten</span>
+					</a>
+				</li>
+			);
+		})}
 	</ul>
 </BaseLayout>
