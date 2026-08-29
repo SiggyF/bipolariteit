@@ -115,10 +115,15 @@ const PLATFORMS: Array<{ key: string; label: string; icon: string }> = [
 				if (!root.contains(event.target)) closePanel();
 			}
 
+			// navigator.share bestaat ook op desktop Safari/Chrome (macOS) --
+			// puur op de aanwezigheid van de API afgaan zou daar het systeemmenu
+			// tonen waar het ontwerp de dropdown wil (zie "Desktop -- gesloten en
+			// open" vs. "Mobiel -- Web Share API" in het ontwerppakket). Een grof
+			// (touch-)pointer als proxy voor "mobiel" onderscheidt dat betrouwbaar.
+			var isTouchPrimary = window.matchMedia && window.matchMedia("(pointer: coarse)").matches;
+
 			trigger.addEventListener("click", function () {
-				// Web Share API i.p.v. het dropdown-menu waar beschikbaar (vrijwel
-				// altijd mobiel/touch) -- opent het systeemeigen deelvenster.
-				if (navigator.share) {
+				if (navigator.share && isTouchPrimary) {
 					navigator.share(shareData()).catch(function () {
 						/* gebruiker annuleerde het systeemdeelvenster, geen actie nodig */
 					});
