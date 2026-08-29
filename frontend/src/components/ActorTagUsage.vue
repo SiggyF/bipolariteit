@@ -172,6 +172,13 @@ function renderMedianTik(_params: any, api: any) {
 	};
 }
 
+function medianTooltip(params: any) {
+	const [idx, waarde] = params.value as number[];
+	const sleutel = chartRows.value[idx]?.sleutel ?? "";
+	const over = props.mode === "persoon" ? "alle sprekers" : "alle partijen";
+	return `<strong>${sleutel}</strong><br/>mediaan over ${over}: ${waarde.toFixed(1)}`;
+}
+
 // Partijgenoten-mediaan als klein grijstinten partijicoontje i.p.v. een tik
 // (issue #202-vervolg): alleen op de persoonspagina, als losstaand symbool
 // naast de tik voor het Kamerbrede mediaan zodat de twee referentiepunten uit
@@ -199,9 +206,18 @@ function renderPartyIcon(_params: any, api: any) {
 
 	const y = api.coord([0, idx])[1];
 	const x = api.coord([waarde, idx])[0];
-	const size = barHalfHoogte(api) * 2;
+	// Iets kleiner dan de volle balkhoogte (i.p.v. dezelfde maat als de
+	// mediaan-streep) -- zo blijft de streep zelf altijd zichtbaar naast/
+	// door het icoon heen, ook als ze bijna op dezelfde plek vallen.
+	const size = barHalfHoogte(api) * 2 * 0.8;
 
 	return { type: "image", style: { image: partyIconUri.value!, x: x - size / 2, y: y - size / 2, width: size, height: size } };
+}
+
+function partyMedianTooltip(params: any) {
+	const [idx, waarde] = params.value as number[];
+	const sleutel = chartRows.value[idx]?.sleutel ?? "";
+	return `<strong>${sleutel}</strong><br/>mediaan over fractiegenoten: ${waarde.toFixed(1)}`;
 }
 
 // Tagicoontje voor de as-labels: ECharts' as-labels zijn tekst + optionele
@@ -254,29 +270,30 @@ const chartOption = computed(() => ({
 			})),
 			barMaxWidth: BAR_MAX_WIDTH,
 		},
-		...(medianRows.value.length
-			? [
-					{
-						type: "custom",
-						silent: true,
-						z: 10,
-						data: medianRows.value,
-						encode: { x: [1], y: 0 },
-						renderItem: renderMedianTik,
-						tooltip: { show: false },
-					},
-				]
-			: []),
+		// z: het partij-icoontje (breder) tekent ónder de mediaan-streep, niet
+		// erboven -- anders verdwijnt de dunne streep volledig als beide zo goed
+		// als samenvallen (partijgebruik ~ Kamerbreed gebruik voor die tag).
 		...(partyMedianRows.value.length
 			? [
 					{
 						type: "custom",
-						silent: true,
-						z: 11,
+						z: 10,
 						data: partyMedianRows.value,
 						encode: { x: [1], y: 0 },
 						renderItem: renderPartyIcon,
-						tooltip: { show: false },
+						tooltip: { formatter: partyMedianTooltip },
+					},
+				]
+			: []),
+		...(medianRows.value.length
+			? [
+					{
+						type: "custom",
+						z: 11,
+						data: medianRows.value,
+						encode: { x: [1], y: 0 },
+						renderItem: renderMedianTik,
+						tooltip: { formatter: medianTooltip },
 					},
 				]
 			: []),
