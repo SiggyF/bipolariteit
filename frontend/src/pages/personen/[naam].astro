@@ -6,7 +6,7 @@ import { slugify } from "../../lib/slug";
 import { NO_PARTY } from "../../lib/types";
 import { PERSPECTIEVEN } from "../../lib/tagIcons.generated";
 import { berekenTagSignalen, signaalTitle, signaalDetail } from "../../lib/tagSignalen";
-import { deriveVerbositeitStats, deriveVerbositeitMedians, boxplotStats, type BoxplotStats } from "../../lib/aggregate";
+import { deriveVerbositeitStats, deriveVerbositeitMedians, median } from "../../lib/aggregate";
 
 const topicModules = import.meta.glob("../../../../data/export/topics/*.json", { eager: true });
 
@@ -63,11 +63,10 @@ const globalTagCount = new Map<string, number>();
 let globalTagTotal = 0;
 const tagBeschrijving = new Map<string, string>();
 
-// Voor de boxplot-whisker op de taghistogram (issue #202-vervolg): per tag
-// de verdeling van het gebruik over alle personen heen, inclusief personen
-// die een tag nooit gebruikten (0) -- zonder die nullen zou de mediaan een
-// vertekend beeld geven van "hoe vaak gebruikt een willekeurige spreker deze
-// tag doorgaans".
+// Voor de mediaanlijn op de taghistogram (issue #202): per tag de mediaan
+// over alle personen heen, inclusief personen die een tag nooit gebruikten
+// (0) -- zonder die nullen zou de mediaan een vertekend beeld geven van "hoe
+// vaak gebruikt een willekeurige spreker deze tag doorgaans".
 const allPersonNames = new Set<string>();
 const tagCountPerPerson = new Map<string, Map<string, number>>();
 const tagTotalPerPerson = new Map<string, number>();
@@ -90,20 +89,19 @@ for (const argument of allArgs) {
 	}
 }
 
-// Aandeel i.p.v. kale telling als basis voor de whisker: personen verschillen
+// Aandeel i.p.v. kale telling als basis voor de mediaan: personen verschillen
 // enorm in totaalvolume (een paar honderd vs. een enkel argument), dus de
 // verdeling van kale tellingen over alle personen zou gedomineerd worden door
 // de meest actieve sprekers. Terugschalen naar déze persoon se eigen totaal
-// houdt de whisker op dezelfde as als de balk (aantallen), maar zonder die
-// scheeftrekking.
-const tagBoxplot: Record<string, BoxplotStats> = {};
+// houdt de mediaanlijn op dezelfde as als de balk (aantallen), maar zonder
+// die scheeftrekking.
+const tagMedian: Record<string, number> = {};
 for (const sleutel of globalTagCount.keys()) {
 	const aandelen = [...allPersonNames].map((p) => {
 		const total = tagTotalPerPerson.get(p) ?? 0;
 		return total ? (tagCountPerPerson.get(p)?.get(sleutel) ?? 0) / total : 0;
 	});
-	const stats = boxplotStats(aandelen);
-	tagBoxplot[sleutel] = { median: stats.median * personTotal, q1: stats.q1 * personTotal, q3: stats.q3 * personTotal };
+	tagMedian[sleutel] = median(aandelen) * personTotal;
 }
 
 const { favorieten, minstFavoriet } = berekenTagSignalen(personTagCount, personTotal, globalTagCount, globalTagTotal, { topN: 3 });
@@ -220,7 +218,7 @@ const verbositeitBadges =
 			argumentList={argumentList}
 			favorieteTags={favorieteTags}
 			minstFavorieteTags={minstFavorieteTags}
-			tagBoxplot={tagBoxplot}
+			tagMedian={tagMedian}
 			client:only="vue"
 		>
 			{verbositeitStats && corpusMedianen && (

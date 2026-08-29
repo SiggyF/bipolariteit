@@ -4,7 +4,7 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import { NO_PARTY } from "../../lib/types";
 import { slugify } from "../../lib/slug";
 import { canonicalParty } from "../../lib/parties";
-import { boxplotStats, type BoxplotStats } from "../../lib/aggregate";
+import { median } from "../../lib/aggregate";
 
 const topicModules = import.meta.glob("../../../../data/export/topics/*.json", { eager: true });
 
@@ -39,9 +39,9 @@ const party = Astro.props.party ?? (matchedArg && canonicalParty(matchedArg.acto
 
 const argumentList = allArgs.filter((a: any) => a.actor.party && canonicalParty(a.actor.party) === party);
 
-// Zelfde boxplot-whisker als op de persoonspagina (issue #202-vervolg), hier
-// over alle partijen i.p.v. alle personen -- inclusief partijen die een tag
-// nooit gebruikten (0).
+// Zelfde mediaanlijn als op de persoonspagina (issue #202), hier over alle
+// partijen i.p.v. alle personen -- inclusief partijen die een tag nooit
+// gebruikten (0).
 const allParties = new Set<string>();
 const tagCountPerParty = new Map<string, Map<string, number>>();
 const tagTotalPerParty = new Map<string, number>();
@@ -64,23 +64,22 @@ for (const argument of allArgs) {
 // Aandeel i.p.v. kale telling: partijen verschillen enorm in totaalvolume
 // (VVD ~1845 vs. DENK ~98 argumenten), dus de verdeling van kale tellingen
 // over alle partijen zou gedomineerd worden door de grootste partijen --
-// zichtbaar als een whisker die bij een kleine partij vrijwel elke balk
+// zichtbaar als een mediaan die bij een kleine partij vrijwel elke balk
 // overschrijdt, ook als die partij een tag juist relatief vaak gebruikt.
-// Terugschalen naar déze partij se eigen totaal houdt de whisker op dezelfde
-// as als de balk (aantallen).
+// Terugschalen naar déze partij se eigen totaal houdt de mediaanlijn op
+// dezelfde as als de balk (aantallen).
 const partyTotal = tagTotalPerParty.get(party ?? "") ?? 0;
-const tagBoxplot: Record<string, BoxplotStats> = {};
+const tagMedian: Record<string, number> = {};
 for (const sleutel of globalTagCount.keys()) {
 	const aandelen = [...allParties].map((p) => {
 		const total = tagTotalPerParty.get(p) ?? 0;
 		return total ? (tagCountPerParty.get(p)?.get(sleutel) ?? 0) / total : 0;
 	});
-	const stats = boxplotStats(aandelen);
-	tagBoxplot[sleutel] = { median: stats.median * partyTotal, q1: stats.q1 * partyTotal, q3: stats.q3 * partyTotal };
+	tagMedian[sleutel] = median(aandelen) * partyTotal;
 }
 ---
 
 <BaseLayout title={`${party || "Partij"} - Bipolariteit`}>
 	<a href="/onderwerpen/" class="back-link">&larr; alle onderwerpen</a>
-	{party && <ActorTagUsage name={party} mode="partij" argumentList={argumentList} tagBoxplot={tagBoxplot} client:only="vue" />}
+	{party && <ActorTagUsage name={party} mode="partij" argumentList={argumentList} tagMedian={tagMedian} client:only="vue" />}
 </BaseLayout>
