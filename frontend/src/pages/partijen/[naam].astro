@@ -4,6 +4,7 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import { NO_PARTY } from "../../lib/types";
 import { slugify } from "../../lib/slug";
 import { canonicalParty } from "../../lib/parties";
+import { median } from "../../lib/aggregate";
 
 const topicModules = import.meta.glob("../../../../data/export/topics/*.json", { eager: true });
 
@@ -37,9 +38,51 @@ const matchedArg = allArgs.find((a: any) => a.actor.party && slugify(canonicalPa
 const party = Astro.props.party ?? (matchedArg && canonicalParty(matchedArg.actor.party));
 
 const argumentList = allArgs.filter((a: any) => a.actor.party && canonicalParty(a.actor.party) === party);
+
+// Zelfde mediaanlijn als op de persoonspagina (issue #202), hier over alle
+// partijen i.p.v. alle personen -- inclusief partijen die een tag nooit
+// gebruikten (0).
+const allParties = new Set<string>();
+const tagCountPerParty = new Map<string, Map<string, number>>();
+const argCountPerParty = new Map<string, number>();
+const globalTagCount = new Map<string, number>();
+
+for (const argument of allArgs) {
+	if (!argument.actor.party || argument.actor.party === NO_PARTY) continue;
+	const argPartij = canonicalParty(argument.actor.party);
+	allParties.add(argPartij);
+	// Alleen argumenten met minstens één LLM-tag tellen mee als noemer -- zie
+	// personen/[naam].astro voor de toelichting.
+	if (argument.tags.some((t: any) => t.created_by === "llm")) {
+		argCountPerParty.set(argPartij, (argCountPerParty.get(argPartij) ?? 0) + 1);
+	}
+	for (const tag of argument.tags) {
+		if (tag.created_by !== "llm") continue;
+		globalTagCount.set(tag.sleutel, (globalTagCount.get(tag.sleutel) ?? 0) + 1);
+		const perParty = tagCountPerParty.get(argPartij) ?? new Map<string, number>();
+		perParty.set(tag.sleutel, (perParty.get(tag.sleutel) ?? 0) + 1);
+		tagCountPerParty.set(argPartij, perParty);
+	}
+}
+
+// Tags per argument (niet per tag-toekenning of kaal totaal) als basis voor
+// de mediaan: partijen verschillen enorm in totaalvolume (VVD ~1845 vs. DENK
+// ~98 argumenten), dus "9 van de 98 argumenten kregen deze tag" (9%) is
+// direct vergelijkbaar tussen partijen, in tegenstelling tot een kale
+// telling of een aandeel van de partij se eigen tag-portfolio. Dezelfde
+// schaal als de balk zelf (client-side ook per argument gedeeld, zie
+// ActorTagUsage.vue), dus geen terugschaling meer nodig.
+const tagMedian: Record<string, number> = {};
+for (const sleutel of globalTagCount.keys()) {
+	const rates = [...allParties].map((p) => {
+		const totalArgs = argCountPerParty.get(p) ?? 0;
+		return totalArgs ? (tagCountPerParty.get(p)?.get(sleutel) ?? 0) / totalArgs : 0;
+	});
+	tagMedian[sleutel] = median(rates);
+}
 ---
 
 <BaseLayout title={`${party || "Partij"} - Bipolariteit`}>
 	<a href="/onderwerpen/" class="back-link">&larr; alle onderwerpen</a>
-	{party && <ActorTagUsage name={party} mode="partij" argumentList={argumentList} client:only="vue" />}
+	{party && <ActorTagUsage name={party} mode="partij" argumentList={argumentList} tagMedian={tagMedian} client:only="vue" />}
 </BaseLayout>

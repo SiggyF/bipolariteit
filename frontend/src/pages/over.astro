@@ -593,6 +593,31 @@ const CA_ROW_LABEL_OFFSET: Record<string, CaLabelOffset> = {
 				ander soort formulering.
 			</p>
 
+			<h2 id="tag-mediaan-methode">Wat betekent de tik boven een balk in het tag-overzicht?</h2>
+			<p>
+				De taghistogram op elke <a href="/personen/">persoons-</a> en <a href="/partijen/">partijpagina</a> toont
+				per tag in hoeveel procent van de <strong>getagde</strong> argumenten van deze persoon of partij 'm
+				gebruikt wordt (bv. "16%", oftewel 79 van de 490 getagde argumenten). Getagde argumenten, niet alle
+				argumenten: bijna de helft van alle argumenten krijgt geen enkele LLM-tag (bv. te kort, of buiten de
+				taxonomie), en die als nul meetellen zou elk percentage verdunnen. Percentage i.p.v. een kaal aantal,
+				want anders is een balk niet vergelijkbaar tussen bv. een minister met honderden argumenten en een
+				achterbanker met een handvol -- beiden kunnen ruwweg even vaak per argument een tag gebruiken, ook al
+				ligt hun kale telling mijlenver uit elkaar.
+			</p>
+			<p>
+				De verticale tik bovenop een balk is de <strong>mediaan</strong> van datzelfde percentage: hoe vaak
+				een <em>typische</em> spreker (op de persoonspagina) of <em>typische</em> partij (op de partijpagina)
+				diezelfde tag gebruikt, ook uitgedrukt als percentage van hun eigen argumenten. Ligt de balk voorbij
+				de tik, dan gebruikt deze persoon/partij die tag bovengemiddeld vaak; blijft de balk erbinnen, dan is
+				het ondergemiddeld.
+			</p>
+			<p>
+				Op een persoonspagina staat er, als de spreker een partij heeft, ook een klein{" "}
+				<strong>partijicoontje</strong> bij: diezelfde mediaan, maar dan alleen berekend over de fractiegenoten
+				van deze spreker in plaats van de hele Kamer. Zo zie je niet alleen of iemand landelijk op- of
+				ondergemiddeld scoort op een tag, maar ook of dat binnen de eigen fractie al opvalt.
+			</p>
+
 			<h2 id="correspondentiekaart-methode">Wat is een correspondentiekaart?</h2>
 			<p>
 				Elke topicpagina toont een <strong>correspondentiekaart</strong>: partijen (of personen) en tags

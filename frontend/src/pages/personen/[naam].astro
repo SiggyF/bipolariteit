@@ -6,7 +6,8 @@ import { slugify } from "../../lib/slug";
 import { NO_PARTY } from "../../lib/types";
 import { PERSPECTIEVEN } from "../../lib/tagIcons.generated";
 import { berekenTagSignalen, signaalTitle, signaalDetail } from "../../lib/tagSignalen";
-import { deriveVerbositeitStats, deriveVerbositeitMedians } from "../../lib/aggregate";
+import { deriveVerbositeitStats, deriveVerbositeitMedians, median } from "../../lib/aggregate";
+import { partyIconMonoSvgRaw } from "../../lib/partyIconMono";
 
 const topicModules = import.meta.glob("../../../../data/export/topics/*.json", { eager: true });
 
@@ -63,7 +64,26 @@ const globalTagCount = new Map<string, number>();
 let globalTagTotal = 0;
 const tagBeschrijving = new Map<string, string>();
 
+// Voor de mediaanlijn op de taghistogram (issue #202): per tag de mediaan
+// over alle personen heen, inclusief personen die een tag nooit gebruikten
+// (0) -- zonder die nullen zou de mediaan een vertekend beeld geven van "hoe
+// vaak gebruikt een willekeurige spreker deze tag doorgaans".
+const allPersonNames = new Set<string>();
+const tagCountPerPerson = new Map<string, Map<string, number>>();
+const argCountPerPerson = new Map<string, number>();
+const partyOfPerson = new Map<string, string>();
+
 for (const argument of allArgs) {
+	allPersonNames.add(argument.actor.name);
+	if (argument.actor.party && !partyOfPerson.has(argument.actor.name)) {
+		partyOfPerson.set(argument.actor.name, canonicalParty(argument.actor.party));
+	}
+	// Alleen argumenten met minstens één LLM-tag tellen mee als noemer -- bijna
+	// de helft van alle argumenten heeft er geen (bv. te kort, of buiten de
+	// taxonomie), en die als nul meetellen zou elk percentage verdunnen.
+	if (argument.tags.some((t: any) => t.created_by === "llm")) {
+		argCountPerPerson.set(argument.actor.name, (argCountPerPerson.get(argument.actor.name) ?? 0) + 1);
+	}
 	for (const tag of argument.tags) {
 		if (tag.created_by !== "llm") continue;
 		if (!tagBeschrijving.has(tag.sleutel)) tagBeschrijving.set(tag.sleutel, tag.beschrijving);
@@ -73,8 +93,42 @@ for (const argument of allArgs) {
 			personTagCount.set(tag.sleutel, (personTagCount.get(tag.sleutel) ?? 0) + 1);
 			personTotal++;
 		}
+		const perPerson = tagCountPerPerson.get(argument.actor.name) ?? new Map<string, number>();
+		perPerson.set(tag.sleutel, (perPerson.get(tag.sleutel) ?? 0) + 1);
+		tagCountPerPerson.set(argument.actor.name, perPerson);
 	}
 }
+
+// Tags per argument (niet per tag-toekenning) als basis voor de mediaan: een
+// kale telling, of zelfs een aandeel van iemands eigen tag-portfolio, laat
+// zich lastig interpreteren zodra personen enorm verschillen in hoeveel ze
+// aan het woord komen. "9 van de 490 argumenten kregen deze tag" (16%) is
+// direct vergelijkbaar tussen sprekers, ook tussen een minister met 944
+// toekenningen en een achterbanker met een handvol. Dezelfde schaal als de
+// balk zelf (client-side ook per argument gedeeld, zie ActorTagUsage.vue),
+// dus geen terugschaling meer nodig.
+function tagMedianOver(personen: string[]): Record<string, number> {
+	const result: Record<string, number> = {};
+	for (const sleutel of globalTagCount.keys()) {
+		const rates = personen.map((p) => {
+			const totalArgs = argCountPerPerson.get(p) ?? 0;
+			return totalArgs ? (tagCountPerPerson.get(p)?.get(sleutel) ?? 0) / totalArgs : 0;
+		});
+		result[sleutel] = median(rates);
+	}
+	return result;
+}
+
+const tagMedian = tagMedianOver([...allPersonNames]);
+
+// Partijgenoten-mediaan (naast de mediaan over alle sprekers): laat zien of
+// deze spreker ook binnen de eigen fractie op- of onderscheidt, niet alleen
+// t.o.v. de volledige Kamer.
+const tagPartyMedian =
+	canonicalPartyNaam && canonicalPartyNaam !== NO_PARTY
+		? tagMedianOver([...allPersonNames].filter((p) => partyOfPerson.get(p) === canonicalPartyNaam))
+		: undefined;
+const partyIconSvgRaw = canonicalPartyNaam && canonicalPartyNaam !== NO_PARTY ? partyIconMonoSvgRaw(canonicalPartyNaam) : null;
 
 const { favorieten, minstFavoriet } = berekenTagSignalen(personTagCount, personTotal, globalTagCount, globalTagTotal, { topN: 3 });
 
@@ -190,6 +244,9 @@ const verbositeitBadges =
 			argumentList={argumentList}
 			favorieteTags={favorieteTags}
 			minstFavorieteTags={minstFavorieteTags}
+			tagMedian={tagMedian}
+			tagPartyMedian={tagPartyMedian}
+			partyIconSvgRaw={partyIconSvgRaw}
 			client:only="vue"
 		>
 			{verbositeitStats && corpusMedianen && (
