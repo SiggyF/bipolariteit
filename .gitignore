@@ -17,6 +17,21 @@ data/raw/elecdebate60to16/*
 data/export/argument-docs/
 data/export/design-handoff/
 data/export/agy_confrontatie_tree.log
+# Tile-pyramide-experiment (pipeline/tiling/, issue #215/#253): regenereerbaar
+# via `make tiles`/`scripts/experiment_umap_documents.py --export-frontend`,
+# net als embeddings/subtitles/debate-events hieronder -- .pmtiles-bestanden
+# (tot 250+ MiB voor de volle-dataset-variant) horen sowieso niet in git, en
+# de -full-varianten wijzigen nog vaak zolang de N-laagse clustering/labeling
+# in ontwikkeling is.
+data/export/*.pmtiles
+# Idem: de Cosmograph-plot-HTML voor de volle dataset is met 50+ MiB veel
+# groter dan de overige, wel ingecheckte docs/poc/umap-documenten/plot-
+# <label>.html-varianten (tot 16 MiB) -- niet meenemen in git.
+docs/poc/umap-documenten/plot-full.html
+data/export/*-full.json
+data/export/*-full.geojson
+data/export/*-full-grid.json
+data/export/plenair-map-grid.json
 data/*.db
 data/*.db-journal
 data/*.db-wal
@@ -36,6 +51,7 @@ frontend/public/data/
 # Per release gerenderd uit deploy/wrangler.template.jsonc.
 wrangler.generated.jsonc
 frontend/.astro/
+.astro/
 __pycache__/
 *.pyc
 .venv/

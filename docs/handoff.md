@@ -2,6 +2,133 @@
 
 Status per 2026-07-27. Zie `docs/plan.md` voor het volledige, goedgekeurde architectuurplan. Dit document is voor het vervolg: wat staat er al, wat is er onderweg ontdekt, en wat is de volgende concrete stap.
 
+## Stand bij einde sessie (2026-08-29, tile-pyramide plenaire kaart + bredere commissiedebatten-crawl, issue #215/#253) — begin hier bij een nieuwe sessie
+
+**Uitgangspunt**: issue #215 (hoge-resolutie A0-export van de plenaire kaart) leidde
+tot een bredere architectuur: een vector-tile-pyramide (MVT/PMTiles) over de UMAP-
+coördinaten, i.p.v. de bestaande platte `plenair-map.json`. Dat lost meteen ook
+issue #253 op (machine-leesbaar `cluster`-id per document, want dat is nu gewoon
+een MVT-property).
+
+**Deel 1 -- tile-pyramide, afgerond en geverifieerd:**
+- Nieuwe subpackage `pipeline/tiling/` (`grid.py`: custom morecantile-grid over de
+  UMAP-bounding-box met een "neppe" vlakke CRS; `encode.py`: MVT-encodering per
+  tile via `mapbox_vector_tile`; `build_pyramid.py`: CLI, verdeelt tile-encodering
+  over dask). Nieuwe `uv`-dependency-group `tiling` (dask[distributed], morecantile,
+  mapbox-vector-tile, pmtiles, bokeh). Nieuw Makefile-target `tiles` (los van
+  `export`-keten, experimenteel).
+- **Persistente dask-cluster**: `dask scheduler`/`dask worker` (built-in dask-CLI)
+  op `tcp://127.0.0.1:8786`/dashboard `:8787`, gestart via
+  `.devcontainer/devcontainer.json` `postStartCommand` -- overleeft de hele sessie
+  i.p.v. per run te verschijnen/verdwijnen. `pipeline/tiling/build_pyramid.py`'s
+  `make_client()` verbindt hiermee als het bereikbaar is, anders eigen kortstondige
+  cluster als fallback.
+- Nieuwe frontend-component `frontend/src/components/TiledPlenairMap.vue` (naast,
+  niet i.p.v. `PlenairMap.vue`, die ongewijzigd blijft) + `frontend/src/lib/
+  tiledMapTransform.ts` + `plenairMapColors.ts` + testpagina `/tests/tiled-plenair-map`.
+  Nieuwe npm-deps: `pmtiles`, `@mapbox/vector-tile`, `pbf` (let op: `pbf@5` exporteert
+  geen default meer, gebruik `import { PbfReader } from "pbf"`, niet `import Pbf`).
+- **QGIS-bug gevonden en gefixt**: QGIS toonde alle punten als "1 punt". Root cause:
+  `mapbox_vector_tile.encode()` liet het MVT-feature-`id`-veld ongezet, decodeerde
+  overal als `0` -- QGIS' vector-tile-provider dedupliceert kennelijk op dat id.
+  Fix in `pipeline/tiling/encode.py`: `pid` (document-id) als feature-`id` meegeven.
+  Geverifieerd (voorheen 2/2, nu 587/587 unieke ids in een steekproef-tile) en
+  live bevestigd werkend in QGIS.
+- `frontend/public/plenair-map-viewer.html` (nieuw, standalone HTML, CDN-MapLibre +
+  pmtiles-protocol, geen npm/build-afhankelijkheid) als tweede, onafhankelijke
+  viewer op hetzelfde .pmtiles-bestand -- handig om de tile-data zelf te
+  controleren los van `TiledPlenairMap.vue`'s eigen canvas-renderer.
+
+**Deel 2 -- bredere dekking (crawl + ingest), afgerond:**
+- `crawlers/tweede_kamer/tweede_kamer/odata.py`'s `vergaderingen_url()` kreeg een
+  `soort`-parameter (was hardcoded `'Plenair'`); `verslagen_periode.py`-spider kreeg
+  `-a soort=Commissie`. **Let op datumgrens**: de huidige kamerperiode is
+  2025-11-12..heden ("Tweede Kamer 2025-heden" in `data/politieke-periodes.toml`),
+  niet 2024 zoals eerst aangenomen -- check die toml bij twijfel, niet uit het hoofd
+  aannemen. Gecrawld: 265 Commissie-Vergaderingen gevonden, 250 succesvol naar
+  `data/raw/tweede_kamer/_commissie_2025-heden/`.
+- **Ingest kostte geen nieuwe code**: `pipeline/ingest/ingest_tk.py`'s
+  `ingest_plenair()` bleek ondanks de naam al volledig soort-onafhankelijk (itereert
+  gewoon alle `<activiteit>`-elementen, geen plenair-specifieke filter) -- gewoon
+  `uv run python -m pipeline.ingest.ingest_tk --plenair-dir _commissie_2025-heden`
+  gedraaid. 40.378 nieuwe spreekbeurten geïmporteerd (`topic_id NULL`, zelfde bucket
+  als de bestaande brede plenaire crawl). DB nu: 232.333 documents totaal, 144.377
+  UMAP-eligible (was 191.955/118.539 vóór deze crawl).
+- **Expliciet besluit**: UMAP draait op alle data; extract/tag (LLM, kostbaar)
+  blijft beperkt tot de 4 gecureerde "polarized topics" (stikstof/abortus/asiel/
+  energietransitie) -- ter info, historisch was dat toch al maar 5.281/191.955
+  documenten (2,75%), de "(geen topic/plenair)"-bucket had al 0 extractie. De
+  commissiedebatten volgen dus dezelfde regel: nooit extract/tag, alleen
+  UMAP-coördinaten.
+- `scripts/experiment_umap_documents.py` kreeg een `--export-suffix`-optie (default
+  `""`, bestaand gedrag ongewijzigd) zodat een volle-dataset-run naar
+  `plenair-map-full.json`/`-clusters-full.json`/`-hierarchy-full.json` schrijft
+  **zonder** het bestaande, op ~40k punten performance-getunede
+  `data/export/plenair-map.json` (dat `PlenairMap.vue` rechtstreeks gebruikt) te
+  overschrijven. Gebruik: `--export-suffix=-full` (met `=`, anders leest argparse
+  `-full` als een losse vlag i.p.v. een waarde).
+
+**Afgerond sinds hierboven**: volle-dataset UMAP-run geslaagd
+(`--start 2000-01-01 --end 2026-08-30 --label full --full-range-topics
+stikstof,abortus,asiel,energietransitie --export-frontend --export-suffix=-full`,
+zie de exacte commando's/cache-paden verderop) -- 135.633 documenten embedden
+kostte 4040.5s (sequentieel tegen de lokale LM Studio-backend, bewust niet
+dask-parallel), UMAP zelf maar 105.8s (single-threaded door `random_state=42`
+bleek dus geen echte bottleneck op deze schaal -- geen besluit meer nodig
+over loslaten van `random_state`). Resultaat: `data/export/plenair-map-full.json`
+(132.921 punten, 20,5 MiB, ruim onder de 25 MiB Cloudflare-grens) +
+`plenair-map.json` (de ~40k-punten productie-export) volledig ongewijzigd.
+Tile-pyramide herbouwd: `data/export/plenair-map-full.pmtiles` (45.225 tiles,
+zoom 0-8, 237 MB -- nog steeds ongedecimeerd per zoomniveau, zie eerdere noot).
+
+**N-laagse clustering toegevoegd** (gebruiker wilde "meerdere niveaus van
+clusters, zoals de zoom-lagen"): `scripts/experiment_umap_documents.py` kreeg
+`build_multilevel_clusters()`/`label_multilevel_clusters()` (nieuw, naast de
+oude `build_hierarchical_clusters()`/`label_hierarchical_clusters()` die
+**ongewijzigd** blijven -- zowel voor `notebooks/explore_plenary_umap_clusters.py`
+dat ze rechtstreeks importeert, als omdat het standaardpad (geen
+`--cluster-level-sizes`) in `main()` bewust naar de oude functies blijft
+wijzen; alleen expliciet `--cluster-level-sizes` schakelt over naar het
+nieuwe N-laagse pad. Kernidee: elk niveau is een ONAFHANKELIJKE snede van
+dezelfde HDBSCAN condensed tree op een eigen drempel (i.p.v. de oude
+recursieve coarse/fine-aanpak) -- sneden van dezelfde boom op verschillende
+hoogtes zijn altijd automatisch consistent/genest, dus ouder/kind-relaties
+tussen niveaus worden achteraf via meerderheidsoverlap bepaald (zelfde truc
+als de oude `parent_of_fine`), niet expliciet per tak afgedwongen. Nieuwe CLI-
+vlag `--cluster-level-sizes` (komma-gescheiden, dalend, bv.
+`4000,1200,350,100,30`), genegeerd/optioneel, `--cluster-min-size-to-name`
+blijft de default-2-niveaus-instelling. Live gedraaid op de volle dataset:
+7 -> 15 -> 37 -> 91 -> 683 clusters, `plenair-map-clusters-full.json` heeft nu
+naast de bestaande `"coarse"`/`"fine"`-sleutels (resp. niveau 0 en het diepste
+niveau, voor backward compat met bestaande consumenten) ook een `"levels"`-
+sleutel met alle N niveaus. Tile-pyramide opnieuw gebouwd met de bijgewerkte
+(diepste-niveau) cluster-ids per punt.
+
+**Nog open**: `label_clusters_with_llm()` (LLM-naamgeving) ondersteunt nog
+alleen exact 2 niveaus -- bij `--cluster-level-sizes` met >2 niveaus is
+`--skip-llm-naming` verplicht (harde `SystemExit` anders). De TF-IDF-namen
+(zonder LLM) zijn bruikbaar maar soms rommelig (zie bv. "Schors" als
+domeinnaam in de laatste run-log) -- LLM-naamgeving generaliseren naar N
+niveaus is nog niet gedaan. Ook nog niet gedaan: `TiledPlenairMap.vue`/
+`plenair-map-viewer.html` tonen nog alleen `clusters.coarse` (niveau 0) als
+hull-overlay, geen keuze/zoom-afhankelijke wissel tussen de 5 niveaus.
+
+**Volgende, nog niet uitgewerkte fase (verkenning gestart, geen goedgekeurd plan)**:
+gebruiker wil daarna nog een **hiërarchische UMAP**: niet alleen clustering op
+meerdere niveaus (hierboven, wél afgerond), maar per cluster ook opnieuw UMAP
+draaien op alleen die punten (`vectors[member_idx]`, geen her-embedding nodig)
+voor een gedetailleerdere "ingezoomde" lokale layout, met **Procrustes-
+uitlijning** (`scipy.spatial.procrustes`/`scipy.linalg.orthogonal_procrustes`,
+al beschikbaar) om elke lokale laag terug te registreren op zijn eigen
+plek/oriëntatie/schaal in de globale kaart. Dit is ook waar dask-parallelisme
+(per-cluster her-UMAP is embarrassingly parallel) écht meerwaarde heeft, meer
+dan bij de tile-encodering alleen. Openstaande ontwerpvragen: op welk
+clusterniveau (van de nu 5 beschikbare) triggert een lokale her-UMAP, hoe een
+zoomniveau in de tile-pyramide bepaalt of globale of lokaal-uitgelijnde
+coördinaten gebruikt worden. Zie ook de sessie-eigen planbestand-aantekeningen
+(niet in git, `/home/vscode/.claude/plans/humming-tickling-seahorse.md` in de
+devcontainer van die sessie) voor de volledige verkenningsbevindingen.
+
 ## Stand bij einde sessie (2026-08-16, videokalibratie via events-API, issue #130) — begin hier bij een nieuwe sessie
 
 **Probleem**: sprekersbeurten in onze player liepen merkbaar slechter gelijk met de

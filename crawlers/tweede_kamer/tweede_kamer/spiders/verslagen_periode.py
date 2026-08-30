@@ -1,7 +1,7 @@
 """
-Spider: haal Tweede Kamer plenaire Verslagen op voor een datumperiode,
-zonder topic-trefwoordfilter (alle Activiteiten van die dag worden later
-door pipeline.ingest.ingest_tk.ingest_plenair() geselecteerd, niet hier).
+Spider: haal Tweede Kamer Verslagen op voor een datumperiode, zonder
+topic-trefwoordfilter (alle Activiteiten van die dag worden later door
+pipeline.ingest.ingest_tk.ingest_plenair() geselecteerd, niet hier).
 
 Gebruik:
     cd crawlers/tweede_kamer
@@ -9,11 +9,16 @@ Gebruik:
         -a topic_keyword=_plenair_2024-2025 -a limit=10 \
         -s CONCURRENT_REQUESTS=8 -s DOWNLOAD_DELAY=0.05
 
+    # Commissiedebatten i.p.v. plenair (issue #215: bredere dekking dan de
+    # topic-gerichte trefwoordcrawls, voor de plenaire/debattenkaart):
+    uv run scrapy crawl verslagen_periode -a start=2025-11-12 -a end=2026-08-29 \
+        -a soort=Commissie -a topic_keyword=_commissie_2025-heden -a limit=20
+
 Schrijft, net als de bestaande `verslagen`-spider, per gevonden Verslag een
 ruw XML-bestand + metadata-JSON naar data/raw/tweede_kamer/<topic_keyword>/
 (via RawFilePipeline) -- topic_keyword is hier een pseudo-waarde (geen
 inhoudelijk topic) die alleen als mapnaam dient, zodat deze ruwe data apart
-blijft van de 4 topic-crawls.
+blijft van de topic-crawls.
 
 Volgt de kortere keten Vergadering -> Verslag -> resource-download
 (geen Activiteit-omweg, zie odata.vergaderingen_url), sequentieel per
@@ -32,21 +37,25 @@ from ..paths import RAW_DIR
 class VerslagenPeriodeSpider(scrapy.Spider):
     name = "verslagen_periode"
 
-    def __init__(self, start=None, end=None, topic_keyword=None, limit=None, *args, **kwargs):
+    def __init__(self, start=None, end=None, soort="Plenair", topic_keyword=None, limit=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if not start or not end:
             raise ValueError(
                 "--start en --end zijn verplicht (ISO-datums), bv. "
                 "scrapy crawl verslagen_periode -a start=2024-09-01 -a end=2025-08-31"
             )
+        if soort not in ("Plenair", "Commissie"):
+            raise ValueError(f"soort moet 'Plenair' of 'Commissie' zijn, niet {soort!r}")
         self.start_date = start
         self.end_date = end
-        self.topic_keyword = topic_keyword or f"_plenair_{start}_{end}"
+        self.soort = soort
+        default_prefix = "_plenair_" if soort == "Plenair" else "_commissie_"
+        self.topic_keyword = topic_keyword or f"{default_prefix}{start}_{end}"
         self.limit = int(limit) if limit is not None else None
         self.fetched = 0
 
     async def start(self):
-        url = odata.vergaderingen_url(self.start_date, self.end_date, top=odata.MAX_TOP)
+        url = odata.vergaderingen_url(self.start_date, self.end_date, top=odata.MAX_TOP, soort=self.soort)
         yield scrapy.Request(url, callback=self.parse_vergaderingen, cb_kwargs={"buffer": []})
 
     def parse_vergaderingen(self, response, buffer):
@@ -58,7 +67,7 @@ class VerslagenPeriodeSpider(scrapy.Spider):
             return
 
         vergaderingen = buffer[: self.limit] if self.limit is not None else buffer
-        self.logger.info(f"{len(vergaderingen)} plenaire Vergaderingen gevonden ({self.start_date}..{self.end_date})")
+        self.logger.info(f"{len(vergaderingen)} {self.soort}-Vergaderingen gevonden ({self.start_date}..{self.end_date})")
         yield from self.process_next_vergadering(vergaderingen, 0)
 
     def process_next_vergadering(self, vergaderingen, index):
