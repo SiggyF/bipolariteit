@@ -98,6 +98,15 @@ matplotlib-preview + een QGIS-schets, plus de vier openstaande stijlvragen
   lid-uitsplitsing zonder citaten om geen lid voor te trekken) -- sluit aan
   bij het "gepersonaliseerde posters per Kamerlid"-idee uit de #215-
   discussie, nog niet eerder uitgewerkt.
+- **Kleur, vastgelegd na een gerichte terugvraag** (zie het "Kleur --
+  vastgelegd"-blok in 2b): de vier onderwerpkleuren volgen de bestaande
+  site-families (`plenairMapColors.ts`/`render_design_preview.py`), maar
+  print-hertint voor mat papier (donkerder/verzadigder, anders vervlakken
+  groen/oranje in de inkt) -- stikstof `#3f6b41`, abortus `#96414f`, asiel
+  `#a8672a`, energietransitie `#35617f`. De persoonlijke-bijdragen-laag (2a/
+  2c) krijgt bewust GEEN vijfde kleur maar een **uitsparing** (onbedrukt
+  papier + zwarte contour) -- kleur blijft zo voorbehouden aan het
+  onderwerp, in lijn met het "kleur is de schaarste"-principe uit Ronde 1.
 
 Concrete specs voor de renderfase (zie `scripts/render_design_preview.py`,
 de nog te bouwen `datashader`-render en `export_clusters_geojson.py --flat`,
