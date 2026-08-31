@@ -17,6 +17,10 @@ data/raw/elecdebate60to16/*
 data/export/argument-docs/
 data/export/design-handoff/
 data/export/agy_confrontatie_tree.log
+# A0-printposter-renderexperimenten (issue #215): regenereerbaar via
+# scripts/render_a0_datashader.py/render_a0_svg.py, geen van beide nog
+# stabiel genoeg voor een definitieve export -- zie de handoff-notitie.
+data/export/a0-map/
 # Tile-pyramide-experiment (pipeline/tiling/, issue #215/#253): regenereerbaar
 # via `make tiles`/`scripts/experiment_umap_documents.py --export-frontend`,
 # net als embeddings/subtitles/debate-events hieronder -- .pmtiles-bestanden

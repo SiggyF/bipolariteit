@@ -56,6 +56,7 @@ tiling = [
     "morecantile>=7.0.3",
     "pmtiles>=3.7.0",
     "datashader>=0.19.1",
+    "colorspacious>=1.1.2",
 ]
 
 [tool.pytest.ini_options]
