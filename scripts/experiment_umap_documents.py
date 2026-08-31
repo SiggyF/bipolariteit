@@ -900,6 +900,7 @@ def label_multilevel_clusters(
                 "hull": hull,
                 "topic_breakdown": dict(topic_counts.most_common()),
                 "redundant_with_parent": False,
+                "contained_by_sibling": None,
             }
 
     def _hull_polygon(hull):
@@ -935,6 +936,32 @@ def label_multilevel_clusters(
             if iou >= redundancy_overlap:
                 summary["redundant_with_parent"] = True
 
+    # Same-level containment (zie scripts/validate_cluster_hierarchy.py):
+    # `partition_exhaustive` garandeert disjuncte PUNTENSETS per cluster op
+    # een niveau, maar niet disjuncte convex hulls -- een ruimtelijk verspreid/
+    # concaaf cluster se hull kan een kleiner, compact cluster op hetzelfde
+    # niveau geometrisch volledig omsluiten, ook zonder gedeelde punten. Op
+    # hetzelfde niveau horen clusters een partitie te zijn (naast elkaar),
+    # niet genest -- dat is dus altijd een render-artefact, in tegenstelling
+    # tot ouder/kind-nesting (hierboven, IoU-redundantie), wat net het
+    # bedoelde beeld is. Lichte mitigatie i.p.v. een concave-hull-herbouw van
+    # compute_cluster_hull(): het KLEINERE cluster vlaggen, niet de
+    # hull-geometrie zelf aanpassen -- een renderstap kan dan zelf kiezen om
+    # zulke contouren over te slaan of anders te stijlen.
+    for level_idx in range(n_levels):
+        summaries = list(level_summaries[level_idx].values())
+        polygons = [(s, _hull_polygon(s["hull"])) for s in summaries]
+        for i, (summary_a, poly_a) in enumerate(polygons):
+            if poly_a is None:
+                continue
+            for summary_b, poly_b in polygons[i + 1:]:
+                if poly_b is None:
+                    continue
+                if poly_a.contains(poly_b):
+                    summary_b["contained_by_sibling"] = summary_a["cluster_id"]
+                elif poly_b.contains(poly_a):
+                    summary_a["contained_by_sibling"] = summary_b["cluster_id"]
+
     def to_node(summary):
         return {
             "id": summary["cluster_id"],
@@ -945,6 +972,7 @@ def label_multilevel_clusters(
             "hull": summary["hull"],
             "topic_breakdown": summary["topic_breakdown"],
             "redundant_with_parent": summary["redundant_with_parent"],
+            "contained_by_sibling": summary["contained_by_sibling"],
             "children": [],
         }
 
@@ -972,7 +1000,11 @@ def label_multilevel_clusters(
 def _build_cluster_naming_prompt(tfidf_terms, example_texts, example_titles):
     terms_str = ", ".join(tfidf_terms) if tfidf_terms else "(geen trefwoorden gevonden)"
     titles_str = "\n".join(f"- {t}" for t in sorted(set(example_titles)) if t) or "(geen debattitels bekend)"
-    examples_str = "\n\n".join(f'"{t[:400]}"' for t in example_texts)
+    # `example_texts` is de volledige, ongetrimde documenttekst (zie main()'s
+    # `texts = [stripped[i] for i in keep]`, geen aparte truncatie daar) --
+    # 1200 tekens (was 400) geeft de LLM meer inhoudelijke context per
+    # voorbeeld zonder de prompt onnodig op te blazen (8 voorbeelden default).
+    examples_str = "\n\n".join(f'"{t[:1200]}"' for t in example_texts)
     return f"""Je krijgt trefwoorden en voorbeeldfragmenten uit spreekbeurten uit
 Tweede Kamerdebatten, allemaal uit hetzelfde cluster van een UMAP-kaart
 (spreekbeurten die semantisch dicht bij elkaar liggen). Geef een korte,
@@ -987,13 +1019,21 @@ Voorbeeldfragmenten:
 {examples_str}
 
 Antwoord in exact dit formaat, zonder verdere uitleg:
-Naam: <2-4 woorden, het beleidsonderwerp>
+Naam: <het beleidsonderwerp in zo min mogelijk woorden -- 1 woord is prima
+als dat al dekkend is, gebruik 2 woorden alleen als 1 woord het onderwerp
+niet duidelijk genoeg maakt>
 Duiding: <één zin, wat dit cluster inhoudelijk samenbindt>"""
 
 
 def _generate_llm_cluster_name(base_url, model, reasoning_effort, tfidf_terms, example_texts, example_titles):
     prompt = _build_cluster_naming_prompt(tfidf_terms, example_texts, example_titles)
-    raw_content, _usage = call_llm(base_url, model, prompt, reasoning_effort=reasoning_effort, timeout=120)
+    # call_llm() (pipeline/tag_arguments.py) vereist max_tokens (geen default) en
+    # geeft een LLMResponse-NamedTuple (content, usage, finish_reason) terug --
+    # het strikte "Naam: .../Duiding: ..."-tweeregelformaat heeft ruim voldoende
+    # aan 200 tokens, mits --llm-reasoning-effort op "none" staat (anders gaat
+    # het hele budget op aan onzichtbare <think>-redenering, zie main()'s toelichting).
+    response = call_llm(base_url, model, prompt, reasoning_effort=reasoning_effort, timeout=120, max_tokens=200)
+    raw_content = response.content
     name, duiding = None, None
     for line in raw_content.splitlines():
         if line.lower().startswith("naam:"):
@@ -1004,57 +1044,61 @@ def _generate_llm_cluster_name(base_url, model, reasoning_effort, tfidf_terms, e
 
 
 def label_clusters_with_llm(
-    coarse_ids, fine_ids, coarse_summaries, fine_list, tree,
+    level_ids, level_lists, tree,
     texts, coords, rows, base_url, model, reasoning_effort, examples_per_cluster,
 ):
-    """Vervangt de TF-IDF-naam van elk coarse- en fine-cluster (in-place) door
+    """Vervangt de TF-IDF-naam van elk cluster op elk niveau (in-place) door
     een LLM-gegenereerde naam + duiding, op basis van representatieve
     spreekbeurten (dichtst bij het clustercentroïde) + debattitels. De
     TF-IDF-termen zelf blijven bewaard (`terms`-veld) voor een eventueel
-    latere "cluster-detail"-weergave (issue vervolgen op #181), alleen
-    `name` wordt overschreven. Werkt ook `tree` (voor plenair-map-hierarchy.json)
-    en fine_list se `parent_name`-verwijzingen bij zodat alles consistent
-    naar de nieuwe namen wijst."""
+    latere "cluster-detail"-weergave (issue vervolgen op #181), alleen `name`
+    wordt overschreven. `level_ids`/`level_lists` zijn N-lang (grofste niveau
+    eerst, zie build_multilevel_clusters/label_multilevel_clusters) -- werkt
+    per niveau van grof naar fijn zodat een dieper niveau's `parent_name`
+    altijd de AL VERVANGEN ouder-naam kan opzoeken. Werkt ook `tree` (voor
+    plenair-map-hierarchy.json) bij, op willekeurige diepte: `to_node()`
+    kopieert `name` op bouwmoment (vóór LLM-naamgeving) naar de boomknoop,
+    dus zonder deze naderhand-patch zou de hierarchy-export de oude
+    TF-IDF-namen blijven tonen ook al is `summary["name"]` allang vervangen."""
     def representative_examples(member_idx):
         centroid = coords[member_idx].mean(axis=0)
         dists = np.linalg.norm(coords[member_idx] - centroid, axis=1)
         closest = member_idx[np.argsort(dists)[:examples_per_cluster]]
         return [texts[i] for i in closest], [rows[i]["debate_title"] for i in closest]
 
-    total = len(coarse_summaries) + len(fine_list)
-    logger.info("LLM-naamgeving voor %d clusters (~%ds geschat, %.1fs/cluster live gemeten)", total, total * 7, 7.0)
+    total = sum(len(summaries) for summaries in level_lists)
+    logger.info(
+        "LLM-naamgeving voor %d clusters over %d niveaus (~%ds geschat, %.1fs/cluster live gemeten)",
+        total, len(level_lists), total * 7, 7.0,
+    )
 
-    llm_names_by_coarse_id = {}
-    for coarse_id, summary in coarse_summaries.items():
-        member_idx = np.where(coarse_ids == coarse_id)[0]
-        example_texts, example_titles = representative_examples(member_idx)
-        name, duiding = _generate_llm_cluster_name(
-            base_url, model, reasoning_effort, summary["terms"], example_texts, example_titles,
-        )
-        summary["name"] = name
-        summary["duiding"] = duiding
-        llm_names_by_coarse_id[coarse_id] = name
-        logger.info("coarse-domein %d (n=%d): LLM-naam '%s' -- %s", coarse_id, summary["size"], name, duiding)
+    names_by_level = []
+    for level_idx, (ids, summaries) in enumerate(zip(level_ids, level_lists)):
+        names_by_id = {}
+        for summary in summaries:
+            member_idx = np.where(ids == summary["cluster_id"])[0]
+            example_texts, example_titles = representative_examples(member_idx)
+            name, duiding = _generate_llm_cluster_name(
+                base_url, model, reasoning_effort, summary["terms"], example_texts, example_titles,
+            )
+            summary["name"] = name
+            summary["duiding"] = duiding
+            if level_idx > 0 and summary["parent_id"] is not None:
+                summary["parent_name"] = names_by_level[level_idx - 1].get(summary["parent_id"], summary["parent_name"])
+            names_by_id[summary["cluster_id"]] = name
+            logger.info(
+                "niveau %d, cluster %d (n=%d): LLM-naam '%s' -- %s",
+                level_idx, summary["cluster_id"], summary["size"], name, duiding,
+            )
+        names_by_level.append(names_by_id)
 
-    for summary in fine_list:
-        member_idx = np.where(fine_ids == summary["cluster_id"])[0]
-        example_texts, example_titles = representative_examples(member_idx)
-        name, duiding = _generate_llm_cluster_name(
-            base_url, model, reasoning_effort, summary["terms"], example_texts, example_titles,
-        )
-        summary["name"] = name
-        summary["duiding"] = duiding
-        if summary["parent_id"] is not None:
-            summary["parent_name"] = llm_names_by_coarse_id.get(summary["parent_id"], summary["parent_name"])
-        logger.info("fine-sub-onderwerp %d (n=%d): LLM-naam '%s' -- %s", summary["cluster_id"], summary["size"], name, duiding)
+    def _rename_tree(nodes, level_idx):
+        for node in nodes:
+            node["name"] = names_by_level[level_idx].get(node["id"], node["name"])
+            if node["children"]:
+                _rename_tree(node["children"], level_idx + 1)
 
-    fine_by_id = {s["cluster_id"]: s for s in fine_list}
-    for coarse_node in tree:
-        coarse_node["name"] = llm_names_by_coarse_id.get(coarse_node["id"], coarse_node["name"])
-        for child in coarse_node["children"]:
-            fine_summary = fine_by_id.get(child["id"])
-            if fine_summary is not None:
-                child["name"] = fine_summary["name"]
+    _rename_tree(tree, 0)
 
 
 def main():
@@ -1269,7 +1313,7 @@ def main():
             if not args.skip_llm_naming:
                 llm_base_url = detect_base_url(args.base_url)
                 label_clusters_with_llm(
-                    coarse_ids, fine_ids, coarse_summaries, fine_summaries, hierarchy,
+                    [coarse_ids, fine_ids], [list(coarse_summaries.values()), fine_summaries], hierarchy,
                     texts, coords, rows, llm_base_url, args.llm_chat_model,
                     args.llm_reasoning_effort, args.llm_examples_per_cluster,
                 )
@@ -1303,22 +1347,12 @@ def main():
             )
 
             if not args.skip_llm_naming:
-                if len(level_sizes) != 2:
-                    raise SystemExit(
-                        "--skip-llm-naming is verplicht bij --cluster-level-sizes met >2 niveaus "
-                        "(label_clusters_with_llm ondersteunt nog alleen coarse/fine)"
-                    )
-                coarse_summaries = {s["cluster_id"]: s for s in level_lists[0]}
-                fine_summaries = {s["cluster_id"]: s for s in level_lists[1]}
-                coarse_ids, fine_ids = level_ids[0], level_ids[1]
                 llm_base_url = detect_base_url(args.base_url)
                 label_clusters_with_llm(
-                    coarse_ids, fine_ids, coarse_summaries, fine_summaries, hierarchy,
+                    level_ids, level_lists, hierarchy,
                     texts, coords, rows, llm_base_url, args.llm_chat_model,
                     args.llm_reasoning_effort, args.llm_examples_per_cluster,
                 )
-                level_lists[0] = list(coarse_summaries.values())
-                level_lists[1] = list(fine_summaries.values())
 
             cluster_ids = level_ids[-1]
             all_level_ids = level_ids

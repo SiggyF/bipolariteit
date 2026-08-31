@@ -75,6 +75,38 @@ laadt via een CDN, alleen inline SVG/CSS op de bestaande site-tokens.
 Het bijbehorende briefingpakket (screenshots, sjabloonzinnen per paginatype)
 staat in `data/export/design-handoff/deelknoppen-preview/` (niet ingecheckt).
 
+## `a0-map/`
+
+Ontwerpverkenning voor de A0-printposter van de plenaire/debattenkaart
+(issue #215), gevoed door het briefingpakket in
+`data/export/design-handoff/plenaire-kaart-print/` (niet ingecheckt): eigen
+matplotlib-preview + een QGIS-schets, plus de vier openstaande stijlvragen
+(kleur, dichtheid, hiërarchie-weergave, typografie/branding).
+
+`A0 Kaartontwerp.dc.html` bevat twee ronden:
+- **Ronde 1** (richtingsbord, antwoord op de vier vragen): onderwerpkleur in
+  de punten (de vier gecureerde topics), clusterfamilie/hiërarchie alleen in
+  de hull-lijnen (niet in de punten, om de twee encoderingen niet te laten
+  concurreren); "overig plenair" als lage-alpha-textuur met de vier topics
+  op een aparte, voller gedekte laag; van de 5 clusterniveaus alleen
+  niveau 1-3 als zichtbare lijnen + labels, niveau 4-5 als hairlines zonder
+  label; typografie/kleurgebruik volgt de bestaande "Ink & Rust"-site-tokens
+  (Libre Caslon Display koppen, IBM Plex Mono colofon/kicker).
+- **Ronde 2** (nieuw voorstel, nog niet gevraagd): één gedeelde basisplaat
+  met persoonlijke edities per Kamerlid (eigen bijdragen uitgelicht +
+  representatieve citaten) en een fractie-editie (voor de fractiekamer, per-
+  lid-uitsplitsing zonder citaten om geen lid voor te trekken) -- sluit aan
+  bij het "gepersonaliseerde posters per Kamerlid"-idee uit de #215-
+  discussie, nog niet eerder uitgewerkt.
+
+Concrete specs voor de renderfase (zie `scripts/render_design_preview.py`,
+de nog te bouwen `datashader`-render en `export_clusters_geojson.py`'s
+platte exportmodus): 300dpi (~9.900×14.000px A0), TWEE losse rasters
+("overig" en de vier onderwerpen, zodat alpha per laag apart te regelen is)
+i.p.v. één gecombineerde puntenlaag, hull-lijndiktes 3,2/2,2/1,4pt (niveau
+1-3, zwart) + 0,8/0,4pt hairlines (niveau 4-5, warm grijs) i.p.v. 5 gelijk
+opgebouwde diktes.
+
 ## `videoplayer/`
 
 Ontwerp voor visuele argumenttype-annotaties op een video-embed (issue #94):
