@@ -79,7 +79,7 @@
       }      
     }
   },
-  "postCreateCommand": "gpg --import .devcontainer/gpg-pubkey.asc && git config --global commit.gpgsign true && uv sync --group tiling && cd frontend && npx playwright install --with-deps chromium",
+  "postCreateCommand": "gpg --import .devcontainer/gpg-pubkey.asc && git config --global commit.gpgsign true && uv sync --all-groups && cd frontend && npx playwright install --with-deps chromium",
   // Persistente dask-scheduler+worker op een vast adres/dashboardpoort, met
   // dask's eigen built-in CLI (`dask scheduler`/`dask worker`, zie `dask
   // --help` -- geen zelfgebouwde wrapper eromheen), zodat

@@ -15,6 +15,15 @@ dependencies = [
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
+# `Makefile`/de pipeline-scripts roepen overal kaal `uv run python ...` aan,
+# zonder `--group` (bv. `pipeline.tiling.build_pyramid` verwacht `tiling`,
+# `experiment_umap_documents.py` verwacht `experiments`) -- zonder dit zou
+# een kale `uv sync` de niet-`dev`-groepen weer verwijderen (uv's default is
+# alleen `dev`), en zo'n rebuild-cyclus kost een hdbscan-compile (`Python.h`
+# nodig, dus ook `python3.14-dev` als systeempakket).
+[tool.uv]
+default-groups = "all"
+
 # `pipeline` en `scripts` als top-level packages (geen src/-layout, ze staan
 # al op de repo-root) -- `uv sync` installeert het project hiermee editable,
 # waardoor `from pipeline... / from scripts...` overal werkt zonder
@@ -46,6 +55,7 @@ tiling = [
     "mapbox-vector-tile>=2.2.0",
     "morecantile>=7.0.3",
     "pmtiles>=3.7.0",
+    "datashader>=0.19.1",
 ]
 
 [tool.pytest.ini_options]

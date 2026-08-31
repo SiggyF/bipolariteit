@@ -214,6 +214,7 @@ experiments = [
 tiling = [
     { name = "bokeh" },
     { name = "dask", extra = ["distributed"] },
+    { name = "datashader" },
     { name = "mapbox-vector-tile" },
     { name = "morecantile" },
     { name = "pmtiles" },
@@ -245,6 +246,7 @@ experiments = [
 tiling = [
     { name = "bokeh", specifier = ">=3.1.0" },
     { name = "dask", extras = ["distributed"], specifier = ">=2026.8.0" },
+    { name = "datashader", specifier = ">=0.19.1" },
     { name = "mapbox-vector-tile", specifier = ">=2.2.0" },
     { name = "morecantile", specifier = ">=7.0.3" },
     { name = "pmtiles", specifier = ">=3.7.0" },
@@ -472,6 +474,15 @@ wheels = [
 ]
 
 [[package]]
+name = "colorcet"
+version = "3.2.1"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/3f/af/b969f541242b84cbbacabdf20862e487689e352bf0f02f90df2795d29da5/colorcet-3.2.1.tar.gz", hash = "sha256:48d9a67e6e59dc5c0a965aa1b46fe5d59cdc95cc36a95949f29313f950ac59f7", size = 2202958, upload-time = "2026-04-28T16:25:37.43Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/1b/24/e95471ae93c08d3606c9c7343cf65d490f154daa88b50581957a0aa780f4/colorcet-3.2.1-py3-none-any.whl", hash = "sha256:3f6fde13cef2169222dd5fe2a2bf847c02d644470fdf167ed566f6421df470f7", size = 262291, upload-time = "2026-04-28T16:25:35.365Z" },
+]
+
+[[package]]
 name = "comm"
 version = "0.2.3"
 source = { registry = "https://pypi.org/simple" }
@@ -644,6 +655,29 @@ wheels = [
 [package.optional-dependencies]
 distributed = [
     { name = "distributed" },
+]
+
+[[package]]
+name = "datashader"
+version = "0.19.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "colorcet" },
+    { name = "multipledispatch" },
+    { name = "numba" },
+    { name = "numpy" },
+    { name = "packaging" },
+    { name = "pandas" },
+    { name = "param" },
+    { name = "pyct" },
+    { name = "requests" },
+    { name = "scipy" },
+    { name = "toolz" },
+    { name = "xarray" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/53/4b/a9141f286f0c01685e9715ba3404769a6138e74575c4d5ccbaa95a22c3bd/datashader-0.19.1.tar.gz", hash = "sha256:f62d880a4a431813f9bb3959e565feda79c1634f889aaadcf948cb0d0c114cdd", size = 10581968, upload-time = "2026-05-19T07:53:06.574Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/cb/41/247627c8b9fef5c605d00546b85771a8fe42975b9616a557cead5468789b/datashader-0.19.1-py3-none-any.whl", hash = "sha256:7ce7154ff3ed070607f429355f57002fee5a17964e47c0b6447eeafe8cef9c82", size = 10715897, upload-time = "2026-05-19T07:53:03.431Z" },
 ]
 
 [[package]]
@@ -1809,6 +1843,15 @@ wheels = [
 ]
 
 [[package]]
+name = "multipledispatch"
+version = "1.0.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/fe/3e/a62c3b824c7dec33c4a1578bcc842e6c30300051033a4e5975ed86cc2536/multipledispatch-1.0.0.tar.gz", hash = "sha256:5c839915465c68206c3e9c473357908216c28383b425361e5d144594bf85a7e0", size = 12385, upload-time = "2023-06-27T16:45:11.074Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/51/c0/00c9809d8b9346eb238a6bbd5f83e846a4ce4503da94a4c08cb7284c325b/multipledispatch-1.0.0-py3-none-any.whl", hash = "sha256:0c53cd8b077546da4e48869f49b13164bebafd0c2a5afceb6bb6a316e7fb46e4", size = 12818, upload-time = "2023-06-27T16:45:09.418Z" },
+]
+
+[[package]]
 name = "narwhals"
 version = "2.24.0"
 source = { registry = "https://pypi.org/simple" }
@@ -2068,6 +2111,15 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/70/6f/3dd4940bbe001c06a65f88e36bad298bc7a0de5036115639926b0c5c0458/pandocfilters-1.5.1.tar.gz", hash = "sha256:002b4a555ee4ebc03f8b66307e287fa492e4a77b4ea14d3f934328297bb4939e", size = 8454, upload-time = "2024-01-18T20:08:13.726Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/ef/af/4fbc8cab944db5d21b7e2a5b8e9211a03a79852b1157e2c102fcc61ac440/pandocfilters-1.5.1-py2.py3-none-any.whl", hash = "sha256:93be382804a9cdb0a7267585f157e5d1731bbe5545a85b268d6f5fe6232de2bc", size = 8663, upload-time = "2024-01-18T20:08:11.28Z" },
+]
+
+[[package]]
+name = "param"
+version = "2.4.1"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/79/9d/33f32981c9cda89fe22abff60f7c71ef4af3e566b6af530392f8b938470d/param-2.4.1.tar.gz", hash = "sha256:364a33bd8a968b053d8a49d319af78dc31b3ccb9661ecb95c29a3ea509d7e443", size = 217776, upload-time = "2026-06-09T13:17:33.665Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/ac/37/1351bbfabbacbe92cd38774f8779ff680fab48c36b5fed9bcfe0c160009c/param-2.4.1-py3-none-any.whl", hash = "sha256:6cdc0869b3ade232fc6d01691223cf86c2bdb53a6d5ba67a33dba838d8b8cf4c", size = 151874, upload-time = "2026-06-09T13:17:31.996Z" },
 ]
 
 [[package]]
@@ -2361,6 +2413,18 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/1b/7d/92392ff7815c21062bea51aa7b87d45576f649f16458d78b7cf94b9ab2e6/pycparser-3.0.tar.gz", hash = "sha256:600f49d217304a5902ac3c37e1281c9fe94e4d0489de643a9504c5cdfdfc6b29", size = 103492, upload-time = "2026-01-21T14:26:51.89Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/0c/c3/44f3fbbfa403ea2a7c779186dc20772604442dde72947e7d01069cbe98e3/pycparser-3.0-py3-none-any.whl", hash = "sha256:b727414169a36b7d524c1c3e31839a521725078d7b2ff038656844266160a992", size = 48172, upload-time = "2026-01-21T14:26:50.693Z" },
+]
+
+[[package]]
+name = "pyct"
+version = "0.6.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "param" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/78/c3/78eeacf7cbf478db6bd41de0ee2221cc6769d81e0c10f6c1616c82a25e06/pyct-0.6.0.tar.gz", hash = "sha256:d4e513b2cf35b6165605ae5fce5f2a49985bc67473c579de85134b8c71d374a8", size = 14586, upload-time = "2025-09-26T08:26:19.987Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/8c/b2/23f4032cd1c9744aa8e9ecda43cd4d755fcb209f7f40fae035248f31a679/pyct-0.6.0-py3-none-any.whl", hash = "sha256:cfaded7289fca72ddf6579b81459e3ec8db323a508e61c49aa318ee3cd6ff160", size = 16630, upload-time = "2025-09-26T08:26:19.092Z" },
 ]
 
 [[package]]
@@ -3524,6 +3588,20 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/bf/60/bc7a980fc78837d6ef8f5940cca4cadc433364503a4c4d42e2a7a0de3231/widgetsnbextension-4.0.16.tar.gz", hash = "sha256:adeea0ae78f0856ee4945f413299801b82a0a01416303301f39a704282a37b73", size = 1111094, upload-time = "2026-08-18T08:52:55.859Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/34/95/40e17e20046b7bc820d29d09ae84ec157ec8dd6e6f6cd722626292c31b2e/widgetsnbextension-4.0.16-py3-none-any.whl", hash = "sha256:a31a8774885b96fe825462f5d6496166f0c7cae111195b6465c801d230eb5a4e", size = 2225148, upload-time = "2026-08-18T08:52:53.736Z" },
+]
+
+[[package]]
+name = "xarray"
+version = "2026.7.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "numpy" },
+    { name = "packaging" },
+    { name = "pandas" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/ea/96/3f7bdd00e505ec3698903415b30135024703e017b28c6b61f98da3193b0d/xarray-2026.7.0.tar.gz", hash = "sha256:361b495928fdbf5b58d0969bb6775339019da5e93ca74d61ddf4eb5edd6ce604", size = 3145348, upload-time = "2026-07-09T17:38:26.515Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/57/5b/28365212062939d213802e5e5fe855cdb231e1c2a93254ba1690066504e3/xarray-2026.7.0-py3-none-any.whl", hash = "sha256:bf9dd130b93806dc78e90c1b7ac24851b31557b888674c53622235691cf21824", size = 1426778, upload-time = "2026-07-09T17:38:24.224Z" },
 ]
 
 [[package]]
