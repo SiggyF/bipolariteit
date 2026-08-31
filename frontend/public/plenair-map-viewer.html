@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>plenair-map tile-pyramide-debugviewer (issue #215/#253)</title>
+<link href="https://cdn.jsdelivr.net/npm/maplibre-gl@4/dist/maplibre-gl.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/maplibre-gl@4/dist/maplibre-gl.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/pmtiles@3/dist/pmtiles.js"></script>
+<style>
+  :root { color-scheme: dark; }
+  html, body { margin: 0; padding: 0; height: 100%; background: #111; color: #eee; font: 14px/1.4 -apple-system, system-ui, sans-serif; }
+  #map { position: absolute; inset: 0; }
+  #panel {
+    position: absolute; top: 8px; left: 8px; z-index: 1;
+    background: rgba(17,17,17,0.85); border: 1px solid #444; border-radius: 6px;
+    padding: 8px 10px; max-width: 340px;
+  }
+  #panel h1 { font-size: 0.95rem; margin: 0 0 4px; }
+  #panel p { color: #aaa; margin: 4px 0; font-size: 0.8rem; }
+  #panel code { color: #ddd; }
+</style>
+</head>
+<body>
+<div id="map"></div>
+<div id="panel">
+  <h1>plenair-map tile-pyramide (debug)</h1>
+  <p>
+    Onafhankelijke controle van <code>plenair-map.pmtiles</code> met MapLibre GL
+    i.p.v. de eigen canvas-renderer in <code>TiledPlenairMap.vue</code> -- ziet
+    alleen de rauwe tiles, geen clusterhulls/labels.
+  </p>
+  <p>
+    Onze tile-grid is geen echte aardse projectie (UMAP-coördinaten
+    hergebruikt als vlakke "meters", zie <code>pipeline/tiling/grid.py</code>);
+    het pmtiles-bestand declareert daarom bewust wereldwijde bounds zodat
+    MapLibre's standaard z/x/y-adressering precies samenvalt met onze eigen
+    grid (zelfde vierkante quadtree-opbouw). Lon/lat op het scherm betekenen
+    dus niets -- alleen de puntdichtheid/clustering is relevant.
+  </p>
+</div>
+<script>
+  const protocol = new pmtiles.Protocol();
+  maplibregl.addProtocol("pmtiles", protocol.tile);
+
+  const TOPIC_COLOR = [
+    "match", ["get", "topic"],
+    "stikstof", "#4a7a4a",
+    "abortus", "#a64d5f",
+    "asiel", "#c07a2e",
+    "energietransitie", "#3d6e8f",
+    "#a89e8c",
+  ];
+
+  const map = new maplibregl.Map({
+    container: "map",
+    style: {
+      version: 8,
+      sources: {
+        points: {
+          type: "vector",
+          url: "pmtiles://" + new URL("data/plenair-map.pmtiles", location.href).href,
+        },
+      },
+      layers: [
+        { id: "bg", type: "background", paint: { "background-color": "#221f1b" } },
+        {
+          id: "points",
+          type: "circle",
+          source: "points",
+          "source-layer": "points",
+          paint: {
+            "circle-radius": ["interpolate", ["linear"], ["zoom"], 0, 1.5, 6, 3],
+            "circle-color": TOPIC_COLOR,
+            "circle-opacity": 0.75,
+          },
+        },
+      ],
+    },
+    center: [0, 0],
+    zoom: 0,
+  });
+
+  map.on("click", "points", (e) => {
+    const props = e.features[0].properties;
+    new maplibregl.Popup()
+      .setLngLat(e.lngLat)
+      .setHTML(
+        `<strong>${props.actor}</strong> (${props.party})<br>` +
+        `${props.debate}<br><em>cluster ${props.cluster}</em><br>` +
+        `${props.text}`
+      )
+      .addTo(map);
+  });
+  map.on("mouseenter", "points", () => (map.getCanvas().style.cursor = "pointer"));
+  map.on("mouseleave", "points", () => (map.getCanvas().style.cursor = ""));
+</script>
+</body>
+</html>

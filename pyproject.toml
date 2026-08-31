@@ -40,6 +40,13 @@ experiments = [
     "tqdm>=4.70.0",
     "umap-learn>=0.5.12",
 ]
+tiling = [
+    "bokeh>=3.1.0",
+    "dask[distributed]>=2026.8.0",
+    "mapbox-vector-tile>=2.2.0",
+    "morecantile>=7.0.3",
+    "pmtiles>=3.7.0",
+]
 
 [tool.pytest.ini_options]
 # crawlers/tweede_kamer is een eigen scrapy-project (scrapy.cfg) en geen

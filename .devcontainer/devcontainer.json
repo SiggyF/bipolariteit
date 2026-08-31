@@ -22,13 +22,17 @@
       "type": "volume"
     }
   ],
-  "forwardPorts": [4321],
+  "forwardPorts": [4321, 8787],
 
   // Optional: Auto-open browser or set custom labels
   "portsAttributes": {
     "4321": {
       "label": "Frontend",
       "onAutoForward": "openBrowser"
+    },
+    "8787": {
+      "label": "Dask-dashboard",
+      "onAutoForward": "ignore"
     }
   },
   "otherPortsAttributes": {
@@ -75,6 +79,12 @@
       }      
     }
   },
-  "postCreateCommand": "gpg --import .devcontainer/gpg-pubkey.asc && git config --global commit.gpgsign true && uv sync && cd frontend && npx playwright install --with-deps chromium",
-  "postStartCommand": "sudo chown -R vscode:vscode ~/.claude ~/.gemini"
+  "postCreateCommand": "gpg --import .devcontainer/gpg-pubkey.asc && git config --global commit.gpgsign true && uv sync --group tiling && cd frontend && npx playwright install --with-deps chromium",
+  // Persistente dask-scheduler+worker op een vast adres/dashboardpoort, met
+  // dask's eigen built-in CLI (`dask scheduler`/`dask worker`, zie `dask
+  // --help` -- geen zelfgebouwde wrapper eromheen), zodat
+  // pipeline.tiling.build_pyramid 'm hergebruikt i.p.v. bij elke run een
+  // eigen, na afloop meteen weer verdwenen cluster op te zetten (issue
+  // #215-discussie: dashboard moet echt te bekijken zijn).
+  "postStartCommand": "sudo chown -R vscode:vscode ~/.claude ~/.gemini && (nohup uv run --group tiling dask scheduler --host 127.0.0.1 --port 8786 --dashboard-address :8787 > /tmp/dask-scheduler.log 2>&1 &) && (nohup uv run --group tiling dask worker tcp://127.0.0.1:8786 > /tmp/dask-worker.log 2>&1 &)"
 }

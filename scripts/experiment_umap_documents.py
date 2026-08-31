@@ -28,12 +28,14 @@ Gebruik:
 import argparse
 import json
 import logging
+import math
 import re
 import time
 from collections import Counter
 
 import numpy as np
 from scipy.spatial import ConvexHull
+from shapely.geometry import Polygon
 from sklearn.cluster import DBSCAN, HDBSCAN
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 
@@ -636,10 +638,373 @@ def label_hierarchical_clusters(
     return coarse_summaries, fine_list, tree
 
 
+def build_multilevel_clusters(coords, hdbscan_min_cluster_size, level_sizes, dominance_ratio=4.0):
+    """N-laags veralgemening van build_hierarchical_clusters (die ongewijzigd
+    blijft, voor backward compat met notebooks/explore_plenary_umap_clusters.py).
+
+    `level_sizes` is een dalende lijst van min_size_to_name-drempels (grofste
+    niveau eerst). In plaats van coarse/fine recursief-per-tak op te bouwen,
+    is elk niveau hier een ONAFHANKELIJKE, volledig uitputtende snede van
+    dezelfde HDBSCAN condensed tree op zijn eigen drempel (partition_exhaustive,
+    de oude fine_partition, nu voor élk niveau i.p.v. alleen het diepste).
+    Een enkele afsplitsingsronde vanaf root (zoals de oude coarse_partition)
+    volstaat hier expliciet NIET: bij grotere drempels blijft dan bijna alle
+    massa in één ongesplitste "hoofdtak" hangen, met een hull die bijna de
+    hele kaart beslaat i.p.v. een compacte regio -- live bevestigd in QGIS
+    (coarse tot 3 niveaus toonden vrijwel identieke buitenranden i.p.v.
+    onderscheidende clusters).
+
+    Dit werkt omdat sneden van dezelfde hiërarchische boom op verschillende
+    hoogtes altijd consistent/genest zijn (een kleinere drempel accepteert
+    een superset van de splitsingen die een grotere drempel accepteert) --
+    nesting hoeft dus niet expliciet per tak afgedwongen te worden zoals in
+    de oude recursieve aanpak, en kan achteraf via meerderheidsoverlap
+    bepaald worden (zie label_multilevel_clusters), net als de oude
+    parent_of_fine-berekening.
+
+    `dominance_ratio`: live in QGIS bleek de "hoofdtak" (het main-branch-
+    restje dat via partition_exhaustive nooit een kwalificerende splitsing
+    vond) op elk niveau als doodgewoon, groot cluster te verschijnen (bv.
+    "Schors", 59% van alle punten op niveau 0, met betekenisloze TF-IDF-
+    termen) i.p.v. als ruis. Als het grootste cluster op een niveau meer dan
+    `dominance_ratio` keer zo groot is als het op-één-na-grootste, wordt het
+    behandeld als zo'n restje en naar -1 (ruis) gezet i.p.v. als genummerd
+    cluster meegeteld -- een normale onderwerpsverdeling heeft nooit één
+    cluster dat de rest met zo'n marge overvleugelt.
+
+    Geeft `level_ids` terug: een lijst van N even lange int-arrays (label per
+    punt in coords, -1=ruis), grofste niveau eerst."""
+    import hdbscan as hdbscan_pkg
+
+    n = len(coords)
+    clusterer = hdbscan_pkg.HDBSCAN(min_cluster_size=hdbscan_min_cluster_size).fit(coords)
+    children_by_parent, root = _condensed_tree_children_by_parent(clusterer)
+
+    def collect_points(node_id):
+        if node_id < n:
+            return [node_id]
+        points = []
+        for child, size in children_by_parent.get(node_id, []):
+            points.extend([child] if size == 1 else collect_points(child))
+        return points
+
+    def partition_exhaustive(node_id, min_size_to_name):
+        current, leaves, merged = node_id, [], []
+        while True:
+            entries = children_by_parent.get(current, [])
+            real_children = [(ch, sz) for ch, sz in entries if sz > 1]
+            qualifying = [(ch, sz) for ch, sz in real_children if sz >= min_size_to_name]
+            merged.extend(ch for ch, sz in entries if sz == 1)
+            for child, size in real_children:
+                if size < min_size_to_name:
+                    merged.extend(collect_points(child))
+            if not qualifying:
+                leaves.append(merged)
+                return leaves
+            qualifying.sort(key=lambda cs: cs[1])
+            *smaller, (largest, _size) = qualifying
+            for child, _size in smaller:
+                leaves.extend(partition_exhaustive(child, min_size_to_name))
+            current = largest
+
+    n_levels = len(level_sizes)
+    level_ids = []
+    for level_idx, threshold in enumerate(level_sizes):
+        # Elk niveau is een volledige uitputtende snede van dezelfde boom op
+        # zijn eigen drempel (niet slechts één afsplitsingsronde vanaf root) --
+        # anders blijft bij grotere drempels vrijwel alle massa in één
+        # ongesplitste "hoofdtak" hangen, met een hull die bijna de hele
+        # kaart beslaat i.p.v. een compacte, herkenbare regio (live gezien in
+        # QGIS: niveaus 0-3 toonden alle drie bijna dezelfde buitenrand).
+        ids = np.full(n, -1, dtype=int)
+        leaves = sorted(partition_exhaustive(root, threshold), key=len, reverse=True)
+        n_rejected = 0
+        if len(leaves) >= 2 and len(leaves[0]) > dominance_ratio * len(leaves[1]):
+            n_rejected = len(leaves[0])
+            leaves = leaves[1:]
+        for label, pts in enumerate(leaves):
+            ids[pts] = label
+        logger.info(
+            "niveau %d/%d (min_size_to_name=%d): %d clusters%s",
+            level_idx + 1, n_levels, threshold, len(set(ids.tolist()) - {-1}),
+            f" (hoofdtak van {n_rejected} punten verworpen als ruis)" if n_rejected else "",
+        )
+        level_ids.append(ids)
+
+    return level_ids
+
+
+def label_multilevel_clusters(
+    texts, coords, level_ids, topic_labels, top_terms=6, extra_stopwords=None, max_df=0.25,
+    redundancy_overlap=0.8,
+):
+    """N-laags veralgemening van label_hierarchical_clusters (die ongewijzigd
+    blijft). `level_ids` is een lijst van N even lange int-arrays (grofste
+    niveau eerst, zie build_multilevel_clusters). Niveau 0 krijgt globale
+    TF-IDF-labels (net als coarse); elk dieper niveau k>0 krijgt contrastieve
+    labels t.o.v. zijn ouder op niveau k-1 (net als fine). "Ouder" wordt
+    bepaald via meerderheidsoverlap -- in de praktijk vrijwel altijd 100%
+    overlap, niet slechts een meerderheid, omdat elk niveau een snede is van
+    dezelfde boom (zie build_multilevel_clusters' docstring).
+
+    Een cluster waarvan de hull minstens `redundancy_overlap` IoU/Jaccard
+    (intersection-over-union van de convex hulls, niet puntenaantal-
+    verhouding -- die laatste kan flink onderschatten, zie de toelichting
+    verderop in deze functie) deelt met de hull van zijn ouder, voegde
+    tussen die twee niveaus geometrisch weinig nieuws toe (live gezien:
+    "Asielmigratie" dook zo, vrijwel ongewijzigd, op bij 4 opeenvolgende
+    niveaus) -- zo'n cluster krijgt `"redundant_with_parent": True`
+    (i.p.v. verwijderd te worden, zodat het per-punt cluster_l<n>-veld
+    intact blijft) zodat hull/naam-consumenten
+    'm kunnen overslaan als niet-nieuwe informatie t.o.v. het vorige niveau.
+
+    Geeft (level_lists, tree) terug: `level_lists` is een lijst van N
+    lijsten met summary-dicts (grofste niveau eerst, elk sorteerd op size),
+    `tree` is een geneste boom (niveau-0-nodes met recursief geneste
+    "children" t/m het diepste niveau)."""
+    if extra_stopwords is None:
+        extra_stopwords = set()
+
+    raw_stops = set(DUTCH_STOPWORDS) | set(extra_stopwords)
+    clean_stops = set()
+    for s in raw_stops:
+        for tok in re.findall(r"(?u)\b[a-zA-ZÀ-ÿ]{2,}\b", s.lower()):
+            clean_stops.add(tok)
+
+    if coords is not None:
+        diffuse_stops = compute_spatially_diffuse_stopwords(texts, coords, max_dispersion_ratio=0.55)
+        for s in diffuse_stops:
+            for tok in re.findall(r"(?u)\b[a-zA-ZÀ-ÿ]{2,}\b", s.lower()):
+                clean_stops.add(tok)
+
+    tfidf = TfidfVectorizer(
+        stop_words=list(clean_stops),
+        lowercase=True,
+        ngram_range=(1, 2),
+        min_df=3,
+        max_df=max_df,
+        token_pattern=r"(?u)\b[a-zA-ZÀ-ÿ]{3,}\b",
+    )
+    tfidf_matrix = tfidf.fit_transform(texts)
+    bin_matrix = (tfidf_matrix > 0).astype(np.float32)
+    global_df = np.asarray(bin_matrix.sum(axis=0)).ravel()
+    terms = tfidf.get_feature_names_out()
+
+    term_global_dispersion = np.ones(len(terms), dtype=np.float32)
+    if coords is not None:
+        counts = np.asarray(bin_matrix.sum(axis=0)).flatten()
+        valid_terms = counts >= 3
+        sum_coords = bin_matrix.T.dot(coords)
+        mean_coords = np.zeros_like(sum_coords)
+        mean_coords[valid_terms] = sum_coords[valid_terms] / counts[valid_terms, None]
+
+        sum_coords_sq = bin_matrix.T.dot(coords ** 2)
+        mean_coords_sq = np.zeros_like(sum_coords_sq)
+        mean_coords_sq[valid_terms] = sum_coords_sq[valid_terms] / counts[valid_terms, None]
+
+        var_x = np.maximum(0, mean_coords_sq[:, 0] - mean_coords[:, 0] ** 2)
+        var_y = np.maximum(0, mean_coords_sq[:, 1] - mean_coords[:, 1] ** 2)
+        term_spatial_std = np.sqrt(var_x + var_y)
+        global_std = np.sqrt(np.var(coords[:, 0]) + np.var(coords[:, 1]))
+        if global_std > 0:
+            term_global_dispersion = term_spatial_std / global_std
+
+    def rank_hull_anchored_terms(member_idx, hull, centroid, base_weights=None):
+        n_members = len(member_idx)
+        if n_members == 0:
+            return []
+        if coords is not None and centroid is not None:
+            c_coords = coords[member_idx]
+            dists = np.linalg.norm(c_coords - centroid, axis=1)
+            center_doc_indices = member_idx[np.argsort(dists)[:5]]
+            hull_doc_indices = []
+            if hull is not None and len(hull) >= 3:
+                for hp in hull:
+                    p_dists = np.linalg.norm(c_coords - hp, axis=1)
+                    hull_doc_indices.append(member_idx[np.argmin(p_dists)])
+            rep_idx = list(set(center_doc_indices) | set(hull_doc_indices))
+        else:
+            rep_idx = list(member_idx)
+
+        c_df = np.asarray(bin_matrix[member_idx].sum(axis=0)).ravel()
+        rep_df = np.asarray(bin_matrix[rep_idx].sum(axis=0)).ravel()
+
+        min_docs = 2 if n_members < 25 else max(3, int(n_members * 0.02))
+        valid = (c_df >= min_docs) & (rep_df >= 1)
+        if not np.any(valid):
+            valid = (c_df >= min_docs)
+        if not np.any(valid):
+            valid = (c_df >= 2)
+        if not np.any(valid):
+            return []
+
+        coverage = c_df[valid] / n_members
+        precision = c_df[valid] / np.maximum(1.0, global_df[valid])
+        rep_ratio = rep_df[valid] / max(1, len(rep_idx))
+        global_compactness = np.maximum(0.01, 1.0 - term_global_dispersion[valid])
+
+        if base_weights is not None:
+            contrast_boost = np.maximum(0.1, base_weights[valid])
+        else:
+            contrast_boost = 1.0
+
+        scores = np.zeros_like(c_df, dtype=np.float32)
+        scores[valid] = global_compactness * precision * np.sqrt(coverage) * contrast_boost * (1.0 + 2.0 * rep_ratio)
+
+        top_idx = scores.argsort()[::-1][:top_terms]
+        return [terms[i] for i in top_idx if scores[i] > 0]
+
+    n_levels = len(level_ids)
+    level_summaries = [dict() for _ in range(n_levels)]
+    level_means = [dict() for _ in range(n_levels)]
+
+    for level_idx, ids in enumerate(level_ids):
+        ids_arr = np.asarray(ids)
+        for cluster_id in sorted(set(ids_arr.tolist()) - {-1}):
+            member_idx = np.where(ids_arr == cluster_id)[0]
+            mean_vec = np.asarray(tfidf_matrix[member_idx].mean(axis=0)).ravel()
+            level_means[level_idx][cluster_id] = mean_vec
+
+            hull, centroid = (None, [0.0, 0.0])
+            if coords is not None:
+                hull, centroid = compute_cluster_hull(coords[member_idx], percentile=92.0 if level_idx == 0 else 90.0)
+
+            parent_id = None
+            base_weights = None
+            if level_idx > 0:
+                parent_at_members = np.asarray(level_ids[level_idx - 1])[member_idx]
+                parent_at_members = parent_at_members[parent_at_members != -1]
+                if len(parent_at_members) > 0:
+                    parent_id = Counter(parent_at_members.tolist()).most_common(1)[0][0]
+                parent_mean = level_means[level_idx - 1].get(parent_id) if parent_id is not None else None
+                base_weights = np.maximum(0, mean_vec - parent_mean) if parent_mean is not None else mean_vec
+
+            kws = rank_hull_anchored_terms(member_idx, hull, centroid, base_weights=base_weights)
+            if not kws and base_weights is not None:
+                kws = rank_hull_anchored_terms(member_idx, hull, centroid, base_weights=mean_vec)
+
+            topic_counts = Counter(topic_labels[i] for i in member_idx)
+            parent_name = None
+            if level_idx > 0 and parent_id is not None and parent_id in level_summaries[level_idx - 1]:
+                parent_name = level_summaries[level_idx - 1][parent_id]["name"]
+
+            level_summaries[level_idx][cluster_id] = {
+                "cluster_id": int(cluster_id),
+                "level": level_idx,
+                "name": format_title_from_terms(kws),
+                "parent_id": int(parent_id) if parent_id is not None else None,
+                "parent_name": parent_name,
+                "terms": kws,
+                "size": len(member_idx),
+                "centroid": centroid,
+                "hull": hull,
+                "topic_breakdown": dict(topic_counts.most_common()),
+                "redundant_with_parent": False,
+                "contained_by_sibling": None,
+            }
+
+    def _hull_polygon(hull):
+        if not hull or len(hull) < 3:
+            return None
+        poly = Polygon(hull)
+        if not poly.is_valid:
+            poly = poly.buffer(0)
+        return poly if not poly.is_empty else None
+
+    for level_idx in range(1, n_levels):
+        for summary in level_summaries[level_idx].values():
+            # Geometrische overlap (IoU/Jaccard op de convex hulls), NIET
+            # puntenaantal-verhouding: een kind kan een flink deel van zijn
+            # ouders leden kwijtraken (interne, niet-rand-punten) zonder dat
+            # de hull-oppervlakte daardoor merkbaar krimpt -- een convex hull
+            # wordt alleen door de buitenste/rand-punten bepaald. Live
+            # bevestigd in QGIS: een paar met 79.5% puntenaantal-overlap
+            # bleek 97-98% van elkaars hull-oppervlakte te delen (dus
+            # duidelijk wél redundant), wat de eerdere puntenaantal-based
+            # check ten onrechte niet als redundant markeerde.
+            parent_id = summary["parent_id"]
+            if parent_id is None:
+                continue
+            parent_summary = level_summaries[level_idx - 1][parent_id]
+            child_poly = _hull_polygon(summary["hull"])
+            parent_poly = _hull_polygon(parent_summary["hull"])
+            if child_poly is None or parent_poly is None:
+                continue
+            intersection_area = child_poly.intersection(parent_poly).area
+            union_area = child_poly.area + parent_poly.area - intersection_area
+            iou = intersection_area / union_area if union_area > 0 else 0.0
+            if iou >= redundancy_overlap:
+                summary["redundant_with_parent"] = True
+
+    # Same-level containment (zie scripts/validate_cluster_hierarchy.py):
+    # `partition_exhaustive` garandeert disjuncte PUNTENSETS per cluster op
+    # een niveau, maar niet disjuncte convex hulls -- een ruimtelijk verspreid/
+    # concaaf cluster se hull kan een kleiner, compact cluster op hetzelfde
+    # niveau geometrisch volledig omsluiten, ook zonder gedeelde punten. Op
+    # hetzelfde niveau horen clusters een partitie te zijn (naast elkaar),
+    # niet genest -- dat is dus altijd een render-artefact, in tegenstelling
+    # tot ouder/kind-nesting (hierboven, IoU-redundantie), wat net het
+    # bedoelde beeld is. Lichte mitigatie i.p.v. een concave-hull-herbouw van
+    # compute_cluster_hull(): het KLEINERE cluster vlaggen, niet de
+    # hull-geometrie zelf aanpassen -- een renderstap kan dan zelf kiezen om
+    # zulke contouren over te slaan of anders te stijlen.
+    for level_idx in range(n_levels):
+        summaries = list(level_summaries[level_idx].values())
+        polygons = [(s, _hull_polygon(s["hull"])) for s in summaries]
+        for i, (summary_a, poly_a) in enumerate(polygons):
+            if poly_a is None:
+                continue
+            for summary_b, poly_b in polygons[i + 1:]:
+                if poly_b is None:
+                    continue
+                if poly_a.contains(poly_b):
+                    summary_b["contained_by_sibling"] = summary_a["cluster_id"]
+                elif poly_b.contains(poly_a):
+                    summary_a["contained_by_sibling"] = summary_b["cluster_id"]
+
+    def to_node(summary):
+        return {
+            "id": summary["cluster_id"],
+            "name": summary["name"],
+            "value": summary["size"],
+            "terms": summary["terms"],
+            "centroid": summary["centroid"],
+            "hull": summary["hull"],
+            "topic_breakdown": summary["topic_breakdown"],
+            "redundant_with_parent": summary["redundant_with_parent"],
+            "contained_by_sibling": summary["contained_by_sibling"],
+            "children": [],
+        }
+
+    nodes_by_level = [
+        {cid: to_node(summary) for cid, summary in level_summaries[level_idx].items()}
+        for level_idx in range(n_levels)
+    ]
+    for level_idx in range(1, n_levels):
+        for cid, node in nodes_by_level[level_idx].items():
+            parent_id = level_summaries[level_idx][cid]["parent_id"]
+            if parent_id is not None and parent_id in nodes_by_level[level_idx - 1]:
+                nodes_by_level[level_idx - 1][parent_id]["children"].append(node)
+    for level_nodes in nodes_by_level:
+        for node in level_nodes.values():
+            node["children"].sort(key=lambda c: c["value"], reverse=True)
+
+    tree = sorted(nodes_by_level[0].values(), key=lambda n: n["value"], reverse=True)
+    level_lists = [
+        sorted(level_summaries[level_idx].values(), key=lambda s: s["size"], reverse=True)
+        for level_idx in range(n_levels)
+    ]
+    return level_lists, tree
+
+
 def _build_cluster_naming_prompt(tfidf_terms, example_texts, example_titles):
     terms_str = ", ".join(tfidf_terms) if tfidf_terms else "(geen trefwoorden gevonden)"
     titles_str = "\n".join(f"- {t}" for t in sorted(set(example_titles)) if t) or "(geen debattitels bekend)"
-    examples_str = "\n\n".join(f'"{t[:400]}"' for t in example_texts)
+    # `example_texts` is de volledige, ongetrimde documenttekst (zie main()'s
+    # `texts = [stripped[i] for i in keep]`, geen aparte truncatie daar) --
+    # 1200 tekens (was 400) geeft de LLM meer inhoudelijke context per
+    # voorbeeld zonder de prompt onnodig op te blazen (8 voorbeelden default).
+    examples_str = "\n\n".join(f'"{t[:1200]}"' for t in example_texts)
     return f"""Je krijgt trefwoorden en voorbeeldfragmenten uit spreekbeurten uit
 Tweede Kamerdebatten, allemaal uit hetzelfde cluster van een UMAP-kaart
 (spreekbeurten die semantisch dicht bij elkaar liggen). Geef een korte,
@@ -654,13 +1019,21 @@ Voorbeeldfragmenten:
 {examples_str}
 
 Antwoord in exact dit formaat, zonder verdere uitleg:
-Naam: <2-4 woorden, het beleidsonderwerp>
+Naam: <het beleidsonderwerp in zo min mogelijk woorden -- 1 woord is prima
+als dat al dekkend is, gebruik 2 woorden alleen als 1 woord het onderwerp
+niet duidelijk genoeg maakt>
 Duiding: <één zin, wat dit cluster inhoudelijk samenbindt>"""
 
 
 def _generate_llm_cluster_name(base_url, model, reasoning_effort, tfidf_terms, example_texts, example_titles):
     prompt = _build_cluster_naming_prompt(tfidf_terms, example_texts, example_titles)
-    raw_content, _usage = call_llm(base_url, model, prompt, reasoning_effort=reasoning_effort, timeout=120)
+    # call_llm() (pipeline/tag_arguments.py) vereist max_tokens (geen default) en
+    # geeft een LLMResponse-NamedTuple (content, usage, finish_reason) terug --
+    # het strikte "Naam: .../Duiding: ..."-tweeregelformaat heeft ruim voldoende
+    # aan 200 tokens, mits --llm-reasoning-effort op "none" staat (anders gaat
+    # het hele budget op aan onzichtbare <think>-redenering, zie main()'s toelichting).
+    response = call_llm(base_url, model, prompt, reasoning_effort=reasoning_effort, timeout=120, max_tokens=200)
+    raw_content = response.content
     name, duiding = None, None
     for line in raw_content.splitlines():
         if line.lower().startswith("naam:"):
@@ -671,57 +1044,61 @@ def _generate_llm_cluster_name(base_url, model, reasoning_effort, tfidf_terms, e
 
 
 def label_clusters_with_llm(
-    coarse_ids, fine_ids, coarse_summaries, fine_list, tree,
+    level_ids, level_lists, tree,
     texts, coords, rows, base_url, model, reasoning_effort, examples_per_cluster,
 ):
-    """Vervangt de TF-IDF-naam van elk coarse- en fine-cluster (in-place) door
+    """Vervangt de TF-IDF-naam van elk cluster op elk niveau (in-place) door
     een LLM-gegenereerde naam + duiding, op basis van representatieve
     spreekbeurten (dichtst bij het clustercentroïde) + debattitels. De
     TF-IDF-termen zelf blijven bewaard (`terms`-veld) voor een eventueel
-    latere "cluster-detail"-weergave (issue vervolgen op #181), alleen
-    `name` wordt overschreven. Werkt ook `tree` (voor plenair-map-hierarchy.json)
-    en fine_list se `parent_name`-verwijzingen bij zodat alles consistent
-    naar de nieuwe namen wijst."""
+    latere "cluster-detail"-weergave (issue vervolgen op #181), alleen `name`
+    wordt overschreven. `level_ids`/`level_lists` zijn N-lang (grofste niveau
+    eerst, zie build_multilevel_clusters/label_multilevel_clusters) -- werkt
+    per niveau van grof naar fijn zodat een dieper niveau's `parent_name`
+    altijd de AL VERVANGEN ouder-naam kan opzoeken. Werkt ook `tree` (voor
+    plenair-map-hierarchy.json) bij, op willekeurige diepte: `to_node()`
+    kopieert `name` op bouwmoment (vóór LLM-naamgeving) naar de boomknoop,
+    dus zonder deze naderhand-patch zou de hierarchy-export de oude
+    TF-IDF-namen blijven tonen ook al is `summary["name"]` allang vervangen."""
     def representative_examples(member_idx):
         centroid = coords[member_idx].mean(axis=0)
         dists = np.linalg.norm(coords[member_idx] - centroid, axis=1)
         closest = member_idx[np.argsort(dists)[:examples_per_cluster]]
         return [texts[i] for i in closest], [rows[i]["debate_title"] for i in closest]
 
-    total = len(coarse_summaries) + len(fine_list)
-    logger.info("LLM-naamgeving voor %d clusters (~%ds geschat, %.1fs/cluster live gemeten)", total, total * 7, 7.0)
+    total = sum(len(summaries) for summaries in level_lists)
+    logger.info(
+        "LLM-naamgeving voor %d clusters over %d niveaus (~%ds geschat, %.1fs/cluster live gemeten)",
+        total, len(level_lists), total * 7, 7.0,
+    )
 
-    llm_names_by_coarse_id = {}
-    for coarse_id, summary in coarse_summaries.items():
-        member_idx = np.where(coarse_ids == coarse_id)[0]
-        example_texts, example_titles = representative_examples(member_idx)
-        name, duiding = _generate_llm_cluster_name(
-            base_url, model, reasoning_effort, summary["terms"], example_texts, example_titles,
-        )
-        summary["name"] = name
-        summary["duiding"] = duiding
-        llm_names_by_coarse_id[coarse_id] = name
-        logger.info("coarse-domein %d (n=%d): LLM-naam '%s' -- %s", coarse_id, summary["size"], name, duiding)
+    names_by_level = []
+    for level_idx, (ids, summaries) in enumerate(zip(level_ids, level_lists)):
+        names_by_id = {}
+        for summary in summaries:
+            member_idx = np.where(ids == summary["cluster_id"])[0]
+            example_texts, example_titles = representative_examples(member_idx)
+            name, duiding = _generate_llm_cluster_name(
+                base_url, model, reasoning_effort, summary["terms"], example_texts, example_titles,
+            )
+            summary["name"] = name
+            summary["duiding"] = duiding
+            if level_idx > 0 and summary["parent_id"] is not None:
+                summary["parent_name"] = names_by_level[level_idx - 1].get(summary["parent_id"], summary["parent_name"])
+            names_by_id[summary["cluster_id"]] = name
+            logger.info(
+                "niveau %d, cluster %d (n=%d): LLM-naam '%s' -- %s",
+                level_idx, summary["cluster_id"], summary["size"], name, duiding,
+            )
+        names_by_level.append(names_by_id)
 
-    for summary in fine_list:
-        member_idx = np.where(fine_ids == summary["cluster_id"])[0]
-        example_texts, example_titles = representative_examples(member_idx)
-        name, duiding = _generate_llm_cluster_name(
-            base_url, model, reasoning_effort, summary["terms"], example_texts, example_titles,
-        )
-        summary["name"] = name
-        summary["duiding"] = duiding
-        if summary["parent_id"] is not None:
-            summary["parent_name"] = llm_names_by_coarse_id.get(summary["parent_id"], summary["parent_name"])
-        logger.info("fine-sub-onderwerp %d (n=%d): LLM-naam '%s' -- %s", summary["cluster_id"], summary["size"], name, duiding)
+    def _rename_tree(nodes, level_idx):
+        for node in nodes:
+            node["name"] = names_by_level[level_idx].get(node["id"], node["name"])
+            if node["children"]:
+                _rename_tree(node["children"], level_idx + 1)
 
-    fine_by_id = {s["cluster_id"]: s for s in fine_list}
-    for coarse_node in tree:
-        coarse_node["name"] = llm_names_by_coarse_id.get(coarse_node["id"], coarse_node["name"])
-        for child in coarse_node["children"]:
-            fine_summary = fine_by_id.get(child["id"])
-            if fine_summary is not None:
-                child["name"] = fine_summary["name"]
+    _rename_tree(tree, 0)
 
 
 def main():
@@ -744,6 +1121,15 @@ def main():
         "onderwerpen/index.astro). Nog een handmatige stap, geen make-target -- pas als "
         "pipeline-stage overwegen ná een interpreteerbaar resultaat op de volle dataset.",
     )
+    parser.add_argument(
+        "--export-suffix",
+        default="",
+        help="voegt <suffix> toe aan de export-bestandsnamen (plenair-map<suffix>.json enz.), "
+        "i.p.v. het bestaande plenair-map.json te overschrijven -- bv. --export-suffix -full "
+        "voor een volledigere dataset naast de bestaande, op ~40k punten performance-getunede "
+        "PlenairMap.vue-export (die blijft ongewijzigd, zie TiledPlenairMap.vue/pipeline.tiling "
+        "voor het renderpad dat wél een groter puntenaantal aankan).",
+    )
     parser.add_argument("--skip-clustering", action="store_true", help="clustering + TF-IDF-labeling overslaan")
     parser.add_argument("--cluster-method", choices=["hdbscan", "dbscan"], default="hdbscan")
     parser.add_argument(
@@ -764,7 +1150,31 @@ def main():
         "--cluster-min-size-to-name", type=int, default=200,
         help="hoeveel spreekbeurten een afgesplitste subtak minstens moet hebben om een eigen "
         "coarse/fine-cluster te worden tijdens de boomwandeling; kleinere subtakken versmelten "
-        "met de rest. Live getest op een steekproef van ~40k punten: 200 -> 31 coarse/48 fine.",
+        "met de rest. Live getest op een steekproef van ~40k punten: 200 -> 31 coarse/48 fine. "
+        "Genegeerd als --cluster-level-sizes is opgegeven.",
+    )
+    parser.add_argument(
+        "--cluster-level-sizes", default=None,
+        help="komma-gescheiden, DALENDE lijst van min_size_to_name-drempels, één per niveau "
+        "(grofste eerst), voor N-laagse clustering i.p.v. de vaste coarse/fine-tweedeling -- "
+        "bv. '4000,1500,500,150,50' voor 5 niveaus. Zonder deze vlag: 2 niveaus op "
+        "[--cluster-min-size-to-name, --cluster-min-size-to-name] (oud gedrag, ongewijzigd). "
+        "Zie build_multilevel_clusters()/label_multilevel_clusters().",
+    )
+    parser.add_argument(
+        "--cluster-dominance-ratio", type=float, default=4.0,
+        help="alleen bij --cluster-level-sizes: als het grootste cluster op een niveau meer dan "
+        "dit veelvoud van het op-één-na-grootste is, wordt het als ruis (-1) behandeld i.p.v. als "
+        "genummerd cluster -- zie build_multilevel_clusters().",
+    )
+    parser.add_argument(
+        "--cluster-redundancy-overlap", type=float, default=0.8,
+        help="alleen bij --cluster-level-sizes: minimale IoU/Jaccard (intersection-over-union "
+        "van de convex hulls, NIET puntenaantal-verhouding -- die kan de werkelijke geometrische "
+        "overlap flink onderschatten) tussen een cluster en zijn ouder-cluster (vorig niveau) om "
+        "als 'geen echte splitsing' te gelden -- gemarkeerd als \"redundant_with_parent\" i.p.v. "
+        "verwijderd, zodat het per-punt cluster_l<n>-veld intact blijft maar hull/naam-consumenten "
+        "'m kunnen overslaan.",
     )
     parser.add_argument("--cluster-top-terms", type=int, default=8, help="aantal TF-IDF-termen per cluster-label")
     parser.add_argument(
@@ -869,9 +1279,23 @@ def main():
         | alpino_stopwords
     )
 
-    cluster_ids, cluster_summaries, hierarchy = None, None, None
+    if args.cluster_level_sizes:
+        level_sizes = [int(x) for x in args.cluster_level_sizes.split(",") if x.strip()]
+        if len(level_sizes) < 2:
+            raise SystemExit("--cluster-level-sizes moet minstens 2 drempels bevatten")
+        if sorted(level_sizes, reverse=True) != level_sizes:
+            raise SystemExit("--cluster-level-sizes moet dalend zijn (grofste niveau eerst)")
+
+    cluster_ids, cluster_summaries, hierarchy, all_level_ids = None, None, None, None
     if not args.skip_clustering:
-        if args.cluster_method == "hdbscan":
+        if args.cluster_method == "hdbscan" and not args.cluster_level_sizes:
+            # Ongewijzigd oorspronkelijk pad (coarse/fine via
+            # build_hierarchical_clusters/label_hierarchical_clusters) --
+            # bewust puur behouden voor de bestaande, op ~40k punten
+            # performance-getunede plenair-map.json/PlenairMap.vue, zodat
+            # het nieuwe N-laagse pad (hieronder) daar geen enkel risico
+            # voor vormt. Zie ook notebooks/explore_plenary_umap_clusters.py,
+            # die deze functies rechtstreeks importeert.
             coarse_ids, fine_ids = build_hierarchical_clusters(
                 coords, args.hdbscan_min_cluster_size, args.cluster_min_size_to_name,
             )
@@ -889,12 +1313,13 @@ def main():
             if not args.skip_llm_naming:
                 llm_base_url = detect_base_url(args.base_url)
                 label_clusters_with_llm(
-                    coarse_ids, fine_ids, coarse_summaries, fine_summaries, hierarchy,
+                    [coarse_ids, fine_ids], [list(coarse_summaries.values()), fine_summaries], hierarchy,
                     texts, coords, rows, llm_base_url, args.llm_chat_model,
                     args.llm_reasoning_effort, args.llm_examples_per_cluster,
                 )
 
             cluster_ids = fine_ids
+            all_level_ids = [coarse_ids, fine_ids]
             cluster_summaries = {
                 "coarse": list(coarse_summaries.values()),
                 "fine": fine_summaries,
@@ -905,6 +1330,51 @@ def main():
                 for child in coarse["children"][:5]:
                     terms_str = ", ".join(child["terms"][:4])
                     logger.info("  └─ %s (n=%d) [%s]", child["name"], child["value"], terms_str)
+        elif args.cluster_method == "hdbscan":
+            level_ids = build_multilevel_clusters(
+                coords, args.hdbscan_min_cluster_size, level_sizes,
+                dominance_ratio=args.cluster_dominance_ratio,
+            )
+            level_lists, hierarchy = label_multilevel_clusters(
+                texts,
+                coords,
+                level_ids,
+                topic_labels,
+                top_terms=args.cluster_top_terms,
+                extra_stopwords=all_stopwords,
+                max_df=0.25,
+                redundancy_overlap=args.cluster_redundancy_overlap,
+            )
+
+            if not args.skip_llm_naming:
+                llm_base_url = detect_base_url(args.base_url)
+                label_clusters_with_llm(
+                    level_ids, level_lists, hierarchy,
+                    texts, coords, rows, llm_base_url, args.llm_chat_model,
+                    args.llm_reasoning_effort, args.llm_examples_per_cluster,
+                )
+
+            cluster_ids = level_ids[-1]
+            all_level_ids = level_ids
+            cluster_summaries = {
+                # Puur "levels" (geen coarse/fine-duplicatie): dit N-laagse
+                # pad wordt alleen gebruikt voor de losse -full-export
+                # (TiledPlenairMap.vue), niet voor de bestaande, op 2 niveaus
+                # vaste plenair-map-clusters.json/PlenairMap.vue.
+                "levels": level_lists,
+            }
+
+            def _log_domain(node, depth=0):
+                if depth > 2:
+                    return
+                indent = "  " * depth + ("└─ " if depth else "")
+                terms_str = ", ".join(node["terms"][:4])
+                logger.info("%s%s (n=%d) [%s]", indent, node["name"], node["value"], terms_str)
+                for child in node["children"][:5]:
+                    _log_domain(child, depth + 1)
+
+            for domain in hierarchy:
+                _log_domain(domain)
         else:
             fine_ids = run_clustering(coords, "dbscan", args.dbscan_eps, args.dbscan_min_samples, None)
             coarse_summaries, fine_summaries, hierarchy = label_hierarchical_clusters(
@@ -937,23 +1407,29 @@ def main():
             "debate_title": row["debate_title"],
             "published_at": row["published_at"],
             "cluster": int(cluster_ids[i]) if cluster_ids is not None else None,
+            "cluster_levels": [int(level[i]) for level in all_level_ids] if all_level_ids is not None else None,
         })
+
+    def _suffixed(path):
+        return path.with_name(f"{path.stem}{args.export_suffix}{path.suffix}") if args.export_suffix else path
 
     if cluster_summaries is not None:
         clusters_path = OUTPUT_DIR / f"clusters-{args.label}.json"
         clusters_path.write_text(json.dumps(cluster_summaries, ensure_ascii=False, indent=2), encoding="utf-8")
         logger.info("%d cluster-labels geschreven naar %s", len(cluster_summaries), clusters_path)
         if args.export_frontend:
-            CLUSTERS_EXPORT_PATH.parent.mkdir(parents=True, exist_ok=True)
-            CLUSTERS_EXPORT_PATH.write_text(json.dumps(cluster_summaries, ensure_ascii=False), encoding="utf-8")
+            clusters_export_path = _suffixed(CLUSTERS_EXPORT_PATH)
+            clusters_export_path.parent.mkdir(parents=True, exist_ok=True)
+            clusters_export_path.write_text(json.dumps(cluster_summaries, ensure_ascii=False), encoding="utf-8")
 
     if hierarchy is not None:
         hierarchy_path = OUTPUT_DIR / f"hierarchy-{args.label}.json"
         hierarchy_path.write_text(json.dumps(hierarchy, ensure_ascii=False, indent=2), encoding="utf-8")
         logger.info("hiërarchie (%d grove clusters) geschreven naar %s", len(hierarchy), hierarchy_path)
         if args.export_frontend:
-            HIERARCHY_EXPORT_PATH.parent.mkdir(parents=True, exist_ok=True)
-            HIERARCHY_EXPORT_PATH.write_text(json.dumps(hierarchy, ensure_ascii=False), encoding="utf-8")
+            hierarchy_export_path = _suffixed(HIERARCHY_EXPORT_PATH)
+            hierarchy_export_path.parent.mkdir(parents=True, exist_ok=True)
+            hierarchy_export_path.write_text(json.dumps(hierarchy, ensure_ascii=False), encoding="utf-8")
 
     html_path = OUTPUT_DIR / f"plot-{args.label}.html"
     write_plot_html(points, html_path, title=f"UMAP (bge-m3) -- alle plenaire debatten, {args.label}")
@@ -965,7 +1441,7 @@ def main():
         )
 
     if args.export_frontend:
-        write_frontend_export(points)
+        write_frontend_export(points, export_path=_suffixed(EXPORT_PATH))
 
 
 # Cloudflare Workers staat max. 25 MiB per asset toe (zie ook
@@ -977,19 +1453,21 @@ def main():
 # herhalen zich massaal (honderden-duizenden beurten uit dezelfde ~200
 # debatten van dezelfde ~150 sprekers). Lookup-tabellen + een compacte
 # array per punt (geen veldnamen, geen herhaalde strings) lost beide op.
-def write_frontend_export(points):
-    xs = sorted(p["x"] for p in points)
-    ys = sorted(p["y"] for p in points)
-    n = len(xs)
-    # Uitschieters (bv. "Voorzitter." -- na het strippen van de
-    # sprekersprefix nauwelijks nog tekst over om zinnig op te embedden)
-    # trekken de as-schaal helemaal open en persen de rest van de wolk in een
-    # hoekje. Buiten het 0.5-99.5-percentielbereik: niet getoond, niet
-    # geëxporteerd (scheelt ook weer wat bestandsgrootte).
-    x_lo, x_hi = xs[int(n * 0.005)], xs[int(n * 0.995)]
-    y_lo, y_hi = ys[int(n * 0.005)], ys[int(n * 0.995)]
-    kept = [p for p in points if x_lo <= p["x"] <= x_hi and y_lo <= p["y"] <= y_hi]
-    logger.info("%d/%d punten binnen 0.5-99.5 percentiel gehouden voor frontend-export", len(kept), n)
+def write_frontend_export(points, export_path=EXPORT_PATH):
+    n = len(points)
+    # Geen percentiel-trim meer (was 0.5-99.5, daarna 0.01-99.99): zelfs de
+    # laatste, veel losser bereik hield exact evenveel punten over als de
+    # oorspronkelijke trim (132.921) -- de uitschieters (bv. "Voorzitter." --
+    # na het strippen van de sprekersprefix nauwelijks nog tekst over om
+    # zinnig op te embedden) zitten kennelijk in een dichte bulk die breder is
+    # dan 0.01%, dus een percentielgrens alleen maakte geen verschil. Ook
+    # zorgde het trimmen zelf voor een mismatch tussen de tile-grid-extent (op
+    # de export gebaseerd) en de cluster-hulls (op de volle, ongetrimde
+    # puntenset gebaseerd) -- zie de L3-201-bug (buiten-bereik coördinaat na
+    # herschaling, live gezien in QGIS). Alleen niet-eindige coördinaten (NaN/
+    # inf, zouden de tile-grid-bounds kapotmaken) worden nog geweerd.
+    kept = [p for p in points if math.isfinite(p["x"]) and math.isfinite(p["y"])]
+    logger.info("%d/%d punten met eindige coördinaten gehouden voor frontend-export", len(kept), n)
 
     topics_lu, actors_lu, parties_lu, debates_lu, soorten_lu = {}, {}, {}, {}, {}
 
@@ -1000,7 +1478,7 @@ def write_frontend_export(points):
 
     rows = []
     for p in kept:
-        rows.append([
+        row = [
             p["id"],
             round(p["x"], 4),
             round(p["y"], 4),
@@ -1012,7 +1490,14 @@ def write_frontend_export(points):
             p["published_at"],
             p["text"][:100],
             p["cluster"],
-        ])
+        ]
+        # Optioneel 12e element: cluster-id per niveau (grofste eerst), alleen
+        # aanwezig bij N-laagse clustering (--cluster-level-sizes). De
+        # bestaande 11-elementen-vorm (o.a. PlenairMap.vue's vaste
+        # RawExport-type) blijft ongewijzigd wanneer dit ontbreekt.
+        if p.get("cluster_levels") is not None:
+            row.append(p["cluster_levels"])
+        rows.append(row)
 
     export = {
         "topics": list(topics_lu),
@@ -1022,10 +1507,10 @@ def write_frontend_export(points):
         "soorten": list(soorten_lu),
         "points": rows,
     }
-    EXPORT_PATH.parent.mkdir(parents=True, exist_ok=True)
-    EXPORT_PATH.write_text(json.dumps(export, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
-    size_mb = EXPORT_PATH.stat().st_size / 1024 / 1024
-    logger.info("frontend-export geschreven naar %s (%.1f MiB)", EXPORT_PATH, size_mb)
+    export_path.parent.mkdir(parents=True, exist_ok=True)
+    export_path.write_text(json.dumps(export, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+    size_mb = export_path.stat().st_size / 1024 / 1024
+    logger.info("frontend-export geschreven naar %s (%.1f MiB)", export_path, size_mb)
     if size_mb > 25:
         logger.warning(
             "EXPORT BOVEN DE 25 MiB CLOUDFLARE WORKERS-ASSETLIMIET (%.1f MiB) -- "
