@@ -100,8 +100,8 @@ matplotlib-preview + een QGIS-schets, plus de vier openstaande stijlvragen
   discussie, nog niet eerder uitgewerkt.
 
 Concrete specs voor de renderfase (zie `scripts/render_design_preview.py`,
-de nog te bouwen `datashader`-render en `export_clusters_geojson.py`'s
-platte exportmodus): 300dpi (~9.900×14.000px A0), TWEE losse rasters
+de nog te bouwen `datashader`-render en `export_clusters_geojson.py --flat`,
+de platte exportmodus): 300dpi (~9.900×14.000px A0), TWEE losse rasters
 ("overig" en de vier onderwerpen, zodat alpha per laag apart te regelen is)
 i.p.v. één gecombineerde puntenlaag, hull-lijndiktes 3,2/2,2/1,4pt (niveau
 1-3, zwart) + 0,8/0,4pt hairlines (niveau 4-5, warm grijs) i.p.v. 5 gelijk

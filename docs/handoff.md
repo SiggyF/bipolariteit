@@ -2,6 +2,14 @@
 
 Status per 2026-07-27. Zie `docs/plan.md` voor het volledige, goedgekeurde architectuurplan. Dit document is voor het vervolg: wat staat er al, wat is er onderweg ontdekt, en wat is de volgende concrete stap.
 
+## Stand bij einde sessie (2026-08-31, A0-printposter #215 vervolg: platte GeoJSON-exportmodus) — begin hier bij een nieuwe sessie
+
+Eerste designer-feedbackronde (`docs/design/a0-map/`, zie sessie hieronder) doorgenomen; geen nieuwe designer-input sindsdien binnengekomen. Volgende stap uit de open-lijst opgepakt: de platte/niet-geprojecteerde GeoJSON-exportmodus.
+
+- **`scripts/export_clusters_geojson.py --flat`** (nieuw, naast de bestaande `--grid <pad>`-modus, nu een mutually-exclusive-group): slaat `make_rescaler`/de EPSG:3857->WGS84-terugprojectie helemaal over en schrijft de rauwe UMAP-grid-eenheden direct als GeoJSON-coördinaten (`flat_rescale`, alleen afronden). Die reprojectie bestond alleen om uit te lijnen met hoe generieke MVT/PMTiles-viewers de puntenlaag interpreteren (zie het commentaar bij `WEB_MERCATOR_HALF_EXTENT`) -- voor de print-pijplijn is er geen viewer, dus geen reden voor de heen-en-weer-reis. Resultaat: dezelfde ruimte/eenheden als `plenair-map-<suffix>.json`'s punten en dus als `render_design_preview.py` (`render()`'s `load_points()` gebruikt de punten ook al ongewijzigd), dus clusterlaag en puntenwolk lijnen 1:1 uit zonder Mercator-vervorming. QGIS moet zo'n bestand na import expliciet als projectloos/lokale coördinaten behandelen, niet als EPSG:4326 (RFC7946 kent geen `crs`-member meer om dat te declareren).
+- Geverifieerd: `--flat` op `plenair-map-clusters-full.json` levert 573 features (zelfde telling als `--grid`), coördinaten liggen in dezelfde grootorde als de brondata-punten (bv. x≈13,35 t.o.v. punten-x-range); bestaande `--grid`-modus ongewijzigd (regressietest gedraaid); `--grid`/`--flat` correct mutually exclusive+required. `uv run pytest tests/` blijft groen (140 tests, geen bestaande tests voor dit script specifiek).
+- **Volgende stap**: de daadwerkelijke `datashader`-puntenwolk-rasterrender op A0/300dpi (twee losse rasters, overig vs. de vier topics, per de designer-specs in `docs/design/README.md`), dan QGIS-compositie met deze platte GeoJSON-clusterlaag ernaast, dan de eerste echte A0-PDF-export.
+
 ## Stand bij einde sessie (2026-08-30, dataprep-afronding #257 + start A0-printposter #215) — begin hier bij een nieuwe sessie
 
 **Afgerond: dataprep-issue [#257](https://github.com/SiggyF/bipolariteit/issues/257), gesloten.** Losgeknipt van #215 (printposter) en #186 (productiekaart) zodat geen van beide op elkaar hoeft te wachten -- beide trekken voortaan uit hetzelfde gearchiveerde databestand.

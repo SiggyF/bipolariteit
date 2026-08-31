@@ -33,6 +33,21 @@ Gebruik:
         data/export/plenair-map-clusters-full.json \
         data/export/plenair-map-clusters-full.geojson \
         --grid data/export/plenair-map-full-grid.json
+
+Voor de print-pijplijn (datashader/QGIS-compositie op A0, geen vector-tile-
+viewer erbij) is die WGS84-heenenweer-reis niet nodig -- ze bestaat alleen om
+uit te lijnen met hoe generieke MVT/PMTiles-viewers de puntenlaag interpreteren.
+`--flat` slaat `make_rescaler`/`_to_wgs84` over en schrijft de rauwe UMAP-
+grid-eenheden (dezelfde eenheden als `plenair-map-<suffix>.json`'s punten en
+dus als `render_design_preview.py`) direct als GeoJSON-coördinaten -- geen
+`--grid` nodig, geen Mercator-vervorming, 1:1 dezelfde ruimte als de
+puntenwolk die er in QGIS naast komt te liggen. QGIS importeert zo'n bestand
+als "no CRS"/vlakke coördinaten (RFC7946 vermeldt geen `crs`-member meer,
+dus behandel de laag na import expliciet als projectloos, niet als EPSG:4326):
+    uv run python scripts/export_clusters_geojson.py \
+        data/export/plenair-map-clusters-full.json \
+        data/export/plenair-map-clusters-full-flat.geojson \
+        --flat
 """
 
 import argparse
@@ -64,6 +79,10 @@ logger = logging.getLogger(__name__)
 WEB_MERCATOR_HALF_EXTENT = 20037508.342789244
 
 _to_wgs84 = Transformer.from_crs("EPSG:3857", "EPSG:4326", always_xy=True)
+
+
+def flat_rescale(point: list[float]) -> list[float]:
+    return [round(float(point[0]), 4), round(float(point[1]), 4)]
 
 
 def make_rescaler(grid: dict):
@@ -143,13 +162,13 @@ def cluster_to_feature(cluster: dict, level: int, rescale) -> dict:
     }
 
 
-def build_geojson(clusters_data: dict, grid: dict, include_redundant: bool = False) -> dict:
+def build_geojson(clusters_data: dict, grid: dict | None, include_redundant: bool = False) -> dict:
     if "levels" in clusters_data:
         levels = clusters_data["levels"]
     else:
         levels = [clusters_data["coarse"], clusters_data["fine"]]
 
-    rescale = make_rescaler(grid)
+    rescale = flat_rescale if grid is None else make_rescaler(grid)
     features = []
     n_points_fallback = 0
     n_skipped_redundant = 0
@@ -179,7 +198,13 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("input", type=str, help="pad naar plenair-map-clusters(-<suffix>).json")
     parser.add_argument("output", type=str, help="pad voor het te schrijven .geojson-bestand")
-    parser.add_argument("--grid", type=str, required=True, help="pad naar het bijbehorende plenair-map(-<suffix>)-grid.json")
+    grid_group = parser.add_mutually_exclusive_group(required=True)
+    grid_group.add_argument("--grid", type=str, help="pad naar het bijbehorende plenair-map(-<suffix>)-grid.json (WGS84-reprojectie, voor naast de .pmtiles-viewer)")
+    grid_group.add_argument(
+        "--flat", action="store_true",
+        help="geen reprojectie -- schrijf de rauwe UMAP-grid-eenheden direct (voor de print-pijplijn, "
+        "geen vector-tile-viewer erbij, zie de module-docstring)",
+    )
     parser.add_argument(
         "--include-redundant", action="store_true",
         help="ook clusters met redundant_with_parent=true meenemen (standaard overgeslagen, "
@@ -189,7 +214,7 @@ def main() -> None:
 
     input_path = Path(args.input)
     output_path = Path(args.output)
-    grid = json.loads(Path(args.grid).read_text())
+    grid = None if args.flat else json.loads(Path(args.grid).read_text())
 
     clusters_data = json.loads(input_path.read_text())
     geojson = build_geojson(clusters_data, grid, include_redundant=args.include_redundant)
