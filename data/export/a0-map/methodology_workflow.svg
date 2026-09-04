@@ -121,9 +121,9 @@
     <text x="117.5" y="52" class="title-text">QGIS A0 Synthese</text>
     
     <rect x="12" y="72" width="211" height="108" class="pill-bg" />
-    <text x="117.5" y="100" class="body-text" font-weight="600">300 DPI Printposter</text>
-    <text x="117.5" y="122" class="body-text">Reliëfwas &amp; Stippels</text>
-    <text x="117.5" y="142" class="sub-text">Matglazen badges</text>
-    <text x="117.5" y="160" class="sub-text">&amp; partijkleuren</text>
+    <text x="117.5" y="98" class="body-text" font-weight="600">300 DPI RGBA Raster</text>
+    <text x="117.5" y="118" class="body-text">CIELAB PCA &amp; Reliëf</text>
+    <text x="117.5" y="138" class="sub-text">Matglazen badges</text>
+    <text x="117.5" y="158" class="sub-text">&amp; vectorstippeling</text>
   </g>
 </svg>

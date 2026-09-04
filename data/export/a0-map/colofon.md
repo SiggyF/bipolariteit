@@ -9,9 +9,10 @@
 ### MACHINE LEARNING & CARTOGRAFIE
 - **Embedding**: BGE-M3 meertalig taalmodel (`1024D Dense Vectors`)
 - **Dimensiereductie**: UMAP 2D-topologische reductie (`1024D → 2D (x, y)`)
+- **Semantische Kleur**: CIELAB projectie (`PC 2 & PC 3 → (a*, b*)`) met procedurele demping
 - **Clustering**: HDBSCAN 5-traps hiërarchische dichtheidsclustering (8 hoofddomeinen tot 573 sub-debatten)
 - **Thematische Duiding**: TF-IDF synthese & 1.521 officiële Kamerstukdossiers
-- **Cartografie**: 300 DPI Gaussiaans reliëf, vectorstippeling en matglazen typografie
+- **Cartografie**: 300 DPI RGBA kleurendichtheidsraster, vectorstippeling en matglazen typografie
 
 ### OPEN SCIENCE & COLOFON
 - **Project**: `Bipolariteit.org`
