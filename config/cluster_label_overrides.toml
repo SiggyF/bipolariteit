@@ -2,6 +2,29 @@
 # Beheerd via de vastgelegde werkwijze in docs/cluster-labeling-werkwijze.md
 
 [labels]
+# --- Asiel: Crisis, Ter Apel & Spreiding ---
+"L1-2"   = "Asiel"
+"L2-43"  = "Crisis"
+"L3-64"  = "Ter Apel"
+"L4-80"  = "Veiligelanders"
+"L4-222" = "Regietafels"
+"L4-506" = "Pendelbus"
+"L3-97"  = "Spreiding"
+"L4-311" = "Spreidingswet"
+"L4-120" = "Intrekkingswet"
+"L2-45"  = "Terugkeer"
+"L4-490" = "Vertrek"
+"L4-193" = "Instroom"
+"L4-201" = "Bandbreedte"
+"L4-359" = "Europa"
+"L4-369" = "Instroomcijfers"
+"L4-467" = "Migratiepact"
+"L2-2"   = "Opvang"
+"L3-83"  = "Uitvoering"
+"L3-124" = "Opvang in de regio"
+"L4-491" = "Asielstop"
+"L4-492" = "COA"
+
 # --- Midden-Oosten & Israël ---
 "L1-7"   = "Midden-Oosten"
 "L2-7"   = "Israël"
@@ -28,6 +51,8 @@
 "L4-37"  = "Integratie"
 
 # --- Oekraïne & Rusland ---
+"L3-13"  = "Steun"
+"L3-66"  = "Rusland"
 "L4-409" = "Steun"
 "L4-455" = "Financiering"
 "L4-437" = "Toetreding"
@@ -37,6 +62,10 @@
 "L4-59"  = "Europa"
 "L3-172" = "Opvang"
 "L4-165" = "Opvang"
+
+# --- Klimaat & Energie ---
+"L4-396" = "Doelen"
+"L4-505" = "Klimaattop"
 
 # --- Wonen / Isolatie ---
 "L3-63"  = "Woningen"
@@ -65,6 +94,9 @@
 "L4-125" = "Dierenarts"
 "L4-324" = "Vogelgriep"
 
+# --- Politie & Justitie ---
+"L4-190" = "Verward gedrag"
+
 # --- Informatieverzoeken ---
 "L2-19"  = "Genoemd"
 
@@ -84,12 +116,15 @@
 "L4-213" = "Aanvaring"
 "L4-286" = "Afrondend"
 "L4-285" = "Kwinkslag"
+"L4-294" = "Via de voorzitter"
 "L4-199" = "Instemming"
 "L4-299" = "Ik wil"
 "L4-410" = "Gezegdes"
 "L4-439" = "Op terugkomen"
 "L4-500" = "Ik vind"
 "L4-370" = "Keijzer"
+"L4-390" = "..., voorzitter."
+"L4-476" = "Het woord is aan"
 "L4-507" = "Encore"
 "L4-495" = "Doorgaan?"
 "L4-23"  = "Geef het woord"
@@ -112,34 +147,49 @@
 "L4-388" = "Tradities"
 "L4-328" = "Niet per motie"
 "L4-393" = "Naar aanleiding van"
+"L3-154" = "Aangenomen"
+"L3-176" = "Toelichting"
+"L3-178" = "De motie van"
 
 # --- Motiebehandeling & Oordelen ---
 "L1-13"  = "Uitvoeren"
 "L2-56"  = "Appreciatie"
-"L3-132" = "Ontijdig"
+"L2-46"  = "Ontijdig"
+"L3-132" = "Overbodig"
 "L4-1"   = "Volgende motie"
 "L4-12"  = "Moeten"
 "L4-67"  = "Motie: oordeel"
-"L4-118" = "Ontijdig"
+"L4-118" = "Overbodig"
 "L4-123" = "Toch oordeel kamer"
 "L4-187" = "Ontraden"
 "L4-206" = "Toch?"
+"L4-238" = "Ontraden."
 "L4-243" = "Op stuk, oordeel Kamer"
 "L4-254" = "Ik geef oordeel kamer"
 "L4-258" = "De juiste plek?"
 "L4-259" = "Dus ontraden"
-"L4-277" = "Ook oordeel kamer"
-"L4-307" = "Aanhouden"
+"L4-277" = "Krijgt oordeel Kamer"
+"L4-43"  = "Aanhouden"
+"L4-307" = "Dan de moties"
+"L4-308" = "Alsnog"
+"L4-309" = "Moet ik ontraden"
+"L4-317" = "De motie op stuk nr."
 "L4-326" = "Als, dan, oordeel kamer"
+"L4-327" = "Verwijzing naar debat"
+"L4-366" = "Ook oordeel kamer"
 "L4-367" = "Dan oordeel kamer"
+"L4-374" = "Daarom ontraden"
 "L4-434" = "Ontraden?"
+"L4-445" = "Moet ontraden"
 "L4-504" = "Dan de motie op stuk"
 
 # --- Wetgeving doublures ---
+"L4-322" = "Wetsbehandeling"
 "L4-344" = "Amendement"
 "L4-355" = "Inwerkingtreding"
 "L4-363" = "Onderbouwing"
 "L4-403" = "Vertraging"
+"L4-418" = "Wat wil de minister"
 "L4-472" = "Wet is wet"
 
 # --- Uitvoering doublures ---
@@ -180,6 +230,10 @@
 
 # --- Bezuinigingen doublures ---
 "L4-255" = "Terugvordering"
+
+# --- Innovatiebeleid doublures ---
+"L4-497" = "Wbso"
+"L4-512" = "Concurrentievermogen"
 
 # --- Amendementen doublures ---
 "L4-329" = "Amendement ontraden"
