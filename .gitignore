@@ -34,6 +34,7 @@ data/export/*.pmtiles
 docs/poc/umap-documenten/plot-full.html
 data/export/*-full.json
 data/export/*-full.geojson
+data/export/*-flat.geojson
 data/export/*-full-grid.json
 data/export/plenair-map-grid.json
 data/*.db
