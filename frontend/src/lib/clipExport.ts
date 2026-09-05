@@ -153,10 +153,17 @@ function pickSupportedMimeType(): string {
 
 // Bovengrens voor de exportbreedte: de bronvideo is vaak 1080p, maar
 // full-res per frame tekenen (canvas + overlay-redraw) én tegelijk
-// VP9-encoden bleek in de praktijk te haperen. Een clip is voor delen
-// bedoeld, geen archiefkwaliteit -- 640px breed is ruim genoeg en scheelt
-// zowel canvas-tekenwerk als encodetijd per frame.
-const MAX_WIDTH = 640;
+// VP9-encoden bleek in de praktijk te haperen. 960px breed (i.p.v. de volle
+// 1080p) is een middenweg: duidelijk leesbaarder dan 640px, nog steeds ruim
+// minder canvas-/encodewerk per frame dan de bronresolutie.
+const MAX_WIDTH = 960;
+
+// MediaRecorder gebruikt zonder expliciete bitrate een browser-eigen default
+// die niet meeschaalt met de exportresolutie. Richtwaarden hieronder
+// (`MediaRecorder` interpreteert dit als VBR-richtwaarde, geen harde cap,
+// dus complexe frames kunnen er nog overheen gaan) geschaald op 960x540.
+const DEFAULT_VIDEO_BITS_PER_SECOND = 1_800_000;
+const DEFAULT_AUDIO_BITS_PER_SECOND = 96_000;
 
 // Duck-typed i.p.v. hls.js' eigen Hls-type importeren: clipExport.ts hoeft
 // verder niets van hls.js te weten, en dit blijft ook bruikbaar als
@@ -188,6 +195,16 @@ function selectExportQuality(hls: HlsLike, targetWidth: number): number {
 	return previousLevel;
 }
 
+export interface RecordClipOptions {
+	onProgress?: (fraction: number) => void;
+	hls?: HlsLike | null;
+	/** VBR-richtwaarden voor MediaRecorder, in bits/seconde. Default:
+	 * DEFAULT_VIDEO_BITS_PER_SECOND/DEFAULT_AUDIO_BITS_PER_SECOND (geschaald
+	 * op 960x540 -- pas ze aan als je op een andere breedte exporteert). */
+	videoBitsPerSecond?: number;
+	audioBitsPerSecond?: number;
+}
+
 /** Neemt `durationSeconds` op vanaf het huidige afspeelpunt van `video`,
  * overlay (badges/naamplaatje/titelkaart, de echte VideoOverlay.vue-DOM)
  * inbegrepen, en levert een afspeelbare WebM-blob op. Vereist dat `video`
@@ -200,9 +217,9 @@ export async function recordClip(
 	video: HTMLVideoElement,
 	overlayEl: Element,
 	durationSeconds: number,
-	onProgress?: (fraction: number) => void,
-	hls?: HlsLike | null,
+	options: RecordClipOptions = {},
 ): Promise<ClipExportResult> {
+	const { onProgress, hls, videoBitsPerSecond = DEFAULT_VIDEO_BITS_PER_SECOND, audioBitsPerSecond = DEFAULT_AUDIO_BITS_PER_SECOND } = options;
 	const sourceWidth = video.videoWidth || 640;
 	const sourceHeight = video.videoHeight || 360;
 	const scale = Math.min(1, MAX_WIDTH / sourceWidth);
@@ -220,7 +237,7 @@ export async function recordClip(
 	if (video.paused) await video.play().catch(() => {});
 
 	try {
-		return await recordFrames(video, overlayEl, durationSeconds, width, height, onProgress);
+		return await recordFrames(video, overlayEl, durationSeconds, width, height, videoBitsPerSecond, audioBitsPerSecond, onProgress);
 	} finally {
 		if (hls && previousLevel !== null) hls.currentLevel = previousLevel;
 	}
@@ -232,6 +249,8 @@ async function recordFrames(
 	durationSeconds: number,
 	width: number,
 	height: number,
+	videoBitsPerSecond: number,
+	audioBitsPerSecond: number,
 	onProgress?: (fraction: number) => void,
 ): Promise<ClipExportResult> {
 	// Logo('s) van de nu al zichtbare spreker vast ophalen/cachen (zie
@@ -258,7 +277,7 @@ async function recordFrames(
 
 	const mimeType = pickSupportedMimeType();
 	const chunks: Blob[] = [];
-	const recorder = new MediaRecorder(stream, mimeType ? { mimeType } : undefined);
+	const recorder = new MediaRecorder(stream, { ...(mimeType ? { mimeType } : {}), videoBitsPerSecond, audioBitsPerSecond });
 	recorder.ondataavailable = (e) => {
 		if (e.data.size > 0) chunks.push(e.data);
 	};

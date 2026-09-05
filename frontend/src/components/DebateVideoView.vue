@@ -130,15 +130,12 @@ async function exportClip() {
 				video.addEventListener("seeked", () => resolve(), { once: true });
 			});
 		}
-		const result = await recordClip(
-			video,
-			overlayEl,
-			clipSeconds,
-			(fraction) => {
+		const result = await recordClip(video, overlayEl, clipSeconds, {
+			onProgress: (fraction) => {
 				exportProgress.value = fraction;
 			},
-			videoPlayerRef.value?.getHlsInstance(),
-		);
+			hls: videoPlayerRef.value?.getHlsInstance(),
+		});
 		downloadClip(result, `${props.debateId}-clip.webm`);
 	} catch (e) {
 		exportError.value = e instanceof Error ? e.message : "onbekende fout";
