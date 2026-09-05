@@ -12,7 +12,7 @@ Ondersteunt georeferencing via World File (.tfw) + .prj (EPSG:3857) voor directe
 integratie in QGIS.
 
 Gebruik:
-    uv run python scripts/generate_a0_color_raster.py \
+    uv run python scripts/a0_map/generate_a0_color_raster.py \
         data/export/plenair-map-full.json \
         data/export/a0-map/density_color_a0_300dpi.tif \
         --grid data/export/plenair-map-full-grid.json \

@@ -10,7 +10,7 @@ Ondersteunt georeferencing via World File (.tfw) + .prj (EPSG:3857) voor directe
 uitlijning met a0-umap.qgz in QGIS, of --flat voor rauwe UMAP-eenheden.
 
 Gebruik:
-    uv run python scripts/generate_a0_density_raster.py \
+    uv run python scripts/a0_map/generate_a0_density_raster.py \
         data/export/plenair-map-full.json \
         data/export/a0-map/density_a0_300dpi.tif \
         --grid data/export/plenair-map-full-grid.json \

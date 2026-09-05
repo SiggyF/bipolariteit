@@ -8,7 +8,7 @@ standaardpad (`tf.shade(cvs.points(...), how="eq_hist")`). Geen eigen
 spreid-/kleurladder-functies.
 
 Gebruik (klein itereren, standaard ~1/6 A0):
-    uv run python scripts/render_a0_datashader.py \
+    uv run python scripts/a0_map/render_a0_datashader.py \
         data/export/plenair-map-full.json \
         data/export/a0-map/a0-alles.png
 """

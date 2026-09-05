@@ -11,7 +11,7 @@ referentiebeelden).
 - **`a0-umap.qgz`** -- het QGIS-projectbestand, staat in deze map (samen met
   het designer-pakket, zie hierboven). Verwijst (relatief) naar:
   - `../../plenair-map-clusters-full.geojson` (clusterhulls, gegenereerd
-    door `scripts/export_clusters_geojson.py`)
+    door `scripts/a0_map/export_clusters_geojson.py`)
   - `../../plenair-map-full.pmtiles` (puntenlaag, laag `points`, gegenereerd
     door `pipeline/tiling/build_pyramid.py`)
 
@@ -26,7 +26,7 @@ referentiebeelden).
       --input data/export/plenair-map-full.json \
       --out data/export/plenair-map-full.pmtiles \
       --grid-out data/export/plenair-map-full-grid.json
-  uv run python scripts/export_clusters_geojson.py \
+  uv run python scripts/a0_map/export_clusters_geojson.py \
       data/export/plenair-map-clusters-full.json \
       data/export/plenair-map-clusters-full.geojson \
       --grid data/export/plenair-map-full-grid.json

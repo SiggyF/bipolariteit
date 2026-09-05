@@ -108,7 +108,7 @@ matplotlib-preview + een QGIS-schets, plus de vier openstaande stijlvragen
   papier + zwarte contour) -- kleur blijft zo voorbehouden aan het
   onderwerp, in lijn met het "kleur is de schaarste"-principe uit Ronde 1.
 
-Concrete specs voor de renderfase (zie `scripts/render_design_preview.py`,
+Concrete specs voor de renderfase (zie `scripts/a0_map/render_design_preview.py`,
 de nog te bouwen `datashader`-render en `export_clusters_geojson.py --flat`,
 de platte exportmodus): 300dpi (~9.900×14.000px A0), TWEE losse rasters
 ("overig" en de vier onderwerpen, zodat alpha per laag apart te regelen is)

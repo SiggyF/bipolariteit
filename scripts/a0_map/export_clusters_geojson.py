@@ -29,7 +29,7 @@ GeoJSON draagt dan gewoon impliciet WGS84 (RFC7946-default, geen crs-member
 nodig), en lijnt zo op natuurlijke wijze uit met de puntenlaag.
 
 Gebruik:
-    uv run python scripts/export_clusters_geojson.py \
+    uv run python scripts/a0_map/export_clusters_geojson.py \
         data/export/plenair-map-clusters-full.json \
         data/export/plenair-map-clusters-full.geojson \
         --grid data/export/plenair-map-full-grid.json
@@ -44,7 +44,7 @@ dus als `render_design_preview.py`) direct als GeoJSON-coördinaten -- geen
 puntenwolk die er in QGIS naast komt te liggen. QGIS importeert zo'n bestand
 als "no CRS"/vlakke coördinaten (RFC7946 vermeldt geen `crs`-member meer,
 dus behandel de laag na import expliciet als projectloos, niet als EPSG:4326):
-    uv run python scripts/export_clusters_geojson.py \
+    uv run python scripts/a0_map/export_clusters_geojson.py \
         data/export/plenair-map-clusters-full.json \
         data/export/plenair-map-clusters-full-flat.geojson \
         --flat

@@ -3,7 +3,7 @@ Rendert de A0 printkaart HTML-widgets (colofon en legenda) naar ultra-hoge-resol
 met behulp van headless Google Chrome.
 
 Gebruik:
-    uv run python scripts/render_a0_widgets.py
+    uv run python scripts/a0_map/render_a0_widgets.py
 """
 
 import subprocess

@@ -36,7 +36,7 @@ import click
 @click.option(
     "--export-geojson/--no-export-geojson",
     default=True,
-    help="Of scripts/export_clusters_geojson.py automatisch gedraaid moet worden.",
+    help="Of scripts/a0_map/export_clusters_geojson.py automatisch gedraaid moet worden.",
 )
 def main(config_path: Path, clusters_json: Path, grid_json: Path, export_geojson: bool):
     """Lees label overrides uit TOML en werk plenair-map-clusters-full.json bij."""
@@ -106,7 +106,7 @@ def main(config_path: Path, clusters_json: Path, grid_json: Path, export_geojson
         # 1. WGS84 export (voor PMTiles/web viewers)
         cmd_wgs84 = [
             sys.executable,
-            "scripts/export_clusters_geojson.py",
+            "scripts/a0_map/export_clusters_geojson.py",
             str(clusters_json),
             str(geojson_wgs84),
             "--grid",
@@ -121,7 +121,7 @@ def main(config_path: Path, clusters_json: Path, grid_json: Path, export_geojson
         # 2. Flat export (voor QGIS A0-printkaart compositie)
         cmd_flat = [
             sys.executable,
-            "scripts/export_clusters_geojson.py",
+            "scripts/a0_map/export_clusters_geojson.py",
             str(clusters_json),
             str(geojson_flat),
             "--flat",

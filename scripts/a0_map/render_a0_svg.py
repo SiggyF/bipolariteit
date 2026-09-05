@@ -27,7 +27,7 @@ Volgt dezelfde 5 datashader-pipelinestappen, maar zonder rasterbinning:
   beperken bij 135k elementen).
 
 Gebruik (klein itereren):
-    uv run python scripts/render_a0_svg.py \
+    uv run python scripts/a0_map/render_a0_svg.py \
         data/export/plenair-map-full.json \
         data/export/a0-map/a0-alles.svg
 """

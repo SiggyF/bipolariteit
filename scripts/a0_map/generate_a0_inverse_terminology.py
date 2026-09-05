@@ -7,7 +7,7 @@ Berekent een continu semantisch grid over de 2D UMAP-kaart:
     gekoppeld officieel TK-Kamerstukdossier (nummer + titel).
 
 Gebruik:
-    uv run python scripts/generate_a0_inverse_terminology.py \
+    uv run python scripts/a0_map/generate_a0_inverse_terminology.py \
         data/export/plenair-map-full.json \
         data/export/a0-map/inverse_terminology_grid.geojson \
         --grid data/export/plenair-map-full-grid.json \
@@ -27,7 +27,7 @@ import numpy as np
 from scipy.spatial import cKDTree
 from sklearn.feature_extraction.text import TfidfVectorizer
 
-from scripts.export_clusters_geojson import make_rescaler, flat_rescale
+from scripts.a0_map.export_clusters_geojson import make_rescaler, flat_rescale
 
 logger = logging.getLogger(__name__)
 

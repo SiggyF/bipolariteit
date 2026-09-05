@@ -7,7 +7,7 @@ Ondersteunt:
 - `--flat` voor rauwe UMAP-vlakke coördinaten.
 
 Gebruik:
-    uv run python scripts/export_a0_points_layer.py \
+    uv run python scripts/a0_map/export_a0_points_layer.py \
         data/export/plenair-map-full.json \
         data/export/a0-map/points_a0_flat.geojson \
         --grid data/export/plenair-map-full-grid.json
@@ -19,7 +19,7 @@ from pathlib import Path
 
 import click
 
-from scripts.export_clusters_geojson import make_rescaler, flat_rescale
+from scripts.a0_map.export_clusters_geojson import make_rescaler, flat_rescale
 
 logger = logging.getLogger(__name__)
 

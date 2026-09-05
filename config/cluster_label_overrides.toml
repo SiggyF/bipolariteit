@@ -266,6 +266,9 @@
 "L3-95"  = "Schijnzelfstandigheid"
 "L3-147" = "Flexwerkers"
 
+# --- Niveau 4 Moties ---
+"L4-381" = "Ik heb twee moties"
+
 [redundant]
 # Geen clusters op redundant; elk cluster krijgt een eigen, eerlijk label.
 
