@@ -30,9 +30,9 @@ nodig), en lijnt zo op natuurlijke wijze uit met de puntenlaag.
 
 Gebruik:
     uv run python scripts/a0_map/export_clusters_geojson.py \
-        data/export/plenair-map-clusters-full.json \
-        data/export/plenair-map-clusters-full.geojson \
-        --grid data/export/plenair-map-full-grid.json
+        data/export/a0-map/maps/plenair-map-clusters-full.json \
+        data/export/a0-map/maps/plenair-map-clusters-full.geojson \
+        --grid data/export/a0-map/maps/plenair-map-full-grid.json
 
 Voor de print-pijplijn (datashader/QGIS-compositie op A0, geen vector-tile-
 viewer erbij) is die WGS84-heenenweer-reis niet nodig -- ze bestaat alleen om
@@ -45,8 +45,8 @@ puntenwolk die er in QGIS naast komt te liggen. QGIS importeert zo'n bestand
 als "no CRS"/vlakke coördinaten (RFC7946 vermeldt geen `crs`-member meer,
 dus behandel de laag na import expliciet als projectloos, niet als EPSG:4326):
     uv run python scripts/a0_map/export_clusters_geojson.py \
-        data/export/plenair-map-clusters-full.json \
-        data/export/plenair-map-clusters-full-flat.geojson \
+        data/export/a0-map/maps/plenair-map-clusters-full.json \
+        data/export/a0-map/maps/plenair-map-clusters-full-flat.geojson \
         --flat
 """
 

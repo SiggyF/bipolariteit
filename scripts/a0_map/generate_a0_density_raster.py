@@ -11,9 +11,9 @@ uitlijning met a0-umap.qgz in QGIS, of --flat voor rauwe UMAP-eenheden.
 
 Gebruik:
     uv run python scripts/a0_map/generate_a0_density_raster.py \
-        data/export/plenair-map-full.json \
+        data/export/a0-map/maps/plenair-map-full.json \
         data/export/a0-map/density_a0_300dpi.tif \
-        --grid data/export/plenair-map-full-grid.json \
+        --grid data/export/a0-map/maps/plenair-map-full-grid.json \
         --scale 1.0 \
         --sigma-mm 3.0
 """

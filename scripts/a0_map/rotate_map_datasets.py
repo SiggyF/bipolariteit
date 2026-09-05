@@ -3,11 +3,11 @@ Roteer plenaire kaart datasets zodat moties en voorzitter onderop komen te ligge
 en sla de resultaten op met het `_rotated` postfix.
 
 Datasets die gegenereerd/geroteerd worden:
-- data/export/plenair-map-full_rotated.json
-- data/export/plenair-map-full-grid_rotated.json
-- data/export/plenair-map-clusters-full_rotated.json
-- data/export/plenair-map-clusters-full_rotated.geojson
-- data/export/plenair-map-clusters-full-flat_rotated.geojson
+- data/export/a0-map/maps/plenair-map-full_rotated.json
+- data/export/a0-map/maps/plenair-map-full-grid_rotated.json
+- data/export/a0-map/maps/plenair-map-clusters-full_rotated.json
+- data/export/a0-map/maps/plenair-map-clusters-full_rotated.geojson
+- data/export/a0-map/maps/plenair-map-clusters-full-flat_rotated.geojson
 
 Gebruik:
     uv run python scripts/a0_map/rotate_map_datasets.py --angle 129.0
@@ -37,13 +37,13 @@ def rotate_coords(x: float, y: float, cx: float, cy: float, cos_a: float, sin_a:
 @click.option(
     "--points-in",
     type=click.Path(exists=True, dir_okay=False, path_type=Path),
-    default=Path("data/export/plenair-map-full.json"),
+    default=Path("data/export/a0-map/maps/plenair-map-full.json"),
     help="Bronbestand met ruwe UMAP punten.",
 )
 @click.option(
     "--clusters-in",
     type=click.Path(exists=True, dir_okay=False, path_type=Path),
-    default=Path("data/export/plenair-map-clusters-full.json"),
+    default=Path("data/export/a0-map/maps/plenair-map-clusters-full.json"),
     help="Bronbestand met clusterhiërarchie.",
 )
 def main(angle: float, points_in: Path, clusters_in: Path):

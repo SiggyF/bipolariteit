@@ -13,8 +13,8 @@ from sklearn.decomposition import PCA
 logging.basicConfig(level=logging.INFO, format="%(message)s")
 
 # 1. Laad data
-points_path = Path("data/export/plenair-map-full.json")
-grid_path = Path("data/export/plenair-map-full-grid.json")
+points_path = Path("data/export/a0-map/maps/plenair-map-full.json")
+grid_path = Path("data/export/a0-map/maps/plenair-map-full-grid.json")
 
 raw_points = json.loads(points_path.read_text(encoding="utf-8"))
 points = raw_points["points"]

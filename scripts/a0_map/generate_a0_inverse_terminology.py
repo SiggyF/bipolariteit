@@ -8,10 +8,10 @@ Berekent een continu semantisch grid over de 2D UMAP-kaart:
 
 Gebruik:
     uv run python scripts/a0_map/generate_a0_inverse_terminology.py \
-        data/export/plenair-map-full.json \
+        data/export/a0-map/maps/plenair-map-full.json \
         data/export/a0-map/inverse_terminology_grid.geojson \
-        --grid data/export/plenair-map-full-grid.json \
-        --clusters data/export/plenair-map-clusters-full.json \
+        --grid data/export/a0-map/maps/plenair-map-full-grid.json \
+        --clusters data/export/a0-map/maps/plenair-map-clusters-full.json \
         --dossiers data/export/tk_kamerstukdossiers.json \
         --grid-nx 80 \
         --grid-ny 112
@@ -72,7 +72,7 @@ def build_dossier_matcher(dossiers_path: Path):
 @click.argument("output_path", type=click.Path(dir_okay=False, path_type=Path))
 @click.option("--grid", "grid_path", type=click.Path(exists=True, dir_okay=False, path_type=Path), default=None, help="Pad naar plenair-map-full-grid.json voor WGS84/EPSG:3857 uitlijning.")
 @click.option("--flat", is_flag=True, default=False, help="Schrijf in rauwe UMAP-coördinaten zonder Mercator-rescaling.")
-@click.option("--clusters", "clusters_path", type=click.Path(exists=True, dir_okay=False, path_type=Path), default=Path("data/export/plenair-map-clusters-full.json"), help="Pad naar plenair-map-clusters-full.json.")
+@click.option("--clusters", "clusters_path", type=click.Path(exists=True, dir_okay=False, path_type=Path), default=Path("data/export/a0-map/maps/plenair-map-clusters-full.json"), help="Pad naar plenair-map-clusters-full.json.")
 @click.option("--dossiers", "dossiers_path", type=click.Path(dir_okay=False, path_type=Path), default=Path("data/export/tk_kamerstukdossiers.json"), help="Pad naar tk_kamerstukdossiers.json.")
 @click.option("--grid-nx", type=int, default=80, help="Aantal grid-cellen in de breedte (default: 80).")
 @click.option("--grid-ny", type=int, default=112, help="Aantal grid-cellen in de hoogte (default: 112).")

@@ -1,6 +1,6 @@
 """
 Print-kwaliteit puntenwolk-rasterrender voor de A0-printposter (issue #215),
-op basis van `data/export/plenair-map-full.json`.
+op basis van `data/export/a0-map/maps/plenair-map-full.json`.
 
 Basisversie: alleen de "alles"-laag (alle punten, alle topics samen), met
 een kant-en-klare colorcet-colormap (`cc.fire`) en datashader's eigen
@@ -9,7 +9,7 @@ spreid-/kleurladder-functies.
 
 Gebruik (klein itereren, standaard ~1/6 A0):
     uv run python scripts/a0_map/render_a0_datashader.py \
-        data/export/plenair-map-full.json \
+        data/export/a0-map/maps/plenair-map-full.json \
         data/export/a0-map/a0-alles.png
 """
 

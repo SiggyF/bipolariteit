@@ -24,13 +24,13 @@ import click
 @click.option(
     "--clusters-json",
     type=click.Path(exists=True, path_type=Path),
-    default=Path("data/export/plenair-map-clusters-full.json"),
+    default=Path("data/export/a0-map/maps/plenair-map-clusters-full.json"),
     help="Pad naar plenair-map-clusters-full.json.",
 )
 @click.option(
     "--grid-json",
     type=click.Path(path_type=Path),
-    default=Path("data/export/plenair-map-full-grid.json"),
+    default=Path("data/export/a0-map/maps/plenair-map-full-grid.json"),
     help="Pad naar plenair-map-full-grid.json voor WGS84 GeoJSON export.",
 )
 @click.option(

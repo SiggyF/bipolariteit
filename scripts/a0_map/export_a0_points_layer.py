@@ -8,9 +8,9 @@ Ondersteunt:
 
 Gebruik:
     uv run python scripts/a0_map/export_a0_points_layer.py \
-        data/export/plenair-map-full.json \
+        data/export/a0-map/maps/plenair-map-full.json \
         data/export/a0-map/points_a0_flat.geojson \
-        --grid data/export/plenair-map-full-grid.json
+        --grid data/export/a0-map/maps/plenair-map-full-grid.json
 """
 
 import json

@@ -28,7 +28,7 @@ Volgt dezelfde 5 datashader-pipelinestappen, maar zonder rasterbinning:
 
 Gebruik (klein itereren):
     uv run python scripts/a0_map/render_a0_svg.py \
-        data/export/plenair-map-full.json \
+        data/export/a0-map/maps/plenair-map-full.json \
         data/export/a0-map/a0-alles.svg
 """
 
