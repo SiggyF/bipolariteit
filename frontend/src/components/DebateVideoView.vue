@@ -90,25 +90,25 @@ const off = reactive<Record<string, boolean>>({});
 function togglePerspective(name: string) {
 	off[name] = !off[name];
 }
-function isVisible(tag: { perspectief: string }) {
-	return !off[tag.perspectief];
-}
-
 // Lokale clip-export (issue #180): geen server, dus canvas.captureStream()
-// van een SVG-overlay op de videoframes (issue #179, zie clipExport.ts).
-// Alleen op de volledige debatpagina (props.debateHref ontbreekt daar, zie
-// #controls-extra hieronder) -- de homepage-teaser is een compacte weergave,
-// geen plek om een clip van te knippen.
+// van de echte VideoOverlay.vue-DOM op de videoframes (via <foreignObject>,
+// zie clipExport.ts) -- geen aparte SVG-herbouw van de overlay, één
+// implementatie voor live scherm én export. Alleen op de volledige
+// debatpagina (props.debateHref ontbreekt daar, zie #controls-extra
+// hieronder) -- de homepage-teaser is een compacte weergave, geen plek om
+// een clip van te knippen.
 const videoPlayerRef = ref<InstanceType<typeof VideoPlayer> | null>(null);
+const videoOverlayRef = ref<InstanceType<typeof VideoOverlay> | null>(null);
 const exporting = ref(false);
 const exportError = ref<string | null>(null);
 async function exportClip() {
 	const video = videoPlayerRef.value?.videoEl;
-	if (!video || exporting.value) return;
+	const overlayEl = videoOverlayRef.value?.rootEl;
+	if (!video || !overlayEl || exporting.value) return;
 	exporting.value = true;
 	exportError.value = null;
 	try {
-		const result = await recordClip(video, argumentList.value, isVisible, 10);
+		const result = await recordClip(video, overlayEl, 10);
 		downloadClip(result, `${props.debateId}-clip.webm`);
 	} catch (e) {
 		exportError.value = e instanceof Error ? e.message : "onbekende fout";
@@ -333,6 +333,7 @@ function dismissFloating() {
 					@seek="requestSeek"
 				>
 					<VideoOverlay
+						ref="videoOverlayRef"
 						:arguments="argumentList"
 						:current-time="currentTime"
 						:off="off"

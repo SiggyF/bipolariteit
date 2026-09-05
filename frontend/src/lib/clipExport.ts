@@ -1,12 +1,144 @@
-import { buildOverlayState } from "./videoOverlayState";
-import { renderOverlaySvg, svgToDataUrl } from "./svgOverlayRenderer";
-import type { Argument } from "./types";
+// Lokale clip-export (issue #180): canvas.captureStream() i.p.v. een
+// serverside component, want die hebben we niet (geen backend, geen
+// video-opslag).
+//
+// Overlay-rendering: de ECHTE, ongewijzigde VideoOverlay.vue-DOM (incl. zijn
+// bestaande, door een designer gemaakte CSS) wordt elk frame gekloond en via
+// een SVG <foreignObject> op hetzelfde canvas getekend als het videoframe.
+// Eerder werd de overlay apart herbouwd als losstaande SVG-vormen
+// (svgOverlayRenderer.ts/VideoOverlaySvg.vue) -- dat gaf onvermijdelijk
+// twee implementaties van dezelfde vormgeving uit de pas (titelmarges,
+// naam-wrap, badge-uitlijning, tag-hover, ...). Deze aanpak hergebruikt de
+// live DOM 1:1, dus geen tweede plek om diezelfde vormgeving te
+// onderhouden.
+//
+// <foreignObject> met echte HTML tainted het canvas NIET in Chromium
+// (empirisch geverifieerd, zie PR #267) -- wel drie dingen die eerst
+// opgelost moesten worden:
+//  1. XML staat geen "--" toe binnen een <!-- -->-comment, maar dit project
+//     schrijft toelichtingen consequent met "--" als gedachtestreepje, ook in
+//     de Vue-templates zelf -- die commentaarnodes staan gewoon in de DOM en
+//     moeten eruit vóór XMLSerializer (zie memory:
+//     project_dutch_comments_break_xml_serialization.md).
+//  2. Csstekst (via document.styleSheets) kan ongeëscapete "&"/"<" bevatten
+//     (bv. Google Fonts-@import-URL's met "&family=...") -- moet in een
+//     CDATA-sectie.
+//  3. <img>'s met een gewoon (zelfs absoluut) src-attribuut laden binnen de
+//     foreignObject niet betrouwbaar op tijd: de buitenste SVG->Image()
+//     rasterisatie wacht niet altijd op geneste, asynchrone resources, dus
+//     het partijlogo bleef op het eerste frame een kapot-plaatje-icoon
+//     (empirisch bevestigd: dezelfde absolute URL laadt prima als los
+//     element, maar niet betrouwbaar als geneste foreignObject-resource).
+//     Oplossing: elke <img> vooraf naar een data:-URI omzetten (fetch +
+//     base64, gecachet) zodat er geen resource meer op te halen valt op het
+//     moment dat de browser de SVG rasterizeert.
 
-// Lokale clip-export (issue #180, plan B uit de PoC): canvas.captureStream()
-// i.p.v. een serverside component, want die hebben we niet (geen backend,
-// geen video-opslag). Overlay wordt als SVG getekend (issue #179) i.p.v.
-// losse divs, want een <div> kan sowieso niet naar een MediaStream/canvas
-// gerasterd worden -- captureStream() bestaat alleen op canvas/video/audio.
+/** Verwijdert alle commentaarnodes (Vue-placeholders én de letterlijke
+ * toelichtingen uit de templates) uit een gekloonde subtree -- noodzakelijk
+ * vóór XMLSerializer, zie moduledocstring punt 1. */
+function stripComments(root: Node) {
+	const walker = document.createTreeWalker(root, NodeFilter.SHOW_COMMENT);
+	const comments: Comment[] = [];
+	let node: Node | null;
+	while ((node = walker.nextNode())) comments.push(node as Comment);
+	comments.forEach((c) => c.remove());
+}
+
+const imageDataUrlCache = new Map<string, string>();
+
+async function fetchAsDataUrl(url: string): Promise<string> {
+	const cached = imageDataUrlCache.get(url);
+	if (cached) return cached;
+	const blob = await (await fetch(url)).blob();
+	const dataUrl = await new Promise<string>((resolve, reject) => {
+		const reader = new FileReader();
+		reader.onload = () => resolve(reader.result as string);
+		reader.onerror = reject;
+		reader.readAsDataURL(blob);
+	});
+	imageDataUrlCache.set(url, dataUrl);
+	return dataUrl;
+}
+
+/** Vervangt elke <img src="..."> door een data:-URI (zie moduledocstring
+ * punt 3) -- gecachet op absolute URL, dus een partijlogo dat al eerder in
+ * deze opname voorbijkwam kost geen nieuwe fetch. Async: bedoeld om één keer
+ * vooraf te "warmen" op de dan zichtbare sprekers. */
+async function inlineImages(root: Element): Promise<void> {
+	const images = Array.from(root.querySelectorAll("img"));
+	await Promise.all(
+		images.map(async (img) => {
+			const src = img.getAttribute("src");
+			if (!src || src.startsWith("data:")) return;
+			try {
+				img.setAttribute("src", await fetchAsDataUrl(new URL(src, location.href).href));
+			} catch {
+				// Logo niet op te halen (bv. netwerkfout) -- geen harde eis,
+				// de rest van de overlay blijft gewoon zichtbaar.
+			}
+		}),
+	);
+}
+
+/** Synchrone tegenhanger voor de per-frame renderlus: gebruikt alleen wat al
+ * in de cache zit (geen await mogelijk in een requestAnimationFrame-loop).
+ * Een spreker die pas halverwege de opname in beeld komt, mist zijn logo dan
+ * een enkel frame terwijl de fetch op de achtergrond loopt -- daarna is 'm
+ * gecachet en klopt elk volgend frame weer. */
+function inlineImagesSync(root: Element): void {
+	for (const img of root.querySelectorAll("img")) {
+		const src = img.getAttribute("src");
+		if (!src || src.startsWith("data:")) continue;
+		const absolute = new URL(src, location.href).href;
+		const cached = imageDataUrlCache.get(absolute);
+		if (cached) {
+			img.setAttribute("src", cached);
+		} else {
+			img.removeAttribute("src"); // liever geen logo dan een kapot-plaatje-icoon
+			void fetchAsDataUrl(absolute).catch(() => {});
+		}
+	}
+}
+
+/** Alle CSS-regeltekst van de pagina (main.css + Vue's scoped
+ * component-stylesheets) -- éénmalig verzameld, niet per frame: de
+ * stylesheets veranderen niet tijdens een 10s-opname. */
+function collectStylesheetText(): string {
+	let css = "";
+	for (const sheet of Array.from(document.styleSheets)) {
+		try {
+			for (const rule of Array.from(sheet.cssRules)) css += rule.cssText + "\n";
+		} catch {
+			// Cross-origin stylesheet (bv. een Google Fonts <link>) --
+			// cssRules is dan niet leesbaar, maar het lettertype is al
+			// geladen/gecachet door de browser en rendert alsnog correct.
+		}
+	}
+	return css;
+}
+
+function serializeOverlaySvg(overlayEl: Element, width: number, height: number, css: string): string {
+	const clone = overlayEl.cloneNode(true) as Element;
+	stripComments(clone);
+	inlineImagesSync(clone);
+	const html = new XMLSerializer().serializeToString(clone);
+	// container-type: inline-size op de wrapper -- VideoOverlay.vue's eigen
+	// @container-regels (compacte badge-labels) reageren op de breedte van
+	// déze wrapper, dus die moet zelf een container zijn, niet enkel de
+	// (hier ontbrekende) .video-stage-ouder uit de echte pagina.
+	return (
+		`<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}">` +
+		`<foreignObject width="${width}" height="${height}">` +
+		`<div xmlns="http://www.w3.org/1999/xhtml" style="position:relative;width:${width}px;height:${height}px;container-type:inline-size;">` +
+		`<style>${`<![CDATA[${css}]]>`}</style>` +
+		html +
+		`</div></foreignObject></svg>`
+	);
+}
+
+function svgToDataUrl(svg: string): string {
+	return "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
+}
 
 export interface ClipExportResult {
 	blob: Blob;
@@ -19,23 +151,22 @@ function pickSupportedMimeType(): string {
 	return MIME_CANDIDATES.find((m) => MediaRecorder.isTypeSupported(m)) ?? "";
 }
 
-/** Neemt `durationSeconds` op vanaf het huidige afspeelpunt van `video`,
- * overlay (badges/naamplaatje/titelkaart) inbegrepen, en levert een
- * afspeelbare WebM-blob op. Vereist dat `video` CORS-schoon is
- * (crossorigin="anonymous" + de bron stuurt Access-Control-Allow-Origin),
- * anders raakt het tussenliggende canvas "tainted" en gooit captureStream()
- * een SecurityError. */
 // Bovengrens voor de exportbreedte: de bronvideo is vaak 1080p, maar
-// full-res per frame tekenen (canvas + SVG-overlay-redraw) én tegelijk
+// full-res per frame tekenen (canvas + overlay-redraw) én tegelijk
 // VP9-encoden bleek in de praktijk te haperen. Een clip is voor delen
 // bedoeld, geen archiefkwaliteit -- 640px breed is ruim genoeg en scheelt
 // zowel canvas-tekenwerk als encodetijd per frame.
 const MAX_WIDTH = 640;
 
+/** Neemt `durationSeconds` op vanaf het huidige afspeelpunt van `video`,
+ * overlay (badges/naamplaatje/titelkaart, de echte VideoOverlay.vue-DOM)
+ * inbegrepen, en levert een afspeelbare WebM-blob op. Vereist dat `video`
+ * CORS-schoon is (crossorigin="anonymous" + de bron stuurt
+ * Access-Control-Allow-Origin), anders raakt het tussenliggende canvas
+ * "tainted" en gooit captureStream() een SecurityError. */
 export async function recordClip(
 	video: HTMLVideoElement,
-	args: Argument[],
-	isVisible: (tag: { perspectief: string }) => boolean,
+	overlayEl: Element,
 	durationSeconds: number,
 ): Promise<ClipExportResult> {
 	const sourceWidth = video.videoWidth || 640;
@@ -43,6 +174,13 @@ export async function recordClip(
 	const scale = Math.min(1, MAX_WIDTH / sourceWidth);
 	const width = Math.round(sourceWidth * scale);
 	const height = Math.round(sourceHeight * scale);
+
+	// Logo('s) van de nu al zichtbare spreker vast ophalen/cachen (zie
+	// inlineImages/inlineImagesSync): zonder deze warmronde zou zelfs de
+	// eerste spreker van de clip zijn logo missen totdat de achtergrondfetch
+	// in de renderlus is aangeslagen.
+	await inlineImages(overlayEl.cloneNode(true) as Element);
+
 	const canvas = document.createElement("canvas");
 	canvas.width = width;
 	canvas.height = height;
@@ -55,7 +193,7 @@ export async function recordClip(
 			video.captureStream().getAudioTracks().forEach((track) => stream.addTrack(track));
 		} catch {
 			// Geen audiotrack beschikbaar (bv. gedempte/geen-audio bron) -- de
-			// clip blijft dan stil, geen harde eis voor deze PoC-afgeleide functie.
+			// clip blijft dan stil, geen harde eis voor deze functie.
 		}
 	}
 
@@ -69,13 +207,13 @@ export async function recordClip(
 		recorder.onstop = () => resolve();
 	});
 
+	const css = collectStylesheetText();
 	const img = new Image();
 	let currentSvgUrl: string | null = null;
 
 	function drawFrame() {
 		ctx!.drawImage(video, 0, 0, width, height);
-		const state = buildOverlayState(args, video.currentTime, isVisible);
-		const url = svgToDataUrl(renderOverlaySvg(state, width, height));
+		const url = svgToDataUrl(serializeOverlaySvg(overlayEl, width, height, css));
 		if (url !== currentSvgUrl) {
 			img.src = url;
 			currentSvgUrl = url;
