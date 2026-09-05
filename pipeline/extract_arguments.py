@@ -15,10 +15,10 @@ opleverde -- zelfde patroon als `arguments.tagged_at` in tag_arguments.py),
 dus herhaald draaien is veilig en de volle batch kan onderbroken/herstart
 worden zonder dubbel werk.
 
-Documenten van vóór [verwerking].vanaf in data/politieke-periodes.toml
-worden overgeslagen: we analyseren de huidige en de vorige Kamer. Die
-documenten blijven gewoon in de database staan; met --vanaf kan een oudere
-periode alsnog bewust verwerkt worden.
+Documenten van vóór [verwerking].focus_vanaf in data/politieke-periodes.toml
+worden overgeslagen: we analyseren de huidige Kamerperiode. Die documenten
+blijven gewoon in de database staan; met --vanaf kan een oudere periode
+alsnog bewust verwerkt worden.
 """
 
 import argparse
@@ -206,11 +206,11 @@ EXCLUDED_ACTIVITEIT_SOORTEN = ["Regeling van werkzaamheden", "Stemmingen"]
 
 def fetch_pending_documents(conn, topic_slug, limit, min_id=0, vanaf=None):
     """`vanaf` is een ISO-datum; oudere documenten blijven in de database maar
-    komen hier niet uit. Default is [verwerking].vanaf uit
-    data/politieke-periodes.toml -- we analyseren de huidige en de vorige
-    Kamer, en dat scheelt aanzienlijk LLM-werk."""
+    komen hier niet uit. Default is [verwerking].focus_vanaf uit
+    data/politieke-periodes.toml -- we analyseren de huidige Kamerperiode, en
+    dat scheelt aanzienlijk LLM-werk."""
     if vanaf is None:
-        vanaf = PeriodeIndex().drempel
+        vanaf = PeriodeIndex().focus_drempel
 
     conditions = [
         "t.slug = ?",
@@ -268,7 +268,7 @@ def main():
     parser.add_argument(
         "--vanaf",
         default=None,
-        help="ISO-datum; overschrijft [verwerking].vanaf uit data/politieke-periodes.toml "
+        help="ISO-datum; overschrijft [verwerking].focus_vanaf uit data/politieke-periodes.toml "
              "(voor een bewuste backfill van een oudere periode)",
     )
     parser.add_argument("--dry-run", action="store_true", help="niets naar de database schrijven, alleen printen")

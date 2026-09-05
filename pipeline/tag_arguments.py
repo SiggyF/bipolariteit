@@ -283,7 +283,7 @@ def insert_llm_tags(conn, argument_id, tag_reden_pairs):
 
 def fetch_untagged_arguments(conn, topic_id, limit, min_id=0, vanaf=None, ids=None):
     """`vanaf` is een ISO-datum op de publicatiedatum van het brondocument;
-    zelfde drempel als bij de extractie ([verwerking].vanaf), zodat we
+    zelfde drempel als bij de extractie ([verwerking].focus_vanaf), zodat we
     geen argumenten taggen uit een periode die we verder buiten beschouwing
     laten. De data blijft staan, alleen deze query ziet 'm niet.
 
@@ -309,7 +309,7 @@ def fetch_untagged_arguments(conn, topic_id, limit, min_id=0, vanaf=None, ids=No
         ).fetchall()
 
     if vanaf is None:
-        vanaf = PeriodeIndex().drempel
+        vanaf = PeriodeIndex().focus_drempel
     return conn.execute(
         """SELECT ar.id, ar.document_id, ar.actor_id, ar.stance, ar.typology,
                   ar.quote_text, ar.quote_context,
@@ -353,7 +353,7 @@ def main():
     parser.add_argument(
         "--vanaf",
         default=None,
-        help="ISO-datum; overschrijft [verwerking].vanaf uit data/politieke-periodes.toml "
+        help="ISO-datum; overschrijft [verwerking].focus_vanaf uit data/politieke-periodes.toml "
              "(voor een bewuste backfill van een oudere periode)",
     )
     parser.add_argument("--dry-run", action="store_true", help="niets naar de database schrijven, alleen printen")

@@ -9,7 +9,7 @@ def index():
 
 
 def test_toml_parst_en_bevat_beide_reeksen():
-    kamerperiodes, regeringsperiodes, _ = laad_periodes()
+    kamerperiodes, regeringsperiodes, _, _ = laad_periodes()
     assert kamerperiodes, f"geen kamerperiodes in {PERIODES_PATH.name}"
     assert regeringsperiodes, f"geen regeringsperiodes in {PERIODES_PATH.name}"
 
@@ -79,3 +79,24 @@ def test_drempel_buiten_de_kamerperiodes_faalt_hard(index):
 
     with pytest.raises(ValueError, match="geen startdatum van een kamerperiode"):
         verwerkingsdrempel({"verwerking": {"vanaf": "2024-01-01"}}, index.kamerperiodes)
+
+
+def test_focus_drempel_komt_uit_de_toml_en_is_een_kamerperiode_start(index):
+    """Zelfde eis als de export-drempel: expliciet in [verwerking].focus_vanaf,
+    niet afgeleid uit lijstpositie."""
+    assert index.focus_drempel in {p.start.isoformat() for p in index.kamerperiodes}
+
+
+def test_focus_drempel_ligt_niet_voor_de_export_drempel(index):
+    """De kern-invariant van de focus/export-splitsing: extract/tag mogen
+    zich versmallen tot een nieuwere periode, maar de export-drempel mag
+    daardoor niet vanzelf meeschuiven -- anders verdwijnt al geanalyseerde
+    data alsnog uit de site."""
+    assert index.focus_drempel >= index.drempel
+
+
+def test_focus_drempel_buiten_de_kamerperiodes_faalt_hard(index):
+    from pipeline.periodes import focus_verwerkingsdrempel
+
+    with pytest.raises(ValueError, match="geen startdatum van een kamerperiode"):
+        focus_verwerkingsdrempel({"verwerking": {"focus_vanaf": "2024-01-01"}}, index.kamerperiodes)

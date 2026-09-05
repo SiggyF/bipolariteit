@@ -152,12 +152,12 @@ def fetch_topics(conn, topic_slug=None):
 
 
 def print_report(conn, topics):
-    vanaf = PeriodeIndex().drempel
+    vanaf = PeriodeIndex().focus_drempel
     logger.info(
         "Huidige promptversies: extract=%s tag=%s redactie=%s",
         EXTRACT_PROMPT_VERSION, TAG_PROMPT_VERSION, REDACTIE_PROMPT_VERSION,
     )
-    logger.info("Verwerkingsdrempel (publicatiedatum): vanaf %s", vanaf)
+    logger.info("Focus-drempel (extract/tag, publicatiedatum): vanaf %s", vanaf)
     for topic in topics:
         status = topic_status(conn, topic["id"], topic["slug"], vanaf)
         missing_description = " ⚠️ GEEN description (extractie faalt hard)" if not topic["description"] else ""

@@ -37,6 +37,15 @@ argumenten stilzwijgend in de verkeerde periode.
 [verwerking]
 vanaf = "2023-12-06"  # start Tweede Kamer 2023-2025
 
+# Vanaf welke datum extract/tag nieuw werk oppakken -- onafhankelijk van
+# `vanaf` hierboven, dat blijft bepalen wat er geexporteerd/getoond wordt.
+# Zo kan de pipeline zich concentreren op de nieuwste Kamer zonder dat de
+# al geanalyseerde data van de vorige Kamer uit de export/frontend valt.
+#
+# Zelfde regel als bij `vanaf`: expliciet, niet afgeleid, en moet gelijk zijn
+# aan de start van een van de kamerperiodes hieronder.
+focus_vanaf = "2025-11-12"  # start Tweede Kamer 2025-heden
+
 # Bron: nl.wikipedia.org / wikidata. Verkiezingsdatum staat erbij ter
 # controle; de periode zelf begint bij de *installatie* van de Kamer.
 

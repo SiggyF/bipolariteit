@@ -327,6 +327,21 @@ function loadFromStorage(): string | null {
 	}
 }
 
+/** Kamerperiode van het meest recente brondocument in de dataset -- zonder de
+ * periodenaam hier hard te coderen, zodat een nieuwe Kamerperiode alleen in
+ * de pipeline-config (data/politieke-periodes.toml) hoeft te landen. */
+export function currentKamerperiode(argumentList: Argument[]): string | null {
+	let nieuwste: { kamer: string; published_at: string } | null = null;
+	for (const argument of argumentList) {
+		const kamer = argument.periode.kamer;
+		const published_at = argument.document.published_at ?? "";
+		if (kamer && (!nieuwste || published_at > nieuwste.published_at)) {
+			nieuwste = { kamer, published_at };
+		}
+	}
+	return nieuwste?.kamer ?? null;
+}
+
 /** Leest de URL (of, bij een lege URL, de bewaarde filters) in de store en
  * houdt beide daarna in sync. Bedoeld als één aanroep bij het opzetten van de
  * pagina, maar idempotent: HMR of een hermontage van het island mag geen
@@ -347,6 +362,12 @@ export function initFiltersFromUrl(argumentList: Argument[]) {
 		if (stored) {
 			applySearchParams(new URLSearchParams(stored));
 			if (isActive()) syncToUrl();
+		} else {
+			// Eerste bezoek zonder URL- of opgeslagen filters: toon standaard
+			// alleen de actuele Kamerperiode. Oudere periodes blijven één
+			// aanvinkje (of "Wis filters") verwijderd.
+			const huidigeKamer = currentKamerperiode(argumentList);
+			if (huidigeKamer) filters.values.kamer = [huidigeKamer];
 		}
 	}
 

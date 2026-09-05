@@ -65,7 +65,7 @@ def main():
     parser.add_argument("keywords", nargs="+", help="kandidaat-trefwoorden, bv. asiel migratie")
     args = parser.parse_args()
 
-    _kamerperiodes, _regeringsperiodes, vanaf = periodes.laad_periodes()
+    _kamerperiodes, _regeringsperiodes, vanaf, _focus_vanaf = periodes.laad_periodes()
     logger.info("Verwerkingsdrempel: vanaf %s", vanaf)
     for keyword in args.keywords:
         report(keyword, fetch_activiteiten(keyword, vanaf))

@@ -48,14 +48,15 @@ def _laad_reeks(data, sleutel, soort):
 
 
 def laad_periodes(path=PERIODES_PATH):
-    """(kamerperiodes, regeringsperiodes, drempel); de reeksen op startdatum
-    gesorteerd, de drempel als ISO-datum."""
+    """(kamerperiodes, regeringsperiodes, drempel, focus_drempel); de reeksen
+    op startdatum gesorteerd, beide drempels als ISO-datum."""
     data = tomllib.loads(path.read_text(encoding="utf-8"))
     kamerperiodes = _laad_reeks(data, "kamerperiodes", "kamerperiode")
     return (
         kamerperiodes,
         _laad_reeks(data, "regeringsperiodes", "regeringsperiode"),
         verwerkingsdrempel(data, kamerperiodes),
+        focus_verwerkingsdrempel(data, kamerperiodes),
     )
 
 
@@ -69,26 +70,39 @@ def zoek(periodes, dag: date, bron=PERIODES_PATH) -> str:
     )
 
 
+def _valide_kamerstart(data, kamerperiodes, sleutel) -> str:
+    """Leest data["verwerking"][sleutel] en toetst dat de waarde exact de
+    startdatum van een kamerperiode is, zodat een typefout of een datum
+    midden in een periode meteen opvalt."""
+    waarde = data["verwerking"][sleutel]
+    starts = {p.start.isoformat(): p.naam for p in kamerperiodes}
+    if waarde not in starts:
+        raise ValueError(
+            f"[verwerking].{sleutel} = {waarde!r} is geen startdatum van een kamerperiode "
+            f"(bekend: {', '.join(sorted(starts))})"
+        )
+    return waarde
+
+
 def verwerkingsdrempel(data, kamerperiodes) -> str:
     """ISO-datum uit [verwerking].vanaf: alles daarvoor blijft in de database
-    staan maar valt buiten de queries die werk ophalen en de export voeden.
+    staan maar valt buiten de queries die de export voeden.
 
     Expliciet in de toml en niet afgeleid als "de op een na laatste
     kamerperiode": die zou meeschuiven zodra er een kamerperiode bijkomt, en
     dan verdwijnen alle al geanalyseerde argumenten van de dan voorlaatste
     Kamer in één klap van de site. Opschuiven hoort een besluit te zijn.
-
-    Wel getoetst aan de kamerperiodes, zodat een typefout of een datum midden
-    in een periode meteen opvalt.
     """
-    vanaf = data["verwerking"]["vanaf"]
-    starts = {p.start.isoformat(): p.naam for p in kamerperiodes}
-    if vanaf not in starts:
-        raise ValueError(
-            f"[verwerking].vanaf = {vanaf!r} is geen startdatum van een kamerperiode "
-            f"(bekend: {', '.join(sorted(starts))})"
-        )
-    return vanaf
+    return _valide_kamerstart(data, kamerperiodes, "vanaf")
+
+
+def focus_verwerkingsdrempel(data, kamerperiodes) -> str:
+    """ISO-datum uit [verwerking].focus_vanaf: bepaalt welke documenten en
+    argumenten extract/tag oppikken, onafhankelijk van de export-drempel
+    (verwerkingsdrempel) -- zo kan extract/tag zich concentreren op de
+    nieuwste Kamer zonder dat al geanalyseerde data van eerdere Kamers uit de
+    export/frontend verdwijnt."""
+    return _valide_kamerstart(data, kamerperiodes, "focus_vanaf")
 
 
 class PeriodeIndex:
@@ -97,7 +111,7 @@ class PeriodeIndex:
 
     def __init__(self, path=PERIODES_PATH):
         self.bron = path
-        self.kamerperiodes, self.regeringsperiodes, self.drempel = laad_periodes(path)
+        self.kamerperiodes, self.regeringsperiodes, self.drempel, self.focus_drempel = laad_periodes(path)
 
     def voor(self, published_at):
         """published_at is naive ISO-tijd uit documents.published_at."""
