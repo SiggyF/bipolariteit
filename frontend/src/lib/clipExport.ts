@@ -158,17 +158,50 @@ function pickSupportedMimeType(): string {
 // zowel canvas-tekenwerk als encodetijd per frame.
 const MAX_WIDTH = 640;
 
+// Duck-typed i.p.v. hls.js' eigen Hls-type importeren: clipExport.ts hoeft
+// verder niets van hls.js te weten, en dit blijft ook bruikbaar als
+// VideoPlayer.vue ooit een ander HLS-type zou gebruiken.
+export interface HlsLike {
+	levels: { width: number }[];
+	currentLevel: number;
+}
+
+/** Kiest de HLS-kwaliteitslaag die qua breedte het dichtst bij `targetWidth`
+ * zit i.p.v. altijd de (vaak 1080p) laag die hls.js toevallig al gekozen
+ * had -- decoderen op volle resolutie en dan via canvas downschalen naar
+ * MAX_WIDTH bleek in de praktijk merkbaar te haperen. Geeft de vorige laag
+ * terug zodat de kijker na de opname weer terug kan naar de kwaliteit die
+ * hls.js zelf (adaptief, op bandbreedte) had gekozen. */
+function selectExportQuality(hls: HlsLike, targetWidth: number): number {
+	const previousLevel = hls.currentLevel;
+	if (hls.levels.length === 0) return previousLevel;
+	let bestIndex = 0;
+	let bestDiff = Infinity;
+	hls.levels.forEach((level, i) => {
+		const diff = Math.abs(level.width - targetWidth);
+		if (diff < bestDiff) {
+			bestDiff = diff;
+			bestIndex = i;
+		}
+	});
+	hls.currentLevel = bestIndex;
+	return previousLevel;
+}
+
 /** Neemt `durationSeconds` op vanaf het huidige afspeelpunt van `video`,
  * overlay (badges/naamplaatje/titelkaart, de echte VideoOverlay.vue-DOM)
  * inbegrepen, en levert een afspeelbare WebM-blob op. Vereist dat `video`
  * CORS-schoon is (crossorigin="anonymous" + de bron stuurt
  * Access-Control-Allow-Origin), anders raakt het tussenliggende canvas
- * "tainted" en gooit captureStream() een SecurityError. */
+ * "tainted" en gooit captureStream() een SecurityError. `hls` is optioneel:
+ * zonder HLS (bv. Safari's native afspeelpad) wordt gewoon op de huidige
+ * decoderesolutie opgenomen. */
 export async function recordClip(
 	video: HTMLVideoElement,
 	overlayEl: Element,
 	durationSeconds: number,
 	onProgress?: (fraction: number) => void,
+	hls?: HlsLike | null,
 ): Promise<ClipExportResult> {
 	const sourceWidth = video.videoWidth || 640;
 	const sourceHeight = video.videoHeight || 360;
@@ -176,10 +209,31 @@ export async function recordClip(
 	const width = Math.round(sourceWidth * scale);
 	const height = Math.round(sourceHeight * scale);
 
+	const previousLevel = hls ? selectExportQuality(hls, width) : null;
+	// Korte marge zodat hls.js het eerste segment van de nieuwe laag kan
+	// laden vóór de opname begint -- anders tonen de eerste frames nog de
+	// oude (hogere) resolutie terwijl de rest al is omgeschakeld.
+	if (hls) await new Promise((resolve) => setTimeout(resolve, 400));
+
 	// video.currentTime moet daadwerkelijk lopen tijdens het opnemen -- een
 	// gepauzeerde video zou hetzelfde frame durationSeconds lang herhalen.
 	if (video.paused) await video.play().catch(() => {});
 
+	try {
+		return await recordFrames(video, overlayEl, durationSeconds, width, height, onProgress);
+	} finally {
+		if (hls && previousLevel !== null) hls.currentLevel = previousLevel;
+	}
+}
+
+async function recordFrames(
+	video: HTMLVideoElement,
+	overlayEl: Element,
+	durationSeconds: number,
+	width: number,
+	height: number,
+	onProgress?: (fraction: number) => void,
+): Promise<ClipExportResult> {
 	// Logo('s) van de nu al zichtbare spreker vast ophalen/cachen (zie
 	// inlineImages/inlineImagesSync): zonder deze warmronde zou zelfs de
 	// eerste spreker van de clip zijn logo missen totdat de achtergrondfetch

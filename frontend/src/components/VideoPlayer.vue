@@ -188,7 +188,18 @@ function skipBy(deltaSeconds: number) {
 // gebruikt om het videoframe + overlay samen te vangen -- crossorigin
 // hieronder is daar ook voor nodig (anders raakt dat canvas "tainted" en
 // weigert captureStream()).
-defineExpose({ fatalError, videoEl });
+//
+// getHlsInstance: idem voor clipExport.ts -- het HLS-manifest bevat meestal
+// meerdere resolutie-varianten (Stream(01)..(05), zie
+// docs/tk-data-sources-overview.md); voor een export op MAX_WIDTH (640px)
+// heeft decoderen+downschalen van de volle 1080p-variant geen zin en kostte
+// in de praktijk merkbaar haperende opnames. Alleen `hls` zelf blootgeven
+// (niet een losse "kies resolutie X"-methode hier): welke resolutie
+// wenselijk is hangt af van de exportgrootte, die clipExport.ts al kent.
+function getHlsInstance() {
+	return hls;
+}
+defineExpose({ fatalError, videoEl, getHlsInstance });
 </script>
 
 <template>
@@ -254,6 +265,13 @@ defineExpose({ fatalError, videoEl });
 				</svg>
 			</button>
 			<span class="time-label">{{ formatClock(currentTime) }} / {{ formatClock(duration) }}</span>
+			<!-- Ruimte voor een niet-generieke, per-plek control (bv. de
+			     argumentenlijst-toggle op /debatten/[id]/ als die lijst is
+			     ingeklapt): hoort qua herkomst niet in deze kale mediaplayer,
+			     maar wel qua rij i.p.v. een aparte knoppenrij eronder. -->
+			<slot name="controls-extra" />
+			<!-- Uiterst rechts, ná controls-extra: "naar de volledige pagina"
+			     is de laatste stap in de rij, niet de eerste. -->
 			<a
 				v-if="debateHref"
 				:href="debateHrefWithTime"
@@ -267,11 +285,6 @@ defineExpose({ fatalError, videoEl });
 					<path d="M10 14 21 3" />
 				</svg>
 			</a>
-			<!-- Ruimte voor een niet-generieke, per-plek control (bv. de
-			     argumentenlijst-toggle op /debatten/[id]/ als die lijst is
-			     ingeklapt): hoort qua herkomst niet in deze kale mediaplayer,
-			     maar wel qua rij i.p.v. een aparte knoppenrij eronder. -->
-			<slot name="controls-extra" />
 		</div>
 	</div>
 </template>
@@ -383,7 +396,12 @@ video {
 	color: var(--color-muted);
 }
 
+/* Geen margin-left: auto hier -- staat nu ná de controls-extra-slot (zie
+   template), en DebateVideoView.vue's .controls-extra-group daarin heeft al
+   een eigen margin-left: auto. Twee auto-margins in dezelfde flex-rij
+   verdelen de vrije ruimte over allebei apart i.p.v. samen rechts te
+   blijven; deze knop hoeft alleen nog de normale rij-gap na die groep. */
 .debate-link-button {
-	margin-left: auto;
+	margin-left: 0;
 }
 </style>
