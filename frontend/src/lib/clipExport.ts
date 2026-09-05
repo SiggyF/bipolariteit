@@ -25,14 +25,24 @@ function pickSupportedMimeType(): string {
  * (crossorigin="anonymous" + de bron stuurt Access-Control-Allow-Origin),
  * anders raakt het tussenliggende canvas "tainted" en gooit captureStream()
  * een SecurityError. */
+// Bovengrens voor de exportbreedte: de bronvideo is vaak 1080p, maar
+// full-res per frame tekenen (canvas + SVG-overlay-redraw) én tegelijk
+// VP9-encoden bleek in de praktijk te haperen. Een clip is voor delen
+// bedoeld, geen archiefkwaliteit -- 640px breed is ruim genoeg en scheelt
+// zowel canvas-tekenwerk als encodetijd per frame.
+const MAX_WIDTH = 640;
+
 export async function recordClip(
 	video: HTMLVideoElement,
 	args: Argument[],
 	isVisible: (tag: { perspectief: string }) => boolean,
 	durationSeconds: number,
 ): Promise<ClipExportResult> {
-	const width = video.videoWidth || 640;
-	const height = video.videoHeight || 360;
+	const sourceWidth = video.videoWidth || 640;
+	const sourceHeight = video.videoHeight || 360;
+	const scale = Math.min(1, MAX_WIDTH / sourceWidth);
+	const width = Math.round(sourceWidth * scale);
+	const height = Math.round(sourceHeight * scale);
 	const canvas = document.createElement("canvas");
 	canvas.width = width;
 	canvas.height = height;
