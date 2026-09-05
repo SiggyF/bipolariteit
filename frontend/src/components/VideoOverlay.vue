@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import { debateName } from "../lib/debateName";
 import { formatDate } from "../lib/formatDate";
 import { perspectiefWeergaveNaam, tagIconPath } from "../lib/tagIcon";
@@ -122,10 +122,18 @@ const badges = computed(() =>
 		})),
 	),
 );
+
+// rootEl: blootgesteld zodat clipExport.ts (issue #180) deze echte,
+// ongewijzigde DOM-boom (incl. de bestaande, door een designer gemaakte CSS)
+// via een SVG <foreignObject> naar canvas kan renderen -- geen aparte
+// SVG-herbouw van de overlay nodig, één implementatie voor live scherm én
+// export.
+const rootEl = ref<HTMLDivElement | null>(null);
+defineExpose({ rootEl });
 </script>
 
 <template>
-	<div class="video-overlay">
+	<div ref="rootEl" class="video-overlay">
 		<Transition name="badge">
 			<div v-if="showTitleCard && debateTitle" class="title-card">
 				<span class="title-card-name">{{ debateTitle }}</span>

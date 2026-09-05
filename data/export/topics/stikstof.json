@@ -167168,7 +167168,72 @@
           "attributed_source_text": "onderzoeken"
         }
       ],
-      "tags": [],
+      "tags": [
+        {
+          "sleutel": "Arena-Parlement",
+          "beschrijving": "Debat of uitspraak afkomstig uit de Eerste of Tweede Kamer.",
+          "labelgroep": "Issue Arena",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Bron is een Tweede Kamer-debat (documents.source.type = 'tweede_kamer')."
+        },
+        {
+          "sleutel": "Actor-Politicus",
+          "beschrijving": "Een gekozen volksvertegenwoordiger, bewindspersoon of partijvertegenwoordiger.",
+          "labelgroep": "Actor Type",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Spreker heeft een geregistreerde partij (SGP)."
+        },
+        {
+          "sleutel": "Context-Commissie",
+          "beschrijving": "Commissiedebat of wetgevingsoverleg; technisch en gedetailleerd van aard met een hogere argumentatieve kwaliteit.",
+          "labelgroep": "Parlementaire Context",
+          "perspectief": "Methodologisch & Contextueel",
+          "created_by": "derived",
+          "reden": "Afgeleid van VLOS-activiteitsoort 'Commissiedebat'."
+        },
+        {
+          "sleutel": "Walton-Expertise",
+          "beschrijving": "Het argument leunt op de autoriteit, bevindingen of de verklaring van een specialist of expert.",
+          "labelgroep": "Redeneerschema",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De claim wordt onderbouwd door verwezing naar 'onderzoeken' die specifieke bevindingen tonen over uitspoelingseffecten."
+        },
+        {
+          "sleutel": "Frame-Thematisch",
+          "beschrijving": "Het benaderen van de kwestie vanuit een breder maatschappelijk, statistisch of historisch kader.",
+          "labelgroep": "Framing-Focus",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "Het argument beroept zich op algemene trends ('meer bouwland ontstaat') en brede onderzoeksresultaten in plaats van een specifiek individueel incident."
+        },
+        {
+          "sleutel": "Ideologie-TAN",
+          "beschrijving": "Conservatief, traditioneel, nationalistisch (Traditional, Authoritarian, Nationalist).",
+          "labelgroep": "Cultureel-Ideologische Breuklijn",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "De spreker (SGP) betwist de Europese Commissie en verdedigt traditionele landbouwpraktijken, wat past binnen een conservatief en nationaal-soverein standpunt."
+        },
+        {
+          "sleutel": "Bewijs-Expert",
+          "beschrijving": "Onderbouwd met de consensus, verklaring of het oordeel van een erkend specialist.",
+          "labelgroep": "Type Bewijsvoering",
+          "perspectief": "Methodologisch & Contextueel",
+          "created_by": "llm",
+          "reden": "Er wordt verwezen naar 'onderzoeken' als autoriteit om de claim over het ontbreken van ongunstige effecten te staven."
+        },
+        {
+          "sleutel": "Stijl-Aangekondigde-Opsomming",
+          "beschrijving": "Vooraf het aantal elementen aankondigen (twee, drie, vijf, ...), gevolgd door een opsomming van precies dat aantal.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De spreker kondigt expliciet aan 'om twee redenen' te argumenteren, waarna twee punten worden opgesomd."
+        }
+      ],
       "oppositions": []
     },
     {
@@ -167200,7 +167265,112 @@
         "regering": "Kabinet-Schoof"
       },
       "claims": [],
-      "tags": [],
+      "tags": [
+        {
+          "sleutel": "Arena-Parlement",
+          "beschrijving": "Debat of uitspraak afkomstig uit de Eerste of Tweede Kamer.",
+          "labelgroep": "Issue Arena",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Bron is een Tweede Kamer-debat (documents.source.type = 'tweede_kamer')."
+        },
+        {
+          "sleutel": "Actor-Politicus",
+          "beschrijving": "Een gekozen volksvertegenwoordiger, bewindspersoon of partijvertegenwoordiger.",
+          "labelgroep": "Actor Type",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Spreker heeft een geregistreerde partij (PvdD)."
+        },
+        {
+          "sleutel": "Context-Commissie",
+          "beschrijving": "Commissiedebat of wetgevingsoverleg; technisch en gedetailleerd van aard met een hogere argumentatieve kwaliteit.",
+          "labelgroep": "Parlementaire Context",
+          "perspectief": "Methodologisch & Contextueel",
+          "created_by": "derived",
+          "reden": "Afgeleid van VLOS-activiteitsoort 'Commissiedebat'."
+        },
+        {
+          "sleutel": "Walton-Regel",
+          "beschrijving": "Het argument beroept zich op een reeds gevestigde wet, formele regel of breed geaccepteerde maatschappelijke norm.",
+          "labelgroep": "Redeneerschema",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het argument leunt op de bestaande wet als formele regel die door de overheid gerespecteerd moet worden."
+        },
+        {
+          "sleutel": "Debatzet-Herformuleren",
+          "beschrijving": "Het vertekenen of overdrijven van het standpunt van de opponent om dit makkelijker te kunnen aanvallen.",
+          "labelgroep": "Debatzetten",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het standpunt van de SGP wordt vertaald naar 'pleiten voor totale chaos' en 'de wet aantasten', een overdrijving van hun feitelijke politieke positie om deze makkelijker aan te vallen."
+        },
+        {
+          "sleutel": "Debatzet-Persoon-Aanspreken",
+          "beschrijving": "Persoonlijke aanval op de tegenstander (op de man spelen) in plaats van een inhoudelijke weerlegging.",
+          "labelgroep": "Debatzetten",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De spreker begint met een karakterisering van de SGP ('doet zich altijd zo netjes voor') in plaats van direct op de inhoudelijke argumenten in te gaan."
+        },
+        {
+          "sleutel": "Frame-Thematisch",
+          "beschrijving": "Het benaderen van de kwestie vanuit een breder maatschappelijk, statistisch of historisch kader.",
+          "labelgroep": "Framing-Focus",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "Het argument richt zich op het algemene principe van wettelijke plichtsbetrachting en de rol van de overheid, niet op een specifiek individueel incident."
+        },
+        {
+          "sleutel": "Frame-Conflict",
+          "beschrijving": "De nadruk ligt op de felle strijd of meningsverschillen tussen personen, partijen of groepen.",
+          "labelgroep": "Generieke Nieuwsframes",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "Er is sprake van een scherpe tegenstelling tussen de SGP (beschuldigd van chaos) en de PvdD/MOB (verdedigers van de wet)."
+        },
+        {
+          "sleutel": "Frame-Verantwoordelijkheid",
+          "beschrijving": "De nadruk ligt op de schuldvraag of de plicht tot het oplossen van het probleem.",
+          "labelgroep": "Generieke Nieuwsframes",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "De nadruk ligt op de plicht van de politiek en de overheid om zich aan de eigen wetten te houden."
+        },
+        {
+          "sleutel": "Ideologie-GAL",
+          "beschrijving": "Progressief, ecologisch, kosmopolitisch (Green, Alternative, Libertarian).",
+          "labelgroep": "Cultureel-Ideologische Breuklijn",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "De spreker (PvdD) verdedigt het handelen van milieuorganisaties (MOB) en benadrukt het belang van naleving van wetten ter bescherming van de regel van recht, wat past binnen het progressieve/ecologische spectrum."
+        },
+        {
+          "sleutel": "Moraliteit-Autoriteit",
+          "beschrijving": "Gericht op respect voor traditie, legitieme hiërarchie, wetten en maatschappelijke orde.",
+          "labelgroep": "Morele Fundamenten",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "Het argument beroept zich sterk op respect voor de wet en de maatschappelijke orde ('zich aan de eigen wetten laten houden')."
+        },
+        {
+          "sleutel": "Meta-Bevoegdheid",
+          "beschrijving": "Uitingen over het formele mandaat, de wettelijke of constitutionele autoriteit, of de institutionele taakverdeling om over de kwestie te beslissen.",
+          "labelgroep": "Metadiscussie",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het argument draait om de wettelijke autoriteit en de plicht van de overheid om binnen de kaders van de wet te opereren."
+        },
+        {
+          "sleutel": "Stijl-Antithese",
+          "beschrijving": "Het naast elkaar plaatsen van twee tegengestelde begrippen of ideeën.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Er wordt een contrast getrokken tussen het 'netjes voor doen' van de SGP en de 'totale chaos' die volgens de spreker het gevolg zou zijn."
+        }
+      ],
       "oppositions": []
     },
     {
@@ -167232,7 +167402,96 @@
         "regering": "Kabinet-Schoof"
       },
       "claims": [],
-      "tags": [],
+      "tags": [
+        {
+          "sleutel": "Arena-Parlement",
+          "beschrijving": "Debat of uitspraak afkomstig uit de Eerste of Tweede Kamer.",
+          "labelgroep": "Issue Arena",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Bron is een Tweede Kamer-debat (documents.source.type = 'tweede_kamer')."
+        },
+        {
+          "sleutel": "Actor-Politicus",
+          "beschrijving": "Een gekozen volksvertegenwoordiger, bewindspersoon of partijvertegenwoordiger.",
+          "labelgroep": "Actor Type",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Spreker heeft een geregistreerde partij (PvdD)."
+        },
+        {
+          "sleutel": "Context-Commissie",
+          "beschrijving": "Commissiedebat of wetgevingsoverleg; technisch en gedetailleerd van aard met een hogere argumentatieve kwaliteit.",
+          "labelgroep": "Parlementaire Context",
+          "perspectief": "Methodologisch & Contextueel",
+          "created_by": "derived",
+          "reden": "Afgeleid van VLOS-activiteitsoort 'Commissiedebat'."
+        },
+        {
+          "sleutel": "Walton-Regel",
+          "beschrijving": "Het argument beroept zich op een reeds gevestigde wet, formele regel of breed geaccepteerde maatschappelijke norm.",
+          "labelgroep": "Redeneerschema",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het argument beroept zich op de verplichting om te voldoen aan reeds gevestigde regelgeving."
+        },
+        {
+          "sleutel": "Debatzet-Persoon-Aanspreken",
+          "beschrijving": "Persoonlijke aanval op de tegenstander (op de man spelen) in plaats van een inhoudelijke weerlegging.",
+          "labelgroep": "Debatzetten",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De spreker richt zich op de motieven en intenties van de SGP ('puur omdat') in plaats van op de inhoudelijke argumenten van die partij."
+        },
+        {
+          "sleutel": "Frame-Thematisch",
+          "beschrijving": "Het benaderen van de kwestie vanuit een breder maatschappelijk, statistisch of historisch kader.",
+          "labelgroep": "Framing-Focus",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "Het argument benoemt een structureel conflict tussen politieke partijen en de rechtsstaat, zonder in te zoomen op een specifiek individueel incident."
+        },
+        {
+          "sleutel": "Frame-Conflict",
+          "beschrijving": "De nadruk ligt op de felle strijd of meningsverschillen tussen personen, partijen of groepen.",
+          "labelgroep": "Generieke Nieuwsframes",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "De tekst schetst een strijd tussen de SGP en MOB, waarbij de SGP wordt beschuldigd van politieke aanval ('a de schandpaal nagelen')."
+        },
+        {
+          "sleutel": "Frame-Verantwoordelijkheid",
+          "beschrijving": "De nadruk ligt op de schuldvraag of de plicht tot het oplossen van het probleem.",
+          "labelgroep": "Generieke Nieuwsframes",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "Er wordt nadruk gelegd op de plicht van de overheid om aan haar eigen regelgeving te voldoen."
+        },
+        {
+          "sleutel": "Ideologie-GAL",
+          "beschrijving": "Progressief, ecologisch, kosmopolitisch (Green, Alternative, Libertarian).",
+          "labelgroep": "Cultureel-Ideologische Breuklijn",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "De spreker (PvdD) verdedigt het juridisch afdwingen van milieuwetgeving, wat past binnen de progressieve en ecologische GAL-dimensie."
+        },
+        {
+          "sleutel": "Moraliteit-Autoriteit",
+          "beschrijving": "Gericht op respect voor traditie, legitieme hiërarchie, wetten en maatschappelijke orde.",
+          "labelgroep": "Morele Fundamenten",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "De nadruk ligt op het respecteren en afdwingen van bestaande wetten en regelgeving ('eigen regelgeving')."
+        },
+        {
+          "sleutel": "Stijl-Slogan",
+          "beschrijving": "Beknopte, pakkende frase.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De uitdrukking 'aan de schandpaal nagelen' is een beknopte, beeldende en pakkende frase."
+        }
+      ],
       "oppositions": []
     },
     {
@@ -167269,7 +167528,56 @@
           "attributed_source_text": "wetenschappelijke rapporten"
         }
       ],
-      "tags": [],
+      "tags": [
+        {
+          "sleutel": "Arena-Parlement",
+          "beschrijving": "Debat of uitspraak afkomstig uit de Eerste of Tweede Kamer.",
+          "labelgroep": "Issue Arena",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Bron is een Tweede Kamer-debat (documents.source.type = 'tweede_kamer')."
+        },
+        {
+          "sleutel": "Actor-Politicus",
+          "beschrijving": "Een gekozen volksvertegenwoordiger, bewindspersoon of partijvertegenwoordiger.",
+          "labelgroep": "Actor Type",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Spreker heeft een geregistreerde partij (SGP)."
+        },
+        {
+          "sleutel": "Context-Commissie",
+          "beschrijving": "Commissiedebat of wetgevingsoverleg; technisch en gedetailleerd van aard met een hogere argumentatieve kwaliteit.",
+          "labelgroep": "Parlementaire Context",
+          "perspectief": "Methodologisch & Contextueel",
+          "created_by": "derived",
+          "reden": "Afgeleid van VLOS-activiteitsoort 'Commissiedebat'."
+        },
+        {
+          "sleutel": "Walton-Expertise",
+          "beschrijving": "Het argument leunt op de autoriteit, bevindingen of de verklaring van een specialist of expert.",
+          "labelgroep": "Redeneerschema",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De spreker onderbouwt zijn standpunt door te verwijzen naar 'wetenschappelijke rapporten' als autoriteit die ten grondslag liggen aan de claim."
+        },
+        {
+          "sleutel": "Frame-Thematisch",
+          "beschrijving": "Het benaderen van de kwestie vanuit een breder maatschappelijk, statistisch of historisch kader.",
+          "labelgroep": "Framing-Focus",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "Het argument beroept zich op algemene wetenschappelijke rapporten en bredere beleidsdoelen (waterkwaliteit) in plaats van een specifiek incident of persoonlijk verhaal."
+        },
+        {
+          "sleutel": "Bewijs-Expert",
+          "beschrijving": "Onderbouwd met de consensus, verklaring of het oordeel van een erkend specialist.",
+          "labelgroep": "Type Bewijsvoering",
+          "perspectief": "Methodologisch & Contextueel",
+          "created_by": "llm",
+          "reden": "De claim wordt gesteund door verwezing naar 'wetenschappelijke rapporten', wat duidt op onderbouwing door specialistisch onderzoek."
+        }
+      ],
       "oppositions": []
     },
     {
@@ -167314,7 +167622,80 @@
           "attributed_source_text": null
         }
       ],
-      "tags": [],
+      "tags": [
+        {
+          "sleutel": "Arena-Parlement",
+          "beschrijving": "Debat of uitspraak afkomstig uit de Eerste of Tweede Kamer.",
+          "labelgroep": "Issue Arena",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Bron is een Tweede Kamer-debat (documents.source.type = 'tweede_kamer')."
+        },
+        {
+          "sleutel": "Actor-Politicus",
+          "beschrijving": "Een gekozen volksvertegenwoordiger, bewindspersoon of partijvertegenwoordiger.",
+          "labelgroep": "Actor Type",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Spreker heeft een geregistreerde partij (SGP)."
+        },
+        {
+          "sleutel": "Context-Commissie",
+          "beschrijving": "Commissiedebat of wetgevingsoverleg; technisch en gedetailleerd van aard met een hogere argumentatieve kwaliteit.",
+          "labelgroep": "Parlementaire Context",
+          "perspectief": "Methodologisch & Contextueel",
+          "created_by": "derived",
+          "reden": "Afgeleid van VLOS-activiteitsoort 'Commissiedebat'."
+        },
+        {
+          "sleutel": "Walton-Regel",
+          "beschrijving": "Het argument beroept zich op een reeds gevestigde wet, formele regel of breed geaccepteerde maatschappelijke norm.",
+          "labelgroep": "Redeneerschema",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het argument beroept zich op de geldigheid van de Europese regelgeving en de bijbehorende juridische procedures (infractieprocedure) als reeds gevestigde norm."
+        },
+        {
+          "sleutel": "Frame-Thematisch",
+          "beschrijving": "Het benaderen van de kwestie vanuit een breder maatschappelijk, statistisch of historisch kader.",
+          "labelgroep": "Framing-Focus",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "Het argument benadert de kwestie vanuit een breed institutioneel en juridisch kader (Europese Commissie, infractieprocedures, landen in Europa) in plaats van een specifiek incident."
+        },
+        {
+          "sleutel": "Frame-Verantwoordelijkheid",
+          "beschrijving": "De nadruk ligt op de schuldvraag of de plicht tot het oplossen van het probleem.",
+          "labelgroep": "Generieke Nieuwsframes",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "De nadruk ligt op de plicht van Nederland om zich te onderwerpen aan de juridische consequenties (infractieprocedure) van het Europese besluit."
+        },
+        {
+          "sleutel": "Ideologie-TAN",
+          "beschrijving": "Conservatief, traditioneel, nationalistisch (Traditional, Authoritarian, Nationalist).",
+          "labelgroep": "Cultureel-Ideologische Breuklijn",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "De spreker (SGP) pleit voor strikt naleven van bestaande regels en procedures, wat past bij een conservatief en autoritair profiel dat orde en wetgevolg hoog stelt."
+        },
+        {
+          "sleutel": "Moraliteit-Autoriteit",
+          "beschrijving": "Gericht op respect voor traditie, legitieme hiërarchie, wetten en maatschappelijke orde.",
+          "labelgroep": "Morele Fundamenten",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "Het argument roept op tot respect voor de hiërarchie en de wet door de mogelijke infractieprocedure te accepteren als legitiem gevolg van het Europese besluit."
+        },
+        {
+          "sleutel": "Meta-Bevoegdheid",
+          "beschrijving": "Uitingen over het formele mandaat, de wettelijke of constitutionele autoriteit, of de institutionele taakverdeling om over de kwestie te beslissen.",
+          "labelgroep": "Metadiscussie",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De spreker betoogt over de formele autoriteit en bevoegdheid van de Europese Commissie via het Nitraatcomité om besluiten te nemen die bindend zijn voor Nederland."
+        }
+      ],
       "oppositions": []
     },
     {
@@ -167351,7 +167732,72 @@
           "attributed_source_text": null
         }
       ],
-      "tags": [],
+      "tags": [
+        {
+          "sleutel": "Arena-Parlement",
+          "beschrijving": "Debat of uitspraak afkomstig uit de Eerste of Tweede Kamer.",
+          "labelgroep": "Issue Arena",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Bron is een Tweede Kamer-debat (documents.source.type = 'tweede_kamer')."
+        },
+        {
+          "sleutel": "Actor-Politicus",
+          "beschrijving": "Een gekozen volksvertegenwoordiger, bewindspersoon of partijvertegenwoordiger.",
+          "labelgroep": "Actor Type",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Spreker heeft een geregistreerde partij (SGP)."
+        },
+        {
+          "sleutel": "Context-Commissie",
+          "beschrijving": "Commissiedebat of wetgevingsoverleg; technisch en gedetailleerd van aard met een hogere argumentatieve kwaliteit.",
+          "labelgroep": "Parlementaire Context",
+          "perspectief": "Methodologisch & Contextueel",
+          "created_by": "derived",
+          "reden": "Afgeleid van VLOS-activiteitsoort 'Commissiedebat'."
+        },
+        {
+          "sleutel": "Walton-Consequentie",
+          "beschrijving": "Het verdedigen of aanvallen van een standpunt op basis van de verwachte praktische (voordelige of nadelige) gevolgen.",
+          "labelgroep": "Redeneerschema",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het argument stelt dat men niet moet opgeven omdat het alternatief 'objectief beter' is voor de waterkwaliteit, dus het verdedigt een standpunt op basis van de verwachte positieve consequentie."
+        },
+        {
+          "sleutel": "Frame-Thematisch",
+          "beschrijving": "Het benaderen van de kwestie vanuit een breder maatschappelijk, statistisch of historisch kader.",
+          "labelgroep": "Framing-Focus",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "Het argument richt zich op het algemene beleidsdoel van waterkwaliteit en de procedurele afwijzing daarvan, zonder in te zoomen op een specifiek incident of persoon."
+        },
+        {
+          "sleutel": "Frame-Moraliteit",
+          "beschrijving": "Inbranding vanuit ethische plichten, spirituele of religieuze principes.",
+          "labelgroep": "Generieke Nieuwsframes",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "De spreker frameert het behoud van waterkwaliteit als een morele plicht ('objectief beter') die niet zomaar mag worden opgegeven."
+        },
+        {
+          "sleutel": "Ideologie-GAL",
+          "beschrijving": "Progressief, ecologisch, kosmopolitisch (Green, Alternative, Libertarian).",
+          "labelgroep": "Cultureel-Ideologische Breuklijn",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "De spreker benadrukt het belang van 'waterkwaliteit' en het afwijzen van maatregelen die daarobjectief beter voor zijn, wat aansluit bij ecologische waarden."
+        },
+        {
+          "sleutel": "Moraliteit-Zorg",
+          "beschrijving": "Gericht op empathie, compassie en het voorkomen van leed en schade bij kwetsbaren.",
+          "labelgroep": "Morele Fundamenten",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "De focus op 'waterkwaliteit' en het voorkomen dat iets 'objectief beters' wordt afgewezen, impliceert zorg voor de omgeving en het voorkomen van schade."
+        }
+      ],
       "oppositions": []
     },
     {
@@ -167404,7 +167850,96 @@
           "attributed_source_text": null
         }
       ],
-      "tags": [],
+      "tags": [
+        {
+          "sleutel": "Arena-Parlement",
+          "beschrijving": "Debat of uitspraak afkomstig uit de Eerste of Tweede Kamer.",
+          "labelgroep": "Issue Arena",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Bron is een Tweede Kamer-debat (documents.source.type = 'tweede_kamer')."
+        },
+        {
+          "sleutel": "Actor-Politicus",
+          "beschrijving": "Een gekozen volksvertegenwoordiger, bewindspersoon of partijvertegenwoordiger.",
+          "labelgroep": "Actor Type",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Spreker heeft een geregistreerde partij (PVV)."
+        },
+        {
+          "sleutel": "Context-Commissie",
+          "beschrijving": "Commissiedebat of wetgevingsoverleg; technisch en gedetailleerd van aard met een hogere argumentatieve kwaliteit.",
+          "labelgroep": "Parlementaire Context",
+          "perspectief": "Methodologisch & Contextueel",
+          "created_by": "derived",
+          "reden": "Afgeleid van VLOS-activiteitsoort 'Commissiedebat'."
+        },
+        {
+          "sleutel": "Walton-Expertise",
+          "beschrijving": "Het argument leunt op de autoriteit, bevindingen of de verklaring van een specialist of expert.",
+          "labelgroep": "Redeneerschema",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De spreker beroept zich expliciet op professor Petersen als de juiste persoon om de juridisch houdbare onderbouwing te leiden, vanwege zijn deskundigheid."
+        },
+        {
+          "sleutel": "Frame-Thematisch",
+          "beschrijving": "Het benaderen van de kwestie vanuit een breder maatschappelijk, statistisch of historisch kader.",
+          "labelgroep": "Framing-Focus",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "Het argument behandelt de kwestie vanuit een breed maatschappelijk en juridisch kader ('vijftien jaar chaos', 'tsunami aan rechtszaken') in plaats van één specifiek incident."
+        },
+        {
+          "sleutel": "Frame-Verantwoordelijkheid",
+          "beschrijving": "De nadruk ligt op de schuldvraag of de plicht tot het oplossen van het probleem.",
+          "labelgroep": "Generieke Nieuwsframes",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "De nadruk ligt op de plicht van de minister om tijdig actie te ondernemen en de schuldvraag bij de eerdere kabinetten ('chaos', 'onterecht in de kou gezet')."
+        },
+        {
+          "sleutel": "Ideologie-TAN",
+          "beschrijving": "Conservatief, traditioneel, nationalistisch (Traditional, Authoritarian, Nationalist).",
+          "labelgroep": "Cultureel-Ideologische Breuklijn",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "De spreker (PVV) benadrukt de noodzaak van juridische orde, respect voor wetgeving en het beëindigen van 'chaos', wat aansluit bij conservatieve en autoritaire waarden."
+        },
+        {
+          "sleutel": "Moraliteit-Autoriteit",
+          "beschrijving": "Gericht op respect voor traditie, legitieme hiërarchie, wetten en maatschappelijke orde.",
+          "labelgroep": "Morele Fundamenten",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "Er wordt geappelleerd aan juridische onderbouwing die 'standhoudt' en het beëindigen van rechtszaken, wat wijst op respect voor wet, orde en hiërarchie."
+        },
+        {
+          "sleutel": "Moraliteit-Eerlijkheid",
+          "beschrijving": "Gericht op gelijke kansen, gelijke rechten en onpartijdige behandeling (equality).",
+          "labelgroep": "Morele Fundamenten",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "De bewering dat boeren 'onterecht in de kou zijn gezet' impliceert een schending van gelijke behandeling en rechtvaardigheid."
+        },
+        {
+          "sleutel": "Bewijs-Expert",
+          "beschrijving": "Onderbouwd met de consensus, verklaring of het oordeel van een erkend specialist.",
+          "labelgroep": "Type Bewijsvoering",
+          "perspectief": "Methodologisch & Contextueel",
+          "created_by": "llm",
+          "reden": "De argumentatie leunt op de autoriteit en kennis van professor Petersen ('Hij schreef de wetenschappelijke onderbouwing en weet precies wat nodig is')."
+        },
+        {
+          "sleutel": "Meta-Agenda-Tijdigheid",
+          "beschrijving": "Uitingen over de chronologische geschiktheid, de prioriteitstelling of de urgentie van de discussie op dit specifieke moment.",
+          "labelgroep": "Metadiscussie",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De spreker dringt er specifiek op aan dat de maatregel vóór 1 oktober van dit jaar geregeld moet zijn, wat de urgentie en timing van de discussie centraal stelt."
+        }
+      ],
       "oppositions": []
     },
     {
@@ -167441,7 +167976,96 @@
           "attributed_source_text": null
         }
       ],
-      "tags": [],
+      "tags": [
+        {
+          "sleutel": "Arena-Parlement",
+          "beschrijving": "Debat of uitspraak afkomstig uit de Eerste of Tweede Kamer.",
+          "labelgroep": "Issue Arena",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Bron is een Tweede Kamer-debat (documents.source.type = 'tweede_kamer')."
+        },
+        {
+          "sleutel": "Actor-Politicus",
+          "beschrijving": "Een gekozen volksvertegenwoordiger, bewindspersoon of partijvertegenwoordiger.",
+          "labelgroep": "Actor Type",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Spreker heeft een geregistreerde partij (PVV)."
+        },
+        {
+          "sleutel": "Context-Commissie",
+          "beschrijving": "Commissiedebat of wetgevingsoverleg; technisch en gedetailleerd van aard met een hogere argumentatieve kwaliteit.",
+          "labelgroep": "Parlementaire Context",
+          "perspectief": "Methodologisch & Contextueel",
+          "created_by": "derived",
+          "reden": "Afgeleid van VLOS-activiteitsoort 'Commissiedebat'."
+        },
+        {
+          "sleutel": "Debatzet-Gevoelens-Verwoorden",
+          "beschrijving": "Emotioneel argumenteren gericht op het oproepen van angst, woede of medelijden bij de toehoorder.",
+          "labelgroep": "Debatzetten",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het gebruik van het emotioneel geladen woord 'gegijzeld' en 'absurd' dient om woede en frustratie op te roepen bij de toehoorder over de beleidsvorming."
+        },
+        {
+          "sleutel": "Frame-Thematisch",
+          "beschrijving": "Het benaderen van de kwestie vanuit een breder maatschappelijk, statistisch of historisch kader.",
+          "labelgroep": "Framing-Focus",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "Het argument richt zich op het algemene beleidsproces en de machtsverhoudingen tussen instituties, niet op een specifiek incident of individu."
+        },
+        {
+          "sleutel": "Frame-Conflict",
+          "beschrijving": "De nadruk ligt op de felle strijd of meningsverschillen tussen personen, partijen of groepen.",
+          "labelgroep": "Generieke Nieuwsframes",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "De tekst schetst een strijd tussen de politiek ('wij') en externe actoren ('natuurclubjes en rechters'), wat een duidelijke tegenstelling en conflict benadrukt."
+        },
+        {
+          "sleutel": "Ideologie-TAN",
+          "beschrijving": "Conservatief, traditioneel, nationalistisch (Traditional, Authoritarian, Nationalist).",
+          "labelgroep": "Cultureel-Ideologische Breuklijn",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "De spreker benadrukt nationale soevereiniteit en autoriteit ('Nederland gegijzeld', 'beleid maken in huis') ten koste van externe invloeden, wat past bij de conservatief-nationaal autoritaire dimensie."
+        },
+        {
+          "sleutel": "Moraliteit-Autoriteit",
+          "beschrijving": "Gericht op respect voor traditie, legitieme hiërarchie, wetten en maatschappelijke orde.",
+          "labelgroep": "Morele Fundamenten",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "Er wordt geappelleerd aan de legitieme autoriteit van de politiek om beleid te maken, zonder inmenging van andere instanties."
+        },
+        {
+          "sleutel": "Moraliteit-Loyaliteit",
+          "beschrijving": "Gericht op groeps-solidariteit, vaderlandsliefde en trouw aan de eigen gemeenschap (in-group).",
+          "labelgroep": "Morele Fundamenten",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "De nadruk op 'Nederland' en 'in huis' impliceert een voorkeur voor nationale belangen en soevereiniteit boven externe of supranationale invloeden."
+        },
+        {
+          "sleutel": "Meta-Bevoegdheid",
+          "beschrijving": "Uitingen over het formele mandaat, de wettelijke of constitutionele autoriteit, of de institutionele taakverdeling om over de kwestie te beslissen.",
+          "labelgroep": "Metadiscussie",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De spreker betwist de legitimiteit van de invloed van rechters en natuurorganisaties op het beleidsproces, wat gaat over wie het mandaat heeft om te beslissen."
+        },
+        {
+          "sleutel": "Stijl-Slogan",
+          "beschrijving": "Beknopte, pakkende frase.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De zin 'Nederland vervolgens gegijzeld wordt door natuurclubjes' fungeert als een beknopte, pakkende frase die een complex probleem reduceert tot een sterke stelling."
+        }
+      ],
       "oppositions": []
     },
     {
@@ -167482,7 +168106,80 @@
           "attributed_source_text": null
         }
       ],
-      "tags": [],
+      "tags": [
+        {
+          "sleutel": "Arena-Parlement",
+          "beschrijving": "Debat of uitspraak afkomstig uit de Eerste of Tweede Kamer.",
+          "labelgroep": "Issue Arena",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Bron is een Tweede Kamer-debat (documents.source.type = 'tweede_kamer')."
+        },
+        {
+          "sleutel": "Actor-Politicus",
+          "beschrijving": "Een gekozen volksvertegenwoordiger, bewindspersoon of partijvertegenwoordiger.",
+          "labelgroep": "Actor Type",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Spreker heeft een geregistreerde partij (GroenLinks-PvdA)."
+        },
+        {
+          "sleutel": "Context-Commissie",
+          "beschrijving": "Commissiedebat of wetgevingsoverleg; technisch en gedetailleerd van aard met een hogere argumentatieve kwaliteit.",
+          "labelgroep": "Parlementaire Context",
+          "perspectief": "Methodologisch & Contextueel",
+          "created_by": "derived",
+          "reden": "Afgeleid van VLOS-activiteitsoort 'Commissiedebat'."
+        },
+        {
+          "sleutel": "Walton-Regel",
+          "beschrijving": "Het argument beroept zich op een reeds gevestigde wet, formele regel of breed geaccepteerde maatschappelijke norm.",
+          "labelgroep": "Redeneerschema",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het argument beroept zich op een reeds aangenomen motie van de Kamer als formele richtlijn voor het beleid."
+        },
+        {
+          "sleutel": "Frame-Thematisch",
+          "beschrijving": "Het benaderen van de kwestie vanuit een breder maatschappelijk, statistisch of historisch kader.",
+          "labelgroep": "Framing-Focus",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "Het argument benadert de kwestie vanuit een breed maatschappelijk en politiek kader (Kamer-motie, algemene maatregelen) in plaats van een specifiek incident."
+        },
+        {
+          "sleutel": "Frame-Verantwoordelijkheid",
+          "beschrijving": "De nadruk ligt op de schuldvraag of de plicht tot het oplossen van het probleem.",
+          "labelgroep": "Generieke Nieuwsframes",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "De nadruk ligt op de plicht van de overheid om eerst maatregelen te nemen voordat een ondergrens wordt ingevoerd, en op het ontbreken van deze maatregelen."
+        },
+        {
+          "sleutel": "Ideologie-GAL",
+          "beschrijving": "Progressief, ecologisch, kosmopolitisch (Green, Alternative, Libertarian).",
+          "labelgroep": "Cultureel-Ideologische Breuklijn",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "De spreker is lid van GroenLinks-PvdA en pleit voor het verlagen van stikstofuitstoot, wat past binnen de ecologische en progressieve agenda."
+        },
+        {
+          "sleutel": "Moraliteit-Zorg",
+          "beschrijving": "Gericht op empathie, compassie en het voorkomen van leed en schade bij kwetsbaren.",
+          "labelgroep": "Morele Fundamenten",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "Het streven naar vermindering van stikstofuitstoot impliceert het voorkomen van schade aan het milieu en de natuur."
+        },
+        {
+          "sleutel": "Meta-Agenda-Tijdigheid",
+          "beschrijving": "Uitingen over de chronologische geschiktheid, de prioriteitstelling of de urgentie van de discussie op dit specifieke moment.",
+          "labelgroep": "Metadiscussie",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De spreker betoogt over de chronologische volgorde en prioriteitstelling: maatregelen moeten voorafgaan aan het invoeren van de ondergrens."
+        }
+      ],
       "oppositions": []
     },
     {
@@ -167519,7 +168216,72 @@
           "attributed_source_text": "meneer Petersen"
         }
       ],
-      "tags": [],
+      "tags": [
+        {
+          "sleutel": "Arena-Parlement",
+          "beschrijving": "Debat of uitspraak afkomstig uit de Eerste of Tweede Kamer.",
+          "labelgroep": "Issue Arena",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Bron is een Tweede Kamer-debat (documents.source.type = 'tweede_kamer')."
+        },
+        {
+          "sleutel": "Actor-Politicus",
+          "beschrijving": "Een gekozen volksvertegenwoordiger, bewindspersoon of partijvertegenwoordiger.",
+          "labelgroep": "Actor Type",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Spreker heeft een geregistreerde partij (GroenLinks-PvdA)."
+        },
+        {
+          "sleutel": "Context-Commissie",
+          "beschrijving": "Commissiedebat of wetgevingsoverleg; technisch en gedetailleerd van aard met een hogere argumentatieve kwaliteit.",
+          "labelgroep": "Parlementaire Context",
+          "perspectief": "Methodologisch & Contextueel",
+          "created_by": "derived",
+          "reden": "Afgeleid van VLOS-activiteitsoort 'Commissiedebat'."
+        },
+        {
+          "sleutel": "Walton-Expertise",
+          "beschrijving": "Het argument leunt op de autoriteit, bevindingen of de verklaring van een specialist of expert.",
+          "labelgroep": "Redeneerschema",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De spreker beroept zich op de verklaring van meneer Petersen als autoriteit om de noodzaak van maatregelen te onderbouwen."
+        },
+        {
+          "sleutel": "Frame-Thematisch",
+          "beschrijving": "Het benaderen van de kwestie vanuit een breder maatschappelijk, statistisch of historisch kader.",
+          "labelgroep": "Framing-Focus",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "Het argument richt zich op het algemene beleidskader ('borgd pakket van maatregelen') en de voorwaarden voor stikstofreductie, niet op een enkel incident."
+        },
+        {
+          "sleutel": "Ideologie-GAL",
+          "beschrijving": "Progressief, ecologisch, kosmopolitisch (Green, Alternative, Libertarian).",
+          "labelgroep": "Cultureel-Ideologische Breuklijn",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "De spreker (GroenLinks-PvdA) benadrukt de noodzaak van maatregelen om stikstofuitstoot te verlagen, wat aansluit bij het ecologische profiel van deze ideologie."
+        },
+        {
+          "sleutel": "Moraliteit-Zorg",
+          "beschrijving": "Gericht op empathie, compassie en het voorkomen van leed en schade bij kwetsbaren.",
+          "labelgroep": "Morele Fundamenten",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "Het streven naar het verlagen van stikstofuitstoot impliceert het voorkomen van schade aan het milieu en de natuur."
+        },
+        {
+          "sleutel": "Bewijs-Expert",
+          "beschrijving": "Onderbouwd met de consensus, verklaring of het oordeel van een erkend specialist.",
+          "labelgroep": "Type Bewijsvoering",
+          "perspectief": "Methodologisch & Contextueel",
+          "created_by": "llm",
+          "reden": "De claim wordt gesteund door het oordeel van een specifieke persoon (meneer Petersen) die als deskundige of betrokken partij wordt gepresenteerd."
+        }
+      ],
       "oppositions": []
     },
     {
@@ -167551,7 +168313,80 @@
         "regering": "Kabinet-Schoof"
       },
       "claims": [],
-      "tags": [],
+      "tags": [
+        {
+          "sleutel": "Arena-Parlement",
+          "beschrijving": "Debat of uitspraak afkomstig uit de Eerste of Tweede Kamer.",
+          "labelgroep": "Issue Arena",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Bron is een Tweede Kamer-debat (documents.source.type = 'tweede_kamer')."
+        },
+        {
+          "sleutel": "Actor-Politicus",
+          "beschrijving": "Een gekozen volksvertegenwoordiger, bewindspersoon of partijvertegenwoordiger.",
+          "labelgroep": "Actor Type",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Spreker heeft een geregistreerde partij (PVV)."
+        },
+        {
+          "sleutel": "Context-Commissie",
+          "beschrijving": "Commissiedebat of wetgevingsoverleg; technisch en gedetailleerd van aard met een hogere argumentatieve kwaliteit.",
+          "labelgroep": "Parlementaire Context",
+          "perspectief": "Methodologisch & Contextueel",
+          "created_by": "derived",
+          "reden": "Afgeleid van VLOS-activiteitsoort 'Commissiedebat'."
+        },
+        {
+          "sleutel": "Walton-Consequentie",
+          "beschrijving": "Het verdedigen of aanvallen van een standpunt op basis van de verwachte praktische (voordelige of nadelige) gevolgen.",
+          "labelgroep": "Redeneerschema",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het standpunt wordt onderbouwd door de nadelige praktische consequentie (schade aan dierenwelzijn) van de huidige vergunningspraktijk te benoemen."
+        },
+        {
+          "sleutel": "Frame-Thematisch",
+          "beschrijving": "Het benaderen van de kwestie vanuit een breder maatschappelijk, statistisch of historisch kader.",
+          "labelgroep": "Framing-Focus",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "Het argument benoemt een algemeen structureel probleem ('traineren van het afgeven van een vergunning door provincies') in plaats van een specifiek incident of casus."
+        },
+        {
+          "sleutel": "Frame-Moraliteit",
+          "beschrijving": "Inbranding vanuit ethische plichten, spirituele of religieuze principes.",
+          "labelgroep": "Generieke Nieuwsframes",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "De claim draait om een ethisch principe, namelijk dat het huidige beleid ten koste gaat van 'dierenwelzijn'."
+        },
+        {
+          "sleutel": "Ideologie-TAN",
+          "beschrijving": "Conservatief, traditioneel, nationalistisch (Traditional, Authoritarian, Nationalist).",
+          "labelgroep": "Cultureel-Ideologische Breuklijn",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "De spreker (PVV) en de focus op dierenwelzijn als moreel kompas passen bij de conservatieve, traditionele pijler van de TAN-dimensie, die vaak nadruk legt op bescherming van de natuur en dieren."
+        },
+        {
+          "sleutel": "Moraliteit-Zorg",
+          "beschrijving": "Gericht op empathie, compassie en het voorkomen van leed en schade bij kwetsbaren.",
+          "labelgroep": "Morele Fundamenten",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "De kern van het argument is het voorkomen van leed en schade bij kwetsbare wezens, specifiek dieren, door verwijzing naar 'dierenwelzijn'."
+        },
+        {
+          "sleutel": "Bewijs-Causaal",
+          "beschrijving": "Onderbouwd met een heldere, mechanistische of logische verklaring van oorzaak en gevolg.",
+          "labelgroep": "Type Bewijsvoering",
+          "perspectief": "Methodologisch & Contextueel",
+          "created_by": "llm",
+          "reden": "Er wordt een directe oorzaak-gevolgrelatie gelegd tussen het 'traineren van het afgeven van een vergunning' en de afname van 'dierenwelzijn'."
+        }
+      ],
       "oppositions": []
     },
     {
@@ -167583,7 +168418,96 @@
         "regering": "Kabinet-Schoof"
       },
       "claims": [],
-      "tags": [],
+      "tags": [
+        {
+          "sleutel": "Arena-Parlement",
+          "beschrijving": "Debat of uitspraak afkomstig uit de Eerste of Tweede Kamer.",
+          "labelgroep": "Issue Arena",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Bron is een Tweede Kamer-debat (documents.source.type = 'tweede_kamer')."
+        },
+        {
+          "sleutel": "Actor-Politicus",
+          "beschrijving": "Een gekozen volksvertegenwoordiger, bewindspersoon of partijvertegenwoordiger.",
+          "labelgroep": "Actor Type",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Spreker heeft een geregistreerde partij (PVV)."
+        },
+        {
+          "sleutel": "Context-Commissie",
+          "beschrijving": "Commissiedebat of wetgevingsoverleg; technisch en gedetailleerd van aard met een hogere argumentatieve kwaliteit.",
+          "labelgroep": "Parlementaire Context",
+          "perspectief": "Methodologisch & Contextueel",
+          "created_by": "derived",
+          "reden": "Afgeleid van VLOS-activiteitsoort 'Commissiedebat'."
+        },
+        {
+          "sleutel": "Walton-Expertise",
+          "beschrijving": "Het argument leunt op de autoriteit, bevindingen of de verklaring van een specialist of expert.",
+          "labelgroep": "Redeneerschema",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het argument leunt op de expertise en onafhankelijkheid van nieuwe, gespecialiseerde juristen onder leiding van een professor om het probleem op te lossen."
+        },
+        {
+          "sleutel": "Frame-Thematisch",
+          "beschrijving": "Het benaderen van de kwestie vanuit een breder maatschappelijk, statistisch of historisch kader.",
+          "labelgroep": "Framing-Focus",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "Het argument richt zich op het bredere institutionele probleem ('tsunami aan rechtszaken') en de algemene werkwijze van het ministerie, in plaats van op een enkel specifiek incident."
+        },
+        {
+          "sleutel": "Frame-Verantwoordelijkheid",
+          "beschrijving": "De nadruk ligt op de schuldvraag of de plicht tot het oplossen van het probleem.",
+          "labelgroep": "Generieke Nieuwsframes",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "De nadruk ligt op de plicht van het ministerie en de overheid om een goede onderbouwing te leveren en de rechtszaken op te lossen."
+        },
+        {
+          "sleutel": "Ideologie-TAN",
+          "beschrijving": "Conservatief, traditioneel, nationalistisch (Traditional, Authoritarian, Nationalist).",
+          "labelgroep": "Cultureel-Ideologische Breuklijn",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "De spreker (PVV) pleit voor het doorbreken van een bestaande procedurele impasse door nieuwe autoriteit in te schakelen, wat past bij een conservatieve, ordegerichte benadering van institutionele processen."
+        },
+        {
+          "sleutel": "Moraliteit-Autoriteit",
+          "beschrijving": "Gericht op respect voor traditie, legitieme hiërarchie, wetten en maatschappelijke orde.",
+          "labelgroep": "Morele Fundamenten",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "Er wordt beroep gedaan op de autoriteit van 'frisse juristen' en 'professor Petersen' om orde en effectiviteit in het juridische proces te herstellen."
+        },
+        {
+          "sleutel": "Bewijs-Expert",
+          "beschrijving": "Onderbouwd met de consensus, verklaring of het oordeel van een erkend specialist.",
+          "labelgroep": "Type Bewijsvoering",
+          "perspectief": "Methodologisch & Contextueel",
+          "created_by": "llm",
+          "reden": "De onderbouwing van de claim dat er sneller vooruitgang geboekt kan worden, rust op het inschakelen van erkende specialisten (juristen/professor)."
+        },
+        {
+          "sleutel": "Meta-Vorm-Setting",
+          "beschrijving": "Uitingen over de formele procedure, de interactieve spelregels, het vergaderformat of de fysieke en institutionele context van de uitwisseling.",
+          "labelgroep": "Metadiscussie",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De uiting gaat over de formele procedure en de samenstelling van het juridische team ('frisse juristen', 'onder leiding van professor Petersen') als middel om het proces te versnellen."
+        },
+        {
+          "sleutel": "Stijl-Slogan",
+          "beschrijving": "Beknopte, pakkende frase.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De term 'tsunami aan rechtszaken' fungeert als een beknopte, pakkende metafoor om de omvang van het juridische probleem te schetsen."
+        }
+      ],
       "oppositions": []
     },
     {
@@ -167640,7 +168564,104 @@
           "attributed_source_text": null
         }
       ],
-      "tags": [],
+      "tags": [
+        {
+          "sleutel": "Arena-Parlement",
+          "beschrijving": "Debat of uitspraak afkomstig uit de Eerste of Tweede Kamer.",
+          "labelgroep": "Issue Arena",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Bron is een Tweede Kamer-debat (documents.source.type = 'tweede_kamer')."
+        },
+        {
+          "sleutel": "Actor-Politicus",
+          "beschrijving": "Een gekozen volksvertegenwoordiger, bewindspersoon of partijvertegenwoordiger.",
+          "labelgroep": "Actor Type",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Spreker heeft een geregistreerde partij (PVV)."
+        },
+        {
+          "sleutel": "Context-Commissie",
+          "beschrijving": "Commissiedebat of wetgevingsoverleg; technisch en gedetailleerd van aard met een hogere argumentatieve kwaliteit.",
+          "labelgroep": "Parlementaire Context",
+          "perspectief": "Methodologisch & Contextueel",
+          "created_by": "derived",
+          "reden": "Afgeleid van VLOS-activiteitsoort 'Commissiedebat'."
+        },
+        {
+          "sleutel": "Walton-Consequentie",
+          "beschrijving": "Het verdedigen of aanvallen van een standpunt op basis van de verwachte praktische (voordelige of nadelige) gevolgen.",
+          "labelgroep": "Redeneerschema",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het standpunt wordt verdedigd op basis van de verwachte praktische gevolgen: extra maatregelen zijn overbodig omdat de uitstoot vanzelf zal dalen door de al lopende krimp."
+        },
+        {
+          "sleutel": "Frame-Thematisch",
+          "beschrijving": "Het benaderen van de kwestie vanuit een breder maatschappelijk, statistisch of historisch kader.",
+          "labelgroep": "Framing-Focus",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "Het argument richt zich op de bredere maatschappelijke en economische trends (krimp van de sector, uitstoot) in plaats van op een specifiek individueel incident."
+        },
+        {
+          "sleutel": "Frame-Economisch",
+          "beschrijving": "De focus ligt op de financiële kosten, baten of budgettaire gevolgen van een kwestie.",
+          "labelgroep": "Generieke Nieuwsframes",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "De focus ligt op de financiële gevolgen voor de sector, zoals opkoopacties, het vertrek van ondernemers en de instabiliteit van melkfabrieken."
+        },
+        {
+          "sleutel": "Ideologie-Rechts-Economisch",
+          "beschrijving": "Gericht op de vrije markt, deregulering en individuele verantwoordelijkheid.",
+          "labelgroep": "Cultureel-Ideologische Breuklijn",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "De spreker benadrukt het belang van 'goede ondernemers' en de negatieve impact van overheidsdruk op de vrije markt en individuele verantwoordelijkheid in de agrarische sector."
+        },
+        {
+          "sleutel": "Ideologie-TAN",
+          "beschrijving": "Conservatief, traditioneel, nationalistisch (Traditional, Authoritarian, Nationalist).",
+          "labelgroep": "Cultureel-Ideologische Breuklijn",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "Er wordt een beroep gedaan op de bescherming van de traditionele agrarische sector en de bestaande maatschappelijke orde, waarbij de teruggang van boeren als een bedreiging voor de nationale economische basis wordt gezien."
+        },
+        {
+          "sleutel": "Moraliteit-Zorg",
+          "beschrijving": "Gericht op empathie, compassie en het voorkomen van leed en schade bij kwetsbaren.",
+          "labelgroep": "Morele Fundamenten",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "Er wordt uitdrukkelijk zorg uitgesproken over de toekomst van boeren en de stabiliteit van de sector ('Daar maken wij ons zorgen over')."
+        },
+        {
+          "sleutel": "Moraliteit-Vrijheid",
+          "beschrijving": "Gericht op individuele autonomie en weerstand tegen dwang of onderdrukking door dominante actoren.",
+          "labelgroep": "Morele Fundamenten",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "Er wordt gepleit tegen 'extra druk' van de overheid, wat impliceert dat de autonomie van de ondernemers wordt bedreigd door ingrijpende maatregelen."
+        },
+        {
+          "sleutel": "Bewijs-Expert",
+          "beschrijving": "Onderbouwd met de consensus, verklaring of het oordeel van een erkend specialist.",
+          "labelgroep": "Type Bewijsvoering",
+          "perspectief": "Methodologisch & Contextueel",
+          "created_by": "llm",
+          "reden": "Er wordt verwezen naar de zorgen en uitspraken van de Rekenkamer als autoriteit om de stelling te staven."
+        },
+        {
+          "sleutel": "Bewijs-Causaal",
+          "beschrijving": "Onderbouwd met een heldere, mechanistische of logische verklaring van oorzaak en gevolg.",
+          "labelgroep": "Type Bewijsvoering",
+          "perspectief": "Methodologisch & Contextueel",
+          "created_by": "llm",
+          "reden": "Er wordt een causaal verband gelegd tussen de krimp van de veestapel en de verwachte verlaging van de stikstofuitstoot."
+        }
+      ],
       "oppositions": []
     },
     {
@@ -167672,7 +168693,48 @@
         "regering": "Kabinet-Schoof"
       },
       "claims": [],
-      "tags": [],
+      "tags": [
+        {
+          "sleutel": "Arena-Parlement",
+          "beschrijving": "Debat of uitspraak afkomstig uit de Eerste of Tweede Kamer.",
+          "labelgroep": "Issue Arena",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Bron is een Tweede Kamer-debat (documents.source.type = 'tweede_kamer')."
+        },
+        {
+          "sleutel": "Actor-Politicus",
+          "beschrijving": "Een gekozen volksvertegenwoordiger, bewindspersoon of partijvertegenwoordiger.",
+          "labelgroep": "Actor Type",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Spreker heeft een geregistreerde partij (PVV)."
+        },
+        {
+          "sleutel": "Context-Commissie",
+          "beschrijving": "Commissiedebat of wetgevingsoverleg; technisch en gedetailleerd van aard met een hogere argumentatieve kwaliteit.",
+          "labelgroep": "Parlementaire Context",
+          "perspectief": "Methodologisch & Contextueel",
+          "created_by": "derived",
+          "reden": "Afgeleid van VLOS-activiteitsoort 'Commissiedebat'."
+        },
+        {
+          "sleutel": "Frame-Thematisch",
+          "beschrijving": "Het benaderen van de kwestie vanuit een breder maatschappelijk, statistisch of historisch kader.",
+          "labelgroep": "Framing-Focus",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "Het argument richt zich op een algemeen beleidskader ('doelsturing') in plaats van op een specifiek incident of individueel geval."
+        },
+        {
+          "sleutel": "Ideologie-TAN",
+          "beschrijving": "Conservatief, traditioneel, nationalistisch (Traditional, Authoritarian, Nationalist).",
+          "labelgroep": "Cultureel-Ideologische Breuklijn",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "De spreker is lid van de PVV, een partij die ideologisch wordt ingedeeld binnen het conservatief-nationaal spectrum (TAN), en pleit voor een alternatieve, minder bureaucratische aanpak."
+        }
+      ],
       "oppositions": []
     },
     {
@@ -167704,7 +168766,96 @@
         "regering": "Kabinet-Rutte IV"
       },
       "claims": [],
-      "tags": [],
+      "tags": [
+        {
+          "sleutel": "Arena-Parlement",
+          "beschrijving": "Debat of uitspraak afkomstig uit de Eerste of Tweede Kamer.",
+          "labelgroep": "Issue Arena",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Bron is een Tweede Kamer-debat (documents.source.type = 'tweede_kamer')."
+        },
+        {
+          "sleutel": "Actor-Politicus",
+          "beschrijving": "Een gekozen volksvertegenwoordiger, bewindspersoon of partijvertegenwoordiger.",
+          "labelgroep": "Actor Type",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Spreker heeft een geregistreerde partij (NSC)."
+        },
+        {
+          "sleutel": "Walton-Consequentie",
+          "beschrijving": "Het verdedigen of aanvallen van een standpunt op basis van de verwachte praktische (voordelige of nadelige) gevolgen.",
+          "labelgroep": "Redeneerschema",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het standpunt wordt verdedigd door de nadelige praktische gevolgen van het beleid te benadrukken (ondernemen wordt onmogelijk, juridisch moeras)."
+        },
+        {
+          "sleutel": "Debatzet-Gevoelens-Verwoorden",
+          "beschrijving": "Emotioneel argumenteren gericht op het oproepen van angst, woede of medelijden bij de toehoorder.",
+          "labelgroep": "Debatzetten",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het gebruik van termen als 'uitzichtloos', 'onmogelijk gemaakt' en 'juridisch moeras' is gericht op het oproepen van medelijden en angst bij de toehoorder."
+        },
+        {
+          "sleutel": "Frame-Thematisch",
+          "beschrijving": "Het benaderen van de kwestie vanuit een breder maatschappelijk, statistisch of historisch kader.",
+          "labelgroep": "Framing-Focus",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "Het argument benoemt een bredere maatschappelijke groep ('PAS-melders en interimmers') en een structureel probleem ('overheidsfalen') in plaats van één specifiek individueel incident."
+        },
+        {
+          "sleutel": "Frame-Verantwoordelijkheid",
+          "beschrijving": "De nadruk ligt op de schuldvraag of de plicht tot het oplossen van het probleem.",
+          "labelgroep": "Generieke Nieuwsframes",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "De tekst wijst expliciet naar 'overheidsfalen' als oorzaak van de problematische situatie, waardoor de schuldvraag centraal staat."
+        },
+        {
+          "sleutel": "Frame-Menselijk-Belang",
+          "beschrijving": "De focus ligt op de menselijke kant, de emoties of het individuele leed (Human Interest).",
+          "labelgroep": "Generieke Nieuwsframes",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "De focus ligt op het leed en de onmacht van de betrokken ondernemers ('uitzichtloos', 'niemand hen uit kan helpen')."
+        },
+        {
+          "sleutel": "Ideologie-Rechts-Economisch",
+          "beschrijving": "Gericht op de vrije markt, deregulering en individuele verantwoordelijkheid.",
+          "labelgroep": "Cultureel-Ideologische Breuklijn",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "De spreker bekritiseert overheidsingrijpen dat ondernemen 'onmogelijk' maakt, wat wijst op een voorkeur voor vrije marktprincipes en individuele verantwoordelijkheid."
+        },
+        {
+          "sleutel": "Moraliteit-Vrijheid",
+          "beschrijving": "Gericht op individuele autonomie en weerstand tegen dwang of onderdrukking door dominante actoren.",
+          "labelgroep": "Morele Fundamenten",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "De nadruk ligt op de beperking van individuele autonomie ('ondernemen is hun onmogelijk gemaakt') door overheidsdwang."
+        },
+        {
+          "sleutel": "Moraliteit-Zorg",
+          "beschrijving": "Gericht op empathie, compassie en het voorkomen van leed en schade bij kwetsbaren.",
+          "labelgroep": "Morele Fundamenten",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "Er wordt ingespeeld op het leed en de kwetsbaarheid van de ondernemers die in een 'juridisch moeras' zitten zonder hulp."
+        },
+        {
+          "sleutel": "Bewijs-Causaal",
+          "beschrijving": "Onderbouwd met een heldere, mechanistische of logische verklaring van oorzaak en gevolg.",
+          "labelgroep": "Type Bewijsvoering",
+          "perspectief": "Methodologisch & Contextueel",
+          "created_by": "llm",
+          "reden": "Er wordt een directe oorzaak-gevolgrelatie gelegd tussen 'overheidsfalen' en de situatie waarin ondernemers 'in een juridisch moeras' zitten."
+        }
+      ],
       "oppositions": []
     },
     {
@@ -167745,7 +168896,80 @@
           "attributed_source_text": null
         }
       ],
-      "tags": [],
+      "tags": [
+        {
+          "sleutel": "Arena-Parlement",
+          "beschrijving": "Debat of uitspraak afkomstig uit de Eerste of Tweede Kamer.",
+          "labelgroep": "Issue Arena",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Bron is een Tweede Kamer-debat (documents.source.type = 'tweede_kamer')."
+        },
+        {
+          "sleutel": "Actor-Politicus",
+          "beschrijving": "Een gekozen volksvertegenwoordiger, bewindspersoon of partijvertegenwoordiger.",
+          "labelgroep": "Actor Type",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Spreker heeft een geregistreerde partij (NSC)."
+        },
+        {
+          "sleutel": "Walton-Regel",
+          "beschrijving": "Het argument beroept zich op een reeds gevestigde wet, formele regel of breed geaccepteerde maatschappelijke norm.",
+          "labelgroep": "Redeneerschema",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het argument beroept zich op de algemene regel dat 'iedereen in dit land een vergunning nodig heeft' om de uitzondering voor luchthavens als inconsistent aan te wijzen."
+        },
+        {
+          "sleutel": "Frame-Episodisch",
+          "beschrijving": "Inzoomen op een specifiek, individueel incident, persoonlijk verhaal of een concrete casus.",
+          "labelgroep": "Framing-Focus",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "Het argument focust op de specifieke casus van de luchthavens Eindhoven en Rotterdam als concrete voorbeelden van het beleid."
+        },
+        {
+          "sleutel": "Frame-Verantwoordelijkheid",
+          "beschrijving": "De nadruk ligt op de schuldvraag of de plicht tot het oplossen van het probleem.",
+          "labelgroep": "Generieke Nieuwsframes",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "De nadruk ligt op de schuldvraag en het falen van de minister om het beleid consistent en rechtvaardig toe te passen."
+        },
+        {
+          "sleutel": "Moraliteit-Eerlijkheid",
+          "beschrijving": "Gericht op gelijke kansen, gelijke rechten en onpartijdige behandeling (equality).",
+          "labelgroep": "Morele Fundamenten",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "De spreker beklemtoont dat 'iedereen' een vergunning nodig heeft, maar deze twee luchthavens niet, wat wijst op een schending van gelijke behandeling en onpartijdigheid."
+        },
+        {
+          "sleutel": "Bewijs-Anekdotisch",
+          "beschrijving": "Onderbouwd met één specifiek praktijkgeval, incident, exemplar of persoonlijk verhaal.",
+          "labelgroep": "Type Bewijsvoering",
+          "perspectief": "Methodologisch & Contextueel",
+          "created_by": "llm",
+          "reden": "De claim wordt onderbouwd met de specifieke praktijkgevallen van de luchthavens Eindhoven en Rotterdam."
+        },
+        {
+          "sleutel": "Bewijs-Statistisch",
+          "beschrijving": "Onderbouwd met kwantitatieve gegevens, cijfers, percentages of grootschalig representatief onderzoek.",
+          "labelgroep": "Type Bewijsvoering",
+          "perspectief": "Methodologisch & Contextueel",
+          "created_by": "llm",
+          "reden": "Er wordt verwezen naar het kwantitatieve gegeven van 'zo'n 100.000 vliegwegingen in totaal per jaar' om de omvang van de uitzondering te illustreren."
+        },
+        {
+          "sleutel": "Stijl-Herhaling",
+          "beschrijving": "Herhaling van hetzelfde woord of dezelfde woordgroep binnen het fragment, ter nadruk.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De zin 'Dit beleid is niet uit te leggen' wordt direct herhaald nadat eerder 'Het is niet uit te leggen' werd gezegd, ter nadruk op de onbegrijpelijke situatie."
+        }
+      ],
       "oppositions": []
     },
     {
@@ -167777,7 +169001,40 @@
         "regering": "Kabinet-Rutte IV"
       },
       "claims": [],
-      "tags": [],
+      "tags": [
+        {
+          "sleutel": "Arena-Parlement",
+          "beschrijving": "Debat of uitspraak afkomstig uit de Eerste of Tweede Kamer.",
+          "labelgroep": "Issue Arena",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Bron is een Tweede Kamer-debat (documents.source.type = 'tweede_kamer')."
+        },
+        {
+          "sleutel": "Actor-Politicus",
+          "beschrijving": "Een gekozen volksvertegenwoordiger, bewindspersoon of partijvertegenwoordiger.",
+          "labelgroep": "Actor Type",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Spreker heeft een geregistreerde partij (NSC)."
+        },
+        {
+          "sleutel": "Frame-Thematisch",
+          "beschrijving": "Het benaderen van de kwestie vanuit een breder maatschappelijk, statistisch of historisch kader.",
+          "labelgroep": "Framing-Focus",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "De spreker adresseert het algemene systeem van vergunningverlening en rekenmodellen ('de modellen', 'de voortoets') in plaats van een specifiek incident of individueel geval."
+        },
+        {
+          "sleutel": "Moraliteit-Eerlijkheid",
+          "beschrijving": "Gericht op gelijke kansen, gelijke rechten en onpartijdige behandeling (equality).",
+          "labelgroep": "Morele Fundamenten",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "De beschrijving van het systeem als 'scheef' impliceert een schending van onpartijdigheid en rechtvaardige behandeling binnen de regelgeving."
+        }
+      ],
       "oppositions": []
     },
     {
@@ -167818,7 +169075,88 @@
           "attributed_source_text": null
         }
       ],
-      "tags": [],
+      "tags": [
+        {
+          "sleutel": "Arena-Parlement",
+          "beschrijving": "Debat of uitspraak afkomstig uit de Eerste of Tweede Kamer.",
+          "labelgroep": "Issue Arena",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Bron is een Tweede Kamer-debat (documents.source.type = 'tweede_kamer')."
+        },
+        {
+          "sleutel": "Actor-Politicus",
+          "beschrijving": "Een gekozen volksvertegenwoordiger, bewindspersoon of partijvertegenwoordiger.",
+          "labelgroep": "Actor Type",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Spreker heeft een geregistreerde partij (NSC)."
+        },
+        {
+          "sleutel": "Walton-Consequentie",
+          "beschrijving": "Het verdedigen of aanvallen van een standpunt op basis van de verwachte praktische (voordelige of nadelige) gevolgen.",
+          "labelgroep": "Redeneerschema",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het argument toont de nadelige consequentie van de huidige modelgrenzen aan: een oneerlijke verdeling van verantwoordelijkheid en het buiten beschouwing laten van grote emissiebronnen."
+        },
+        {
+          "sleutel": "Frame-Thematisch",
+          "beschrijving": "Het benaderen van de kwestie vanuit een breder maatschappelijk, statistisch of historisch kader.",
+          "labelgroep": "Framing-Focus",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "Het argument benadert de kwestie vanuit een breder statistisch en methodologisch kader (AERIUS-modellen, afstandsgrenzen, hoogtegrenzen) in plaats van een enkel incident."
+        },
+        {
+          "sleutel": "Frame-Verantwoordelijkheid",
+          "beschrijving": "De nadruk ligt op de schuldvraag of de plicht tot het oplossen van het probleem.",
+          "labelgroep": "Generieke Nieuwsframes",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "De nadruk ligt op de schuldvraag en de ongelijke verantwoording die verschillende actoren (Schiphol versus boeren) moeten afleggen."
+        },
+        {
+          "sleutel": "Ideologie-GAL",
+          "beschrijving": "Progressief, ecologisch, kosmopolitisch (Green, Alternative, Libertarian).",
+          "labelgroep": "Cultureel-Ideologische Breuklijn",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "De spreker (NSC) bekritiseert de methodologie van stikstofmodellen vanuit een ecologisch perspectief, waarbij de nauwkeurigheid van milieubelasting centraal staat."
+        },
+        {
+          "sleutel": "Moraliteit-Eerlijkheid",
+          "beschrijving": "Gericht op gelijke kansen, gelijke rechten en onpartijdige behandeling (equality).",
+          "labelgroep": "Morele Fundamenten",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "Er wordt gewezen op de oneerlijke en ongelijke behandeling tussen sectoren, waarbij boeren streng worden berekend terwijl andere sectoren kortingen krijgen."
+        },
+        {
+          "sleutel": "Bewijs-Statistisch",
+          "beschrijving": "Onderbouwd met kwantitatieve gegevens, cijfers, percentages of grootschalig representatief onderzoek.",
+          "labelgroep": "Type Bewijsvoering",
+          "perspectief": "Methodologisch & Contextueel",
+          "created_by": "llm",
+          "reden": "De claim wordt onderbouwd met specifieke kwantitatieve gegevens, zoals de afstandsgrens van 25 kilometer, de hoogtegrens van 900 meter, en percentages (10-20%, 80%)."
+        },
+        {
+          "sleutel": "Meta-Reikwijdte",
+          "beschrijving": "Uitingen over de thematische grenzen van het debat, de toelaatbaarheid van specifieke beweringen, of de legitimiteit van bepaalde linguïstische framings.",
+          "labelgroep": "Metadiscussie",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De spreker bekritiseert de thematische grenzen van het debat door aan te geven dat bepaalde emissies (80% van Schiphol) buiten beschouwing worden gelaten in de modellen."
+        },
+        {
+          "sleutel": "Stijl-Antithese",
+          "beschrijving": "Het naast elkaar plaatsen van twee tegengestelde begrippen of ideeën.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Er wordt een scherp contrast getrokken tussen de soepele behandeling van Schiphol/industrie en de strenge, gedetailleerde berekening voor boeren."
+        }
+      ],
       "oppositions": []
     },
     {
@@ -167850,7 +169188,64 @@
         "regering": "Kabinet-Rutte IV"
       },
       "claims": [],
-      "tags": [],
+      "tags": [
+        {
+          "sleutel": "Arena-Parlement",
+          "beschrijving": "Debat of uitspraak afkomstig uit de Eerste of Tweede Kamer.",
+          "labelgroep": "Issue Arena",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Bron is een Tweede Kamer-debat (documents.source.type = 'tweede_kamer')."
+        },
+        {
+          "sleutel": "Actor-Politicus",
+          "beschrijving": "Een gekozen volksvertegenwoordiger, bewindspersoon of partijvertegenwoordiger.",
+          "labelgroep": "Actor Type",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Spreker heeft een geregistreerde partij (NSC)."
+        },
+        {
+          "sleutel": "Walton-Regel",
+          "beschrijving": "Het argument beroept zich op een reeds gevestigde wet, formele regel of breed geaccepteerde maatschappelijke norm.",
+          "labelgroep": "Redeneerschema",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het argument leunt op de bestaande wet ('die wet werkt op dit moment niet') als formele regel die de basis vormt voor de eis tot duidelijkheid."
+        },
+        {
+          "sleutel": "Frame-Thematisch",
+          "beschrijving": "Het benaderen van de kwestie vanuit een breder maatschappelijk, statistisch of historisch kader.",
+          "labelgroep": "Framing-Focus",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "Het argument richt zich op het algemene juridische kader en de werking van de wet als systeem, niet op een specifiek incident of individu."
+        },
+        {
+          "sleutel": "Frame-Verantwoordelijkheid",
+          "beschrijving": "De nadruk ligt op de schuldvraag of de plicht tot het oplossen van het probleem.",
+          "labelgroep": "Generieke Nieuwsframes",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "De spreker wijst expliciet naar de minister als degene die duidelijkheid moet verschaffen ('het is hoognodig dat de minister nu duidelijk maakt')."
+        },
+        {
+          "sleutel": "Moraliteit-Autoriteit",
+          "beschrijving": "Gericht op respect voor traditie, legitieme hiërarchie, wetten en maatschappelijke orde.",
+          "labelgroep": "Morele Fundamenten",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "Het argument beroept zich op de wet als legitieme autoriteit en de noodzaak van duidelijke regels ('wat mag') om maatschappelijke orde te waarborgen."
+        },
+        {
+          "sleutel": "Meta-Bevoegdheid",
+          "beschrijving": "Uitingen over het formele mandaat, de wettelijke of constitutionele autoriteit, of de institutionele taakverdeling om over de kwestie te beslissen.",
+          "labelgroep": "Metadiscussie",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De uiting benadrukt de institutionele taakverdeling en wettelijke autoriteit ('er is er maar één die de wet maakt') om de bevoegdheid tot besluitvorming te definiëren."
+        }
+      ],
       "oppositions": []
     },
     {
@@ -167899,7 +169294,112 @@
           "attributed_source_text": null
         }
       ],
-      "tags": [],
+      "tags": [
+        {
+          "sleutel": "Arena-Parlement",
+          "beschrijving": "Debat of uitspraak afkomstig uit de Eerste of Tweede Kamer.",
+          "labelgroep": "Issue Arena",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Bron is een Tweede Kamer-debat (documents.source.type = 'tweede_kamer')."
+        },
+        {
+          "sleutel": "Actor-Politicus",
+          "beschrijving": "Een gekozen volksvertegenwoordiger, bewindspersoon of partijvertegenwoordiger.",
+          "labelgroep": "Actor Type",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Spreker heeft een geregistreerde partij (PvdD)."
+        },
+        {
+          "sleutel": "Context-Commissie",
+          "beschrijving": "Commissiedebat of wetgevingsoverleg; technisch en gedetailleerd van aard met een hogere argumentatieve kwaliteit.",
+          "labelgroep": "Parlementaire Context",
+          "perspectief": "Methodologisch & Contextueel",
+          "created_by": "derived",
+          "reden": "Afgeleid van VLOS-activiteitsoort 'Commissiedebat'."
+        },
+        {
+          "sleutel": "Walton-Regel",
+          "beschrijving": "Het argument beroept zich op een reeds gevestigde wet, formele regel of breed geaccepteerde maatschappelijke norm.",
+          "labelgroep": "Redeneerschema",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het argument beroept zich op de schending van bestaande wetten, afspraken en het advies van de Raad van State om het beleid te bekritiseren."
+        },
+        {
+          "sleutel": "Debatzet-Persoon-Aanspreken",
+          "beschrijving": "Persoonlijke aanval op de tegenstander (op de man spelen) in plaats van een inhoudelijke weerlegging.",
+          "labelgroep": "Debatzetten",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De minister wordt persoonlijk aangevallen door haar handelen te kwalificeren als 'juridisch gokgedrag' en 'bewust kiezen voor juridische risico's', in plaats van uitsluitend het beleid inhoudelijk te bespreken."
+        },
+        {
+          "sleutel": "Frame-Thematisch",
+          "beschrijving": "Het benaderen van de kwestie vanuit een breder maatschappelijk, statistisch of historisch kader.",
+          "labelgroep": "Framing-Focus",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "Het argument benadert de kwestie vanuit een breed maatschappelijk en juridisch kader ('officieel koploper in biodiversiteitsverlies', 'natuurregels', 'Raad van State') in plaats van een enkel incident."
+        },
+        {
+          "sleutel": "Frame-Conflict",
+          "beschrijving": "De nadruk ligt op de felle strijd of meningsverschillen tussen personen, partijen of groepen.",
+          "labelgroep": "Generieke Nieuwsframes",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "Er is sprake van een felle strijd tussen de minister (die regels oprekt) en de wet/Raad van State (die zich niet wordt gerespecteerd)."
+        },
+        {
+          "sleutel": "Frame-Verantwoordelijkheid",
+          "beschrijving": "De nadruk ligt op de schuldvraag of de plicht tot het oplossen van het probleem.",
+          "labelgroep": "Generieke Nieuwsframes",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "De nadruk ligt op de schuldvraag: de minister houdt zich niet aan de wet en kiest bewust voor risico's."
+        },
+        {
+          "sleutel": "Ideologie-GAL",
+          "beschrijving": "Progressief, ecologisch, kosmopolitisch (Green, Alternative, Libertarian).",
+          "labelgroep": "Cultureel-Ideologische Breuklijn",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "De spreker (PvdD) pleit voor strikte naleving van natuurregels en biodiversiteitsbescherming, wat kernwaarden zijn van de Groen-Alternatief-Libertair (GAL) ideologie."
+        },
+        {
+          "sleutel": "Moraliteit-Autoriteit",
+          "beschrijving": "Gericht op respect voor traditie, legitieme hiërarchie, wetten en maatschappelijke orde.",
+          "labelgroep": "Morele Fundamenten",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "Het argument beroept zich op de wet, afspraken en het advies van de Raad van State als legitieme autoriteiten die gerespecteerd moeten worden."
+        },
+        {
+          "sleutel": "Moraliteit-Zorg",
+          "beschrijving": "Gericht op empathie, compassie en het voorkomen van leed en schade bij kwetsbaren.",
+          "labelgroep": "Morele Fundamenten",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "Er wordt gepleit voor het beschermen van 'kwetsbare natuur' en het tegengaan van biodiversiteitsverlies."
+        },
+        {
+          "sleutel": "Bewijs-Expert",
+          "beschrijving": "Onderbouwd met de consensus, verklaring of het oordeel van een erkend specialist.",
+          "labelgroep": "Type Bewijsvoering",
+          "perspectief": "Methodologisch & Contextueel",
+          "created_by": "llm",
+          "reden": "Het argument leunt op het oordeel van de Raad van State als erkende autoriteit/expert die het beleid afkeurt."
+        },
+        {
+          "sleutel": "Stijl-Antithese",
+          "beschrijving": "Het naast elkaar plaatsen van twee tegengestelde begrippen of ideeën.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De tekst plaatst tegenstrijdige begrippen naast elkaar: 'Niet natuurherstel, maar juridisch gokgedrag' en 'niet het beschermen van kwetsbare natuur, maar een hogere rekenkundige ondergrens'."
+        }
+      ],
       "oppositions": []
     },
     {
@@ -167940,7 +169440,80 @@
           "attributed_source_text": null
         }
       ],
-      "tags": [],
+      "tags": [
+        {
+          "sleutel": "Arena-Parlement",
+          "beschrijving": "Debat of uitspraak afkomstig uit de Eerste of Tweede Kamer.",
+          "labelgroep": "Issue Arena",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Bron is een Tweede Kamer-debat (documents.source.type = 'tweede_kamer')."
+        },
+        {
+          "sleutel": "Actor-Politicus",
+          "beschrijving": "Een gekozen volksvertegenwoordiger, bewindspersoon of partijvertegenwoordiger.",
+          "labelgroep": "Actor Type",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Spreker heeft een geregistreerde partij (PvdD)."
+        },
+        {
+          "sleutel": "Context-Commissie",
+          "beschrijving": "Commissiedebat of wetgevingsoverleg; technisch en gedetailleerd van aard met een hogere argumentatieve kwaliteit.",
+          "labelgroep": "Parlementaire Context",
+          "perspectief": "Methodologisch & Contextueel",
+          "created_by": "derived",
+          "reden": "Afgeleid van VLOS-activiteitsoort 'Commissiedebat'."
+        },
+        {
+          "sleutel": "Walton-Consequentie",
+          "beschrijving": "Het verdedigen of aanvallen van een standpunt op basis van de verwachte praktische (voordelige of nadelige) gevolgen.",
+          "labelgroep": "Redeneerschema",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het argument stelt dat het standpunt (emissies onder 1 mol) onhoudbaar is vanwege de nadelige praktische consequentie: schade aan de natuur."
+        },
+        {
+          "sleutel": "Frame-Thematisch",
+          "beschrijving": "Het benaderen van de kwestie vanuit een breder maatschappelijk, statistisch of historisch kader.",
+          "labelgroep": "Framing-Focus",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "Het argument behandelt het stikstofprobleem als een algemeen, structureel fenomeen ('Stikstofemissies', 'De natuur') in plaats van te focussen op een specifiek incident of individu."
+        },
+        {
+          "sleutel": "Frame-Moraliteit",
+          "beschrijving": "Inbranding vanuit ethische plichten, spirituele of religieuze principes.",
+          "labelgroep": "Generieke Nieuwsframes",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "De uitspraak 'De natuur lijdt eronder' impliceert een ethische plicht om schade aan het milieu te voorkomen."
+        },
+        {
+          "sleutel": "Ideologie-GAL",
+          "beschrijving": "Progressief, ecologisch, kosmopolitisch (Green, Alternative, Libertarian).",
+          "labelgroep": "Cultureel-Ideologische Breuklijn",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "De spreker (PvdD) benadrukt de ecologische schade aan de natuur, wat kernachtig is voor de Green, Alternative, Libertarian (GAL) ideologie."
+        },
+        {
+          "sleutel": "Moraliteit-Zorg",
+          "beschrijving": "Gericht op empathie, compassie en het voorkomen van leed en schade bij kwetsbaren.",
+          "labelgroep": "Morele Fundamenten",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "De nadruk op het lijden van de natuur ('De natuur lijdt eronder') activeert het morele fundament van zorg en het voorkomen van schade."
+        },
+        {
+          "sleutel": "Bewijs-Causaal",
+          "beschrijving": "Onderbouwd met een heldere, mechanistische of logische verklaring van oorzaak en gevolg.",
+          "labelgroep": "Type Bewijsvoering",
+          "perspectief": "Methodologisch & Contextueel",
+          "created_by": "llm",
+          "reden": "Er wordt een directe oorzaak-gevolgrelatie gelegd tussen de aanwezigheid van emissies en het lijden van de natuur."
+        }
+      ],
       "oppositions": []
     },
     {
@@ -167977,7 +169550,96 @@
           "attributed_source_text": null
         }
       ],
-      "tags": [],
+      "tags": [
+        {
+          "sleutel": "Arena-Parlement",
+          "beschrijving": "Debat of uitspraak afkomstig uit de Eerste of Tweede Kamer.",
+          "labelgroep": "Issue Arena",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Bron is een Tweede Kamer-debat (documents.source.type = 'tweede_kamer')."
+        },
+        {
+          "sleutel": "Actor-Politicus",
+          "beschrijving": "Een gekozen volksvertegenwoordiger, bewindspersoon of partijvertegenwoordiger.",
+          "labelgroep": "Actor Type",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Spreker heeft een geregistreerde partij (PvdD)."
+        },
+        {
+          "sleutel": "Context-Commissie",
+          "beschrijving": "Commissiedebat of wetgevingsoverleg; technisch en gedetailleerd van aard met een hogere argumentatieve kwaliteit.",
+          "labelgroep": "Parlementaire Context",
+          "perspectief": "Methodologisch & Contextueel",
+          "created_by": "derived",
+          "reden": "Afgeleid van VLOS-activiteitsoort 'Commissiedebat'."
+        },
+        {
+          "sleutel": "Walton-Consequentie",
+          "beschrijving": "Het verdedigen of aanvallen van een standpunt op basis van de verwachte praktische (voordelige of nadelige) gevolgen.",
+          "labelgroep": "Redeneerschema",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het argument waarschuwt voor de nadelige praktische gevolgen ('natuur verder verslechtert') van het voorgestelde beleid."
+        },
+        {
+          "sleutel": "Debatzet-Herformuleren",
+          "beschrijving": "Het vertekenen of overdrijven van het standpunt van de opponent om dit makkelijker te kunnen aanvallen.",
+          "labelgroep": "Debatzetten",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het standpunt van de minister wordt vereenvoudigd tot 'regels afzwakken' in plaats van natuur herstellen, wat een vertekening is van het beleid om het aanvalbaar te maken."
+        },
+        {
+          "sleutel": "Frame-Thematisch",
+          "beschrijving": "Het benaderen van de kwestie vanuit een breder maatschappelijk, statistisch of historisch kader.",
+          "labelgroep": "Framing-Focus",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "Het argument behandelt het algemene beleidsdoel (natuurherstel vs. regelgeving) binnen een breder maatschappelijk kader, zonder in te zoomen op een specifiek incident."
+        },
+        {
+          "sleutel": "Frame-Verantwoordelijkheid",
+          "beschrijving": "De nadruk ligt op de schuldvraag of de plicht tot het oplossen van het probleem.",
+          "labelgroep": "Generieke Nieuwsframes",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "De nadruk ligt op de schuldvraag en de rol van de minister in het al dan niet herstellen van de natuur."
+        },
+        {
+          "sleutel": "Ideologie-GAL",
+          "beschrijving": "Progressief, ecologisch, kosmopolitisch (Green, Alternative, Libertarian).",
+          "labelgroep": "Cultureel-Ideologische Breuklijn",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "De spreker (PvdD) pleit voor natuurherstel en waarschuwt voor ecologische verslechtering, wat kernwaarden zijn van de Green-Alternative-Libertarian ideologie."
+        },
+        {
+          "sleutel": "Moraliteit-Zorg",
+          "beschrijving": "Gericht op empathie, compassie en het voorkomen van leed en schade bij kwetsbaren.",
+          "labelgroep": "Morele Fundamenten",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "Het argument benadrukt het voorkomen van schade aan de natuur ('verder verslechtert') en het belang van herstel, wat aansluit bij zorg voor kwetsbare systemen."
+        },
+        {
+          "sleutel": "Bewijs-Causaal",
+          "beschrijving": "Onderbouwd met een heldere, mechanistische of logische verklaring van oorzaak en gevolg.",
+          "labelgroep": "Type Bewijsvoering",
+          "perspectief": "Methodologisch & Contextueel",
+          "created_by": "llm",
+          "reden": "Er wordt een directe oorzaak-gevolgrelatie gelegd tussen het afzwakken van regels en de verslechtering van de natuur."
+        },
+        {
+          "sleutel": "Stijl-Antithese",
+          "beschrijving": "Het naast elkaar plaatsen van twee tegengestelde begrippen of ideeën.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Er wordt een tegenstelling getrokken tussen 'natuur herstellen' en 'regels afzwakken'."
+        }
+      ],
       "oppositions": []
     },
     {
@@ -168014,7 +169676,80 @@
           "attributed_source_text": null
         }
       ],
-      "tags": [],
+      "tags": [
+        {
+          "sleutel": "Arena-Parlement",
+          "beschrijving": "Debat of uitspraak afkomstig uit de Eerste of Tweede Kamer.",
+          "labelgroep": "Issue Arena",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Bron is een Tweede Kamer-debat (documents.source.type = 'tweede_kamer')."
+        },
+        {
+          "sleutel": "Actor-Politicus",
+          "beschrijving": "Een gekozen volksvertegenwoordiger, bewindspersoon of partijvertegenwoordiger.",
+          "labelgroep": "Actor Type",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Spreker heeft een geregistreerde partij (PvdD)."
+        },
+        {
+          "sleutel": "Context-Commissie",
+          "beschrijving": "Commissiedebat of wetgevingsoverleg; technisch en gedetailleerd van aard met een hogere argumentatieve kwaliteit.",
+          "labelgroep": "Parlementaire Context",
+          "perspectief": "Methodologisch & Contextueel",
+          "created_by": "derived",
+          "reden": "Afgeleid van VLOS-activiteitsoort 'Commissiedebat'."
+        },
+        {
+          "sleutel": "Walton-Consequentie",
+          "beschrijving": "Het verdedigen of aanvallen van een standpunt op basis van de verwachte praktische (voordelige of nadelige) gevolgen.",
+          "labelgroep": "Redeneerschema",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het standpunt wordt onderbouwd door te wijzen op de nadelige praktische gevolgen (bedrijven vertrekken) van het huidige beleid."
+        },
+        {
+          "sleutel": "Frame-Episodisch",
+          "beschrijving": "Inzoomen op een specifiek, individueel incident, persoonlijk verhaal of een concrete casus.",
+          "labelgroep": "Framing-Focus",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "Het argument zoomt in op een specifiek, concreet voorbeeld (het bedrijf ASML) in plaats van het bredere maatschappelijke of statistische kader van stikstof."
+        },
+        {
+          "sleutel": "Frame-Economisch",
+          "beschrijving": "De focus ligt op de financiële kosten, baten of budgettaire gevolgen van een kwestie.",
+          "labelgroep": "Generieke Nieuwsframes",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "De focus ligt op de economische gevolgen van het beleid, namelijk het vertrek van bedrijven en de daaruit voortvloeiende schade aan de economie."
+        },
+        {
+          "sleutel": "Frame-Verantwoordelijkheid",
+          "beschrijving": "De nadruk ligt op de schuldvraag of de plicht tot het oplossen van het probleem.",
+          "labelgroep": "Generieke Nieuwsframes",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "Er wordt expliciet schuld toegewezen aan het 'falende stikstofbeleid' als oorzaak van de negatieve economische uitkomst."
+        },
+        {
+          "sleutel": "Ideologie-GAL",
+          "beschrijving": "Progressief, ecologisch, kosmopolitisch (Green, Alternative, Libertarian).",
+          "labelgroep": "Cultureel-Ideologische Breuklijn",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "De spreker is lid van de PvdD, een partij die ideologisch wordt ingedeeld binnen de GAL-dimensie (Groen, Alternatief, Libertair), en gebruikt dit argument om het huidige beleid te bekritiseren vanuit een ecologisch-politieke hoek."
+        },
+        {
+          "sleutel": "Bewijs-Anekdotisch",
+          "beschrijving": "Onderbouwd met één specifiek praktijkgeval, incident, exemplar of persoonlijk verhaal.",
+          "labelgroep": "Type Bewijsvoering",
+          "perspectief": "Methodologisch & Contextueel",
+          "created_by": "llm",
+          "reden": "De claim wordt onderbouwd met één specifiek praktijkgeval, namelijk de dreiging van ASML om Nederland te verlaten."
+        }
+      ],
       "oppositions": []
     },
     {
@@ -168051,7 +169786,80 @@
           "attributed_source_text": "de directeur-generaal van de Europese Commissie"
         }
       ],
-      "tags": [],
+      "tags": [
+        {
+          "sleutel": "Arena-Parlement",
+          "beschrijving": "Debat of uitspraak afkomstig uit de Eerste of Tweede Kamer.",
+          "labelgroep": "Issue Arena",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Bron is een Tweede Kamer-debat (documents.source.type = 'tweede_kamer')."
+        },
+        {
+          "sleutel": "Actor-Politicus",
+          "beschrijving": "Een gekozen volksvertegenwoordiger, bewindspersoon of partijvertegenwoordiger.",
+          "labelgroep": "Actor Type",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Spreker heeft een geregistreerde partij (PvdD)."
+        },
+        {
+          "sleutel": "Context-Commissie",
+          "beschrijving": "Commissiedebat of wetgevingsoverleg; technisch en gedetailleerd van aard met een hogere argumentatieve kwaliteit.",
+          "labelgroep": "Parlementaire Context",
+          "perspectief": "Methodologisch & Contextueel",
+          "created_by": "derived",
+          "reden": "Afgeleid van VLOS-activiteitsoort 'Commissiedebat'."
+        },
+        {
+          "sleutel": "Walton-Expertise",
+          "beschrijving": "Het argument leunt op de autoriteit, bevindingen of de verklaring van een specialist of expert.",
+          "labelgroep": "Redeneerschema",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het argument leunt volledig op de autoriteit en waarschuwing van een specifieke expert: de directeur-generaal van de Europese Commissie."
+        },
+        {
+          "sleutel": "Frame-Thematisch",
+          "beschrijving": "Het benaderen van de kwestie vanuit een breder maatschappelijk, statistisch of historisch kader.",
+          "labelgroep": "Framing-Focus",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "Het argument benoemt een brede maatschappelijke en ecologische crisis ('natuur- en klimaatcrisis') in plaats van te focussen op een enkel incident of individueel verhaal."
+        },
+        {
+          "sleutel": "Frame-Verantwoordelijkheid",
+          "beschrijving": "De nadruk ligt op de schuldvraag of de plicht tot het oplossen van het probleem.",
+          "labelgroep": "Generieke Nieuwsframes",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "De tekst wijst direct op de plicht tot handelen ('Ga aan de slag!') en wijst afzwakking van normen als onvoldoende oplossing, waardoor de focus ligt op het oplossen van het probleem."
+        },
+        {
+          "sleutel": "Ideologie-GAL",
+          "beschrijving": "Progressief, ecologisch, kosmopolitisch (Green, Alternative, Libertarian).",
+          "labelgroep": "Cultureel-Ideologische Breuklijn",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "De spreker (PvdD) en de inhoud (natuur- en klimaatcrisis, bescherming van de natuur) sluiten aan bij de progressieve, ecologische pijlers van de GAL-dimensie."
+        },
+        {
+          "sleutel": "Moraliteit-Zorg",
+          "beschrijving": "Gericht op empathie, compassie en het voorkomen van leed en schade bij kwetsbaren.",
+          "labelgroep": "Morele Fundamenten",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "De waarschuwing over de slechte staat van de natuur en de crisis impliceert een morele plicht om schade aan het ecosysteem te voorkomen en zorg te dragen voor kwetsbare natuur."
+        },
+        {
+          "sleutel": "Bewijs-Expert",
+          "beschrijving": "Onderbouwd met de consensus, verklaring of het oordeel van een erkend specialist.",
+          "labelgroep": "Type Bewijsvoering",
+          "perspectief": "Methodologisch & Contextueel",
+          "created_by": "llm",
+          "reden": "De claim wordt onderbouwd door het oordeel en de verklaring van een erkende specialistische instantie (de directeur-generaal van de Europese Commissie)."
+        }
+      ],
       "oppositions": []
     },
     {
@@ -168092,7 +169900,88 @@
           "attributed_source_text": null
         }
       ],
-      "tags": [],
+      "tags": [
+        {
+          "sleutel": "Arena-Parlement",
+          "beschrijving": "Debat of uitspraak afkomstig uit de Eerste of Tweede Kamer.",
+          "labelgroep": "Issue Arena",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Bron is een Tweede Kamer-debat (documents.source.type = 'tweede_kamer')."
+        },
+        {
+          "sleutel": "Actor-Politicus",
+          "beschrijving": "Een gekozen volksvertegenwoordiger, bewindspersoon of partijvertegenwoordiger.",
+          "labelgroep": "Actor Type",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Spreker heeft een geregistreerde partij (PvdD)."
+        },
+        {
+          "sleutel": "Context-Commissie",
+          "beschrijving": "Commissiedebat of wetgevingsoverleg; technisch en gedetailleerd van aard met een hogere argumentatieve kwaliteit.",
+          "labelgroep": "Parlementaire Context",
+          "perspectief": "Methodologisch & Contextueel",
+          "created_by": "derived",
+          "reden": "Afgeleid van VLOS-activiteitsoort 'Commissiedebat'."
+        },
+        {
+          "sleutel": "Walton-Causaal",
+          "beschrijving": "Argumentatie gebaseerd op een directe oorzaak-gevolgrelatie.",
+          "labelgroep": "Redeneerschema",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Er wordt een directe oorzaak-gevolgrelatie gelegd tussen 'te veel dieren in de veehouderij' (oorzaak) en de stikstofproblematiek die tot intrekkingsverzoeken leidt (gevolg)."
+        },
+        {
+          "sleutel": "Frame-Thematisch",
+          "beschrijving": "Het benaderen van de kwestie vanuit een breder maatschappelijk, statistisch of historisch kader.",
+          "labelgroep": "Framing-Focus",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "Het argument benadert de kwestie vanuit een breed maatschappelijk en structureel kader (de veehouderij als systeem) in plaats van een enkel incident."
+        },
+        {
+          "sleutel": "Frame-Verantwoordelijkheid",
+          "beschrijving": "De nadruk ligt op de schuldvraag of de plicht tot het oplossen van het probleem.",
+          "labelgroep": "Generieke Nieuwsframes",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "De nadruk ligt op de schuldvraag door de minister te wijzen als degene die weigert de oorzaak aan te pakken."
+        },
+        {
+          "sleutel": "Ideologie-GAL",
+          "beschrijving": "Progressief, ecologisch, kosmopolitisch (Green, Alternative, Libertarian).",
+          "labelgroep": "Cultureel-Ideologische Breuklijn",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "De spreker (PvdD) pleit voor het aanpakken van de ecologische oorzaak (stikstof/veehouderij), wat kenmerkend is voor de Green, Alternative, Libertarian-stroming."
+        },
+        {
+          "sleutel": "Moraliteit-Zorg",
+          "beschrijving": "Gericht op empathie, compassie en het voorkomen van leed en schade bij kwetsbaren.",
+          "labelgroep": "Morele Fundamenten",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "Het argument impliceert dat het huidige beleid schade veroorzaakt (stikstof) en dat deze schade moet worden voorkomen door de oorzaak aan te pakken."
+        },
+        {
+          "sleutel": "Bewijs-Causaal",
+          "beschrijving": "Onderbouwd met een heldere, mechanistische of logische verklaring van oorzaak en gevolg.",
+          "labelgroep": "Type Bewijsvoering",
+          "perspectief": "Methodologisch & Contextueel",
+          "created_by": "llm",
+          "reden": "De claim wordt onderbouwd door een mechanistische verklaring: de weigering om de oorzaak (veehouderij) aan te pakken leidt tot de huidige situatie."
+        },
+        {
+          "sleutel": "Stijl-Retorische-Vraag",
+          "beschrijving": "Een vraag waarvan het antwoord al besloten ligt in de formulering zelf.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De zin 'En waarom?' fungeert als een retorische vraag waarbij het antwoord direct door de spreker zelf wordt gegeven."
+        }
+      ],
       "oppositions": []
     },
     {
@@ -168129,7 +170018,104 @@
           "attributed_source_text": null
         }
       ],
-      "tags": [],
+      "tags": [
+        {
+          "sleutel": "Arena-Parlement",
+          "beschrijving": "Debat of uitspraak afkomstig uit de Eerste of Tweede Kamer.",
+          "labelgroep": "Issue Arena",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Bron is een Tweede Kamer-debat (documents.source.type = 'tweede_kamer')."
+        },
+        {
+          "sleutel": "Actor-Politicus",
+          "beschrijving": "Een gekozen volksvertegenwoordiger, bewindspersoon of partijvertegenwoordiger.",
+          "labelgroep": "Actor Type",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Spreker heeft een geregistreerde partij (PvdD)."
+        },
+        {
+          "sleutel": "Context-Commissie",
+          "beschrijving": "Commissiedebat of wetgevingsoverleg; technisch en gedetailleerd van aard met een hogere argumentatieve kwaliteit.",
+          "labelgroep": "Parlementaire Context",
+          "perspectief": "Methodologisch & Contextueel",
+          "created_by": "derived",
+          "reden": "Afgeleid van VLOS-activiteitsoort 'Commissiedebat'."
+        },
+        {
+          "sleutel": "Walton-Consequentie",
+          "beschrijving": "Het verdedigen of aanvallen van een standpunt op basis van de verwachte praktische (voordelige of nadelige) gevolgen.",
+          "labelgroep": "Redeneerschema",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het standpunt wordt verdedigd op basis van de verwachte praktische gevolgen: minder dieren fokken leidt tot minder stikstof, minder leed en meer ruimte voor andere doelen."
+        },
+        {
+          "sleutel": "Frame-Thematisch",
+          "beschrijving": "Het benaderen van de kwestie vanuit een breder maatschappelijk, statistisch of historisch kader.",
+          "labelgroep": "Framing-Focus",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "Het argument benadert de kwestie vanuit een breed maatschappelijk en structureel kader (landbouw, wonen, milieu) in plaats van te focussen op een specifiek incident of individu."
+        },
+        {
+          "sleutel": "Frame-Economisch",
+          "beschrijving": "De focus ligt op de financiële kosten, baten of budgettaire gevolgen van een kwestie.",
+          "labelgroep": "Generieke Nieuwsframes",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "Er wordt expliciet verwezen naar 'betaalbaar wonen' en 'gezonde landbouw' als economische en maatschappelijke baten van het voorgestelde beleid."
+        },
+        {
+          "sleutel": "Frame-Moraliteit",
+          "beschrijving": "Inbranding vanuit ethische plichten, spirituele of religieuze principes.",
+          "labelgroep": "Generieke Nieuwsframes",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "Het argument beroept zich op ethische principes door 'dierenleed' te noemen en 'gezonde landbouw' als een moreel gewenst doel te presenteren."
+        },
+        {
+          "sleutel": "Ideologie-GAL",
+          "beschrijving": "Progressief, ecologisch, kosmopolitisch (Green, Alternative, Libertarian).",
+          "labelgroep": "Cultureel-Ideologische Breuklijn",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "Het argument koppelt ecologische doelen (minder stikstof, gezonde landbouw) aan sociale waarden (dierenleed, betaalbaar wonen), wat kenmerkend is voor de Groen-Alternatief-Libertair (GAL) as."
+        },
+        {
+          "sleutel": "Moraliteit-Zorg",
+          "beschrijving": "Gericht op empathie, compassie en het voorkomen van leed en schade bij kwetsbaren.",
+          "labelgroep": "Morele Fundamenten",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "Het argument benadrukt het voorkomen van leed ('minder dierenleed') en schade aan kwetsbaren (dieren en de samenleving via wonen)."
+        },
+        {
+          "sleutel": "Moraliteit-Zuiverheid",
+          "beschrijving": "Gericht op het vermijden van morele of fysieke besmetting; streven naar het schone, natuurlijke of verhevene.",
+          "labelgroep": "Morele Fundamenten",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "Het streven naar 'gezonde landbouw' en het verminderen van 'mest' en 'stikstof' impliceert een focus op het schone, natuurlijke en het vermijden van fysieke besmetting."
+        },
+        {
+          "sleutel": "Bewijs-Causaal",
+          "beschrijving": "Onderbouwd met een heldere, mechanistische of logische verklaring van oorzaak en gevolg.",
+          "labelgroep": "Type Bewijsvoering",
+          "perspectief": "Methodologisch & Contextueel",
+          "created_by": "llm",
+          "reden": "Er wordt een logische oorzaak-gevolgrelatie gelegd: minder dieren fokken (oorzaak) resulteert in minder mest en stikstof (gevolg)."
+        },
+        {
+          "sleutel": "Stijl-Slogan",
+          "beschrijving": "Beknopte, pakkende frase.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De zin is beknopt, pakkend en samenvattend geformuleerd als een kernboodschap die makkelijk memorabel is."
+        }
+      ],
       "oppositions": []
     },
     {
@@ -168166,7 +170152,64 @@
           "attributed_source_text": null
         }
       ],
-      "tags": [],
+      "tags": [
+        {
+          "sleutel": "Arena-Parlement",
+          "beschrijving": "Debat of uitspraak afkomstig uit de Eerste of Tweede Kamer.",
+          "labelgroep": "Issue Arena",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Bron is een Tweede Kamer-debat (documents.source.type = 'tweede_kamer')."
+        },
+        {
+          "sleutel": "Actor-Politicus",
+          "beschrijving": "Een gekozen volksvertegenwoordiger, bewindspersoon of partijvertegenwoordiger.",
+          "labelgroep": "Actor Type",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Spreker heeft een geregistreerde partij (PvdD)."
+        },
+        {
+          "sleutel": "Context-Commissie",
+          "beschrijving": "Commissiedebat of wetgevingsoverleg; technisch en gedetailleerd van aard met een hogere argumentatieve kwaliteit.",
+          "labelgroep": "Parlementaire Context",
+          "perspectief": "Methodologisch & Contextueel",
+          "created_by": "derived",
+          "reden": "Afgeleid van VLOS-activiteitsoort 'Commissiedebat'."
+        },
+        {
+          "sleutel": "Walton-Regel",
+          "beschrijving": "Het argument beroept zich op een reeds gevestigde wet, formele regel of breed geaccepteerde maatschappelijke norm.",
+          "labelgroep": "Redeneerschema",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het argument beroept zich op de breed geaccepteerde maatschappelijke norm of wil van de meerderheid als legitimatie voor het standpunt."
+        },
+        {
+          "sleutel": "Frame-Thematisch",
+          "beschrijving": "Het benaderen van de kwestie vanuit een breder maatschappelijk, statistisch of historisch kader.",
+          "labelgroep": "Framing-Focus",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "Het argument beroept zich op een brede maatschappelijke statistiek ('Meer dan 80% van Nederland') in plaats van een specifiek individueel incident."
+        },
+        {
+          "sleutel": "Ideologie-GAL",
+          "beschrijving": "Progressief, ecologisch, kosmopolitisch (Green, Alternative, Libertarian).",
+          "labelgroep": "Cultureel-Ideologische Breuklijn",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "De spreker (PvdD) en het onderwerp (stikstof/ecologie) vallen binnen de progressieve, ecologische dimensie van het politieke spectrum."
+        },
+        {
+          "sleutel": "Bewijs-Statistisch",
+          "beschrijving": "Onderbouwd met kwantitatieve gegevens, cijfers, percentages of grootschalig representatief onderzoek.",
+          "labelgroep": "Type Bewijsvoering",
+          "perspectief": "Methodologisch & Contextueel",
+          "created_by": "llm",
+          "reden": "De claim wordt onderbouwd met een specifiek percentage ('Meer dan 80%') dat verwijst naar kwantitatieve gegevens over de publieke opinie."
+        }
+      ],
       "oppositions": []
     },
     {
@@ -168207,7 +170250,88 @@
           "attributed_source_text": null
         }
       ],
-      "tags": [],
+      "tags": [
+        {
+          "sleutel": "Arena-Parlement",
+          "beschrijving": "Debat of uitspraak afkomstig uit de Eerste of Tweede Kamer.",
+          "labelgroep": "Issue Arena",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Bron is een Tweede Kamer-debat (documents.source.type = 'tweede_kamer')."
+        },
+        {
+          "sleutel": "Actor-Politicus",
+          "beschrijving": "Een gekozen volksvertegenwoordiger, bewindspersoon of partijvertegenwoordiger.",
+          "labelgroep": "Actor Type",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Spreker heeft een geregistreerde partij (SGP)."
+        },
+        {
+          "sleutel": "Context-Commissie",
+          "beschrijving": "Commissiedebat of wetgevingsoverleg; technisch en gedetailleerd van aard met een hogere argumentatieve kwaliteit.",
+          "labelgroep": "Parlementaire Context",
+          "perspectief": "Methodologisch & Contextueel",
+          "created_by": "derived",
+          "reden": "Afgeleid van VLOS-activiteitsoort 'Commissiedebat'."
+        },
+        {
+          "sleutel": "Walton-Regel",
+          "beschrijving": "Het argument beroept zich op een reeds gevestigde wet, formele regel of breed geaccepteerde maatschappelijke norm.",
+          "labelgroep": "Redeneerschema",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het argument beroept zich op de bestaande regel of definitie van 'kwetsbaar gebied' en stelt dat deze regel op basis van nieuwe feiten (actuele data) niet meer op bepaalde gebieden van toepassing zou moeten zijn."
+        },
+        {
+          "sleutel": "Frame-Thematisch",
+          "beschrijving": "Het benaderen van de kwestie vanuit een breder maatschappelijk, statistisch of historisch kader.",
+          "labelgroep": "Framing-Focus",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "Het argument benadert de kwestie vanuit een breed beleidskader (aanwijzing van kwetsbare gebieden in heel Nederland) en vergelijkt verschillende regio's (rivierengebied, kustgebieden) in plaats van te focussen op één specifiek incident."
+        },
+        {
+          "sleutel": "Frame-Verantwoordelijkheid",
+          "beschrijving": "De nadruk ligt op de schuldvraag of de plicht tot het oplossen van het probleem.",
+          "labelgroep": "Generieke Nieuwsframes",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "De spreker richt zich direct tot de minister met vragen over wat zij gaat doen en hoe zij de aanpak vormgeeft, waardoor de nadruk ligt op de plicht en verantwoordelijkheid van de overheid."
+        },
+        {
+          "sleutel": "Ideologie-TAN",
+          "beschrijving": "Conservatief, traditioneel, nationalistisch (Traditional, Authoritarian, Nationalist).",
+          "labelgroep": "Cultureel-Ideologische Breuklijn",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "De SGP is een traditioneel-christelijke partij die pleit voor een gebiedsgerichte, lokale aanpak in plaats van een uniforme landelijke regelgeving, wat past binnen het conservatieve en traditionele profiel."
+        },
+        {
+          "sleutel": "Moraliteit-Eerlijkheid",
+          "beschrijving": "Gericht op gelijke kansen, gelijke rechten en onpartijdige behandeling (equality).",
+          "labelgroep": "Morele Fundamenten",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "Het argument pleit voor een eerlijke en rechtvaardige behandeling door gebieden die op basis van actuele data niet meer als kwetsbaar gelden (zoals het rivierengebied) niet langer onder strenge regels te laten vallen."
+        },
+        {
+          "sleutel": "Bewijs-Anekdotisch",
+          "beschrijving": "Onderbouwd met één specifiek praktijkgeval, incident, exemplar of persoonlijk verhaal.",
+          "labelgroep": "Type Bewijsvoering",
+          "perspectief": "Methodologisch & Contextueel",
+          "created_by": "llm",
+          "reden": "Het argument gebruikt specifieke voorbeelden van gebieden (het rivierengebied en kustgebieden) om de stelling te staven dat niet heel Nederland als kwetsbaar aangewezen hoeft te worden."
+        },
+        {
+          "sleutel": "Stijl-Retorische-Vraag",
+          "beschrijving": "Een vraag waarvan het antwoord al besloten ligt in de formulering zelf.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De spreker stelt meerdere vragen aan de minister ('Hoe gaat de minister die vormgeven?', 'Wat gaat de minister hieraan doen?') om druk uit te oefenen en een antwoord af te dwingen, in plaats van puur informatie op te vragen."
+        }
+      ],
       "oppositions": []
     },
     {
@@ -168256,7 +170380,112 @@
           "attributed_source_text": "Nitraatrichtlijn"
         }
       ],
-      "tags": [],
+      "tags": [
+        {
+          "sleutel": "Arena-Parlement",
+          "beschrijving": "Debat of uitspraak afkomstig uit de Eerste of Tweede Kamer.",
+          "labelgroep": "Issue Arena",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Bron is een Tweede Kamer-debat (documents.source.type = 'tweede_kamer')."
+        },
+        {
+          "sleutel": "Actor-Politicus",
+          "beschrijving": "Een gekozen volksvertegenwoordiger, bewindspersoon of partijvertegenwoordiger.",
+          "labelgroep": "Actor Type",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "derived",
+          "reden": "Spreker heeft een geregistreerde partij (SGP)."
+        },
+        {
+          "sleutel": "Context-Commissie",
+          "beschrijving": "Commissiedebat of wetgevingsoverleg; technisch en gedetailleerd van aard met een hogere argumentatieve kwaliteit.",
+          "labelgroep": "Parlementaire Context",
+          "perspectief": "Methodologisch & Contextueel",
+          "created_by": "derived",
+          "reden": "Afgeleid van VLOS-activiteitsoort 'Commissiedebat'."
+        },
+        {
+          "sleutel": "Walton-Consequentie",
+          "beschrijving": "Het verdedigen of aanvallen van een standpunt op basis van de verwachte praktische (voordelige of nadelige) gevolgen.",
+          "labelgroep": "Redeneerschema",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "Het argument verdedigt derogatie door te wijzen op de nadelige consequentie van het alternatief (verlies van derogatie leidt tot omschakeling naar bouwland en slechtere waterkwaliteit)."
+        },
+        {
+          "sleutel": "Frame-Thematisch",
+          "beschrijving": "Het benaderen van de kwestie vanuit een breder maatschappelijk, statistisch of historisch kader.",
+          "labelgroep": "Framing-Focus",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "Het argument benadert de kwestie vanuit een breed maatschappelijk en beleidskader (Europese Commissie, Nitraatrichtlijn, algemene waterkwaliteit) in plaats van een enkel incident."
+        },
+        {
+          "sleutel": "Frame-Conflict",
+          "beschrijving": "De nadruk ligt op de felle strijd of meningsverschillen tussen personen, partijen of groepen.",
+          "labelgroep": "Generieke Nieuwsframes",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "Er is sprake van een duidelijke strijd tussen de SGP/minister en de Europese Commissie/Wageningse studie over de interpretatie van feiten en beleid."
+        },
+        {
+          "sleutel": "Frame-Verantwoordelijkheid",
+          "beschrijving": "De nadruk ligt op de schuldvraag of de plicht tot het oplossen van het probleem.",
+          "labelgroep": "Generieke Nieuwsframes",
+          "perspectief": "Communicatiewetenschappelijk & Media",
+          "created_by": "llm",
+          "reden": "De spreker vraagt de minister expliciet hoe hij de situatie opvangt en pleit voor het 'stijf houden' van de Nederlandse positie tegenover Brussel."
+        },
+        {
+          "sleutel": "Ideologie-TAN",
+          "beschrijving": "Conservatief, traditioneel, nationalistisch (Traditional, Authoritarian, Nationalist).",
+          "labelgroep": "Cultureel-Ideologische Breuklijn",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "De spreker (SGP) pleit voor het behoud van traditionele landbouwpraktijken en betwist de autoriteit van de Europese Commissie, wat past binnen een conservatief en nationaal-sovereinistisch kader."
+        },
+        {
+          "sleutel": "Moraliteit-Autoriteit",
+          "beschrijving": "Gericht op respect voor traditie, legitieme hiërarchie, wetten en maatschappelijke orde.",
+          "labelgroep": "Morele Fundamenten",
+          "perspectief": "Politicologisch & Sociaal-Psychologisch",
+          "created_by": "llm",
+          "reden": "De spreker beroept zich op de Nitraatrichtlijn en objectieve criteria als formele regels die gerespecteerd moeten worden, en betwist de interpretatie van de Europese autoriteit."
+        },
+        {
+          "sleutel": "Bewijs-Expert",
+          "beschrijving": "Onderbouwd met de consensus, verklaring of het oordeel van een erkend specialist.",
+          "labelgroep": "Type Bewijsvoering",
+          "perspectief": "Methodologisch & Contextueel",
+          "created_by": "llm",
+          "reden": "De spreker verwijst naar de 'Wageningse studie' en de 'Europese Commissie' als bronnen van informatie, al betwist hij de volledigheid van de eerste."
+        },
+        {
+          "sleutel": "Bewijs-Causaal",
+          "beschrijving": "Onderbouwd met een heldere, mechanistische of logische verklaring van oorzaak en gevolg.",
+          "labelgroep": "Type Bewijsvoering",
+          "perspectief": "Methodologisch & Contextueel",
+          "created_by": "llm",
+          "reden": "Er wordt een mechanistische verklaring gegeven: verlies van derogatie leidt tot omschakeling naar bouwland, wat op zijn beurt leidt tot verslechtering van de waterkwaliteit."
+        },
+        {
+          "sleutel": "Stijl-Aangekondigde-Opsomming",
+          "beschrijving": "Vooraf het aantal elementen aankondigen (twee, drie, vijf, ...), gevolgd door een opsomming van precies dat aantal.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De spreker kondigt aan dat 'twee zaken ontbreken' in de studie en somt deze vervolgens op ('één... en, twee...')."
+        },
+        {
+          "sleutel": "Stijl-Retorische-Vraag",
+          "beschrijving": "Een vraag waarvan het antwoord al besloten ligt in de formulering zelf.",
+          "labelgroep": "Stijlmiddelen",
+          "perspectief": "Filosofisch & Argumentatietheoretisch",
+          "created_by": "llm",
+          "reden": "De vraag 'Hoe komt het dat de Europese Commissie nog steeds dit verkeerde beeld heeft?' impliceert dat het beeld inderdaad verkeerd is en vraagt om een verklaring van het falen van de Commissie."
+        }
+      ],
       "oppositions": []
     },
     {
@@ -183867,9 +186096,73 @@
       ],
       "tags": [],
       "oppositions": []
+    },
+    {
+      "id": 10188,
+      "stance": "pro",
+      "typology": "legal",
+      "quote_text": "Maar omdat het wel degelijk ook gevolgen heeft voor ons hier in Nederland, voor de opgave die we nog hebben te verrichten als het gaat om het achterstallig onderhoud op het gebied van natuurherstel en stikstofvermindering, voortvloeiend vanuit de Vogel- en Habitatrichtlijn, is dat wat de VVD betreft het werk dat we eerst hebben te doen.",
+      "quote_context": null,
+      "prompt_version": "0b12780c7cac",
+      "start_seconds": 33.88000000000011,
+      "end_seconds": 52.23999999999978,
+      "actor": {
+        "name": "Thom van Campen",
+        "party": "VVD",
+        "role_title": null
+      },
+      "document": {
+        "id": 193801,
+        "url": "https://gegevensmagazijn.tweedekamer.nl/OData/v4/2.0/Verslag/fecbfec7-c374-471d-88c9-5bf865e126b3/resource",
+        "video_url": "https://debatdirect.tweedekamer.nl/2024-06-20/internationaal/plenaire-zaal/onder-voorbehoud-tweeminutendebat-landbouw-en-visserijraad-dd-24-juni-2024-10-15/video",
+        "published_at": "2024-06-20T10:17:19",
+        "speaker_video_url": "https://debatdirect.tweedekamer.nl/2024-06-20/internationaal/plenaire-zaal/onder-voorbehoud-tweeminutendebat-landbouw-en-visserijraad-dd-24-juni-2024-10-15?event=speaker2024-06-20T10%3A17%3A19%2B0200",
+        "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2024A04121",
+        "redactie_review": null,
+        "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-06-20/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-06-20T10%3A17%3A06%2B0200&end=2024-06-20T10%3A43%3A38%2B0200"
+      },
+      "periode": {
+        "kamer": "Tweede Kamer 2023-2025",
+        "regering": "Kabinet-Rutte IV"
+      },
+      "claims": [],
+      "tags": [],
+      "oppositions": []
+    },
+    {
+      "id": 10189,
+      "stance": "contra",
+      "typology": "other",
+      "quote_text": "Maar we moeten er heel goed voor waken dat op de verordening, die een directe uitwerking heeft op de Nederlandse wet- en regelgeving, met dat plan dat moet worden opgesteld, niet onnodige koppen komen te staan.",
+      "quote_context": "Na het erkennen dat de VVD ook wil dat er werk gemaakt wordt van stikstofreductie, waarschuwt Van Campen tegen de gevolgen van de voorgestelde verordening.",
+      "prompt_version": "0b12780c7cac",
+      "start_seconds": 190.95899999999983,
+      "end_seconds": 203.91899999999987,
+      "actor": {
+        "name": "Thom van Campen",
+        "party": "VVD",
+        "role_title": null
+      },
+      "document": {
+        "id": 193802,
+        "url": "https://gegevensmagazijn.tweedekamer.nl/OData/v4/2.0/Verslag/fecbfec7-c374-471d-88c9-5bf865e126b3/resource",
+        "video_url": "https://debatdirect.tweedekamer.nl/2024-06-20/internationaal/plenaire-zaal/onder-voorbehoud-tweeminutendebat-landbouw-en-visserijraad-dd-24-juni-2024-10-15/video",
+        "published_at": "2024-06-20T10:19:35",
+        "speaker_video_url": "https://debatdirect.tweedekamer.nl/2024-06-20/internationaal/plenaire-zaal/onder-voorbehoud-tweeminutendebat-landbouw-en-visserijraad-dd-24-juni-2024-10-15?event=speaker2024-06-20T10%3A19%3A35%2B0200",
+        "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2024A04121",
+        "redactie_review": null,
+        "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-06-20/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-06-20T10%3A17%3A06%2B0200&end=2024-06-20T10%3A43%3A38%2B0200"
+      },
+      "periode": {
+        "kamer": "Tweede Kamer 2023-2025",
+        "regering": "Kabinet-Rutte IV"
+      },
+      "claims": [],
+      "tags": [],
+      "oppositions": []
     }
   ],
-  "argument_count": 1976,
+  "argument_count": 1978,
   "sprekerbeurten": [
     {
       "id": 37,
@@ -225329,121 +227622,121 @@
   "tag_correspondence": {
     "inertia_pct": [
       37.7,
-      20.4
+      20.1
     ],
     "parties": [
       {
         "party": "BBB",
-        "x": -0.36705158327919457,
-        "y": -0.0899528047807056,
+        "x": -0.36741828615361916,
+        "y": -0.09129495653924206,
         "n": 1861
       },
       {
         "party": "CDA",
-        "x": 0.01392563441461345,
-        "y": -0.015022530822990491,
+        "x": 0.011093737581913682,
+        "y": -0.0126007154005867,
         "n": 499
       },
       {
         "party": "ChristenUnie",
-        "x": 0.09388450295615135,
-        "y": -0.07910512794016347,
+        "x": 0.09183039391811425,
+        "y": -0.07925444032461433,
         "n": 791
       },
       {
         "party": "D66",
-        "x": 0.47631604945630285,
-        "y": 0.09403164072542773,
+        "x": 0.47377514381468616,
+        "y": 0.09898481512567828,
         "n": 1180
       },
       {
         "party": "DENK",
-        "x": 0.26821878673147453,
-        "y": 0.026095742330586168,
+        "x": 0.2657838609265682,
+        "y": 0.029336987758997745,
         "n": 70
       },
       {
         "party": "FVD",
-        "x": -0.6235912819078853,
-        "y": -0.3293093987434894,
+        "x": -0.620809593268534,
+        "y": -0.3342640421406445,
         "n": 388
       },
       {
         "party": "GroenLinks-PvdA",
-        "x": 0.46180336598025223,
-        "y": -0.08641607444878086,
-        "n": 366
+        "x": 0.4685627730556343,
+        "y": -0.07707585214546213,
+        "n": 377
       },
       {
         "party": "Groep Markuszower",
-        "x": -0.4928569306424932,
-        "y": -0.5367757968521818,
+        "x": -0.48427213574463746,
+        "y": -0.5346063488544404,
         "n": 171
       },
       {
         "party": "JA21",
-        "x": -0.45747000043096436,
-        "y": 0.1698693466609298,
+        "x": -0.45871535091923715,
+        "y": 0.17494559237867582,
         "n": 152
       },
       {
         "party": "Lid Keijzer",
-        "x": -0.3784288886584409,
-        "y": -0.10492430583253597,
+        "x": -0.3773916957647436,
+        "y": -0.10155148716582522,
         "n": 325
       },
       {
         "party": "NSC",
-        "x": 0.038728415282736864,
-        "y": 0.06561344455121294,
-        "n": 480
+        "x": 0.029064276648087157,
+        "y": 0.0687230786682539,
+        "n": 511
       },
       {
         "party": "Onafhankelijk",
-        "x": 0.16776083150407045,
-        "y": 0.38987256759741995,
+        "x": 0.1631951128970078,
+        "y": 0.38951295227833704,
         "n": 104
       },
       {
         "party": "PRO",
-        "x": 0.6003020042002928,
-        "y": -0.07310786340184858,
+        "x": 0.5994276131727716,
+        "y": -0.0680614608319005,
         "n": 596
       },
       {
         "party": "PVV",
-        "x": -0.47723293192295335,
-        "y": -0.17708300973509267,
-        "n": 200
+        "x": -0.4790418058251864,
+        "y": -0.160143319788597,
+        "n": 241
       },
       {
         "party": "PvdD",
-        "x": 0.47526218603339154,
-        "y": -0.10733393978440321,
-        "n": 579
+        "x": 0.47063096954483125,
+        "y": -0.10121490452062804,
+        "n": 653
       },
       {
         "party": "SGP",
-        "x": -0.387665205216529,
-        "y": -0.27177744381266505,
-        "n": 708
+        "x": -0.3730187468243509,
+        "y": -0.2659566174664817,
+        "n": 744
       },
       {
         "party": "SP",
-        "x": 0.4956993107334632,
-        "y": -0.5274284406947743,
+        "x": 0.4948287897745593,
+        "y": -0.5264140776444644,
         "n": 360
       },
       {
         "party": "VVD",
-        "x": -0.19826763549288254,
-        "y": 0.6392151502329313,
+        "x": -0.20391834623851496,
+        "y": 0.6381955559586581,
         "n": 1318
       },
       {
         "party": "Volt",
-        "x": 0.41438320766007103,
-        "y": -0.018614153345544754,
+        "x": 0.41432123736570553,
+        "y": -0.020189791703529646,
         "n": 373
       }
     ],
@@ -225452,337 +227745,337 @@
         "sleutel": "Bewijs-Anekdotisch",
         "beschrijving": "Onderbouwd met één specifiek praktijkgeval, incident, exemplar of persoonlijk verhaal.",
         "labelgroep": "Type Bewijsvoering",
-        "x": 0.049745597474538925,
-        "y": -0.08562232882417341,
-        "n": 220
+        "x": 0.04870857537277856,
+        "y": -0.08234559689474392,
+        "n": 223
       },
       {
         "sleutel": "Bewijs-Causaal",
         "beschrijving": "Onderbouwd met een heldere, mechanistische of logische verklaring van oorzaak en gevolg.",
         "labelgroep": "Type Bewijsvoering",
-        "x": 0.02006905135008333,
-        "y": 0.06925094358716066,
-        "n": 652
+        "x": 0.020268100985128816,
+        "y": 0.07167719018761824,
+        "n": 660
       },
       {
         "sleutel": "Bewijs-Expert",
         "beschrijving": "Onderbouwd met de consensus, verklaring of het oordeel van een erkend specialist.",
         "labelgroep": "Type Bewijsvoering",
-        "x": -0.028980205695044503,
-        "y": 0.1294359923858831,
-        "n": 249
+        "x": -0.04193831446254033,
+        "y": 0.11065778734397207,
+        "n": 258
       },
       {
         "sleutel": "Bewijs-Statistisch",
         "beschrijving": "Onderbouwd met kwantitatieve gegevens, cijfers, percentages of grootschalig representatief onderzoek.",
         "labelgroep": "Type Bewijsvoering",
-        "x": -0.06715292365854353,
-        "y": -0.19169723951786824,
-        "n": 161
+        "x": -0.059966477829495234,
+        "y": -0.18075337004332467,
+        "n": 164
       },
       {
         "sleutel": "Debatzet-Bewijs-Vragen",
         "beschrijving": "Doen alsof een claim geen bewijs behoeft of de tegenstander dwingen het tegendeel te bewijzen.",
         "labelgroep": "Debatzetten",
-        "x": -0.5894504673983126,
-        "y": -0.2228500143983997,
+        "x": -0.5945603908922132,
+        "y": -0.21632582299402303,
         "n": 11
       },
       {
         "sleutel": "Debatzet-Gevoelens-Verwoorden",
         "beschrijving": "Emotioneel argumenteren gericht op het oproepen van angst, woede of medelijden bij de toehoorder.",
         "labelgroep": "Debatzetten",
-        "x": -0.6788538702353463,
-        "y": -0.5345395203150262,
-        "n": 52
+        "x": -0.6732317686417234,
+        "y": -0.5170270613741096,
+        "n": 54
       },
       {
         "sleutel": "Debatzet-Herformuleren",
         "beschrijving": "Het vertekenen of overdrijven van het standpunt van de opponent om dit makkelijker te kunnen aanvallen.",
         "labelgroep": "Debatzetten",
-        "x": -0.5857730846500326,
-        "y": -0.33162198384998887,
-        "n": 91
+        "x": -0.5437282342221992,
+        "y": -0.3291688176065812,
+        "n": 93
       },
       {
         "sleutel": "Debatzet-Keuze-Aanscherpen",
         "beschrijving": "Zwart-wit denken; de situatie voorstellen alsof er slechts twee uiterste, elkaar uitsluitende opties bestaan.",
         "labelgroep": "Debatzetten",
-        "x": -0.29698802836253324,
-        "y": -0.20274236736286896,
+        "x": -0.2994074297915871,
+        "y": -0.1971220900723685,
         "n": 68
       },
       {
         "sleutel": "Debatzet-Persoon-Aanspreken",
         "beschrijving": "Persoonlijke aanval op de tegenstander (op de man spelen) in plaats van een inhoudelijke weerlegging.",
         "labelgroep": "Debatzetten",
-        "x": -0.05969838319662416,
-        "y": -0.3131420405541084,
-        "n": 55
+        "x": 0.007848900922178308,
+        "y": -0.3095407781349461,
+        "n": 58
       },
       {
         "sleutel": "Frame-Conflict",
         "beschrijving": "De nadruk ligt op de felle strijd of meningsverschillen tussen personen, partijen of groepen.",
         "labelgroep": "Generieke Nieuwsframes",
-        "x": -0.11935659598963543,
-        "y": -0.38689929269652046,
-        "n": 351
+        "x": -0.11178640695575574,
+        "y": -0.3837743118777672,
+        "n": 356
       },
       {
         "sleutel": "Frame-Economisch",
         "beschrijving": "De focus ligt op de financiële kosten, baten of budgettaire gevolgen van een kwestie.",
         "labelgroep": "Generieke Nieuwsframes",
-        "x": -0.0453945488770326,
-        "y": 0.07487211555005771,
-        "n": 358
+        "x": -0.04446528812729921,
+        "y": 0.07994811641536098,
+        "n": 361
       },
       {
         "sleutel": "Frame-Episodisch",
         "beschrijving": "Inzoomen op een specifiek, individueel incident, persoonlijk verhaal of een concrete casus.",
         "labelgroep": "Framing-Focus",
-        "x": -0.0404651584722817,
-        "y": -0.13680017784235493,
-        "n": 277
+        "x": -0.03600488481870413,
+        "y": -0.1291617691724556,
+        "n": 279
       },
       {
         "sleutel": "Frame-Menselijk-Belang",
         "beschrijving": "De focus ligt op de menselijke kant, de emoties of het individuele leed (Human Interest).",
         "labelgroep": "Generieke Nieuwsframes",
-        "x": -0.21386919028273801,
-        "y": -0.27945979746878413,
-        "n": 93
+        "x": -0.21264038717430625,
+        "y": -0.27015826768382767,
+        "n": 94
       },
       {
         "sleutel": "Frame-Moraliteit",
         "beschrijving": "Inbranding vanuit ethische plichten, spirituele of religieuze principes.",
         "labelgroep": "Generieke Nieuwsframes",
-        "x": 0.3330736284754031,
-        "y": -0.39215936562584675,
-        "n": 84
+        "x": 0.3206798829026626,
+        "y": -0.39448497091805484,
+        "n": 88
       },
       {
         "sleutel": "Frame-Thematisch",
         "beschrijving": "Het benaderen van de kwestie vanuit een breder maatschappelijk, statistisch of historisch kader.",
         "labelgroep": "Framing-Focus",
-        "x": 0.01623306090928766,
-        "y": 0.08579234744772517,
-        "n": 1242
+        "x": 0.01359797030119706,
+        "y": 0.08227987215547697,
+        "n": 1269
       },
       {
         "sleutel": "Frame-Verantwoordelijkheid",
         "beschrijving": "De nadruk ligt op de schuldvraag of de plicht tot het oplossen van het probleem.",
         "labelgroep": "Generieke Nieuwsframes",
-        "x": 0.12013466117474132,
-        "y": 0.08820942046471245,
-        "n": 995
+        "x": 0.12025021917503267,
+        "y": 0.08928590644260256,
+        "n": 1012
       },
       {
         "sleutel": "Ideologie-GAL",
         "beschrijving": "Progressief, ecologisch, kosmopolitisch (Green, Alternative, Libertarian).",
         "labelgroep": "Cultureel-Ideologische Breuklijn",
-        "x": 1.0018824326037996,
-        "y": -0.04321381286329111,
-        "n": 538
+        "x": 0.9992041450245317,
+        "y": -0.03760560776285288,
+        "n": 552
       },
       {
         "sleutel": "Ideologie-Links-Economisch",
         "beschrijving": "Gericht op herverdeling van welvaart, sterke collectieve voorzieningen en overheidsingrijpen.",
         "labelgroep": "Cultureel-Ideologische Breuklijn",
-        "x": 1.010481501849874,
-        "y": -1.0081697404383962,
+        "x": 1.010255388777376,
+        "y": -1.009009819757209,
         "n": 69
       },
       {
         "sleutel": "Ideologie-Rechts-Economisch",
         "beschrijving": "Gericht op de vrije markt, deregulering en individuele verantwoordelijkheid.",
         "labelgroep": "Cultureel-Ideologische Breuklijn",
-        "x": -0.6344621060338854,
-        "y": 0.9884833732820484,
-        "n": 253
+        "x": -0.6425931687842108,
+        "y": 0.9907829044066192,
+        "n": 255
       },
       {
         "sleutel": "Ideologie-TAN",
         "beschrijving": "Conservatief, traditioneel, nationalistisch (Traditional, Authoritarian, Nationalist).",
         "labelgroep": "Cultureel-Ideologische Breuklijn",
-        "x": -0.9412299293213134,
-        "y": -0.5329769055602063,
-        "n": 397
+        "x": -0.9406649391581099,
+        "y": -0.537746228176896,
+        "n": 407
       },
       {
         "sleutel": "Meta-Agenda-Tijdigheid",
         "beschrijving": "Uitingen over de chronologische geschiktheid, de prioriteitstelling of de urgentie van de discussie op dit specifieke moment.",
         "labelgroep": "Metadiscussie",
-        "x": 0.15599064818092626,
-        "y": 0.2574532265017703,
-        "n": 107
+        "x": 0.1478303072399501,
+        "y": 0.25356214737871,
+        "n": 109
       },
       {
         "sleutel": "Meta-Bevoegdheid",
         "beschrijving": "Uitingen over het formele mandaat, de wettelijke of constitutionele autoriteit, of de institutionele taakverdeling om over de kwestie te beslissen.",
         "labelgroep": "Metadiscussie",
-        "x": -0.2749870649720846,
-        "y": 0.6569934593084722,
-        "n": 108
+        "x": -0.27837910305008595,
+        "y": 0.626154306513028,
+        "n": 112
       },
       {
         "sleutel": "Meta-Deelnemers",
         "beschrijving": "Uitingen over de spreektijdregelingen, de aanwezigheidsplicht van specifieke actoren, of de legitieme toegang van sprekers tot de lopende interactie.",
         "labelgroep": "Metadiscussie",
-        "x": 0.16386536982365005,
-        "y": 0.18515135186214,
+        "x": 0.1559463080577882,
+        "y": 0.1967877646354226,
         "n": 9
       },
       {
         "sleutel": "Meta-Reikwijdte",
         "beschrijving": "Uitingen over de thematische grenzen van het debat, de toelaatbaarheid van specifieke beweringen, of de legitimiteit van bepaalde linguïstische framings.",
         "labelgroep": "Metadiscussie",
-        "x": -0.3330225047500617,
-        "y": -0.16909663097722,
-        "n": 123
+        "x": -0.33122707328849155,
+        "y": -0.16386188788784956,
+        "n": 124
       },
       {
         "sleutel": "Meta-Vorm-Setting",
         "beschrijving": "Uitingen over de formele procedure, de interactieve spelregels, het vergaderformat of de fysieke en institutionele context van de uitwisseling.",
         "labelgroep": "Metadiscussie",
-        "x": -0.10079714249553909,
-        "y": 0.34456826039851757,
-        "n": 119
+        "x": -0.11563649674612879,
+        "y": 0.3453973757390091,
+        "n": 120
       },
       {
         "sleutel": "Moraliteit-Autoriteit",
         "beschrijving": "Gericht op respect voor traditie, legitieme hiërarchie, wetten en maatschappelijke orde.",
         "labelgroep": "Morele Fundamenten",
-        "x": -0.06372586357810393,
-        "y": 0.43706749450006194,
-        "n": 454
+        "x": -0.07196044711562595,
+        "y": 0.4280993579829225,
+        "n": 463
       },
       {
         "sleutel": "Moraliteit-Eerlijkheid",
         "beschrijving": "Gericht op gelijke kansen, gelijke rechten en onpartijdige behandeling (equality).",
         "labelgroep": "Morele Fundamenten",
-        "x": 0.19186430953034492,
-        "y": -0.1975325615602383,
-        "n": 275
+        "x": 0.18034451930549653,
+        "y": -0.19037898510790202,
+        "n": 280
       },
       {
         "sleutel": "Moraliteit-Loyaliteit",
         "beschrijving": "Gericht op groeps-solidariteit, vaderlandsliefde en trouw aan de eigen gemeenschap (in-group).",
         "labelgroep": "Morele Fundamenten",
-        "x": -0.8103783594228184,
-        "y": -0.3668182923124876,
-        "n": 106
+        "x": -0.8136381921347458,
+        "y": -0.36704675035865675,
+        "n": 107
       },
       {
         "sleutel": "Moraliteit-Proportionaliteit",
         "beschrijving": "Gericht op rechtvaardigheid naar rato van inspanning; belonen naar werken en het straffen van profiteurs.",
         "labelgroep": "Morele Fundamenten",
-        "x": -0.08766913866163148,
-        "y": -0.2579125289220109,
+        "x": -0.08459413095612313,
+        "y": -0.25151065463616284,
         "n": 72
       },
       {
         "sleutel": "Moraliteit-Vrijheid",
         "beschrijving": "Gericht op individuele autonomie en weerstand tegen dwang of onderdrukking door dominante actoren.",
         "labelgroep": "Morele Fundamenten",
-        "x": -0.7336347912831301,
-        "y": -0.048363653908065164,
-        "n": 218
+        "x": -0.7332507273788575,
+        "y": -0.04622402368187338,
+        "n": 220
       },
       {
         "sleutel": "Moraliteit-Zorg",
         "beschrijving": "Gericht op empathie, compassie en het voorkomen van leed en schade bij kwetsbaren.",
         "labelgroep": "Morele Fundamenten",
-        "x": 0.3566237798106275,
-        "y": -0.09684908236729287,
-        "n": 347
+        "x": 0.3598925419020325,
+        "y": -0.0969242954998935,
+        "n": 359
       },
       {
         "sleutel": "Moraliteit-Zuiverheid",
         "beschrijving": "Gericht op het vermijden van morele of fysieke besmetting; streven naar het schone, natuurlijke of verhevene.",
         "labelgroep": "Morele Fundamenten",
-        "x": 1.0476919588632845,
-        "y": -0.05405550844341439,
-        "n": 111
+        "x": 1.0484575349293639,
+        "y": -0.04166803125835231,
+        "n": 112
       },
       {
         "sleutel": "Stijl-Aangekondigde-Opsomming",
         "beschrijving": "Vooraf het aantal elementen aankondigen (twee, drie, vijf, ...), gevolgd door een opsomming van precies dat aantal.",
         "labelgroep": "Stijlmiddelen",
-        "x": 0.3728465955403056,
-        "y": 0.15676321662580184,
-        "n": 47
+        "x": 0.31453993199997177,
+        "y": 0.12484936749743981,
+        "n": 49
       },
       {
         "sleutel": "Stijl-Antithese",
         "beschrijving": "Het naast elkaar plaatsen van twee tegengestelde begrippen of ideeën.",
         "labelgroep": "Stijlmiddelen",
-        "x": -0.06469341668350827,
-        "y": -0.13007214045049054,
-        "n": 215
+        "x": -0.04819134229830022,
+        "y": -0.1261316441186102,
+        "n": 219
       },
       {
         "sleutel": "Stijl-Herhaling",
         "beschrijving": "Herhaling van hetzelfde woord of dezelfde woordgroep binnen het fragment, ter nadruk.",
         "labelgroep": "Stijlmiddelen",
-        "x": -0.07563235082842258,
-        "y": 0.029178350171320866,
-        "n": 230
+        "x": -0.07842889143559292,
+        "y": 0.03676722787916681,
+        "n": 231
       },
       {
         "sleutel": "Stijl-Retorische-Vraag",
         "beschrijving": "Een vraag waarvan het antwoord al besloten ligt in de formulering zelf.",
         "labelgroep": "Stijlmiddelen",
-        "x": 0.11866471491290652,
-        "y": -0.36381868088144786,
-        "n": 253
+        "x": 0.11630619729323605,
+        "y": -0.36291139111321913,
+        "n": 256
       },
       {
         "sleutel": "Stijl-Slogan",
         "beschrijving": "Beknopte, pakkende frase.",
         "labelgroep": "Stijlmiddelen",
-        "x": -0.1326975271130512,
-        "y": -0.19788118122593715,
-        "n": 23
+        "x": -0.11322904669007713,
+        "y": -0.22653378266969323,
+        "n": 27
       },
       {
         "sleutel": "Walton-Analogie",
         "beschrijving": "Er wordt een vergelijking getrokken met een historische gebeurtenis, een andere specifieke casus of een precedent.",
         "labelgroep": "Redeneerschema",
-        "x": -0.10525558412101059,
-        "y": -0.16446017340216285,
+        "x": -0.10722146043423235,
+        "y": -0.15973385740630158,
         "n": 82
       },
       {
         "sleutel": "Walton-Causaal",
         "beschrijving": "Argumentatie gebaseerd op een directe oorzaak-gevolgrelatie.",
         "labelgroep": "Redeneerschema",
-        "x": -0.17764537672337116,
-        "y": -0.33513811521423675,
-        "n": 129
+        "x": -0.1653193459286369,
+        "y": -0.33077523225946026,
+        "n": 130
       },
       {
         "sleutel": "Walton-Consequentie",
         "beschrijving": "Het verdedigen of aanvallen van een standpunt op basis van de verwachte praktische (voordelige of nadelige) gevolgen.",
         "labelgroep": "Redeneerschema",
-        "x": 0.08874585452692622,
-        "y": 0.0749738733261555,
-        "n": 800
+        "x": 0.08567691705733042,
+        "y": 0.07818894374793817,
+        "n": 810
       },
       {
         "sleutel": "Walton-Expertise",
         "beschrijving": "Het argument leunt op de autoriteit, bevindingen of de verklaring van een specialist of expert.",
         "labelgroep": "Redeneerschema",
-        "x": -0.033563074575134355,
-        "y": -0.06675720212563008,
-        "n": 175
+        "x": -0.044467079763331196,
+        "y": -0.07970938121946634,
+        "n": 181
       },
       {
         "sleutel": "Walton-Regel",
         "beschrijving": "Het argument beroept zich op een reeds gevestigde wet, formele regel of breed geaccepteerde maatschappelijke norm.",
         "labelgroep": "Redeneerschema",
-        "x": -0.11396023241773094,
-        "y": 0.30330709440557085,
-        "n": 302
+        "x": -0.10070520163217324,
+        "y": 0.2920269324202606,
+        "n": 311
       }
     ]
   },
