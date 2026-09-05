@@ -184,13 +184,17 @@ function skipBy(deltaSeconds: number) {
 	emit("seek", Math.max(0, currentTime.value + deltaSeconds));
 }
 
-defineExpose({ fatalError });
+// videoEl: nodig voor clipExport.ts (issue #180), dat canvas.drawImage(video, ...)
+// gebruikt om het videoframe + overlay samen te vangen -- crossorigin
+// hieronder is daar ook voor nodig (anders raakt dat canvas "tainted" en
+// weigert captureStream()).
+defineExpose({ fatalError, videoEl });
 </script>
 
 <template>
 	<div class="video-player">
 		<div class="video-stage">
-			<video v-show="!fatalError" ref="videoEl" playsinline :poster="poster ?? undefined"></video>
+			<video v-show="!fatalError" ref="videoEl" playsinline crossorigin="anonymous" :poster="poster ?? undefined"></video>
 			<p v-if="fatalError" class="video-fallback">
 				De video kan nu niet worden afgespeeld (het onderliggende manifest is ongedocumenteerd en kan gemigreerd
 				zijn). Probeer het later opnieuw, of bekijk het debat rechtstreeks bij de Tweede Kamer.

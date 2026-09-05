@@ -10,6 +10,7 @@ import { perspectiefWeergaveNaam } from "../lib/tagIcon";
 import { activeArguments } from "../lib/videoLabels";
 import { requestSeek, videoSeek } from "../lib/videoSeek";
 import { notifyUserScroll, userScroll } from "../lib/userScroll";
+import { downloadClip, recordClip } from "../lib/clipExport";
 
 const props = withDefaults(
 	defineProps<{
@@ -88,6 +89,33 @@ watch(
 const off = reactive<Record<string, boolean>>({});
 function togglePerspective(name: string) {
 	off[name] = !off[name];
+}
+function isVisible(tag: { perspectief: string }) {
+	return !off[tag.perspectief];
+}
+
+// Lokale clip-export (issue #180): geen server, dus canvas.captureStream()
+// van een SVG-overlay op de videoframes (issue #179, zie clipExport.ts).
+// Alleen op de volledige debatpagina (props.debateHref ontbreekt daar, zie
+// #controls-extra hieronder) -- de homepage-teaser is een compacte weergave,
+// geen plek om een clip van te knippen.
+const videoPlayerRef = ref<InstanceType<typeof VideoPlayer> | null>(null);
+const exporting = ref(false);
+const exportError = ref<string | null>(null);
+async function exportClip() {
+	const video = videoPlayerRef.value?.videoEl;
+	if (!video || exporting.value) return;
+	exporting.value = true;
+	exportError.value = null;
+	try {
+		const result = await recordClip(video, argumentList.value, isVisible, 10);
+		downloadClip(result, `${props.debateId}-clip.webm`);
+	} catch (e) {
+		exportError.value = e instanceof Error ? e.message : "onbekende fout";
+		console.error("clip-export mislukt:", e);
+	} finally {
+		exporting.value = false;
+	}
 }
 
 // Welk argument(en) nu spelen, om de bijbehorende kaart in de lijst rechts
@@ -292,6 +320,7 @@ function dismissFloating() {
 			</button>
 			<div v-if="props.rawVideoUrl" class="player-stage">
 				<VideoPlayer
+					ref="videoPlayerRef"
 					:src="props.rawVideoUrl"
 					:poster="props.posterUrl"
 					:seek-to="videoSeek.seconds"
@@ -328,6 +357,19 @@ function dismissFloating() {
 								<path
 									d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"
 								/>
+							</svg>
+						</button>
+						<button
+							type="button"
+							class="control-button argument-toggle-inline"
+							:disabled="exporting"
+							:aria-label="exporting ? 'Clip wordt gemaakt...' : 'Clip van 10 seconden exporteren'"
+							:title="exportError ? `Mislukt: ${exportError}` : exporting ? 'Clip wordt gemaakt...' : 'Clip van 10 seconden exporteren (WebM, lokale download)'"
+							@click="exportClip"
+						>
+							<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+								<rect x="3" y="5" width="14" height="14" rx="2" />
+								<path d="M17 9.5 21 7v10l-4-2.5" />
 							</svg>
 						</button>
 					</template>
@@ -676,6 +718,11 @@ function dismissFloating() {
 .argument-toggle-inline[aria-pressed="true"] {
 	color: var(--color-accent);
 	border-color: var(--color-accent);
+}
+
+.argument-toggle-inline:disabled {
+	opacity: 0.5;
+	cursor: default;
 }
 
 .argument-list {
