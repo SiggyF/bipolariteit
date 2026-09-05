@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <title>Colofon - De Parlementaire Kaart van Nederland</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Work+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap');
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: transparent;
+      display: inline-block;
+      padding: 20px;
+    }
+
+    .colofon-card {
+      background-color: #fbf9f4;
+      border: 2.2px solid #22304e;
+      border-radius: 12px;
+      padding: 28px 36px;
+      width: 1400px;
+      box-shadow: 0 10px 25px rgba(34, 48, 78, 0.12);
+      font-family: 'Work Sans', -apple-system, sans-serif;
+      color: #221f1b;
+    }
+
+    .header-title {
+      font-family: 'Libre Caslon Text', Georgia, serif;
+      font-size: 24px;
+      font-weight: 700;
+      color: #22304e;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+    }
+
+    .header-sub {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 13px;
+      font-weight: 600;
+      color: #6f6558;
+      letter-spacing: 0.5px;
+      margin-bottom: 16px;
+    }
+
+    .divider {
+      height: 1.5px;
+      background-color: #45587d;
+      opacity: 0.4;
+      margin-bottom: 24px;
+    }
+
+    .grid-3col {
+      display: grid;
+      grid-template-columns: 1fr 1.35fr 1fr;
+      gap: 32px;
+    }
+
+    .section-title {
+      font-family: 'Libre Caslon Text', Georgia, serif;
+      font-size: 16px;
+      font-weight: 700;
+      color: #33456e;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .section-title::before {
+      content: '';
+      display: inline-block;
+      width: 6px;
+      height: 14px;
+      background-color: #33456e;
+      border-radius: 2px;
+    }
+
+    ul.meta-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    ul.meta-list li {
+      font-size: 13.5px;
+      line-height: 1.45;
+      color: #33302c;
+    }
+
+    ul.meta-list li strong {
+      color: #1c2b48;
+      font-weight: 600;
+    }
+
+    .mono-tag {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      background-color: #e8edf5;
+      color: #22304e;
+      padding: 2px 6px;
+      border-radius: 4px;
+      border: 1px solid #45587d40;
+      font-weight: 600;
+    }
+
+    .footer-note {
+      margin-top: 22px;
+      padding-top: 14px;
+      border-top: 1px dashed #45587d40;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      color: #6f6558;
+      font-family: 'IBM Plex Mono', monospace;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="colofon-card">
+    <div class="header-title">COLOFON &amp; METHODOLOGISCHE VERANTWOORDING</div>
+    <div class="header-sub">DE PARLEMENTAIRE KAART VAN NEDERLAND · ZITTINGSJAAR 2025–2026</div>
+    <div class="divider"></div>
+
+    <div class="grid-3col">
+      <!-- KOLOM 1: DATA -->
+      <div>
+        <div class="section-title">DATA &amp; BRONVERMELDING</div>
+        <ul class="meta-list">
+          <li><strong>Bron:</strong> Tweede Kamer der Staten-Generaal Open Data Portaal <span class="mono-tag">OData v4 / VLOS</span></li>
+          <li><strong>Omvang:</strong> 135.633 spreekbeurten uit alle plenaire debatten en commissievergaderingen</li>
+          <li><strong>Periode:</strong> Zittingsjaar 2025–2026 <span class="mono-tag">nov 2025 – sep 2026</span></li>
+        </ul>
+      </div>
+
+      <!-- KOLOM 2: MACHINE LEARNING & CARTOGRAFIE -->
+      <div>
+        <div class="section-title">MACHINE LEARNING &amp; CARTOGRAFIE</div>
+        <ul class="meta-list">
+          <li><strong>Embedding:</strong> BGE-M3 meertalig taalmodel <span class="mono-tag">1024D Dense Vectors</span></li>
+          <li><strong>Dimensiereductie:</strong> UMAP 2D-topologische reductie <span class="mono-tag">1024D → 2D (x, y)</span></li>
+          <li><strong>Semantische Kleur:</strong> CIELAB projectie <span class="mono-tag">PC 2 &amp; PC 3 → (a*, b*)</span></li>
+          <li><strong>Clustering:</strong> HDBSCAN 5-traps hiërarchie (8 hoofddomeinen tot 573 sub-debatten)</li>
+          <li><strong>Thematische Duiding:</strong> TF-IDF synthese &amp; 1.521 officiële Kamerstukdossiers</li>
+          <li><strong>Cartografie:</strong> 300 DPI RGBA kleurendichtheidsraster, vectorstippeling &amp; matglas</li>
+        </ul>
+      </div>
+
+      <!-- KOLOM 3: OPEN SCIENCE -->
+      <div>
+        <div class="section-title">OPEN SCIENCE &amp; COLOFON</div>
+        <ul class="meta-list">
+          <li><strong>Project:</strong> <span class="mono-tag">Bipolariteit.org</span></li>
+          <li><strong>Data DOI:</strong> <span class="mono-tag">10.5281/zenodo.22236363</span></li>
+          <li><strong>Licentie:</strong> <span class="mono-tag">CC BY-SA 4.0</span> (Naamsvermelding-GelijkDelen)</li>
+          <li><strong>Typografie:</strong> Libre Caslon Display, Work Sans, IBM Plex Mono</li>
+          <li><strong>Uitgave:</strong> Eerste Druk, September 2026</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-note">
+      <span>© 2026 Bipolariteit.org · Licentie: Creative Commons CC BY-SA 4.0</span>
+      <span>Printresolutie 300 DPI (A0)</span>
+    </div>
+  </div>
+
+</body>
+</html>

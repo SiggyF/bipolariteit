@@ -1,0 +1,98 @@
+direction: right
+
+vars: {
+  d2-config: {
+    theme-id: 0
+    sketch: false
+  }
+}
+
+classes: {
+  step: {
+    style: {
+      fill: "#fbf9f4"
+      stroke: "#22304e"
+      stroke-width: 2
+      border-radius: 6
+      font-size: 13
+      font-color: "#221f1b"
+    }
+  }
+  sub: {
+    style: {
+      fill: "#e8edf5"
+      stroke: "#45587d"
+      stroke-width: 1
+      border-radius: 4
+      font-size: 11
+      font-color: "#22304e"
+    }
+  }
+}
+
+step1: "1. Data-inname\nTweede Kamer OData v4" {
+  class: step
+  info: "135.633 spreekbeurten\nPlenair & Commissiezalen\n(nov 2025 – sep 2026)" {
+    class: sub
+  }
+}
+
+step2: "2. Semantische Vectoren\nBGE-M3 Taalmodel" {
+  class: step
+  info: "1024-dimensionale\nsemantische embedding\nper spreekbeurt" {
+    class: sub
+  }
+}
+
+step3: "3. Dimensiereductie\nUMAP 2D-Projectie" {
+  class: step
+  info: "Topologische projectie\n1024D → 2D cartografische\ncoördinaten (x, y)" {
+    class: sub
+  }
+}
+
+step4: "4. Multilevel Clustering\nHDBSCAN 5 Niveaus" {
+  class: step
+  info: "Van 8 hoofddomeinen\ntot 573 sub-debatten\nen contourhulls" {
+    class: sub
+  }
+}
+
+step5: "5. Thematische Duiding\nTF-IDF + LLM & Dossiers" {
+  class: step
+  info: "Koppeling aan 1.521\nofficiële Kamerstukdossiers\nen thema-etiketten" {
+    class: sub
+  }
+}
+
+step6: "6. A0 Cartografie\nQGIS Poster Synthese" {
+  class: step
+  info: "300 DPI RGBA raster,\nCIELAB PCA-kleur reliëf,\nvector-stippeling & badges" {
+    class: sub
+  }
+}
+
+step1 -> step2: "1024D" {
+  style.stroke: "#33456e"
+  style.stroke-width: 2
+}
+
+step2 -> step3: "Topologie" {
+  style.stroke: "#33456e"
+  style.stroke-width: 2
+}
+
+step3 -> step4: "(x, y)" {
+  style.stroke: "#33456e"
+  style.stroke-width: 2
+}
+
+step4 -> step5: "Clusters" {
+  style.stroke: "#33456e"
+  style.stroke-width: 2
+}
+
+step5 -> step6: "Kaartlagen" {
+  style.stroke: "#33456e"
+  style.stroke-width: 2
+}

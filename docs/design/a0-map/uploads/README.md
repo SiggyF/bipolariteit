@@ -25,7 +25,7 @@ sub-onderwerpen, elk met een automatisch gegenereerde naam.
 ## Bestanden in dit pakket
 
 - **`screenshots/preview.png`** -- eerste ruwe preview
-  (`scripts/render_design_preview.py`, een snel matplotlib-scriptje, GEEN
+  (`scripts/a0_map/render_design_preview.py`, een snel matplotlib-scriptje, GEEN
   printkwaliteit-renderer): puntenwolk gekleurd per onderwerp
   (semi-transparant, zodat dichtheid zichtbaar wordt), met daaroverheen alle
   5 clusterniveaus als contourlijnen (dikker = grover niveau, dunner =

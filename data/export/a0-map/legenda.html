@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <title>Legenda - De Parlementaire Kaart van Nederland</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Work+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap');
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: transparent;
+      display: inline-block;
+      padding: 16px;
+    }
+
+    .legend-card {
+      background-color: #fbf9f4;
+      border: 2.2px solid #22304e;
+      border-radius: 12px;
+      padding: 22px 24px;
+      width: 440px;
+      box-shadow: 0 10px 25px rgba(34, 48, 78, 0.12);
+      font-family: 'Work Sans', -apple-system, sans-serif;
+      color: #221f1b;
+    }
+
+    .legend-title {
+      font-family: 'Libre Caslon Text', Georgia, serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: #22304e;
+      letter-spacing: 0.5px;
+      margin-bottom: 3px;
+    }
+
+    .legend-sub {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10.5px;
+      font-weight: 600;
+      color: #6f6558;
+      letter-spacing: 0.5px;
+      margin-bottom: 12px;
+    }
+
+    .divider {
+      height: 1.5px;
+      background-color: #45587d;
+      opacity: 0.35;
+      margin-bottom: 14px;
+    }
+
+    .legend-items {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .legend-item {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .item-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+    }
+
+    .item-title {
+      font-family: 'Libre Caslon Text', Georgia, serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: #22304e;
+    }
+
+    .mono-tag {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9.5px;
+      font-weight: 600;
+      color: #6f6558;
+    }
+
+    .symbol-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 38px;
+      padding: 6px 12px;
+      background: #f2efe7;
+      border-radius: 6px;
+      border: 1.2px solid #dcd7cc;
+    }
+
+    .legend-desc {
+      font-size: 11.5px;
+      line-height: 1.40;
+      color: #33302c;
+    }
+
+    /* Symbol 1: Points */
+    .dots-sample {
+      position: relative;
+      width: 220px;
+      height: 24px;
+    }
+    .dot {
+      position: absolute;
+      width: 3.5px;
+      height: 3.5px;
+      background-color: #222222;
+      border-radius: 50%;
+      opacity: 0.75;
+    }
+
+    /* Symbol 2: Gradient Ramp */
+    .gradient-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      width: 280px;
+    }
+    .gradient-bar {
+      width: 100%;
+      height: 10px;
+      border-radius: 3px;
+      background: linear-gradient(to right, #f2efe7 0%, #a8a49c 50%, #222222 100%);
+      border: 1px solid #8e897e;
+      box-shadow: inset 0 1px 2px rgba(0,0,0,0.12);
+    }
+    .gradient-labels {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 8.5px;
+      font-weight: 600;
+      color: #555047;
+    }
+
+    /* Symbol 4: Contours & Badges */
+    .contour-sample {
+      width: 180px;
+      height: 26px;
+      border: 1.8px solid #22304e;
+      border-radius: 13px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: rgba(34, 48, 78, 0.03);
+    }
+    .badge-sample {
+      font-family: 'Libre Caslon Text', Georgia, serif;
+      font-size: 9px;
+      font-weight: 700;
+      background: #e8edf5;
+      color: #22304e;
+      padding: 1.5px 7px;
+      border-radius: 4px;
+      border: 1px solid #45587d;
+      box-shadow: 0 1px 3px rgba(34,48,78,0.15);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="legend-card">
+    <div class="legend-title">LEGENDA</div>
+    <div class="legend-sub">VERKLARING VAN KAARTELEMENTEN</div>
+    <div class="divider"></div>
+
+    <div class="legend-items">
+      <!-- ITEM 1: DE PUNTJES -->
+      <div class="legend-item">
+        <div class="item-header">
+          <span class="item-title">Parlementaire Spreekbeurt</span>
+          <span class="mono-tag">1 stip = 1 bijdrage</span>
+        </div>
+        <div class="symbol-container">
+          <div class="dots-sample">
+            <div class="dot" style="top: 8px; left: 15px;"></div>
+            <div class="dot" style="top: 3px; left: 45px;"></div>
+            <div class="dot" style="top: 15px; left: 65px;"></div>
+            <div class="dot" style="top: 6px; left: 95px; opacity: 0.9;"></div>
+            <div class="dot" style="top: 11px; left: 110px; opacity: 0.9;"></div>
+            <div class="dot" style="top: 4px; left: 125px; opacity: 0.9;"></div>
+            <div class="dot" style="top: 17px; left: 150px;"></div>
+            <div class="dot" style="top: 5px; left: 175px;"></div>
+            <div class="dot" style="top: 12px; left: 195px;"></div>
+          </div>
+        </div>
+        <div class="legend-desc">
+          Elk punt vertegenwoordigt één individuele spreekbeurt in de Tweede Kamer (135.633 totaal). De positie weerspiegelt inhoudelijke verwantschap via BGE-M3 taalmodellen.
+        </div>
+      </div>
+
+      <!-- ITEM 2: DE DICHTHEID -->
+      <div class="legend-item">
+        <div class="item-header">
+          <span class="item-title">Debatintensiteit &amp; Reliëf</span>
+          <span class="mono-tag">Luminantie L*</span>
+        </div>
+        <div class="symbol-container">
+          <div class="gradient-wrapper">
+            <div class="gradient-bar"></div>
+            <div class="gradient-labels">
+              <span>Laag / Wit</span>
+              <span>Gesproken Tijd (KDE)</span>
+              <span>Hoog / Donker</span>
+            </div>
+          </div>
+        </div>
+        <div class="legend-desc">
+          Het reliëf toont de lokale concentratie van gesproken tijd. Donkere toppen markeren intensieve kernonderwerpen; lichte flanken geven randdebatten weer.
+        </div>
+      </div>
+
+      <!-- ITEM 3: CIELAB CONTINUOUS 2D COLOR SPACE -->
+      <div class="legend-item">
+        <div class="item-header">
+          <span class="item-title">Thematische Kleurruimte</span>
+          <span class="mono-tag">CIELAB (PC 2 &amp; PC 3)</span>
+        </div>
+        <div class="symbol-container" style="padding: 4px; min-height: 125px;">
+          <!-- Embed van het 2D CIELAB diagram -->
+          <img src="cielab_legend_widget.svg" width="370" height="122" alt="CIELAB Kleurruimte" style="display: block; margin: 0 auto;" />
+        </div>
+        <div class="legend-desc">
+          De kleurtoonsoort projecteert de twee belangrijkste inhoudelijke hoofdcomponenten (PC 2 en PC 3) op de CIELAB kleurruimte. Procedurele spreekbeurten (moties en voorzitter) vallen in het neutrale centrum (0, 0) als grafietgrijs.
+        </div>
+      </div>
+
+      <!-- ITEM 4: CONTOUREN & BADGES -->
+      <div class="legend-item">
+        <div class="item-header">
+          <span class="item-title">Themacontouren</span>
+          <span class="mono-tag">HDBSCAN 5 Trappen</span>
+        </div>
+        <div class="symbol-container">
+          <div class="contour-sample">
+            <div class="badge-sample">Themanaam</div>
+          </div>
+        </div>
+        <div class="legend-desc">
+          Donkerblauwe omtrekken omvatten de 8 grote hoofddomeinen. Fijnere lijnen en matglazen badges bakenen de 573 specifieke beleidsthema's en sub-debatten af.
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

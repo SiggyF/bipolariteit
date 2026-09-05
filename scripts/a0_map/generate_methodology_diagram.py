@@ -1,0 +1,141 @@
+"""
+Genereert een pixel-perfect SVG- en hoge-resolutie PNG-infographic van de methodologie
+met de exacte fonts van de site (Libre Caslon, Work Sans, IBM Plex Mono) en
+de officiële Bipolariteit Navy/Slate-stijl.
+"""
+
+from pathlib import Path
+
+svg_content = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 240" width="100%" height="100%">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&amp;family=Libre+Caslon+Text:wght@700&amp;family=Work+Sans:ital,wght@0,400;0,500;0,600;1,400&amp;display=swap');
+      
+      .box-bg { fill: #fbf9f4; stroke: #22304e; stroke-width: 2.2; rx: 8px; filter: drop-shadow(0px 3px 6px rgba(34, 48, 78, 0.12)); }
+      .pill-bg { fill: #e8edf5; stroke: #45587d; stroke-width: 1.2; rx: 6px; }
+      .title-text { font-family: 'Libre Caslon Text', 'Georgia', serif; font-size: 13.5px; font-weight: 700; fill: #1c2b48; text-anchor: middle; }
+      .num-text { font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600; fill: #6f6558; text-anchor: middle; letter-spacing: 0.5px; }
+      .body-text { font-family: 'Work Sans', -apple-system, sans-serif; font-size: 10px; font-weight: 500; fill: #22304e; text-anchor: middle; line-height: 1.35; }
+      .sub-text { font-family: 'Work Sans', -apple-system, sans-serif; font-size: 9px; font-weight: 400; fill: #526282; text-anchor: middle; font-style: italic; }
+      .arrow-line { stroke: #33456e; stroke-width: 2.2; stroke-linecap: round; }
+      .arrow-head { fill: #33456e; }
+      .connector-text { font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; font-weight: 600; fill: #33456e; text-anchor: middle; }
+    </style>
+    
+    <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" class="arrow-head" />
+    </marker>
+  </defs>
+
+  <!-- STAP 1: DATA-INNAME -->
+  <g transform="translate(20, 20)">
+    <rect width="215" height="195" class="box-bg" />
+    <text x="107.5" y="32" class="num-text">STAP 01</text>
+    <text x="107.5" y="52" class="title-text">Tweede Kamer OData</text>
+    
+    <rect x="12" y="72" width="191" height="108" class="pill-bg" />
+    <text x="107.5" y="100" class="body-text" font-weight="600">135.633 Spreekbeurten</text>
+    <text x="107.5" y="122" class="body-text">Plenair &amp; Commissies</text>
+    <text x="107.5" y="142" class="sub-text">Zittingsjaar 2025–2026</text>
+    <text x="107.5" y="160" class="sub-text">Officiële VLOS OData v4</text>
+  </g>
+
+  <!-- CONNECTOR 1 -> 2 -->
+  <g>
+    <line x1="237" y1="117" x2="280" y2="117" class="arrow-line" marker-end="url(#arrow)" />
+    <text x="259" y="107" class="connector-text">Tekst</text>
+  </g>
+
+  <!-- STAP 2: EMBEDDINGS -->
+  <g transform="translate(285, 20)">
+    <rect width="215" height="195" class="box-bg" />
+    <text x="107.5" y="32" class="num-text">STAP 02</text>
+    <text x="107.5" y="52" class="title-text">BGE-M3 Taalmodel</text>
+    
+    <rect x="12" y="72" width="191" height="108" class="pill-bg" />
+    <text x="107.5" y="100" class="body-text" font-weight="600">1024D Semantiek</text>
+    <text x="107.5" y="122" class="body-text">Dense Vectorruimte</text>
+    <text x="107.5" y="142" class="sub-text">Contextuele betekenis</text>
+    <text x="107.5" y="160" class="sub-text">Meertalige BGE-M3</text>
+  </g>
+
+  <!-- CONNECTOR 2 -> 3 -->
+  <g>
+    <line x1="502" y1="117" x2="545" y2="117" class="arrow-line" marker-end="url(#arrow)" />
+    <text x="524" y="107" class="connector-text">1024D</text>
+  </g>
+
+  <!-- STAP 3: UMAP -->
+  <g transform="translate(550, 20)">
+    <rect width="215" height="195" class="box-bg" />
+    <text x="107.5" y="32" class="num-text">STAP 03</text>
+    <text x="107.5" y="52" class="title-text">UMAP 2D-Projectie</text>
+    
+    <rect x="12" y="72" width="191" height="108" class="pill-bg" />
+    <text x="107.5" y="100" class="body-text" font-weight="600">Topologische Reductie</text>
+    <text x="107.5" y="122" class="body-text">1024D → 2D Vlak</text>
+    <text x="107.5" y="142" class="sub-text">Behoud van lokale</text>
+    <text x="107.5" y="160" class="sub-text">&amp; globale relaties</text>
+  </g>
+
+  <!-- CONNECTOR 3 -> 4 -->
+  <g>
+    <line x1="767" y1="117" x2="810" y2="117" class="arrow-line" marker-end="url(#arrow)" />
+    <text x="789" y="107" class="connector-text">(x, y)</text>
+  </g>
+
+  <!-- STAP 4: HDBSCAN -->
+  <g transform="translate(815, 20)">
+    <rect width="215" height="195" class="box-bg" />
+    <text x="107.5" y="32" class="num-text">STAP 04</text>
+    <text x="107.5" y="52" class="title-text">HDBSCAN Hiërarchie</text>
+    
+    <rect x="12" y="72" width="191" height="108" class="pill-bg" />
+    <text x="107.5" y="100" class="body-text" font-weight="600">5 Clusterniveaus</text>
+    <text x="107.5" y="122" class="body-text">8 Hoofddomeinen</text>
+    <text x="107.5" y="142" class="sub-text">tot 573 sub-debatten</text>
+    <text x="107.5" y="160" class="sub-text">&amp; contour-hulls</text>
+  </g>
+
+  <!-- CONNECTOR 4 -> 5 -->
+  <g>
+    <line x1="1032" y1="117" x2="1075" y2="117" class="arrow-line" marker-end="url(#arrow)" />
+    <text x="1054" y="107" class="connector-text">Clusters</text>
+  </g>
+
+  <!-- STAP 5: DUIDING & DOSSIERS -->
+  <g transform="translate(1080, 20)">
+    <rect width="215" height="195" class="box-bg" />
+    <text x="107.5" y="32" class="num-text">STAP 05</text>
+    <text x="107.5" y="52" class="title-text">TK-Dossiers &amp; Duiding</text>
+    
+    <rect x="12" y="72" width="191" height="108" class="pill-bg" />
+    <text x="107.5" y="100" class="body-text" font-weight="600">1.521 Kamerstukken</text>
+    <text x="107.5" y="122" class="body-text">TF-IDF &amp; LLM Titels</text>
+    <text x="107.5" y="142" class="sub-text">Inverse terminologie</text>
+    <text x="107.5" y="160" class="sub-text">&amp; dossiernummers</text>
+  </g>
+
+  <!-- CONNECTOR 5 -> 6 -->
+  <g>
+    <line x1="1297" y1="117" x2="1340" y2="117" class="arrow-line" marker-end="url(#arrow)" />
+    <text x="1319" y="107" class="connector-text">Lagen</text>
+  </g>
+
+  <!-- STAP 6: CARTOGRAFIE -->
+  <g transform="translate(1345, 20)">
+    <rect width="235" height="195" class="box-bg" />
+    <text x="117.5" y="32" class="num-text">STAP 06</text>
+    <text x="117.5" y="52" class="title-text">QGIS A0 Synthese</text>
+    
+    <rect x="12" y="72" width="211" height="108" class="pill-bg" />
+    <text x="117.5" y="98" class="body-text" font-weight="600">300 DPI RGBA Raster</text>
+    <text x="117.5" y="118" class="body-text">CIELAB PCA &amp; Reliëf</text>
+    <text x="117.5" y="138" class="sub-text">Matglazen badges</text>
+    <text x="117.5" y="158" class="sub-text">&amp; vectorstippeling</text>
+  </g>
+</svg>"""
+
+out_svg = Path("data/export/a0-map/methodology_workflow.svg")
+out_svg.write_text(svg_content, encoding="utf-8")
+print(f"Written bespoke branded SVG to {out_svg}")

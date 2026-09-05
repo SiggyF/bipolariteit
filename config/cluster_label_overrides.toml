@@ -1,0 +1,297 @@
+# Cluster label overrides en redundantie voor plenair-map-clusters-full.json
+# Beheerd via de vastgelegde werkwijze in docs/cluster-labeling-werkwijze.md
+
+[labels]
+# --- Asiel: Crisis, Ter Apel & Spreiding ---
+"L1-2"   = "Asiel"
+"L2-43"  = "Crisis"
+"L3-64"  = "Ter Apel"
+"L4-80"  = "Veiligelanders"
+"L4-222" = "Regietafels"
+"L4-506" = "Pendelbus"
+"L3-97"  = "Spreiding"
+"L4-311" = "Spreidingswet"
+"L4-120" = "Intrekkingswet"
+"L2-45"  = "Terugkeer"
+"L4-490" = "Vertrek"
+"L4-193" = "Instroom"
+"L4-201" = "Bandbreedte"
+"L4-359" = "Europa"
+"L4-369" = "Instroomcijfers"
+"L4-467" = "Migratiepact"
+"L2-2"   = "Opvang"
+"L3-83"  = "Uitvoering"
+"L3-124" = "Opvang in de regio"
+"L4-491" = "Asielstop"
+"L4-492" = "COA"
+
+# --- Midden-Oosten & Israël ---
+"L1-7"   = "Midden-Oosten"
+"L2-7"   = "Israël"
+"L3-7"   = "Israël"
+"L4-6"   = "Gaza"
+"L4-249" = "Genocideverdrag"
+"L4-357" = "Positie Europa"
+"L4-373" = "Libanon"
+"L4-387" = "Nederzettingen"
+"L4-443" = "Diplomatie"
+"L4-461" = "Venezuela"
+"L4-462" = "Kabinetspositie"
+"L4-487" = "Sancties"
+"L3-111" = "UNRWA"
+"L4-99"  = "UNRWA"
+"L3-80"  = "Sudan"
+"L4-70"  = "Sudan"
+"L2-31"  = "Iran"
+"L3-25"  = "Iran"
+"L4-25"  = "Regime"
+"L4-216" = "Iranoorlog 2026"
+"L2-55"  = "Integratie"
+"L3-49"  = "Integratie"
+"L4-37"  = "Integratie"
+
+# --- Oekraïne & Rusland ---
+"L3-13"  = "Steun"
+"L3-66"  = "Rusland"
+"L4-409" = "Steun"
+"L4-455" = "Financiering"
+"L4-437" = "Toetreding"
+"L4-360" = "Tegoeden"
+"L4-186" = "Vredesplan"
+"L3-67"  = "Europa"
+"L4-59"  = "Europa"
+"L3-172" = "Opvang"
+"L4-165" = "Opvang"
+
+# --- Klimaat & Energie ---
+"L4-396" = "Doelen"
+"L4-505" = "Klimaattop"
+
+# --- Wonen / Isolatie ---
+"L3-63"  = "Woningen"
+"L4-72"  = "Isolatie"
+"L4-297" = "Energiearmoede"
+"L4-449" = "Energiebesparing"
+
+# --- Landbouw / Stikstof ---
+"L3-4"   = "Stikstof"
+"L3-60"  = "PAS-melders"
+"L4-412" = "Salderen"
+"L4-447" = "Onteigenen"
+"L4-332" = "Impasse"
+"L4-414" = "Stikstofslot"
+"L4-376" = "Industrie"
+"L4-389" = "Gebiedsgericht"
+"L4-413" = "Veestapel"
+"L4-478" = "KDW"
+"L3-73"  = "Innovatie"
+"L3-108" = "Boeren"
+"L3-116" = "Rekenkundige ondergrens"
+
+# --- Dierenwelzijn ---
+"L3-58"  = "Wolf"
+"L3-101" = "Zieke dieren"
+"L4-125" = "Dierenarts"
+"L4-324" = "Vogelgriep"
+
+# --- Politie & Justitie ---
+"L4-190" = "Verward gedrag"
+
+# --- Informatieverzoeken ---
+"L2-19"  = "Genoemd"
+
+# --- Staatssecretaris & Toezeggingen ---
+"L4-239" = "Staatssecretaris"
+"L4-272" = "Brief"
+"L2-49"  = "Brieven"
+"L4-179" = "Tweede termijn"
+"L4-274" = "Toezeggingen"
+"L4-415" = "Voortgang"
+"L4-458" = "Navragen"
+
+# --- Procedurele clusters ---
+"L4-233" = "Punt van orde"
+"L4-252" = "Heel kort"
+"L4-112" = "Telt als interruptie?"
+"L4-213" = "Aanvaring"
+"L4-286" = "Afrondend"
+"L4-285" = "Kwinkslag"
+"L4-294" = "Via de voorzitter"
+"L4-199" = "Instemming"
+"L4-299" = "Ik wil"
+"L4-410" = "Gezegdes"
+"L4-439" = "Op terugkomen"
+"L4-500" = "Ik vind"
+"L4-370" = "Keijzer"
+"L4-390" = "..., voorzitter."
+"L4-476" = "Het woord is aan"
+"L4-507" = "Encore"
+"L4-495" = "Doorgaan?"
+"L4-23"  = "Geef het woord"
+"L3-119" = "Blokje"
+"L3-70"  = "Interrupties"
+"L3-155" = "Nog een interruptie?"
+
+# --- Politieke dynamiek ---
+"L4-185" = "Onder vuur"
+"L4-346" = "Stoken"
+
+# --- Moties ---
+"L4-275" = "Eén motie"
+"L4-182" = "Twee moties"
+"L4-444" = "Tweede motie"
+"L4-219" = "Drie moties"
+"L4-488" = "Motie aanpassen"
+"L4-50"  = "Dankwoord"
+"L4-195" = "Indienen"
+"L4-388" = "Tradities"
+"L4-328" = "Niet per motie"
+"L4-393" = "Naar aanleiding van"
+"L3-154" = "Aangenomen"
+"L3-176" = "Toelichting"
+"L3-178" = "De motie van"
+
+# --- Motiebehandeling & Oordelen ---
+"L1-13"  = "Uitvoeren"
+"L2-56"  = "Appreciatie"
+"L2-46"  = "Ontijdig"
+"L3-132" = "Overbodig"
+"L4-1"   = "Volgende motie"
+"L4-12"  = "Moeten"
+"L4-67"  = "Motie: oordeel"
+"L4-118" = "Overbodig"
+"L4-123" = "Toch oordeel kamer"
+"L4-187" = "Ontraden"
+"L4-206" = "Toch?"
+"L4-238" = "Ontraden."
+"L4-243" = "Op stuk, oordeel Kamer"
+"L4-254" = "Ik geef oordeel kamer"
+"L4-258" = "De juiste plek?"
+"L4-259" = "Dus ontraden"
+"L4-277" = "Krijgt oordeel Kamer"
+"L4-43"  = "Aanhouden"
+"L4-307" = "Dan de moties"
+"L4-308" = "Alsnog"
+"L4-309" = "Moet ik ontraden"
+"L4-317" = "De motie op stuk nr."
+"L4-326" = "Als, dan, oordeel kamer"
+"L4-327" = "Verwijzing naar debat"
+"L4-366" = "Ook oordeel kamer"
+"L4-367" = "Dan oordeel kamer"
+"L4-374" = "Daarom ontraden"
+"L4-434" = "Ontraden?"
+"L4-445" = "Moet ontraden"
+"L4-504" = "Dan de motie op stuk"
+
+# --- Wetgeving doublures ---
+"L4-322" = "Wetsbehandeling"
+"L4-344" = "Amendement"
+"L4-355" = "Inwerkingtreding"
+"L4-363" = "Onderbouwing"
+"L4-403" = "Vertraging"
+"L4-418" = "Wat wil de minister"
+"L4-472" = "Wet is wet"
+
+# --- Uitvoering doublures ---
+"L4-196" = "In de praktijk"
+"L4-427" = "Prioritering"
+"L4-515" = "Uitvoerbaarheid"
+
+# --- Vergaderorde doublures ---
+"L4-260" = "Gaat uw gang"
+"L4-290" = "Niet paraat"
+"L4-398" = "Minister of staatssecretaris"
+
+# --- Regeldruk doublures ---
+"L4-378" = "Kleine overheid"
+"L4-516" = "Doelmatigheid"
+
+# --- Interrupties doublures ---
+"L4-468" = "U heeft een interruptie"
+"L4-499" = "Hoeveel interrupties heb ik nog?"
+"L4-508" = "Meer interrupties"
+
+# --- Antisemitisme doublures ---
+"L4-202" = "Joodse studenten"
+
+# --- Coalitieakkoord doublures ---
+"L4-68" = "Formatie"
+
+# --- Transparantie doublures ---
+"L4-209" = "Machtsverhoudingen"
+"L4-433" = "Informatiepositie"
+
+# --- Termijnafspraken doublures ---
+"L4-223" = "Zomerreces"
+"L4-335" = "Brief voor de zomer"
+
+# --- Procesvoering doublures ---
+"L4-441" = "Onderzoek afwachten"
+
+# --- Bezuinigingen doublures ---
+"L4-255" = "Terugvordering"
+
+# --- Innovatiebeleid doublures ---
+"L4-497" = "Wbso"
+"L4-512" = "Concurrentievermogen"
+
+# --- Amendementen doublures ---
+"L4-329" = "Amendement ontraden"
+"L4-372" = "Amendement oordeel Kamer"
+
+# --- Niveau 1 Moties ---
+"L1-17" = "Indienen"
+
+# --- Niveau 2 Moties ---
+"L2-23" = "Van"
+"L2-35" = "Aantal"
+"L2-54" = "Dank de minister"
+
+# --- Niveau 3 Moties ---
+"L3-137" = "Motie op stuk"
+"L3-175" = "Even"
+"L3-91"  = "Dank, voorzitter"
+"L3-41"  = "Ik heb moties"
+"L3-143" = "Veel moties"
+
+# --- Niveau 3 Defensie ---
+"L3-17"  = "NAVO-norm"
+"L3-167" = "Niet op orde"
+
+# --- Niveau 3 Amendementen ---
+"L3-71"  = "Memorie van toelichting"
+"L3-151" = "Ontraden"
+
+# --- Niveau 3 Flexwerk ---
+"L3-95"  = "Schijnzelfstandigheid"
+"L3-147" = "Flexwerkers"
+
+# --- Niveau 4 Moties ---
+"L4-381" = "Ik heb twee moties"
+
+[redundant]
+# Geen clusters op redundant; elk cluster krijgt een eigen, eerlijk label.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

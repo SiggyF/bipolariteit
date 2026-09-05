@@ -13,9 +13,9 @@ hiërarchie. Geen labels (te veel clutter op deze schaal/resolutie, dat is
 onderdeel van de latere QGIS-compositie).
 
 Gebruik:
-    uv run python scripts/render_design_preview.py \
-        data/export/plenair-map-full.json \
-        data/export/plenair-map-clusters-full.json \
+    uv run python scripts/a0_map/render_design_preview.py \
+        data/export/a0-map/maps/plenair-map-full.json \
+        data/export/a0-map/maps/plenair-map-clusters-full.json \
         data/export/design-handoff/plenaire-kaart-print/screenshots/preview.png
 """
 
