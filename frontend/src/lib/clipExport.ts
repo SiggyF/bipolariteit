@@ -168,12 +168,17 @@ export async function recordClip(
 	video: HTMLVideoElement,
 	overlayEl: Element,
 	durationSeconds: number,
+	onProgress?: (fraction: number) => void,
 ): Promise<ClipExportResult> {
 	const sourceWidth = video.videoWidth || 640;
 	const sourceHeight = video.videoHeight || 360;
 	const scale = Math.min(1, MAX_WIDTH / sourceWidth);
 	const width = Math.round(sourceWidth * scale);
 	const height = Math.round(sourceHeight * scale);
+
+	// video.currentTime moet daadwerkelijk lopen tijdens het opnemen -- een
+	// gepauzeerde video zou hetzelfde frame durationSeconds lang herhalen.
+	if (video.paused) await video.play().catch(() => {});
 
 	// Logo('s) van de nu al zichtbare spreker vast ophalen/cachen (zie
 	// inlineImages/inlineImagesSync): zonder deze warmronde zou zelfs de
@@ -229,7 +234,9 @@ export async function recordClip(
 	await new Promise<void>((resolve) => {
 		function loop() {
 			drawFrame();
-			if (performance.now() - start < durationSeconds * 1000) {
+			const elapsed = performance.now() - start;
+			onProgress?.(Math.min(1, elapsed / (durationSeconds * 1000)));
+			if (elapsed < durationSeconds * 1000) {
 				raf = requestAnimationFrame(loop);
 			} else {
 				cancelAnimationFrame(raf);

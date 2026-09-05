@@ -93,22 +93,46 @@ function togglePerspective(name: string) {
 // Lokale clip-export (issue #180): geen server, dus canvas.captureStream()
 // van de echte VideoOverlay.vue-DOM op de videoframes (via <foreignObject>,
 // zie clipExport.ts) -- geen aparte SVG-herbouw van de overlay, één
-// implementatie voor live scherm én export. Alleen op de volledige
-// debatpagina (props.debateHref ontbreekt daar, zie #controls-extra
-// hieronder) -- de homepage-teaser is een compacte weergave, geen plek om
-// een clip van te knippen.
+// implementatie voor live scherm én export. Op zowel de volledige
+// debatpagina als de homepage-teaser (zelfde knop overal, issue over
+// video-component-uniformiteit).
 const videoPlayerRef = ref<InstanceType<typeof VideoPlayer> | null>(null);
 const videoOverlayRef = ref<InstanceType<typeof VideoOverlay> | null>(null);
 const exporting = ref(false);
+const exportProgress = ref(0);
 const exportError = ref<string | null>(null);
+
+// Fallback-lengte als er geen actief argument is (bv. een gat in de
+// tijdlijn) -- de meeste geldige argumentspannes vallen ruim onder de 60s,
+// die bovengrens is puur om een uitschieter (foutief lange spanne) niet een
+// enorme clip te laten opnemen.
+const DEFAULT_CLIP_SECONDS = 10;
+const MAX_CLIP_SECONDS = 60;
+
 async function exportClip() {
 	const video = videoPlayerRef.value?.videoEl;
 	const overlayEl = videoOverlayRef.value?.rootEl;
 	if (!video || !overlayEl || exporting.value) return;
 	exporting.value = true;
+	exportProgress.value = 0;
 	exportError.value = null;
 	try {
-		const result = await recordClip(video, overlayEl, 10);
+		// Standaard het hele huidige fragment (het actieve argument), niet een
+		// vast aantal seconden vanaf waar de video toevallig staat -- dat is
+		// wat "dit fragment downloaden" betekent voor de kijker. Vereist eerst
+		// terugspoelen naar het begin van dat argument.
+		const argument = nowPlaying.value;
+		let clipSeconds = DEFAULT_CLIP_SECONDS;
+		if (argument?.start_seconds != null && argument?.end_seconds != null) {
+			clipSeconds = Math.min(MAX_CLIP_SECONDS, Math.max(1, argument.end_seconds - argument.start_seconds));
+			video.currentTime = argument.start_seconds;
+			await new Promise<void>((resolve) => {
+				video.addEventListener("seeked", () => resolve(), { once: true });
+			});
+		}
+		const result = await recordClip(video, overlayEl, clipSeconds, (fraction) => {
+			exportProgress.value = fraction;
+		});
 		downloadClip(result, `${props.debateId}-clip.webm`);
 	} catch (e) {
 		exportError.value = e instanceof Error ? e.message : "onbekende fout";
@@ -344,35 +368,63 @@ function dismissFloating() {
 					<!-- Altijd dezelfde plek (dezelfde rij als play/pause, vergelijk
 					     YouTube's chat-knop) i.p.v. mee te verhuizen tussen boven de
 					     lijst en onder de video -- dat verspringen maakte de knop
-					     moeilijker terug te vinden. -->
-					<template v-if="!props.debateHref" #controls-extra>
-						<button
-							type="button"
-							class="control-button argument-toggle-inline"
-							:aria-pressed="expanded"
-							:aria-label="expanded ? 'Argumenten verbergen' : 'Argumenten tonen'"
-							:title="expanded ? 'Argumenten verbergen' : 'Argumenten tonen'"
-							@click="toggleExpanded"
-						>
-							<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-								<path
-									d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"
-								/>
-							</svg>
-						</button>
-						<button
-							type="button"
-							class="control-button argument-toggle-inline"
-							:disabled="exporting"
-							:aria-label="exporting ? 'Clip wordt gemaakt...' : 'Clip van 10 seconden exporteren'"
-							:title="exportError ? `Mislukt: ${exportError}` : exporting ? 'Clip wordt gemaakt...' : 'Clip van 10 seconden exporteren (WebM, lokale download)'"
-							@click="exportClip"
-						>
-							<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-								<rect x="3" y="5" width="14" height="14" rx="2" />
-								<path d="M17 9.5 21 7v10l-4-2.5" />
-							</svg>
-						</button>
+					     moeilijker terug te vinden. Beide knoppen in één
+					     .controls-extra-group i.p.v. allebei hun eigen
+					     margin-left:auto: flexbox verdeelt de vrije ruimte dan over
+					     élke auto-margin apart, wat de knoppen ver uit elkaar duwde
+					     i.p.v. als groep rechts te houden. -->
+					<template #controls-extra>
+						<div class="controls-extra-group">
+							<!-- Uniform op zowel de volledige debatpagina als de
+							     homepage-teaser (geen v-if op debateHref hier). Links
+							     van de argumenten-toggle: die laatste hoort qua
+							     associatie bij het paneel rechts ernaast, dus moet
+							     zelf uiterst rechts blijven staan. -->
+							<button
+								type="button"
+								class="control-button argument-toggle-inline"
+								:disabled="exporting"
+								:aria-label="exporting ? `Fragment wordt gedownload... ${Math.round(exportProgress * 100)}%` : 'Huidige fragment downloaden (WebM)'"
+								:title="exportError ? `Mislukt: ${exportError}` : exporting ? `Bezig met downloaden... ${Math.round(exportProgress * 100)}%` : 'Huidige fragment downloaden (WebM)'"
+								@click="exportClip"
+							>
+								<svg v-if="!exporting" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+									<path d="M12 3v11" />
+									<path d="M7 10l5 5 5-5" />
+									<path d="M5 20h14" />
+								</svg>
+								<svg v-else viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+									<circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2" opacity="0.25" />
+									<circle
+										cx="12"
+										cy="12"
+										r="9"
+										fill="none"
+										stroke="currentColor"
+										stroke-width="2"
+										stroke-linecap="round"
+										:stroke-dasharray="2 * Math.PI * 9"
+										:stroke-dashoffset="2 * Math.PI * 9 * (1 - exportProgress)"
+										transform="rotate(-90 12 12)"
+									/>
+								</svg>
+							</button>
+							<button
+								v-if="!props.debateHref"
+								type="button"
+								class="control-button argument-toggle-inline"
+								:aria-pressed="expanded"
+								:aria-label="expanded ? 'Argumenten verbergen' : 'Argumenten tonen'"
+								:title="expanded ? 'Argumenten verbergen' : 'Argumenten tonen'"
+								@click="toggleExpanded"
+							>
+								<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+									<path
+										d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"
+									/>
+								</svg>
+							</button>
+						</div>
 					</template>
 				</VideoPlayer>
 			</div>
@@ -695,6 +747,13 @@ function dismissFloating() {
    dezelfde vormgeving herhaald. Icoon-only zoals de andere controlsrij-
    knoppen (play/pauze/mute): geen tekstlabel meer, dat maakte "vorig/volgend
    argument" ernaast al krap; aria-label/title dragen de betekenis. */
+.controls-extra-group {
+	display: flex;
+	align-items: center;
+	gap: 0.4rem;
+	margin-left: auto;
+}
+
 .argument-toggle-inline {
 	width: 40px;
 	height: 40px;
@@ -709,7 +768,6 @@ function dismissFloating() {
 	color: var(--color-text);
 	cursor: pointer;
 	padding: 0;
-	margin-left: auto;
 }
 
 .argument-toggle-inline:hover {
