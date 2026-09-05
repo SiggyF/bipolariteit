@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-08-29T20:21:13+02:00",
+  "generated_at": "2026-09-05T23:10:24+02:00",
   "topics": [
     {
       "slug": "stikstof",
       "name": "Stikstof",
       "vanaf": "2023-12-06",
       "documents_total": 4381,
-      "documents_extracted": 3885,
-      "arguments_total": 1986,
-      "arguments_tagged": 1538,
+      "documents_extracted": 3889,
+      "arguments_total": 1988,
+      "arguments_tagged": 1567,
       "documents_redactie_checked": 5,
       "arguments_ander_onderwerp": 10,
       "ander_onderwerp_top": [
@@ -33,24 +33,24 @@
         {
           "stage": "extraction",
           "model": "qwen/qwen3.6-27b",
-          "n_calls": 727,
-          "total_duration_s": 10634.821207828354,
-          "avg_duration_s": 14.628364797563073,
+          "n_calls": 731,
+          "total_duration_s": 10697.309052189354,
+          "avg_duration_s": 14.633801712981333,
           "n_errors": 1,
-          "total_completion_tokens": 106968,
+          "total_completion_tokens": 107290,
           "first_call_at": "2026-08-07T20:19:55.234257+00:00",
-          "last_call_at": "2026-08-09T09:55:19.713882+00:00"
+          "last_call_at": "2026-09-05T17:53:08.696420+00:00"
         },
         {
           "stage": "tagging",
           "model": "qwen/qwen3.6-27b",
-          "n_calls": 188,
-          "total_duration_s": 11814.84174759785,
-          "avg_duration_s": 62.84490291275452,
-          "n_errors": 1,
-          "total_completion_tokens": 104673,
+          "n_calls": 218,
+          "total_duration_s": 13692.615105373865,
+          "avg_duration_s": 62.81016103382507,
+          "n_errors": 2,
+          "total_completion_tokens": 121338,
           "first_call_at": "2026-08-08T09:19:34.005336+00:00",
-          "last_call_at": "2026-08-29T18:07:00.712101+00:00"
+          "last_call_at": "2026-09-05T18:10:14.133008+00:00"
         }
       ]
     },
@@ -86,7 +86,7 @@
       "documents_total": 7820,
       "documents_extracted": 4809,
       "arguments_total": 3555,
-      "arguments_tagged": 1108,
+      "arguments_tagged": 1826,
       "documents_redactie_checked": 0,
       "arguments_ander_onderwerp": 92,
       "ander_onderwerp_top": [
@@ -146,13 +146,13 @@
         {
           "stage": "tagging",
           "model": "qwen/qwen3.6-27b",
-          "n_calls": 1117,
-          "total_duration_s": 67922.80943827072,
-          "avg_duration_s": 60.80824479701945,
-          "n_errors": 9,
-          "total_completion_tokens": 650674,
+          "n_calls": 1838,
+          "total_duration_s": 115706.27542191076,
+          "avg_duration_s": 62.95227172029965,
+          "n_errors": 12,
+          "total_completion_tokens": 1083067,
           "first_call_at": "2026-08-05T16:53:22.700983+00:00",
-          "last_call_at": "2026-08-29T18:01:50.863955+00:00"
+          "last_call_at": "2026-09-05T11:13:26.066902+00:00"
         }
       ]
     },
