@@ -1,6 +1,6 @@
 """
 Gedeelde logging-helper voor `llm_calls`: één rij per LLM-call vanuit
-extract_arguments.py/tag_arguments.py/redactie_check.py. Slaat bewust geen
+extract_arguments.py/tag_arguments.py. Slaat bewust geen
 volledige prompt-tekst op (zie pipeline/db/schema.sql), alleen de gegevens
 om 'm later te reconstrueren (document_id/argument_id/prompt_version) plus
 wat wél nodig is om de call te evalueren (model, duur, respons, status).

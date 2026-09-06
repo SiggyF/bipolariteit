@@ -1,0 +1,106 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://bipolariteit.org/schemas/argument_tree.schema.json",
+  "title": "Argument tree (confrontatie-as)",
+  "description": "Output contract for the bipolariteit.org argumentenboom pipeline (issue #252): a topic-independent set of nodes plus typed relations between them, produced in three stages -- a structuring pass selects nodes/relations, two review passes (one per side of the debate) each judge every relation, and a deterministic merge folds those judgements into the final relations[] (weak_link, confidence, beoordeeld_door). This schema validates only the final, merged output -- the intermediate per-stage LLM outputs have their own simpler shapes, see pipeline/prompts/argument_tree_gemini.md and pipeline/prompts/boomredactie.md. The relation shape below is the tree-specific superset of pipeline/schemas/argument_relations.schema.json's AIF-core relation (thema + beoordeeld_door added) -- duplicated rather than $ref'd across files so each schema stays independently valid without a schema registry.",
+  "type": "object",
+  "properties": {
+    "nodes": {
+      "type": "array",
+      "description": "The selected subset of arguments that make up the tree.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "argument_id": { "type": "integer", "description": "id of the argument, must exist in the source database." },
+          "gist": { "type": "string", "description": "Very short (3-4 words) summary for the tree display. Never a paraphrase that adds facts not in the quote itself." },
+          "samenvatting": {
+            "type": ["string", "null"],
+            "description": "1-2 sentence readable summary of this node together with everything that supports it, or null for a leaf node whose quote is already short enough."
+          }
+        },
+        "required": ["argument_id", "gist", "samenvatting"],
+        "additionalProperties": false
+      }
+    },
+    "relations": {
+      "type": "array",
+      "description": "Typed relations between nodes (AIF core: support = RA-node, conflict = CA-node). A support relation with one premise is a simple 'kid'; with several premises it is a coordinative group. A conflict relation anchors a band in the tree.",
+      "items": {
+        "type": "object",
+        "description": "One RA-node (support) or CA-node (conflict): premise_argument_ids feed the relation, target_argument_id is the argument being supported or attacked.",
+        "properties": {
+          "relation_type": {
+            "type": "string",
+            "enum": ["support", "conflict"],
+            "description": "support = RA-node (premises logically back up the target). conflict = CA-node (premises rebut or undermine the target)."
+          },
+          "target_argument_id": {
+            "type": "integer",
+            "description": "id of the argument being supported or attacked."
+          },
+          "premise_argument_ids": {
+            "type": "array",
+            "items": { "type": "integer" },
+            "minItems": 1,
+            "description": "ids of the arguments that feed the relation. More than 1 item = a coordinative group: the premises only carry the target jointly, not individually."
+          },
+          "thema": {
+            "type": ["string", "null"],
+            "description": "Short (max ~8 words), neutral title naming the actual point of contention -- only set on conflict relations, becomes the band title. Never a fact/number/judgement, and never just the two gists glued together."
+          },
+          "scheme": {
+            "type": ["string", "null"],
+            "description": "Refinement of relation_type. For conflict: 'direct_rebuttal' (explicitly rebuts the same point), 'thematic' (touches the same sub-topic, no direct rebuttal), or 'frame_shift' (shifts the discussion to a different value/framing instead of rebutting the point itself). For support: a Walton argumentation-scheme name if one clearly applies, otherwise null."
+          },
+          "weak_link": {
+            "type": "boolean",
+            "description": "true if only one of the two side-reviewers endorsed this relation -- a measured disagreement signal, not a self-reported one. Set by the deterministic merge step, never by an LLM directly."
+          },
+          "beoordeeld_door": {
+            "type": "array",
+            "items": { "type": "string", "enum": ["pro", "contra"] },
+            "description": "Which side-reviewers endorsed this relation. Both present = weak_link false; exactly one = weak_link true. A relation endorsed by neither is dropped before this schema is validated -- it never appears here with an empty list."
+          },
+          "confidence": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1,
+            "description": "1.0 when both reviewers endorsed the relation, 0.5 when only one did. Derived by the merge step, not self-reported by the LLM."
+          }
+        },
+        "required": ["relation_type", "target_argument_id", "premise_argument_ids", "thema", "scheme", "weak_link", "beoordeeld_door", "confidence"],
+        "additionalProperties": false
+      }
+    },
+    "coordinatieve_groepen": {
+      "type": "array",
+      "description": "Argument groups that are only ever shown as a bundle outside the confrontatie-as (never a band side): several arguments that independently make a similar point, without one supporting another and without being part of any conflict relation.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "label": { "type": "string", "description": "Short (max ~6 words), neutral summary of the shared point." },
+          "samenvatting": { "type": ["string", "null"] },
+          "argument_ids": { "type": "array", "items": { "type": "integer" }, "minItems": 2 }
+        },
+        "required": ["label", "samenvatting", "argument_ids"],
+        "additionalProperties": false
+      }
+    },
+    "twijfelachtige_classificaties": {
+      "type": "array",
+      "description": "Arguments encountered whose existing pro/contra stance looks clearly wrong. Reported, never silently corrected or excluded from the source data.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "argument_id": { "type": "integer" },
+          "huidige_stance": { "type": "string" },
+          "reden": { "type": "string" }
+        },
+        "required": ["argument_id", "huidige_stance", "reden"],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": ["nodes", "relations", "coordinatieve_groepen", "twijfelachtige_classificaties"],
+  "additionalProperties": false
+}

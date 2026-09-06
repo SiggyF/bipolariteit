@@ -31,13 +31,11 @@ function argument(overrides: Partial<Argument> & { id: number }): Argument {
 			published_at: null,
 			speaker_video_url: null,
 			tweedekamer_activiteit_url: null,
-			redactie_review: null,
 			raw_video_url: null,
 		},
 		periode: { kamer: null, regering: null },
 		claims: [],
 		tags: [TAG],
-		oppositions: [],
 		...overrides,
 	};
 }

@@ -14,6 +14,13 @@ automatische classificatie — vertrouw er niet blind op. Zie je een argument
 dat overduidelijk verkeerd staat, gebruik het dan niet in je selectie, en
 rapporteer het apart onder `twijfelachtige_classificaties` in de output.
 
+Dit is de eerste van drie stappen die samen de argumentenboom bouwen (zie
+`pipeline/prompts/boomredactie.md` voor de twee redactiestappen die hierna
+op jouw resultaat volgen). Jij structureert; de redactie beoordeelt en
+verzwakt waar nodig — jij hoeft dus niet zelf al te wikken of een
+onderbouwing/weerlegging sterk genoeg is, wel om 'm alleen aan te dragen als
+je 'm oprecht plausibel vindt.
+
 Je taak heeft twee onderdelen:
 
 ## 1. Selecteer een subset van elkaar weersprekende argumenten
@@ -30,70 +37,72 @@ Er is nog geen vooraf ingevulde lijst met bekende opposities meegegeven —
 zoek zelf, puur op basis van de citaten, welke pro- en contra-argumenten
 inhoudelijk het scherpst tegenover elkaar staan.
 
-## 2. Structureer de selectie in een argumentatieboom
+## 2. Structureer de selectie in relaties
 
-Volg het pragma-dialectische onderscheid tussen coördinatieve en
-subordinatieve argumentatie:
+Elke relatie tussen twee (of meer) argumenten heeft dezelfde vorm: een
+`relation_type` (`support` of `conflict`), één of meer `premise_argument_ids`
+die de relatie voeden, en één `target_argument_id` die ondersteund of
+aangevallen wordt. Volg het pragma-dialectische onderscheid tussen
+coördinatieve en subordinatieve argumentatie om te bepalen welke relatie
+van toepassing is:
 
-- **Coördinatief**: een groep argumenten die *gezamenlijk* het standpunt (of
-  een ander argument) dragen — los van elkaar zou geen van beide voldoende
-  zijn, samen wel.
-- **Subordinatief**: argument B is de onderbouwing van argument A, niet van
-  het standpunt zelf (B is een reden om A te geloven — "A, want B"). Dat
-  geeft diepte: A staat direct onder het standpunt, B staat als `children`
-  onder A. Dit is de "fundering" die we vandaag specifiek zoeken — gebruik
-  ook de vermelde `claims` (genoemde cijfers/bronnen) bij een argument als
-  signaal dat het argument extra onderbouwd is, al zijn claims zelf geen
-  aparte node.
-- **Meervoudig**: argumenten die *onafhankelijk* van elkaar het standpunt
-  dragen horen als aparte top-level knopen naast elkaar, niet in dezelfde
-  coördinatieve groep.
+- **Subordinatief -> `support` met 1 premisse**: argument B is de
+  onderbouwing van argument A, niet van het standpunt zelf (B is een reden
+  om A te geloven — "A, want B"). `premise_argument_ids: [B]`,
+  `target_argument_id: A`. Dit is de "fundering" die we specifiek zoeken —
+  gebruik ook de vermelde `claims` (genoemde cijfers/bronnen) bij een
+  argument als signaal dat het argument extra onderbouwd is, al zijn claims
+  zelf geen aparte node.
+- **Coördinatief, en samen een ander argument onderbouwend -> `support` met
+  meerdere premissen**: een groep argumenten die *gezamenlijk* een ander
+  argument (of elkaar) dragen — los van elkaar zou geen van beide voldoende
+  zijn, samen wel. `premise_argument_ids: [B, C, ...]`,
+  `target_argument_id: A`.
+- **Coördinatief, zonder een ander argument te onderbouwen -> een
+  `coordinatieve_groepen`-entry**: argumenten die *onafhankelijk* van elkaar
+  eenzelfde punt maken, zonder dat ze een ander argument onderbouwen en
+  zonder dat ze zelf in een `conflict`-relatie zitten. Dit is een puur
+  weergavebundel voor buiten de confrontatie-as, geen `relations`-entry.
+- **Weersproken -> `conflict`**: een pro- en een contra-argument die je als
+  elkaars scherpste tegenhanger hebt gekozen (stap 1).
+  `premise_argument_ids: [het aanvallende argument]`,
+  `target_argument_id: [het aangevallen argument]`. Geef er meteen een
+  `thema` bij: een korte (richtlijn: max. ~8 woorden), scherpe, neutrale
+  titel die het **daadwerkelijke geschilpunt** benoemt — niet een
+  onderwerplabel, en niet simpelweg de twee gists achter elkaar. Formuleer
+  het bij voorkeur als vraag of spanning. Voorbeeld van het verschil: *niet*
+  "reductie opent vergunningverlening weer — economische lasten voor
+  boeren" (mechanisch, twee gists aan elkaar geplakt), *wel* "Moet de
+  KDW-norm losgelaten worden om vergunningen weer te verlenen?" (het echte
+  geschilpunt).
 
-Elk argument krijgt een `gist` van **maximaal 3-4 woorden**.
-
-## 3. Benoem het geschilpunt en bundel gelijksoortige argumenten
-
-Naast de structuur uit stap 2 heb je twee extra velden nodig, omdat een
-mechanische samenvoeging van gists niet leesbaar genoeg is:
-
-- **`thema`** bij elke oppositie in `oppositions[]`: een korte (richtlijn:
-  max. ~8 woorden), scherpe, neutrale titel die het **daadwerkelijke
-  geschilpunt** benoemt — niet een onderwerplabel, en niet simpelweg de twee
-  gists achter elkaar. Formuleer het bij voorkeur als vraag of spanning.
-  Voorbeeld van het verschil: *niet* "reductie opent vergunningverlening weer
-  — economische lasten voor boeren" (mechanisch, twee gists aan elkaar
-  geplakt), *wel* "Moet de KDW-norm losgelaten worden om vergunningen weer te
-  verlenen?" (het echte geschilpunt).
-- **`samenvatting`** bij elke node met `children` en bij elke coördinatieve
-  `label`-groep in `pro.nodes`/`contra.nodes`: 1-2 zinnen (richtlijn: max.
-  ~30 woorden) die de gebundelde argumenten samen parafraseren tot één
-  leesbare, samenhangende stelling. Voor een los top-level argument zonder
-  kinderen is `samenvatting` niet nodig (het citaat is al kort genoeg).
+Elk argument krijgt een `gist` van **maximaal 3-4 woorden**, en waar
+zinvol een `samenvatting`: 1-2 zinnen (richtlijn: max. ~30 woorden) die
+het argument samen met alles wat eronder hangt parafraseert tot één
+leesbare, samenhangende stelling. Voor een los top-level argument zonder
+onderbouwing is `samenvatting: null` (het citaat is al kort genoeg).
 
 Regels (belangrijk, volg strikt):
 - Jij bent geen scheidsrechter. Beoordeel nooit of een argument klopt,
   terecht is, of overtuigend is. Geef nooit het ene argument gelijk boven
   het andere.
-- Jij verzint of parafraseert GEEN argumenttekst. `gist` is uitsluitend een
-  compacte samenvatting voor de boomweergave, geen vervanging van het
-  citaat — en elk `argument_id` dat je gebruikt moet een `id` uit het
-  document zijn, nooit verzonnen.
+- Jij verzint of parafraseert GEEN argumenttekst. `gist`/`samenvatting` zijn
+  uitsluitend compacte samenvattingen voor de boomweergave, geen vervanging
+  van het citaat — en elk `argument_id` dat je gebruikt moet een `id` uit
+  het document zijn, nooit verzonnen.
 - Niet elk `id` uit het document hoeft in de boom voor te komen — je hebt
-  immers al geselecteerd in stap 1. Wél moet elk `argument_id` dat je
-  gebruikt hooguit één keer voorkomen (nooit twee keer).
-- Ken alleen een subordinatieve relatie toe (`children`) als B *expliciet*
-  een reden geeft om A te geloven, niet alleen omdat ze over hetzelfde thema
-  gaan. Wees terughoudend met diepte.
-- `label` (bij een coördinatieve groep) is een korte, neutrale samenvatting
-  (max. ~6 woorden) van de gedeelde reden.
+  immers al geselecteerd in stap 1.
+- Ken alleen een `support`-relatie toe als B *expliciet* een reden geeft om
+  A te geloven, niet alleen omdat ze over hetzelfde thema gaan. Wees
+  terughoudend met diepte.
 - `thema` mag geen cijfers, bronnen of een eigen oordeel bevatten — puur het
-  geschilpunt zelf.
-- `samenvatting` mag, net als `gist`, GEEN feiten, cijfers of claims
-  bevatten die niet letterlijk in de geciteerde argumenten van die
-  node/groep staan. Het is een leesbare laag bovenop de citaten, geen
-  vervanging en geen nieuwe bewering.
+  geschilpunt zelf. `samenvatting` mag, net als `gist`, GEEN feiten, cijfers
+  of claims bevatten die niet letterlijk in de geciteerde argumenten staan.
+- `scheme` mag je bij een `support`-relatie invullen als er overduidelijk
+  een Walton-redeneerschema van toepassing is (bv. "Argument from Cause to
+  Effect"), anders `null` — nooit gokken.
 
-## 4. Controleer je Nederlandse tekst op spelfouten
+## 3. Controleer je Nederlandse tekst op spelfouten
 
 Lees je eigen `gist`, `samenvatting`, `thema` en `label`-velden na op
 spelfouten voordat je antwoordt, en corrigeer ze. Dit is puur een
@@ -103,53 +112,35 @@ de brondata blijven ongewijzigd.
 ## Output
 
 Antwoord ALLEEN met geldige JSON, geen uitleg, geen markdown-codeblok
-eromheen. Er is nog geen vastgelegd formaat voor dit resultaat — kies zelf
-een heldere, consistente structuur die in elk geval bevat:
-
-- per standpunt (pro/contra) de geselecteerde argumenten, elk met hun `id`
-  en een korte `gist` (max. 3-4 woorden);
-- de coördinatieve/subordinatieve structuur uit stap 2 (welke argumenten
-  samen een groep vormen, welke argumenten onderbouwing zijn van welk ander
-  argument);
-- de pro/contra-paren die je als elkaars scherpste tegenhanger hebt
-  gekozen, elk met een `thema` uit stap 3;
-- bij elke node met `children` en elke coördinatieve groep: een
-  `samenvatting` uit stap 3;
-- `twijfelachtige_classificaties`: argumenten die je bent tegengekomen met
-  een overduidelijk verkeerde pro/contra-stance (uit stap 1), met hun `id`,
-  de huidige (foute) stance, en een korte reden.
-
-Licht kort (een paar zinnen) toe waarom je voor die structuur gekozen hebt,
-zodat we samen kunnen beoordelen of dit een bruikbaar formaat is voordat we
-het ergens op vastleggen.
-
-Voorbeeld (puur ter illustratie van het soort structuur, geen vast format —
-kies zelf betere veldnamen/vorm als dat logischer is):
+eromheen, in dit exacte formaat (dit is een tussenformaat -- de twee
+redactiestappen die hierna volgen vullen `weak_link`/`beoordeeld_door`/
+`confidence` pas in, dus die velden laat jij hier weg):
 
 ```json
 {{
-  "pro": {{"nodes": [
+  "nodes": [
     {{"argument_id": 12, "gist": "vergunningverlening loopt vast",
-      "samenvatting": "Vergunningverlening zit vast omdat natuurvergunningen niet meer afgegeven worden.",
-      "children": [
-      {{"argument_id": 45, "gist": "ook natuurvergunningen vertraagd"}}
-    ]}}
-  ]}},
-  "contra": {{"nodes": [
-    {{"label": "economische lasten voor boeren",
-      "samenvatting": "Boeren worden gedwongen te stoppen en biologische bedrijven zijn niet rendabel.",
-      "arguments": [
-      {{"argument_id": 47, "gist": "duizenden boeren gedwongen stoppen"}},
-      {{"argument_id": 103, "gist": "biologische boeren niet rendabel"}}
-    ], "children": []}}
-  ]}},
-  "oppositions": [
-    {{"argument_a_id": 12, "argument_b_id": 47, "relation_type": "direct_rebuttal",
-      "thema": "Moet vergunningverlening voorrang krijgen boven de gevolgen voor boeren?"}}
+      "samenvatting": "Vergunningverlening zit vast omdat natuurvergunningen niet meer afgegeven worden."}},
+    {{"argument_id": 45, "gist": "ook natuurvergunningen vertraagd", "samenvatting": null}},
+    {{"argument_id": 47, "gist": "duizenden boeren gedwongen stoppen", "samenvatting": null}},
+    {{"argument_id": 103, "gist": "biologische boeren niet rendabel", "samenvatting": null}}
+  ],
+  "relations": [
+    {{"relation_type": "support", "premise_argument_ids": [45], "target_argument_id": 12, "scheme": null}},
+    {{"relation_type": "conflict", "premise_argument_ids": [47], "target_argument_id": 12,
+      "thema": "Moet vergunningverlening voorrang krijgen boven de gevolgen voor boeren?", "scheme": null}}
+  ],
+  "coordinatieve_groepen": [
+    {{"label": "economische lasten voor boeren", "samenvatting": "Boeren worden gedwongen te stoppen en biologische bedrijven zijn niet rendabel.",
+      "argument_ids": [47, 103]}}
   ],
   "twijfelachtige_classificaties": [
     {{"argument_id": 88, "huidige_stance": "contra", "reden": "citaat pleit juist voor snellere reductie"}}
-  ],
-  "toelichting": "korte uitleg van de gekozen structuur"
+  ]
 }}
 ```
+
+Let op: argument 47 komt hier zowel in een `coordinatieve_groepen`-entry als in een `conflict`-relatie
+voor -- dat mag. Een groepslid dat *zelf* ook een scherpe weerlegging is, wordt met zijn eigen kaart
+uit de confrontatie-as getrokken; de rest van de groep (hier: 103) blijft als bundel buiten de
+confrontatie-as staan.

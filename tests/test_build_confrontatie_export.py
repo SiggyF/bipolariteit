@@ -1,48 +1,70 @@
-from pipeline.build_confrontatie_export import build_bands_and_losse
+from pipeline.build_confrontatie_export import _build_registry, build_bands_and_losse
+
+
+def _relation(relation_type, premise_argument_ids, target_argument_id, thema=None, scheme=None):
+    return {
+        "relation_type": relation_type,
+        "premise_argument_ids": premise_argument_ids,
+        "target_argument_id": target_argument_id,
+        "thema": thema,
+        "scheme": scheme,
+        "weak_link": False,
+        "beoordeeld_door": ["pro", "contra"],
+        "confidence": 1.0,
+    }
 
 
 def _tree():
-    """Synthetische Gemini-tree met dezelfde structuurpatronen als de echte
-    stikstof-output: een direct top-level paar (1 vs 10), een genest paar
-    waarbij het contra-argument een kind is van een ander top-level contra-
-    argument (2 vs 11, 11 is kind van top-level 20), en een cross-band-geval
-    waarbij hetzelfde pro-argument (1) via een kind (3) een tweede keer
-    weersproken wordt (3 vs 30) -- dat kind moet dan een verwijskaart
-    krijgen i.p.v. een duplicaat van argument 1."""
+    """Synthetische argumentenboom met dezelfde structuurpatronen als de
+    echte stikstof-output: een direct top-level paar (1 vs 10), een genest
+    paar waarbij het contra-argument een kind is van een ander top-level
+    contra-argument (2 vs 11, 11 is kind van top-level 20), en een cross-
+    band-geval waarbij hetzelfde pro-argument (1) via een kind (3) een
+    tweede keer weersproken wordt (3 vs 30) -- dat kind moet dan een
+    verwijskaart krijgen i.p.v. een duplicaat van argument 1."""
     return {
-        "pro": {
-            "nodes": [
-                {"argument_id": 1, "gist": "pro hoofdargument", "children": [{"argument_id": 3, "gist": "onderbouwing van 1"}]},
-                {"argument_id": 2, "gist": "los pro-argument"},
-                {"label": "groep", "arguments": [{"argument_id": 4, "gist": "groepslid a"}, {"argument_id": 5, "gist": "groepslid b"}], "children": []},
-            ]
-        },
-        "contra": {
-            "nodes": [
-                {"argument_id": 10, "gist": "contra hoofdargument"},
-                {"argument_id": 20, "gist": "ander contra-hoofdargument", "children": [{"argument_id": 11, "gist": "onderbouwing van 20"}]},
-                {"argument_id": 30, "gist": "los contra-argument"},
-                {"argument_id": 40, "gist": "ongebruikt contra-argument"},
-            ]
-        },
-        "oppositions": [
-            {"argument_a_id": 1, "argument_b_id": 10, "relation_type": "direct_rebuttal"},
-            {"argument_a_id": 2, "argument_b_id": 11, "relation_type": "direct_rebuttal"},
-            {"argument_a_id": 3, "argument_b_id": 30, "relation_type": "direct_rebuttal"},
+        "nodes": [
+            {"argument_id": 1, "gist": "pro hoofdargument", "samenvatting": None},
+            {"argument_id": 2, "gist": "los pro-argument", "samenvatting": None},
+            {"argument_id": 3, "gist": "onderbouwing van 1", "samenvatting": None},
+            {"argument_id": 4, "gist": "groepslid a", "samenvatting": None},
+            {"argument_id": 5, "gist": "groepslid b", "samenvatting": None},
+            {"argument_id": 10, "gist": "contra hoofdargument", "samenvatting": None},
+            {"argument_id": 11, "gist": "onderbouwing van 20", "samenvatting": None},
+            {"argument_id": 20, "gist": "ander contra-hoofdargument", "samenvatting": None},
+            {"argument_id": 30, "gist": "los contra-argument", "samenvatting": None},
+            {"argument_id": 40, "gist": "ongebruikt contra-argument", "samenvatting": None},
+        ],
+        "relations": [
+            _relation("support", [3], 1),
+            _relation("support", [11], 20),
+            _relation("conflict", [1], 10),
+            _relation("conflict", [2], 11),
+            _relation("conflict", [3], 30),
+        ],
+        "coordinatieve_groepen": [
+            {"label": "groep", "samenvatting": None, "argument_ids": [4, 5]},
         ],
         "twijfelachtige_classificaties": [],
     }
 
 
+def _stance_by_id():
+    return {
+        1: "pro", 2: "pro", 3: "pro", 4: "pro", 5: "pro",
+        10: "contra", 11: "contra", 20: "contra", 30: "contra", 40: "contra",
+    }
+
+
 def test_direct_top_level_pair_gets_two_real_cards():
-    result = build_bands_and_losse(_tree())
+    result = build_bands_and_losse(_tree(), _stance_by_id())
     band = result["bands"][0]
     assert band["pro"] == {"type": "node", "id": 1, "kids": []}
     assert band["contra"] == {"type": "node", "id": 10, "kids": []}
 
 
 def test_nested_side_anchors_on_its_top_level_parent():
-    result = build_bands_and_losse(_tree())
+    result = build_bands_and_losse(_tree(), _stance_by_id())
     band = result["bands"][1]
     # argument 2 (pro, top-level) weerspreekt 11, dat genest is onder top-level 20:
     # de "echte kaart" hoort bij de voorouder (20), niet bij 11 zelf.
@@ -51,7 +73,7 @@ def test_nested_side_anchors_on_its_top_level_parent():
 
 
 def test_second_use_of_same_top_level_ancestor_becomes_a_reference():
-    result = build_bands_and_losse(_tree())
+    result = build_bands_and_losse(_tree(), _stance_by_id())
     band = result["bands"][2]
     # argument 3 is een kind van top-level 1, dat al "geclaimd" is door band 0 --
     # dus hier een verwijskaart naar band 1 (1-indexed nummer van band 0), niet
@@ -61,7 +83,7 @@ def test_second_use_of_same_top_level_ancestor_becomes_a_reference():
 
 
 def test_unopposed_top_level_argument_and_group_end_up_losse():
-    result = build_bands_and_losse(_tree())
+    result = build_bands_and_losse(_tree(), _stance_by_id())
     assert result["losse_argumenten"] == [40]
     assert result["losse_groepen"] == [
         {"kind": "group", "label": "groep", "samenvatting": None, "member_ids": [4, 5]}
@@ -69,22 +91,22 @@ def test_unopposed_top_level_argument_and_group_end_up_losse():
 
 
 def test_every_argument_id_is_indexed_exactly_once_in_the_registry():
-    result = build_bands_and_losse(_tree())
+    result = build_bands_and_losse(_tree(), _stance_by_id())
     assert set(result["registry"].keys()) == {1, 2, 3, 4, 5, 10, 11, 20, 30, 40}
 
 
 def test_band_thema_and_samenvatting_are_passed_through_when_present():
     tree = _tree()
-    tree["oppositions"][0]["thema"] = "Moet er sneller gereduceerd worden?"
-    tree["pro"]["nodes"][0]["samenvatting"] = "Snellere reductie is nodig voor natuurherstel."
-    result = build_bands_and_losse(tree)
+    tree["relations"][2]["thema"] = "Moet er sneller gereduceerd worden?"
+    tree["nodes"][0]["samenvatting"] = "Snellere reductie is nodig voor natuurherstel."
+    result = build_bands_and_losse(tree, _stance_by_id())
     band = result["bands"][0]
     assert band["thema"] == "Moet er sneller gereduceerd worden?"
     assert result["registry"][1]["samenvatting"] == "Snellere reductie is nodig voor natuurherstel."
 
 
 def test_band_thema_falls_back_to_mechanical_gist_join_when_absent():
-    result = build_bands_and_losse(_tree())
+    result = build_bands_and_losse(_tree(), _stance_by_id())
     band = result["bands"][0]
     assert band["thema"] == "pro hoofdargument vs contra hoofdargument"
     assert result["registry"][1]["samenvatting"] is None
@@ -92,8 +114,8 @@ def test_band_thema_falls_back_to_mechanical_gist_join_when_absent():
 
 def test_opposed_group_member_gets_its_own_card_and_drops_out_of_losse_groepen():
     tree = _tree()
-    tree["oppositions"].append({"argument_a_id": 4, "argument_b_id": 40, "relation_type": "direct_rebuttal"})
-    result = build_bands_and_losse(tree)
+    tree["relations"].append(_relation("conflict", [4], 40))
+    result = build_bands_and_losse(tree, _stance_by_id())
     band = result["bands"][-1]
     # groepslid 4 (pro) wordt hier los weersproken: het is zijn eigen
     # top-level voorouder, dus een gewone "node"-kaart -- geen crash op een
@@ -103,3 +125,25 @@ def test_opposed_group_member_gets_its_own_card_and_drops_out_of_losse_groepen()
     # de groep blijft niet ook nog los staan nu lid 4 al een band-kaart heeft.
     assert result["losse_groepen"] == []
     assert result["losse_argumenten"] == []
+
+
+def test_kids_carry_their_own_weak_link_from_the_support_relation():
+    tree = _tree()
+    tree["relations"][0]["weak_link"] = True  # support [3] -> 1
+    registry = _build_registry(tree, _stance_by_id())
+    assert registry[1]["children"] == [{"id": 3, "weak_link": True, "scheme": None}]
+    # een andere kid, ongewijzigde support-relatie, blijft niet weak_link
+    assert registry[20]["children"] == [{"id": 11, "weak_link": False, "scheme": None}]
+
+
+def test_band_carries_weak_link_and_scheme_from_relation():
+    tree = _tree()
+    tree["relations"][2]["weak_link"] = True
+    tree["relations"][2]["scheme"] = "frame_shift"
+    tree["relations"][2]["beoordeeld_door"] = ["pro"]
+    tree["relations"][2]["confidence"] = 0.5
+    result = build_bands_and_losse(tree, _stance_by_id())
+    oppositie = result["bands"][0]["oppositie"]
+    assert oppositie["weak_link"] is True
+    assert oppositie["scheme"] == "frame_shift"
+    assert oppositie["confidence"] == 0.5

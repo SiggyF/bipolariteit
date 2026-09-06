@@ -92,31 +92,6 @@ CREATE TABLE claims (
     attributed_source_text TEXT
 );
 
-CREATE TABLE argument_oppositions (
-    id INTEGER PRIMARY KEY,
-    argument_a_id INTEGER NOT NULL REFERENCES arguments(id),
-    argument_b_id INTEGER NOT NULL REFERENCES arguments(id),
-    relation_type TEXT NOT NULL CHECK (relation_type IN ('direct_rebuttal', 'thematic')),
-    created_by TEXT NOT NULL CHECK (created_by IN ('llm', 'manual')),
-    confidence REAL
-);
-
--- Redactionele bias-balans-check, één rij per document: pass_status is een
--- corpus-brede, deterministische pro/contra-snapshot van het hele topic op
--- het moment dat dit document werd verwerkt (zie redactie_check.py) -- niet
--- een oordeel over dit ene document op zich (dat is hier bijna altijd één
--- sprekersbeurt van één Kamerlid, dus per-document "eenzijdig" zou triviaal
--- altijd waar zijn). Nooit een oordeel over of een argument feitelijk klopt.
-CREATE TABLE redactie_reviews (
-    id INTEGER PRIMARY KEY,
-    document_id INTEGER NOT NULL REFERENCES documents(id),
-    pass_status TEXT NOT NULL CHECK (pass_status IN ('balanced', 'imbalanced', 'flag')),
-    notes TEXT,
-    reviewer_model TEXT,
-    prompt_version TEXT, -- hash van pipeline/prompts/redactie_bias_check.md t.t.v. deze review; NULL = vóór versionering bestond
-    created_at TEXT NOT NULL
-);
-
 CREATE INDEX idx_documents_topic ON documents(topic_id);
 -- document_exists() (ingest_tk.py, elke ingest-run) en alle scripts/backfill_*.py
 -- zoeken op external_id; zonder index is dat een full table scan (191k+ rijen,
@@ -126,9 +101,6 @@ CREATE INDEX IF NOT EXISTS idx_documents_external_id ON documents(external_id);
 CREATE INDEX idx_arguments_topic_stance ON arguments(topic_id, stance);
 CREATE INDEX idx_arguments_document ON arguments(document_id);
 CREATE INDEX idx_claims_argument ON claims(argument_id);
-CREATE INDEX idx_oppositions_a ON argument_oppositions(argument_a_id);
-CREATE INDEX idx_oppositions_b ON argument_oppositions(argument_b_id);
-CREATE INDEX idx_redactie_document ON redactie_reviews(document_id);
 
 -- Argument-taxonomie van een argumentatie-onderzoeker (data/tags.toml), geladen
 -- via pipeline/db/seed_tags.py. `active` is een soft-delete-vlag: elke seed-run
@@ -193,35 +165,3 @@ CREATE TABLE IF NOT EXISTS llm_calls (
 );
 CREATE INDEX IF NOT EXISTS idx_llm_calls_topic_model ON llm_calls(topic_id, model);
 CREATE INDEX IF NOT EXISTS idx_llm_calls_stage ON llm_calls(stage);
-
--- Vervanger van argument_oppositions (issue #252), gebaseerd op de AIF-kern
--- (I/RA/CA-nodes, zie pipeline/schemas/argument_relations.schema.json): een
--- relatie is zelf het object (support/conflict) i.p.v. een gelabelde edge
--- tussen twee vaste kolommen, zodat een coordinatieve groep (meerdere
--- argumenten die een claim alleen gezamenlijk dragen) ook uit te drukken is
--- via meerdere aif_relation_premises-rijen op dezelfde relatie. aif_-prefix
--- om deze twee tabellen als AIF-afgeleid model te onderscheiden van de rest
--- van het (eigen) schema. argument_oppositions blijft staan tot deze
--- migratie geverifieerd is (zie
--- scripts/migrate_argument_oppositions_to_relations.py), daarna een aparte
--- opruimstap.
-CREATE TABLE IF NOT EXISTS aif_relations (
-    id INTEGER PRIMARY KEY,
-    relation_type TEXT NOT NULL CHECK (relation_type IN ('support', 'conflict')),
-    target_argument_id INTEGER NOT NULL REFERENCES arguments(id),
-    scheme TEXT, -- bv. 'direct_rebuttal'/'thematic'/'frame_shift' (conflict) of een Walton-schemanaam (support), NULL als geen scheme van toepassing is
-    weak_link INTEGER NOT NULL DEFAULT 0 CHECK (weak_link IN (0, 1)), -- zwakke-koppeling-signaal uit #252: structureel dichtbij, maar geen echte logische steun/weerlegging
-    created_by TEXT NOT NULL CHECK (created_by IN ('llm', 'manual')),
-    confidence REAL
-);
-
--- De argumenten die een relatie voeden -- 1 rij voor een simpele koppeling,
--- meerdere rijen voor een coordinatieve groep (nu onmogelijk met de platte
--- argument_a_id/argument_b_id-kolommen van argument_oppositions).
-CREATE TABLE IF NOT EXISTS aif_relation_premises (
-    relation_id INTEGER NOT NULL REFERENCES aif_relations(id),
-    argument_id INTEGER NOT NULL REFERENCES arguments(id),
-    PRIMARY KEY (relation_id, argument_id)
-);
-CREATE INDEX IF NOT EXISTS idx_aif_relations_target ON aif_relations(target_argument_id);
-CREATE INDEX IF NOT EXISTS idx_aif_relation_premises_argument ON aif_relation_premises(argument_id);

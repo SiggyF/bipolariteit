@@ -1,20 +1,35 @@
 """
-Draait de argumentenboom-structurering (pipeline/prompts/argument_tree_gemini.md)
-niet-interactief via `agy` in Docker (docker/agy/Dockerfile), i.p.v. het
-argumentdocument + de prompt handmatig in een Gemini-chat te plakken.
-Bouwt het argumentdocument zelf op (dezelfde functies als
-pipeline/export_argument_doc.py -- geen tussenbestand nodig) en schrijft
-Gemini's ruwe structurering direct naar
-data/export/argument-docs/<topic>-gemini-tree.json. Wordt aangeroepen door
-`make confrontatie-tree TOPIC=<topic>`, dat er meteen ook
-pipeline.build_confrontatie_export achteraan plakt -- zonder handmatige
-tussenstap.
+Draait de volledige argumentenboom-pipeline (issue #252) niet-interactief
+via `agy` in Docker (docker/agy/Dockerfile): structureren + tweezijdige
+redactie + samenvoegen + valideren, in één run. Schrijft het eindresultaat
+naar data/export/argument-docs/<topic>-gemini-tree.json (zelfde bestandsnaam
+als voorheen, ondanks dat het nu drie LLM-calls zijn i.p.v. één).
+
+Drie stappen:
+1. **Structureren** (pipeline/prompts/argument_tree_gemini.md): bouwt het
+   argumentdocument zelf op (dezelfde functies als
+   pipeline/export_argument_doc.py -- geen tussenbestand nodig) en laat
+   Gemini een concept-boom bouwen (nodes/relations/coordinatieve_groepen/
+   twijfelachtige_classificaties, zie pipeline/schemas/argument_tree.schema.json).
+2. **Redactie, twee keer** (pipeline/prompts/boomredactie.md): een pro- en
+   een contra-redacteur beoordelen onafhankelijk elke relatie uit stap 1 op
+   diezelfde concept-boom.
+3. **Samenvoegen + valideren** (pipeline/confrontatie_tree.py, zuivere
+   Python, geen LLM): een relatie die door beide kanten onderschreven wordt
+   telt als stevig, door precies één kant blijft ze staan maar gemarkeerd
+   (weak_link), door geen van beide verdwijnt ze. Het resultaat wordt tegen
+   het schema gevalideerd vóór het wegschrijven -- faalt de validatie, dan
+   wordt niets weggeschreven.
+
+Wordt aangeroepen door `make redactie TOPIC=<topic>`, dat er meteen ook
+pipeline.build_confrontatie_export achteraan plakt.
 
 In tegenstelling tot de extractie-/tagging-agy-scripts (honderden calls,
-dus een goedkoop `flash-low`-model) is dit één call per topic -- de default
-is daarom een zwaarder model. Zie
-docs/design/argumentenboom/thema-en-samenvatting-workflow.md voor de volledige
-workflow en hoe je itereert als de output niet scherp/leesbaar genoeg is.
+dus een goedkoop `flash-low`-model) zijn dit maar drie calls per topic -- de
+default is daarom een zwaarder model. Zie
+docs/design/argumentenboom/thema-en-samenvatting-workflow.md voor de
+volledige workflow en hoe je itereert als de output niet scherp/leesbaar
+genoeg is.
 
 Vereist: `docker build -t bipolariteit-agy docker/agy` en een eenmalige
 interactieve login (zie docs/handoff.md, sectie "Antigravity CLI (agy) in
@@ -27,11 +42,9 @@ faalt al met "Argument list too long" ruim onder 1,5 MB) en ook niet via
 stdin (agy gebruikt stdin niet als input voor het model -- beide geprobeerd,
 zie git-historie van dit bestand). In plaats daarvan wordt het document als
 bestand in een tijdelijke map gemount en met `--add-dir` aan agy's workspace
-toegevoegd. Bij deze omvang leest agy het NIET via zijn gewone `read_file`-
-tool, maar schrijft en draait hij zelf shell-scriptjes (`which`, `python3`,
-`perl`, `cat << EOF > script.py`) om het te parsen/doorzoeken -- ontdekt door
-een complete run eerst interactief te draaien (`docker run -it ... agy`,
-zonder --print) en te zien welke permissies daadwerkelijk gevraagd werden.
+toegevoegd -- alleen nodig voor de structureringsstap; de twee redactiestappen
+werken op de al-geselecteerde concept-boom (~15-30 argumenten per kant), die
+ruim binnen een gewoon `--print`-argument past.
 
 Permissies: volgens https://antigravity.google/docs/cli/permissions bestaan
 er zes permissie-acties (`read_file`, `write_file`, `command`, `read_url`,
@@ -68,6 +81,9 @@ import time
 from datetime import datetime, timezone
 from pathlib import Path
 
+from jsonschema import Draft202012Validator, ValidationError
+
+from pipeline.confrontatie_tree import merge_reviews
 from pipeline.db import db
 from pipeline.export_argument_doc import build_document, fetch_stance_arguments
 from pipeline.extract_arguments import _extract_json
@@ -75,7 +91,9 @@ from pipeline.periodes import PeriodeIndex
 
 logger = logging.getLogger(__name__)
 
-PROMPT_PATH = Path(__file__).parent.parent / "pipeline" / "prompts" / "argument_tree_gemini.md"
+STRUCTURE_PROMPT_PATH = Path(__file__).parent.parent / "pipeline" / "prompts" / "argument_tree_gemini.md"
+REDACTIE_PROMPT_PATH = Path(__file__).parent.parent / "pipeline" / "prompts" / "boomredactie.md"
+TREE_SCHEMA_PATH = Path(__file__).parent.parent / "pipeline" / "schemas" / "argument_tree.schema.json"
 GEMINI_TREE_DIR = Path(__file__).parent.parent / "data" / "export" / "argument-docs"
 LOG_PATH = Path(__file__).parent.parent / "data" / "export" / "agy_confrontatie_tree.log"
 
@@ -87,8 +105,9 @@ AGY_GEMINI_CONFIG_DIR = str(Path.home() / ".bipolariteit" / "agy_gemini_config")
 
 # Eén call per topic i.p.v. honderden zoals bij extractie/tagging -- de
 # extra kosten/tijd van een zwaarder model wegen hier niet zwaar, en dit is
-# inhoudelijk lastiger werk (structureren + scherpe thema's + samenvatten)
-# dan de per-document-extractie waar `flash-low` voor gekozen is.
+# inhoudelijk lastiger werk (structureren + scherpe thema's + samenvatten,
+# of het kritisch beoordelen daarvan) dan de per-document-extractie waar
+# `flash-low` voor gekozen is.
 DEFAULT_MODEL = "gemini-3.6-flash-high"
 
 CONTAINER_INPUT_DIR = "/data/input"
@@ -113,17 +132,17 @@ def _ensure_read_permission():
     --print) en te kijken welke permissies daadwerkelijk gevraagd werden:
     bij een document van deze omvang (~1,5 MB) leest agy het NIET via zijn
     gewone `read_file`-tool, maar schrijft en draait hij zelf shell-
-    scriptjes om het te parsen/chunken/doorzoeken -- `which` (om te
-    checken welke interpreter beschikbaar is), `python3 -c "..."`
-    (voornaamste aanpak), `perl` (fallback toen python3 nog ontbrak in de
-    Docker-image, zie docker/agy/Dockerfile) en `cat << 'EOF' > script.py`
-    (scriptjes wegschrijven vóór ze uit te voeren). Elke `command(<naam>)`-
-    regel whitelist op de commandonaam (prefix-matching, zie
-    https://antigravity.google/docs/cli/permissions, voorbeeld
-    "command(npm run (build|lint|test))") -- generieker dan de letterlijke,
-    scriptspecifieke regel die de CLI's eigen "always allow"-optie zou
-    opslaan (die matcht op de exacte scripttekst van dát ene scriptje, en
-    werkt dus niet meer zodra agy een net iets andere aanroep genereert).
+    scriptjes (`which` (om te checken welke interpreter beschikbaar is),
+    `python3 -c "..."` (voornaamste aanpak), `perl` (fallback toen python3
+    nog ontbrak in de Docker-image, zie docker/agy/Dockerfile) en
+    `cat << 'EOF' > script.py` (scriptjes wegschrijven vóór ze uit te
+    voeren). Elke `command(<naam>)`-regel whitelist op de commandonaam
+    (prefix-matching, zie https://antigravity.google/docs/cli/permissions,
+    voorbeeld "command(npm run (build|lint|test))") -- generieker dan de
+    letterlijke, scriptspecifieke regel die de CLI's eigen "always allow"-
+    optie zou opslaan (die matcht op de exacte scripttekst van dát ene
+    scriptje, en werkt dus niet meer zodra agy een net iets andere aanroep
+    genereert).
 
     Andere, eventueel al aanwezige instellingen in dit bestand (bv. de
     OAuth-sessie zelf staat elders in dezelfde AGY_GEMINI_CONFIG_DIR)
@@ -162,12 +181,26 @@ def _log_attempt(label, cmd, stdout, stderr, elapsed):
         f.write("\n")
 
 
+def _run_agy_cmd(cmd, timeout, label):
+    """Voert een kant-en-klare `docker run ... agy ...`-commando uit, leest
+    agy's eigen --log-file-output terug (verwacht als laatste twee
+    argumenten van cmd: het pad ernaartoe wordt door de caller al meegegeven
+    via --log-file), en logt alles naar LOG_PATH. Gedeelde kern van
+    run_agy() (structureringsstap, met gemount document) en
+    run_agy_prompt() (redactiestappen, kleine boom past in --print)."""
+    start = time.monotonic()
+    result = subprocess.run(cmd, capture_output=True, text=True, timeout=timeout)
+    elapsed = time.monotonic() - start
+    _log_attempt(label, cmd, result.stdout, result.stderr, elapsed)
+    return result.stdout.strip(), result.stderr.strip(), elapsed
+
+
 def run_agy(document, instructions, model, timeout, skip_permissions=False):
-    """Mount `document` als bestand in een tijdelijke, read-only map en voeg
-    die met `--add-dir` toe aan agy's workspace -- zie moduledocstring voor
-    waarom (te groot voor een CLI-argument of stdin). agy verwerkt het
-    bestand zelf via shell-scriptjes (which/python3/perl/cat, zie
-    _ensure_read_permission()), niet via een simpele file-read.
+    """Structureringsstap: mount `document` als bestand in een tijdelijke,
+    read-only map en voeg die met `--add-dir` toe aan agy's workspace -- zie
+    moduledocstring voor waarom (te groot voor een CLI-argument of stdin).
+    agy verwerkt het bestand zelf via shell-scriptjes (which/python3/perl/
+    cat, zie _ensure_read_permission()), niet via een simpele file-read.
 
     `skip_permissions=True` is puur een noodgreep-optie voor als de scoped
     permissions.allow-regel onverwacht niet volstaat (bv. een tweede,
@@ -186,21 +219,6 @@ def run_agy(document, instructions, model, timeout, skip_permissions=False):
             f"zijn geheel, voordat je de onderstaande opdracht uitvoert.\n\n{instructions}"
         )
 
-        # Gewone argv-lijst (geen shell, geen quoting-gedoe): subprocess.run
-        # geeft elk element letterlijk door aan execve, dus willekeurige
-        # tekens in `instructions_with_path` (quotes, `$`, `*`, ...) kunnen
-        # niet als shell-syntax geïnterpreteerd worden.
-        #
-        # Geen --sandbox: die vraagt bij ELK commando een losse "sandbox
-        # bypass"-bevestiging (de binnen-container-sandboxmechaniek zit niet
-        # in dit image), zonder dat het extra isolatie toevoegt -- de
-        # wegwerpbare Docker-container (--rm) is hier al de isolatiegrens.
-        #
-        # --log-file naar een apart, schrijfbare (niet -ro) gemounte map:
-        # agy's eigen debug-log bleek niet te leven op het pad dat
-        # docs/handoff.md noemt (geen enkele "log"-directory gevonden onder
-        # /home/agy, /tmp of /root in dit image) -- met --log-file kiezen we
-        # zelf waar het terechtkomt, i.p.v. te gokken/zoeken.
         cmd = [
             "docker", "run", "--rm",
             "-v", f"{AGY_GEMINI_CONFIG_DIR}:/home/agy/.gemini",
@@ -215,16 +233,51 @@ def run_agy(document, instructions, model, timeout, skip_permissions=False):
         if skip_permissions:
             cmd.append("--dangerously-skip-permissions")
 
-        start = time.monotonic()
-        result = subprocess.run(cmd, capture_output=True, text=True, timeout=timeout)
-        elapsed = time.monotonic() - start
-
+        stdout, stderr, elapsed = _run_agy_cmd(cmd, timeout, "structureren skip_permissions=" + str(skip_permissions))
         agy_log_path = Path(output_dir) / AGY_LOG_FILENAME
         agy_log = agy_log_path.read_text() if agy_log_path.exists() else "(--log-file leverde geen bestand op)"
-        stderr_with_log = f"{result.stderr}\n--- agy --log-file ({AGY_LOG_FILENAME}) ---\n{agy_log}"
+        return stdout, f"{stderr}\n--- agy --log-file ({AGY_LOG_FILENAME}) ---\n{agy_log}", elapsed
 
-        _log_attempt("skip_permissions=" + str(skip_permissions), cmd, result.stdout, stderr_with_log, elapsed)
-        return result.stdout.strip(), stderr_with_log.strip(), elapsed
+
+def run_agy_prompt(prompt, model, timeout, label, skip_permissions=False):
+    """Redactiestap: de concept-boom is klein genoeg (~15-30 argumenten per
+    kant) om rechtstreeks in --print mee te geven, geen gemount bestand
+    nodig zoals bij run_agy() (de structureringsstap, met het volledige
+    argumentdocument)."""
+    with tempfile.TemporaryDirectory(prefix="bipolariteit-agy-out-") as output_dir:
+        cmd = [
+            "docker", "run", "--rm",
+            "-v", f"{AGY_GEMINI_CONFIG_DIR}:/home/agy/.gemini",
+            "-v", f"{output_dir}:{CONTAINER_OUTPUT_DIR}",
+            "bipolariteit-agy",
+            "agy", "--print", prompt,
+            "--model", model,
+            "--log-file", f"{CONTAINER_OUTPUT_DIR}/{AGY_LOG_FILENAME}",
+        ]
+        if skip_permissions:
+            cmd.append("--dangerously-skip-permissions")
+
+        stdout, stderr, elapsed = _run_agy_cmd(cmd, timeout, f"{label} skip_permissions={skip_permissions}")
+        agy_log_path = Path(output_dir) / AGY_LOG_FILENAME
+        agy_log = agy_log_path.read_text() if agy_log_path.exists() else "(--log-file leverde geen bestand op)"
+        return stdout, f"{stderr}\n--- agy --log-file ({AGY_LOG_FILENAME}) ---\n{agy_log}", elapsed
+
+
+def _parse_or_die(stdout, stderr, label):
+    if not stdout:
+        raise SystemExit(
+            f"leeg antwoord van agy ({label}) (stderr, eerste 2000 tekens: {stderr[:2000]}) -- volledige "
+            f"output in {LOG_PATH}. Als dit een permissiefout is: whitelist de genoemde tool via settings.json "
+            f"in {AGY_GEMINI_CONFIG_DIR} (zie run_agy()-docstring), of run desnoods opnieuw met "
+            "--dangerously-skip-permissions."
+        )
+    try:
+        return _extract_json(stdout)
+    except Exception as exc:
+        raise SystemExit(
+            f"agy-output ({label}) is geen geldige JSON ({exc}); niet weggeschreven. Volledige output in "
+            f"{LOG_PATH}.\n--- eerste 2000 tekens ---\n{stdout[:2000]}"
+        )
 
 
 def build_prompt(conn, topic_row, stances, vanaf):
@@ -232,9 +285,20 @@ def build_prompt(conn, topic_row, stances, vanaf):
         stance: fetch_stance_arguments(conn, topic_row["id"], stance, vanaf, limit=None) for stance in stances
     }
     document = build_document(topic_row, stances_by_name)
-    instructions = PROMPT_PATH.read_text().format(topic=topic_row["name"])
+    instructions = STRUCTURE_PROMPT_PATH.read_text().format(topic=topic_row["name"])
     total = sum(len(v) for v in stances_by_name.values())
     return document, instructions, total
+
+
+def run_redactie(structured, topic_name, kant, model, timeout, skip_permissions):
+    tree_json = json.dumps(structured, ensure_ascii=False, indent=2)
+    prompt = REDACTIE_PROMPT_PATH.read_text().format(topic=topic_name, kant=kant, tree_json=tree_json)
+    stdout, stderr, elapsed = run_agy_prompt(prompt, model, timeout, f"redactie-{kant}", skip_permissions)
+    logger.info("redactie-%s-call klaar in %.1fs", kant, elapsed)
+    review = _parse_or_die(stdout, stderr, f"redactie-{kant}")
+    if "beoordelingen" not in review:
+        raise SystemExit(f"redactie-{kant}-output mist 'beoordelingen'-veld: {stdout[:500]}")
+    return review
 
 
 def main():
@@ -246,7 +310,7 @@ def main():
     parser.add_argument(
         "--out", default=None, help="uitvoerpad (default: data/export/argument-docs/<topic>-gemini-tree.json)"
     )
-    parser.add_argument("--timeout", type=int, default=1800, help="timeout in seconden voor de agy-call (default 1800)")
+    parser.add_argument("--timeout", type=int, default=1800, help="timeout in seconden per agy-call (default 1800)")
     parser.add_argument(
         "--dangerously-skip-permissions", action="store_true",
         help="voeg --dangerously-skip-permissions toe aan agy -- alleen als laatste redmiddel, zie run_agy()",
@@ -271,40 +335,55 @@ def main():
     )
 
     if args.dry_run:
-        print("=== document (via --add-dir bestand) ===")
+        print("=== document (structureringsstap, via --add-dir bestand) ===")
         print(document)
-        print("=== instructies (--print) ===")
+        print("=== instructies (structureringsstap, --print) ===")
         print(instructions)
         logger.info("(--dry-run: geen agy-call)")
         return
 
+    # 1. Structureren
     stdout, stderr, elapsed = run_agy(
         document, instructions, args.model, args.timeout, skip_permissions=args.dangerously_skip_permissions
     )
-    logger.info("agy-call klaar in %.1fs -- volledige in/output in %s", elapsed, LOG_PATH)
+    logger.info("structureer-call klaar in %.1fs -- volledige in/output in %s", elapsed, LOG_PATH)
+    structured = _parse_or_die(stdout, stderr, "structureren")
+    for verplicht in ("nodes", "relations"):
+        if verplicht not in structured:
+            raise SystemExit(f"structureer-output mist '{verplicht}'-veld: {stdout[:500]}")
+    structured.setdefault("coordinatieve_groepen", [])
+    structured.setdefault("twijfelachtige_classificaties", [])
 
-    if not stdout:
-        raise SystemExit(
-            f"leeg antwoord van agy (stderr, eerste 2000 tekens: {stderr[:2000]}) -- volledige output in {LOG_PATH}. "
-            "Als dit een permissiefout is: whitelist de genoemde tool via settings.json in "
-            f"{AGY_GEMINI_CONFIG_DIR} (zie run_agy()-docstring), of run desnoods opnieuw met "
-            "--dangerously-skip-permissions."
-        )
+    # 2. Redactie, twee keer -- dezelfde concept-boom, onafhankelijk beoordeeld
+    pro_review = run_redactie(
+        structured, topic_row["name"], "pro", args.model, args.timeout, args.dangerously_skip_permissions
+    )
+    contra_review = run_redactie(
+        structured, topic_row["name"], "contra", args.model, args.timeout, args.dangerously_skip_permissions
+    )
 
+    # 3. Samenvoegen + valideren -- geen LLM, puur Python (pipeline/confrontatie_tree.py)
+    result = merge_reviews(structured, pro_review, contra_review)
+    schema = json.loads(TREE_SCHEMA_PATH.read_text())
     try:
-        parsed = _extract_json(stdout)
-    except Exception as exc:
+        Draft202012Validator(schema).validate(result)
+    except ValidationError as exc:
         raise SystemExit(
-            f"agy-output is geen geldige JSON ({exc}); niet weggeschreven. Volledige output in {LOG_PATH}.\n"
-            f"--- eerste 2000 tekens ---\n{stdout[:2000]}"
+            f"samengevoegde argumentenboom voldoet niet aan {TREE_SCHEMA_PATH.name}: {exc.message} "
+            f"(pad: {list(exc.absolute_path)}). Niet weggeschreven."
         )
+
+    dropped = len(structured["relations"]) - len(result["relations"])
+    weak_link = sum(1 for r in result["relations"] if r["weak_link"])
+    logger.info(
+        "Redactie klaar: %d relaties gevalideerd, %d met weak_link, %d verworpen (door geen van beide redacteuren onderschreven).",
+        len(result["relations"]), weak_link, dropped,
+    )
 
     out_path = Path(args.out) if args.out else GEMINI_TREE_DIR / f"{args.topic}-gemini-tree.json"
     out_path.parent.mkdir(parents=True, exist_ok=True)
-    out_path.write_text(json.dumps(parsed, ensure_ascii=False, indent=2))
-    logger.info("Gemini-tree -> %s", out_path)
-    if "toelichting" in parsed:
-        logger.info("Toelichting van Gemini: %s", parsed["toelichting"])
+    out_path.write_text(json.dumps(result, ensure_ascii=False, indent=2))
+    logger.info("Argumentenboom -> %s", out_path)
 
 
 if __name__ == "__main__":

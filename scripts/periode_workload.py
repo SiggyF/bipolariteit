@@ -30,8 +30,7 @@ def main():
     documents = conn.execute(
         """SELECT d.id, d.published_at,
                   d.extraction_attempted_at IS NOT NULL AS extracted,
-                  d.extraction_attempted_at IS NULL AND d.is_voorzitter_turn = 0 AS pending,
-                  (SELECT COUNT(*) FROM redactie_reviews rr WHERE rr.document_id = d.id) > 0 AS reviewed
+                  d.extraction_attempted_at IS NULL AND d.is_voorzitter_turn = 0 AS pending
            FROM documents d"""
     ).fetchall()
 
@@ -47,7 +46,6 @@ def main():
         stats[periode]["documenten"] += 1
         stats[periode]["geëxtraheerd"] += bool(row["extracted"])
         stats[periode]["wachtrij"] += bool(row["pending"])
-        stats[periode]["redactie"] += bool(row["reviewed"])
 
     for row in arguments:
         periode = _periode(index, row["published_at"])

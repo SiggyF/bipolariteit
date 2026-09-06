@@ -62,16 +62,13 @@ const generated = new Date(status.generated_at).toLocaleString("nl-NL", {
 						<div class="status-bar-fill" style={`width: ${pct(topic.arguments_tagged, topic.arguments_total)}%`} />
 					</div>
 				</li>
-				<li>
-					<div class="status-bar-label">
-						<span>Documenten redactie-gecheckt (Stage 2)</span>
-						<span class="status-bar-count">{topic.documents_redactie_checked} / {topic.documents_total}</span>
-					</div>
-					<div class="status-bar-track">
-						<div class="status-bar-fill" style={`width: ${pct(topic.documents_redactie_checked, topic.documents_total)}%`} />
-					</div>
-				</li>
 			</ul>
+			<p class="panel-note">
+				Argumentenboom (Stage 2, structureren + tweezijdige redactie):{" "}
+				{topic.argumentenboom_banden > 0
+					? `${topic.argumentenboom_banden} confrontatie-banden, waarvan ${topic.argumentenboom_weak_link} slechts door één van de twee redacteuren onderschreven.`
+					: "nog niet gegenereerd."}
+			</p>
 			<p class="status-total">{topic.arguments_total} argumenten in {topic.documents_total} documenten.</p>
 
 			{topic.llm_calls_by_model.length > 0 && (

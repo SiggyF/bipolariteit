@@ -3,7 +3,7 @@
 		v-if="variant !== 'ref'"
 		ref="rootEl"
 		class="ack"
-		:class="[`ack-${variant}`, `ack-${side}`, { 'ack-selected': selected, 'ack-linked': linked }]"
+		:class="[`ack-${variant}`, `ack-${side}`, { 'ack-selected': selected, 'ack-linked': linked, 'ack-weak-link': weakLink }]"
 		:data-arg="argument.id"
 		@click="$emit('select', argument.id)"
 		@mouseenter="$emit('hover', argument.id)"
@@ -17,6 +17,13 @@
 		<div class="ack-speaker">{{ argument.spreker }}<template v-if="argument.partij"> ({{ argument.partij }})</template></div>
 		<div v-if="showCitaat" class="ack-quote">&ldquo;{{ quoteShort }}&rdquo;</div>
 		<div v-if="oppGist" class="ack-opp">↔ weerlegt {{ oppGist }}</div>
+		<div
+			v-if="weakLink"
+			class="ack-weak-link-badge"
+			title="Slechts één van de twee redacteuren (pro/contra) onderschreef deze koppeling -- zie /over"
+		>
+			⚠ zwakke koppeling
+		</div>
 	</div>
 	<div v-else class="ack ack-ref" :class="`ack-${side}`" @click="$emit('select', refId)">
 		Zie #{{ refId }}: hangt als onderbouwing onder een ander thema (band {{ refBandNummer }}).
@@ -46,6 +53,9 @@ const props = defineProps<{
 	linked?: boolean;
 	showCitaat?: boolean;
 	oppGist?: string | null;
+	// #252: true als deze relatie (steun of weerlegging) door slechts één van
+	// de twee redacteuren onderschreven is (zie pipeline/confrontatie_tree.py).
+	weakLink?: boolean;
 }>();
 
 defineEmits<{ select: [id: number]; hover: [id: number]; unhover: [] }>();
@@ -212,6 +222,19 @@ defineExpose({ rootEl });
 	color: var(--confrontatie-accent-text);
 	margin-top: 0.5rem;
 	font-feature-settings: "tnum";
+}
+
+/* #252: zwakke-koppeling-signaal -- slechts één van de twee redacteuren
+   (pro/contra) onderschreef deze steun/weerlegging. Zelfde toon als het
+   "onduidelijk"-standpunt elders op de site: geen fout, wel een
+   nuanceringssignaal. */
+.ack-weak-link-badge {
+	font-size: 0.65rem;
+	color: var(--color-unclear);
+	margin-top: 0.4rem;
+	display: inline-flex;
+	align-items: center;
+	gap: 0.25rem;
 }
 
 .ack-ref {
