@@ -26,6 +26,14 @@ export default defineConfig({
     '/debat/[id]': '/debatten/[id]',
   },
   vite: {
+    server: {
+      // Dev-only: Playwright MCP draait als sibling-container op de host
+      // (devcontainer kan zelf geen Chrome starten, zie devcontainer.json's
+      // initializeCommand), bereikt deze dev-server dus via
+      // host.docker.internal i.p.v. localhost -- Vite's DNS-rebinding-
+      // bescherming blokkeert die hostnaam anders standaard met een 403.
+      allowedHosts: ['host.docker.internal'],
+    },
     plugins: [
       {
         // Dev-only static server voor data/export/gepubliceerd/ (issue
