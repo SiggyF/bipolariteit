@@ -1,6 +1,6 @@
 """
 Eenmalige migratie (issue #252): zet bestaande argument_oppositions-rijen om
-naar het nieuwe argument_relations/argument_relation_premises-model (AIF-
+naar het nieuwe aif_relations/aif_relation_premises-model (AIF-
 kern, zie pipeline/schemas/argument_relations.schema.json).
 
 argument_oppositions.argument_a_id was altijd het nieuw-geextraheerde
@@ -15,7 +15,7 @@ dat signaal bestond nog niet toen deze rijen gemaakt werden, dus 1 zetten
 zou een positief signaal verzinnen dat nooit berekend is.
 
 Idempotent: slaat een argument_oppositions-rij over als er al een
-argument_relations-rij bestaat met dezelfde target/premise/scheme-combinatie.
+aif_relations-rij bestaat met dezelfde target/premise/scheme-combinatie.
 
 Gebruik:
     uv run python scripts/migrate_argument_oppositions_to_relations.py [--dry-run]
@@ -38,8 +38,8 @@ def fetch_oppositions(conn):
 def relation_already_migrated(conn, target_id, premise_id, scheme):
     row = conn.execute(
         """SELECT ar.id
-           FROM argument_relations ar
-           JOIN argument_relation_premises arp ON arp.relation_id = ar.id
+           FROM aif_relations ar
+           JOIN aif_relation_premises arp ON arp.relation_id = ar.id
            WHERE ar.target_argument_id = ? AND arp.argument_id = ?
              AND ar.relation_type = 'conflict'
              AND (ar.scheme IS ? OR ar.scheme = ?)""",
@@ -65,13 +65,13 @@ def migrate(conn, dry_run):
             continue
 
         cur = conn.execute(
-            """INSERT INTO argument_relations
+            """INSERT INTO aif_relations
                    (relation_type, target_argument_id, scheme, weak_link, created_by, confidence)
                VALUES ('conflict', ?, ?, 0, ?, ?)""",
             (target_id, scheme, row["created_by"], row["confidence"]),
         )
         conn.execute(
-            "INSERT INTO argument_relation_premises (relation_id, argument_id) VALUES (?, ?)",
+            "INSERT INTO aif_relation_premises (relation_id, argument_id) VALUES (?, ?)",
             (cur.lastrowid, premise_id),
         )
         migrated += 1

@@ -199,11 +199,13 @@ CREATE INDEX IF NOT EXISTS idx_llm_calls_stage ON llm_calls(stage);
 -- relatie is zelf het object (support/conflict) i.p.v. een gelabelde edge
 -- tussen twee vaste kolommen, zodat een coordinatieve groep (meerdere
 -- argumenten die een claim alleen gezamenlijk dragen) ook uit te drukken is
--- via meerdere argument_relation_premises-rijen op dezelfde relatie.
--- argument_oppositions blijft staan tot deze migratie geverifieerd is (zie
+-- via meerdere aif_relation_premises-rijen op dezelfde relatie. aif_-prefix
+-- om deze twee tabellen als AIF-afgeleid model te onderscheiden van de rest
+-- van het (eigen) schema. argument_oppositions blijft staan tot deze
+-- migratie geverifieerd is (zie
 -- scripts/migrate_argument_oppositions_to_relations.py), daarna een aparte
 -- opruimstap.
-CREATE TABLE IF NOT EXISTS argument_relations (
+CREATE TABLE IF NOT EXISTS aif_relations (
     id INTEGER PRIMARY KEY,
     relation_type TEXT NOT NULL CHECK (relation_type IN ('support', 'conflict')),
     target_argument_id INTEGER NOT NULL REFERENCES arguments(id),
@@ -216,10 +218,10 @@ CREATE TABLE IF NOT EXISTS argument_relations (
 -- De argumenten die een relatie voeden -- 1 rij voor een simpele koppeling,
 -- meerdere rijen voor een coordinatieve groep (nu onmogelijk met de platte
 -- argument_a_id/argument_b_id-kolommen van argument_oppositions).
-CREATE TABLE IF NOT EXISTS argument_relation_premises (
-    relation_id INTEGER NOT NULL REFERENCES argument_relations(id),
+CREATE TABLE IF NOT EXISTS aif_relation_premises (
+    relation_id INTEGER NOT NULL REFERENCES aif_relations(id),
     argument_id INTEGER NOT NULL REFERENCES arguments(id),
     PRIMARY KEY (relation_id, argument_id)
 );
-CREATE INDEX IF NOT EXISTS idx_argument_relations_target ON argument_relations(target_argument_id);
-CREATE INDEX IF NOT EXISTS idx_argument_relation_premises_argument ON argument_relation_premises(argument_id);
+CREATE INDEX IF NOT EXISTS idx_aif_relations_target ON aif_relations(target_argument_id);
+CREATE INDEX IF NOT EXISTS idx_aif_relation_premises_argument ON aif_relation_premises(argument_id);
