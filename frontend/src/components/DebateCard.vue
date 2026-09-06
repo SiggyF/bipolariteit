@@ -236,7 +236,11 @@ const unclearWidth = computed(() => scaleWidth(props.debate.stance.unclear, prop
 	grid-template-columns: 1fr 96px 96px;
 	gap: 0.6rem;
 	align-items: center;
-	padding: 0.55rem 0;
+	/* 0.75rem i.p.v. 0.55rem: zelfde verticale ademruimte als de niet-compacte
+	   tag-bar-wrap (margin-top: 0.75rem, DebateCardTagBar.vue). Padding op de
+	   hele grid-rij i.p.v. margin op de balk zelf houdt titel (kolom 1) en
+	   balk (kolom 2-3) verticaal uitgelijnd -- zie issue #219. */
+	padding: 0.75rem 0;
 }
 
 /* .debate-card-body zit tussen de grid-root en headline/axis in -- moet zelf
