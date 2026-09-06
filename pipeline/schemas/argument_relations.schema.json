@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://bipolariteit.org/schemas/argument_relations.schema.json",
+  "title": "Argument-relaties",
+  "description": "LLM-uitvoerformaat voor het classificeren van relaties tussen argumenten (issue #252). Modelleert alleen de AIF-kern (I/RA/CA-nodes; zie https://en.wikipedia.org/wiki/Argument_Interchange_Format en het officiele schema op https://www.arg.tech/wp-content/uploads/AIF.sql) toegepast op onze eigen arguments-tabel: een relatie is zelf het object (een 'RA-node' voor support, een 'CA-node' voor conflict), niet een gelabelde edge. Bewust zonder de AIF+-dialooglaag (L/YA/TA-nodes): onze arguments-tabel is al de schone, geextraheerde claim, geen ruwe dialoogturns.",
+  "type": "object",
+  "properties": {
+    "relations": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/relation" }
+    }
+  },
+  "required": ["relations"],
+  "additionalProperties": false,
+  "$defs": {
+    "relation": {
+      "type": "object",
+      "description": "Een RA-node (support) of CA-node (conflict): premise_argument_ids voeden de relatie, target_argument_id is het argument dat ondersteund/aangevallen wordt.",
+      "properties": {
+        "relation_type": {
+          "type": "string",
+          "enum": ["support", "conflict"],
+          "description": "support = RA-node (premises onderbouwen target logisch). conflict = CA-node (premises weerleggen/ondermijnen target)."
+        },
+        "target_argument_id": {
+          "type": "integer",
+          "description": "id van het argument (I-node) dat ondersteund of aangevallen wordt."
+        },
+        "premise_argument_ids": {
+          "type": "array",
+          "items": { "type": "integer" },
+          "minItems": 1,
+          "description": "id's van de argumenten (I-nodes) die de relatie voeden. Meer dan 1 item = coordinatieve groep: de premises dragen de target alleen gezamenlijk, niet elk voor zich."
+        },
+        "scheme": {
+          "type": ["string", "null"],
+          "description": "Verfijning van relation_type, analoog aan AIF's schemes-tabel. Voor conflict: 'direct_rebuttal' (weerlegt hetzelfde punt expliciet), 'thematic' (raakt hetzelfde subonderwerp, geen directe weerlegging), of 'frame_shift' (verlegt de discussie naar een ander waarden-/nieuwsframe i.p.v. het punt zelf te weerleggen). Voor support: een Walton-schemanaam uit data/tags.toml indien van toepassing, anders null."
+        },
+        "weak_link": {
+          "type": "boolean",
+          "description": "true als de premise het target niet logisch onderbouwt/weerlegt ondanks structurele nabijheid (bv. een 'kid' die er inhoudelijk niet echt bij hoort) -- het zwakke-koppeling-signaal uit issue #252."
+        },
+        "confidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
+      },
+      "required": ["relation_type", "target_argument_id", "premise_argument_ids", "weak_link", "confidence"],
+      "additionalProperties": false
+    }
+  }
+}
