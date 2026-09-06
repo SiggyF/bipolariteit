@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://bipolariteit.org/schemas/argument_relations.schema.json",
-  "title": "Argument relations",
-  "description": "LLM output format for classifying relations between arguments (bipolariteit.org issue #252). Models only the AIF core (I/RA/CA nodes; see https://en.wikipedia.org/wiki/Argument_Interchange_Format and the official schema at https://www.arg.tech/wp-content/uploads/AIF.sql) applied to our own arguments table: a relation is itself the object (an 'RA-node' for support, a 'CA-node' for conflict), not a labelled edge. Deliberately without the AIF+ dialogue layer (L/YA/TA nodes): our arguments table already holds clean, extracted claims, not raw dialogue turns.",
+  "title": "Argument relations (AIF core)",
+  "description": "LLM output format for classifying relations between a flat set of already-extracted arguments/claims, each identified by an integer id. Models only the AIF core (I/RA/CA nodes; see https://en.wikipedia.org/wiki/Argument_Interchange_Format and the official schema at https://www.arg.tech/wp-content/uploads/AIF.sql): a relation is itself the object (an 'RA-node' for support, a 'CA-node' for conflict), not a labelled edge -- this naturally covers coordinative groups (several arguments jointly backing one claim), which a flat from/to edge cannot express. Deliberately without the AIF+ dialogue layer (L/YA/TA nodes, locutions, illocutionary acts): this schema assumes arguments have already been extracted as clean, standalone claims, not raw dialogue turns -- suitable for any pipeline that has arguments/claims as rows/objects with an id, not specific to any one project's database.",
   "type": "object",
   "properties": {
     "relations": {
@@ -35,17 +35,17 @@
         },
         "scheme": {
           "type": ["string", "null"],
-          "description": "Refinement of relation_type, analogous to AIF's schemes table. For conflict: 'direct_rebuttal' (explicitly rebuts the same point), 'thematic' (touches the same sub-topic, no direct rebuttal), or 'frame_shift' (shifts the discussion to a different value/news frame instead of rebutting the point itself). For support: a Walton scheme name from data/tags.toml if applicable, otherwise null."
+          "description": "Refinement of relation_type, analogous to AIF's schemes table (a named argumentation scheme applied by this relation). For conflict: 'direct_rebuttal' (explicitly rebuts the same point), 'thematic' (touches the same sub-topic, no direct rebuttal), or 'frame_shift' (shifts the discussion to a different value/framing instead of rebutting the point itself). For support: a Walton argumentation-scheme name (e.g. 'Argument from Cause to Effect', 'Argument from Expert Opinion') if one clearly applies, otherwise null -- never guess a scheme that doesn't fit."
         },
         "weak_link": {
           "type": "boolean",
-          "description": "true if the premise does not logically support/rebut the target despite their structural proximity (e.g. a 'kid' argument that doesn't really belong there) -- the weak-link signal from issue #252."
+          "description": "true if the premise does not actually logically support/rebut the target despite being structurally or topically close to it (e.g. two arguments placed near each other that don't really engage with the same point) -- flags a relation that looks plausible on the surface but doesn't hold up."
         },
         "confidence": {
           "type": "number",
           "minimum": 0,
           "maximum": 1,
-          "description": "Model's confidence in this relation, 0.0-1.0. Not a probability in a strict statistical sense -- a self-reported certainty estimate, same convention as the existing argument_oppositions.confidence column."
+          "description": "Model's confidence in this relation, 0.0-1.0. Not a probability in a strict statistical sense -- a self-reported certainty estimate."
         }
       },
       "required": ["relation_type", "target_argument_id", "premise_argument_ids", "weak_link", "confidence"],
