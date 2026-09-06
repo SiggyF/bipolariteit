@@ -34,7 +34,11 @@ genoeg is.
 Vereist: `docker build -t bipolariteit-agy docker/agy` en een eenmalige
 interactieve login (zie docs/handoff.md, sectie "Antigravity CLI (agy) in
 Docker") -- dezelfde `~/.bipolariteit/agy_gemini_config`-sessie als de
-extractie-/tagging-agy-scripts.
+extractie-/tagging-agy-scripts. Ontbreekt docker (bv. deze devcontainer-
+sandbox) en staat er wel een ingelogde lokale agy-CLI op
+`~/.gemini/bin/agy`, dan valt `_use_local_agy()` daar automatisch op terug
+(zonder container-isolatie, met `--dangerously-skip-permissions` omdat er
+geen wegwerpbare container is om binnen te blijven).
 
 Het argumentdocument (tot ~1,5 MB voor stikstof-schaal topics) kan niet als
 CLI-argument mee (OS-limiet op de grootte van een process-argument, macOS
@@ -75,6 +79,7 @@ Gebruik:
 import argparse
 import json
 import logging
+import shutil
 import subprocess
 import tempfile
 import time
@@ -108,12 +113,26 @@ AGY_GEMINI_CONFIG_DIR = str(Path.home() / ".bipolariteit" / "agy_gemini_config")
 # inhoudelijk lastiger werk (structureren + scherpe thema's + samenvatten,
 # of het kritisch beoordelen daarvan) dan de per-document-extractie waar
 # `flash-low` voor gekozen is.
-DEFAULT_MODEL = "gemini-3.6-flash-high"
+DEFAULT_MODEL = "gemini-3.8-flash-medium"
 
 CONTAINER_INPUT_DIR = "/data/input"
 CONTAINER_OUTPUT_DIR = "/data/output"
 DOC_FILENAME = "argumenten.md"
 AGY_LOG_FILENAME = "agy.log"
+
+# Fallback voor sandboxes zonder docker (bv. deze devcontainer, zie
+# docs/handoff.md): een lokaal geïnstalleerde, al ingelogde agy-CLI buiten
+# Docker om. Zelfde --print/--add-dir/--model-interface, maar zonder de
+# container-isolatie -- de tijdelijke input-/outputmappen zijn dan gewoon
+# echte paden op de host i.p.v. gemount op CONTAINER_INPUT_DIR/OUTPUT_DIR.
+LOCAL_AGY_BIN = Path.home() / ".gemini" / "bin" / "agy"
+
+
+def _use_local_agy():
+    """docker ontbreekt in sommige sandboxes; val dan automatisch terug op
+    LOCAL_AGY_BIN als die bestaat, in plaats van een cryptische
+    "docker: command not found"-fout te geven."""
+    return shutil.which("docker") is None and LOCAL_AGY_BIN.exists()
 
 # https://antigravity.google/docs/cli/permissions: settings.json leeft op
 # ~/.gemini/antigravity-cli/settings.json -- binnen de gemounte
@@ -153,6 +172,16 @@ def _ensure_read_permission():
         "command(python3)",
         "command(perl)",
         "command(cat)",
+        # Ontdekt bij agy 1.1.27 (was 1.1.11 toen de regels hierboven werden
+        # vastgesteld): voordat hij het document leest, verkent hij eerst de
+        # workspace met `find` -- zowel op zoek naar bestanden die in de
+        # instructietekst genoemd worden (bv. `boomredactie.md`, dat niet
+        # gemount is en dus onvindbaar blijft, onschuldig) als breder
+        # (`find /workspace /data /home/agy -name "*.py" -o ... | grep -v
+        # ... | head -n 30`). Zonder deze regel loopt elke headless
+        # (--print) aanroep hier al op vast, ver voordat de eigenlijke
+        # structureer-/redactietaak begint.
+        "command(find)",
     ]
     settings = json.loads(SETTINGS_PATH.read_text()) if SETTINGS_PATH.exists() else {}
     allow = settings.setdefault("permissions", {}).setdefault("allow", [])
@@ -188,10 +217,13 @@ def _run_agy_cmd(cmd, timeout, label):
     via --log-file), en logt alles naar LOG_PATH. Gedeelde kern van
     run_agy() (structureringsstap, met gemount document) en
     run_agy_prompt() (redactiestappen, kleine boom past in --print)."""
+    logger.info("%s -- commando: %s", label, " ".join(cmd))
     start = time.monotonic()
     result = subprocess.run(cmd, capture_output=True, text=True, timeout=timeout)
     elapsed = time.monotonic() - start
     _log_attempt(label, cmd, result.stdout, result.stderr, elapsed)
+    if result.returncode != 0:
+        logger.error("%s (returncode=%d) -- stderr:\n%s", label, result.returncode, result.stderr.strip())
     return result.stdout.strip(), result.stderr.strip(), elapsed
 
 
@@ -208,30 +240,45 @@ def run_agy(document, instructions, model, timeout, skip_permissions=False):
     tool-aanroepen goed, niet alleen file-reads. Risico blijft beperkt tot
     deze wegwerpbare container (--rm, alleen de auth-map en het read-only
     documentbestand gemount, geen toegang tot de rest van de repo/host)."""
-    _ensure_read_permission()
+    local = _use_local_agy()
+    if not local:
+        _ensure_read_permission()
     with tempfile.TemporaryDirectory(prefix="bipolariteit-agy-in-") as input_dir, \
          tempfile.TemporaryDirectory(prefix="bipolariteit-agy-out-") as output_dir:
         (Path(input_dir) / DOC_FILENAME).write_text(document)
 
+        doc_path = f"{input_dir}/{DOC_FILENAME}" if local else f"{CONTAINER_INPUT_DIR}/{DOC_FILENAME}"
         instructions_with_path = (
             f"Het volledige argumentexport-document staat in het bestand "
-            f"{CONTAINER_INPUT_DIR}/{DOC_FILENAME} in je workspace -- lees dat bestand eerst, in "
+            f"{doc_path} in je workspace -- lees dat bestand eerst, in "
             f"zijn geheel, voordat je de onderstaande opdracht uitvoert.\n\n{instructions}"
         )
 
-        cmd = [
-            "docker", "run", "--rm",
-            "-v", f"{AGY_GEMINI_CONFIG_DIR}:/home/agy/.gemini",
-            "-v", f"{input_dir}:{CONTAINER_INPUT_DIR}:ro",
-            "-v", f"{output_dir}:{CONTAINER_OUTPUT_DIR}",
-            "bipolariteit-agy",
-            "agy", "--print", instructions_with_path,
-            "--add-dir", CONTAINER_INPUT_DIR,
-            "--model", model,
-            "--log-file", f"{CONTAINER_OUTPUT_DIR}/{AGY_LOG_FILENAME}",
-        ]
-        if skip_permissions:
-            cmd.append("--dangerously-skip-permissions")
+        if local:
+            log_path = Path(output_dir) / AGY_LOG_FILENAME
+            cmd = [
+                str(LOCAL_AGY_BIN), "--print", instructions_with_path,
+                "--add-dir", input_dir,
+                "--model", model,
+                "--log-file", str(log_path),
+                "--print-timeout", f"{timeout}s",
+                "--dangerously-skip-permissions",
+            ]
+        else:
+            cmd = [
+                "docker", "run", "--rm",
+                "-v", f"{AGY_GEMINI_CONFIG_DIR}:/home/agy/.gemini",
+                "-v", f"{input_dir}:{CONTAINER_INPUT_DIR}:ro",
+                "-v", f"{output_dir}:{CONTAINER_OUTPUT_DIR}",
+                "bipolariteit-agy",
+                "agy", "--print", instructions_with_path,
+                "--add-dir", CONTAINER_INPUT_DIR,
+                "--model", model,
+                "--log-file", f"{CONTAINER_OUTPUT_DIR}/{AGY_LOG_FILENAME}",
+                "--print-timeout", f"{timeout}s",
+            ]
+            if skip_permissions:
+                cmd.append("--dangerously-skip-permissions")
 
         stdout, stderr, elapsed = _run_agy_cmd(cmd, timeout, "structureren skip_permissions=" + str(skip_permissions))
         agy_log_path = Path(output_dir) / AGY_LOG_FILENAME
@@ -244,18 +291,29 @@ def run_agy_prompt(prompt, model, timeout, label, skip_permissions=False):
     kant) om rechtstreeks in --print mee te geven, geen gemount bestand
     nodig zoals bij run_agy() (de structureringsstap, met het volledige
     argumentdocument)."""
+    local = _use_local_agy()
     with tempfile.TemporaryDirectory(prefix="bipolariteit-agy-out-") as output_dir:
-        cmd = [
-            "docker", "run", "--rm",
-            "-v", f"{AGY_GEMINI_CONFIG_DIR}:/home/agy/.gemini",
-            "-v", f"{output_dir}:{CONTAINER_OUTPUT_DIR}",
-            "bipolariteit-agy",
-            "agy", "--print", prompt,
-            "--model", model,
-            "--log-file", f"{CONTAINER_OUTPUT_DIR}/{AGY_LOG_FILENAME}",
-        ]
-        if skip_permissions:
-            cmd.append("--dangerously-skip-permissions")
+        if local:
+            cmd = [
+                str(LOCAL_AGY_BIN), "--print", prompt,
+                "--model", model,
+                "--log-file", str(Path(output_dir) / AGY_LOG_FILENAME),
+                "--print-timeout", f"{timeout}s",
+                "--dangerously-skip-permissions",
+            ]
+        else:
+            cmd = [
+                "docker", "run", "--rm",
+                "-v", f"{AGY_GEMINI_CONFIG_DIR}:/home/agy/.gemini",
+                "-v", f"{output_dir}:{CONTAINER_OUTPUT_DIR}",
+                "bipolariteit-agy",
+                "agy", "--print", prompt,
+                "--model", model,
+                "--log-file", f"{CONTAINER_OUTPUT_DIR}/{AGY_LOG_FILENAME}",
+                "--print-timeout", f"{timeout}s",
+            ]
+            if skip_permissions:
+                cmd.append("--dangerously-skip-permissions")
 
         stdout, stderr, elapsed = _run_agy_cmd(cmd, timeout, f"{label} skip_permissions={skip_permissions}")
         agy_log_path = Path(output_dir) / AGY_LOG_FILENAME

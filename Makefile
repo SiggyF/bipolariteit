@@ -80,7 +80,7 @@ tag: ## Stage 1b -- tags toekennen (LLM, alleen op netstroom). Vars: TOPIC, LIMI
 tag-agy: ## Stage 1b -- tags toekennen via Docker agy (Gemini). Vars: TOPIC, LIMIT, AGY_MODEL
 	PYTHONPATH=. uv run python scripts/agy_run_tagging_batch.py --topic $(TOPIC) --limit $(LIMIT) $(if $(AGY_MODEL),--model $(AGY_MODEL),)
 
-redactie: ## Stage 2 -- argumentenboom bouwen + tweezijdige redactie (structureren + pro/contra-beoordeling, via Docker agy/Gemini) en meteen exporteren (#252). Vars: TOPIC, AGY_MODEL (default gemini-3.6-flash-high)
+redactie: ## Stage 2 -- argumentenboom bouwen + tweezijdige redactie (structureren + pro/contra-beoordeling, via Docker agy/Gemini) en meteen exporteren (#252). Vars: TOPIC, AGY_MODEL (default gemini-3.8-flash-medium)
 	PYTHONPATH=. uv run python scripts/agy_run_confrontatie_tree.py --topic $(TOPIC) $(if $(AGY_MODEL),--model $(AGY_MODEL),)
 	uv run python -m pipeline.build_confrontatie_export --topic $(TOPIC)
 
