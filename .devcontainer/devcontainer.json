@@ -49,6 +49,18 @@
   "containerEnv": {
     "CLAUDE_CONFIG_DIR": "/home/vscode/.claude"
   },
+  // Playwright MCP-server op de host starten (buiten deze container): Chrome
+  // kan niet in de eigen sandbox van deze devcontainer starten (het
+  // zygote-proces crasht, PID/network-namespace niet toegestaan).
+  // initializeCommand draait op de host zelf, vóór de container start -- de
+  // enige hook die een host-Docker-container kan aanmaken/hernemen.
+  // Idempotent: bestaat de container al (nog actief van een vorige run),
+  // dan alleen starten; anders aanmaken. --rm i.p.v. een restart-policy: de
+  // container verdwijnt vanzelf zodra hij stopt, initializeCommand maakt 'm
+  // gewoon opnieuw aan bij de volgende devcontainer-start. --allowed-hosts
+  // '*' is nodig omdat de server anders de host.docker.internal-Host-header
+  // van deze devcontainer met 403 afwijst.
+  "initializeCommand": "docker start playwright-mcp 2>/dev/null || docker run -d --rm --name playwright-mcp -p 8931:8931 --init mcr.microsoft.com/playwright/mcp --port 8931 --host 0.0.0.0 --allowed-hosts '*'",
   "customizations": {
     "vscode": {
       "extensions": [
