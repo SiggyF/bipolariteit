@@ -152,7 +152,7 @@ const CA_ROW_LABEL_OFFSET: Record<string, CaLabelOffset> = {
 						<h2>Ontwikkelversie</h2>
 						<p>
 							Deze site groeit onderwerp voor onderwerp: elk debat doorloopt crawlen,
-							extractie, tagging en een redactiepas in zijn eigen tempo
+							extractie, tagging en het bouwen van een argumentenboom in zijn eigen tempo
 							{import.meta.env.PUBLIC_RELEASE_TAG
 								? ` (versie ${import.meta.env.PUBLIC_RELEASE_TAG})`
 								: ""}, zichtbaar terwijl het gebeurt op de <a href="/status/">pipeline-status</a>-pagina.
@@ -177,9 +177,10 @@ const CA_ROW_LABEL_OFFSET: Record<string, CaLabelOffset> = {
 					zender ("volgens X…"), nooit gepresenteerd als objectieve waarheid van de site zelf.
 				</li>
 				<li>
-					<strong>Redactionele balans, geen waarheidscheck.</strong> Waar een redactie-pass
-					bestaat, checkt die alleen of het tegenperspectief evenwichtig aan bod komt, niet of
-					een standpunt feitelijk juist is.
+					<strong>Redactionele koppeling, geen waarheidscheck.</strong> In de argumentenboom
+					(stap 5 hieronder) checkt de redactiestap alleen of een aangedragen weerlegging of
+					onderbouwing aantoonbaar op het andere argument ingaat, niet of een standpunt feitelijk
+					juist is.
 				</li>
 				<li>
 					<strong>Pro/contra is een classificatie-hulpmiddel.</strong> De indeling in pro/contra,
@@ -386,10 +387,13 @@ const CA_ROW_LABEL_OFFSET: Record<string, CaLabelOffset> = {
 				</li>
 				<li class="workflow-arrow" aria-hidden="true">↓</li>
 				<li class="workflow-step">
-					<p class="workflow-step-title"><span class="workflow-step-index">5</span> Bias-check</p>
+					<p class="workflow-step-title"><span class="workflow-step-index">5</span> Argumentenboom &amp; redactie</p>
 					<p class="workflow-step-detail">
-						Een bias-balanssnapshot per document plus een koppeling naar tegenargumenten. Geen
-						feitelijke-juistheidscheck.
+						Voor elk onderwerp selecteert een LLM een subset van elkaar scherp weersprekende
+						argumenten en legt daar relaties tussen (welk argument onderbouwt of weerlegt welk
+						ander). Elke relatie wordt vervolgens los gecontroleerd: gaat dit argument aantoonbaar
+						in op het andere, of staan ze er alleen toevallig naast? Geen feitelijke-juistheidscheck
+						— alleen of de koppeling zelf standhoudt.
 					</p>
 				</li>
 				<li class="workflow-arrow" aria-hidden="true">↓</li>
@@ -904,9 +908,11 @@ const CA_ROW_LABEL_OFFSET: Record<string, CaLabelOffset> = {
 					Tweede Kamer.
 				</li>
 				<li>
-					<strong>Modellen &amp; promptversies.</strong> Argumenten-extractie, tagging en de bias-check draaien lokaal
-					via een open-source model (momenteel <code>qwen/qwen3.6-27b</code>);
-					validatiesteekproeven gebruiken daarnaast Gemini als tweede beoordelaar. Van elk argument wordt
+					<strong>Modellen &amp; promptversies.</strong> Argumenten-extractie en tagging draaien lokaal
+					via een open-source model (momenteel <code>qwen/qwen3.6-27b</code>); het bouwen van de
+					argumentenboom (stap 5) gebruikt Gemini, vanwege het grotere contextvenster dat nodig is
+					om de volledige argumentenset van een onderwerp in één keer te doorzoeken.
+					Validatiesteekproeven gebruiken daarnaast Gemini als tweede beoordelaar. Van elk argument wordt
 					bijgehouden met welke promptversie het gemaakt is, zodat een prompt- of modelwijziging altijd
 					traceerbaar is.
 				</li>

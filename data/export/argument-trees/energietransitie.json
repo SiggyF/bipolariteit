@@ -2,17 +2,17 @@
   "slug": "energietransitie",
   "name": "Energietransitie",
   "topic_description": "Dit debat gaat over het tempo en de mate van overheidssturing bij de Nederlandse energietransitie: investeringen in kernenergie, hernieuwbare energie en waterstof, de rol van het Klimaatfonds, de aanpak van netcongestie, de afbouw van de salderingsregeling, het volgen van EU-klimaatdoelen (Fit for 55, EU-klimaatwet), en welke maatstaf daarbij leidend is voor de te kiezen energievorm.\n\nPRO = voorstander van een versnelde, overheidsgestuurde energietransitie, ongeacht kabinet of instrument. Vier aspecten spelen hierbij: (1) hoog tempo en actieve overheidssturing zijn nodig (Klimaatfonds, subsidies, normering); (2) economische groei is geen leidend principe, krimp van vervuilende sectoren mag (degrowth); (3) voorkeur voor de \"groenste\" oplossing (zon, wind, isolatie, bos), ook als minder robuust; (4) bij meerdere CO2-neutrale opties heeft de oplossing met de minste industriele groei de voorkeur. Verder geldt: de vervuiler betaalt, niet de burger (bv. overwinstbelasting); klimaatrechtvaardigheid (sterkste schouders dragen zwaarste lasten); EU-klimaatdoelen moeten gevolgd of overtroffen worden. Kritiek richt zich op onvoldoende ambitie of snelheid, niet op verzet tegen de transitie zelf.\n\nCONTRA = voorstander van een realistisch tempo en een pragmatische, beperkte rol voor de overheid bij de energietransitie. Vier aspecten spelen hierbij: (1) een haalbaar tempo, met ruimte voor markt en vrijwilligheid in plaats van dwang vanuit de overheid; (2) economische groei, industriele concurrentiekracht en werkgelegenheid wegen zwaar, krimp is onwenselijk; (3) voorkeur voor een robuuste, betrouwbare energievorm (kernenergie, gas), ook als die minder \"zuiver groen\" oogt; (4) bij meerdere opties heeft de meest betaalbare en betrouwbare de voorkeur, ook als dat minder CO2-winst oplevert. Verder geldt: betaalbaarheid en financiele druk op burgers en ondernemers wegen zwaar (energierekening, energiearmoede, netkosten); EU-klimaatverplichtingen gaan te ver of te snel; burgers die al investeerden (bv. in zonnepanelen) mogen niet de dupe worden van beleidswijzigingen; nationale soevereiniteit en energieonafhankelijkheid wegen zwaarder dan een zo snel mogelijke verduurzaming.",
-  "generated_at": "2026-09-06T18:40:34.194397+00:00",
+  "generated_at": "2026-09-07T19:19:58.739743+00:00",
   "stats": {
     "totaal_argumenten": 4024,
     "aantal_pro": 1476,
     "aantal_contra": 2524,
-    "aantal_geselecteerd": 47
+    "aantal_geselecteerd": 46
   },
   "arguments": {
-    "3351": {
-      "id": 3351,
-      "citaat": "Mensen zijn gebaat bij een lagere energierekening. Dát is waar de mensen bij gebaat zijn. Kijk, feit is dat er klimaatgeld zit in een Klimaatfonds, waar heel erg veel geld in zit. Daar kunnen we deze maatregel gewoon van betalen. Op het moment dat wij er met die salderingsregeling voor kunnen zorgen dat veel meer mensen veel meer geld overhouden in de portemonnee in tijden waarin de geopolitieke spanningen dusdanig groot zijn, dan vind ik, wat er in het verleden ook is gebeurd, dat we hier vandaag zo mans moeten zijn om te zeggen dat dát is wat nodig is om de mensen te helpen.",
+    "3349": {
+      "id": 3349,
+      "citaat": "Als er iets is wat helpt in het tegengaan van de energierekening, dan is dat het opwekken van eigen energie, niet vanuit een doorgeslagen klimaatideologie, maar vanuit het perspectief van rust in de portemonnee. Dit was ook de belofte van de VVD tijdens de verkiezingen. Als je iets belooft, dan moet je dat wat ons betreft ook nakomen. Groep Markuszower doet daarom vandaag het voorstel om de salderingsregeling terug in het leven te roepen. Meer dan 3 miljoen huishoudens hebben inmiddels zonnepanelen. Het was de overheid die het aantrekkelijk maakte om ze te plaatsen. Het was de overheid die het mogelijk maakte om binnen no time die zonnepanelen terug te verdienen, zodat er dan echt geld in de portemonnee overbleef, om vervolgens, als een toch onbetrouwbare partner, de stekker uit deze regeling te trekken. Dit jaar hebben we deze regeling nog, maar volgend jaar is het afgelopen. Dan is het klaar. Dat gaat mensen raken, niet alleen financieel, maar het raakt ook het vertrouwen in de politiek.",
       "typologie": "economic",
       "stance": "contra",
       "spreker": "Hidde Heutink",
@@ -20,61 +20,36 @@
       "tags": [
         "Actor-Politicus",
         "Arena-Parlement",
+        "Bewijs-Statistisch",
         "Context-Commissie",
         "Frame-Economisch",
-        "Frame-Menselijk-Belang",
         "Frame-Thematisch",
-        "Ideologie-Links-Economisch",
-        "Moraliteit-Zorg",
+        "Frame-Verantwoordelijkheid",
+        "Ideologie-Rechts-Economisch",
+        "Moraliteit-Eerlijkheid",
+        "Moraliteit-Vrijheid",
         "Stijl-Herhaling",
         "Walton-Consequentie"
       ],
       "claims": [
         {
-          "claim_text": "er klimaatgeld zit in een Klimaatfonds, waar heel erg veel geld in zit",
+          "claim_text": "Meer dan 3 miljoen huishoudens hebben inmiddels zonnepanelen.",
           "attributed_source_text": null
         }
       ],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2025A05890",
       "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2026-04-09/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2026-04-09T14%3A36%3A25%2B0200&end=2026-04-09T18%3A56%3A49%2B0200",
-      "start_seconds": 335.0,
-      "gist": "klimaatgeld direct naar lastenverlichting",
+      "start_seconds": 146.10000000000218,
+      "gist": "onbetrouwbare overheid dupeert huishoudens",
       "samenvatting": null
     },
-    "3409": {
-      "id": 3409,
-      "citaat": "Forum voor Democratie wil zo snel mogelijk een forse verlaging van de energiebelasting en de ODE-heffing afschaffen, want dit is niets anders dan een verkapte klimaatbelasting. We willen geen Europees sociaal klimaatfonds dat via een omweg opnieuw geld uit de zakken van Nederlandse burgers trekt. We moeten niet nog een Brusselse pot inrichten; we moeten de belastingdruk hier in Nederland verlagen. Dit zijn allemaal concrete voorstellen waarmee wij hier met z'n allen kunnen bewerkstelligen dat de energierekening van Nederlanders betaalbaar gehouden wordt.",
+    "3352": {
+      "id": 3352,
+      "citaat": "Daarom mijn oproep vandaag aan het kabinet: houd de salderingsregeling in leven. Trek 700 miljoen euro per jaar uit uit het Klimaatfonds en zorg ervoor dat we mensen opnieuw massaal de kans geven op een lagere energierekening. Dat is het minste wat we kunnen doen in deze grillige geopolitieke tijden.",
       "typologie": "economic",
       "stance": "contra",
-      "spreker": "Tom Russcher",
-      "partij": "FVD",
-      "tags": [
-        "Actor-Politicus",
-        "Arena-Parlement",
-        "Context-Commissie",
-        "Frame-Economisch",
-        "Frame-Thematisch",
-        "Ideologie-Rechts-Economisch",
-        "Ideologie-TAN",
-        "Moraliteit-Loyaliteit",
-        "Moraliteit-Vrijheid",
-        "Stijl-Herhaling",
-        "Walton-Consequentie"
-      ],
-      "claims": [],
-      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2025A05890",
-      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2026-04-09/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2026-04-09T14%3A36%3A25%2B0200&end=2026-04-09T18%3A56%3A49%2B0200",
-      "start_seconds": 3938.16,
-      "gist": "energiebelasting direct fors verlagen",
-      "samenvatting": null
-    },
-    "3414": {
-      "id": 3414,
-      "citaat": "We zien landen om ons heen, die allemaal ingrijpen, die willen dat er wordt ingegrepen op de overwinsten van energiebedrijven, zoals dat in 2022 ook werd gedaan. De 93 grootste energie- en oliebedrijven maakten 490 miljard euro meer winst dan de 700 miljard euro winst die zij al maakten. Dat zijn dus crisisprofiteurs. Er zijn landen om ons heen — Duitsland, Italië, Spanje, Portugal en Oostenrijk — die ervoor pleiten om deze overwinsten van energiebedrijven te gaan belasten, zodat de lasten van mensen omlaag kunnen.",
-      "typologie": "economic",
-      "stance": "pro",
-      "spreker": "Jimmy Dijk",
-      "partij": "SP",
+      "spreker": "Hidde Heutink",
+      "partij": "Groep Markuszower",
       "tags": [
         "Actor-Politicus",
         "Arena-Parlement",
@@ -84,81 +59,126 @@
         "Frame-Thematisch",
         "Frame-Verantwoordelijkheid",
         "Ideologie-Links-Economisch",
-        "Moraliteit-Proportionaliteit",
+        "Moraliteit-Eerlijkheid",
         "Moraliteit-Zorg",
         "Walton-Consequentie"
       ],
       "claims": [
         {
-          "claim_text": "De 93 grootste energie- en oliebedrijven maakten 490 miljard euro meer winst dan de 700 miljard euro winst die zij al maakten",
+          "claim_text": "700 miljoen euro per jaar uit het Klimaatfonds",
           "attributed_source_text": null
         }
       ],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2025A05890",
       "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2026-04-09/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2026-04-09T14%3A36%3A25%2B0200&end=2026-04-09T18%3A56%3A49%2B0200",
-      "start_seconds": 4236.279999999999,
-      "gist": "overwinsten energiebedrijven fors belasten",
-      "samenvatting": "Extreme overwinsten van olie- en gasmultinationals moeten worden afgeroomd om de energielasten van huishoudens te verlichten."
-    },
-    "3471": {
-      "id": 3471,
-      "citaat": "Investeren in verduurzaming loont, zeker ten tijde van een energiecrisis. Het is wat ons betreft dus ook echt heel teleurstellend dat deze coalitie geen extra geld reserveert voor de ondersteuning van huishoudens bij deze transitie.",
-      "typologie": "economic",
-      "stance": "pro",
-      "spreker": "Suzanne Kröger",
-      "partij": "GroenLinks-PvdA",
-      "tags": [
-        "Actor-Politicus",
-        "Arena-Parlement",
-        "Context-Commissie",
-        "Frame-Economisch",
-        "Frame-Thematisch",
-        "Frame-Verantwoordelijkheid",
-        "Ideologie-GAL",
-        "Ideologie-Links-Economisch",
-        "Moraliteit-Eerlijkheid",
-        "Moraliteit-Zorg",
-        "Walton-Consequentie"
-      ],
-      "claims": [],
-      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2025A05890",
-      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2026-04-09/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2026-04-09T14%3A36%3A25%2B0200&end=2026-04-09T18%3A56%3A49%2B0200",
-      "start_seconds": 6946.260000000002,
-      "gist": "steun huishoudens blijft uit",
+      "start_seconds": 389.0,
+      "gist": "behoud saldering via Klimaatfonds",
       "samenvatting": null
     },
-    "3479": {
-      "id": 3479,
-      "citaat": "We moeten zorgen dat mensen die het het hardst nodig hebben, geholpen worden. Je moet dus zo gericht mogelijk ingrijpen. Je moet ook zorgen voor structurele oplossingen, bijvoorbeeld een isolatieoffensief. En je moet zorgen dat de rekening komt te liggen waar die moet liggen. Dat is wat mij betreft zeker bij de grote oliebedrijven die hiermee winst kunnen gaan maken.",
-      "typologie": "economic",
-      "stance": "pro",
-      "spreker": "Suzanne Kröger",
-      "partij": "GroenLinks-PvdA",
+    "3356": {
+      "id": 3356,
+      "citaat": "Hoe gaan die twee dingen samen? Want juist door het in stand houden van de salderingsregeling zorg je ervoor dat mensen met zonnepanelen hun verbruik niet aanpassen en dat verergert de netcongestie alleen maar. Volgens mij klopt die stelling dus van geen kant.",
+      "typologie": "factual",
+      "stance": "contra",
+      "spreker": "Daniël van den Berg",
+      "partij": "JA21",
       "tags": [
         "Actor-Politicus",
         "Arena-Parlement",
+        "Bewijs-Causaal",
+        "Context-Commissie",
+        "Debatzet-Herformuleren",
+        "Frame-Conflict",
+        "Frame-Thematisch",
+        "Stijl-Retorische-Vraag",
+        "Walton-Consequentie"
+      ],
+      "claims": [
+        {
+          "claim_text": "door het in stand houden van de salderingsregeling zorg je ervoor dat mensen met zonnepanelen hun verbruik niet aanpassen",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "dat verergert de netcongestie alleen maar",
+          "attributed_source_text": null
+        }
+      ],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2025A05890",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2026-04-09/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2026-04-09T14%3A36%3A25%2B0200&end=2026-04-09T18%3A56%3A49%2B0200",
+      "start_seconds": 701.4600000000028,
+      "gist": "saldering verergert overbelast stroomnet",
+      "samenvatting": null
+    },
+    "3359": {
+      "id": 3359,
+      "citaat": "Oké, maar dat zou impliceren voor mensen die zonnepanelen willen aanschaffen, dat dat niet rendabel is en dat er weer een subsidieregeling over de top overheen moet om het dan maar extra aantrekkelijk te maken. Zo'n beetje alle onderzoeken wijzen uit dat zonnepanelen ook zonder salderingsregeling gewoon terug te verdienen zijn. Het is, denk ik, een eigen keuze van mensen. Ik snap dus niet zo goed waarom Groep Markuszower dat koste wat kost dan toch wil subsidiëren ten koste van de mensen die het uiteindelijk betalen, want het komt van belastinggeld.",
+      "typologie": "economic",
+      "stance": "contra",
+      "spreker": "Daniël van den Berg",
+      "partij": "JA21",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Expert",
+        "Context-Commissie",
+        "Frame-Economisch",
+        "Frame-Thematisch",
+        "Ideologie-Rechts-Economisch",
+        "Moraliteit-Eerlijkheid",
+        "Moraliteit-Vrijheid",
+        "Stijl-Retorische-Vraag",
+        "Walton-Consequentie"
+      ],
+      "claims": [
+        {
+          "claim_text": "Zo'n beetje alle onderzoeken wijzen uit dat zonnepanelen ook zonder salderingsregeling gewoon terug te verdienen zijn.",
+          "attributed_source_text": "alle onderzoeken"
+        }
+      ],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2025A05890",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2026-04-09/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2026-04-09T14%3A36%3A25%2B0200&end=2026-04-09T18%3A56%3A49%2B0200",
+      "start_seconds": 767.0,
+      "gist": "zonnepanelen zonder subsidie rendabel",
+      "samenvatting": null
+    },
+    "3443": {
+      "id": 3443,
+      "citaat": "Kan de minister uitleggen waarom ze miljarden laat liggen in het Klimaatfonds door onderuitputting, maar geen geld kan vinden om de energiebelasting te verlagen voor de gewone Nederlander?",
+      "typologie": "economic",
+      "stance": "contra",
+      "spreker": "Ismail El Abassi",
+      "partij": "DENK",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Statistisch",
         "Context-Commissie",
         "Frame-Economisch",
         "Frame-Thematisch",
         "Frame-Verantwoordelijkheid",
-        "Ideologie-GAL",
         "Ideologie-Links-Economisch",
         "Moraliteit-Eerlijkheid",
         "Moraliteit-Zorg",
-        "Stijl-Herhaling",
+        "Stijl-Antithese",
+        "Stijl-Retorische-Vraag",
         "Walton-Consequentie"
       ],
-      "claims": [],
+      "claims": [
+        {
+          "claim_text": "miljarden laat liggen in het Klimaatfonds door onderuitputting",
+          "attributed_source_text": null
+        }
+      ],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2025A05890",
       "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2026-04-09/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2026-04-09T14%3A36%3A25%2B0200&end=2026-04-09T18%3A56%3A49%2B0200",
-      "start_seconds": 7324.679999999997,
-      "gist": "vervuilende bedrijven laten meebetalen",
-      "samenvatting": "De rekening van de transitie moet worden neergelegd bij grote energie- en oliebedrijven die gigantische winsten boeken."
+      "start_seconds": 5762.18,
+      "gist": "onderuitputting laat budgetten liggen",
+      "samenvatting": null
     },
-    "3625": {
-      "id": 3625,
-      "citaat": "Ik vind weersafhankelijke stroom pas wiebelig. Daarom zit ik hier in een kernenergiedebat stevig te pleiten voor constante energieaanvoer via onder andere kerncentrales.",
-      "typologie": "factual",
+    "3465": {
+      "id": 3465,
+      "citaat": "BBB is voorstander van verduurzaming, maar alleen als die haalbaar en betaalbaar is. Mensen die niet kunnen investeren in isolatie of warmtepompen, mogen niet worden gestraft met hogere lasten. Daarom vindt BBB dat ondersteuning en woningverbetering hand in hand moeten gaan: één loket, minder bureaucratie en praktische hulp, juist voor mensen die het niet zelf kunnen regelen, zoals eerder ook al door collega's is gemeld. Is het kabinet bereid om de versnippering van regelingen verder terug te dringen en te zorgen voor één duidelijke, toegankelijke route voor huishoudens die willen besparen? Hier roepen we al jaren om. Mensen moeten nu een ingewikkelde route kiezen voor btw-teruggave en dat geld moeten ze dan ook nog eens voorschieten; dat levert dubbele lasten en dus dubbele problemen op. Die mensen komen daar op deze manier dus gewoon niet door.",
+      "typologie": "economic",
       "stance": "contra",
       "spreker": "Henk Vermeer",
       "partij": "BBB",
@@ -167,22 +187,25 @@
         "Arena-Parlement",
         "Bewijs-Causaal",
         "Context-Commissie",
+        "Frame-Economisch",
         "Frame-Thematisch",
+        "Frame-Verantwoordelijkheid",
         "Ideologie-TAN",
-        "Moraliteit-Autoriteit",
-        "Stijl-Antithese",
+        "Moraliteit-Eerlijkheid",
+        "Moraliteit-Zorg",
+        "Stijl-Retorische-Vraag",
         "Walton-Consequentie"
       ],
       "claims": [],
-      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08125",
-      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-02-12/troelstrazaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-02-12T13%3A00%3A35%2B0100&end=2025-02-12T17%3A11%3A04%2B0100",
-      "start_seconds": 2949.099,
-      "gist": "constante stroom voorkomt instabiliteit",
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2025A05890",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2026-04-09/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2026-04-09T14%3A36%3A25%2B0200&end=2026-04-09T18%3A56%3A49%2B0200",
+      "start_seconds": 6757.861000000001,
+      "gist": "geen lastenverzwaring voor minima",
       "samenvatting": null
     },
-    "6992": {
-      "id": 6992,
-      "citaat": "Een van de dingen waar we consumenten tegen moeten beschermen, zijn de terugleverheffingen die bedrijven nu rekenen voor mensen met zonnepanelen.",
+    "3633": {
+      "id": 3633,
+      "citaat": "Alleen suggereert de heer Erkens nu dat de kosten voor verzwaring van het net, de kosten om diepe aanlanding van wind op zee voor elkaar te krijgen, de kosten die we hebben voor elektrificatie, wegvallen op het moment dat je die vier kerncentrales bouwt. Dat is natuurlijk onzin. Die vier kerncentrales staan er namelijk na 2040 en tot die tijd maken we al enorme stappen om ons hele elektriciteitssysteem te verduurzamen.",
       "typologie": "factual",
       "stance": "pro",
       "spreker": "Suzanne Kröger",
@@ -190,205 +213,347 @@
       "tags": [
         "Actor-Politicus",
         "Arena-Parlement",
-        "Context-Plenair",
+        "Bewijs-Causaal",
+        "Context-Commissie",
+        "Debatzet-Herformuleren",
+        "Frame-Conflict",
+        "Frame-Economisch",
+        "Frame-Thematisch",
+        "Ideologie-GAL",
+        "Walton-Consequentie"
+      ],
+      "claims": [
+        {
+          "claim_text": "Die vier kerncentrales staan er namelijk na 2040",
+          "attributed_source_text": null
+        }
+      ],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08125",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-02-12/troelstrazaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-02-12T13%3A00%3A35%2B0100&end=2025-02-12T17%3A11%3A04%2B0100",
+      "start_seconds": 3737.34,
+      "gist": "pas na 2040 operationeel",
+      "samenvatting": null
+    },
+    "3684": {
+      "id": 3684,
+      "citaat": "Kortom, we moeten voorkomen dat het Klimaatfonds een soort graaifonds wordt, waar nu voor allerlei andere doelen geld uit wordt gehaald. We moeten ervoor zorgen dat we de klimaataanpak versterken.",
+      "typologie": "factual",
+      "stance": "pro",
+      "spreker": "Ilana Rooderkerk",
+      "partij": "D66",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Context-Commissie",
         "Frame-Economisch",
         "Frame-Thematisch",
         "Frame-Verantwoordelijkheid",
         "Ideologie-GAL",
-        "Ideologie-Links-Economisch",
         "Moraliteit-Eerlijkheid",
-        "Moraliteit-Zorg",
         "Walton-Consequentie"
       ],
       "claims": [],
-      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2024A04115",
-      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-05-23/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-05-23T12%3A22%3A44%2B0200&end=2024-05-23T17%3A06%3A22%2B0200",
-      "start_seconds": 183.21999999999935,
-      "gist": "bescherming tegen terugleverheffingen",
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08125",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-02-12/troelstrazaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-02-12T13%3A00%3A35%2B0100&end=2025-02-12T17%3A11%3A04%2B0100",
+      "start_seconds": 6270.08,
+      "gist": "klimaatfonds beschermen tegen oneigenlijkheid",
       "samenvatting": null
     },
-    "6995": {
-      "id": 6995,
-      "citaat": "Afschaffen heeft ook te maken met het feit dat de salderingsregeling niet helpt met het verminderen van netcongestie, dat het oneerlijk is voor huishoudens die geen zonnepanelen hebben en dat de kosten steeds hoger worden. Daarom zijn we ook nog steeds voor het afschaffen van de salderingsregeling.",
-      "typologie": "economic",
-      "stance": "contra",
-      "spreker": "Silvio Erkens",
-      "partij": "VVD",
-      "tags": [
-        "Actor-Politicus",
-        "Arena-Parlement",
-        "Bewijs-Causaal",
-        "Context-Plenair",
-        "Frame-Economisch",
-        "Frame-Thematisch",
-        "Ideologie-Rechts-Economisch",
-        "Moraliteit-Eerlijkheid",
-        "Walton-Consequentie"
-      ],
-      "claims": [],
-      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2024A04115",
-      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-05-23/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-05-23T12%3A22%3A44%2B0200&end=2024-05-23T17%3A06%3A22%2B0200",
-      "start_seconds": 526.6599999999999,
-      "gist": "saldering vergroot netcongestie",
-      "samenvatting": "De salderingsregeling stimuleert geen eigen verbruik, verergert netcongestie en wentelt kosten af op huishoudens zonder panelen."
-    },
-    "7002": {
-      "id": 7002,
-      "citaat": "Ook nu wordt de salderingsregeling afgeschaft, omdat ik salderen niet houdbaar vind. Het is een heel goede regeling geweest die zonnepanelen heel aantrekkelijk heeft gemaakt, maar hierdoor worden de kosten steeds hoger voor mensen die geen zonnepanelen hebben.",
-      "typologie": "economic",
-      "stance": "contra",
-      "spreker": "Silvio Erkens",
-      "partij": "VVD",
-      "tags": [
-        "Actor-Politicus",
-        "Arena-Parlement",
-        "Bewijs-Causaal",
-        "Context-Plenair",
-        "Frame-Economisch",
-        "Frame-Thematisch",
-        "Ideologie-Rechts-Economisch",
-        "Moraliteit-Eerlijkheid",
-        "Moraliteit-Proportionaliteit",
-        "Walton-Consequentie"
-      ],
-      "claims": [],
-      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2024A04115",
-      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-05-23/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-05-23T12%3A22%3A44%2B0200&end=2024-05-23T17%3A06%3A22%2B0200",
-      "start_seconds": 1035.339,
-      "gist": "regeling niet langer houdbaar",
-      "samenvatting": null
-    },
-    "7010": {
-      "id": 7010,
-      "citaat": "We zien nu al — dat blijkt uit berekeningen van de Woonbond — dat huurders met zonnepanelen soms duurder uit zijn dan huurders zonder zonnepanelen. Dat wordt alleen maar erger als je de salderingsregeling niet afschaft met dat afbouwpad, maar pats-boem, in één keer.",
-      "typologie": "economic",
-      "stance": "pro",
-      "spreker": "Sandra Beckerman",
-      "partij": "SP",
-      "tags": [
-        "Actor-Politicus",
-        "Arena-Parlement",
-        "Bewijs-Expert",
-        "Context-Plenair",
-        "Frame-Economisch",
-        "Frame-Thematisch",
-        "Ideologie-Links-Economisch",
-        "Moraliteit-Eerlijkheid",
-        "Moraliteit-Zorg",
-        "Stijl-Antithese",
-        "Walton-Consequentie"
-      ],
-      "claims": [
-        {
-          "claim_text": "huurders met zonnepanelen soms duurder uit zijn dan huurders zonder zonnepanelen",
-          "attributed_source_text": "berekeningen van de Woonbond"
-        }
-      ],
-      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2024A04115",
-      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-05-23/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-05-23T12%3A22%3A44%2B0200&end=2024-05-23T17%3A06%3A22%2B0200",
-      "start_seconds": 1315.2199999999993,
-      "gist": "huurders duurder uit",
-      "samenvatting": "Zonder geleidelijk afbouwpad worden huurders met zonnepanelen geconfronteerd met hogere kosten en terugleverheffingen."
-    },
-    "7046": {
-      "id": 7046,
-      "citaat": "Maar als we ook inhoudelijk gaan spreken over het afschaffen van die salderingsregeling, dan zitten daar natuurlijk ook voordelen aan, bijvoorbeeld dat de netcongestie wordt opgelost. David Smeulders, hoogleraar energietransitie, heeft eerder gezegd: de salderingsregeling is onhoudbaar en belast het stroomnet te veel.",
+    "6816": {
+      "id": 6816,
+      "citaat": "We hebben kernenergie helemaal niet nodig voor de energietransitie. Bovendien zijn er veel goedkopere opties. TNO rekende uit dat we nog zo'n 200 uur nodig hebben aan regelbaar vermogen. Dat is wat ik de hele tijd hoor, dus \"robuust\" en zo. TNO zegt dat je dat regelbaar vermogen kunt oplossen met opslag en een betere inrichting van het energie-elektriciteitsnet.",
       "typologie": "factual",
-      "stance": "contra",
-      "spreker": "Alexander Kops",
-      "partij": "PVV",
+      "stance": "pro",
+      "spreker": "Christine Teunissen",
+      "partij": "PvdD",
       "tags": [
         "Actor-Politicus",
         "Arena-Parlement",
         "Bewijs-Expert",
-        "Context-Plenair",
+        "Bewijs-Statistisch",
+        "Context-Commissie",
+        "Frame-Economisch",
         "Frame-Thematisch",
+        "Ideologie-GAL",
         "Walton-Expertise"
       ],
       "claims": [
         {
-          "claim_text": "het afschaffen van de salderingsregeling zorgt ervoor dat de netcongestie wordt opgelost",
+          "claim_text": "TNO rekende uit dat we nog zo'n 200 uur nodig hebben aan regelbaar vermogen",
+          "attributed_source_text": "TNO"
+        },
+        {
+          "claim_text": "TNO zegt dat je dat regelbaar vermogen kunt oplossen met opslag en een betere inrichting van het energie-elektriciteitsnet",
+          "attributed_source_text": "TNO"
+        }
+      ],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2026A04059",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2026-07-02/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2026-07-02T10%3A03%3A40%2B0200&end=2026-07-02T15%3A49%3A55%2B0200",
+      "start_seconds": 1984.3000000000002,
+      "gist": "opslag goedkoper dan kernenergie",
+      "samenvatting": "Kernenergie is overbodig en te duur wanneer centrales niet continu draaien, terwijl flexibiliteit volgens TNO goedkoper te borgen is met opslag en netbeheer."
+    },
+    "6887": {
+      "id": 6887,
+      "citaat": "Kerncentrales zijn op geen enkele manier een oplossing, maar wel een enorme last en een enorme bedreiging voor Nederland. We hebben geen kerncentrales nodig. Ze zijn geen oplossing voor de klimaatcrisis, want ze komen veel te laat.",
+      "typologie": "factual",
+      "stance": "pro",
+      "spreker": "Christine Teunissen",
+      "partij": "PvdD",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Context-Commissie",
+        "Frame-Thematisch",
+        "Frame-Verantwoordelijkheid",
+        "Ideologie-GAL",
+        "Moraliteit-Zorg",
+        "Stijl-Herhaling",
+        "Walton-Consequentie"
+      ],
+      "claims": [],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2026A04059",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2026-07-02/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2026-07-02T10%3A03%3A40%2B0200&end=2026-07-02T15%3A49%3A55%2B0200",
+      "start_seconds": 5932.479,
+      "gist": "kerncentrales komen te laat",
+      "samenvatting": "Kerncentrales lossen de klimaatcrisis niet op omdat ze pas na 2040 gereed zijn en kwetsbaar blijken voor stilstand tijdens extreme hitte."
+    },
+    "6896": {
+      "id": 6896,
+      "citaat": "Overigens is kernenergie ook geen stabiele energievoorziening. We zien namelijk nu dat Frankrijk kerncentrales moet terugschroeven en stilleggen vanwege de hitte. Het is dus onzin. Kernenergie is juist wiebelstroom.",
+      "typologie": "factual",
+      "stance": "pro",
+      "spreker": "Christine Teunissen",
+      "partij": "PvdD",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Anekdotisch",
+        "Context-Commissie",
+        "Frame-Episodisch",
+        "Ideologie-GAL",
+        "Walton-Consequentie"
+      ],
+      "claims": [
+        {
+          "claim_text": "Frankrijk kerncentrales moet terugschroeven en stilleggen vanwege de hitte",
+          "attributed_source_text": null
+        }
+      ],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2026A04059",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2026-07-02/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2026-07-02T10%3A03%3A40%2B0200&end=2026-07-02T15%3A49%3A55%2B0200",
+      "start_seconds": 6147.24,
+      "gist": "stilgelegd bij extreme hitte",
+      "samenvatting": null
+    },
+    "6902": {
+      "id": 6902,
+      "citaat": "Kernenergie wordt structureel te rooskleurig voorgesteld. Als de centrales niet continu draaien, worden ze alleen maar duurder per geproduceerde kilowattuur. Dat is precies waar het expertteam dat het kabinet zelf heeft ingesteld nog voor waarschuwde in 2020. Het is dus niet nodig om de leveringszekerheid te garanderen. TNO berekende dat we nog maar acht dagen aan regelbaar vermogen nodig hebben. Dat vang je veel efficiënter en goedkoper op met opslag, slimme netten en vraagsturing.",
+      "typologie": "economic",
+      "stance": "pro",
+      "spreker": "Christine Teunissen",
+      "partij": "PvdD",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Expert",
+        "Bewijs-Statistisch",
+        "Context-Commissie",
+        "Frame-Economisch",
+        "Frame-Thematisch",
+        "Ideologie-GAL",
+        "Walton-Expertise"
+      ],
+      "claims": [
+        {
+          "claim_text": "Als de centrales niet continu draaien, worden ze alleen maar duurder per geproduceerde kilowattuur",
           "attributed_source_text": null
         },
         {
-          "claim_text": "de salderingsregeling is onhoudbaar en belast het stroomnet te veel",
-          "attributed_source_text": "David Smeulders, hoogleraar energietransitie"
+          "claim_text": "het expertteam dat het kabinet zelf heeft ingesteld nog voor waarschuwde in 2020",
+          "attributed_source_text": "expertteam dat het kabinet zelf heeft ingesteld"
+        },
+        {
+          "claim_text": "TNO berekende dat we nog maar acht dagen aan regelbaar vermogen nodig hebben",
+          "attributed_source_text": "TNO"
+        }
+      ],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2026A04059",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2026-07-02/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2026-07-02T10%3A03%3A40%2B0200&end=2026-07-02T15%3A49%3A55%2B0200",
+      "start_seconds": 6292.059,
+      "gist": "onrendabel zonder continue productie",
+      "samenvatting": null
+    },
+    "6912": {
+      "id": 6912,
+      "citaat": "Ook moeten we het niet stoppen in kernenergie. Nee, je moet nu dus inzetten ... We hebben nu de kans om de 14 miljard uit het Klimaatfonds in te zetten op zon, wind, opslag en een slimmere inrichting van ons net. Dat is nu de oplossing. De oplossingen liggen gewoon voor onze ogen. Dus ik snap niet dat het CDA nu over fossiele brandstoffen begint, want daar moeten we juist vanaf.",
+      "typologie": "factual",
+      "stance": "pro",
+      "spreker": "Christine Teunissen",
+      "partij": "PvdD",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Statistisch",
+        "Context-Commissie",
+        "Frame-Economisch",
+        "Frame-Thematisch",
+        "Frame-Verantwoordelijkheid",
+        "Ideologie-GAL",
+        "Meta-Agenda-Tijdigheid",
+        "Moraliteit-Zorg",
+        "Stijl-Retorische-Vraag",
+        "Walton-Consequentie"
+      ],
+      "claims": [
+        {
+          "claim_text": "14 miljard uit het Klimaatfonds",
+          "attributed_source_text": null
+        }
+      ],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2026A04059",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2026-07-02/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2026-07-02T10%3A03%3A40%2B0200&end=2026-07-02T15%3A49%3A55%2B0200",
+      "start_seconds": 6663.96,
+      "gist": "investeer miljarden in hernieuwbaar",
+      "samenvatting": null
+    },
+    "7070": {
+      "id": 7070,
+      "citaat": "Wat dit beoogde kabinet doet, is populistische politiek. De Ombudsman zegt daarvan: de politiek moet geen beloftes doen die niet waar worden gemaakt. Dus op het moment dat dit kabinet rücksichtslos keihard in 2027 salderen afschaft en vervolgens in de krant zegt \"maar we gaan die terugleverboete stoppen\", maar dat feitelijk niet waar blijkt te zijn, dan ondermijnt ook mevrouw Postma het vertrouwen in de politiek.",
+      "typologie": "factual",
+      "stance": "pro",
+      "spreker": "Suzanne Kröger",
+      "partij": "GroenLinks-PvdA",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Expert",
+        "Context-Plenair",
+        "Frame-Conflict",
+        "Frame-Thematisch",
+        "Frame-Verantwoordelijkheid",
+        "Ideologie-GAL",
+        "Moraliteit-Eerlijkheid",
+        "Walton-Expertise"
+      ],
+      "claims": [
+        {
+          "claim_text": "De Ombudsman zegt: de politiek moet geen beloftes doen die niet waar worden gemaakt",
+          "attributed_source_text": "De Ombudsman"
+        },
+        {
+          "claim_text": "het kabinet rücksichtslos keihard in 2027 salderen afschaft",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "het kabinet in de krant zegt \"maar we gaan die terugleverboete stoppen\"",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "dat feitelijk niet waar blijkt te zijn [dat de terugleverboete stopt]",
+          "attributed_source_text": null
         }
       ],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2024A04115",
       "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-05-23/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-05-23T12%3A22%3A44%2B0200&end=2024-05-23T17%3A06%3A22%2B0200",
-      "start_seconds": 10353.199,
-      "gist": "afschaffing ontlast stroomnet",
+      "start_seconds": 12949.2,
+      "gist": "onbetrouwbaar beleid ondermijnt vertrouwen",
       "samenvatting": null
     },
-    "7075": {
-      "id": 7075,
-      "citaat": "Na het schrappen van de salderingsregeling zijn leveranciers die terugleverkosten in rekening gaan brengen, omdat de kosten anders oneerlijk worden verdeeld over de klanten. Dat is wat de afgelopen week allemaal in de krant hebben gelezen. Die terugleverkosten blijven gewoon staan. Daar heeft u op dit moment geen voorstel voor. Het voorstel dat u wel heeft, gaat over iets heel anders. Dat gaat namelijk over een heel, heel, heel klein stukje van het aantal consumenten. Dat zijn de mensen die meer stroom leveren aan het net dan ze verbruiken. Eerst ga je namelijk salderen, dan streep je alles weg en pas over het surplus krijg je een terugleververgoeding. Uw amendement gaat over de terugleververgoeding, en dan raakt het waarschijnlijk ook alleen nog maar de mensen met een dynamisch tarief, want alleen de dynamische tarieven duiken onder nul. Uw amendement gaat dus echt over een heel klein deel van de zonnepanelenbezitters. Wat er gesuggereerd wordt in de krant is iets heel anders en klopt niet.",
+    "7147": {
+      "id": 7147,
+      "citaat": "Wij willen naar een makkelijker systeem toewerken en zeggen daarom: wanneer we stoppen met salderen, moeten we die extra kostenposten ook allemaal weghalen omdat die het voor huishoudens onduidelijk maken wat ze verdienen aan zonnepanelen. Bovendien zijn die vaak intransparant over energieleveranciers heen.",
+      "typologie": "economic",
+      "stance": "contra",
+      "spreker": "Silvio Erkens",
+      "partij": "VVD",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Causaal",
+        "Context-Plenair",
+        "Frame-Economisch",
+        "Frame-Thematisch",
+        "Ideologie-Rechts-Economisch",
+        "Moraliteit-Eerlijkheid",
+        "Moraliteit-Vrijheid",
+        "Walton-Consequentie"
+      ],
+      "claims": [],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2024A04115",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-05-23/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-05-23T19%3A03%3A49%2B0200&end=2024-05-23T21%3A36%3A29%2B0200",
+      "start_seconds": 6165.619999999995,
+      "gist": "beëindiging stopt ook terugleverkosten",
+      "samenvatting": null
+    },
+    "7201": {
+      "id": 7201,
+      "citaat": "Er zijn heel veel positieve geluiden over het gebruik van die warmtepomp, dus dan zou je zeggen dat een verplichting niet nodig is, want dan staan er nu al rijen mensen bij de installateurs om ze te verzoeken deze dingen te installeren. Zelf heb ik daar ook opdracht toe gegeven. Dat is natuurlijk ook omdat wij willen weten hoe dingen werken. Maar als het toch al zo interessant is, waarom is er dan nog steeds een verplichting nodig?",
       "typologie": "factual",
       "stance": "contra",
+      "spreker": "Henk Vermeer",
+      "partij": "BBB",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Anekdotisch",
+        "Context-Commissie",
+        "Frame-Thematisch",
+        "Ideologie-Rechts-Economisch",
+        "Moraliteit-Vrijheid",
+        "Stijl-Retorische-Vraag",
+        "Walton-Consequentie"
+      ],
+      "claims": [
+        {
+          "claim_text": "Er zijn heel veel positieve geluiden over het gebruik van die warmtepomp",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "staan er nu al rijen mensen bij de installateurs om ze te verzoeken deze dingen te installeren",
+          "attributed_source_text": null
+        }
+      ],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A09271",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-01-16/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-01-16T14%3A00%3A24%2B0100&end=2025-01-16T18%3A10%3A19%2B0100",
+      "start_seconds": 1817.5600000000004,
+      "gist": "verplichte warmtepomp volstrekt overbodig",
+      "samenvatting": "Een verplichte warmtepomp bij ketelvervanging is overbodig omdat particulieren de verbeterde techniek vanwege de gunstige terugverdientijd al vrijwillig aanschaffen."
+    },
+    "7203": {
+      "id": 7203,
+      "citaat": "Nou, dat laatste is volgens mij vooral relevant als het over full-electricwarmtepompen gaat, want als je 5 kilowatt extra op je net zet keer 100 woningen, dan kan die trafo in de wijk het niet aan. Maar als jij een hybride warmtepomp hebt, met zo'n unit van 1 kilowatt ... Dat is nou juist de kracht van de hybride warmtepomp: die heeft geen groot effect op het elektriciteitsnet. En je hebt altijd gas als back-up, maar het neemt een hele grote hap uit je gasvraag.",
+      "typologie": "factual",
+      "stance": "pro",
       "spreker": "Henri Bontenbal",
       "partij": "CDA",
       "tags": [
         "Actor-Politicus",
         "Arena-Parlement",
         "Bewijs-Causaal",
-        "Context-Plenair",
-        "Debatzet-Herformuleren",
-        "Frame-Economisch",
-        "Frame-Thematisch",
-        "Frame-Verantwoordelijkheid",
-        "Ideologie-Rechts-Economisch",
-        "Meta-Reikwijdte",
-        "Moraliteit-Eerlijkheid",
-        "Stijl-Herhaling",
-        "Walton-Causaal"
-      ],
-      "claims": [
-        {
-          "claim_text": "Na het schrappen van de salderingsregeling zijn leveranciers die terugleverkosten in rekening gaan brengen, omdat de kosten anders oneerlijk worden verdeeld over de klanten.",
-          "attributed_source_text": null
-        },
-        {
-          "claim_text": "Uw amendement gaat over de terugleververgoeding, en dan raakt het waarschijnlijk ook alleen nog maar de mensen met een dynamisch tarief, want alleen de dynamische tarieven duiken onder nul.",
-          "attributed_source_text": null
-        }
-      ],
-      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2024A04115",
-      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-05-23/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-05-23T12%3A22%3A44%2B0200&end=2024-05-23T17%3A06%3A22%2B0200",
-      "start_seconds": 13468.699,
-      "gist": "terugleverkosten verdelen lasten eerlijker",
-      "samenvatting": null
-    },
-    "7078": {
-      "id": 7078,
-      "citaat": "We zien nu dat de 30% zonnepaneelbezitters op dit moment vanzelfsprekend veel baat heeft bij de salderingsregeling, maar we zien ook dat degenen die op dit moment nog geen zonnepanelen hebben onevenredig veel moeten gaan betalen. Dat is natuurlijk een van de redenen — dat weet mevrouw Rooderkerk ook — dat die tarieven er zijn, dat die nu op zo'n manier worden vastgesteld. We vinden het heel erg belangrijk om die mee te nemen om ervoor te zorgen dat mensen ook in de toekomst kunnen blijven investeren in zonnepanelen. De salderingsregeling zoals die nu is, is dan niet meer houdbaar, omdat de kosten op zoveel anderen moeten worden afgewenteld.",
-      "typologie": "economic",
-      "stance": "contra",
-      "spreker": "Wytske Postma",
-      "partij": "NSC",
-      "tags": [
-        "Actor-Politicus",
-        "Arena-Parlement",
         "Bewijs-Statistisch",
-        "Context-Plenair",
-        "Frame-Economisch",
+        "Context-Commissie",
         "Frame-Thematisch",
-        "Ideologie-Rechts-Economisch",
-        "Moraliteit-Eerlijkheid",
-        "Moraliteit-Proportionaliteit",
-        "Stijl-Antithese",
         "Walton-Consequentie"
       ],
       "claims": [
         {
-          "claim_text": "30% zonnepaneelbezitters op dit moment",
+          "claim_text": "als je 5 kilowatt extra op je net zet keer 100 woningen, dan kan die trafo in de wijk het niet aan",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "hybride warmtepomp ... heeft geen groot effect op het elektriciteitsnet",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "hybride warmtepomp ... neemt een hele grote hap uit je gasvraag",
           "attributed_source_text": null
         }
       ],
-      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2024A04115",
-      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-05-23/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-05-23T12%3A22%3A44%2B0200&end=2024-05-23T17%3A06%3A22%2B0200",
-      "start_seconds": 13840.099999999999,
-      "gist": "oneerlijke verdeling voor niet-bezitters",
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A09271",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-01-16/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-01-16T14%3A00%3A24%2B0100&end=2025-01-16T18%3A10%3A19%2B0100",
+      "start_seconds": 1854.0,
+      "gist": "hybride ontziet het stroomnet",
       "samenvatting": null
     },
     "7204": {
@@ -416,36 +581,135 @@
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A09271",
       "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-01-16/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-01-16T14%3A00%3A24%2B0100&end=2025-01-16T18%3A10%3A19%2B0100",
       "start_seconds": 1878.6390000000001,
-      "gist": "hybride warmtepomp zeer efficiënt",
+      "gist": "hybride levert bewezen reductie",
       "samenvatting": null
     },
-    "7380": {
-      "id": 7380,
-      "citaat": "Een van de maatregelen die zeer abrupt worden afgeschaft, is natuurlijk de salderingsregeling. Dat is naar mijn mening echt onbegrijpelijk. Het is onbegrijpelijk voor al die mensen met zonnepanelen. Het is onbegrijpelijk voor al die mensen die nog heel graag zonnepanelen zouden willen hebben. We hebben nu de kans om een decentraal energiesysteem te bouwen, een systeem waarin lokaal opwekken, opslaan en delen echt het hart vormen van de energietransitie voor huishoudens. Maar dan moet je wel zorgen dat iedereen mee kan doen en dan moet je niet abrupt een regeling stoppen, net op het moment dat juist mensen die weinig te besteden hebben eindelijk aan de beurt zijn om panelen te gaan leggen. Ik vind het ook echt onbegrijpelijk dat je dat doet zonder een alternatief te bieden.",
+    "7206": {
+      "id": 7206,
+      "citaat": "Daarnaast ben ik het meest kwaad over het volgende. Wij hebben het hier elke keer over het vestigingsklimaat voor bedrijven. Vervolgens komen we met die normering. Dan gaan er vijf grote fabrikanten fabrieken bouwen om in Nederland massaal die hybride warmtepompen te produceren. En dan zet dit kabinet daar een streep onder. Als wij bedrijven in Nederland en het vestigingsklimaat serieus willen nemen, dan moeten wij niet zo met het bedrijfsleven omgaan. Normering gaat op de lange termijn gewoon het meest effectieve instrument zijn. Ik zou dus zeggen: iets minder populisme en gewoon doen wat nodig is, dus kom gewoon terug naar die hybride route, want die is gewoon het meest effectief.",
       "typologie": "economic",
       "stance": "pro",
-      "spreker": "Suzanne Kröger",
-      "partij": "GroenLinks-PvdA",
+      "spreker": "Henri Bontenbal",
+      "partij": "CDA",
       "tags": [
         "Actor-Politicus",
         "Arena-Parlement",
+        "Bewijs-Causaal",
+        "Context-Commissie",
+        "Debatzet-Gevoelens-Verwoorden",
+        "Frame-Economisch",
+        "Frame-Thematisch",
+        "Frame-Verantwoordelijkheid",
+        "Ideologie-Rechts-Economisch",
+        "Moraliteit-Autoriteit",
+        "Moraliteit-Loyaliteit",
+        "Stijl-Herhaling",
+        "Walton-Consequentie"
+      ],
+      "claims": [
+        {
+          "claim_text": "vijf grote fabrikanten fabrieken bouwen om in Nederland massaal die hybride warmtepompen te produceren",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "Normering gaat op de lange termijn gewoon het meest effectieve instrument zijn",
+          "attributed_source_text": null
+        }
+      ],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A09271",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-01-16/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-01-16T14%3A00%3A24%2B0100&end=2025-01-16T18%3A10%3A19%2B0100",
+      "start_seconds": 1905.0389999999998,
+      "gist": "normering warmtepomp meest effectief",
+      "samenvatting": "Wettelijke normering voor hybride warmtepompen is noodzakelijk om klimaatdoelen te halen, biedt bewezen efficiënte gasbesparing en ontziet het elektriciteitsnet."
+    },
+    "7348": {
+      "id": 7348,
+      "citaat": "Je moet twee dingen met elkaar oplossen als je de salderingsregeling afschaft. Aan de ene kan wil je die afschaffen, wij in ieder geval, omdat je wil dat huishoudens meer energie verbruiken op het moment dat ze het opwekken, zodat we ook qua netcongestie misschien iets minder problemen gaan ondervinden met elkaar. Aan de andere kant wil je voorkomen dat de socialisatie van kosten over huishoudens die geen zonnepanelen hebben, steeds groter wordt omdat steeds meer huishoudens zonnepanelen hebben en de groep zonder zonnepanelen steeds kleiner wordt. Dat model is dus onhoudbaar. Daar moeten we vanaf. Daarom zijn wij ook voor het afschaffen van de salderingsregeling.",
+      "typologie": "economic",
+      "stance": "contra",
+      "spreker": "Silvio Erkens",
+      "partij": "VVD",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Causaal",
         "Context-Plenair",
         "Frame-Economisch",
-        "Frame-Menselijk-Belang",
         "Frame-Thematisch",
-        "Ideologie-GAL",
-        "Ideologie-Links-Economisch",
+        "Ideologie-Rechts-Economisch",
         "Moraliteit-Eerlijkheid",
-        "Moraliteit-Zorg",
-        "Stijl-Herhaling",
+        "Moraliteit-Proportionaliteit",
+        "Stijl-Aangekondigde-Opsomming",
         "Walton-Consequentie"
       ],
       "claims": [],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2024A04115",
       "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-05-23/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-05-23T12%3A22%3A44%2B0200&end=2024-05-23T17%3A06%3A22%2B0200",
-      "start_seconds": 6796.900999999998,
-      "gist": "afschaffen saldering schaadt transitie",
-      "samenvatting": "De abrupte afschaffing van de salderingsregeling brengt een zware slag toe aan de energietransitie en investeringszekerheid."
+      "start_seconds": 1464.9189999999999,
+      "gist": "saldering onhoudbaar door kosten",
+      "samenvatting": "Saldering moet stoppen omdat panelen zonder subsidie rendabel zijn, de regeling netcongestie aanjaagt en afschaffing een einde maakt aan ondoorzichtige terugleverheffingen."
+    },
+    "7376": {
+      "id": 7376,
+      "citaat": "De 55%-doelstelling blijft ook staan. Dat is ook goed, alleen ligt er wel een hele grote opgave voor deze partijen. Want je kunt niet gratis een aantal maatregelen doorstrepen en denken dat je dan de 55% haalt. Het schrappen van de hybride warmtepomp betekent dat je megatonnen CO2-reductie ergens anders vandaan moet halen. Ook allerlei accijnsverhogingen of het beknibbelen van wind op zee, waar juist voor Nederland veel potentieel ligt, zijn ingewikkeld. Je moet het dan ergens anders halen.",
+      "typologie": "factual",
+      "stance": "pro",
+      "spreker": "Henri Bontenbal",
+      "partij": "CDA",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Causaal",
+        "Context-Plenair",
+        "Frame-Thematisch",
+        "Frame-Verantwoordelijkheid",
+        "Ideologie-GAL",
+        "Moraliteit-Autoriteit",
+        "Walton-Consequentie"
+      ],
+      "claims": [
+        {
+          "claim_text": "Het schrappen van de hybride warmtepomp betekent dat je megatonnen CO2-reductie ergens anders vandaan moet halen.",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "Wind op zee heeft voor Nederland veel potentieel.",
+          "attributed_source_text": null
+        }
+      ],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2024A04115",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-05-23/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-05-23T12%3A22%3A44%2B0200&end=2024-05-23T17%3A06%3A22%2B0200",
+      "start_seconds": 3688.0,
+      "gist": "schrapping bedreigt klimaatdoelen",
+      "samenvatting": null
+    },
+    "7398": {
+      "id": 7398,
+      "citaat": "We kunnen het ons absoluut permitteren om kernenergie uit te sluiten. We hebben kernenergie niet nodig als we naar het energiesysteem van de toekomst willen. Dat laten meerdere onderzoeken zien.",
+      "typologie": "factual",
+      "stance": "pro",
+      "spreker": "Sjoukje van Oosterhout",
+      "partij": "GroenLinks-PvdA",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Expert",
+        "Context-Commissie",
+        "Frame-Thematisch",
+        "Ideologie-GAL",
+        "Walton-Expertise"
+      ],
+      "claims": [
+        {
+          "claim_text": "We hebben kernenergie niet nodig als we naar het energiesysteem van de toekomst willen",
+          "attributed_source_text": "meerdere onderzoeken"
+        }
+      ],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2025A02843",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-12-17/troelstrazaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-12-17T14%3A37%3A40%2B0100&end=2025-12-17T18%3A25%3A03%2B0100",
+      "start_seconds": 393.0,
+      "gist": "toekomstbestendig zonder nucleaire energie",
+      "samenvatting": null
     },
     "7432": {
       "id": 7432,
@@ -467,12 +731,12 @@
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2025A02843",
       "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-12-17/troelstrazaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-12-17T14%3A37%3A40%2B0100&end=2025-12-17T18%3A25%3A03%2B0100",
       "start_seconds": 1927.0,
-      "gist": "kernenergie levert stabiele basislast",
-      "samenvatting": "Kernenergie is weersonafhankelijk, stoot geen CO2 uit en vormt een onmisbare constante basislast in het energiesysteem."
+      "gist": "constante CO2-vrije basislast",
+      "samenvatting": null
     },
-    "7593": {
-      "id": 7593,
-      "citaat": "Maar zelfs al zou dat zo zijn, dan is het ruimtebeslag van kernenergie nog vele malen lager dan alle andere geplande projecten voor zonne- en windenergie, én alle installaties die daar nog extra voor nodig zijn voor de aanlanding. We hebben het gezien met de aanlandingsplannen, bijvoorbeeld bij de Waddenzee, bij het zogenaamde PAWOZ-traject, waar kabels dwars door hoogrenderende gronden getrokken moeten worden, door gebieden waar pootaardappelen voor de hele wereld geteeld worden, waar 800 miljoen mensen in de wereld van eten. Het lijkt mij heel verstandig om dat allemaal goed tegen elkaar af te wegen. Dan zul je zien dat je met kernenergie veruit het minste ruimtegebrek zult krijgen.",
+    "7434": {
+      "id": 7434,
+      "citaat": "Als we investeren in kernenergie, zorgen we voor een betrouwbare en stabiele energievoorziening met zeer hoge leveringszekerheid. Daar snakken bedrijven en burgers naar.",
       "typologie": "factual",
       "stance": "contra",
       "spreker": "Henk Vermeer",
@@ -480,57 +744,208 @@
       "tags": [
         "Actor-Politicus",
         "Arena-Parlement",
-        "Bewijs-Anekdotisch",
-        "Bewijs-Statistisch",
+        "Bewijs-Causaal",
         "Context-Commissie",
         "Frame-Economisch",
         "Frame-Thematisch",
-        "Ideologie-TAN",
-        "Moraliteit-Zorg",
+        "Ideologie-Rechts-Economisch",
+        "Moraliteit-Autoriteit",
         "Walton-Consequentie"
+      ],
+      "claims": [],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2025A02843",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-12-17/troelstrazaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-12-17T14%3A37%3A40%2B0100&end=2025-12-17T18%3A25%3A03%2B0100",
+      "start_seconds": 2003.8789999999972,
+      "gist": "hoge leveringszekerheid voor bedrijven",
+      "samenvatting": null
+    },
+    "7631": {
+      "id": 7631,
+      "citaat": "Nederland staat voor een simpele waarheid: zonder kernenergie bouwen we geen betrouwbaar, betaalbaar en klimaatneutraal energiesysteem. De VVD zegt dan ook helder: we kiezen onomwonden voor kernenergie. Het gaat om vier grote kerncentrales en SMR's. Kijk naar de werkelijkheid. We elektrificeren industrie, mobiliteit en warmte en tegelijkertijd groeit de vraag naar energie en de behoefte aan leveringszekerheid en onafhankelijke energieproductie. Dan kun je niet leunen op alleen wind en zon. Je hebt een systeem nodig dat ook werkt als het niet waait en het donker is; het is net ook al gezegd. Kernenergie levert precies dat: continue, stabiele, CO2-arme productie met een relatief kleine ruimtelijke voetafdruk.",
+      "typologie": "factual",
+      "stance": "contra",
+      "spreker": "Peter de Groot",
+      "partij": "VVD",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Causaal",
+        "Context-Commissie",
+        "Debatzet-Keuze-Aanscherpen",
+        "Frame-Economisch",
+        "Frame-Thematisch",
+        "Ideologie-Rechts-Economisch",
+        "Moraliteit-Autoriteit",
+        "Stijl-Aangekondigde-Opsomming",
+        "Walton-Consequentie"
+      ],
+      "claims": [],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2025A02843",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-12-17/troelstrazaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-12-17T14%3A37%3A40%2B0100&end=2025-12-17T18%3A25%3A03%2B0100",
+      "start_seconds": 3938.0,
+      "gist": "kernenergie onmisbaar voor energiesysteem",
+      "samenvatting": "Kernenergie is onmisbaar voor een betrouwbaar en klimaatneutraal systeem, omdat het stabiele basislast biedt en volgens TNO qua systeemkosten concurrerend is."
+    },
+    "7632": {
+      "id": 7632,
+      "citaat": "De kosten. De recente TNO-systeemkostenanalyse laat zien dat energiesystemen met kernenergie net zo duur of zelfs goedkoper kunnen zijn dan systemen die volledig steunen op extra wind op zee. TNO laat ook zien dat kernenergie weglaten kan leiden tot miljarden hogere systeemkosten richting 2050. Laten we maar stoppen met doen alsof kernenergie per definitie te duur is. Kernenergie draagt bij aan prijsstabiliteit, omdat je minder kwetsbaar wordt voor schaarste, pieken en extreme afhankelijkheid van flex en import.",
+      "typologie": "economic",
+      "stance": "contra",
+      "spreker": "Peter de Groot",
+      "partij": "VVD",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Expert",
+        "Context-Commissie",
+        "Frame-Economisch",
+        "Frame-Thematisch",
+        "Ideologie-Rechts-Economisch",
+        "Walton-Expertise"
       ],
       "claims": [
         {
-          "claim_text": "het ruimtebeslag van kernenergie is vele malen lager dan alle andere geplande projecten voor zonne- en windenergie, én alle installaties die daar nog extra voor nodig zijn voor de aanlanding",
-          "attributed_source_text": null
+          "claim_text": "energiesystemen met kernenergie net zo duur of zelfs goedkoper kunnen zijn dan systemen die volledig steunen op extra wind op zee",
+          "attributed_source_text": "TNO-systeemkostenanalyse"
         },
         {
-          "claim_text": "bij het PAWOZ-traject moeten kabels dwars door hoogrenderende gronden getrokken worden, door gebieden waar pootaardappelen voor de hele wereld geteeld worden",
-          "attributed_source_text": null
-        },
-        {
-          "claim_text": "800 miljoen mensen in de wereld eten van pootaardappelen uit die gebieden",
-          "attributed_source_text": null
-        },
-        {
-          "claim_text": "met kernenergie krijg je veruit het minste ruimtegebrek",
-          "attributed_source_text": null
+          "claim_text": "kernenergie weglaten kan leiden tot miljarden hogere systeemkosten richting 2050",
+          "attributed_source_text": "TNO"
         }
       ],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2025A02843",
       "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-12-17/troelstrazaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-12-17T14%3A37%3A40%2B0100&end=2025-12-17T18%3A25%3A03%2B0100",
-      "start_seconds": 2275.241000000002,
-      "gist": "laag ruimtebeslag kernenergie",
+      "start_seconds": 3981.9799999999996,
+      "gist": "kernenergie net zo goedkoop",
       "samenvatting": null
     },
-    "8101": {
-      "id": 8101,
-      "citaat": "Op dit moment gaan allerlei installateurs en installatiebedrijven failliet doordat de normering van de warmtepomp is geschrapt en doordat de saldering is geschrapt. Op dit moment gaan al die installateurs failliet en zitten ze zo direct thuis. Is dat iets waarvan de minister zegt: oké, nee, daar ga ik dan toch weer mee aan de slag, zodat die zonnepanelen en warmtepompen weer doorgaan?",
+    "7870": {
+      "id": 7870,
+      "citaat": "Ten tweede moet volgens mij de concurrentiepositie van de industrie in de komende jaren verbeterd worden, want anders vertrekken al die bedrijven naar het Midden-Oosten, de VS en China. Dan zijn we nog verder van huis. Dat is wat mij betreft geen klimaatbeleid; dat is gewoon het probleem de grens over schuiven en tegelijkertijd jezelf op de schouders kloppen omdat je iets goeds gedaan hebt.",
       "typologie": "economic",
+      "stance": "contra",
+      "spreker": "Silvio Erkens",
+      "partij": "VVD",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Causaal",
+        "Context-Plenair",
+        "Debatzet-Herformuleren",
+        "Frame-Economisch",
+        "Frame-Thematisch",
+        "Ideologie-Rechts-Economisch",
+        "Moraliteit-Loyaliteit",
+        "Stijl-Aangekondigde-Opsomming",
+        "Walton-Consequentie"
+      ],
+      "claims": [],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2024A06886",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-03-11/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-03-11T16%3A57%3A25%2B0100&end=2025-03-12T00%3A55%3A25%2B0100",
+      "start_seconds": 3031.258999999998,
+      "gist": "uitstoot verschuift naar buitenland",
+      "samenvatting": null
+    },
+    "7879": {
+      "id": 7879,
+      "citaat": "Er moet ook worden ingegrepen voor al die mensen met zonnepanelen; ook veel huurders, die nu minder dan een cent terug gaan krijgen voor hun stroom. Wij hebben hiervoor gewaarschuwd bij het afschaffen van de salderingsregeling. Het is echt bizar. Het ondermijnt het vertrouwen en het ondermijnt het opwekken van een heleboel duurzame stroom.",
+      "typologie": "factual",
+      "stance": "pro",
+      "spreker": "Suzanne Kröger",
+      "partij": "GroenLinks-PvdA",
+      "tags": [],
+      "claims": [],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2024A06886",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-03-11/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-03-11T16%3A57%3A25%2B0100&end=2025-03-12T00%3A55%3A25%2B0100",
+      "start_seconds": 3380.9200000000055,
+      "gist": "afschaffen schaadt duurzame opwek",
+      "samenvatting": "Abrupte afschaffing van salderen ondermijnt het vertrouwen van burgers en leidt volgens het PBL tot fors minder zonnepanelen, vooral op huurwoningen."
+    },
+    "7901": {
+      "id": 7901,
+      "citaat": "Het is inderdaad zo dat de warmtepomp enorm verbeterd is. Dat zien we ook terug in de businesscase, waardoor het voor particulieren ook gewoon interessant is om die aan te schaffen zonder verplichting — gelukkig, want het rekent steeds meer rond.",
+      "typologie": "economic",
+      "stance": "contra",
+      "spreker": "Wytske Postma",
+      "partij": "NSC",
+      "tags": [],
+      "claims": [
+        {
+          "claim_text": "de warmtepomp enorm verbeterd is",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "de businesscase van de warmtepomp is verbeterd",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "het voor particulieren interessant is om een warmtepomp aan te schaffen zonder verplichting",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "de warmtepomp rekent steeds meer rond",
+          "attributed_source_text": null
+        }
+      ],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2024A06886",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-03-11/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-03-11T16%3A57%3A25%2B0100&end=2025-03-12T00%3A55%3A25%2B0100",
+      "start_seconds": 4481.640000000007,
+      "gist": "warmtepomp zonder dwang rendabel",
+      "samenvatting": null
+    },
+    "7913": {
+      "id": 7913,
+      "citaat": "Nederlandse bedrijven betalen tot 75% meer voor energie dan hun concurrenten in de buurlanden. Ik vraag de minister hoe we ervoor zorgen dat onze industrie niet wordt weggeconcurreerd. Hoe voorkomen we dat de energietransitie ten koste gaat van banen en economische slagkracht?",
+      "typologie": "economic",
+      "stance": "contra",
+      "spreker": "Henk Vermeer",
+      "partij": "BBB",
+      "tags": [],
+      "claims": [
+        {
+          "claim_text": "Nederlandse bedrijven betalen tot 75% meer voor energie dan hun concurrenten in de buurlanden",
+          "attributed_source_text": null
+        }
+      ],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2024A06886",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-03-11/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-03-11T16%3A57%3A25%2B0100&end=2025-03-12T00%3A55%3A25%2B0100",
+      "start_seconds": 5139.880000000005,
+      "gist": "fors hogere energiekosten industrie",
+      "samenvatting": null
+    },
+    "8083": {
+      "id": 8083,
+      "citaat": "Eigenlijk is dit een heel concreet iets wat het PBL aangeeft: de klimaatdoelen raken uit zicht, onder andere door het afschaffen van salderen en het feit dat er gewoon minder zon op dak gelegd gaat worden. Dat is de analyse van het PBL.",
+      "typologie": "factual",
       "stance": "pro",
       "spreker": "Suzanne Kröger",
       "partij": "GroenLinks-PvdA",
       "tags": [],
       "claims": [
         {
-          "claim_text": "Installateurs en installatiebedrijven gaan failliet doordat de normering van de warmtepomp is geschrapt en doordat de saldering is geschrapt",
-          "attributed_source_text": null
+          "claim_text": "de klimaatdoelen raken uit zicht, onder andere door het afschaffen van salderen en het feit dat er gewoon minder zon op dak gelegd gaat worden",
+          "attributed_source_text": "het PBL"
         }
       ],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2024A06886",
       "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-03-11/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-03-11T16%3A57%3A25%2B0100&end=2025-03-12T00%3A55%3A25%2B0100",
-      "start_seconds": 21696.300000000003,
-      "gist": "installatiebranche gaat failliet",
+      "start_seconds": 19849.5,
+      "gist": "minder zonnepanelen zonder saldering",
+      "samenvatting": null
+    },
+    "8329": {
+      "id": 8329,
+      "citaat": "Maar wij hebben er moeite mee dat het Klimaatfonds een heel hoge drempel kent, dus dat de meeste gelden alleen gaan naar grote bedrijven en hele grote projecten. Wij denken dat er een lagere drempel in moet.",
+      "typologie": "factual",
+      "stance": "contra",
+      "spreker": "Henk Vermeer",
+      "partij": "BBB",
+      "tags": [],
+      "claims": [],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2023A07716",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2023-12-20/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2023-12-20T16%3A30%3A11%2B0100&end=2023-12-20T21%3A24%3A25%2B0100",
+      "start_seconds": 1537.2200000000012,
+      "gist": "klimaatfonds bevoordeelt grote bedrijven",
       "samenvatting": null
     },
     "8341": {
@@ -559,7 +974,22 @@
       "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2023-12-20/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2023-12-20T16%3A30%3A11%2B0100&end=2023-12-20T21%3A24%3A25%2B0100",
       "start_seconds": 2404.0,
       "gist": "gebrek aan parlementaire controle",
-      "samenvatting": null
+      "samenvatting": "Het Klimaatfonds kent gebrekkige parlementaire controle en verstrekt ineffectieve subsidies aan grote projecten met verwaarloosbaar klimaatrendement."
+    },
+    "8349": {
+      "id": 8349,
+      "citaat": "Het voordeel van fondsen, begrotingsfondsen, is dat je als Kamer meer controle kunt uitoefenen, meer meerjarig kunt sturen en programmeren, en dat het voorspelbaarheid biedt voor de markt. Die weet dan dat de overheid voor langere tijd een commitment aangaat en gaat investeren in een groot, vaak fysiek, project. Dat is de energietransitie namelijk grotendeels. Toch lees ik tot mijn verbazing dat NSC tegen dit middel is, waarmee de controle van het parlement wordt verbeterd en de voorspelbaarheid voor de markt en ook voor huishoudens beter wordt. NSC wil het Klimaatfonds schrappen.",
+      "typologie": "factual",
+      "stance": "pro",
+      "spreker": "Pieter Grinwis",
+      "partij": "ChristenUnie",
+      "tags": [],
+      "claims": [],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2023A07716",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2023-12-20/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2023-12-20T16%3A30%3A11%2B0100&end=2023-12-20T21%3A24%3A25%2B0100",
+      "start_seconds": 2847.0,
+      "gist": "fonds biedt noodzakelijke voorspelbaarheid",
+      "samenvatting": "Het Klimaatfonds biedt noodzakelijke meerjarige investeringszekerheid en schrappen of afromen van subsidies brengt de klimaatdoelen van 2030 in gevaar."
     },
     "8395": {
       "id": 8395,
@@ -582,75 +1012,90 @@
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2023A07716",
       "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2023-12-20/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2023-12-20T16%3A30%3A11%2B0100&end=2023-12-20T21%3A24%3A25%2B0100",
       "start_seconds": 5396.159,
-      "gist": "klimaatfonds is bodemloze put",
-      "samenvatting": "Het Klimaatfonds pompt tientallen miljarden in ineffectieve subsidies met een verwaarloosbare invloed op het wereldklimaat."
-    },
-    "9172": {
-      "id": 9172,
-      "citaat": "Als er iets is wat als een paal boven water staat, is het dat we heel duidelijk weten dat de kosten van wind en zon jaar, na jaar, na jaar, na jaar dalen. Als er iets is wat we ook weten, is het dat voor kernenergie de trend precies omgekeerd is. Wat we ook weten, is dat bij kernenergie elke centrale die je bouwt, vier keer zo duur is en de bouw drie keer zo lang duurt als gepland. Je hebt kernenergie niet nodig. Het is een politieke keuze om daarmee door te gaan.",
-      "typologie": "economic",
-      "stance": "pro",
-      "spreker": "Sjoukje van Oosterhout",
-      "partij": "GroenLinks-PvdA",
-      "tags": [],
-      "claims": [
-        {
-          "claim_text": "de kosten van wind en zon jaar, na jaar, na jaar, na jaar dalen",
-          "attributed_source_text": null
-        },
-        {
-          "claim_text": "voor kernenergie de trend precies omgekeerd is",
-          "attributed_source_text": null
-        },
-        {
-          "claim_text": "bij kernenergie elke centrale die je bouwt, vier keer zo duur is en de bouw drie keer zo lang duurt als gepland",
-          "attributed_source_text": null
-        }
-      ],
-      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2026A03081",
-      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2026-05-27/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2026-05-27T12%3A03%3A05%2B0200&end=2026-05-27T14%3A00%3A27%2B0200",
-      "start_seconds": 277.0,
-      "gist": "zon en wind goedkoper",
-      "samenvatting": "Zon- en windenergie worden jaarlijks goedkoper, terwijl de kosten van kernenergieprojecten juist fors blijven oplopen."
-    },
-    "9193": {
-      "id": 9193,
-      "citaat": "Dat argument van die onzekerheid hoor ik vaak, maar het gaat echt om een heel beperkt aantal uren dat de wind niet waait of de zon niet schijnt. Daar moeten we inderdaad een oplossing voor vinden. Dat is opslag. Dat zie je ook heel duidelijk terug in de scenario's waarin kernenergie een prominente rol speelt. Daarnaast moeten we investeren in het uitbreiden van het netwerk met andere Europese landen, zodat we als de zon bij ons niet schijnt, maar in een ander land wel, dat met elkaar kunt uitwisselen.",
-      "typologie": "factual",
-      "stance": "pro",
-      "spreker": "Sjoukje van Oosterhout",
-      "partij": "GroenLinks-PvdA",
-      "tags": [],
-      "claims": [
-        {
-          "claim_text": "het gaat echt om een heel beperkt aantal uren dat de wind niet waait of de zon niet schijnt",
-          "attributed_source_text": null
-        },
-        {
-          "claim_text": "Dat zie je ook heel duidelijk terug in de scenario's waarin kernenergie een prominente rol speelt",
-          "attributed_source_text": null
-        }
-      ],
-      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2026A03081",
-      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2026-05-27/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2026-05-27T12%3A03%3A05%2B0200&end=2026-05-27T14%3A00%3A27%2B0200",
-      "start_seconds": 1033.0,
-      "gist": "dunkelflaute zeer beperkt",
+      "gist": "miljarden voor minimale temperatuurwinst",
       "samenvatting": null
     },
-    "9199": {
-      "id": 9199,
-      "citaat": "Kernenergie is een onmisbaar fundament onder een robuust, schoon en toekomstbestendig energiesysteem. Het is een betrouwbare, CO2-vrije energiebron, die ons land minder afhankelijk maakt. Kernenergie maakt Nederland veiliger, duurzamer en economisch sterker. De VVD pleit dan ook al langer voor het openhouden van de kerncentrale in Borssele. Dat dit nu mogelijk wordt gemaakt met deze wetswijziging, is goed nieuws voor onze leveringszekerheid en voor ons klimaat. Met Borssele kunnen wij een eigen, stabiele stroomvoorziening behouden. Bovendien draagt het openhouden ervan bij aan het behoud van specifieke nucleaire kennis en ervaring in Nederland. Kennis die wij in de toekomst keihard nodig hebben.",
-      "typologie": "factual",
+    "8579": {
+      "id": 8579,
+      "citaat": "Daarnaast moeten we voorkomen dat Nederland zijn concurrentiepositie ondermijnt door knellende nationale wet- en regelgeving. De huidige nationale CO2-heffing doet dat wel. Bedrijven dreigen uit te wijken naar het buitenland en dat kost banen. Daarom wil de VVD dat deze heffing wordt afgeschaft.",
+      "typologie": "economic",
       "stance": "contra",
-      "spreker": "Alisha Müller",
+      "spreker": "Peter de Groot",
       "partij": "VVD",
       "tags": [],
       "claims": [],
-      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2026A03081",
-      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2026-05-27/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2026-05-27T12%3A03%3A05%2B0200&end=2026-05-27T14%3A00%3A27%2B0200",
-      "start_seconds": 1989.0,
-      "gist": "fundament voor robuust systeem",
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2025A04595",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-09-03/wttewaallvanstoetwegenzaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-09-03T14%3A00%3A17%2B0200&end=2025-09-03T17%3A36%3A51%2B0200",
+      "start_seconds": 1951.0,
+      "gist": "nationale CO2-heffing schaadt concurrentiekracht",
+      "samenvatting": "De nationale CO2-heffing moet verdwijnen omdat deze de concurrentiekracht schaadt en volgens het PBL leidt tot weglek van industrie en banen naar het buitenland."
+    },
+    "8583": {
+      "id": 8583,
+      "citaat": "Duurzame bedrijven hier hebben al een benadeelde positie door al die fossiele subsidies. Nu gaat ook nog eens die nationale CO2-heffing van de baan, als het aan de VVD ligt. Mijn vraag is: hoe gaan we er dan voor zorgen dat die duurzame bedrijven, die willen innoveren, niet gaan omvallen?",
+      "typologie": "economic",
+      "stance": "pro",
+      "spreker": "Christine Teunissen",
+      "partij": "PvdD",
+      "tags": [],
+      "claims": [
+        {
+          "claim_text": "Duurzame bedrijven hier hebben al een benadeelde positie door al die fossiele subsidies",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "de VVD wil dat de nationale CO2-heffing van de baan gaat",
+          "attributed_source_text": null
+        }
+      ],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2025A04595",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-09-03/wttewaallvanstoetwegenzaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-09-03T14%3A00%3A17%2B0200&end=2025-09-03T17%3A36%3A51%2B0200",
+      "start_seconds": 2107.0,
+      "gist": "afschaffing heffing benadeelt verduurzamers",
       "samenvatting": null
+    },
+    "8618": {
+      "id": 8618,
+      "citaat": "Kernenergie is voor de VVD namelijk een van de noodzakelijke pijlers voor een robuust en toekomstig energiesysteem. Het biedt stabiele CO2-vrije basislast, vergroot onze energieonafhankelijkheid en is daarmee cruciaal voor de leveringszekerheid.",
+      "typologie": "factual",
+      "stance": "contra",
+      "spreker": "Peter de Groot",
+      "partij": "VVD",
+      "tags": [],
+      "claims": [],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2025A04595",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-09-03/wttewaallvanstoetwegenzaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-09-03T14%3A00%3A17%2B0200&end=2025-09-03T17%3A36%3A51%2B0200",
+      "start_seconds": 4009.0,
+      "gist": "minder beslag op ruimte",
+      "samenvatting": null
+    },
+    "9120": {
+      "id": 9120,
+      "citaat": "Fossiele en energie-intensieve bedrijven hangen aan het subsidie-infuus, terwijl die bedrijfsmodellen hier niet meer passen zonder goedkoop gas en onder de streep geen bijdrage leveren aan ons land. De belangrijkste energiebesparingsmaatregel is: snoeien om te bloeien. Ga serieus aan de slag met fossielvrije industriepolitiek, maak ruimte voor de toekomst, bouw energie-intensieve basisindustrie af en werk aan een circulaire economie.",
+      "typologie": "economic",
+      "stance": "pro",
+      "spreker": "Christine Teunissen",
+      "partij": "PvdD",
+      "tags": [],
+      "claims": [
+        {
+          "claim_text": "Fossiele en energie-intensieve bedrijven hangen aan het subsidie-infuus.",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "Die bedrijfsmodellen passen hier niet meer zonder goedkoop gas.",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "Die bedrijfsmodellen leveren onder de streep geen bijdrage aan ons land.",
+          "attributed_source_text": null
+        }
+      ],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A06035",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-12-18/troelstrazaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-12-18T11%3A00%3A30%2B0100&end=2024-12-18T15%3A11%3A05%2B0100",
+      "start_seconds": 5037.08,
+      "gist": "energie-intensieve basisindustrie actief afbouwen",
+      "samenvatting": "Fossiele basisindustrie moet worden afgebouwd door de vervuiler te laten betalen, in plaats van vervuilende bedrijven met subsidies en belastingvoordelen overeind te houden."
     },
     "9202": {
       "id": 9202,
@@ -664,69 +1109,35 @@
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2026A03081",
       "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2026-05-27/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2026-05-27T12%3A03%3A05%2B0200&end=2026-05-27T14%3A00%3A27%2B0200",
       "start_seconds": 2231.0,
-      "gist": "kernenergie garandeert leveringszekerheid",
+      "gist": "niet afhankelijk van weer",
       "samenvatting": null
     },
-    "9269": {
-      "id": 9269,
-      "citaat": "De VVD pleit niet voor dwangmaatregelen.",
+    "9428": {
+      "id": 9428,
+      "citaat": "Het PBL heeft geanalyseerd wat een additionele verhoging van dat prijspad doet. In die analyse staat gewoon dat de kans vrij groot is dat het effect is dat er niet meer verduurzaamd wordt in Nederland, maar dat het gewoon gaat om minder productie of weglek van bedrijvigheid. Ik zou daarom ook de GroenLinks-PvdA-fractie aanraden om soms op basis van de feiten standpunten te herzien. Uiteindelijk willen we hetzelfde: het sneller verduurzamen van onze industrie. Ik vind het wel van belang dat die in Nederland plaatsvindt en niet naar het buitenland vertrekt.",
       "typologie": "factual",
       "stance": "contra",
-      "spreker": "Peter de Groot",
+      "spreker": "Silvio Erkens",
       "partij": "VVD",
-      "tags": [],
-      "claims": [],
-      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2025A02841",
-      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-11-27/troelstrazaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-11-27T14%3A31%3A16%2B0100&end=2025-11-27T19%3A16%3A57%2B0100",
-      "start_seconds": 2041.9009999999998,
-      "gist": "geen dwangmaatregelen bij verduurzaming",
-      "samenvatting": null
-    },
-    "9424": {
-      "id": 9424,
-      "citaat": "Als er één onderdeel is van de portefeuille van deze minister waarbij ze kan laten zien dat groene groei alleen kan met grijze krimp, dan is het mijnbouw. Dat betekent dat we echt de afbouw van fossiel in gang zetten en dus zeker geen nieuwe gaswinning toelaten onder zo'n kwetsbaar en zo'n belangrijk natuurgebied als de Wadden.",
-      "typologie": "economic",
-      "stance": "pro",
-      "spreker": "Suzanne Kröger",
-      "partij": "GroenLinks-PvdA",
-      "tags": [],
-      "claims": [],
-      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2024A07020",
-      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-12-05/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-12-05T10%3A16%3A01%2B0100&end=2024-12-05T10%3A50%3A46%2B0100",
-      "start_seconds": 369.90099999999984,
-      "gist": "groene groei vereist krimp",
-      "samenvatting": null
-    },
-    "9489": {
-      "id": 9489,
-      "citaat": "Er is 15 miljard bezuinigd op het Transitiefonds landelijk gebied en natuur; dat is minder geld voor de natuur en om CO2 vast te houden. De rode dieselsubsidie loopt op tot 1,26 miljard. In het totaal heb je aan de andere kant nog miljarden die naar kerncentrales gaan. Dat gaat over 14 miljard. Daarnaast heb je ook nog de bezuinigingen op de energiesubsidies en de algehele subsidiekorting die van de duurzame subsidies afgaat.",
-      "typologie": "economic",
-      "stance": "pro",
-      "spreker": "Ilana Rooderkerk",
-      "partij": "D66",
       "tags": [],
       "claims": [
         {
-          "claim_text": "Er is 15 miljard bezuinigd op het Transitiefonds landelijk gebied en natuur",
+          "claim_text": "Nederland heeft als enig Europees land een nationale CO2-heffing.",
           "attributed_source_text": null
         },
         {
-          "claim_text": "De rode dieselsubsidie loopt op tot 1,26 miljard",
-          "attributed_source_text": null
+          "claim_text": "Het PBL heeft geanalyseerd wat een additionele verhoging van dat prijspad doet.",
+          "attributed_source_text": "PBL"
         },
         {
-          "claim_text": "miljarden die naar kerncentrales gaan. Dat gaat over 14 miljard",
-          "attributed_source_text": null
-        },
-        {
-          "claim_text": "bezuinigingen op de energiesubsidies en de algehele subsidiekorting die van de duurzame subsidies afgaat",
-          "attributed_source_text": null
+          "claim_text": "In die analyse staat gewoon dat de kans vrij groot is dat het effect is dat er niet meer verduurzaamd wordt in Nederland, maar dat het gewoon gaat om minder productie of weglek van bedrijvigheid.",
+          "attributed_source_text": "PBL"
         }
       ],
-      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A02611",
-      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-09-12/troelstrazaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-09-12T16%3A31%3A02%2B0200&end=2024-09-12T20%3A30%3A21%2B0200",
-      "start_seconds": 2278.0,
-      "gist": "minder middelen voor CO2-reductie",
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2024A02290",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-04-18/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-04-18T16%3A12%3A45%2B0200&end=2024-04-18T16%3A46%3A37%2B0200",
+      "start_seconds": 478.72100000000137,
+      "gist": "strenge heffing veroorzaakt weglek",
       "samenvatting": null
     },
     "9496": {
@@ -754,8 +1165,8 @@
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A02611",
       "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-09-12/troelstrazaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-09-12T16%3A31%3A02%2B0200&end=2024-09-12T20%3A30%3A21%2B0200",
       "start_seconds": 2644.38,
-      "gist": "bezuinigingen brengen doelen gevaar",
-      "samenvatting": "Miljardenbezuinigingen op klimaat- en stikstoffondsen maken het onhaalbaar om de klimaatdoelen voor 2030 te realiseren."
+      "gist": "bezuiniging bedreigt klimaatdoelen",
+      "samenvatting": null
     },
     "9653": {
       "id": 9653,
@@ -769,67 +1180,7 @@
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2024A07628",
       "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-11-07/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-11-07T16%3A52%3A14%2B0100&end=2024-11-07T23%3A17%3A30%2B0100",
       "start_seconds": 5573.82,
-      "gist": "sociale huurders blijven achter",
-      "samenvatting": null
-    },
-    "9661": {
-      "id": 9661,
-      "citaat": "Zelfs als je denkt dat er een klimaatcrisis is, heeft het toch geen zin? We maken toch alleen maar onszelf kapot? We jagen de industrie niet alleen Nederland, maar heel Europa uit. Onze welvaart gaat naar de knoppen. Voor niets. En waarvoor? Het heeft geen zin.",
-      "typologie": "economic",
-      "stance": "contra",
-      "spreker": "Pepijn van Houwelingen",
-      "partij": "FVD",
-      "tags": [],
-      "claims": [
-        {
-          "claim_text": "Een heel groot deel van de wereld doet niet mee.",
-          "attributed_source_text": null
-        },
-        {
-          "claim_text": "China gaat in 2030 mee aan de gang met klimaatmaatregelen.",
-          "attributed_source_text": null
-        },
-        {
-          "claim_text": "Amerika stopt met klimaatmaatregelen.",
-          "attributed_source_text": null
-        },
-        {
-          "claim_text": "Trump is al een keer uit het Parijsakkoord gegaan.",
-          "attributed_source_text": null
-        },
-        {
-          "claim_text": "Trump noemde het klimaatbeleid een climate hoax.",
-          "attributed_source_text": null
-        }
-      ],
-      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2024A07628",
-      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-11-07/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-11-07T16%3A52%3A14%2B0100&end=2024-11-07T23%3A17%3A30%2B0100",
-      "start_seconds": 6187.0,
-      "gist": "weglekeffect vernietigt economische welvaart",
-      "samenvatting": null
-    },
-    "9701": {
-      "id": 9701,
-      "citaat": "Het is echt bizar om miljarden aan klimaatgeld opzij te zetten voor projecten waarvan het totaal onduidelijk is of die ooit gerealiseerd worden. Deze minister moet zelfs bedrijven betalen om überhaupt te onderzoeken of er ooit een kerncentrale gaat komen. Het is bizar dat we dat geld of in ieder geval een deel daarvan niet nu aanwenden om gewoon écht CO2-winst te boeken en écht iets te doen voor mensen. Ik vind dat asociaal.",
-      "typologie": "moral",
-      "stance": "pro",
-      "spreker": "Suzanne Kröger",
-      "partij": "GroenLinks-PvdA",
-      "tags": [],
-      "claims": [
-        {
-          "claim_text": "projecten waarvan het totaal onduidelijk is of die ooit gerealiseerd worden",
-          "attributed_source_text": null
-        },
-        {
-          "claim_text": "Deze minister moet zelfs bedrijven betalen om überhaupt te onderzoeken of er ooit een kerncentrale gaat komen.",
-          "attributed_source_text": null
-        }
-      ],
-      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2024A07628",
-      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-11-07/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-11-07T16%3A52%3A14%2B0100&end=2024-11-07T23%3A17%3A30%2B0100",
-      "start_seconds": 15602.0,
-      "gist": "klimaatgeld naar onzekere kernenergie",
+      "gist": "geen plan voor huurwoningen",
       "samenvatting": null
     },
     "9718": {
@@ -857,292 +1208,22 @@
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2024A07628",
       "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-11-07/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-11-07T16%3A52%3A14%2B0100&end=2024-11-07T23%3A17%3A30%2B0100",
       "start_seconds": 17757.0,
-      "gist": "overheid ontziet grote vervuilers",
+      "gist": "grote vervuilers onterecht gefaciliteerd",
       "samenvatting": null
     },
-    "9813": {
-      "id": 9813,
-      "citaat": "De vrijheid om je eigen energie te regelen en daar keuze in te hebben, vind ik heel goed. Dat vind ik een mooi uitgangspunt. Wij zijn de Partij voor de Vríjheid en ik heb u al gewezen op uw \"v\", dus laten we die vrijheid hooghouden en maximaal houden voor onze burger. Deze wet moeten we dan niet hebben, want dit is een dwangwet en dat is geen vrijheid.",
-      "typologie": "moral",
-      "stance": "contra",
-      "spreker": "Barry Madlener",
-      "partij": "PVV",
-      "tags": [],
-      "claims": [],
-      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2024A01502",
-      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-03-27/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-03-27T16%3A56%3A05%2B0100&end=2024-03-27T23%3A32%3A48%2B0100",
-      "start_seconds": 7342.0,
-      "gist": "vrijheid van eigen energiekeuze",
-      "samenvatting": null
-    },
-    "9928": {
-      "id": 9928,
-      "citaat": "Ook is de warmtepompverplichting per 2026 geschrapt. Ook dat is goed nieuws.",
-      "typologie": "factual",
-      "stance": "contra",
-      "spreker": "Alexander Kops",
-      "partij": "PVV",
+    "9986": {
+      "id": 9986,
+      "citaat": "Daarom denk ik dat het zo belangrijk is dat je als kabinet de keuze maakt om juist voor deze mensen geld uit te trekken. Ga niet de grote vervuilers een belastingverlaging geven, maar help mensen daarbij.",
+      "typologie": "economic",
+      "stance": "pro",
+      "spreker": "Ilana Rooderkerk",
+      "partij": "D66",
       "tags": [],
       "claims": [],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2024A05301",
       "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-11-06/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-11-06T10%3A16%3A09%2B0100&end=2024-11-06T14%3A02%3A10%2B0100",
-      "start_seconds": 1769.3210000000008,
-      "gist": "warmtepompverplichting per 2026 vervallen",
-      "samenvatting": null
-    },
-    "9940": {
-      "id": 9940,
-      "citaat": "Nee, wij zijn dolblij met de maatregelen die in het hoofdlijnenakkoord staan, waaronder het schrappen van de warmtepompplicht en het verlagen van de energiebelasting op gas.",
-      "typologie": "factual",
-      "stance": "contra",
-      "spreker": "Alexander Kops",
-      "partij": "PVV",
-      "tags": [],
-      "claims": [],
-      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2024A05301",
-      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-11-06/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-11-06T10%3A16%3A09%2B0100&end=2024-11-06T14%3A02%3A10%2B0100",
-      "start_seconds": 2386.0,
-      "gist": "schrappen warmtepompplicht ontlast burger",
-      "samenvatting": "Het schrappen van de verplichte warmtepomp voorkomt hoge kosten voor huishoudens en waarborgt betaalbaarheid."
-    },
-    "9999": {
-      "id": 9999,
-      "citaat": "Wat de VVD betreft houdt de minister ook rekening met de concurrentiepositie van de industrie en de betaalbaarheid van de huishoudens.",
-      "typologie": "economic",
-      "stance": "contra",
-      "spreker": "Silvio Erkens",
-      "partij": "VVD",
-      "tags": [],
-      "claims": [],
-      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2024A05301",
-      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-11-06/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-11-06T10%3A16%3A09%2B0100&end=2024-11-06T14%3A02%3A10%2B0100",
-      "start_seconds": 5819.0,
-      "gist": "concurrentiepositie van industrie bewaken",
-      "samenvatting": null
-    },
-    "10001": {
-      "id": 10001,
-      "citaat": "Het schrappen van de hybridewarmtepompverplichting leidt er gewoon toe dat mensen achterover gaan leunen en dat bedrijven, die juist op basis van eerdere aankondigingen van normering door de overheid zijn gaan investeren in de uitbreiding van hun capaciteit en personeel hadden aangenomen, dat personeel weer hebben moeten ontslaan. Ik sprak gisteravond een warmtepompproducent. Die had begin dit jaar 60 man personeel, nu op 5 november 30 man personeel: de helft van de omzet was weg. Door het zwabberbeleid van de overheid zijn mensen achterover gaan zitten en is die hele branche in elkaar aan het storten. Dat heeft toch weinig met \"groene groei\" te maken?",
-      "typologie": "economic",
-      "stance": "pro",
-      "spreker": "Pieter Grinwis",
-      "partij": "ChristenUnie",
-      "tags": [],
-      "claims": [
-        {
-          "claim_text": "Een warmtepompproducent had begin dit jaar 60 man personeel, nu op 5 november 30 man personeel",
-          "attributed_source_text": "Ik sprak gisteravond een warmtepompproducent"
-        },
-        {
-          "claim_text": "de helft van de omzet was weg",
-          "attributed_source_text": "Ik sprak gisteravond een warmtepompproducent"
-        }
-      ],
-      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2024A05301",
-      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-11-06/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-11-06T10%3A16%3A09%2B0100&end=2024-11-06T14%3A02%3A10%2B0100",
-      "start_seconds": 6091.0,
-      "gist": "massaal banenverlies warmtepompsector",
-      "samenvatting": "Door het schrappen van de normering wachten consumenten af en moeten warmtepompproducenten personeel ontslaan."
-    },
-    "10007": {
-      "id": 10007,
-      "citaat": "De VVD doet nu twee dingen. Een. Die zet namelijk in op kernenergie, wat de komende twintig jaar geen oplossing gaat bieden, maar waar het kabinet nu wel 9,2 miljard extra tegenaan wil gooien. Dat geld kunnen we ook nu stoppen in echte verduurzamingsmaatregelen, zoals het verduurzamen van woningen. Dat hadden we allang moeten doen. We moeten investeren in personeel dat daadwerkelijk zonnepanelen kan aanleggen, want daar hebben we een groot tekort aan. Daarmee gaan we de doelen dus ook niet halen.",
-      "typologie": "economic",
-      "stance": "pro",
-      "spreker": "Christine Teunissen",
-      "partij": "PvdD",
-      "tags": [],
-      "claims": [
-        {
-          "claim_text": "kernenergie biedt de komende twintig jaar geen oplossing",
-          "attributed_source_text": null
-        },
-        {
-          "claim_text": "het kabinet wil 9,2 miljard extra aan kernenergie besteden",
-          "attributed_source_text": null
-        },
-        {
-          "claim_text": "er is een groot tekort aan personeel dat zonnepanelen kan aanleggen",
-          "attributed_source_text": null
-        }
-      ],
-      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2024A05301",
-      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-11-06/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-11-06T10%3A16%3A09%2B0100&end=2024-11-06T14%3A02%3A10%2B0100",
-      "start_seconds": 6477.0,
-      "gist": "kernenergie biedt geen oplossing",
-      "samenvatting": "Investeren in kernenergie biedt de komende twintig jaar geen soelaas en onttrekt miljarden aan noodzakelijke isolatie en personeel."
-    },
-    "10011": {
-      "id": 10011,
-      "citaat": "Ten tweede is er geen land in de wereld dat vervuiling op de industrie meer belast dan Nederland, geen land in de wereld. De Europese Unie heeft de hoogste CO2-belasting van de hele wereld. Nederland heeft als enige Europese land daarbovenop een nationale CO2-heffing. Dat is dus meer dan elk ander land in de wereld. Die flauwekul dat de industrie niet zou betalen voor vervuiling, daar hebben we helemaal niks aan.",
-      "typologie": "economic",
-      "stance": "contra",
-      "spreker": "Silvio Erkens",
-      "partij": "VVD",
-      "tags": [],
-      "claims": [
-        {
-          "claim_text": "Er is geen land in de wereld dat vervuiling op de industrie meer belast dan Nederland",
-          "attributed_source_text": null
-        },
-        {
-          "claim_text": "De Europese Unie heeft de hoogste CO2-belasting van de hele wereld",
-          "attributed_source_text": null
-        },
-        {
-          "claim_text": "Nederland heeft als enige Europese land een nationale CO2-heffing bovenop de EU-belasting",
-          "attributed_source_text": null
-        }
-      ],
-      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2024A05301",
-      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-11-06/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-11-06T10%3A16%3A09%2B0100&end=2024-11-06T14%3A02%3A10%2B0100",
-      "start_seconds": 6604.0,
-      "gist": "industrie al zwaarst belast",
-      "samenvatting": "Nederland kent door de nationale CO2-heffing bovenop Europees beleid al de allerhoogste belastingdruk op industriële vervuiling."
-    },
-    "10027": {
-      "id": 10027,
-      "citaat": "We zien dat de industrie Nederland verlaat. Dat zei ik net al. Je zou toch denken dat dat de VVD ook aan het hart zou moeten gaan. We zien dat \"Groene Groei\" eigenlijk \"Groene Krimp\" betekent. We zien degrowth. We zien echt dat we onze welvaart het land uit duwen. Dat is wat we op dit moment aan het doen zijn door dit absurde beleid.",
-      "typologie": "economic",
-      "stance": "contra",
-      "spreker": "Pepijn van Houwelingen",
-      "partij": "FVD",
-      "tags": [],
-      "claims": [
-        {
-          "claim_text": "de industrie Nederland verlaat",
-          "attributed_source_text": null
-        },
-        {
-          "claim_text": "\"Groene Groei\" betekent \"Groene Krimp\"",
-          "attributed_source_text": null
-        },
-        {
-          "claim_text": "er is sprake van degrowth",
-          "attributed_source_text": null
-        },
-        {
-          "claim_text": "welvaart wordt het land uit geduwd",
-          "attributed_source_text": null
-        }
-      ],
-      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2024A05301",
-      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-11-06/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-11-06T10%3A16%3A09%2B0100&end=2024-11-06T14%3A02%3A10%2B0100",
-      "start_seconds": 7613.0,
-      "gist": "industrie verlaat het land",
-      "samenvatting": "Stapeling van nationale heffingen dwingt de industrie naar het buitenland en leidt tot verlies van welvaart."
-    },
-    "10035": {
-      "id": 10035,
-      "citaat": "Het meest onverstandige vindt mijn fractie het schrappen van de verplichting van een hybride warmtepomp bij het vervangen van een gasketel. De spookverhalen hebben wat ons betreft gewonnen. We vinden het ook voor de consument een slechte keuze. Het slechtste wat we voor het bedrijfsleven kunnen doen, is steeds wisselen van klimaatbeleid. Dat is precies wat we nu aan het doen zijn.",
-      "typologie": "economic",
-      "stance": "pro",
-      "spreker": "Henri Bontenbal",
-      "partij": "CDA",
-      "tags": [],
-      "claims": [],
-      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2024A05301",
-      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-11-06/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-11-06T10%3A16%3A09%2B0100&end=2024-11-06T14%3A02%3A10%2B0100",
-      "start_seconds": 8120.0,
-      "gist": "schrappen warmtepompnormering is onverstandig",
-      "samenvatting": "Het loslaten van de hybride warmtepompverplichting schaadt consumenten en leidt tot fataal zwabberbeleid voor het bedrijfsleven."
-    },
-    "10039": {
-      "id": 10039,
-      "citaat": "Het CDA heeft met GroenLinks-PvdA en ChristenUnie amendementen ingediend om 5 miljard uit het Klimaatfonds te reserveren voor de verduurzaming van de agrarische sector. Het CDA wil de agrarische sector niet laten stikken. Hoe kijkt de minister naar dit amendement? De reden waarom de agrarische sector onder het vorige kabinet geen aanspraak kon maken op het Klimaatfonds, was dat de sector daar het transitiefonds voor kon gebruiken. Dat was de afspraak. Maar de BBB heeft het transitiefonds weggestreept. Er is dus geen geld meer voor de verduurzaming van die sector. Dat is gewoon een feit, terwijl de doelen blijven staan. Dat is gewoon heel pijnlijk voor die sector. Wij proberen met het amendement eigenlijk een handreiking richting de coalitie te doen. Ik zou verwachten dat daar dan ook wat beweging zou komen.",
-      "typologie": "factual",
-      "stance": "pro",
-      "spreker": "Henri Bontenbal",
-      "partij": "CDA",
-      "tags": [],
-      "claims": [
-        {
-          "claim_text": "De agrarische sector onder het vorige kabinet geen aanspraak kon maken op het Klimaatfonds omdat de sector daar het transitiefonds voor kon gebruiken",
-          "attributed_source_text": null
-        },
-        {
-          "claim_text": "De BBB heeft het transitiefonds weggestreept",
-          "attributed_source_text": null
-        },
-        {
-          "claim_text": "Er is dus geen geld meer voor de verduurzaming van die sector",
-          "attributed_source_text": null
-        }
-      ],
-      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2024A05301",
-      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-11-06/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-11-06T10%3A16%3A09%2B0100&end=2024-11-06T14%3A02%3A10%2B0100",
-      "start_seconds": 8120.0,
-      "gist": "klimaatgeld voor woningverduurzaming mkb",
-      "samenvatting": "Middelen uit het Klimaatfonds moeten gericht worden gereserveerd om woningen en het mkb daadwerkelijk te verduurzamen."
-    },
-    "10078": {
-      "id": 10078,
-      "citaat": "Erkent mevrouw Postma dat extra kerncentrales niks gaan doen voor het halen van de doelen voor 2030?",
-      "typologie": "factual",
-      "stance": "pro",
-      "spreker": "Suzanne Kröger",
-      "partij": "GroenLinks-PvdA",
-      "tags": [],
-      "claims": [
-        {
-          "claim_text": "extra kerncentrales niks gaan doen voor het halen van de doelen voor 2030",
-          "attributed_source_text": null
-        }
-      ],
-      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2024A05301",
-      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-11-06/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-11-06T10%3A16%3A09%2B0100&end=2024-11-06T14%3A02%3A10%2B0100",
-      "start_seconds": 10781.0,
-      "gist": "geen doelen voor 2030",
-      "samenvatting": null
-    },
-    "10082": {
-      "id": 10082,
-      "citaat": "Klimaatbeleid faalt als de overheid eerst zegt \"neem maar zonnepanelen\", en als je ze net hebt liggen, zegt \"grapje, we gaan toch niet betalen\".",
-      "typologie": "moral",
-      "stance": "pro",
-      "spreker": "Sandra Beckerman",
-      "partij": "SP",
-      "tags": [],
-      "claims": [],
-      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2024A05301",
-      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-11-06/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-11-06T14%3A02%3A55%2B0100&end=2024-11-06T15%3A42%3A46%2B0100",
-      "start_seconds": 61.20100000000093,
-      "gist": "overheid straft zonnepaneelbezitters af",
-      "samenvatting": null
-    },
-    "10094": {
-      "id": 10094,
-      "citaat": "Zeven voorstellen die betaalbaar zijn door 3,7 miljard van kernenergie niet uit te geven aan wensdenken, maar aan klimaatwinst, een lagere energierekening voor lage en middeninkomens en een betere woning.",
-      "typologie": "economic",
-      "stance": "pro",
-      "spreker": "Sandra Beckerman",
-      "partij": "SP",
-      "tags": [],
-      "claims": [],
-      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2024A05301",
-      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-11-06/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-11-06T14%3A02%3A55%2B0100&end=2024-11-06T15%3A42%3A46%2B0100",
-      "start_seconds": 329.2199999999975,
-      "gist": "kernenergiegeld naar directe verduurzaming",
-      "samenvatting": null
-    },
-    "10158": {
-      "id": 10158,
-      "citaat": "Het is oliedom zwabberbeleid, met als gevolg dat burgers de kat uit de boom kijken en nog maar even geen warmtepomp bestellen. Gisteravond nog sprak ik een ondernemer met een prachtig familiebedrijf, een warmtepompproducent, die dit jaar na het schrappen van de hybridewarmtepompenmaatregel door de coalitie de helft van zijn omzet zag verdampen, zoals in de hele markt, zodat hij de helft van zijn personeel heeft moeten ontslaan.",
-      "typologie": "economic",
-      "stance": "pro",
-      "spreker": "Pieter Grinwis",
-      "partij": "ChristenUnie",
-      "tags": [],
-      "claims": [
-        {
-          "claim_text": "Een warmtepompproducent zag na het schrappen van de hybridewarmtepompenmaatregel de helft van zijn omzet verdampen en moest de helft van zijn personeel ontslaan.",
-          "attributed_source_text": null
-        }
-      ],
-      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2024A05301",
-      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-11-06/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-11-06T14%3A02%3A55%2B0100&end=2024-11-06T15%3A42%3A46%2B0100",
-      "start_seconds": 4282.600999999999,
-      "gist": "zwabberbeleid halveert omzet producenten",
+      "start_seconds": 5563.5,
+      "gist": "bescherm burgers boven industrie",
       "samenvatting": null
     },
     "10182": {
@@ -1157,124 +1238,208 @@
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A05865",
       "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-10-03/groenvanprinstererzaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-10-03T18%3A16%3A17%2B0200&end=2024-10-03T21%3A25%3A58%2B0200",
       "start_seconds": 499.39900000000125,
-      "gist": "geen verplichte hybride warmtepomp",
+      "gist": "schrapping ketelverplichting terecht besluit",
       "samenvatting": null
     }
   },
   "bands": [
     {
       "nummer": 1,
-      "thema": "Moet de zware industrie extra worden belast?",
+      "thema": "Is kernenergie noodzakelijk voor een betrouwbaar energiesysteem?",
       "pro": {
         "type": "node",
-        "id": 3479,
+        "id": 6887,
         "kids": [
           {
-            "id": 3414,
-            "weak_link": false,
-            "scheme": "Argument from Cause to Effect"
+            "id": 3633,
+            "scheme": "Argument from Consequences",
+            "reden": "De premissen noemen expliciet de concrete feitelijke gronden (pas na 2040 operationeel en stilgelegd bij extreme hitte) die direct aansluiten bij de stelling dat kerncentrales te laat komen en kwetsbaar zijn."
           },
           {
-            "id": 9718,
-            "weak_link": false,
-            "scheme": null
+            "id": 6896,
+            "scheme": "Argument from Consequences",
+            "reden": "De premissen noemen expliciet de concrete feitelijke gronden (pas na 2040 operationeel en stilgelegd bij extreme hitte) die direct aansluiten bij de stelling dat kerncentrales te laat komen en kwetsbaar zijn."
           }
         ]
       },
       "contra": {
         "type": "node",
-        "id": 10011,
-        "kids": []
+        "id": 7631,
+        "kids": [
+          {
+            "id": 7632,
+            "scheme": "Argument from Expert Opinion",
+            "reden": "De premissen (constante CO2-vrije basislast en dat kernenergie net zo goedkoop is) sluiten direct aan op de twee expliciete pijlers van het doelwit: het bieden van stabiele basislast en concurrentiekracht qua systeemkosten."
+          },
+          {
+            "id": 7432,
+            "scheme": "Argument from Expert Opinion",
+            "reden": "De premissen (constante CO2-vrije basislast en dat kernenergie net zo goedkoop is) sluiten direct aan op de twee expliciete pijlers van het doelwit: het bieden van stabiele basislast en concurrentiekracht qua systeemkosten."
+          }
+        ]
       },
       "oppositie": {
-        "argument_a_id": 10011,
-        "argument_b_id": 3479,
+        "argument_a_id": 6887,
+        "argument_b_id": 7631,
         "scheme": null,
-        "weak_link": false,
-        "confidence": 1.0
+        "reden": "Het argument betwist direct de kernclaims van het doelwit: de betrouwbaarheid en stabiele basislast worden betwist met het risico op stilstand bij hitte, en de bijdrage aan een klimaatneutraal systeem wordt weerlegd met de te late oplevering na 2040."
+      }
+    },
+    {
+      "nummer": 2,
+      "thema": "Kan grootschalige opslag kernenergie overbodig maken?",
+      "pro": {
+        "type": "node",
+        "id": 6816,
+        "kids": [
+          {
+            "id": 6902,
+            "scheme": "Argument from Consequences",
+            "reden": "De premisse noemt de onrendabiliteit bij ontbreken van continue productie als expliciete grond voor de stelling dat kernenergie te duur is wanneer centrales niet continu draaien."
+          }
+        ]
+      },
+      "contra": {
+        "type": "ref",
+        "ref_id": 7631,
+        "band_nummer": 1
+      },
+      "oppositie": {
+        "argument_a_id": 6816,
+        "argument_b_id": 7631,
+        "scheme": null,
+        "reden": "Het premise-argument betwist direct de centrale stelling van het target-argument dat kernenergie 'onmisbaar' en 'concurrerend' is, door expliciet te stellen dat kernenergie 'overbodig en te duur' is en de TNO-kostenclaim te pareren met opslag en netbeheer."
+      }
+    },
+    {
+      "nummer": 3,
+      "thema": "Moet de hybride warmtepomp wettelijk worden verplicht?",
+      "pro": {
+        "type": "node",
+        "id": 7206,
+        "kids": [
+          {
+            "id": 7204,
+            "scheme": "Argument from Consequences",
+            "reden": "De premissen noemen specifieke gevolgen en gronden (bewezen reductie, ontzien van het stroomnet, en het bedreigen van de klimaatdoelen bij schrapping) die exact aansluiten op de drie kernclaims van het doelwit-argument."
+          },
+          {
+            "id": 7203,
+            "scheme": "Argument from Consequences",
+            "reden": "De premissen noemen specifieke gevolgen en gronden (bewezen reductie, ontzien van het stroomnet, en het bedreigen van de klimaatdoelen bij schrapping) die exact aansluiten op de drie kernclaims van het doelwit-argument."
+          },
+          {
+            "id": 7376,
+            "scheme": "Argument from Consequences",
+            "reden": "De premissen noemen specifieke gevolgen en gronden (bewezen reductie, ontzien van het stroomnet, en het bedreigen van de klimaatdoelen bij schrapping) die exact aansluiten op de drie kernclaims van het doelwit-argument."
+          }
+        ]
+      },
+      "contra": {
+        "type": "node",
+        "id": 7201,
+        "kids": [
+          {
+            "id": 7901,
+            "scheme": "Argument from Consequences",
+            "reden": "Dat de warmtepomp zonder dwang rendabel is (7901) vormt een directe inhoudelijke grond voor de stelling dat een verplichting overbodig is (7201)."
+          },
+          {
+            "id": 10182,
+            "scheme": "Argument from Consequences",
+            "reden": "Dat de warmtepomp zonder dwang rendabel is (7901) vormt een directe inhoudelijke grond voor de stelling dat een verplichting overbodig is (7201)."
+          }
+        ]
+      },
+      "oppositie": {
+        "argument_a_id": 7201,
+        "argument_b_id": 7206,
+        "scheme": null,
+        "reden": "Het premise-argument betwist direct de noodzaak van een wettelijke verplichting/normering van de warmtepomp door te stellen dat deze overbodig is vanwege vrijwillige aanschaf."
       }
     }
   ],
   "losse_groepen": [
     {
       "kind": "group",
-      "label": "kernenergie als betrouwbare basislast",
-      "samenvatting": "Kernenergie levert een constante, weersonafhankelijke energiebron die zorgt voor leveringszekerheid en het stroomnet ontlast.",
+      "label": "kernenergie als stabiele en ruimtebesparende basislast",
+      "samenvatting": "Kernenergie levert constante leveringszekerheid voor bedrijven en vraagt aanzienlijk minder schaarse ruimte dan grootschalige zon- en windparken.",
       "member_ids": [
-        7432,
-        9199,
-        9202,
-        3625
+        7434,
+        8618,
+        9202
       ]
     },
     {
       "kind": "group",
-      "label": "kosten en scheefgroei door saldering",
-      "samenvatting": "De salderingsregeling leidt tot oneerlijke kostenverdeling waarbij huishoudens zonder panelen meebetalen en leveranciers heffingen moeten invoeren.",
+      "label": "investeren in hernieuwbare alternatieven en netcapaciteit",
+      "samenvatting": "Middelen moeten direct worden benut voor zon, wind, opslag en netcapaciteit omdat het energiesysteem zonder kerncentrales kan functioneren.",
       "member_ids": [
-        6995,
-        7002,
-        7078,
-        7075
+        6912,
+        7398
       ]
     },
     {
       "kind": "group",
-      "label": "vrijwilligheid en afwijzen dwangmaatregelen",
-      "samenvatting": "Het schrappen van de hybride warmtepompplicht voorkomt hoge kosten voor burgers en waarborgt keuzevrijheid in de verwarming van woningen.",
+      "label": "bescherming zonnepaneelbezitters tegen lastenverzwaring",
+      "samenvatting": "De salderingsregeling moet worden bekostigd uit het Klimaatfonds zodat huishoudens niet worden gedupeerd door zwalkend overheidsbeleid.",
       "member_ids": [
-        9940,
-        9928,
-        10182,
-        9813
+        3349,
+        3352
+      ]
+    },
+    {
+      "kind": "group",
+      "label": "toegankelijke ondersteuning en betaalbaarheid voor minima",
+      "samenvatting": "Verduurzaming mag niet leiden tot hogere woonlasten en subsidies moeten eenvoudiger bereikbaar zijn voor financieel kwetsbare huishoudens.",
+      "member_ids": [
+        3465,
+        3443
+      ]
+    },
+    {
+      "kind": "group",
+      "label": "ontzien van industrie versus lastenverlichting voor burgers",
+      "samenvatting": "Hoge energiekosten bedreigen de industriële werkgelegenheid, terwijl tegelijk wordt gepleit om belastingverlichting te richten op burgers in plaats van grote vervuilers.",
+      "member_ids": [
+        7913,
+        9986
       ]
     }
   ],
   "losse_argumenten": [
-    10007,
-    9193,
-    10094,
-    7593,
-    7380,
-    6992,
-    10035,
-    7204,
-    9269,
-    10039,
-    9496,
-    9489,
-    8395,
+    7348,
+    7879,
+    8349,
     8341,
-    3351,
-    3409,
-    9424,
-    10027
+    8579,
+    9120
   ],
   "twijfelachtige_classificaties": [
     {
-      "argument_id": 8608,
+      "argument_id": 3601,
       "huidige_stance": "contra",
-      "reden": "citaat pleit tegen kernenergie en noemt het te laat, te duur en te gevaarlijk, wat conform de dimensiedefinitie een pro-positie is ten gunste van zon en wind"
+      "reden": "citaat pleit tegen 14,5 miljard voor kerncentrales en juist voor snellere inzet op duurzame technieken en 2030-klimaatdoelen"
     },
     {
       "argument_id": 9982,
       "huidige_stance": "contra",
-      "reden": "citaat bekritiseert het kabinetsbeleid wegens het verhogen van de uitstoot via fossiele subsidies en het duurder maken van elektrisch rijden, wat conform de dimensiedefinitie een pro-positie is"
+      "reden": "citaat hekelt uitstootvergrotend beleid zoals fossiele subsidies (rode diesel) en pleit voor elektrisch rijden"
     },
     {
-      "argument_id": 9435,
+      "argument_id": 8564,
       "huidige_stance": "contra",
-      "reden": "citaat verzet zich tegen het verlagen van de nationale CO2-heffing en weerspreekt weglekrisico, wat conform de dimensiedefinitie past bij pro (de vervuiler betaalt)"
-    },
-    {
-      "argument_id": 9626,
-      "huidige_stance": "contra",
-      "reden": "citaat bekritiseert het schrappen van de hybridewarmtepompverplichting en bezuinigingen op verduurzamingssubsidies zoals de ISDE, wat conform de dimensiedefinitie pro is"
+      "reden": "citaat verzet zich tegen subsidies voor fossiele CCS en eist echte CO2-reductie conform het principe dat de vervuiler betaalt"
     },
     {
       "argument_id": 6836,
       "huidige_stance": "pro",
-      "reden": "citaat bepleit dat twee grote commerciële kerncentrales nodig zijn, wat conform de dimensiedefinitie contra is (voorkeur voor kernenergie als robuuste bron)"
+      "reden": "citaat bepleit de noodzaak van twee commerciële kerncentrales als robuuste basis, wat volgens de dimensiedefinitie onder contra valt"
+    },
+    {
+      "argument_id": 9847,
+      "huidige_stance": "contra",
+      "reden": "citaat beroept zich expliciet op klimaatrechtvaardigheid en het principe dat de vervuiler moet betalen in plaats van lagere inkomens"
     }
   ]
 }

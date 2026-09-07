@@ -2,72 +2,53 @@
   "slug": "stikstof",
   "name": "Stikstof",
   "topic_description": "Dit debat gaat over het Nederlandse stikstofbeleid: de mate waarin stikstofuitstoot en -depositie verplichtend worden teruggedrongen, en welke maatstaf daarbij leidend is voor natuurherstel.\n\nPRO = voorstander van verplichtende, stevige stikstofreductie, ongeacht welk kabinet dat op een gegeven moment nastreeft of welk concreet instrument daarvoor wordt ingezet. Kenmerkende onderbouwingen: de kritische depositiewaarde (KDW) en het AERIUS-rekenmodel zijn een betrouwbare/wetenschappelijk onderbouwde maatstaf; natuurherstel vergt in de eerste plaats minder stikstof; Nederland moet aan de Habitatrichtlijn/Natura 2000-verplichtingen voldoen; de economische gevolgen voor landbouw, bouw en luchtvaart wegen niet op tegen die verplichtingen; vrijwilligheid heeft tot nu toe onvoldoende resultaat opgeleverd, dus is een verplichtend instrument (uitkoop, onteigening, normering) nodig.\n\nCONTRA = voorstander van afzwakking, uitstel, vrijwilligheid in plaats van verplichting, of een wezenlijk andere aanpak van het stikstofprobleem. Kenmerkende onderbouwingen: de KDW/het AERIUS-model overschat het probleem of is wetenschappelijk omstreden; observaties/feitelijke metingen van natuurkwaliteit zijn een betere basis voor beleid dan modelberekeningen; natuurherstel kan (ook) via andere maatregelen dan stikstofreductie (bv. waterhuishouding, bestrijding van invasieve soorten, natuurbeheer); de economische gevolgen voor landbouw, bouw en luchtvaart zijn onevenredig zwaar; vrijwillige/innovatieve oplossingen verdienen de voorkeur boven dwang.",
-  "generated_at": "2026-09-06T17:15:49.614539+00:00",
+  "generated_at": "2026-09-07T19:01:24.662081+00:00",
   "stats": {
     "totaal_argumenten": 1978,
     "aantal_pro": 691,
     "aantal_contra": 1258,
-    "aantal_geselecteerd": 45
+    "aantal_geselecteerd": 44
   },
   "arguments": {
-    "35": {
-      "id": 35,
-      "citaat": "Ten eerste werk ik niet mee aan desastreus beleid. Ik werk niet mee aan beleid dat duizenden boeren de nekslag gaat geven en boerengezinnen in de ellende gaat storten. Daar ga ik gewoon niet aan meewerken, echt totaal niet.",
-      "typologie": "moral",
+    "22": {
+      "id": 22,
+      "citaat": "Met maatregelen als zonering van 500 meter en 1 kilometer rondom natuurgebieden, grondgebondenheid, oftewel een grens van 2,6 koeien per hectare, afroming, dreigen met gedwongen uitkoop, gedwongen krimp van de veestapel en emissierecht per fosfaatnorm werd het volk voorgehouden dat boeren weer perspectief hebben, dat ze vergunningen kunnen krijgen. Feitelijk betekent het gewoon halvering van de veestapel, de natte droom van D66.",
+      "typologie": "legal",
       "stance": "contra",
       "spreker": "Caroline van der Plas",
       "partij": "BBB",
       "tags": [
         "Actor-Politicus",
         "Arena-Parlement",
-        "Debatzet-Gevoelens-Verwoorden",
+        "Bewijs-Causaal",
+        "Debatzet-Herformuleren",
+        "Debatzet-Persoon-Aanspreken",
         "Frame-Conflict",
-        "Frame-Menselijk-Belang",
+        "Frame-Economisch",
         "Frame-Thematisch",
         "Ideologie-TAN",
-        "Moraliteit-Loyaliteit",
-        "Moraliteit-Zorg",
-        "Stijl-Herhaling",
+        "Moraliteit-Eerlijkheid",
+        "Moraliteit-Vrijheid",
         "Walton-Consequentie"
       ],
       "claims": [
         {
-          "claim_text": "beleid dat duizenden boeren de nekslag gaat geven en boerengezinnen in de ellende gaat storten",
+          "claim_text": "zonering van 500 meter en 1 kilometer rondom natuurgebieden",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "grondgebondenheid, oftewel een grens van 2,6 koeien per hectare",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "halvering van de veestapel",
           "attributed_source_text": null
         }
       ],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2026A02765",
       "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2026-07-01/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2026-07-01T13%3A35%3A26%2B0200&end=2026-07-02T01%3A14%3A54%2B0200",
-      "start_seconds": 1706.0,
-      "gist": "desastreus beleid vernietigt gezinnen",
-      "samenvatting": null
-    },
-    "48": {
-      "id": 48,
-      "citaat": "Een kilometer generiek rondom een natuurgebied is gewoon de grootste onzin. Daar nek je boerengezinnen en boerenbedrijven mee.",
-      "typologie": "economic",
-      "stance": "contra",
-      "spreker": "Caroline van der Plas",
-      "partij": "BBB",
-      "tags": [
-        "Actor-Politicus",
-        "Arena-Parlement",
-        "Debatzet-Gevoelens-Verwoorden",
-        "Frame-Economisch",
-        "Frame-Menselijk-Belang",
-        "Frame-Thematisch",
-        "Ideologie-Rechts-Economisch",
-        "Ideologie-TAN",
-        "Moraliteit-Loyaliteit",
-        "Moraliteit-Vrijheid",
-        "Moraliteit-Zorg",
-        "Walton-Consequentie"
-      ],
-      "claims": [],
-      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2026A02765",
-      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2026-07-01/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2026-07-01T13%3A35%3A26%2B0200&end=2026-07-02T01%3A14%3A54%2B0200",
-      "start_seconds": 2240.620999999999,
-      "gist": "kilometerzone rond natuur desastreus",
+      "start_seconds": 390.6200000000026,
+      "gist": "maatregelen halveren de veestapel",
       "samenvatting": null
     },
     "60": {
@@ -91,37 +72,29 @@
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2026A02765",
       "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2026-07-01/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2026-07-01T13%3A35%3A26%2B0200&end=2026-07-02T01%3A14%3A54%2B0200",
       "start_seconds": 2742.0800000000017,
-      "gist": "vergunningenstop vertraagt nieuwbouwwoningen ernstig",
+      "gist": "vergunningstop schaadt woningzoekenden",
       "samenvatting": null
     },
-    "86": {
-      "id": 86,
-      "citaat": "Die 2,6 gve vinden wij eigenlijk ook te hoog. Wij hebben hier een paar weken geleden een petitie aangenomen van de boeren van Netwerk GRONDig, die zeiden: \"Hou nou vast aan de norm van 2,2 voor grondgebondenheid, want dan kan daar ook niet elke keer discussie over ontstaan. Als wij zelf een plan hadden gemaakt, hadden wij 2,2 erin gezet.\"",
-      "typologie": "legal",
+    "61": {
+      "id": 61,
+      "citaat": "Laat ik beginnen met de zones rondom Natura 2000-gebieden. Dat vinden wij een goed idee.",
+      "typologie": "moral",
       "stance": "pro",
       "spreker": "Laura Bromet",
       "partij": "PRO",
       "tags": [
         "Actor-Politicus",
         "Arena-Parlement",
-        "Bewijs-Anekdotisch",
-        "Frame-Episodisch",
-        "Frame-Verantwoordelijkheid",
+        "Frame-Thematisch",
         "Ideologie-GAL",
-        "Moraliteit-Autoriteit",
-        "Walton-Consequentie"
+        "Moraliteit-Zuiverheid"
       ],
-      "claims": [
-        {
-          "claim_text": "Wij hebben hier een paar weken geleden een petitie aangenomen van de boeren van Netwerk GRONDig",
-          "attributed_source_text": "Netwerk GRONDig"
-        }
-      ],
+      "claims": [],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2026A02765",
       "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2026-07-01/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2026-07-01T13%3A35%3A26%2B0200&end=2026-07-02T01%3A14%3A54%2B0200",
-      "start_seconds": 3718.0,
-      "gist": "strikte norm grondgebondenheid noodzakelijk",
-      "samenvatting": null
+      "start_seconds": 2761.0600000000013,
+      "gist": "bufferzones rond natuurgebieden noodzakelijk",
+      "samenvatting": "Zonering rondom Natura 2000-gebieden is een noodzakelijke maatregel om de hoogste stikstofdruk op overbelaste natuur direct aan te pakken."
     },
     "87": {
       "id": 87,
@@ -152,30 +125,198 @@
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2026A02765",
       "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2026-07-01/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2026-07-01T13%3A35%3A26%2B0200&end=2026-07-02T01%3A14%3A54%2B0200",
       "start_seconds": 3747.821,
-      "gist": "ammoniakconcentraties schaden natuur zwaar",
+      "gist": "schade rond overbelaste natuur",
       "samenvatting": null
     },
-    "88": {
-      "id": 88,
-      "citaat": "Wellicht heeft het ook invloed op hun bestaansrecht. Dat lijkt me zeker aannemelijk.",
-      "typologie": "economic",
-      "stance": "contra",
-      "spreker": "Maarten Goudzwaard",
-      "partij": "JA21",
+    "115": {
+      "id": 115,
+      "citaat": "Het gaat ons niet om minder boeren; het gaat ons om minder ammoniak en daarmee om minder dieren.",
+      "typologie": "factual",
+      "stance": "pro",
+      "spreker": "Laura Bromet",
+      "partij": "PRO",
       "tags": [
         "Actor-Politicus",
         "Arena-Parlement",
-        "Frame-Economisch",
+        "Bewijs-Causaal",
         "Frame-Thematisch",
-        "Ideologie-Rechts-Economisch",
-        "Moraliteit-Zorg",
-        "Walton-Consequentie"
+        "Ideologie-GAL",
+        "Meta-Reikwijdte",
+        "Moraliteit-Zuiverheid",
+        "Stijl-Antithese",
+        "Stijl-Herhaling",
+        "Walton-Causaal"
       ],
       "claims": [],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2026A02765",
       "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2026-07-01/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2026-07-01T13%3A35%3A26%2B0200&end=2026-07-02T01%3A14%3A54%2B0200",
-      "start_seconds": 3791.339,
-      "gist": "stikstofeisen bedreigen agrarisch bestaansrecht",
+      "start_seconds": 4408.719000000001,
+      "gist": "minder dieren voor ammoniakreductie",
+      "samenvatting": null
+    },
+    "119": {
+      "id": 119,
+      "citaat": "Er is, nota bene door een kabinet waar PRO geen deel van uitmaakte, een Ecologische Autoriteit ingesteld, die analyses maakt van de staat van de natuur in Nederland, per gebied. Daarin staan heel veel stoplichten op rood.",
+      "typologie": "factual",
+      "stance": "pro",
+      "spreker": "Laura Bromet",
+      "partij": "PRO",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Expert",
+        "Frame-Thematisch",
+        "Frame-Verantwoordelijkheid",
+        "Ideologie-GAL",
+        "Moraliteit-Zuiverheid",
+        "Walton-Expertise"
+      ],
+      "claims": [
+        {
+          "claim_text": "Ecologische Autoriteit maakt analyses van de staat van de natuur in Nederland, per gebied",
+          "attributed_source_text": "Ecologische Autoriteit"
+        },
+        {
+          "claim_text": "In de analyses van de Ecologische Autoriteit staan heel veel stoplichten op rood",
+          "attributed_source_text": "Ecologische Autoriteit"
+        }
+      ],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2026A02765",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2026-07-01/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2026-07-01T13%3A35%3A26%2B0200&end=2026-07-02T01%3A14%3A54%2B0200",
+      "start_seconds": 4465.2199999999975,
+      "gist": "Ecologische Autoriteit slaat alarm",
+      "samenvatting": null
+    },
+    "124": {
+      "id": 124,
+      "citaat": "De bufferzone van 1.000 meter is geen wetenschappelijke ondergrens, maar een politieke keuze.",
+      "typologie": "factual",
+      "stance": "contra",
+      "spreker": "Caroline van der Plas",
+      "partij": "BBB",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Frame-Conflict",
+        "Frame-Thematisch",
+        "Ideologie-TAN",
+        "Meta-Reikwijdte",
+        "Moraliteit-Vrijheid",
+        "Stijl-Antithese"
+      ],
+      "claims": [
+        {
+          "claim_text": "De bufferzone van 1.000 meter is geen wetenschappelijke ondergrens, maar een politieke keuze",
+          "attributed_source_text": null
+        }
+      ],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2026A02765",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2026-07-01/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2026-07-01T13%3A35%3A26%2B0200&end=2026-07-02T01%3A14%3A54%2B0200",
+      "start_seconds": 4597.720000000001,
+      "gist": "bufferzone is politieke keuze",
+      "samenvatting": "Bufferzones van 1.000 meter rondom natuurgebieden ontberen wetenschappelijke grondslag en bedreigen het voortbestaan van agrarische familiebedrijven."
+    },
+    "127": {
+      "id": 127,
+      "citaat": "Wij komen op voor de natuur die elk jaar, al deze zeven jaar waarin we wachten op beleid dat werkt, verder verslechtert. Dat is ons een doorn in het oog.",
+      "typologie": "moral",
+      "stance": "pro",
+      "spreker": "Laura Bromet",
+      "partij": "PRO",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Causaal",
+        "Frame-Moraliteit",
+        "Frame-Thematisch",
+        "Frame-Verantwoordelijkheid",
+        "Ideologie-GAL",
+        "Meta-Agenda-Tijdigheid",
+        "Moraliteit-Zorg",
+        "Moraliteit-Zuiverheid",
+        "Walton-Consequentie"
+      ],
+      "claims": [
+        {
+          "claim_text": "de natuur ... elk jaar, al deze zeven jaar waarin we wachten op beleid dat werkt, verder verslechtert",
+          "attributed_source_text": null
+        }
+      ],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2026A02765",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2026-07-01/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2026-07-01T13%3A35%3A26%2B0200&end=2026-07-02T01%3A14%3A54%2B0200",
+      "start_seconds": 4647.079999999998,
+      "gist": "natuur verslechtert zonder stikstofaanpak",
+      "samenvatting": "Jarenlang uitstel van stikstofreductie leidt tot verdere verslechtering van kwetsbare natuur en aantasting van de leefomgeving."
+    },
+    "141": {
+      "id": 141,
+      "citaat": "Het voorvorige kabinet heeft een Ecologische Autoriteit ingesteld. Die heeft metingen gedaan en die heeft onderzoek gedaan naar hoe het gesteld is met de natuur in Nederland. Daar zitten een heleboel rode vlaggen in. Er zijn ook soorten, inderdaad, waar het hartstikke goed mee gaat; ook waar ik woon, vliegt er een lepelaar, waar die vroeger niet vloog. Maar het gaat juist om de staat van, de instandhouding van, de natuur die in het geding is. Die moet je beschermen; die mag niet verslechteren. Die verslechtert wél. Daarom hebben we een probleem, en daarom is de vergunningverlening op slot gezet.",
+      "typologie": "factual",
+      "stance": "pro",
+      "spreker": "Laura Bromet",
+      "partij": "PRO",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Anekdotisch",
+        "Bewijs-Causaal",
+        "Bewijs-Expert",
+        "Frame-Thematisch",
+        "Frame-Verantwoordelijkheid",
+        "Ideologie-GAL",
+        "Moraliteit-Zorg",
+        "Stijl-Antithese",
+        "Walton-Expertise"
+      ],
+      "claims": [
+        {
+          "claim_text": "De Ecologische Autoriteit heeft metingen en onderzoek gedaan naar de staat van de natuur in Nederland",
+          "attributed_source_text": "Ecologische Autoriteit"
+        },
+        {
+          "claim_text": "In de onderzoeken van de Ecologische Autoriteit zitten een heleboel rode vlaggen",
+          "attributed_source_text": "Ecologische Autoriteit"
+        },
+        {
+          "claim_text": "De instandhouding van de natuur verslechtert",
+          "attributed_source_text": null
+        }
+      ],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2026A02765",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2026-07-01/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2026-07-01T13%3A35%3A26%2B0200&end=2026-07-02T01%3A14%3A54%2B0200",
+      "start_seconds": 5301.860000000001,
+      "gist": "natuur verslechtert door stikstof",
+      "samenvatting": "Onderzoek van de Ecologische Autoriteit toont aan dat de staat van de natuur verslechtert en vergunningverlening terecht stilvalt."
+    },
+    "142": {
+      "id": 142,
+      "citaat": "Wij vinden, PRO vindt, dat er wél een probleem is met de natuur. Dat kunnen we gewoon staven met rapportages, die door de overheid gemaakt worden, door het Planbureau voor de Leefomgeving en door de Ecologische Autoriteit.",
+      "typologie": "factual",
+      "stance": "pro",
+      "spreker": "Laura Bromet",
+      "partij": "PRO",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Expert",
+        "Frame-Thematisch",
+        "Ideologie-GAL",
+        "Walton-Expertise"
+      ],
+      "claims": [
+        {
+          "claim_text": "Er is een probleem met de natuur",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "Rapportages door de overheid, het Planbureau voor de Leefomgeving en de Ecologische Autoriteit staven dat er een probleem is met de natuur",
+          "attributed_source_text": "Planbureau voor de Leefomgeving; Ecologische Autoriteit"
+        }
+      ],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2026A02765",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2026-07-01/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2026-07-01T13%3A35%3A26%2B0200&end=2026-07-02T01%3A14%3A54%2B0200",
+      "start_seconds": 5357.32,
+      "gist": "bevestigd door officiële rapporten",
       "samenvatting": null
     },
     "148": {
@@ -214,73 +355,170 @@
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2026A02765",
       "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2026-07-01/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2026-07-01T13%3A35%3A26%2B0200&end=2026-07-02T01%3A14%3A54%2B0200",
       "start_seconds": 5625.779999999999,
-      "gist": "rekenkundige ondergrens deblokkeert woningbouw",
-      "samenvatting": "Het verhogen van de rekenkundige ondergrens naar 1 mol maakt direct een einde aan de vergunningenstop voor het overgrote deel van de woningbouw."
+      "gist": "ondergrens naar 1 mol",
+      "samenvatting": "Een rekenkundige ondergrens van 1 mol moet direct ingevoerd worden om PAS-melders te legaliseren en woningbouw vlot te trekken."
     },
-    "219": {
-      "id": 219,
-      "citaat": "De SGP wil niet politiek gokken met gezinsbedrijven door harde emissienormen en scherpe zonering als kern van het beleid, zonder duidelijkheid over natuurherstel en opening van het stikstofslot.",
-      "typologie": "factual",
-      "stance": "contra",
-      "spreker": "André Flach",
-      "partij": "SGP",
+    "149": {
+      "id": 149,
+      "citaat": "Over het invoeren van de rekenkundige ondergrens: mevrouw Keijzer zegt nu heel stoer dat dat per 1 september moet gebeuren, maar toen zij zelf minister was, is die ook niet ingevoerd. En waarom niet? Omdat de Raad van State hier advies over heeft gegeven en heeft gezegd: de rekenkundige ondergrens is juridisch niet houdbaar als je er niet ook maatregelen tegenover zet die de stikstof reduceren. Dat is precies wat het kabinet doet. Het kabinet zegt: we gaan maatregelen nemen om de stikstof te reduceren. Daarmee kan op termijn de rekenkundige ondergrens worden ingevoerd. Ik ben daar ook helemaal niet tegen.",
+      "typologie": "legal",
+      "stance": "pro",
+      "spreker": "Laura Bromet",
+      "partij": "PRO",
       "tags": [
         "Actor-Politicus",
         "Arena-Parlement",
-        "Bewijs-Causaal",
-        "Frame-Economisch",
-        "Frame-Thematisch",
-        "Ideologie-TAN",
-        "Moraliteit-Loyaliteit",
-        "Moraliteit-Zorg",
-        "Walton-Consequentie"
-      ],
-      "claims": [],
-      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2026A02765",
-      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2026-07-01/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2026-07-01T13%3A35%3A26%2B0200&end=2026-07-02T01%3A14%3A54%2B0200",
-      "start_seconds": 10588.0,
-      "gist": "geen risico met gezinsbedrijven",
-      "samenvatting": null
-    },
-    "283": {
-      "id": 283,
-      "citaat": "Maar voor mijn gevoel is die grondgebondenheidsnorm in deze scherpte gewoon een vermomming van die halvering van de veestapel.",
-      "typologie": "factual",
-      "stance": "contra",
-      "spreker": "André Flach",
-      "partij": "SGP",
-      "tags": [
-        "Actor-Politicus",
-        "Arena-Parlement",
-        "Bewijs-Causaal",
-        "Debatzet-Herformuleren",
+        "Bewijs-Expert",
+        "Debatzet-Persoon-Aanspreken",
         "Frame-Conflict",
-        "Frame-Economisch",
-        "Frame-Thematisch",
-        "Ideologie-TAN",
-        "Meta-Reikwijdte",
-        "Moraliteit-Vrijheid",
-        "Walton-Consequentie"
+        "Frame-Episodisch",
+        "Frame-Verantwoordelijkheid",
+        "Ideologie-GAL",
+        "Moraliteit-Autoriteit",
+        "Stijl-Retorische-Vraag",
+        "Walton-Regel"
       ],
       "claims": [
         {
-          "claim_text": "De grondgebondenheidsnorm in deze scherpte is een vermomming van de halvering van de veestapel",
+          "claim_text": "de Raad van State heeft advies gegeven dat de rekenkundige ondergrens juridisch niet houdbaar is zonder maatregelen die de stikstof reduceren",
+          "attributed_source_text": "Raad van State"
+        }
+      ],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2026A02765",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2026-07-01/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2026-07-01T13%3A35%3A26%2B0200&end=2026-07-02T01%3A14%3A54%2B0200",
+      "start_seconds": 5651.439999999999,
+      "gist": "ondergrens vereist geborgde reductie",
+      "samenvatting": "Een rekenkundige ondergrens is juridisch onhoudbaar zonder een geborgd pakket aan maatregelen dat daadwerkelijk stikstofuitstoot reduceert."
+    },
+    "151": {
+      "id": 151,
+      "citaat": "De rekenkundige ondergrens is geen drempelwaarde. Dat weet Bromet héél erg goed. Aan de Duitse grens, in Noordrijn-Westfalen — dat is net zo groot als Nederland, met net zoveel inwoners en net zoveel boeren — is de natuur op rood bij een rekenkundige ondergrens van rond de 20.",
+      "typologie": "factual",
+      "stance": "contra",
+      "spreker": "Mona Keijzer",
+      "partij": "Lid Keijzer",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Statistisch",
+        "Frame-Thematisch",
+        "Frame-Verantwoordelijkheid",
+        "Ideologie-TAN",
+        "Moraliteit-Eerlijkheid",
+        "Walton-Analogie"
+      ],
+      "claims": [
+        {
+          "claim_text": "De rekenkundige ondergrens is geen drempelwaarde.",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "Bromet weet dat de rekenkundige ondergrens geen drempelwaarde is.",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "Noordrijn-Westfalen is net zo groot als Nederland, met net zoveel inwoners en net zoveel boeren.",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "In Noordrijn-Westfalen is de natuur op rood bij een rekenkundige ondergrens van rond de 20.",
           "attributed_source_text": null
         }
       ],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2026A02765",
       "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2026-07-01/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2026-07-01T13%3A35%3A26%2B0200&end=2026-07-02T01%3A14%3A54%2B0200",
-      "start_seconds": 13476.699,
-      "gist": "grondgebondenheid dwingt tot veestapelkrimp",
-      "samenvatting": "Een dwingende norm voor grondgebondenheid functioneert in de praktijk als een verkapte verplichting om de veestapel aanzienlijk te verkleinen."
+      "start_seconds": 5722.401000000002,
+      "gist": "buurlanden hanteren soepelere grenzen",
+      "samenvatting": null
     },
-    "405": {
-      "id": 405,
-      "citaat": "De bedoeling is dat we een overtuigend verhaal neerleggen om natuurherstel weer mogelijk te maken. Daar horen stikstofreductie en het aanpakken van drukfactoren in de natuur ook bij. Zonder dat pakket lukt het ook niet om die rechter te overtuigen.",
+    "157": {
+      "id": 157,
+      "citaat": "Mevrouw Bromet had het nog over de Ecologische Autoriteit, maar de Ecologische Autoriteit concludeert alleen maar op basis van het overschrijden van de KDW dat het slecht gaat met de natuur. Dat is een cirkelredenering. Ik hoor dus op geen enkele manier een onderbouwing van de heel stellige bewering dat het heel slecht gesteld is met de Nederlandse natuur.",
+      "typologie": "other",
+      "stance": "contra",
+      "spreker": "Lidewij de Vos",
+      "partij": "FVD",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Expert",
+        "Debatzet-Herformuleren",
+        "Frame-Conflict",
+        "Frame-Thematisch",
+        "Ideologie-TAN",
+        "Meta-Reikwijdte",
+        "Walton-Expertise"
+      ],
+      "claims": [
+        {
+          "claim_text": "de Ecologische Autoriteit concludeert alleen maar op basis van het overschrijden van de KDW dat het slecht gaat met de natuur",
+          "attributed_source_text": null
+        }
+      ],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2026A02765",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2026-07-01/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2026-07-01T13%3A35%3A26%2B0200&end=2026-07-02T01%3A14%3A54%2B0200",
+      "start_seconds": 5934.420000000002,
+      "gist": "KDW berust op cirkelredenering",
+      "samenvatting": "De Ecologische Autoriteit baseert natuurverslechtering louter op het overschrijden van KDW-modelnormen, wat een cirkelredenering is zonder feitelijke waarneming."
+    },
+    "159": {
+      "id": 159,
+      "citaat": "Wij vinden dat de intensieve veehouderij in Nederland uit de kluiten gewassen is, dat er veel te veel ammoniak uitgestoten wordt, dat daar eiken van sterven op de Veluwe, dat daar vogelsoorten verdwijnen en dat de hoeveelheid insecten drastisch afneemt. Daar maken we ons grote zorgen over. Wij willen die natuur beschermen, los van de vraag of dat moet van Europa. Wij vinden de natuur heel belangrijk. Er moet plaats zijn voor natuur in Nederland. De veehouderij zit daarbij in sommige gebieden ernstig in de weg.",
       "typologie": "factual",
       "stance": "pro",
-      "spreker": "Jan Arie Koorevaar",
-      "partij": "CDA",
+      "spreker": "Laura Bromet",
+      "partij": "PRO",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Causaal",
+        "Frame-Conflict",
+        "Frame-Thematisch",
+        "Frame-Verantwoordelijkheid",
+        "Ideologie-GAL",
+        "Moraliteit-Zorg",
+        "Moraliteit-Zuiverheid",
+        "Walton-Causaal"
+      ],
+      "claims": [
+        {
+          "claim_text": "de intensieve veehouderij in Nederland is uit de kluiten gewassen",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "er wordt veel te veel ammoniak uitgestoten",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "eiken sterven op de Veluwe",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "vogelsoorten verdwijnen",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "de hoeveelheid insecten neemt drastisch af",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "de veehouderij zit in sommige gebieden ernstig in de weg voor natuur",
+          "attributed_source_text": null
+        }
+      ],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2026A02765",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2026-07-01/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2026-07-01T13%3A35%3A26%2B0200&end=2026-07-02T01%3A14%3A54%2B0200",
+      "start_seconds": 6038.879999999997,
+      "gist": "overmaat ammoniak schaadt biodiversiteit",
+      "samenvatting": null
+    },
+    "163": {
+      "id": 163,
+      "citaat": "Over die mest: we hebben al jarenlang een probleem met te veel mest. Daarom zeg ik ook dat we te veel vee hebben in Nederland. We zijn een klein land, waar we willen wonen, waar we willen genieten van de natuur en waar we ook ontzettend veel dieren hebben die allemaal poepen. Die mest zorgt voor aantasting van de waterkwaliteit, die zorgt voor het niet halen van de klimaatdoelen. Er zijn allerlei problemen gekoppeld aan die mestproductie.",
+      "typologie": "factual",
+      "stance": "pro",
+      "spreker": "Laura Bromet",
+      "partij": "PRO",
       "tags": [
         "Actor-Politicus",
         "Arena-Parlement",
@@ -288,20 +526,163 @@
         "Frame-Thematisch",
         "Frame-Verantwoordelijkheid",
         "Ideologie-GAL",
-        "Moraliteit-Autoriteit",
+        "Moraliteit-Zorg",
         "Moraliteit-Zuiverheid",
+        "Walton-Causaal"
+      ],
+      "claims": [
+        {
+          "claim_text": "we hebben al jarenlang een probleem met te veel mest",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "we te veel vee hebben in Nederland",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "Die mest zorgt voor aantasting van de waterkwaliteit",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "Die mest zorgt voor het niet halen van de klimaatdoelen",
+          "attributed_source_text": null
+        }
+      ],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2026A02765",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2026-07-01/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2026-07-01T13%3A35%3A26%2B0200&end=2026-07-02T01%3A14%3A54%2B0200",
+      "start_seconds": 6315.0,
+      "gist": "mest overschrijdt ecologische grenzen",
+      "samenvatting": null
+    },
+    "292": {
+      "id": 292,
+      "citaat": "Onder andere door een advies van de Raad van State weten we dat die alleen kan als er een geborgd pakket aan maatregelen ingevoerd wordt, zoals dat dan heet. Ik ben een beetje bevreesd dat op een gegeven moment het wetsvoorstel voor de rekenkundige ondergrens naar de Kamer gestuurd wordt, maar dat het pakket er dan nog niet is. Hoe kijkt mevrouw Podt daarnaar? Wij willen als PRO namelijk echt eerst de maatregelen verankerd hebben en dan pas praten over de rekenkundige ondergrens.",
+      "typologie": "legal",
+      "stance": "pro",
+      "spreker": "Laura Bromet",
+      "partij": "PRO",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Expert",
+        "Frame-Thematisch",
+        "Frame-Verantwoordelijkheid",
+        "Ideologie-GAL",
+        "Meta-Agenda-Tijdigheid",
+        "Moraliteit-Autoriteit",
+        "Stijl-Retorische-Vraag",
+        "Walton-Expertise"
+      ],
+      "claims": [
+        {
+          "claim_text": "de rekenkundige ondergrens kan alleen als er een geborgd pakket aan maatregelen ingevoerd wordt",
+          "attributed_source_text": "advies van de Raad van State"
+        }
+      ],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2026A02765",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2026-07-01/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2026-07-01T13%3A35%3A26%2B0200&end=2026-07-02T01%3A14%3A54%2B0200",
+      "start_seconds": 13773.599000000002,
+      "gist": "advies Raad van State",
+      "samenvatting": null
+    },
+    "315": {
+      "id": 315,
+      "citaat": "De landsadvocaat is van mening dat je gewoon een generaal pardon van de PAS-melders gaat doen. Gaat mevrouw Podt van de fractie van D66 de voorstellen die hier vast gedaan worden vanuit de Kamer, straks steunen? En is zij bereid om niet weer dezelfde fuik van doorrekening door het PBL via AERIUS in te gaan? Want dan krijg je gewoon weer hetzelfde. Als je doet wat je deed, dan krijg je wat je kreeg.",
+      "typologie": "factual",
+      "stance": "contra",
+      "spreker": "Mona Keijzer",
+      "partij": "Lid Keijzer",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Expert",
+        "Debatzet-Keuze-Aanscherpen",
+        "Frame-Conflict",
+        "Frame-Episodisch",
+        "Frame-Verantwoordelijkheid",
+        "Ideologie-TAN",
+        "Moraliteit-Eerlijkheid",
+        "Stijl-Retorische-Vraag",
+        "Walton-Consequentie"
+      ],
+      "claims": [
+        {
+          "claim_text": "De landsadvocaat is van mening dat je gewoon een generaal pardon van de PAS-melders gaat doen.",
+          "attributed_source_text": "landsadvocaat"
+        }
+      ],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2026A02765",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2026-07-01/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2026-07-01T13%3A35%3A26%2B0200&end=2026-07-02T01%3A14%3A54%2B0200",
+      "start_seconds": 14702.398999999998,
+      "gist": "generaal pardon voor PAS-melders",
+      "samenvatting": "De overheid moet PAS-melders via een generaal pardon legaliseren om een einde te maken aan de oneerlijke onzekerheid voor boeren."
+    },
+    "347": {
+      "id": 347,
+      "citaat": "Het is toch de omgekeerde wereld dat je eerst het hele land de rilbibbers geeft door ongeveer elk Natura 2000-gebied te voorzien van een zone, ook gebieden waar je van tevoren weet dat het er niet effectief gaat zijn. Ik noemde al de gebieden: de Waddeneilanden, de Hollandse en Zeeuwse kust, de grote waterrijke gebieden, zoals de Biesbosch, de Reeuwijkse Plassen en langs de Linge. Het is daar niet zinvol. Het draagt niks bij aan de natuur in dat gebied. En dan schrijf je dat wel op en dan kunnen provincies met veel pijn en moeite vervolgens die zones weer van het papier krijgen? Ondertussen heb je iedereen de stuipen op het lijf gejaagd. Ik vertelde het al aan het begin van mijn bijdrage. We waren op het weiland van een melkveehouder die plotsklaps vrijdag een aankondiging kreeg dat hij in een zone van 1.000 meter zou zitten, terwijl er aan zijn kant van het water nooit sprake zou zijn geweest van een zone of van een dreiging van een zone. Je gaat toch niet de mensen de stuipen op het lijf jagen en hier zeggen: we hebben een proces waarmee we er misschien nog een paar gebieden tussenuit kunnen schieten?",
+      "typologie": "factual",
+      "stance": "contra",
+      "spreker": "Pieter Grinwis",
+      "partij": "ChristenUnie",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Anekdotisch",
+        "Debatzet-Gevoelens-Verwoorden",
+        "Frame-Episodisch",
+        "Frame-Menselijk-Belang",
+        "Frame-Verantwoordelijkheid",
+        "Ideologie-TAN",
+        "Moraliteit-Vrijheid",
+        "Moraliteit-Zorg",
+        "Stijl-Retorische-Vraag",
+        "Walton-Consequentie"
+      ],
+      "claims": [
+        {
+          "claim_text": "in gebieden zoals de Waddeneilanden, de Hollandse en Zeeuwse kust, de Biesbosch, de Reeuwijkse Plassen en langs de Linge is het voorzien van een zone niet effectief en draagt het niks bij aan de natuur",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "een melkveehouder kreeg plotsklaps vrijdag een aankondiging dat hij in een zone van 1.000 meter zou zitten, terwijl er aan zijn kant van het water nooit sprake zou zijn geweest van een zone of van een dreiging van een zone",
+          "attributed_source_text": null
+        }
+      ],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2026A02765",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2026-07-01/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2026-07-01T13%3A35%3A26%2B0200&end=2026-07-02T01%3A14%3A54%2B0200",
+      "start_seconds": 16776.0,
+      "gist": "zonering creëert onnodige onrust",
+      "samenvatting": null
+    },
+    "352": {
+      "id": 352,
+      "citaat": "Boeren willen weer kunnen boeren, bouwers willen weer kunnen bouwen en de schop moet de grond in om Nederland weer in beweging te krijgen. Daarvoor zijn vergunningen nodig. Zonder vergunningen kunnen boeren ook niet investeren in innovaties, terwijl ze al in 2035 worden afgerekend op de resultaten van die innovaties.",
+      "typologie": "economic",
+      "stance": "contra",
+      "spreker": "Pieter Grinwis",
+      "partij": "ChristenUnie",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Causaal",
+        "Frame-Economisch",
+        "Frame-Thematisch",
+        "Ideologie-Rechts-Economisch",
+        "Moraliteit-Proportionaliteit",
+        "Moraliteit-Vrijheid",
+        "Stijl-Herhaling",
         "Walton-Consequentie"
       ],
       "claims": [],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2026A02765",
       "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2026-07-01/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2026-07-01T13%3A35%3A26%2B0200&end=2026-07-02T01%3A14%3A54%2B0200",
-      "start_seconds": 20791.0,
-      "gist": "stikstofreductie fundamenteel voor herstel",
-      "samenvatting": "Natuurherstel en juridisch houdbare vergunningverlening vereisen onontkoombaar dat stikstofoverbelasting krachtig wordt teruggedrongen."
+      "start_seconds": 17192.300000000003,
+      "gist": "vergunningen nodig voor economie",
+      "samenvatting": null
     },
-    "417": {
-      "id": 417,
-      "citaat": "De KDW is namelijk een meetsysteem, een rekenkundig model, dat niet altijd voldoet.",
+    "413": {
+      "id": 413,
+      "citaat": "Geborgd natuurherstel en natuurbeheer zijn hierbij van groot belang. Daarbij moet zeker niet alleen gekeken worden naar de stikstofemissiedaling. Drukfactoren die natuurherstel bedreigen, zijn niet alleen verzuring en vermesting, maar ook verdroging, versnippering, verzilting, verontreiniging, klimaatverandering en invasieve exoten. Er moet gekeken worden naar herstel van het ecosysteem.",
       "typologie": "factual",
       "stance": "contra",
       "spreker": "Renate den Hollander",
@@ -311,79 +692,140 @@
         "Arena-Parlement",
         "Bewijs-Causaal",
         "Frame-Thematisch",
-        "Ideologie-Rechts-Economisch"
+        "Frame-Verantwoordelijkheid",
+        "Ideologie-GAL",
+        "Moraliteit-Zuiverheid",
+        "Stijl-Aangekondigde-Opsomming",
+        "Walton-Causaal"
       ],
       "claims": [
         {
-          "claim_text": "De KDW is een meetsysteem, een rekenkundig model, dat niet altijd voldoet.",
+          "claim_text": "Drukfactoren die natuurherstel bedreigen, zijn niet alleen verzuring en vermesting, maar ook verdroging, versnippering, verzilting, verontreiniging, klimaatverandering en invasieve exoten.",
           "attributed_source_text": null
         }
       ],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2026A02765",
       "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2026-07-01/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2026-07-01T13%3A35%3A26%2B0200&end=2026-07-02T01%3A14%3A54%2B0200",
-      "start_seconds": 22352.701,
-      "gist": "rekenkundig model voldoet niet",
+      "start_seconds": 21988.099000000002,
+      "gist": "meerdere drukfactoren bedreigen natuur",
       "samenvatting": null
     },
-    "454": {
-      "id": 454,
-      "citaat": "Dat is heel jammer, want als we dat nou zouden invoeren, dan komen negen van de tien woningbouwlocaties los. Het is nu weer wachten op 1 januari '28 op zijn vroegst.",
-      "typologie": "factual",
+    "521": {
+      "id": 521,
+      "citaat": "Zones rond Natura 2000-gebieden, bedrijfsspecifieke emissienormen, afroming van dier- en fosfaatrechten, 2,6 koeien per hectare en gedwongen krimp van de veestapel als stok achter de deur: de lijst met maatregelen is eindeloos en desastreus voor onze prachtige agrarische sector en voor iedereen in Nederland die wil bouwen of ondernemen.",
+      "typologie": "economic",
       "stance": "contra",
-      "spreker": "Mona Keijzer",
-      "partij": "Lid Keijzer",
-      "tags": [
-        "Actor-Politicus",
-        "Arena-Parlement",
-        "Bewijs-Statistisch",
-        "Frame-Economisch",
-        "Frame-Thematisch",
-        "Walton-Consequentie"
-      ],
-      "claims": [
-        {
-          "claim_text": "als we dat nou zouden invoeren, dan komen negen van de tien woningbouwlocaties los",
-          "attributed_source_text": null
-        },
-        {
-          "claim_text": "Het is nu weer wachten op 1 januari '28 op zijn vroegst",
-          "attributed_source_text": null
-        }
-      ],
-      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2026A02765",
-      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2026-07-01/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2026-07-01T13%3A35%3A26%2B0200&end=2026-07-02T01%3A14%3A54%2B0200",
-      "start_seconds": 23870.0,
-      "gist": "ondergrens lost woningbouwlocaties op",
-      "samenvatting": null
-    },
-    "470": {
-      "id": 470,
-      "citaat": "Ze kiezen voor nieuwe bufferzones, nieuwe generieke regels, nieuwe emissie-eisen en een pakket waarin de dreiging van gedwongen krimp boven de markt hangt als uiteindelijk blijkt dat de doelen niet gehaald worden.",
-      "typologie": "factual",
-      "stance": "contra",
-      "spreker": "Mona Keijzer",
-      "partij": "Lid Keijzer",
+      "spreker": "Lidewij de Vos",
+      "partij": "FVD",
       "tags": [
         "Actor-Politicus",
         "Arena-Parlement",
         "Bewijs-Causaal",
+        "Debatzet-Gevoelens-Verwoorden",
         "Frame-Economisch",
         "Frame-Thematisch",
+        "Ideologie-Rechts-Economisch",
         "Ideologie-TAN",
+        "Moraliteit-Loyaliteit",
         "Moraliteit-Vrijheid",
-        "Stijl-Herhaling",
         "Walton-Consequentie"
       ],
       "claims": [],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2026A02765",
       "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2026-07-01/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2026-07-01T13%3A35%3A26%2B0200&end=2026-07-02T01%3A14%3A54%2B0200",
-      "start_seconds": 24668.9,
-      "gist": "bufferzones bedreigen agrarische bedrijven",
-      "samenvatting": "Bufferzones, generieke voorschriften en dwingende emissie-eisen leggen onevenredig zware restricties op aan agrarische gezinsbedrijven rond natuurgebieden."
+      "start_seconds": 17856.5,
+      "gist": "maatregelenpakket desastreus voor landbouw",
+      "samenvatting": null
     },
-    "510": {
-      "id": 510,
-      "citaat": "We vragen inderdaad het maximale in de zones waarvan wij vinden dat het verantwoord is om landbouwkundig gebruik mogelijk te houden. Er zijn inderdaad ook wetenschappelijke benaderingen die zeggen: u kunt in die zones wel 85% of 90% reductie bewerkstellingen. Dat kan — dat is ook een manier om het te doen — maar dan kun je in die zones dus geen landbouw meer bedrijven. Dan kun je daar struiken gaan onderhouden en dat wil dit kabinet niet. Dus de reductie die we in die zones houden, hebben we maximaal gezet op een percentage en een bereik waaronder landbouwkundig gebruik nog mogelijk blijft. Dat is dan weliswaar in extensieve vorm, maar het blijft mogelijk.",
+    "522": {
+      "id": 522,
+      "citaat": "De minister beweert dat de natuur verslechtert, maar die bewering is enkel gebaseerd op het feit dat de kritische depositiewaarde en de stikstofnormen worden overschreden. De onderbouwing voor het gebruik van die normen is, jawel, de vermeende verslechtering van de natuur. Het is een cirkelredenering die met de feitelijke staat van de natuur niets van doen heeft.",
+      "typologie": "factual",
+      "stance": "contra",
+      "spreker": "Lidewij de Vos",
+      "partij": "FVD",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Causaal",
+        "Frame-Conflict",
+        "Frame-Thematisch",
+        "Ideologie-TAN",
+        "Meta-Reikwijdte",
+        "Walton-Causaal"
+      ],
+      "claims": [],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2026A02765",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2026-07-01/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2026-07-01T13%3A35%3A26%2B0200&end=2026-07-02T01%3A14%3A54%2B0200",
+      "start_seconds": 17882.901000000005,
+      "gist": "modelnormen los van natuurstaat",
+      "samenvatting": null
+    },
+    "524": {
+      "id": 524,
+      "citaat": "De kritische depositiewaarde is grotendeels gebaseerd op modelberekeningen en korte laboratoriumproeven, die aantoonbaar tot vele malen strengere normen komen dan daadwerkelijke natuurmetingen. Vasthouden aan deze normen, zo concludeerden de toenmalige bewindslieden in 2006 al, creëerde dan ook \"een onwerkbare situatie\". De normen waren immers onrealistisch en zolang het kabinet ze bleef hanteren, bleef de rechter het kabinet aan zijn eigen, onhaalbare doelstelling houden.",
+      "typologie": "factual",
+      "stance": "contra",
+      "spreker": "Lidewij de Vos",
+      "partij": "FVD",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Causaal",
+        "Frame-Thematisch",
+        "Frame-Verantwoordelijkheid",
+        "Ideologie-TAN",
+        "Moraliteit-Vrijheid",
+        "Walton-Consequentie"
+      ],
+      "claims": [
+        {
+          "claim_text": "De kritische depositiewaarde is grotendeels gebaseerd op modelberekeningen en korte laboratoriumproeven, die aantoonbaar tot vele malen strengere normen komen dan daadwerkelijke natuurmetingen",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "Vasthouden aan deze normen ... creëerde dan ook \"een onwerkbare situatie\"",
+          "attributed_source_text": "de toenmalige bewindslieden in 2006"
+        }
+      ],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2026A02765",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2026-07-01/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2026-07-01T13%3A35%3A26%2B0200&end=2026-07-02T01%3A14%3A54%2B0200",
+      "start_seconds": 17974.300000000003,
+      "gist": "modellen strenger dan metingen",
+      "samenvatting": null
+    },
+    "525": {
+      "id": 525,
+      "citaat": "Dat concludeerde twee jaar later ook de door het toenmalige kabinet ingestelde commissie-Trojan: \"De kritische depositiewaarde moet in de toekomst niet meer gezien worden als een doelstelling die behaald moet worden, zoals dat ook in de omliggende landen niet gebeurt.\" Dan heeft ook de rechter niet langer een poot om op te staan, aldus Trojan. Kortom, schaf de kritische depositiewaarde af, met drempelwaarden en al, en het probleem is opgelost.",
+      "typologie": "factual",
+      "stance": "contra",
+      "spreker": "Lidewij de Vos",
+      "partij": "FVD",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Expert",
+        "Frame-Thematisch",
+        "Frame-Verantwoordelijkheid",
+        "Ideologie-TAN",
+        "Moraliteit-Vrijheid",
+        "Walton-Expertise"
+      ],
+      "claims": [
+        {
+          "claim_text": "De kritische depositiewaarde moet in de toekomst niet meer gezien worden als een doelstelling die behaald moet worden, zoals dat ook in de omliggende landen niet gebeurt",
+          "attributed_source_text": "commissie-Trojan"
+        }
+      ],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2026A02765",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2026-07-01/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2026-07-01T13%3A35%3A26%2B0200&end=2026-07-02T01%3A14%3A54%2B0200",
+      "start_seconds": 18016.701,
+      "gist": "Trojan adviseerde afschaffing KDW",
+      "samenvatting": null
+    },
+    "556": {
+      "id": 556,
+      "citaat": "wij kiezen juist voor die 1.000 meterzones omdat het om gebieden gaat die het meest overbelast zijn en waar de meeste uitstoot direct in de omgeving zit. Dat zijn dus veel beïnvloedbare factoren. We kiezen daarvoor omdat het RIVM laat zien dat het terugdringen van emissies van 0 tot 500 een bepaalde werking heeft, maar dat je van 500 tot 1.000 nog steeds een tweeënhalf keer effectievere inzet op dat natuurgebied hebt dan wanneer je het generiek gaat doen. Die inzet is dus na 500 meter nog steeds tweeënhalf keer zo effectief in gebieden die juist zwaar overbelast zijn, los van de andere drukfactoren.",
       "typologie": "factual",
       "stance": "pro",
       "spreker": "Jaimi van Essen",
@@ -393,113 +835,26 @@
         "Arena-Parlement",
         "Bewijs-Expert",
         "Bewijs-Statistisch",
-        "Debatzet-Keuze-Aanscherpen",
-        "Frame-Economisch",
         "Frame-Thematisch",
+        "Frame-Verantwoordelijkheid",
         "Ideologie-GAL",
-        "Stijl-Antithese",
-        "Walton-Consequentie"
-      ],
-      "claims": [
-        {
-          "claim_text": "wetenschappelijke benaderingen zeggen dat u in die zones wel 85% of 90% reductie kunt bewerkstelligen",
-          "attributed_source_text": "wetenschappelijke benaderingen"
-        },
-        {
-          "claim_text": "bij 85% of 90% reductie kun je in die zones geen landbouw meer bedrijven",
-          "attributed_source_text": null
-        }
-      ],
-      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2026A02765",
-      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2026-07-01/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2026-07-01T13%3A35%3A26%2B0200&end=2026-07-02T01%3A14%3A54%2B0200",
-      "start_seconds": 29724.900999999998,
-      "gist": "reductiezones rond natuurgebieden noodzakelijk",
-      "samenvatting": "In zones rond kwetsbare natuurgebieden is een maximale stikstofreductie vereist om stapeling van uitstoot te voorkomen en landbouwgebruik op extensieve wijze mogelijk te houden."
-    },
-    "578": {
-      "id": 578,
-      "citaat": "Uit de informatie die ik heb, blijkt dat de staat van de instandhouding voor 88% van de habitattypen en 78% van de soorten niet gunstig is. Daarom herken ik het cijfer van 80% dat in een goede staat zou verkeren niet. Dat geldt ook voor de conclusies die daaraan verbonden worden.",
-      "typologie": "factual",
-      "stance": "pro",
-      "spreker": "Jaimi van Essen",
-      "partij": "D66",
-      "tags": [
-        "Actor-Politicus",
-        "Arena-Parlement",
-        "Bewijs-Statistisch",
-        "Frame-Conflict",
-        "Frame-Thematisch",
-        "Ideologie-GAL",
-        "Meta-Reikwijdte",
         "Moraliteit-Zuiverheid",
         "Walton-Expertise"
       ],
       "claims": [
         {
-          "claim_text": "de staat van de instandhouding voor 88% van de habitattypen en 78% van de soorten niet gunstig is",
-          "attributed_source_text": "de informatie die ik heb"
-        }
-      ],
-      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2026A02765",
-      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2026-07-01/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2026-07-01T13%3A35%3A26%2B0200&end=2026-07-02T01%3A14%3A54%2B0200",
-      "start_seconds": 32579.900999999998,
-      "gist": "natuur merendeels ongunstige staat",
-      "samenvatting": null
-    },
-    "586": {
-      "id": 586,
-      "citaat": "Het kabinet wil met de invoering van grondgebondenheid bereiken dat melkveehouderijen meer in balans zijn met de leefomgeving. Het stuurt op het extensiveren van de melkveehouderij in sommige gebieden en waar dat nodig is op het borgen van het graslandareaal door een graslandnorm.",
-      "typologie": "factual",
-      "stance": "pro",
-      "spreker": "Jaimi van Essen",
-      "partij": "D66",
-      "tags": [
-        "Actor-Politicus",
-        "Arena-Parlement",
-        "Bewijs-Causaal",
-        "Frame-Thematisch",
-        "Frame-Verantwoordelijkheid",
-        "Ideologie-GAL",
-        "Moraliteit-Zuiverheid",
-        "Walton-Consequentie"
-      ],
-      "claims": [
-        {
-          "claim_text": "grondgebondenheid zorgt dat melkveehouderijen meer in balans zijn met de leefomgeving",
-          "attributed_source_text": null
+          "claim_text": "het RIVM laat zien dat het terugdringen van emissies van 0 tot 500 een bepaalde werking heeft, maar dat je van 500 tot 1.000 nog steeds een tweeënhalf keer effectievere inzet op dat natuurgebied hebt dan wanneer je het generiek gaat doen",
+          "attributed_source_text": "het RIVM"
         },
         {
-          "claim_text": "grondgebondenheid stuurt op extensivering en borgen van graslandareaal",
+          "claim_text": "de inzet is na 500 meter nog steeds tweeënhalf keer zo effectief in gebieden die juist zwaar overbelast zijn",
           "attributed_source_text": null
         }
       ],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2026A02765",
       "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2026-07-01/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2026-07-01T13%3A35%3A26%2B0200&end=2026-07-02T01%3A14%3A54%2B0200",
-      "start_seconds": 33869.4,
-      "gist": "grondgebondenheid herstelt ecologisch evenwicht",
-      "samenvatting": "Dwingende normering voor grondgebondenheid en graslandborging brengt de melkveehouderij in balans met de leefomgeving en voorkomt structurele overschotten."
-    },
-    "620": {
-      "id": 620,
-      "citaat": "Met het maatregelenpakket trekken we die vergunningverlening weer los en kunnen we handhavingsverzoeken afwijzen. Vergunningverlening wordt ook weer mogelijk voor emissiereductie. Ook ontstaat er ruimte voor het vergunnen van nieuwe activiteiten.",
-      "typologie": "factual",
-      "stance": "pro",
-      "spreker": "Jaimi van Essen",
-      "partij": "D66",
-      "tags": [
-        "Actor-Politicus",
-        "Arena-Parlement",
-        "Bewijs-Causaal",
-        "Frame-Thematisch",
-        "Frame-Verantwoordelijkheid",
-        "Moraliteit-Autoriteit",
-        "Walton-Consequentie"
-      ],
-      "claims": [],
-      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2026A02765",
-      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2026-07-01/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2026-07-01T13%3A35%3A26%2B0200&end=2026-07-02T01%3A14%3A54%2B0200",
-      "start_seconds": 35539.201,
-      "gist": "stikstofdaling maakt vergunningen mogelijk",
+      "start_seconds": 31613.5,
+      "gist": "RIVM toont effectiviteit zonering",
       "samenvatting": null
     },
     "623": {
@@ -534,60 +889,98 @@
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2026A02765",
       "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2026-07-01/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2026-07-01T13%3A35%3A26%2B0200&end=2026-07-02T01%3A14%3A54%2B0200",
       "start_seconds": 35642.901,
-      "gist": "KDW wetenschappelijk beste maatstaf",
-      "samenvatting": "Europese rechtspraak verplicht uit te gaan van de beste wetenschappelijke kennis; de KDW is momenteel internationaal de beste maatstaf om stikstofeffecten op overbelaste natuur te beoordelen."
-    },
-    "625": {
-      "id": 625,
-      "citaat": "Wij zijn ervan overtuigd dat we met deze aanpak vergunningverlening weer lostrekken. Dat doen we met een breed pakket dat leidt tot verdere emissiereductie en natuurherstel.",
-      "typologie": "factual",
-      "stance": "pro",
-      "spreker": "Jaimi van Essen",
-      "partij": "D66",
-      "tags": [
-        "Actor-Politicus",
-        "Arena-Parlement",
-        "Bewijs-Causaal",
-        "Frame-Thematisch",
-        "Frame-Verantwoordelijkheid",
-        "Ideologie-GAL",
-        "Moraliteit-Zuiverheid",
-        "Walton-Consequentie"
-      ],
-      "claims": [],
-      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2026A02765",
-      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2026-07-01/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2026-07-01T13%3A35%3A26%2B0200&end=2026-07-02T01%3A14%3A54%2B0200",
-      "start_seconds": 35748.9,
-      "gist": "emissiedaling schept vergunningruimte woningbouw",
-      "samenvatting": "Een samenhangend pakket voor structurele emissiereductie is vereist om vergunningverlening voor woningen en projecten juridisch houdbaar vlot te trekken."
-    },
-    "628": {
-      "id": 628,
-      "citaat": "We kunnen anders immers in een specifiek gebied een stapeling van emissie krijgen die weer leidt tot een te hoge depositie op Natura 2000 en dan begint het hele verhaal weer overnieuw. Dat willen we niet.",
-      "typologie": "factual",
-      "stance": "pro",
-      "spreker": "Jaimi van Essen",
-      "partij": "D66",
-      "tags": [
-        "Actor-Politicus",
-        "Arena-Parlement",
-        "Bewijs-Causaal",
-        "Frame-Thematisch",
-        "Frame-Verantwoordelijkheid",
-        "Ideologie-GAL",
-        "Moraliteit-Zorg",
-        "Walton-Consequentie"
-      ],
-      "claims": [],
-      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2026A02765",
-      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2026-07-01/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2026-07-01T13%3A35%3A26%2B0200&end=2026-07-02T01%3A14%3A54%2B0200",
-      "start_seconds": 35915.8,
-      "gist": "stapeling van uitstoot voorkomen",
+      "gist": "KDW beste wetenschappelijke maatstaf",
       "samenvatting": null
     },
-    "818": {
-      "id": 818,
-      "citaat": "Hopelijk blijven wij niet alles ophangen aan modellen, gemiddelden en het rekenprogramma AERIUS, dat zelfs een isolatieklus of een wandeltocht kan blokkeren. Wat gaat de commissie doen om AERIUS zo snel mogelijk te vervangen door een beter alternatief? Wanneer kunnen we daar iets van verwachten? Wanneer kunnen we de eerste stappen verwachten om de KDW's als omgevingswaarden uit de wet te halen?",
+    "671": {
+      "id": 671,
+      "citaat": "De PAS-melders zijn 1 juli vogelvrij. Dan verloopt de wet voor het legaliseren van PAS-melders, en een nieuwe is er nog niet. Als die er wel komt, dan moet die deugdelijk zijn en juridisch standhouden. Daarom dienen wij een motie in.",
+      "typologie": "legal",
+      "stance": "contra",
+      "spreker": "Harm Holman",
+      "partij": "NSC",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Causaal",
+        "Frame-Thematisch",
+        "Frame-Verantwoordelijkheid",
+        "Meta-Agenda-Tijdigheid",
+        "Moraliteit-Autoriteit",
+        "Moraliteit-Eerlijkheid",
+        "Walton-Regel"
+      ],
+      "claims": [
+        {
+          "claim_text": "De PAS-melders zijn 1 juli vogelvrij.",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "Dan verloopt de wet voor het legaliseren van PAS-melders, en een nieuwe is er nog niet.",
+          "attributed_source_text": null
+        }
+      ],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2025A03345",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-05-22/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-05-22T14%3A38%3A14%2B0200&end=2025-05-22T15%3A42%3A25%2B0200",
+      "start_seconds": 599.0,
+      "gist": "PAS-melders dreigen vogelvrij",
+      "samenvatting": null
+    },
+    "772": {
+      "id": 772,
+      "citaat": "De heer Van Campen weet, denk ik, als geen ander dat additionaliteit door de Europese Unie is opgelegd en dat daaraan voldaan moet worden om PAS-melders te kunnen legaliseren. Ik kan niet verzinnen hoe we dat gaan organiseren. Als we niet een hoeveelheid emissiereductie vergaren en daarmee de instandhouding van de natuur, de achteruitgang en de verslechtering stoppen, kan ik niet verzinnen hoe er dan nog een mogelijkheid is om vrijgekomen ruimte te benutten voor PAS-melders.",
+      "typologie": "legal",
+      "stance": "pro",
+      "spreker": "Harm Holman",
+      "partij": "NSC",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Causaal",
+        "Frame-Thematisch",
+        "Frame-Verantwoordelijkheid",
+        "Moraliteit-Autoriteit",
+        "Stijl-Herhaling",
+        "Walton-Regel"
+      ],
+      "claims": [
+        {
+          "claim_text": "additionaliteit door de Europese Unie is opgelegd",
+          "attributed_source_text": "Europese Unie"
+        }
+      ],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2025A03345",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-05-22/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-05-22T15%3A42%3A25%2B0200&end=2025-05-22T22%3A33%3A59%2B0200",
+      "start_seconds": 4299.0,
+      "gist": "additionaliteitseis verplicht emissiedaling",
+      "samenvatting": null
+    },
+    "781": {
+      "id": 781,
+      "citaat": "Ik ben ervan overtuigd — dat eerlijke verhaal vertel ik ook — dat we er niet aan ontkomen dat de veestapel krimpt. Dat kan niet anders, want anders redden we het niet.",
+      "typologie": "factual",
+      "stance": "pro",
+      "spreker": "Anne-Marijke Podt",
+      "partij": "D66",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Causaal",
+        "Frame-Thematisch",
+        "Frame-Verantwoordelijkheid",
+        "Ideologie-GAL",
+        "Walton-Consequentie"
+      ],
+      "claims": [],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2025A03345",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-05-22/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-05-22T15%3A42%3A25%2B0200&end=2025-05-22T22%3A33%3A59%2B0200",
+      "start_seconds": 4982.799999999999,
+      "gist": "veestapel moet onontkoombaar krimpen",
+      "samenvatting": "Zonder een krimp van de veestapel en vermindering van het aantal dieren kunnen de wettelijke stikstofdoelen niet worden gehaald."
+    },
+    "824": {
+      "id": 824,
+      "citaat": "In de plannen van de ministeriële commissie wordt nadrukkelijk afgestapt van de focus op stikstof. Er wordt gekeken naar waar stikstof een probleem is. Daar gaan stikstofmaatregelen genomen worden, maar waar droogte is — wat eigenlijk een veel groter probleem is voor natuurgebieden — moet je gaan beheren of moet je hydrologische maatregelen nemen. Daar ben ik hartstikke blij mee en ik neem aan dat de heer Baudet daar ook blij mee is, want het ligt een beetje in lijn met wat Forum zegt: kijk naar de daadwerkelijke staat van de natuur.",
       "typologie": "factual",
       "stance": "contra",
       "spreker": "Caroline van der Plas",
@@ -595,88 +988,273 @@
       "tags": [
         "Actor-Politicus",
         "Arena-Parlement",
-        "Bewijs-Anekdotisch",
-        "Debatzet-Herformuleren",
-        "Frame-Episodisch",
-        "Frame-Verantwoordelijkheid",
-        "Ideologie-TAN",
-        "Moraliteit-Vrijheid",
-        "Stijl-Retorische-Vraag",
-        "Walton-Consequentie"
+        "Bewijs-Causaal",
+        "Frame-Thematisch",
+        "Stijl-Antithese",
+        "Walton-Causaal"
       ],
-      "claims": [],
+      "claims": [
+        {
+          "claim_text": "droogte is eigenlijk een veel groter probleem dan stikstof voor natuurgebieden",
+          "attributed_source_text": null
+        }
+      ],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2025A03345",
       "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-05-22/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-05-22T15%3A42%3A25%2B0200&end=2025-05-22T22%3A33%3A59%2B0200",
-      "start_seconds": 8181.440999999999,
-      "gist": "modelberekeningen AERIUS blokkeren projecten",
-      "samenvatting": "Beleid mag niet afhankelijk blijven van rekenmodellen zoals AERIUS die zelfs minimale klussen blokkeren op basis van honderdsten van een mol."
+      "start_seconds": 8459.040999999997,
+      "gist": "droogte bedreigt natuur meer",
+      "samenvatting": "Natuurherstel vereist primair hydrologische ingrepen en beheer tegen verdroging in plaats van een eenzijdige fixatie op stikstofdepositie."
     },
-    "1041": {
-      "id": 1041,
-      "citaat": "De stikstofcrisis is inmiddels zo'n kluwen geworden dat er alleen maar verliezers zijn. De economie loopt enorme schade op, boeren weten niet meer waar ze op moeten hopen, verduurzaming stokt en de natuur schiet er ook niets mee op.",
+    "853": {
+      "id": 853,
+      "citaat": "Er ligt een rapport — ik ga naar mijn vraag — van de Universiteit Leiden. Dat zegt gewoon: we kunnen die doelen halen. 2030 kan gewoon, anders dan wat de premier zegt, maar je moet wat lef tonen.",
       "typologie": "factual",
-      "stance": "contra",
-      "spreker": "Eline Vedder",
-      "partij": "CDA",
+      "stance": "pro",
+      "spreker": "Ines Kostić",
+      "partij": "PvdD",
       "tags": [
         "Actor-Politicus",
         "Arena-Parlement",
-        "Bewijs-Causaal",
+        "Bewijs-Expert",
+        "Frame-Conflict",
+        "Frame-Thematisch",
+        "Ideologie-GAL",
+        "Stijl-Antithese",
+        "Walton-Expertise"
+      ],
+      "claims": [
+        {
+          "claim_text": "we kunnen die doelen halen. 2030 kan gewoon",
+          "attributed_source_text": "rapport ... van de Universiteit Leiden"
+        }
+      ],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2025A03345",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-05-22/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-05-22T15%3A42%3A25%2B0200&end=2025-05-22T22%3A33%3A59%2B0200",
+      "start_seconds": 14981.5,
+      "gist": "Leidse studie bevestigt haalbaarheid",
+      "samenvatting": null
+    },
+    "855": {
+      "id": 855,
+      "citaat": "Het hele debat gaat eigenlijk over natuurherstel. Dat hebben we al jaren verzaakt. Daarvan zegt de rechter: daar moet je nu mee aan de slag. Nu. Niet over tien jaar, niet over vijf jaar, niet over drie jaar, maar nu. Niks rekenkundige ondergrens. Het is gewoon een foefje. Het is PAS 2.0.",
+      "typologie": "legal",
+      "stance": "pro",
+      "spreker": "Ines Kostić",
+      "partij": "PvdD",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Frame-Conflict",
+        "Frame-Thematisch",
+        "Frame-Verantwoordelijkheid",
+        "Ideologie-GAL",
+        "Moraliteit-Autoriteit",
+        "Moraliteit-Zuiverheid",
+        "Stijl-Herhaling",
+        "Stijl-Slogan",
+        "Walton-Regel"
+      ],
+      "claims": [
+        {
+          "claim_text": "de rechter zegt dat je nu met natuurherstel aan de slag moet",
+          "attributed_source_text": "de rechter"
+        }
+      ],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2025A03345",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-05-22/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-05-22T15%3A42%3A25%2B0200&end=2025-05-22T22%3A33%3A59%2B0200",
+      "start_seconds": 15071.0,
+      "gist": "rechter eist direct natuurherstel",
+      "samenvatting": null
+    },
+    "948": {
+      "id": 948,
+      "citaat": "Daar ligt gewoon een wet voor op tafel. Er ligt een wet op tafel, de Wet stikstofreductie en natuurverbetering. Aan de afspraken die we in dat verband hebben gemaakt en de jaartallen die daarbij horen, zullen we ons moeten houden. Dat heeft de rechter in de zaak van Greenpeace tegen de Staat nogmaals duidelijk gemaakt. We kunnen hier met elkaar praten over percentages, over het wanneer en over alles, maar die zijn volgens mij duidelijk. Die staan in de wet.",
+      "typologie": "legal",
+      "stance": "pro",
+      "spreker": "Thom van Campen",
+      "partij": "VVD",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Frame-Thematisch",
+        "Frame-Verantwoordelijkheid",
+        "Moraliteit-Autoriteit",
+        "Stijl-Herhaling",
+        "Walton-Regel"
+      ],
+      "claims": [
+        {
+          "claim_text": "Er ligt een wet op tafel, de Wet stikstofreductie en natuurverbetering.",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "De rechter in de zaak van Greenpeace tegen de Staat heeft nogmaals duidelijk gemaakt dat we ons aan de afspraken en jaartallen moeten houden.",
+          "attributed_source_text": "de rechter in de zaak van Greenpeace tegen de Staat"
+        }
+      ],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2025A00576",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-02-20/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-02-20T16%3A04%3A53%2B0100&end=2025-02-20T23%3A20%3A06%2B0100",
+      "start_seconds": 1466.0,
+      "gist": "rechterlijke plicht tot doelbereik",
+      "samenvatting": "Wettelijke verplichtingen en de rechterlijke uitspraak in de Greenpeace-zaak dwingen het kabinet vast te houden aan tijdige doelrealisatie."
+    },
+    "959": {
+      "id": 959,
+      "citaat": "Ik heb het over gedwongen krimp van de veestapel, dus niet over een gevolg van maatregelen die je neemt, waardoor de veestapel krimpt. Dat zien we al jaren. Ik bedoel, de veestapel is sinds 1990 met een kwart gekrompen. De ammoniakuitstoot is met 70% gedaald in al die jaren. Ik heb het over gedwongen krimp. In het hoofdlijnenakkoord staat: \"Wij sturen niet op gedwongen krimp van de veestapel en er komt geen gedwongen onteigening.\" Dat zijn keiharde afspraken ...",
+      "typologie": "factual",
+      "stance": "contra",
+      "spreker": "Caroline van der Plas",
+      "partij": "BBB",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Statistisch",
+        "Frame-Thematisch",
+        "Ideologie-TAN",
+        "Meta-Reikwijdte",
+        "Moraliteit-Vrijheid",
+        "Stijl-Antithese",
+        "Walton-Regel"
+      ],
+      "claims": [
+        {
+          "claim_text": "de veestapel is sinds 1990 met een kwart gekrompen",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "De ammoniakuitstoot is met 70% gedaald in al die jaren",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "In het hoofdlijnenakkoord staat: \"Wij sturen niet op gedwongen krimp van de veestapel en er komt geen gedwongen onteigening.\"",
+          "attributed_source_text": "het hoofdlijnenakkoord"
+        }
+      ],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2025A00576",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-02-20/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-02-20T16%3A04%3A53%2B0100&end=2025-02-20T23%3A20%3A06%2B0100",
+      "start_seconds": 2611.0,
+      "gist": "geen gedwongen krimp veestapel",
+      "samenvatting": "Er mag niet worden gestuurd op gedwongen krimp of onteigening van boeren, conform de afspraken in het hoofdlijnenakkoord."
+    },
+    "1099": {
+      "id": 1099,
+      "citaat": "Het lijkt mij verstandig om de adviezen van Remkes niet toe te passen op 2030, maar om gewoon 2035 te blijven hanteren, zoals nu in de wet staat. Als je nu tien jaar de tijd hebt en als je vandaag begint met het emissiereductiebeleid en de doelsturing, dan kun je van ondernemers wat vragen en dan kun je effecten gaan zien. Dat is eerst met managementmaatregelen en later misschien met wat grootschaliger investeringen. Als het goed is, heb je ook 5 miljard, en wat mij betreft nog wat meer, om boeren daarbij te helpen. Dan kun je echt een geborgde reductie tot stand brengen. Ik denk dat een emissiedoel, zoals Remkes dat ooit heeft geadviseerd, voor zowel ammoniak als NOx dan niet irreëel is. Dat is temeer zo als je kijkt naar alle studies die door bijvoorbeeld Wageningen gedaan zijn. Die zeggen: met innovatie- en managementmaatregelen kun je zelfs meer dan 50% reduceren.",
+      "typologie": "factual",
+      "stance": "contra",
+      "spreker": "Pieter Grinwis",
+      "partij": "ChristenUnie",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Expert",
         "Frame-Economisch",
         "Frame-Thematisch",
+        "Ideologie-GAL",
+        "Moraliteit-Autoriteit",
+        "Walton-Consequentie"
+      ],
+      "claims": [
+        {
+          "claim_text": "studies door Wageningen zeggen dat met innovatie- en managementmaatregelen meer dan 50% reductie mogelijk is",
+          "attributed_source_text": "Wageningen"
+        }
+      ],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2025A00576",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-02-20/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-02-20T16%3A04%3A53%2B0100&end=2025-02-20T23%3A20%3A06%2B0100",
+      "start_seconds": 10033.0,
+      "gist": "doeljaar 2035 is realistischer",
+      "samenvatting": "Vasthouden aan 2035 als doeljaar biedt de agrarische sector een realistischer en uitvoerbaarder termijn dan overhaaste tussendoelen in 2030."
+    },
+    "1103": {
+      "id": 1103,
+      "citaat": "Het kabinet stelt voor om bufferzones rondom natuurgebieden in te stellen van 500 en 1.000 meter. Binnen deze zones moeten boeren hun bedrijf zodanig aanpassen dat het niet meer voortgezet kan worden. Duizenden dieren moeten worden verwijderd om te voldoen aan de norm van maximaal 2,6 koe per hectare. Intensieve boeren zitten nu al op het drie- tot viervoudige hiervan. Het is een bezopen maatregel. Mest, het zwarte goud, waarvan het land vruchtbaar wordt en blijft, mogen ze niet meer uitrijden. Uiteindelijk zal dit voorstel van het kabinet alleen al de doodsteek worden voor 3.500 tot 6.500 boerenbedrijven binnen deze zones.",
+      "typologie": "factual",
+      "stance": "contra",
+      "spreker": "Chris Jansen",
+      "partij": "PVV",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Statistisch",
+        "Debatzet-Gevoelens-Verwoorden",
+        "Frame-Economisch",
+        "Frame-Thematisch",
+        "Ideologie-TAN",
+        "Moraliteit-Vrijheid",
         "Moraliteit-Zorg",
         "Walton-Consequentie"
       ],
       "claims": [
         {
-          "claim_text": "De economie loopt enorme schade op",
+          "claim_text": "Het kabinet stelt voor om bufferzones rondom natuurgebieden in te stellen van 500 en 1.000 meter",
           "attributed_source_text": null
         },
         {
-          "claim_text": "Verduurzaming stokt",
+          "claim_text": "norm van maximaal 2,6 koe per hectare",
           "attributed_source_text": null
         },
         {
-          "claim_text": "De natuur schiet er ook niets mee op",
+          "claim_text": "Intensieve boeren zitten nu al op het drie- tot viervoudige hiervan",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "Uiteindelijk zal dit voorstel van het kabinet alleen al de doodsteek worden voor 3.500 tot 6.500 boerenbedrijven binnen deze zones",
+          "attributed_source_text": null
+        }
+      ],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2026A02765",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2026-07-01/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2026-07-01T13%3A35%3A26%2B0200&end=2026-07-02T01%3A14%3A54%2B0200",
+      "start_seconds": 17565.101000000002,
+      "gist": "onacceptabele inbreuk op boerenbedrijven",
+      "samenvatting": null
+    },
+    "1191": {
+      "id": 1191,
+      "citaat": "Toch even over die doelen, want wat zijn \"haalbare doelen\"? We hebben een technische briefing van het PBL gehad. Dat zei: de doelen worden niet gehaald. Er zijn een aantal grote punten waarmee je de doelen kunt halen: vermindering van vee, innovatie, geen derogatie en grondgebondenheid. Als we derogatie krijgen, zal de emissie toenemen doordat er dan meer mest is. Als we geen grondgebondenheid krijgen, zal de emissie ook toenemen. Dan blijft er eigenlijk niets over en is het \"haalbare doel\" dat we doorgaan zoals het nu gaat. Wat is dus de definitie van \"haalbare doelen\"?",
+      "typologie": "factual",
+      "stance": "contra",
+      "spreker": "Harm Holman",
+      "partij": "NSC",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Causaal",
+        "Bewijs-Expert",
+        "Debatzet-Keuze-Aanscherpen",
+        "Frame-Thematisch",
+        "Frame-Verantwoordelijkheid",
+        "Ideologie-GAL",
+        "Meta-Reikwijdte",
+        "Stijl-Retorische-Vraag",
+        "Walton-Expertise"
+      ],
+      "claims": [
+        {
+          "claim_text": "de doelen worden niet gehaald",
+          "attributed_source_text": "PBL"
+        },
+        {
+          "claim_text": "Er zijn een aantal grote punten waarmee je de doelen kunt halen: vermindering van vee, innovatie, geen derogatie en grondgebondenheid",
+          "attributed_source_text": "PBL"
+        },
+        {
+          "claim_text": "Als we derogatie krijgen, zal de emissie toenemen doordat er dan meer mest is",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "Als we geen grondgebondenheid krijgen, zal de emissie ook toenemen",
           "attributed_source_text": null
         }
       ],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2025A00576",
       "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-02-20/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-02-20T16%3A04%3A53%2B0100&end=2025-02-20T23%3A20%3A06%2B0100",
-      "start_seconds": 5381.0,
-      "gist": "stikstofcrisis schaadt economie breed",
+      "start_seconds": 16884.0,
+      "gist": "PBL concludeert onhaalbaarheid doelen",
       "samenvatting": null
     },
-    "1060": {
-      "id": 1060,
-      "citaat": "PAS-knelgevallen, woningbouw en andere projecten zijn niet geholpen met keiharde emissiedoelen op wetsniveau en millimeteren over procenten, maar met concrete acties op gebiedsniveau en meer geld hiervoor.",
-      "typologie": "factual",
-      "stance": "contra",
-      "spreker": "André Flach",
-      "partij": "SGP",
-      "tags": [
-        "Actor-Politicus",
-        "Arena-Parlement",
-        "Bewijs-Causaal",
-        "Debatzet-Keuze-Aanscherpen",
-        "Frame-Economisch",
-        "Frame-Thematisch",
-        "Frame-Verantwoordelijkheid",
-        "Ideologie-TAN",
-        "Moraliteit-Eerlijkheid",
-        "Stijl-Antithese",
-        "Walton-Consequentie"
-      ],
-      "claims": [],
-      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2025A03345",
-      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-05-22/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-05-22T15%3A42%3A25%2B0200&end=2025-05-22T22%3A33%3A59%2B0200",
-      "start_seconds": 9625.659999999996,
-      "gist": "gebiedsacties effectiever dan wetsnormen",
-      "samenvatting": null
-    },
-    "1195": {
-      "id": 1195,
-      "citaat": "Als zij daar niet toe bereid zijn, kunnen ze een andere keuze maken, maar uiteindelijk is het aan de ondernemers zelf hoe ze aan die doelen willen voldoen. Dat kan bijvoorbeeld door extensivering of innovatie.",
+    "1266": {
+      "id": 1266,
+      "citaat": "Kritische depositiewaardes op zichzelf zijn een internationaal, ook door andere lidstaten, erkende norm, waarboven je voor een habitattype verslechtering op basis van stikstofdepositie niet kunt uitsluiten. Dat wil overigens niet zeggen dat er altijd verslechtering optreedt als je boven die norm zit. Integendeel, we zien in veel natuurgebieden — maar goed, dat is het beleidsterrein van mijn collega Rummenie — dat hydrologie bijvoorbeeld een van de drukfactoren is. Als dat op orde is, kan de natuur echt wel een stootje hebben. We moeten naar al die drukfactoren kijken. Dat staat ook in het hoofdlijnenakkoord: de daadwerkelijke staat van de natuur.",
       "typologie": "factual",
       "stance": "contra",
       "spreker": "Femke Marije Wiersma",
@@ -687,63 +1265,58 @@
         "Bewijs-Causaal",
         "Frame-Thematisch",
         "Frame-Verantwoordelijkheid",
-        "Ideologie-Rechts-Economisch",
-        "Moraliteit-Vrijheid",
-        "Walton-Consequentie"
-      ],
-      "claims": [],
-      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2025A00576",
-      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-02-20/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-02-20T16%3A04%3A53%2B0100&end=2025-02-20T23%3A20%3A06%2B0100",
-      "start_seconds": 17069.799999999996,
-      "gist": "ondernemer kiest zelf verduurzaming",
-      "samenvatting": null
-    },
-    "1374": {
-      "id": 1374,
-      "citaat": "AERIUS is het enige model en heeft zo zijn beperkingen. Dat heb ik altijd volledig erkend. Maar om te komen tot een vergunning, kun je dus naast AERIUS een passende beoordeling doen voor een extra onderbouwing. Die mogelijkheid is er. De sector is er volop mee bezig en daar helpen we bij. Ik zeg daarbij: de basisvergunning komt op orde. Deze zomer kunnen we daar gewoon naar een vergunbare situatie gaan. Aanvullende wensen zullen met een aanvullende passende beoordeling moeten. Daar wordt hard aan gewerkt. Dat is de situatie.",
-      "typologie": "factual",
-      "stance": "pro",
-      "spreker": "Christianne van der Wal",
-      "partij": "VVD",
-      "tags": [
-        "Actor-Politicus",
-        "Arena-Parlement",
-        "Frame-Thematisch",
-        "Frame-Verantwoordelijkheid",
-        "Moraliteit-Autoriteit",
-        "Walton-Regel"
+        "Ideologie-TAN",
+        "Meta-Bevoegdheid",
+        "Walton-Causaal"
       ],
       "claims": [
         {
-          "claim_text": "AERIUS is het enige model en heeft zo zijn beperkingen",
+          "claim_text": "hydrologie is een van de drukfactoren in veel natuurgebieden en het kijken naar de daadwerkelijke staat van de natuur staat in het hoofdlijnenakkoord",
+          "attributed_source_text": "hoofdlijnenakkoord"
+        }
+      ],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2025A00576",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-02-20/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-02-20T16%3A04%3A53%2B0100&end=2025-02-20T23%3A20%3A06%2B0100",
+      "start_seconds": 20912.101000000002,
+      "gist": "hydrologie maakt natuur weerbaar",
+      "samenvatting": null
+    },
+    "1394": {
+      "id": 1394,
+      "citaat": "De enige manier om gelegaliseerd te worden, is stikstofvermindering. Daar moet regie op gevoerd worden, want in de visie van GroenLinks-PvdA gaan wij als maatschappij die stikstofruimte verdelen, eerst naar de natuur en dan naar de woningbouw en de PAS-melders, en dus niet naar vliegtuigen.",
+      "typologie": "factual",
+      "stance": "pro",
+      "spreker": "Laura Bromet",
+      "partij": "GroenLinks-PvdA",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Causaal",
+        "Frame-Thematisch",
+        "Frame-Verantwoordelijkheid",
+        "Ideologie-GAL",
+        "Ideologie-Links-Economisch",
+        "Moraliteit-Eerlijkheid",
+        "Moraliteit-Zorg",
+        "Stijl-Aangekondigde-Opsomming",
+        "Stijl-Antithese",
+        "Walton-Causaal"
+      ],
+      "claims": [
+        {
+          "claim_text": "De enige manier om gelegaliseerd te worden, is stikstofvermindering",
           "attributed_source_text": null
         },
         {
-          "claim_text": "om te komen tot een vergunning, kun je dus naast AERIUS een passende beoordeling doen voor een extra onderbouwing",
-          "attributed_source_text": null
-        },
-        {
-          "claim_text": "De sector is er volop mee bezig en daar helpen we bij",
-          "attributed_source_text": null
-        },
-        {
-          "claim_text": "de basisvergunning komt op orde",
-          "attributed_source_text": null
-        },
-        {
-          "claim_text": "Deze zomer kunnen we daar gewoon naar een vergunbare situatie gaan",
-          "attributed_source_text": null
-        },
-        {
-          "claim_text": "Aanvullende wensen zullen met een aanvullende passende beoordeling moeten",
+          "claim_text": "in de visie van GroenLinks-PvdA gaan wij als maatschappij die stikstofruimte verdelen, eerst naar de natuur en dan naar de woningbouw en de PAS-melders, en dus niet naar vliegtuigen",
           "attributed_source_text": null
         }
       ],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2024A04121",
-      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-06-20/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-06-20T10%3A43%3A38%2B0200&end=2024-06-20T11%3A32%3A01%2B0200",
-      "start_seconds": 2029.0,
-      "gist": "rekenmodel onmisbaar voor vergunningen",
-      "samenvatting": "AERIUS heeft beperkingen maar is als rekenmodel onmisbaar, omdat specifieke stikstofneerslag op afzonderlijke habitats niet in het veld kan worden gemeten."
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-06-20/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-06-20T11%3A32%3A01%2B0200&end=2024-06-20T14%3A16%3A03%2B0200",
+      "start_seconds": 1246.7209999999995,
+      "gist": "legalisatie vereist reële emissiereductie",
+      "samenvatting": "PAS-melders kunnen alleen houdbaar worden gelegaliseerd als er vooraf stikstofruimte ontstaat door daadwerkelijke reductie, zonder natuur extra te belasten."
     },
     "1472": {
       "id": 1472,
@@ -773,51 +1346,12 @@
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2024A04121",
       "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-06-20/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-06-20T11%3A32%3A01%2B0200&end=2024-06-20T14%3A16%3A03%2B0200",
       "start_seconds": 6028.1810000000005,
-      "gist": "natuur reddeloos zonder aanscherping",
+      "gist": "RIVM waarschuwt voor natuurverlies",
       "samenvatting": null
     },
-    "1514": {
-      "id": 1514,
-      "citaat": "Mevrouw Hertzberger wees op commissie-Hordijk, die ook naar AERIUS heeft gekeken. Die heeft geconstateerd dat AERIUS voldoet. Dat geldt ook voor de manier waarop wij ons beleid daarop baseren. Er is geen alternatief voor AERIUS. Meneer Hordijk heeft destijds hele goede adviezen gegeven ten aanzien van AERIUS en vergunningverlening. Al die adviezen hebben wij vorig jaar of anderhalf jaar ook verwerkt.",
-      "typologie": "factual",
-      "stance": "pro",
-      "spreker": "Christianne van der Wal",
-      "partij": "VVD",
-      "tags": [
-        "Actor-Politicus",
-        "Arena-Parlement",
-        "Bewijs-Expert",
-        "Frame-Thematisch",
-        "Moraliteit-Autoriteit",
-        "Walton-Expertise"
-      ],
-      "claims": [
-        {
-          "claim_text": "commissie-Hordijk heeft geconstateerd dat AERIUS voldoet",
-          "attributed_source_text": "commissie-Hordijk"
-        },
-        {
-          "claim_text": "Er is geen alternatief voor AERIUS",
-          "attributed_source_text": null
-        },
-        {
-          "claim_text": "Meneer Hordijk heeft destijds hele goede adviezen gegeven ten aanzien van AERIUS en vergunningverlening",
-          "attributed_source_text": null
-        },
-        {
-          "claim_text": "Al die adviezen hebben wij vorig jaar of anderhalf jaar ook verwerkt",
-          "attributed_source_text": null
-        }
-      ],
-      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2024A04121",
-      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-06-20/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-06-20T14%3A19%3A33%2B0200&end=2024-06-20T16%3A40%3A09%2B0200",
-      "start_seconds": 1347.9609999999993,
-      "gist": "Hordijk bevestigt validiteit AERIUS",
-      "samenvatting": null
-    },
-    "1590": {
-      "id": 1590,
-      "citaat": "Ik heb wel gezegd dat in het hoofdlijnenakkoord staat dat er niet wordt gestuurd op krimp van de veestapel. Kennelijk is de heer Holman het daar niet mee eens, want grondgebondenheid gaat zeker leiden tot krimp van de veestapel.",
+    "1589": {
+      "id": 1589,
+      "citaat": "In het hoofdlijnenakkoord staat dat er niet gestuurd wordt op krimp van de veestapel. Wat hier nu gebeurt, is gewoon openbreken van het hoofdlijnenakkoord.",
       "typologie": "factual",
       "stance": "contra",
       "spreker": "Caroline van der Plas",
@@ -825,64 +1359,59 @@
       "tags": [
         "Actor-Politicus",
         "Arena-Parlement",
-        "Bewijs-Causaal",
         "Context-Commissie",
         "Frame-Conflict",
         "Frame-Thematisch",
+        "Frame-Verantwoordelijkheid",
         "Ideologie-TAN",
         "Moraliteit-Autoriteit",
-        "Moraliteit-Loyaliteit",
+        "Moraliteit-Eerlijkheid",
         "Walton-Regel"
       ],
       "claims": [
         {
-          "claim_text": "in het hoofdlijnenakkoord staat dat er niet wordt gestuurd op krimp van de veestapel",
-          "attributed_source_text": "hoofdlijnenakkoord"
-        },
-        {
-          "claim_text": "grondgebondenheid gaat zeker leiden tot krimp van de veestapel",
-          "attributed_source_text": null
+          "claim_text": "In het hoofdlijnenakkoord staat dat er niet gestuurd wordt op krimp van de veestapel",
+          "attributed_source_text": "het hoofdlijnenakkoord"
         }
       ],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2025A02619",
       "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-06-18/troelstrazaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-06-18T16%3A16%3A42%2B0200&end=2025-06-18T21%3A49%3A42%2B0200",
-      "start_seconds": 1401.2800000000002,
-      "gist": "grondgebondenheid schendt regeerafspraken veestapel",
+      "start_seconds": 1340.1,
+      "gist": "hoofdlijnenakkoord verbiedt krimpsturing",
       "samenvatting": null
     },
-    "2696": {
-      "id": 2696,
-      "citaat": "De directeur-generaal van de Europese Commissie waarschuwde vorige week nog in de Kamer: \"Het gaat heel slecht met de Nederlandse natuur. We zitten in een natuur- en klimaatcrisis. Het afzwakken van de normen lost dit niet op. Ga aan de slag!\"",
+    "1611": {
+      "id": 1611,
+      "citaat": "meneer Petersen zelf — ik heb hem gisteren gesproken en er ook naar gevraagd — zegt: nee, het kan alleen als er een geborgd pakket van maatregelen naast ligt om de stikstofuitstoot naar beneden te brengen.",
       "typologie": "factual",
       "stance": "pro",
-      "spreker": "Ines Kostić",
-      "partij": "PvdD",
+      "spreker": "Laura Bromet",
+      "partij": "GroenLinks-PvdA",
       "tags": [
         "Actor-Politicus",
         "Arena-Parlement",
         "Bewijs-Expert",
         "Context-Commissie",
         "Frame-Thematisch",
-        "Frame-Verantwoordelijkheid",
         "Ideologie-GAL",
         "Moraliteit-Zorg",
         "Walton-Expertise"
       ],
       "claims": [
         {
-          "claim_text": "Het gaat heel slecht met de Nederlandse natuur. We zitten in een natuur- en klimaatcrisis. Het afzwakken van de normen lost dit niet op.",
-          "attributed_source_text": "de directeur-generaal van de Europese Commissie"
+          "claim_text": "Meneer Petersen zegt dat het (de ondergrens) alleen kan als er een geborgd pakket van maatregelen naast ligt om de stikstofuitstoot naar beneden te brengen.",
+          "attributed_source_text": "meneer Petersen"
         }
       ],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2025A02619",
       "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-06-18/troelstrazaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-06-18T16%3A16%3A42%2B0200&end=2025-06-18T21%3A49%3A42%2B0200",
-      "start_seconds": 2520.9389999999994,
-      "gist": "Europese Commissie luidt noodklok",
+      "start_seconds": 3406.6399999999994,
+      "gist": "wetenschappelijk advies vereist reductiepakket",
       "samenvatting": null
     },
-    "2697": {
-      "id": 2697,
-      "citaat": "Er komen al massa's intrekkingsverzoeken binnen. En waarom? Omdat deze minister weigert de oorzaak aan te pakken: te veel dieren in de veehouderij.",
+    "2693": {
+      "id": 2693,
+      "citaat": "Stikstofemissies onder 1 mol kan je op papier proberen weg te toveren, maar ze zijn er wel. De natuur lijdt eronder.",
       "typologie": "factual",
       "stance": "pro",
       "spreker": "Ines Kostić",
@@ -892,462 +1421,259 @@
         "Arena-Parlement",
         "Bewijs-Causaal",
         "Context-Commissie",
+        "Frame-Moraliteit",
         "Frame-Thematisch",
-        "Frame-Verantwoordelijkheid",
         "Ideologie-GAL",
         "Moraliteit-Zorg",
-        "Stijl-Retorische-Vraag",
-        "Walton-Causaal"
+        "Walton-Consequentie"
       ],
       "claims": [
         {
-          "claim_text": "Er komen al massa's intrekkingsverzoeken binnen",
+          "claim_text": "Stikstofemissies onder 1 mol kan je op papier proberen weg te toveren, maar ze zijn er wel",
           "attributed_source_text": null
         },
         {
-          "claim_text": "deze minister weigert de oorzaak aan te pakken: te veel dieren in de veehouderij",
+          "claim_text": "De natuur lijdt eronder",
           "attributed_source_text": null
         }
       ],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2025A02619",
       "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-06-18/troelstrazaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-06-18T16%3A16%3A42%2B0200&end=2025-06-18T21%3A49%3A42%2B0200",
-      "start_seconds": 2574.0599999999995,
-      "gist": "dieraantallen veroorzaken vastgelopen vergunningen",
+      "start_seconds": 2431.9799999999996,
+      "gist": "depositie verdwijnt niet administratief",
       "samenvatting": null
-    },
-    "2714": {
-      "id": 2714,
-      "citaat": "Zolang de KDW en AERIUS in de wet staan, zitten we muurvast. Dit souvenirtje van het kabinet-Rutte houdt Nederland op slot. Dat maakt dat ondernemers uit ons land verdwijnen en boeren geen perspectief meer hebben.",
-      "typologie": "economic",
-      "stance": "contra",
-      "spreker": "Jeanet Nijhof-Leeuw",
-      "partij": "PVV",
-      "tags": [],
-      "claims": [],
-      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2025A02619",
-      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-06-18/troelstrazaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-06-18T16%3A16%3A42%2B0200&end=2025-06-18T21%3A49%3A42%2B0200",
-      "start_seconds": 4009.7390000000005,
-      "gist": "modellen houden land vast",
-      "samenvatting": null
-    },
-    "2798": {
-      "id": 2798,
-      "citaat": "Minister Wiersma: Ik geef natuurlijk nog steeds uitvoering aan het hoofdlijnenakkoord. Dat zegt: geen gedwongen krimp en niet sturen op de omvang van de veestapel.",
-      "typologie": "factual",
-      "stance": "contra",
-      "spreker": "Femke Marije Wiersma",
-      "partij": "BBB",
-      "tags": [],
-      "claims": [
-        {
-          "claim_text": "het hoofdlijnenakkoord zegt: geen gedwongen krimp en niet sturen op de omvang van de veestapel",
-          "attributed_source_text": "hoofdlijnenakkoord"
-        }
-      ],
-      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2025A02619",
-      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-06-18/troelstrazaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-06-18T16%3A16%3A42%2B0200&end=2025-06-18T21%3A49%3A42%2B0200",
-      "start_seconds": 18139.0,
-      "gist": "geen sturing op veestapelkrimp",
-      "samenvatting": "Het regeringsbeleid sluit gedwongen krimp en sturing op de omvang van de veestapel uit, zodat ondernemers zelf via extensivering of innovatie doelen kunnen behalen."
-    },
-    "2802": {
-      "id": 2802,
-      "citaat": "Ik ben dus ook blij dat de minister aangeeft dat de opdracht uit het hoofdlijnenakkoord gewoon nog steeds staat. Daarin staat: er wordt niet gestuurd op gedwongen krimp van de veestapel.",
-      "typologie": "factual",
-      "stance": "contra",
-      "spreker": "Caroline van der Plas",
-      "partij": "BBB",
-      "tags": [],
-      "claims": [
-        {
-          "claim_text": "In het hoofdlijnenakkoord staat dat er niet wordt gestuurd op gedwongen krimp van de veestapel.",
-          "attributed_source_text": "hoofdlijnenakkoord"
-        }
-      ],
-      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2025A02619",
-      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-06-18/troelstrazaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-06-18T16%3A16%3A42%2B0200&end=2025-06-18T21%3A49%3A42%2B0200",
-      "start_seconds": 18578.0,
-      "gist": "hoofdlijnenakkoord verbiedt gedwongen krimp",
-      "samenvatting": null
-    },
-    "2811": {
-      "id": 2811,
-      "citaat": "De huidige stikstofdoelen zijn ronduit onrealistisch. De kritische depositiewaarden, de KDW's, zijn dusdanig aangescherpt dat het praktisch onmogelijk is om aan de omgevingswaarden te voldoen. Dit creëert een situatie waarin zowel boeren als infrastructurele projecten en woningbouwprojecten vastlopen in een juridisch moeras.",
-      "typologie": "factual",
-      "stance": "contra",
-      "spreker": "Cor Pierik",
-      "partij": "BBB",
-      "tags": [],
-      "claims": [],
-      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A05766",
-      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-12-04/troelstrazaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-12-04T10%3A00%3A52%2B0100&end=2024-12-04T17%3A22%3A41%2B0100",
-      "start_seconds": 356.0,
-      "gist": "stikstofdoelen zijn praktisch onhaalbaar",
-      "samenvatting": null
-    },
-    "2812": {
-      "id": 2812,
-      "citaat": "Het is onacceptabel dat er prioriteit wordt gegeven aan de handhaving van de KDW's terwijl de PAS-melders in onzekerheid blijven zitten. Daarom doe ik nogmaals de oproep om eerst de PAS-melders te legaliseren.",
-      "typologie": "factual",
-      "stance": "contra",
-      "spreker": "Cor Pierik",
-      "partij": "BBB",
-      "tags": [],
-      "claims": [],
-      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A05766",
-      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-12-04/troelstrazaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-12-04T10%3A00%3A52%2B0100&end=2024-12-04T17%3A22%3A41%2B0100",
-      "start_seconds": 356.0,
-      "gist": "eerst PAS-melders legaliseren",
-      "samenvatting": "De overheid moet prioriteit geven aan het beschermen en legaliseren van te goeder trouw handelende PAS-melders boven strikte handhaving van KDW-normen."
-    },
-    "2818": {
-      "id": 2818,
-      "citaat": "Innovaties werken onvoldoende. Dat is klip-en-klaar.",
-      "typologie": "factual",
-      "stance": "pro",
-      "spreker": "Ines Kostić",
-      "partij": "PvdD",
-      "tags": [],
-      "claims": [
-        {
-          "claim_text": "Innovaties werken onvoldoende",
-          "attributed_source_text": null
-        }
-      ],
-      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A05766",
-      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-12-04/troelstrazaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-12-04T10%3A00%3A52%2B0100&end=2024-12-04T17%3A22%3A41%2B0100",
-      "start_seconds": 899.0,
-      "gist": "innovaties werken volstrekt onvoldoende",
-      "samenvatting": null
-    },
-    "2886": {
-      "id": 2886,
-      "citaat": "We weten ook al decennia wat er moet gebeuren. Inderdaad, het aantal dieren in de veehouderij moet krimpen. Dat is onvermijdelijk. Het allerbelangrijkste is dat je moet inzetten op een transitie naar een totaal ander landbouwsysteem dat biologisch, meer plantaardig en in lijn met de natuur is, in plaats van ertegenin werken met hoogtechnologische foefjes die dit systeem in stand houden.",
-      "typologie": "factual",
-      "stance": "pro",
-      "spreker": "Ines Kostić",
-      "partij": "PvdD",
-      "tags": [],
-      "claims": [],
-      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A05766",
-      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-12-04/troelstrazaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-12-04T10%3A00%3A52%2B0100&end=2024-12-04T17%3A22%3A41%2B0100",
-      "start_seconds": 6129.0,
-      "gist": "krimp van veestapel onvermijdelijk",
-      "samenvatting": "Het aantal dieren in de veehouderij moet onontkoombaar krimpen om de vastgelopen sector om te schakelen naar een landbouwsysteem dat in harmonie is met de natuur."
-    },
-    "2954": {
-      "id": 2954,
-      "citaat": "Hoe kun je een staatssecretaris of minister serieus nemen die meer dan vijf jaar na de uitspraak van de rechter nog eens drie jaar extra de tijd denkt te kunnen nemen voor legalisatie van de PAS-melders?",
-      "typologie": "legal",
-      "stance": "pro",
-      "spreker": "Laura Bromet",
-      "partij": "GroenLinks-PvdA",
-      "tags": [],
-      "claims": [
-        {
-          "claim_text": "Er is meer dan vijf jaar geleden een uitspraak van de rechter geweest.",
-          "attributed_source_text": null
-        },
-        {
-          "claim_text": "De minister denkt nog eens drie jaar extra de tijd te kunnen nemen voor legalisatie van de PAS-melders.",
-          "attributed_source_text": null
-        }
-      ],
-      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A05766",
-      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-12-04/troelstrazaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-12-04T10%3A00%3A52%2B0100&end=2024-12-04T17%3A22%3A41%2B0100",
-      "start_seconds": 1385.0,
-      "gist": "jarenlange vertraging legalisatie PAS-melders",
-      "samenvatting": null
-    },
-    "2980": {
-      "id": 2980,
-      "citaat": "Mijn collega heeft vanuit het hoofdlijnenakkoord de opdracht meegekregen om natuurbeleid meer te stoelen op de staat van de natuur en dus niet alleen op depositiedoelen in de vorm van KDW's.",
-      "typologie": "factual",
-      "stance": "contra",
-      "spreker": "Femke Marije Wiersma",
-      "partij": "BBB",
-      "tags": [],
-      "claims": [
-        {
-          "claim_text": "natuurbeleid moet meer gestoeld worden op de staat van de natuur en niet alleen op depositiedoelen in de vorm van KDW's",
-          "attributed_source_text": "hoofdlijnenakkoord"
-        }
-      ],
-      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A05766",
-      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-12-04/troelstrazaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-12-04T10%3A00%3A52%2B0100&end=2024-12-04T17%3A22%3A41%2B0100",
-      "start_seconds": 25857.0,
-      "gist": "beleid richten op drukfactoren",
-      "samenvatting": null
-    },
-    "2994": {
-      "id": 2994,
-      "citaat": "De afgelopen eeuw is de biodiversiteit niet 2% toegenomen. Dat is gewoon een leugen. De biodiversiteit in Nederland is 85% afgenomen. Daar maak ik me ernstige zorgen over. Dat is niet vastgesteld op basis van modellen, maar op basis van metingen. Laat ik één voorbeeld noemen: de grutto, de vogel waarvoor ik de politiek in ben gegaan. De grutto is enorm afgenomen. Elk jaar zijn er minder grutto's als gevolg van de intensivering van de landbouw. Dat is waar ik voor in de politiek zit. Dat is een symbool. Ik zit er niet alleen voor de grutto, maar ook voor al die andere dieren en planten die het onderspit delven. Al dat Engels raaigras in Nederland, waardoor de pinksterbloem verdrongen is, de koekoeksbloem, orchideeën. Ze zijn allemaal weg. Het is allemaal hetzelfde. Dat is geen biodiversiteit. Biodiversiteit is soortenrijkdom en die vinden wij nou eenmaal heel belangrijk.",
-      "typologie": "factual",
-      "stance": "pro",
-      "spreker": "Laura Bromet",
-      "partij": "GroenLinks-PvdA",
-      "tags": [],
-      "claims": [
-        {
-          "claim_text": "De biodiversiteit in Nederland is 85% afgenomen.",
-          "attributed_source_text": null
-        },
-        {
-          "claim_text": "De afname is vastgesteld op basis van metingen, niet op basis van modellen.",
-          "attributed_source_text": null
-        },
-        {
-          "claim_text": "De grutto is enorm afgenomen.",
-          "attributed_source_text": null
-        },
-        {
-          "claim_text": "Elk jaar zijn er minder grutto's als gevolg van de intensivering van de landbouw.",
-          "attributed_source_text": null
-        },
-        {
-          "claim_text": "Engels raaigras verdringt de pinksterbloem, de koekoeksbloem en orchideeën.",
-          "attributed_source_text": null
-        }
-      ],
-      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08295",
-      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-04-02/suzegroenewegzaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-04-02T10%3A00%3A15%2B0200&end=2025-04-02T15%3A44%3A47%2B0200",
-      "start_seconds": 1033.0,
-      "gist": "biodiversiteitsverlies feitelijk bewezen metingen",
-      "samenvatting": null
-    },
-    "3016": {
-      "id": 3016,
-      "citaat": "Het veranderen van wetten gaat niets veranderen aan het feit dat zeker 70% van de soorten uit de Habitatrichtlijn in een ongunstige staat van instandhouding verkeert en dat het heel slecht gaat met een groot gedeelte van onze insecten. Die insecten zijn fundamenteel voor onze voedselvoorziening en voedselzekerheid. Ik heb hier een motie die de collega van de PVV ook heeft gesteund. Die zegt: kabinet, neem nou maatregelen om ervoor te zorgen dat de negatieve trend, die onder andere geldt bij de bijen, die ook zo belangrijk zijn voor onze voedselvoorziening, wordt gekeerd. Er zijn dus extra maatregelen nodig, want het huidige beleid is onvoldoende.",
-      "typologie": "factual",
-      "stance": "pro",
-      "spreker": "Ines Kostić",
-      "partij": "PvdD",
-      "tags": [],
-      "claims": [
-        {
-          "claim_text": "zeker 70% van de soorten uit de Habitatrichtlijn in een ongunstige staat van instandhouding verkeert",
-          "attributed_source_text": null
-        },
-        {
-          "claim_text": "het heel slecht gaat met een groot gedeelte van onze insecten",
-          "attributed_source_text": null
-        },
-        {
-          "claim_text": "insecten zijn fundamenteel voor onze voedselvoorziening en voedselzekerheid",
-          "attributed_source_text": null
-        },
-        {
-          "claim_text": "de huidige beleid is onvoldoende",
-          "attributed_source_text": null
-        }
-      ],
-      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08295",
-      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-04-02/suzegroenewegzaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-04-02T10%3A00%3A15%2B0200&end=2025-04-02T15%3A44%3A47%2B0200",
-      "start_seconds": 3188.0,
-      "gist": "soortenrijkdom blijft ernstig bedreigd",
-      "samenvatting": null
-    },
-    "3311": {
-      "id": 3311,
-      "citaat": "De kritische depositiewaarden worden uit de wet gehaald. We hebben gezien dat dit bewegende doelen zijn. Je kunt geen beleid formuleren op doelen die voortdurend kunnen veranderen of worden bijgesteld. Dat zien wij ook. Daarom staat het in het hoofdlijnenakkoord en hebben we dit in het regeerprogramma opgenomen. Er staat wel bij dat er een juridisch houdbaar alternatief komt, omdat je er wel aan bent gehouden om de Vogel- en Habitatrichtlijn in nationale wetgeving te implementeren. Het vorige kabinet heeft dat gedaan door onder andere de omgevingswaarde in de wet op te nemen. Het vorige kabinet is ook al tot het inzicht gekomen dat dit niet handig was in verband met de actualisatie daarvan. Wij willen zo snel mogelijk de KDW's uit de wet halen.",
-      "typologie": "legal",
-      "stance": "contra",
-      "spreker": "Femke Marije Wiersma",
-      "partij": "BBB",
-      "tags": [],
-      "claims": [],
-      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08295",
-      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-04-02/suzegroenewegzaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-04-02T10%3A00%3A15%2B0200&end=2025-04-02T15%3A44%3A47%2B0200",
-      "start_seconds": 13299.0,
-      "gist": "KDW schrappen wegens verschuiving",
-      "samenvatting": "De kritische depositiewaarden moeten uit de wet worden geschrapt omdat het telkens verschuivende doelpalen zijn waarop geen stabiel beleid kan worden gevoerd."
-    },
-    "3330": {
-      "id": 3330,
-      "citaat": "We zijn het met elkaar eens dat het niet allesbepalend is, zoals je soms ook ziet aan de feitelijke staat van de natuur. Dat is ook de reden waarom in het hoofdlijnenakkoord en het regeerprogramma staat dat we af moeten van het enkelzijdige kijken naar de KDW's en toe moeten naar de stand van de natuur.",
-      "typologie": "factual",
-      "stance": "contra",
-      "spreker": "Femke Marije Wiersma",
-      "partij": "BBB",
-      "tags": [],
-      "claims": [
-        {
-          "claim_text": "de KDW's zijn niet allesbepalend, zoals je soms ook ziet aan de feitelijke staat van de natuur",
-          "attributed_source_text": null
-        },
-        {
-          "claim_text": "in het hoofdlijnenakkoord en het regeerprogramma staat dat we af moeten van het enkelzijdige kijken naar de KDW's en toe moeten naar de stand van de natuur",
-          "attributed_source_text": "hoofdlijnenakkoord en het regeerprogramma"
-        }
-      ],
-      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08295",
-      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-04-02/suzegroenewegzaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-04-02T10%3A00%3A15%2B0200&end=2025-04-02T15%3A44%3A47%2B0200",
-      "start_seconds": 17567.5,
-      "gist": "stikstof niet allesbepalend natuurherstel",
-      "samenvatting": "Natuurbeleid moet uitgaan van de feitelijke staat van instandhouding en meervoudige ecologische factoren, in plaats van uitsluitend te sturen op stikstofdepositie."
-    },
-    "3331": {
-      "id": 3331,
-      "citaat": "Er zijn heel veel habitatsoorten waarvan de KDW overschreden wordt, die in goede staat van instandhouding zijn. Het een sluit het ander dus niet uit, maar het is een van de indicatoren. Dat wij het in onze wet als resultaatverplichting hebben opgenomen, was niet goed. Daarom zijn we er nu mee bezig om dat te herstellen en de KDW weer te gebruiken waar die voor bedoeld is: als een van de indicatoren van drukfactoren op habitatsoorten.",
-      "typologie": "factual",
-      "stance": "contra",
-      "spreker": "Femke Marije Wiersma",
-      "partij": "BBB",
-      "tags": [],
-      "claims": [
-        {
-          "claim_text": "Er zijn heel veel habitatsoorten waarvan de KDW overschreden wordt, die in goede staat van instandhouding zijn",
-          "attributed_source_text": null
-        },
-        {
-          "claim_text": "Dat wij het in onze wet als resultaatverplichting hebben opgenomen, was niet goed",
-          "attributed_source_text": null
-        }
-      ],
-      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08295",
-      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-04-02/suzegroenewegzaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-04-02T10%3A00%3A15%2B0200&end=2025-04-02T15%3A44%3A47%2B0200",
-      "start_seconds": 17604.601,
-      "gist": "KDW-overschrijding sluit herstel niet",
-      "samenvatting": null
-    },
-    "3337": {
-      "id": 3337,
-      "citaat": "Iedereen die denkt en belooft dat de PAS-melders gelegaliseerd kunnen worden zonder dat er andere boeren stoppen ofwel vee inleveren, draait boeren gewoon een rad voor ogen. Dat doet deze minister ook.",
-      "typologie": "factual",
-      "stance": "pro",
-      "spreker": "Laura Bromet",
-      "partij": "GroenLinks-PvdA",
-      "tags": [],
-      "claims": [],
-      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08295",
-      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-04-02/suzegroenewegzaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-04-02T10%3A00%3A15%2B0200&end=2025-04-02T15%3A44%3A47%2B0200",
-      "start_seconds": 19181.5,
-      "gist": "PAS-legalisatie vergt reële stikstofruimte",
-      "samenvatting": "Legalisatie van PAS-melders is onmogelijk zonder dat andere partijen aantoonbaar uitstoot inleveren; een papieren oplossing zonder stikstofruimte misleidt ondernemers."
     }
   },
   "bands": [
     {
       "nummer": 1,
-      "thema": "Is stikstofreductie de doorslaggevende factor voor natuurherstel?",
+      "thema": "Kan een ondergrens zonder stikstofreductie standhouden?",
       "pro": {
         "type": "node",
-        "id": 405,
+        "id": 149,
         "kids": [
           {
-            "id": 1472,
-            "weak_link": false,
-            "scheme": "Argument from Expert Opinion"
+            "id": 1611,
+            "scheme": "Argument from Expert Opinion",
+            "reden": "Het premisse-argument voert een bron/autoriteit op (wetenschappelijk advies) die de noodzaak van een reductiepakket onderbouwt, wat direct aansluit op de eis van een reductiepakket in het doelwit-argument."
           }
         ]
       },
       "contra": {
         "type": "node",
-        "id": 3330,
+        "id": 148,
         "kids": [
           {
-            "id": 2980,
-            "weak_link": true,
-            "scheme": null
+            "id": 151,
+            "scheme": "Argument from Analogy",
+            "reden": "Het argument dat buurlanden soepelere grenzen hanteren dient naar analogie als expliciete grond of precedent om een hogere ondergrens (1 mol) in te voeren."
           }
         ]
       },
       "oppositie": {
-        "argument_a_id": 3330,
-        "argument_b_id": 405,
+        "argument_a_id": 149,
+        "argument_b_id": 148,
         "scheme": null,
-        "weak_link": true,
-        "confidence": 0.5
+        "reden": "Het premise-argument noemt expliciet de rekenkundige ondergrens en stelt dat invoering daarvan juridisch onhoudbaar is zonder geborgde stikstofreductie, waarmee het inhoudelijk rechtstreeks ingaat op het voorstel uit het target-argument."
+      }
+    },
+    {
+      "nummer": 2,
+      "thema": "Biedt een rekenkundige ondergrens reële natuurbescherming?",
+      "pro": {
+        "type": "node",
+        "id": 2693,
+        "kids": []
+      },
+      "contra": {
+        "type": "ref",
+        "ref_id": 148,
+        "band_nummer": 1
+      },
+      "oppositie": {
+        "argument_a_id": 2693,
+        "argument_b_id": 148,
+        "scheme": null,
+        "reden": "Het argument dat depositie niet administratief verdwijnt reageert inhoudelijk direct op het voorstel voor een rekenkundige ondergrens, waarbij uitstoot administratief buiten beschouwing wordt gelaten."
+      }
+    },
+    {
+      "nummer": 3,
+      "thema": "Is de KDW een betrouwbare natuurmaatstaf?",
+      "pro": {
+        "type": "node",
+        "id": 141,
+        "kids": [
+          {
+            "id": 142,
+            "scheme": "Argument from Expert Opinion",
+            "reden": "Het premise-argument noemt expliciet een bron en autoriteitsgrond ('bevestigd door officiële rapporten') ter onderbouwing van de stelling dat de natuur verslechtert."
+          },
+          {
+            "id": 119,
+            "scheme": "Argument from Expert Opinion",
+            "reden": "Het feit dat de Ecologische Autoriteit alarm slaat fungeert als autoriteitsbron/grond die direct aansluit bij de stelling dat onderzoek van diezelfde autoriteit aantoont dat de natuur verslechtert."
+          }
+        ]
+      },
+      "contra": {
+        "type": "node",
+        "id": 157,
+        "kids": [
+          {
+            "id": 522,
+            "scheme": null,
+            "reden": "Dat modelnormen losstaan van de werkelijke natuurstaat vormt een directe inhoudelijke grond voor de stelling dat het louter baseren van natuurkwaliteit op die normen gebeurt zonder feitelijke waarneming."
+          }
+        ]
+      },
+      "oppositie": {
+        "argument_a_id": 157,
+        "argument_b_id": 141,
+        "scheme": null,
+        "reden": "Het premise-argument bekritiseert expliciet de methodiek van de Ecologische Autoriteit waarop het target-argument zijn conclusie over natuurverslechtering baseert."
+      }
+    },
+    {
+      "nummer": 4,
+      "thema": "Moet de veestapel verplicht krimpen voor natuurherstel?",
+      "pro": {
+        "type": "node",
+        "id": 781,
+        "kids": [
+          {
+            "id": 115,
+            "scheme": "Argument from Cause to Effect",
+            "reden": "Het argument dat minder dieren nodig zijn voor ammoniakreductie biedt het inhoudelijke mechanisme (minder uitstoot) waarom een krimp van de veestapel nodig is om de stikstofdoelen te halen."
+          }
+        ]
+      },
+      "contra": {
+        "type": "node",
+        "id": 959,
+        "kids": [
+          {
+            "id": 1589,
+            "scheme": "Argument from Established Rule",
+            "reden": "Het argument dat het hoofdlijnenakkoord krimpsturing verbiedt, dient als expliciete normatieve bron/grond voor de stelling dat er niet mag worden gestuurd op gedwongen krimp."
+          }
+        ]
+      },
+      "oppositie": {
+        "argument_a_id": 959,
+        "argument_b_id": 781,
+        "scheme": null,
+        "reden": "Het premise-argument gaat direct in op de krimp van de veestapel door te stellen dat gedwongen krimp niet mag plaatsvinden, wat rechtstreeks botst met de stelling van het target-argument dat krimp onontkoombaar is om de doelen te halen."
+      }
+    },
+    {
+      "nummer": 5,
+      "thema": "Zijn verplichte bufferzones rond natuurgebieden noodzakelijk?",
+      "pro": {
+        "type": "node",
+        "id": 61,
+        "kids": [
+          {
+            "id": 556,
+            "scheme": "Argument from Expert Opinion",
+            "reden": "Het premise-argument noemt een gezaghebbende bron (RIVM) die de effectiviteit van zonering aantoont, wat direct als onderbouwing dient voor de noodzaak en werking van zonering rond natuurgebieden in het doelwit-argument."
+          }
+        ]
+      },
+      "contra": {
+        "type": "node",
+        "id": 124,
+        "kids": []
+      },
+      "oppositie": {
+        "argument_a_id": 124,
+        "argument_b_id": 61,
+        "scheme": null,
+        "reden": "Het premise-argument gaat direct in op de voorgestelde bufferzones/zonering rond natuurgebieden en betwist de noodzaak hiervan door te stellen dat er geen wetenschappelijke grondslag voor is."
+      }
+    },
+    {
+      "nummer": 6,
+      "thema": "Is stikstofreductie of waterbeheer doorslaggevend voor natuurherstel?",
+      "pro": {
+        "type": "node",
+        "id": 127,
+        "kids": [
+          {
+            "id": 1472,
+            "scheme": "Argument from Expert Opinion",
+            "reden": "Het premise-argument noemt het RIVM als expliciete bron/autoriteit die waarschuwt voor natuurverlies, wat direct aansluit op de stelling in het target-argument dat de natuur verslechtert."
+          },
+          {
+            "id": 163,
+            "scheme": "Argument from Cause to Effect",
+            "reden": "Het overschrijden van ecologische grenzen door mest dient als een concrete oorzaak en onderbouwing voor de stelling dat de kwetsbare natuur verslechtert."
+          }
+        ]
+      },
+      "contra": {
+        "type": "node",
+        "id": 824,
+        "kids": [
+          {
+            "id": 1266,
+            "scheme": "Argument from Cause to Effect",
+            "reden": "Dat hydrologie de natuur weerbaar maakt, biedt een directe oorzaak/grond voor de stelling dat natuurherstel primair hydrologische ingrepen vereist."
+          }
+        ]
+      },
+      "oppositie": {
+        "argument_a_id": 824,
+        "argument_b_id": 127,
+        "scheme": null,
+        "reden": "Het premise-argument gaat direct in op de noodzaak van stikstofaanpak voor de natuur door te stellen dat natuurherstel primair om hydrologische ingrepen vraagt in plaats van een fixatie op stikstofdepositie."
       }
     }
   ],
-  "losse_groepen": [
-    {
-      "kind": "group",
-      "label": "economische schade voor boerengezinnen",
-      "samenvatting": "Strenge stikstofmaatregelen bedreigen het voortbestaan van boerengezinnen en veroorzaken zware economische schade en aanhoudende onzekerheid op het platteland.",
-      "member_ids": [
-        35,
-        88,
-        1041
-      ]
-    },
-    {
-      "kind": "group",
-      "label": "historische achteruitgang van biodiversiteit",
-      "samenvatting": "De Nederlandse biodiversiteit en kwetsbare soorten zijn in de afgelopen eeuw dramatisch achteruitgegaan door intensivering van het landgebruik.",
-      "member_ids": [
-        2696,
-        2994
-      ]
-    }
-  ],
+  "losse_groepen": [],
   "losse_argumenten": [
+    292,
     623,
-    578,
-    3016,
-    3311,
-    3331,
-    2811,
-    1374,
-    818,
-    417,
-    2714,
-    2886,
-    2798,
-    510,
-    470,
-    625,
-    148,
-    3337,
-    2954,
-    2812,
-    1060,
-    586,
-    86,
-    283,
-    1590
+    524,
+    525,
+    159,
+    87,
+    1103,
+    347,
+    413,
+    1394,
+    60,
+    315,
+    352,
+    948,
+    853,
+    1099
   ],
   "twijfelachtige_classificaties": [
     {
-      "argument_id": 1,
-      "huidige_stance": "pro",
-      "reden": "Citaat van Van der Plas (BBB) verzet zich tegen het strenge stikstofbeleid en verdedigt het boerenperspectief; inhoudelijk contra."
+      "argument_id": 131,
+      "huidige_stance": "contra",
+      "reden": "citaat pleit juist tegen continue beleidsafzwakking en voor het doorzetten van ferme reductiemaatregelen"
     },
     {
-      "argument_id": 2,
+      "argument_id": 137,
+      "huidige_stance": "contra",
+      "reden": "citaat spreekt expliciet uit dat elke verandering die een afzwakking van beleid betekent niet gesteund zal worden"
+    },
+    {
+      "argument_id": 879,
       "huidige_stance": "pro",
-      "reden": "Citaat van Van der Plas (BBB) prijst BBB-beleid waarin stikstofdwang en boerenprotesten afwezig waren; inhoudelijk contra."
+      "reden": "citaat pleit ervoor om de KDW uit de wet te halen omdat deze zelfs bij volledige economische stilstand onhaalbaar zou zijn"
     },
     {
       "argument_id": 46,
       "huidige_stance": "pro",
-      "reden": "Pleit voor invoering van een rekenkundige ondergrens om projecten zonder stikstofbeperkingen door te laten gaan; inhoudelijk contra."
+      "reden": "citaat bepleit de invoering van een rekenkundige ondergrens zodat 95% van de projecten doorgang kan vinden"
     },
     {
-      "argument_id": 1012,
-      "huidige_stance": "pro",
-      "reden": "Pleit namens JA21 voor versoepeling van de rekenkundige drempel naar 1 mol om vergunningen makkelijker te verlenen; inhoudelijk contra."
-    },
-    {
-      "argument_id": 1137,
+      "argument_id": 487,
       "huidige_stance": "contra",
-      "reden": "Podt (D66) waarschuwt tegen stijgende stikstofuitstoot bij kwetsbare natuur en pleit voor juridisch geborgde reductie; inhoudelijk pro."
-    },
-    {
-      "argument_id": 1166,
-      "huidige_stance": "contra",
-      "reden": "Ouwehand (PvdD) dringt aan op daadwerkelijk natuurherstel en harde stikstofmaatregelen, wat zuiver bij het pro-standpunt hoort."
-    },
-    {
-      "argument_id": 1394,
-      "huidige_stance": "contra",
-      "reden": "Bromet (GroenLinks-PvdA) stelt dat stikstofvermindering de enige oplossing is voor legalisatie; dit is een pro-reductiestandpunt."
-    },
-    {
-      "argument_id": 3036,
-      "huidige_stance": "contra",
-      "reden": "Podt (D66) roept op tot onmiddellijke substantiële uitstootvermindering in plaats van minder meten; onmiskenbaar pro-reductie."
+      "reden": "citaat bekritiseert de neerwaartse bijstelling van doelen en maakt zich zorgen over verdere achteruitgang van de natuur"
     }
   ]
 }
