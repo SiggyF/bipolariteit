@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { debateName } from "../lib/debateName";
 import { formatDate } from "../lib/formatDate";
 import { perspectiefWeergaveNaam, tagIconPath } from "../lib/tagIcon";
@@ -50,7 +50,20 @@ const active = computed(() => activeArguments(props.arguments, props.currentTime
 // titel nu kort ("Laatste gelabelde debat") is i.p.v. de volledige debatnaam.
 const debateTitle = computed(() => debateName(props.arguments[0]?.document.video_url ?? null));
 const debateDate = computed(() => formatDate(props.arguments[0]?.document.published_at ?? null));
-const showTitleCard = computed(() => props.currentTime < 4.5);
+
+// Was `currentTime < 4.5`: klopte alleen als de video vanaf t=0 start. Een
+// fragment (bv. vanuit ArgumentTree.vue of ClaimsHighlights.vue) seekt meteen
+// naar het start_seconds van dat argument -- vaak ver voorbij 4.5s -- dus de
+// titelkaart (en daarmee de enige plek waar de datum stond) verscheen dan
+// nooit. Nu gebaseerd op wanneer déze overlay is gemount, niet op de
+// videopositie: elke keer dat je een nieuw debat/fragment opent zie je 'm
+// even, ongeacht waar de video zelf start.
+const showTitleCard = ref(true);
+onMounted(() => {
+	setTimeout(() => {
+		showTitleCard.value = false;
+	}, 4500);
+});
 
 // Uit het ontwerpprototype (.dc.html): naast de naamplaat een klok die, als
 // er nu geen gelabeld argument loopt, "volgend argument om ..." toont en
