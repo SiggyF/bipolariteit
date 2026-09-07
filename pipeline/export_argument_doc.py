@@ -1,7 +1,8 @@
 """
-Argumentexport voor handmatige structurering via Gemini: dumpt alle
-pro/contra-argumenten van één topic (met typologie, tags, onderbouwende
-claims en reeds bekende opposities) als leesbaar markdown-document.
+Argumentexport voor de structureringsstap (pipeline/prompts/argument_tree_gemini.md,
+zie scripts/agy_run_confrontatie_tree.py): dumpt alle pro/contra-argumenten
+van één topic (met typologie, tags, onderbouwende claims) als leesbaar
+markdown-document.
 
 GEEN LLM-call -- puur een export, net als build_static_data.py. Bedoeld om
 in een Gemini-chat te plakken/uploaden, samen met het bijbehorende
@@ -106,33 +107,6 @@ def fetch_stance_arguments(conn, topic_id, stance, vanaf, limit):
     return arguments
 
 
-def fetch_oppositions(conn, argument_ids):
-    """Alle reeds bekende opposities (beide relation_type) tussen argumenten
-    die in déze export zitten -- in tegenstelling tot
-    build_argument_tree.py::fetch_oppositions nemen we ook 'thematic' mee:
-    dit is een hint voor Gemini om zelf op voort te bouwen, geen garantie
-    die in de frontend getekend moet worden."""
-    if not argument_ids:
-        return []
-    placeholders = ",".join("?" * len(argument_ids))
-    rows = conn.execute(
-        f"""SELECT argument_a_id, argument_b_id, relation_type, confidence
-            FROM argument_oppositions
-            WHERE argument_a_id IN ({placeholders})
-              AND argument_b_id IN ({placeholders})""",
-        (*argument_ids, *argument_ids),
-    ).fetchall()
-    return [
-        {
-            "argument_a_id": row["argument_a_id"],
-            "argument_b_id": row["argument_b_id"],
-            "relation_type": row["relation_type"],
-            "confidence": row["confidence"],
-        }
-        for row in rows
-    ]
-
-
 def _format_argument(arg):
     lines = [f'### id {arg["id"]}: {arg["typology"]}, {arg["actor_name"]} ({arg["actor_party"]})']
     lines.append(f'> {arg["quote_text"]}')
@@ -149,7 +123,7 @@ def _format_argument(arg):
     return "\n".join(lines)
 
 
-def build_document(topic_row, stances_by_name, oppositions=None):
+def build_document(topic_row, stances_by_name):
     slug, name = topic_row["slug"], topic_row["name"]
     total = sum(len(args) for args in stances_by_name.values())
     lines = [
@@ -179,20 +153,6 @@ def build_document(topic_row, stances_by_name, oppositions=None):
             lines.append(_format_argument(arg))
             lines.append("")
 
-    # Bewust weglaatbaar (--include-known-oppositions): we willen eerst een
-    # ongekleurde eerste run met Gemini, zonder de (heel spaarzame) bestaande
-    # database-opposities als impliciete hint mee te geven.
-    if oppositions is not None:
-        lines.append(f"## Reeds bekende opposities uit de database ({len(oppositions)})")
-        lines.append("")
-        if oppositions:
-            for opp in oppositions:
-                relatie = "weerlegt direct" if opp["relation_type"] == "direct_rebuttal" else "thematisch verband met"
-                lines.append(f'- id {opp["argument_a_id"]} {relatie} id {opp["argument_b_id"]} (confidence: {opp["confidence"]})')
-        else:
-            lines.append("(geen)")
-        lines.append("")
-
     return "\n".join(lines)
 
 
@@ -211,11 +171,6 @@ def main():
         "--vanaf", default=None, help="ISO-datum; overschrijft [verwerking].vanaf uit data/politieke-periodes.toml"
     )
     parser.add_argument("--out", default=None, help="uitvoerpad (default: data/export/argument-docs/<topic>.md)")
-    parser.add_argument(
-        "--include-known-oppositions", action="store_true",
-        help="voeg de (spaarzame) reeds bekende database-opposities toe als hint-sectie -- "
-             "default uit, voor een ongekleurde eerste run met Gemini",
-    )
     parser.add_argument("--dry-run", action="store_true", help="niets wegschrijven, alleen printen")
     args = parser.parse_args()
 
@@ -232,17 +187,14 @@ def main():
     vanaf = args.vanaf if args.vanaf is not None else PeriodeIndex().drempel
 
     stances_by_name = {}
-    all_ids = []
     for stance in stances:
         arguments = fetch_stance_arguments(conn, topic_row["id"], stance, vanaf, args.limit)
         stances_by_name[stance] = arguments
-        all_ids.extend(arg["id"] for arg in arguments)
         logger.info("topic=%s stance=%-8s %d argument(en)", topic_row["slug"], stance, len(arguments))
 
-    oppositions = fetch_oppositions(conn, all_ids) if args.include_known_oppositions else None
     conn.close()
 
-    document = build_document(topic_row, stances_by_name, oppositions)
+    document = build_document(topic_row, stances_by_name)
 
     if args.dry_run:
         print(document)

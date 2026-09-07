@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-05T23:10:24+02:00",
+  "generated_at": "2026-09-07T21:36:01+02:00",
   "topics": [
     {
       "slug": "stikstof",
@@ -9,7 +9,7 @@
       "documents_extracted": 3889,
       "arguments_total": 1988,
       "arguments_tagged": 1567,
-      "documents_redactie_checked": 5,
+      "argumentenboom_banden": 6,
       "arguments_ander_onderwerp": 10,
       "ander_onderwerp_top": [
         {
@@ -62,7 +62,7 @@
       "documents_extracted": 586,
       "arguments_total": 439,
       "arguments_tagged": 439,
-      "documents_redactie_checked": 0,
+      "argumentenboom_banden": 6,
       "arguments_ander_onderwerp": 0,
       "ander_onderwerp_top": [],
       "llm_calls_by_model": [
@@ -87,7 +87,7 @@
       "documents_extracted": 4809,
       "arguments_total": 3555,
       "arguments_tagged": 1826,
-      "documents_redactie_checked": 0,
+      "argumentenboom_banden": 3,
       "arguments_ander_onderwerp": 92,
       "ander_onderwerp_top": [
         {
@@ -164,7 +164,7 @@
       "documents_extracted": 5612,
       "arguments_total": 4143,
       "arguments_tagged": 1835,
-      "documents_redactie_checked": 0,
+      "argumentenboom_banden": 3,
       "arguments_ander_onderwerp": 119,
       "ander_onderwerp_top": [
         {

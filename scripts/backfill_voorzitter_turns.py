@@ -9,8 +9,8 @@ Documenten die hierdoor alsnog als voorzitter-beurt herkend worden, kunnen al
 vóór deze fix door Stage 1 verwerkt zijn (arguments toegeschreven aan de
 voorzitter's eigen fractie, terwijl het procedurele tekst was -- zie
 docs/handoff.md). --purge-arguments verwijdert die arguments (+ afhankelijke
-claims/argument_tags/argument_oppositions) alsnog; zonder die flag rapporteert
-dit script alleen hoeveel dat er zijn, zonder iets te verwijderen.
+claims/argument_tags) alsnog; zonder die flag rapporteert dit script alleen
+hoeveel dat er zijn, zonder iets te verwijderen.
 
 Gebruik:
     uv run python scripts/backfill_voorzitter_turns.py --topic stikstof [--dry-run] [--purge-arguments]
@@ -43,10 +43,6 @@ def purge_arguments_for_document(conn, document_id):
     for argument_id in argument_ids:
         conn.execute("DELETE FROM argument_tags WHERE argument_id = ?", (argument_id,))
         conn.execute("DELETE FROM claims WHERE argument_id = ?", (argument_id,))
-        conn.execute(
-            "DELETE FROM argument_oppositions WHERE argument_a_id = ? OR argument_b_id = ?",
-            (argument_id, argument_id),
-        )
     conn.execute("DELETE FROM arguments WHERE document_id = ?", (document_id,))
     return len(argument_ids)
 

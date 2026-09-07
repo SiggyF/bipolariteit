@@ -39,7 +39,6 @@ export interface Argument {
 		published_at: string | null;
 		speaker_video_url: string | null;
 		tweedekamer_activiteit_url: string | null;
-		redactie_review: { pass_status: string; notes: string | null } | null;
 		// Het afspeelbare HLS-manifest (pipeline/fetch_subtitles.py); null zolang
 		// dat nog niet (succesvol) opgehaald is voor dit debat.
 		raw_video_url: string | null;
@@ -49,7 +48,6 @@ export interface Argument {
 	periode: { kamer: string | null; regering: string | null };
 	claims: Claim[];
 	tags: Tag[];
-	oppositions: { argument_id: number; relation_type: string; confidence: number | null }[];
 }
 
 // Vorm van één sprekerbeurt in data/export/topics/<slug>.json (zie

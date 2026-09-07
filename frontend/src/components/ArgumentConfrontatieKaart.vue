@@ -180,6 +180,14 @@ defineExpose({ rootEl });
 	line-height: 1.25;
 }
 
+/* Vangnet voor gists die (nog) met een kleine letter uit de LLM komen --
+   de prompt (pipeline/prompts/argument_tree_gemini.md) vraagt inmiddels
+   om een hoofdletter, maar al gegenereerde data hoeft niet meteen opnieuw
+   te draaien om er correct uit te zien. */
+.ack-gist::first-letter {
+	text-transform: uppercase;
+}
+
 .ack-kid .ack-gist {
 	font-size: 1.02rem;
 }

@@ -95,14 +95,14 @@
 							<div v-if="toonOnderbouwing && band.pro?.type === 'node' && band.pro.kids.length" class="confrontatie-kids confrontatie-kids-pro">
 								<ArgumentConfrontatieKaart
 									v-for="kid in band.pro.kids"
-									:key="kid"
+									:key="kid.id"
 									variant="kid"
 									side="pro"
-									:argument="argumentFor(kid)"
-									:selected="selectedId === kid"
-									:linked="isLinked(kid)"
+									:argument="argumentFor(kid.id)"
+									:selected="selectedId === kid.id"
+									:linked="isLinked(kid.id)"
 									:show-citaat="toonCitaten"
-									:opp-gist="oppositionGist(kid)"
+									:opp-gist="oppositionGist(kid.id)"
 									@select="selectArgument"
 									@hover="hoverId = $event"
 									@unhover="hoverId = null"
@@ -144,14 +144,14 @@
 							<div v-if="toonOnderbouwing && band.contra?.type === 'node' && band.contra.kids.length" class="confrontatie-kids confrontatie-kids-contra">
 								<ArgumentConfrontatieKaart
 									v-for="kid in band.contra.kids"
-									:key="kid"
+									:key="kid.id"
 									variant="kid"
 									side="contra"
-									:argument="argumentFor(kid)"
-									:selected="selectedId === kid"
-									:linked="isLinked(kid)"
+									:argument="argumentFor(kid.id)"
+									:selected="selectedId === kid.id"
+									:linked="isLinked(kid.id)"
 									:show-citaat="toonCitaten"
-									:opp-gist="oppositionGist(kid)"
+									:opp-gist="oppositionGist(kid.id)"
 									@select="selectArgument"
 									@hover="hoverId = $event"
 									@unhover="hoverId = null"
@@ -329,10 +329,16 @@ interface ExportArgument {
 	samenvatting: string | null;
 }
 
+interface Kid {
+	id: number;
+	scheme: string | null;
+	reden: string;
+}
+
 interface BandSlot {
 	type: "node" | "ref";
 	id?: number;
-	kids?: number[];
+	kids?: Kid[];
 	ref_id?: number;
 	band_nummer?: number;
 }
@@ -342,7 +348,12 @@ interface Band {
 	thema: string;
 	pro: BandSlot | null;
 	contra: BandSlot | null;
-	oppositie: { argument_a_id: number; argument_b_id: number; relation_type: string } | null;
+	oppositie: {
+		argument_a_id: number;
+		argument_b_id: number;
+		scheme: string | null;
+		reden: string;
+	} | null;
 }
 
 interface LosseGroep {
@@ -612,7 +623,7 @@ const kidsRails = computed<KidsRail[]>(() => {
 			if (!kids.length) continue;
 			const hoofd = r[slot.id];
 			if (!hoofd) continue;
-			const kidYs = kids.map((id) => r[id]?.anchorY).filter((y): y is number => y !== undefined);
+			const kidYs = kids.map((kid) => r[kid.id]?.anchorY).filter((y): y is number => y !== undefined);
 			if (!kidYs.length) continue;
 			// Start bij de hoofdkaart zelf (niet pas bij de eerste kid): dat
 			// laat in één lijn zien dat de hele tak -- hoofdargument mét

@@ -33,14 +33,12 @@ from zoneinfo import ZoneInfo
 import pandas as pd
 import prince
 
+from pipeline.build_confrontatie_export import TREE_EXPORT_DIR
 from pipeline.db import db
 from pipeline.extract_arguments import PROMPT_VERSION as EXTRACT_PROMPT_VERSION
 from pipeline.extract_arguments import _build_prompt as _build_extraction_prompt
 from pipeline.match_argument_spans import expected_event_type
 from pipeline.periodes import PeriodeIndex
-from pipeline.redactie_check import PROMPT_TEMPLATE as REDACTIE_PROMPT_TEMPLATE
-from pipeline.redactie_check import PROMPT_VERSION as REDACTIE_PROMPT_VERSION
-from pipeline.redactie_check import _format_arguments_block
 from pipeline.tag_arguments import PROMPT_VERSION as TAG_PROMPT_VERSION
 from pipeline.tag_arguments import _build_prompt as _build_tagging_prompt
 from pipeline.tag_arguments import build_tag_catalogue
@@ -116,42 +114,6 @@ def _topic_image_url(arguments):
     return None
 
 
-def fetch_redactie_reviews(conn, topic_id):
-    """document_id -> {pass_status, notes}. Nooit een oordeel over of een
-    argument feitelijk klopt, alleen de corpus-brede pro/contra-balans op
-    het moment dat het document verwerkt is -- zie schema.sql/redactie_check.py."""
-    rows = conn.execute(
-        """SELECT rr.document_id, rr.pass_status, rr.notes
-           FROM redactie_reviews rr
-           JOIN documents d ON d.id = rr.document_id
-           WHERE d.topic_id = ?""",
-        (topic_id,),
-    ).fetchall()
-    return {row["document_id"]: {"pass_status": row["pass_status"], "notes": row["notes"]} for row in rows}
-
-
-def fetch_oppositions(conn, topic_id):
-    """argument_id -> lijst van tegenargumenten (symmetrisch: zowel vanaf
-    argument_a als argument_b bekeken), voor het tonen van een link tussen
-    een argument en zijn tegenhanger(s) in de frontend. Nooit een oordeel
-    over wie gelijk heeft -- alleen de relatie zelf (direct_rebuttal/thematic)."""
-    rows = conn.execute(
-        """SELECT ao.argument_a_id, ao.argument_b_id, ao.relation_type, ao.confidence
-           FROM argument_oppositions ao
-           JOIN arguments a ON a.id = ao.argument_a_id
-           WHERE a.topic_id = ?""",
-        (topic_id,),
-    ).fetchall()
-
-    oppositions_by_argument = {}
-    for row in rows:
-        a_id, b_id = row["argument_a_id"], row["argument_b_id"]
-        entry = {"relation_type": row["relation_type"], "confidence": row["confidence"]}
-        oppositions_by_argument.setdefault(a_id, []).append({"argument_id": b_id, **entry})
-        oppositions_by_argument.setdefault(b_id, []).append({"argument_id": a_id, **entry})
-    return oppositions_by_argument
-
-
 def fetch_arguments(conn, topic_id, periode_index):
     rows = conn.execute(
         """SELECT ar.id, ar.stance, ar.typology, ar.quote_text, ar.quote_context,
@@ -204,9 +166,6 @@ def fetch_arguments(conn, topic_id, periode_index):
             }
         )
 
-    redactie_by_document = fetch_redactie_reviews(conn, topic_id)
-    oppositions_by_argument = fetch_oppositions(conn, topic_id)
-
     arguments = []
     for row in rows:
         arguments.append(
@@ -242,7 +201,6 @@ def fetch_arguments(conn, topic_id, periode_index):
                         row["is_voorzitter_turn"],
                     ),
                     "tweedekamer_activiteit_url": row["tweedekamer_activiteit_url"],
-                    "redactie_review": redactie_by_document.get(row["document_id"]),
                     # Het afspeelbare HLS-manifest (pipeline/fetch_subtitles.py); NULL
                     # zolang de detail-API nog niet (succesvol) bevraagd is voor dit debat.
                     "raw_video_url": row["raw_video_url"],
@@ -253,7 +211,6 @@ def fetch_arguments(conn, topic_id, periode_index):
                 "periode": periode_index.voor(row["published_at"]),
                 "claims": claims_by_argument.get(row["id"], []),
                 "tags": tags_by_argument.get(row["id"], []),
-                "oppositions": oppositions_by_argument.get(row["id"], []),
             }
         )
     return arguments
@@ -364,12 +321,7 @@ def fetch_pipeline_status(conn, topic_row, drempel):
         (topic_id, drempel),
     ).fetchall()
 
-    documents_with_redactie = conn.execute(
-        """SELECT COUNT(DISTINCT rr.document_id)
-           FROM redactie_reviews rr JOIN documents d ON d.id = rr.document_id
-           WHERE d.topic_id = ? AND d.published_at >= ?""",
-        (topic_id, drempel),
-    ).fetchone()[0]
+    boom_bands = _fetch_argumentenboom_status(topic_row["slug"])
 
     return {
         "slug": topic_row["slug"],
@@ -379,12 +331,29 @@ def fetch_pipeline_status(conn, topic_row, drempel):
         "documents_extracted": extraction_attempted,
         "arguments_total": arguments_total,
         "arguments_tagged": arguments_tagged,
-        "documents_redactie_checked": documents_with_redactie,
+        # Redactie zit sinds issue #252 niet meer in een per-document-telling
+        # (het oude Stage 2, argument_oppositions/redactie_reviews), maar in
+        # de argumentenboom-pipeline zelf: elke relatie in een band is
+        # per relatie apart, neutraal gecontroleerd (zie
+        # pipeline/confrontatie_tree.py) voordat 'm de boom in mag.
+        "argumentenboom_banden": boom_bands,
         "arguments_ander_onderwerp": sum(row["aantal"] for row in ander_onderwerp_rows),
         "ander_onderwerp_top": [
             {"onderwerp": row["onderwerp"], "aantal": row["aantal"]} for row in ander_onderwerp_rows[:10]
         ],
     }
+
+
+def _fetch_argumentenboom_status(slug):
+    """Aantal confrontatie-banden uit de gepubliceerde argumentenboom-export,
+    of 0 als die nog niet bestaat voor dit topic -- puur telwerk voor de
+    /status-pagina, geen DB-query (de boom leeft in JSON, zie
+    pipeline/build_confrontatie_export.py)."""
+    tree_path = TREE_EXPORT_DIR / f"{slug}.json"
+    if not tree_path.exists():
+        return 0
+    tree_export = json.loads(tree_path.read_text())
+    return len(tree_export.get("bands", []))
 
 
 def fetch_llm_call_stats(conn, topic_id):
@@ -414,7 +383,6 @@ def fetch_llm_call_stats(conn, topic_id):
 _STAGE_CURRENT_PROMPT_VERSION = {
     "extraction": EXTRACT_PROMPT_VERSION,
     "tagging": TAG_PROMPT_VERSION,
-    "redactie": REDACTIE_PROMPT_VERSION,
 }
 
 
@@ -451,39 +419,6 @@ def _reconstruct_prompt(conn, call, topic_name, topic_description):
         return _build_tagging_prompt(
             topic_name, arg["actor_name"], arg["actor_party"], arg["stance"], arg["typology"],
             arg["quote_text"], arg["quote_context"], tag_catalogue, tag_json_skeleton,
-        )
-
-    if call["stage"] == "redactie":
-        doc = conn.execute(
-            """SELECT a.name AS actor_name, a.party AS actor_party
-               FROM documents d JOIN actors a ON a.id = d.actor_id
-               WHERE d.id = ?""",
-            (call["document_id"],),
-        ).fetchone()
-        if doc is None:
-            return None
-        new_args = conn.execute(
-            """SELECT id, stance, quote_text FROM arguments
-               WHERE document_id = ? AND stance IN ('pro', 'contra') ORDER BY id""",
-            (call["document_id"],),
-        ).fetchall()
-        candidate_ids = json.loads(call["prompt_vars"])["candidate_argument_ids"] if call["prompt_vars"] else []
-        candidates = []
-        if candidate_ids:
-            placeholders = ",".join("?" * len(candidate_ids))
-            candidates = conn.execute(
-                f"""SELECT ar.id, ar.quote_text, a.name AS actor_name, a.party AS actor_party
-                    FROM arguments ar JOIN actors a ON a.id = ar.actor_id
-                    WHERE ar.id IN ({placeholders})""",
-                candidate_ids,
-            ).fetchall()
-        actor_party_suffix = f" ({doc['actor_party']})" if doc["actor_party"] else ""
-        return REDACTIE_PROMPT_TEMPLATE.format(
-            topic=topic_name,
-            actor_name=doc["actor_name"],
-            actor_party_suffix=actor_party_suffix,
-            new_arguments_block=_format_arguments_block(new_args),
-            candidates_block=_format_arguments_block(candidates),
         )
 
     return None

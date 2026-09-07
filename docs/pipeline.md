@@ -27,20 +27,35 @@ rij voor één topic. De laatste drie (`tags-taxonomy`, `export-public-data`,
 Vars ook `AGY_MODEL`, `MIN_ID`) voor als er geen lokale LM Studio-instance
 beschikbaar is; die zitten niet in `make pipeline`, met de hand draaien.
 
-### redactie: bestaat, maar draait niet mee
+### redactie: bouwt de argumentenboom (issue #252)
 
-`redactie` (Stage 2 in de code, `pipeline/redactie_check.py`) is **niet**
-onderdeel van de reguliere workflow, ondanks de naam "Stage 2" in het
-script zelf. In de praktijk staat er maar een handvol rijen in
-`redactie_reviews` tegenover duizenden argumenten, en 0 `llm_calls` met
-`stage='redactie'` — de stap wordt in de praktijk niet gedraaid.
+`make redactie TOPIC=<slug>` bouwt de argumentenboom van een topic en is de
+enige plek waar de redactionele balanscontrole daadwerkelijk gebeurt — niet
+als losse, corpus-brede stap (dat was een eerdere, nooit-gebruikte opzet,
+`pipeline/redactie_check.py`, inmiddels verwijderd), maar ingebed in het
+bouwen van de boom zelf. Twee stappen, via Docker agy/Gemini:
 
-Wat hij zou doen als je 'm wél draait: een corpus-brede pro/contra-
-balanscheck (geen LLM) plus opposition-linking tussen argumenten met
-tegenovergestelde standpunten (wel LLM, "het redactielid" uit het motto in
-[plan.md](plan.md)). Zie de module-docstring in `redactie_check.py` voor de
-volledige uitleg. Staat bewust bij [Ondersteunend / niet in de
-keten](#ondersteunend--niet-in-de-keten) hieronder, niet bij de kernketen.
+1. **Structureren** (`pipeline/prompts/argument_tree_gemini.md`, 1 call):
+   selecteert uit alle argumenten van een topic een subset die elkaar
+   scherp tegenspreekt, en legt daartussen getypeerde relaties (`support` =
+   onderbouwing, `conflict` = weerlegging, AIF-gebaseerd, zie issue #252).
+2. **Redactiecheck, per relatie apart** (`pipeline/prompts/
+   boomredactie_rebuttal_detection.md` voor `conflict`,
+   `boomredactie_support_check.md` voor `support`): elke relatie krijgt een
+   eigen, geïsoleerde LLM-call met een zuiver feitelijke ja/nee-vraag
+   ("engageert dit argument aantoonbaar met de kern van het andere?"), nooit
+   een geldigheidsoordeel. Een relatie die "nee" krijgt vervalt.
+
+`pipeline/confrontatie_tree.py` voegt de uitkomsten samen (geen LLM), en
+`pipeline/build_confrontatie_export.py` exporteert het resultaat naar
+`data/export/argument-trees/<slug>.json`. Zie de module-docstring van
+`pipeline/confrontatie_tree.py` en issue #252 voor waarom de eerdere opzet
+(twee rolgebonden redacteuren, "onenigheid = signaal") is losgelaten: die
+bleek niet te discrimineren tussen relaties, ongeacht de inhoud.
+
+Draait bewust niet mee in `make pipeline` (zie hieronder): vereist Docker
+agy/Gemini i.p.v. de lokale LLM van de rest van de keten, en herstructureert
+de hele boom bij elke run.
 
 ### Vóór crawl: probe
 
@@ -99,9 +114,8 @@ vaste schakel:
 | `backup-db` | Kopie van `data/bipolariteit.db` wegschrijven. |
 | `check-video-urls` | Controleert of opgeslagen `raw_video_url`-manifesten nog afspeelbaar zijn. |
 | `validate` | Evalharnas tegen een gouden dataset, zie [eval-elecdebate.md](eval-elecdebate.md). |
-| `redactie` | Bias-check + opposition-linking -- bestaat, draait in de praktijk niet mee (zie hierboven). |
-| `argument-doc` | Exporteert pro/contra-argumenten van één topic als markdown, voor handmatig structureren. |
-| `confrontatie-tree` | Genereert de argumentenboom-export via Docker agy (Gemini) + `build_confrontatie_export`. |
+| `redactie` | Bouwt de argumentenboom (structureren + per-relatie redactiecheck, zie hierboven). |
+| `argument-doc` | Exporteert pro/contra-argumenten van één topic als markdown, voor inspectie zonder LLM-call. |
 | `check-public-exposure` | Controleert dat er geen gevoelige bestanden publiek staan op een gegeven host. |
 | `test` / `test-js` / `test-frontend` / `ca-fixture` | Testsuites. |
 | `dev` / `dev-stop` | Lokale Astro dev-server. |

@@ -2,12 +2,12 @@
   "slug": "abortus",
   "name": "Abortus",
   "topic_description": "Dit debat gaat over het Nederlandse abortusbeleid. Aan de ene kant staat\nkeuzevrijheid van de vrouw, aan de andere kant bescherming van het ongeboren\nkind. De discussie omvat aspecten als decriminalisering, de 24-wekengrens, en\nde vorm van abortuszorg.\n\nPRO = pleit voor het schrappen van abortus uit het Wetboek van Strafrecht,\nvoor behoud of verruiming van de 24-wekengrens, voor afschaffing van de\nbedenktijd, en tegen actief aansturen op alternatieven -- de keuze is aan de\nvrouw zelf.\nCONTRA = pleit voor behoud van abortus als uitzondering in het strafrecht,\nvoor een kortere toegestane periode, voor behoud van de bedenktijd als\nzorgvuldigheidswaarborg, en voor actief hulp/informatie aanbieden over\nalternatieven voor abortus.",
-  "generated_at": "2026-08-21T22:19:16.314797+00:00",
+  "generated_at": "2026-09-07T19:29:21.106829+00:00",
   "stats": {
     "totaal_argumenten": 439,
     "aantal_pro": 216,
     "aantal_contra": 198,
-    "aantal_geselecteerd": 38
+    "aantal_geselecteerd": 53
   },
   "arguments": {
     "1616": {
@@ -40,45 +40,7 @@
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2025A03392",
       "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2026-02-10/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2026-02-10T18%3A01%3A39%2B0100&end=2026-02-10T21%3A20%3A31%2B0100",
       "start_seconds": 254.5600000000004,
-      "gist": "honderden vrouwen missen toegang",
-      "samenvatting": null
-    },
-    "1617": {
-      "id": 1617,
-      "citaat": "Tijdens mijn werk hoorde ik de meest schrijnende verhalen, bijvoorbeeld van een dakloze vrouw die uit wanhoop een suïcidepoging deed, omdat zij geen toegang kreeg tot de abortus die zij verdiende en nodig had. Maar ik hoorde ook verhalen van vrouwen die uit pure nood abortusmedicatie op de zwarte markt kochten, met alle medische risico's van dien.",
-      "typologie": "factual",
-      "stance": "pro",
-      "spreker": "Lisa Vliegenthart",
-      "partij": "GroenLinks-PvdA",
-      "tags": [
-        "Actor-Politicus",
-        "Arena-Parlement",
-        "Bewijs-Anekdotisch",
-        "Context-Commissie",
-        "Drogreden-Bespelen-Publiek",
-        "Frame-Episodisch",
-        "Frame-Menselijk-Belang",
-        "Frame-Verantwoordelijkheid",
-        "Ideologie-GAL",
-        "Ideologie-Links-Economisch",
-        "Moraliteit-Vrijheid",
-        "Moraliteit-Zorg",
-        "Walton-Consequentie"
-      ],
-      "claims": [
-        {
-          "claim_text": "dakloze vrouw die uit wanhoop een suïcidepoging deed, omdat zij geen toegang kreeg tot de abortus",
-          "attributed_source_text": "Tijdens mijn werk hoorde ik"
-        },
-        {
-          "claim_text": "vrouwen die uit pure nood abortusmedicatie op de zwarte markt kochten, met alle medische risico's van dien",
-          "attributed_source_text": "Tijdens mijn werk hoorde ik"
-        }
-      ],
-      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2025A03392",
-      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2026-02-10/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2026-02-10T18%3A01%3A39%2B0100&end=2026-02-10T21%3A20%3A31%2B0100",
-      "start_seconds": 283.3000000000002,
-      "gist": "gebrek vergoeding dwingt zwarte-markt",
+      "gist": "honderden missen toegang financiering",
       "samenvatting": null
     },
     "1618": {
@@ -106,43 +68,112 @@
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2025A03392",
       "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2026-02-10/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2026-02-10T18%3A01%3A39%2B0100&end=2026-02-10T21%3A20%3A31%2B0100",
       "start_seconds": 305.7399999999998,
-      "gist": "vergoeding onverzekerden via cak",
-      "samenvatting": "Toegang tot abortuszorg raakt aan het recht op gezondheid en moet voor onverzekerden via de CAK-regeling gefinancierd worden."
+      "gist": "financiering onverzekerden via CAK",
+      "samenvatting": "Financiering van abortuszorg voor onverzekerden moet via CAK-regelingen worden geregeld, omdat honderden in Nederland wonende vrouwen nu door gebrek aan geld verstoken blijven van noodzakelijke zorg."
     },
-    "1623": {
-      "id": 1623,
-      "citaat": "In dit blokje abortuszorg is het wat mijn fractie betreft ook belangrijk dat vrouwen de abortuspil bij de huisarts kunnen krijgen. Daar hebben we ook samen met de partij van deze staatssecretaris om gestreden in de vorige periode of die daarvoor. Maar nu las ik een aantal weken geleden dat nog maar 3,5% van de Nederlandse huisartsen de verplichte onlinetraining heeft gevolgd om de abortuspil ook te kunnen verstrekken. Vrouwengezondheid gaat wat mij betreft ook over toegang tot dit soort zorg.",
+    "1621": {
+      "id": 1621,
+      "citaat": "Specifiek de CAK-regelingen zijn daar geen oplossing voor. Die zijn namelijk gekoppeld aan het basispakket van de Zorgverzekeringswet. Abortus is daar geen onderdeel van, dus die bieden geen oplossing.",
       "typologie": "factual",
-      "stance": "pro",
-      "spreker": "Wieke Paulusma",
-      "partij": "D66",
+      "stance": "contra",
+      "spreker": "Judith Tielen",
+      "partij": "VVD",
       "tags": [
-        "Actor-Politicus",
         "Arena-Parlement",
-        "Bewijs-Statistisch",
+        "Bewijs-Causaal",
         "Context-Commissie",
+        "Frame-Economisch",
         "Frame-Thematisch",
-        "Frame-Verantwoordelijkheid",
-        "Ideologie-GAL",
-        "Moraliteit-Vrijheid",
-        "Moraliteit-Zorg",
-        "Walton-Consequentie"
+        "Walton-Regel"
       ],
       "claims": [
         {
-          "claim_text": "nog maar 3,5% van de Nederlandse huisartsen de verplichte onlinetraining heeft gevolgd om de abortuspil ook te kunnen verstrekken",
+          "claim_text": "CAK-regelingen zijn gekoppeld aan het basispakket van de Zorgverzekeringswet",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "Abortus is geen onderdeel van het basispakket van de Zorgverzekeringswet",
           "attributed_source_text": null
         }
       ],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2025A03392",
       "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2026-02-10/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2026-02-10T18%3A01%3A39%2B0100&end=2026-02-10T21%3A20%3A31%2B0100",
-      "start_seconds": 9682.0,
-      "gist": "abortuspil bij huisarts belangrijk",
+      "start_seconds": 9516.118999999999,
+      "gist": "CAK-regeling juridisch niet toepasbaar",
+      "samenvatting": "Onderbrenging bij het CAK is juridisch onmogelijk omdat abortus buiten het basispakket valt, en het creëren van een aparte regeling voert te ver gezien de reeds bestaande voorzieningen."
+    },
+    "1622": {
+      "id": 1622,
+      "citaat": "de oplossing zoals mevrouw Vliegenthart die voorstelt, is wat mij betreft gewoon geen oplossing. [...] Het voert nu echt te ver om daar een aparte regeling voor op te zetten, juist omdat we al zo veel regelingen rondom abortus hebben.",
+      "typologie": "factual",
+      "stance": "contra",
+      "spreker": "Judith Tielen",
+      "partij": "VVD",
+      "tags": [
+        "Arena-Parlement",
+        "Context-Commissie",
+        "Frame-Conflict",
+        "Frame-Thematisch",
+        "Ideologie-TAN",
+        "Meta-Reikwijdte",
+        "Moraliteit-Autoriteit",
+        "Stijl-Herhaling",
+        "Walton-Consequentie"
+      ],
+      "claims": [],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2025A03392",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2026-02-10/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2026-02-10T18%3A01%3A39%2B0100&end=2026-02-10T21%3A20%3A31%2B0100",
+      "start_seconds": 9619.0,
+      "gist": "aparte subsidieregeling overbodig",
       "samenvatting": null
     },
-    "1630": {
-      "id": 1630,
-      "citaat": "De opmerking over de rol van mannen bij anticonceptie kan de VVD alleen maar steunen. Het voorkómen van ongewenste zwangerschap en het gebruik van anticonceptie is niet een verantwoordelijkheid van vrouwen, maar van beide partners.",
+    "1624": {
+      "id": 1624,
+      "citaat": "Ook wil ik het hebben over de toegang tot abortuszorg voor onverzekerde vrouwen, want zij krijgen deze zorg nu niet vergoed. Afgelopen maandag hadden wij ook een debat daarover en wees de staatssecretaris hiervoor naar de buffers van de klinieken. Wij hebben al eerder contact gehad met die klinieken en zij wijzen ons erop dat die buffers daar niet voor bedoeld zijn en dat deze nodig zijn voor andere noodzakelijke uitgaven die zij ook moeten doen. Dus het geld is niet over. Daardoor zijn onverzekerde vrouwen nu afhankelijk van liefdadigheid.",
+      "typologie": "factual",
+      "stance": "pro",
+      "spreker": "Sarah Dobbe",
+      "partij": "SP",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Expert",
+        "Context-Commissie",
+        "Frame-Economisch",
+        "Frame-Thematisch",
+        "Frame-Verantwoordelijkheid",
+        "Ideologie-Links-Economisch",
+        "Moraliteit-Eerlijkheid",
+        "Moraliteit-Zorg",
+        "Walton-Expertise"
+      ],
+      "claims": [
+        {
+          "claim_text": "onverzekerde vrouwen krijgen abortuszorg nu niet vergoed",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "de staatssecretaris wees naar de buffers van de klinieken",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "klinieken wijzen erop dat buffers niet voor onverzekerde vrouwen bedoeld zijn en nodig zijn voor andere noodzakelijke uitgaven",
+          "attributed_source_text": "klinieken"
+        },
+        {
+          "claim_text": "onverzekerde vrouwen zijn nu afhankelijk van liefdadigheid",
+          "attributed_source_text": null
+        }
+      ],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2025A02808",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-09-10/groenvanprinstererzaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-09-10T09%3A59%3A47%2B0200&end=2025-09-10T12%3A44%3A51%2B0200",
+      "start_seconds": 1579.74,
+      "gist": "klinieken hebben ontoereikende reserves",
+      "samenvatting": null
+    },
+    "1628": {
+      "id": 1628,
+      "citaat": "Het resultaat is een afgewogen balans tussen beschermwaardigheid van leven en een zo groot mogelijk recht op zelfbeschikking van het individu. Wat de VVD betreft is en blijft dat laatste een grote verworvenheid. We willen dat mensen eigen keuzes over hun leven kunnen maken.",
       "typologie": "moral",
       "stance": "pro",
       "spreker": "Harry Bevers",
@@ -150,81 +181,21 @@
       "tags": [
         "Actor-Politicus",
         "Arena-Parlement",
-        "Bewijs-Causaal",
         "Context-Commissie",
+        "Frame-Moraliteit",
         "Frame-Thematisch",
-        "Frame-Verantwoordelijkheid",
-        "Ideologie-Rechts-Economisch",
-        "Moraliteit-Eerlijkheid",
-        "Stijl-Antithese",
-        "Walton-Consequentie"
-      ],
-      "claims": [],
-      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08083",
-      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-01-15/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-01-15T14%3A03%3A00%2B0100&end=2025-01-15T18%3A10%3A35%2B0100",
-      "start_seconds": 393.5809999999999,
-      "gist": "anticonceptie verantwoordelijkheid beide partners",
-      "samenvatting": null
-    },
-    "1631": {
-      "id": 1631,
-      "citaat": "Daarom is mijn vraag: zou het kabinet niet tot doel moeten hebben om juist ook het aantal abortussen omlaag te laten gaan? Kan de heer Bevers ook wat reflecteren op de wetgeving die we in het afgelopen jaar hebben gezien? Bijvoorbeeld door het veranderen van de beraadtermijn zien we nu dat driekwart van de keuzes voor abortus eigenlijk al bij de nul dagen plaatsvindt, niet zoals eerder bij de vijf dagen. Zou het gegeven dat mensen zich minder lang beraden, en dus ook minder lang de verschillende mogelijkheden afwegen, er ook niet een van de oorzaken van kunnen zijn?",
-      "typologie": "factual",
-      "stance": "contra",
-      "spreker": "Mirjam Bikker",
-      "partij": "ChristenUnie",
-      "tags": [
-        "Actor-Politicus",
-        "Arena-Parlement",
-        "Bewijs-Causaal",
-        "Bewijs-Statistisch",
-        "Context-Commissie",
-        "Frame-Thematisch",
-        "Frame-Verantwoordelijkheid",
-        "Ideologie-TAN",
-        "Moraliteit-Autoriteit",
-        "Moraliteit-Zorg",
-        "Stijl-Retorische-Vraag",
-        "Walton-Causaal"
-      ],
-      "claims": [
-        {
-          "claim_text": "driekwart van de keuzes voor abortus eigenlijk al bij de nul dagen plaatsvindt, niet zoals eerder bij de vijf dagen",
-          "attributed_source_text": null
-        }
-      ],
-      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08083",
-      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-01-15/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-01-15T14%3A03%3A00%2B0100&end=2025-01-15T18%3A10%3A35%2B0100",
-      "start_seconds": 451.279,
-      "gist": "afschaffing beraadtermijn verhoogt abortuscijfers",
-      "samenvatting": null
-    },
-    "1632": {
-      "id": 1632,
-      "citaat": "Het laten dalen van het aantal abortussen vind ik geen doel op zich. Ik wil het aantal ongewenste zwangerschappen laten dalen. Dat vind ik belangrijk. Dat heeft te maken met anticonceptie, waar ik net ook wat over zei. Blijkbaar zijn er veranderingen in de samenleving waardoor het gebruik van anticonceptie veel meer ter discussie is komen te staan. Helaas, want het is gewoon een belangrijk middel om ongewenste zwangerschap te voorkomen.",
-      "typologie": "factual",
-      "stance": "pro",
-      "spreker": "Harry Bevers",
-      "partij": "VVD",
-      "tags": [
-        "Actor-Politicus",
-        "Arena-Parlement",
-        "Bewijs-Causaal",
-        "Context-Commissie",
-        "Frame-Thematisch",
-        "Frame-Verantwoordelijkheid",
         "Ideologie-GAL",
         "Moraliteit-Vrijheid",
         "Moraliteit-Zorg",
         "Stijl-Antithese",
-        "Walton-Consequentie"
+        "Walton-Regel"
       ],
       "claims": [],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08083",
       "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-01-15/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-01-15T14%3A03%3A00%2B0100&end=2025-01-15T18%3A10%3A35%2B0100",
-      "start_seconds": 484.0,
-      "gist": "preventie is eigen verantwoordelijkheid",
-      "samenvatting": "Het voorkomen van ongewenste zwangerschappen is een eigen verantwoordelijkheid van beide partners en geen argument voor gratis vergoeding."
+      "start_seconds": 227.12000000000012,
+      "gist": "afgewogen balans waarborgt zelfbeschikking",
+      "samenvatting": "De Nederlandse wet biedt een zorgvuldig getoetste balans tussen de beschermwaardigheid van het leven en zelfbeschikking, waarbij evaluaties bevestigen dat artsen uiterst terughoudend en zorgvuldig handelen."
     },
     "1633": {
       "id": 1633,
@@ -248,7 +219,7 @@
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08083",
       "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-01-15/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-01-15T14%3A03%3A00%2B0100&end=2025-01-15T18%3A10%3A35%2B0100",
       "start_seconds": 514.8800000000001,
-      "gist": "vrouwen beslissen op dag1",
+      "gist": "vrouwen beslissen direct weloverwogen",
       "samenvatting": null
     },
     "1638": {
@@ -280,7 +251,7 @@
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08083",
       "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-01-15/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-01-15T14%3A03%3A00%2B0100&end=2025-01-15T18%3A10%3A35%2B0100",
       "start_seconds": 1047.7199999999998,
-      "gist": "veel abortuspatienten zonder anticonceptie",
+      "gist": "veel abortussen zonder anticonceptie",
       "samenvatting": null
     },
     "1639": {
@@ -307,8 +278,35 @@
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08083",
       "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-01-15/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-01-15T14%3A03%3A00%2B0100&end=2025-01-15T18%3A10%3A35%2B0100",
       "start_seconds": 1075.1799999999998,
-      "gist": "financiele barriere verhoogt abortussen",
-      "samenvatting": "Financiële drempels bij anticonceptie leiden tot ongewenste zwangerschappen, waardoor vergoeding in het basispakket kostenbesparend werkt."
+      "gist": "kosten belemmeren anticonceptiegebruik",
+      "samenvatting": null
+    },
+    "1640": {
+      "id": 1640,
+      "citaat": "Wij hebben daar toen tegen gestemd. Daar heb ik nu spijt van; soms heb je voortschrijdend inzicht. Onze tegenstem was heel erg gebaseerd op de administratieve lasten die dit met zich mee zou brengen voor artsen. Dat was de reden dat wij tegen die motie stemden. Maar als ik nu naar de stijging kijk, wil ik toch ook wel graag weten hoe dat komt. Dat heb ik net ook in een interruptie op de heer Bevers aangegeven. Mijn vraag is dus of er opnieuw zo'n motie komt. Dan hebben we een nieuwe ronde en nieuwe kansen. Ik denk namelijk dat het toch heel erg belangrijk is om dit te onderzoeken.",
+      "typologie": "factual",
+      "stance": "contra",
+      "spreker": "Caroline van der Plas",
+      "partij": "BBB",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Statistisch",
+        "Context-Commissie",
+        "Frame-Thematisch",
+        "Frame-Verantwoordelijkheid",
+        "Ideologie-TAN",
+        "Meta-Vorm-Setting",
+        "Moraliteit-Autoriteit",
+        "Stijl-Slogan",
+        "Walton-Consequentie"
+      ],
+      "claims": [],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08083",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-01-15/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-01-15T14%3A03%3A00%2B0100&end=2025-01-15T18%3A10%3A35%2B0100",
+      "start_seconds": 1625.819,
+      "gist": "oorzaken abortus verplicht onderzoeken",
+      "samenvatting": "Onderzoek naar en registratie van de precieze motieven voor abortus is noodzakelijk, omdat abortussen vanwege armoede of woningnood wijzen op maatschappelijk falen dat gerichte actie vraagt."
     },
     "1642": {
       "id": 1642,
@@ -333,34 +331,8 @@
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08083",
       "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-01-15/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-01-15T14%3A03%3A00%2B0100&end=2025-01-15T18%3A10%3A35%2B0100",
       "start_seconds": 1881.48,
-      "gist": "beraadtermijn beschermt tegen familiedruk",
+      "gist": "bedenktijd beschermt tegen familiedruk",
       "samenvatting": null
-    },
-    "1645": {
-      "id": 1645,
-      "citaat": "De SGP heeft er meermaals voor gepleit — dat kwam net ook aan de orde — om motieven voor abortus te laten registreren. Zo kunnen we de hulp aan onbedoeld zwangere vrouwen en hun kindje verbeteren.",
-      "typologie": "factual",
-      "stance": "contra",
-      "spreker": "Diederik van Dijk",
-      "partij": "SGP",
-      "tags": [
-        "Actor-Politicus",
-        "Arena-Parlement",
-        "Bewijs-Causaal",
-        "Context-Commissie",
-        "Frame-Moraliteit",
-        "Frame-Thematisch",
-        "Frame-Verantwoordelijkheid",
-        "Ideologie-TAN",
-        "Moraliteit-Zorg",
-        "Walton-Consequentie"
-      ],
-      "claims": [],
-      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08083",
-      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-01-15/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-01-15T14%3A03%3A00%2B0100&end=2025-01-15T18%3A10%3A35%2B0100",
-      "start_seconds": 2183.1809999999996,
-      "gist": "registratie motieven verbetert hulpverlening",
-      "samenvatting": "Het registreren van abortusmotieven is noodzakelijk om gerichte ondersteuning te bieden en inzicht te krijgen in stijgende cijfers."
     },
     "1648": {
       "id": 1648,
@@ -385,8 +357,71 @@
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08083",
       "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-01-15/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-01-15T14%3A03%3A00%2B0100&end=2025-01-15T18%3A10%3A35%2B0100",
       "start_seconds": 2432.299,
-      "gist": "abortus is reguliere zorg",
-      "samenvatting": "Abortus is een vorm van gezondheidszorg en hoort daarom niet thuis in het Wetboek van Strafrecht."
+      "gist": "abortus uit strafrecht halen",
+      "samenvatting": "Abortus hoort niet thuis in het Wetboek van Strafrecht omdat het medische zorg is en strafbaarstelling leidt tot taboes en afbraak van zorgrechten."
+    },
+    "1649": {
+      "id": 1649,
+      "citaat": "We zien dat in Frankrijk al de toegang en het recht op de zorg in de grondwet zijn verankerd.",
+      "typologie": "factual",
+      "stance": "pro",
+      "spreker": "Elke Slagt-Tichelman",
+      "partij": "GroenLinks-PvdA",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Anekdotisch",
+        "Context-Commissie",
+        "Frame-Thematisch",
+        "Ideologie-GAL",
+        "Moraliteit-Vrijheid",
+        "Walton-Analogie"
+      ],
+      "claims": [
+        {
+          "claim_text": "in Frankrijk al de toegang en het recht op de zorg in de grondwet zijn verankerd",
+          "attributed_source_text": null
+        }
+      ],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08083",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-01-15/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-01-15T14%3A03%3A00%2B0100&end=2025-01-15T18%3A10%3A35%2B0100",
+      "start_seconds": 2443.639,
+      "gist": "Frankrijk verankert abortus grondwettelijk",
+      "samenvatting": null
+    },
+    "1650": {
+      "id": 1650,
+      "citaat": "Voor mensen die geen Nederlandse nationaliteit en geen baan hebben, bijvoorbeeld buitenlandse studenten, kost een abortuspil €504. Voor velen is dit onbetaalbaar. Ik zou daarom dit kabinet willen oproepen om deze groep te helpen. Bied ook hun gelijke toegang tot zorg.",
+      "typologie": "economic",
+      "stance": "pro",
+      "spreker": "Elke Slagt-Tichelman",
+      "partij": "GroenLinks-PvdA",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Statistisch",
+        "Context-Commissie",
+        "Frame-Economisch",
+        "Frame-Thematisch",
+        "Frame-Verantwoordelijkheid",
+        "Ideologie-GAL",
+        "Ideologie-Links-Economisch",
+        "Moraliteit-Eerlijkheid",
+        "Moraliteit-Zorg",
+        "Stijl-Herhaling",
+        "Walton-Consequentie"
+      ],
+      "claims": [
+        {
+          "claim_text": "kost een abortuspil €504",
+          "attributed_source_text": null
+        }
+      ],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08083",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-01-15/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-01-15T14%3A03%3A00%2B0100&end=2025-01-15T18%3A10%3A35%2B0100",
+      "start_seconds": 2471.7389999999996,
+      "gist": "abortuspil onbetaalbaar voor onverzekerden",
+      "samenvatting": null
     },
     "1655": {
       "id": 1655,
@@ -419,8 +454,8 @@
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08083",
       "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-01-15/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-01-15T14%3A03%3A00%2B0100&end=2025-01-15T18%3A10%3A35%2B0100",
       "start_seconds": 2989.0,
-      "gist": "nederlandse 24-wekengrens is uitzonderlijk",
-      "samenvatting": "Nederland hanteert een uitzonderlijk lange termijngrens van 24 weken, terwijl foetussen bij latere termijnen al pijn kunnen ervaren."
+      "gist": "Nederland heeft ruimste abortustermijn",
+      "samenvatting": null
     },
     "1657": {
       "id": 1657,
@@ -448,7 +483,67 @@
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08083",
       "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-01-15/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-01-15T14%3A03%3A00%2B0100&end=2025-01-15T18%3A10%3A35%2B0100",
       "start_seconds": 4979.200999999999,
-      "gist": "anticonceptievergoeding bespaart zorgkosten abortus",
+      "gist": "anticonceptie in het basispakket",
+      "samenvatting": "Opname van anticonceptie in het basispakket voorkomt ongewenste zwangerschappen en werkt kostenbesparend, aangezien 41 procent van de abortuscliënten vooraf geen anticonceptie gebruikte."
+    },
+    "1660": {
+      "id": 1660,
+      "citaat": "Hoewel de cijfers geen oorzaken noemen, zei Monique Opheij van het NGvA, het Nederlands Genootschap van Abortusartsen: het kan te maken hebben met het woningtekort, de economische situatie, maar ook desinformatie over anticonceptie kan een rol spelen. Als vrouwen zich genoodzaakt voelen een kind niet te krijgen omdat zij bang zijn geen huis of geen geld te hebben, dan zie ik dit als vrij simpel, want eigenlijk hebben we het hier dan over het falen van de verzorgingsstaat. Dat kunnen we niet laten gebeuren.",
+      "typologie": "moral",
+      "stance": "contra",
+      "spreker": "Caroline van der Plas",
+      "partij": "BBB",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Expert",
+        "Context-Commissie",
+        "Frame-Economisch",
+        "Frame-Thematisch",
+        "Frame-Verantwoordelijkheid",
+        "Ideologie-Links-Economisch",
+        "Moraliteit-Eerlijkheid",
+        "Moraliteit-Zorg",
+        "Stijl-Aangekondigde-Opsomming",
+        "Walton-Causaal"
+      ],
+      "claims": [
+        {
+          "claim_text": "Monique Opheij van het NGvA zei dat de stijging kan te maken hebben met het woningtekort, de economische situatie, maar ook desinformatie over anticonceptie kan een rol spelen",
+          "attributed_source_text": "Monique Opheij van het NGvA, het Nederlands Genootschap van Abortusartsen"
+        }
+      ],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08083",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-01-15/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-01-15T14%3A03%3A00%2B0100&end=2025-01-15T18%3A10%3A35%2B0100",
+      "start_seconds": 5187.6,
+      "gist": "armoede voorkomen als abortusreden",
+      "samenvatting": null
+    },
+    "1662": {
+      "id": 1662,
+      "citaat": "De meerderheid van de Kamer heeft gestemd voor het afschaffen van de vijf dagen bedenktijd. Mijn fractie was daar heel kritisch op en heeft daar ook tegen gestemd. Die kritiek hebben wij nog steeds. Ik vraag me af of het mogelijk is om te achterhalen of er een verband is met de stijging in het aantal afbrekingen van ongeboren leven. Mijn concrete vraag aan de staatssecretaris is dan ook: heeft het afschaffen van de bedenktijd van vijf dagen mogelijk effect op de stijging van het aantal afbrekingen van ongeboren leven?",
+      "typologie": "factual",
+      "stance": "contra",
+      "spreker": "Caroline van der Plas",
+      "partij": "BBB",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Statistisch",
+        "Context-Commissie",
+        "Frame-Conflict",
+        "Frame-Moraliteit",
+        "Frame-Thematisch",
+        "Ideologie-TAN",
+        "Moraliteit-Autoriteit",
+        "Moraliteit-Zorg",
+        "Walton-Causaal"
+      ],
+      "claims": [],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08083",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-01-15/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-01-15T14%3A03%3A00%2B0100&end=2025-01-15T18%3A10%3A35%2B0100",
+      "start_seconds": 5648.299000000001,
+      "gist": "bedenktijdafschaffing mogelijk oorzaak stijging",
       "samenvatting": null
     },
     "1664": {
@@ -473,8 +568,8 @@
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08083",
       "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-01-15/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-01-15T14%3A03%3A00%2B0100&end=2025-01-15T18%3A10%3A35%2B0100",
       "start_seconds": 5676.100999999999,
-      "gist": "beraadtermijn helpt zorgvuldige keuze",
-      "samenvatting": "De verplichte bedenktijd vormt een essentiële zorgvuldigheidswaarborg die vrouwen helpt en beschermt tegen sociale dwang."
+      "gist": "bedenktijd helpt vrouwen",
+      "samenvatting": "Een wettelijke bedenktijd van vijf dagen is overkomelijk en biedt vrouwen essentiële rust en bescherming tegen druk van familie of omgeving om zorgvuldig te beslissen."
     },
     "1666": {
       "id": 1666,
@@ -504,51 +599,42 @@
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08083",
       "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-01-15/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-01-15T14%3A03%3A00%2B0100&end=2025-01-15T18%3A10%3A35%2B0100",
       "start_seconds": 1404.221,
-      "gist": "registratie biedt inzicht stijging",
+      "gist": "te veel acute besluiten",
       "samenvatting": null
     },
-    "1668": {
-      "id": 1668,
-      "citaat": "Er is een herziene richtlijn uitgebracht in maart 2024. Maar, stellen de opstellers, er moet direct gewerkt worden aan een herziening, omdat wetenschappelijke kennis zich ontwikkelt en het steeds reëler lijkt om niet alleen het aantal weken, de 24 wekengrens qua levensvatbaarheid, maar ook individuele risicofactoren standaard te laten meewegen. De nieuwe richtlijn komt echter pas in 2028. Ik vraag de staatssecretaris op welke manier in de tussentijd specialisten in staat worden gesteld om de kennis die we hebben toe te passen en de richtlijn zo mogelijk sneller aan te passen.",
-      "typologie": "factual",
-      "stance": "contra",
-      "spreker": "Mirjam Bikker",
-      "partij": "ChristenUnie",
+    "1670": {
+      "id": 1670,
+      "citaat": "Sommige mensen kunnen dat niet omdat er een financiële barrière is. Daarom vraag ik aan mevrouw Van der Plas of zij bereid is om te kijken wat de gevolgen zouden zijn als we anticonceptie opnemen in het basispakket. Dan kunnen we afwegen of we dat willen of niet en kunnen we kijken naar de betaalbaarheid. Ik kan me voorstellen dat het goedkoper is om in te zetten op anticonceptie dan om de kosten van soa's en abortussen te dragen.",
+      "typologie": "economic",
+      "stance": "pro",
+      "spreker": "Sarah Dobbe",
+      "partij": "SP",
       "tags": [
         "Actor-Politicus",
         "Arena-Parlement",
-        "Bewijs-Expert",
+        "Bewijs-Causaal",
         "Context-Commissie",
+        "Frame-Economisch",
         "Frame-Thematisch",
-        "Frame-Verantwoordelijkheid",
-        "Ideologie-TAN",
-        "Meta-Agenda-Tijdigheid",
-        "Moraliteit-Autoriteit",
+        "Ideologie-Links-Economisch",
+        "Moraliteit-Eerlijkheid",
         "Moraliteit-Zorg",
-        "Walton-Expertise"
+        "Walton-Consequentie"
       ],
       "claims": [
         {
-          "claim_text": "Er is een herziene richtlijn uitgebracht in maart 2024",
+          "claim_text": "het anticonceptiegebruik neemt af",
           "attributed_source_text": null
         },
         {
-          "claim_text": "de opstellers stellen dat er direct gewerkt moet worden aan een herziening",
-          "attributed_source_text": "de opstellers"
-        },
-        {
-          "claim_text": "wetenschappelijke kennis zich ontwikkelt en het steeds reëler lijkt om niet alleen het aantal weken, de 24 wekengrens qua levensvatbaarheid, maar ook individuele risicofactoren standaard te laten meewegen",
-          "attributed_source_text": "de opstellers"
-        },
-        {
-          "claim_text": "De nieuwe richtlijn komt echter pas in 2028",
+          "claim_text": "het is goedkoper om in te zetten op anticonceptie dan om de kosten van soa's en abortussen te dragen",
           "attributed_source_text": null
         }
       ],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08083",
       "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-01-15/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-01-15T14%3A03%3A00%2B0100&end=2025-01-15T18%3A10%3A35%2B0100",
-      "start_seconds": 1470.52,
-      "gist": "medische kennis levensvatbaarheid vordert",
+      "start_seconds": 5843.799000000001,
+      "gist": "anticonceptievergoeding voorkomt maatschappelijke kosten",
       "samenvatting": null
     },
     "1671": {
@@ -581,7 +667,7 @@
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08083",
       "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-01-15/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-01-15T14%3A03%3A00%2B0100&end=2025-01-15T18%3A10%3A35%2B0100",
       "start_seconds": 5962.298999999999,
-      "gist": "stijging al voor afschaffing",
+      "gist": "stijging los van beraadtermijn",
       "samenvatting": null
     },
     "1673": {
@@ -607,7 +693,7 @@
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08083",
       "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-01-15/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-01-15T14%3A03%3A00%2B0100&end=2025-01-15T18%3A10%3A35%2B0100",
       "start_seconds": 6156.0,
-      "gist": "strafbaarheid belemmert zorgtoegang",
+      "gist": "strafrecht belemmert toegang zorg",
       "samenvatting": null
     },
     "1678": {
@@ -634,8 +720,8 @@
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08083",
       "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-01-15/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-01-15T14%3A03%3A00%2B0100&end=2025-01-15T18%3A10%3A35%2B0100",
       "start_seconds": 9109.0,
-      "gist": "registratie abortusredenen niet zinvol",
-      "samenvatting": "Het verplicht registreren van abortusredenen is onwenselijk omdat het stigmatiserend werkt en besluiten te complex zijn voor vinklijsten."
+      "gist": "redenregistratie dwingt tot verantwoording",
+      "samenvatting": "Standaard registratie van redenen is ongewenst omdat het vrouwen dwingt zich te verantwoorden, terwijl onderzoek aantoont dat complexe motieven niet in vinklijstjes passen en enkel sociaal-wenselijke antwoorden opleveren."
     },
     "1679": {
       "id": 1679,
@@ -667,7 +753,7 @@
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08083",
       "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-01-15/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-01-15T14%3A03%3A00%2B0100&end=2025-01-15T18%3A10%3A35%2B0100",
       "start_seconds": 9109.0,
-      "gist": "eerstelijnszorg voldoet wettelijke regels",
+      "gist": "wetsevaluatie bevestigt zorgvuldige praktijk",
       "samenvatting": null
     },
     "1680": {
@@ -696,8 +782,8 @@
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08083",
       "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-01-15/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-01-15T14%3A03%3A00%2B0100&end=2025-01-15T18%3A10%3A35%2B0100",
       "start_seconds": 9109.0,
-      "gist": "beraadtermijn niet noodzakelijk zorgvuldigheid",
-      "samenvatting": "Een verplichte beraadtermijn is geen noodzakelijke voorwaarde voor zorgvuldige besluitvorming door vrouwen."
+      "gist": "beraadtermijn onnodig voor zorgvuldigheid",
+      "samenvatting": "Een verplichte beraadtermijn is geen noodzakelijke voorwaarde voor zorgvuldige besluitvorming; de stijging van abortussen begon al voor de afschaffing en betreft vooral behandelingen waar de termijn niet gold."
     },
     "1688": {
       "id": 1688,
@@ -726,42 +812,7 @@
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08083",
       "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-01-15/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-01-15T14%3A03%3A00%2B0100&end=2025-01-15T18%3A10%3A35%2B0100",
       "start_seconds": 9811.0,
-      "gist": "besluit te complex vinklijsten",
-      "samenvatting": null
-    },
-    "1691": {
-      "id": 1691,
-      "citaat": "De Wet afbreking zwangerschap is de afgelopen jaren op twee punten gewijzigd. De verplichte minimale beraadtermijn geldt niet meer sinds 2023. Sinds 1 januari van dit jaar is abortuszorg ook via de huisarts toegankelijk. Deze wetswijzigingen zijn na uitgebreid politiek en maatschappelijk debat tot stand gekomen — dat zei ik ook al in mijn inleiding — en zijn met veel inzet van de beroepsgroepen uitgewerkt in de praktijk. De zorgvuldigheid en kwaliteit van de abortuszorg blijven met deze wetswijzigingen dus ook behouden.",
-      "typologie": "factual",
-      "stance": "pro",
-      "spreker": "Vincent Karremans",
-      "partij": "VVD",
-      "tags": [
-        "Actor-Politicus",
-        "Arena-Parlement",
-        "Bewijs-Expert",
-        "Context-Commissie",
-        "Frame-Thematisch",
-        "Frame-Verantwoordelijkheid",
-        "Ideologie-GAL",
-        "Moraliteit-Autoriteit",
-        "Stijl-Aangekondigde-Opsomming",
-        "Walton-Consequentie"
-      ],
-      "claims": [
-        {
-          "claim_text": "De verplichte minimale beraadtermijn geldt niet meer sinds 2023",
-          "attributed_source_text": null
-        },
-        {
-          "claim_text": "Sinds 1 januari van dit jaar is abortuszorg ook via de huisarts toegankelijk",
-          "attributed_source_text": null
-        }
-      ],
-      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08083",
-      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-01-15/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-01-15T14%3A03%3A00%2B0100&end=2025-01-15T18%3A10%3A35%2B0100",
-      "start_seconds": 9811.0,
-      "gist": "huisartsenzorg behoudt kwaliteit zorgvuldigheid",
+      "gist": "vinklijstjes negeren complexe werkelijkheid",
       "samenvatting": null
     },
     "1695": {
@@ -797,49 +848,82 @@
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08083",
       "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-01-15/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-01-15T14%3A03%3A00%2B0100&end=2025-01-15T18%3A10%3A35%2B0100",
       "start_seconds": 10081.0,
-      "gist": "registratie werkt stigmatiserend vrouwen",
+      "gist": "registratie levert schijnantwoorden op",
       "samenvatting": null
     },
-    "1703": {
-      "id": 1703,
-      "citaat": "We zien een groep ongedocumenteerden in Nederland die hier wel verblijft, maar die een abortus niet kan betalen en daardoor in de problemen komt. De staatssecretaris refereerde net aan de financiële buffers van de klinieken. Wij hebben ook dokters gesproken. Dokters van de Wereld zegt dat die financiële buffers er in ieder geval voor de regio Amsterdam niet zijn; dat is de enige regio waar Dokters van de Wereld zicht op heeft, en wij ook, want wij hebben geen andere cijfers. Dus hoe zit dat dan? Zijn die financiële buffers er? Op dit moment krijgen wij in ieder geval signalen dat die vrouwen nu niet geholpen kunnen worden. Dat heeft natuurlijk weer allerlei gevolgen. We willen ook niet dat vrouwen hier verblijven en een zwangerschap moeten voldragen die ze niet willen of niet kunnen hebben.",
+    "1700": {
+      "id": 1700,
+      "citaat": "Ik denk dat het kabinet veel waarde hecht aan een zorgvuldige afweging in wetgeving over medisch-ethische onderwerpen. Het kabinet vindt onder andere dat in de Wet afbreking zwangerschap een goede balans is gevonden tussen de bescherming van het ongeboren leven enerzijds en het zelfbeschikkingsrecht van de ongewenst zwangere vrouw anderzijds. Uit de laatste wetsevaluatie blijkt dat de Nederlandse abortuspraktijk zorgvuldig is en dat de wettelijke regels goed worden nageleefd; dat heb ik al een paar keer eerder gezegd.",
       "typologie": "factual",
-      "stance": "pro",
-      "spreker": "Sarah Dobbe",
-      "partij": "SP",
+      "stance": "contra",
+      "spreker": "Vincent Karremans",
+      "partij": "VVD",
       "tags": [
         "Actor-Politicus",
         "Arena-Parlement",
-        "Bewijs-Expert",
+        "Bewijs-Statistisch",
         "Context-Commissie",
-        "Frame-Economisch",
-        "Frame-Menselijk-Belang",
+        "Frame-Moraliteit",
         "Frame-Thematisch",
         "Frame-Verantwoordelijkheid",
-        "Ideologie-GAL",
-        "Ideologie-Links-Economisch",
-        "Moraliteit-Eerlijkheid",
+        "Ideologie-TAN",
+        "Moraliteit-Autoriteit",
+        "Moraliteit-Vrijheid",
         "Moraliteit-Zorg",
-        "Stijl-Retorische-Vraag",
-        "Walton-Consequentie"
+        "Stijl-Antithese",
+        "Walton-Regel"
       ],
       "claims": [
         {
-          "claim_text": "Dokters van de Wereld zegt dat die financiële buffers er in ieder geval voor de regio Amsterdam niet zijn",
-          "attributed_source_text": "Dokters van de Wereld"
+          "claim_text": "in de Wet afbreking zwangerschap een goede balans is gevonden tussen de bescherming van het ongeboren leven enerzijds en het zelfbeschikkingsrecht van de ongewenst zwangere vrouw anderzijds",
+          "attributed_source_text": "Het kabinet"
+        },
+        {
+          "claim_text": "de Nederlandse abortuspraktijk zorgvuldig is en dat de wettelijke regels goed worden nageleefd",
+          "attributed_source_text": "de laatste wetsevaluatie"
         }
       ],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08083",
       "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-01-15/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-01-15T14%3A03%3A00%2B0100&end=2025-01-15T18%3A10%3A35%2B0100",
-      "start_seconds": 11100.0,
-      "gist": "klinieken missen financiele buffers",
+      "start_seconds": 10792.0,
+      "gist": "huidig wettelijk kader volstaat",
       "samenvatting": null
     },
-    "1707": {
-      "id": 1707,
-      "citaat": "Ik denk dat het weer belangrijk is om twee zaken uit elkaar te houden, namelijk het aantal onbedoelde zwangerschappen en het aantal abortussen. Dat zijn twee verschillende zaken. Ik stuur op het verminderen van het aantal onbedoelde zwangerschappen. Daarbij is anticonceptie inderdaad een middel. Het kan natuurlijk altijd zo zijn dat vrouwen wel anticonceptie gebruiken, maar dat bijvoorbeeld niet goed gebruiken of dat er een keer wat misgaat. Zij komen dan alsnog terecht bij een abortuskliniek omdat er dus iets is misgegaan. Daarmee ontstaat namelijk een onbedoelde zwangerschap. Dat kan nog steeds.",
+    "1702": {
+      "id": 1702,
+      "citaat": "Ik kan me goed voorstellen dat deze situatie voor deze groep vrouwen bijzonder lastig is, maar ik kan abortuszorg niet voor alle vrouwen gratis aanbieden. Dat zou een ongecontroleerde toestroom naar de sector veroorzaken, met grote druk op de sector en hele hoge kosten tot gevolg.",
+      "typologie": "economic",
+      "stance": "contra",
+      "spreker": "Vincent Karremans",
+      "partij": "VVD",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Causaal",
+        "Context-Commissie",
+        "Frame-Economisch",
+        "Frame-Thematisch",
+        "Ideologie-Rechts-Economisch",
+        "Moraliteit-Proportionaliteit",
+        "Walton-Consequentie"
+      ],
+      "claims": [
+        {
+          "claim_text": "Dat zou een ongecontroleerde toestroom naar de sector veroorzaken, met grote druk op de sector en hele hoge kosten tot gevolg",
+          "attributed_source_text": null
+        }
+      ],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08083",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-01-15/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-01-15T14%3A03%3A00%2B0100&end=2025-01-15T18%3A10%3A35%2B0100",
+      "start_seconds": 10792.0,
+      "gist": "ongecontroleerde toestroom en kostenstijging",
+      "samenvatting": null
+    },
+    "1705": {
+      "id": 1705,
+      "citaat": "De barrières die mensen ervaren rond anticonceptie zijn heel verschillend. Het kan voor mensen bijvoorbeeld moeilijk zijn om op tijd een keuze te maken voor passende anticonceptie en om die anticonceptie vervolgens ook te verkrijgen. Ook kan het moeilijk zijn om die anticonceptie consequent goed te gebruiken. Anticonceptie gratis maken is daarvoor dan geen oplossing.",
       "typologie": "factual",
-      "stance": "pro",
+      "stance": "contra",
       "spreker": "Vincent Karremans",
       "partij": "VVD",
       "tags": [
@@ -849,126 +933,143 @@
         "Context-Commissie",
         "Frame-Thematisch",
         "Frame-Verantwoordelijkheid",
-        "Ideologie-GAL",
-        "Meta-Reikwijdte",
-        "Moraliteit-Zorg",
-        "Stijl-Aangekondigde-Opsomming",
+        "Ideologie-Rechts-Economisch",
         "Walton-Causaal"
       ],
       "claims": [],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08083",
       "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-01-15/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-01-15T14%3A03%3A00%2B0100&end=2025-01-15T18%3A10%3A35%2B0100",
-      "start_seconds": 11907.0,
-      "gist": "anticonceptiefouten veroorzaken ook zwangerschap",
+      "start_seconds": 11407.0,
+      "gist": "barrières liggen bij gebruik",
       "samenvatting": null
     },
-    "1814": {
-      "id": 1814,
-      "citaat": "We hebben in de afgelopen jaren in Nederland juist gezien dat de abortuswetgeving is verruimd. De beraadtermijn is afgeschaft en de abortuspil bij de huisarts is toegankelijk geworden, waar mijn partij tegen was en de partij van mevrouw Hirsch voor. Maar we hebben ook gezien dat het aantal abortussen daardoor niet is afgenomen, maar is toegenomen.",
-      "typologie": "factual",
+    "1721": {
+      "id": 1721,
+      "citaat": "Omdat ik vind dat als we abortus als mensenrecht neerzetten, we iedereen die geen stem heeft omdat die nog ongeboren is, geen mensenrechten toekennen.",
+      "typologie": "moral",
       "stance": "contra",
       "spreker": "Mirjam Bikker",
       "partij": "ChristenUnie",
       "tags": [
         "Actor-Politicus",
         "Arena-Parlement",
-        "Bewijs-Statistisch",
-        "Frame-Conflict",
+        "Bewijs-Causaal",
+        "Frame-Moraliteit",
         "Frame-Thematisch",
         "Ideologie-TAN",
-        "Moraliteit-Autoriteit",
-        "Stijl-Antithese",
-        "Walton-Causaal"
+        "Meta-Reikwijdte",
+        "Moraliteit-Eerlijkheid",
+        "Moraliteit-Zorg",
+        "Walton-Consequentie"
       ],
-      "claims": [
-        {
-          "claim_text": "de abortuswetgeving is verruimd",
-          "attributed_source_text": null
-        },
-        {
-          "claim_text": "De beraadtermijn is afgeschaft",
-          "attributed_source_text": null
-        },
-        {
-          "claim_text": "de abortuspil bij de huisarts is toegankelijk geworden",
-          "attributed_source_text": null
-        },
-        {
-          "claim_text": "het aantal abortussen daardoor niet is afgenomen, maar is toegenomen",
-          "attributed_source_text": null
-        }
-      ],
+      "claims": [],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08828",
       "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-09-08/troelstrazaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-09-08T10%3A00%3A04%2B0200&end=2025-09-08T13%3A47%3A37%2B0200",
-      "start_seconds": 6065.080000000002,
-      "gist": "huisartsenzorg leidt tot stijging",
+      "start_seconds": 529.0799999999999,
+      "gist": "mensenrecht ontneemt bescherming ongeborene",
       "samenvatting": null
     },
-    "1840": {
-      "id": 1840,
-      "citaat": "We zien dat in Nederland door het afschaffen van de bedenktijd en het toegankelijk maken van de abortuspil bij de huisarts het aantal abortussen de afgelopen jaren fundamenteel is gestegen.",
+    "1723": {
+      "id": 1723,
+      "citaat": "Alleen, dat doe ik wel vanuit het volle besef dat ieder leven, ook als het niet voor zichzelf kan spreken, heilig is. Dat maakt inderdaad dat ik voor andere middelen kies dan de heer Paternotte met D66, die van abortus een mensenrecht willen maken.",
+      "typologie": "moral",
+      "stance": "contra",
+      "spreker": "Mirjam Bikker",
+      "partij": "ChristenUnie",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Frame-Conflict",
+        "Frame-Moraliteit",
+        "Frame-Thematisch",
+        "Ideologie-TAN",
+        "Moraliteit-Zorg",
+        "Moraliteit-Zuiverheid",
+        "Walton-Regel"
+      ],
+      "claims": [],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08828",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-09-08/troelstrazaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-09-08T10%3A00%3A04%2B0200&end=2025-09-08T13%3A47%3A37%2B0200",
+      "start_seconds": 666.0,
+      "gist": "ongeboren leven is heilig",
+      "samenvatting": null
+    },
+    "1733": {
+      "id": 1733,
+      "citaat": "Abortus is voor mij geen mensenrecht. Volgens mij is dat het fundamentele verschil, want ik vind dat het recht op zelfbeschikking ook een grens heeft. En die grens ligt daar waar je een ander mens ontmoet.",
+      "typologie": "moral",
+      "stance": "contra",
+      "spreker": "Mirjam Bikker",
+      "partij": "ChristenUnie",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Frame-Moraliteit",
+        "Frame-Thematisch",
+        "Ideologie-TAN",
+        "Moraliteit-Vrijheid",
+        "Moraliteit-Zorg",
+        "Walton-Regel"
+      ],
+      "claims": [],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08828",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-09-08/troelstrazaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-09-08T10%3A00%3A04%2B0200&end=2025-09-08T13%3A47%3A37%2B0200",
+      "start_seconds": 1176.1189999999997,
+      "gist": "abortus is geen mensenrecht",
+      "samenvatting": "Abortus kan geen fundamenteel mensenrecht zijn, omdat het recht op zelfbeschikking begrensd wordt door het recht op leven van het ongeboren kind dat zichzelf niet kan verdedigen."
+    },
+    "1786": {
+      "id": 1786,
+      "citaat": "Het vastleggen van abortus als mensenrecht in internationale verdragen zoals het Handvest van de grondrechten van de Europese Unie en het Internationaal Verdrag inzake burgerrechten en politieke rechten, kunnen wij steunen. Het recht van de vrouw om over haar eigen lichaam te beslissen en te beschikken, is wat ons betreft universeel.",
+      "typologie": "moral",
+      "stance": "pro",
+      "spreker": "Sarah Dobbe",
+      "partij": "SP",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Frame-Moraliteit",
+        "Frame-Thematisch",
+        "Ideologie-GAL",
+        "Moraliteit-Vrijheid",
+        "Walton-Regel"
+      ],
+      "claims": [],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08828",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-09-08/troelstrazaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-09-08T10%3A00%3A04%2B0200&end=2025-09-08T13%3A47%3A37%2B0200",
+      "start_seconds": 4329.660000000001,
+      "gist": "abortus verankeren als mensenrecht",
+      "samenvatting": "Het verankeren van abortus als universeel mensenrecht in internationale verdragen en het EU-Handvest is dringend noodzakelijk om lichamelijke zelfbeschikking te beschermen tegen wereldwijde conservatieve aanvallen."
+    },
+    "1789": {
+      "id": 1789,
+      "citaat": "Maar het vastleggen van abortus als mensenrecht zien wij niet als de oplossing. Het opnemen van abortus in internationale verdragen zoals het EU-Handvest of het Internationaal Verdrag inzake burgerrechten en politieke rechten, zoals de initiatiefnemers voorstellen, achten wij niet zinvol. Niet alleen zijn verdragswijzigingen langdurige en kansarme processen; er is ook een reëel risico dat bestaande verdragen juist worden opengebroken en dat verworvenheden op het gebied van seksuele en reproductieve gezondheid teruggedraaid worden.",
       "typologie": "factual",
       "stance": "contra",
-      "spreker": "Gideon van Meijeren",
-      "partij": "FVD",
+      "spreker": "Isa Kahraman",
+      "partij": "NSC",
       "tags": [
         "Actor-Politicus",
         "Arena-Parlement",
         "Bewijs-Causaal",
+        "Frame-Conflict",
         "Frame-Thematisch",
         "Ideologie-TAN",
+        "Meta-Vorm-Setting",
         "Moraliteit-Autoriteit",
-        "Walton-Causaal"
+        "Stijl-Antithese",
+        "Walton-Consequentie"
       ],
-      "claims": [
-        {
-          "claim_text": "in Nederland door het afschaffen van de bedenktijd en het toegankelijk maken van de abortuspil bij de huisarts het aantal abortussen de afgelopen jaren fundamenteel is gestegen",
-          "attributed_source_text": null
-        }
-      ],
+      "claims": [],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08828",
       "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-09-08/troelstrazaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-09-08T10%3A00%3A04%2B0200&end=2025-09-08T13%3A47%3A37%2B0200",
-      "start_seconds": 10300.6,
-      "gist": "laagdrempelige pil verhoogt abortusaantal",
+      "start_seconds": 4520.639,
+      "gist": "internationaal recht schendt autonomie",
       "samenvatting": null
     },
-    "1847": {
-      "id": 1847,
-      "citaat": "Als iemand woont of werkt in Nederland — je hoeft niet per se een Nederlands paspoort te hebben — is die persoon via de Wet langdurige zorg verzekerd voor de toegang tot abortuszorg. Daarnaast hebben we ook voor asielzoekers en Oekraïense ontheemden zorgregelingen met toegang tot abortuszorg. Ik heb veel contact met bestuurders van abortusklinieken over de hulpverlening aan andere buitenlandse vrouwen. Dan moet je denken aan ongedocumenteerden. Daar is geen financiële regeling voor, maar klinieken hebben over het algemeen de ruimte om voor een symbolisch of heel laag bedrag abortuszorg te kunnen bieden aan die groepen buitenlandse vrouwen, en dat doen ze ook. Ze kunnen buffers van de gesubsidieerde abortuszorg gebruiken om deze te bekostigen. Eigenlijk geven zij allemaal aan dat het binnen de huidige regelingen goed te regelen is om dat toegankelijk te houden.",
-      "typologie": "factual",
-      "stance": "pro",
-      "spreker": "Judith Tielen",
-      "partij": "VVD",
-      "tags": [
-        "Actor-Politicus",
-        "Arena-Parlement",
-        "Bewijs-Expert",
-        "Frame-Economisch",
-        "Frame-Thematisch",
-        "Ideologie-GAL",
-        "Moraliteit-Eerlijkheid",
-        "Moraliteit-Zorg",
-        "Walton-Expertise"
-      ],
-      "claims": [
-        {
-          "claim_text": "In Nederland zijn er ongeveer 20.000 miskramen.",
-          "attributed_source_text": null
-        },
-        {
-          "claim_text": "Het aantal buitenbaarmoederlijke zwangerschappen is 2.000 à 3.000 per jaar.",
-          "attributed_source_text": null
-        }
-      ],
-      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08828",
-      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-09-08/troelstrazaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-09-08T10%3A00%3A04%2B0200&end=2025-09-08T13%3A47%3A37%2B0200",
-      "start_seconds": 11773.301,
-      "gist": "klinieken hebben eigen buffers",
-      "samenvatting": null
-    },
-    "1868": {
-      "id": 1868,
-      "citaat": "Waar hebben we het dan over? In ieder geval niet over klompjes cellen, maar over baby'tjes waar alles al op en aan zit, baby'tjes die op barbaarse wijze, met een grote abortustang, aan stukken worden gescheurd om uit de baarmoeder te kunnen worden verwijderd. Het hoofdje is zelfs al te groot en moet daarom eerst in de baarmoeder worden verbrijzeld, en dit alles zonder verdoving, terwijl deze foetussen al intense pijn kunnen ervaren. Dat is de dagelijkse praktijk in Nederland. Ethiek gaat over grenzen trekken. We moeten ons afvragen of deze dagelijkse gang van zaken niet alle morele grenzen overschrijdt, zeker gezien de laatste wetenschappelijke inzichten omtrent pijnbeleving en levensvatbaarheid.",
+    "1810": {
+      "id": 1810,
+      "citaat": "Maar het op gruwelijke wijze doden van ongeboren kinderen tot 22 weken oud, met alles erop en eraan, van de vingernageltjes tot de wimpers, van baby'tjes die de stem van de moeder al kunnen herkennen, die zich ergens aan vast kunnen grijpen, die kunnen gapen en noem het allemaal maar op, zonder enige medische noodzaak en zelfs überhaupt zonder enige noodzaak, is in Nederland de dagelijkse praktijk. Die ouders zouden bijvoorbeeld liever een jongetje of een meisje hebben gehad, zitten net in een verbouwing en zouden daarom het liefst pas over een halfjaar een baby'tje hebben gehad of maken zich zorgen over het klimaat. Ik verzin dit niet. Dit zijn redenen die in Nederland voldoende zijn om baby'tjes van 22 weken oud te doden. Dat is niet vooruitstrevend, zoals mevrouw Paulusma het noemt.",
       "typologie": "moral",
       "stance": "contra",
       "spreker": "Gideon van Meijeren",
@@ -977,75 +1078,283 @@
         "Actor-Politicus",
         "Arena-Parlement",
         "Bewijs-Anekdotisch",
-        "Bewijs-Expert",
-        "Drogreden-Bespelen-Publiek",
-        "Frame-Episodisch",
+        "Debatzet-Gevoelens-Verwoorden",
+        "Debatzet-Herformuleren",
         "Frame-Menselijk-Belang",
         "Frame-Moraliteit",
+        "Frame-Thematisch",
         "Ideologie-TAN",
         "Moraliteit-Zorg",
         "Moraliteit-Zuiverheid",
-        "Stijl-Herhaling",
-        "Stijl-Retorische-Vraag",
+        "Stijl-Aangekondigde-Opsomming",
         "Walton-Consequentie"
       ],
       "claims": [
         {
-          "claim_text": "baby'tjes die op barbaarse wijze, met een grote abortustang, aan stukken worden gescheurd om uit de baarmoeder te kunnen worden verwijderd",
+          "claim_text": "Het doden van ongeboren kinderen tot 22 weken oud zonder enige medische noodzaak is in Nederland de dagelijkse praktijk",
           "attributed_source_text": null
         },
         {
-          "claim_text": "Het hoofdje is zelfs al te groot en moet daarom eerst in de baarmoeder worden verbrijzeld",
-          "attributed_source_text": null
-        },
-        {
-          "claim_text": "dit alles zonder verdoving",
-          "attributed_source_text": null
-        },
-        {
-          "claim_text": "deze foetussen al intense pijn kunnen ervaren",
+          "claim_text": "Redenen zoals geslachtsvoorkeur, verbouwingen of klimaatzorgen zijn in Nederland voldoende om baby'tjes van 22 weken oud te doden",
           "attributed_source_text": null
         }
       ],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08828",
       "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-09-08/troelstrazaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-09-08T10%3A00%3A04%2B0200&end=2025-09-08T13%3A47%3A37%2B0200",
-      "start_seconds": 12459.3,
-      "gist": "latere foetussen ervaren pijn",
+      "start_seconds": 5605.099,
+      "gist": "late abortus beëindigt leven",
+      "samenvatting": "Abortus tot 24 weken doodt een al volledig gevormde en levensvatbare foetus; Nederland heeft hiermee de meest uitzonderlijk ruime termijn van de gehele Europese Unie."
+    },
+    "1813": {
+      "id": 1813,
+      "citaat": "Waar rechten worden afgebroken, is het tijd om ze stevig te verankeren. De indieners stellen voor om dit in het EU-Handvest en de VN-verdragen te doen.",
+      "typologie": "other",
+      "stance": "pro",
+      "spreker": "Daniëlle Hirsch",
+      "partij": "GroenLinks-PvdA",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Frame-Moraliteit",
+        "Frame-Thematisch",
+        "Ideologie-GAL",
+        "Moraliteit-Autoriteit",
+        "Moraliteit-Vrijheid",
+        "Walton-Regel"
+      ],
+      "claims": [],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08828",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-09-08/troelstrazaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-09-08T10%3A00%3A04%2B0200&end=2025-09-08T13%3A47%3A37%2B0200",
+      "start_seconds": 6010.581,
+      "gist": "EU-verankering beschermt tegen rechtenafbraak",
       "samenvatting": null
     },
-    "1875": {
-      "id": 1875,
-      "citaat": "In de motie op stuk nr. 12 wordt verzocht om met een regeling te komen voor reproductieve gezondheidszorg, inclusief abortus, voor alle onverzekerden. Die moet ik ontraden. Zoals ik net al uiteenzette, hebben we verschillende programma's om ervoor te zorgen dat abortuszorg voor de mensen in Nederland beschikbaar is. Als we die verder uitbreiden, komen er allemaal gekke vraagstukken op tafel, namelijk: waarom zouden ongedocumenteerden bijvoorbeeld wel abortuszorg vergoed krijgen en de andere mensen in Nederland die niet voor de Wlz verzekerd zijn, niet? En voor wie doen we dat dan? Waar moeten mensen dan wel of niet vandaan komen? Ik ben er echt niet voor om dit te doen, omdat we dan heel veel vraagstukken krijgen waar we nu geen antwoord op hebben. Uit de signalen die wij krijgen vanuit de abortusklinieken waarmee wij regelmatig contact hebben, blijkt dat die signalen niet opwegen tegen de moeilijkheden die we dan over onszelf gaan afroepen.",
+    "1830": {
+      "id": 1830,
+      "citaat": "Je hebt zelfbeschikkingsrecht over het eigen lichaam, maar hoe zit het met dat ongeboren kind? Over een geboren kind van drie maanden zijn we het helemaal eens, maar dat ongeboren kind van min drie maanden is ook een kind in wording. Ik dacht gisteren nog: wat ben ik blij dat mijn moeder die keus niet had. Die wilde die keus ook helemaal niet, die was ontzettend blij dat er überhaupt een kind kwam na vele jaren. Maar dat geldt voor ons allemaal. Als onze moeders een andere keuze hadden gemaakt, hadden we hier nu ook niet gezeten. Dat in ogenschouw nemend vraag ik wat dan het recht van dat ongeboren kind is. Dat is toch ook een mensenrecht? Ik heb daar vrij veel vragen over gesteld. Het recht van een vrouw om te beschikken over haar eigen lichaam blijft, maar dat kindje wat daarna komt heeft dan geen recht? Dat kan helemaal niets, heeft helemaal niets in te brengen? Is het niet meer dan dit? Is dat het enige recht?",
+      "typologie": "moral",
+      "stance": "contra",
+      "spreker": "Chris Stoffer",
+      "partij": "SGP",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Anekdotisch",
+        "Frame-Episodisch",
+        "Frame-Menselijk-Belang",
+        "Frame-Moraliteit",
+        "Ideologie-TAN",
+        "Moraliteit-Autoriteit",
+        "Moraliteit-Zorg",
+        "Stijl-Herhaling",
+        "Stijl-Retorische-Vraag",
+        "Walton-Analogie"
+      ],
+      "claims": [],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08828",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-09-08/troelstrazaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-09-08T10%3A00%3A04%2B0200&end=2025-09-08T13%3A47%3A37%2B0200",
+      "start_seconds": 9729.279,
+      "gist": "ongeboren leven verdient bescherming",
+      "samenvatting": null
+    },
+    "1843": {
+      "id": 1843,
+      "citaat": "Ik begrijp dat de initiatiefnemers dit onderwerp verder willen brengen, maar ik moet daar wel enigszins de verwachtingen temperen. Voor het wijzigen van het EU-Handvest is een verdragswijziging nodig en dat vereist unanimiteit onder lidstaten. Ik kan u nu al zonder sonderen zeggen dat die unanimiteit op dit moment niet te vinden zal zijn. Voor het wijzigen van het Internationaal Verdrag inzake burgerrechten en politieke rechten is er steun nodig van twee derde van alle VN-lidstaten. Hoewel die drempel minder hoog lijkt, moet je daarvoor ook eerst het verdrag openen. Dat betekent dat je ook alle verworven rechten die inmiddels in dat verdrag staan, mogelijk weer in een risicovol daglicht zet. Dus hoewel wij zeer veel sympathie hebben voor de stap van Frankrijk, eerst met de grondwettelijke verankering, maar nu ook met het voornemen om daar wat mee te doen in de richting van het EU-Handvest, zien wij deze route niet als productief binnen de bredere SRGR-agenda binnen de EU. Ook ik zou huiverig zijn om op dit moment het handvest te openen. Nogmaals, ik ben wel bereid om te bezien hoe dat speelveld zich ontwikkelt, om contact te houden met like-minded landen om te zien of zich daar in de toekomst wel een mogelijkheid voordoet, maar op dit moment zou ik daar geen voorstander van zijn.",
       "typologie": "factual",
       "stance": "contra",
-      "spreker": "Judith Tielen",
+      "spreker": "David van Weel",
       "partij": "VVD",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Causaal",
+        "Frame-Thematisch",
+        "Ideologie-TAN",
+        "Meta-Agenda-Tijdigheid",
+        "Moraliteit-Autoriteit",
+        "Walton-Consequentie"
+      ],
+      "claims": [
+        {
+          "claim_text": "Voor het wijzigen van het EU-Handvest is een verdragswijziging nodig en dat vereist unanimiteit onder lidstaten.",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "die unanimiteit op dit moment niet te vinden zal zijn.",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "Voor het wijzigen van het Internationaal Verdrag inzake burgerrechten en politieke rechten is er steun nodig van twee derde van alle VN-lidstaten.",
+          "attributed_source_text": null
+        }
+      ],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08828",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-09-08/troelstrazaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-09-08T10%3A00%3A04%2B0200&end=2025-09-08T13%3A47%3A37%2B0200",
+      "start_seconds": 10817.2,
+      "gist": "verdragswijziging brengt grote risico's",
+      "samenvatting": null
+    },
+    "1856": {
+      "id": 1856,
+      "citaat": "Het Europees Parlement heeft zich namelijk uitgesproken voor het vastleggen van het recht op abortus in de Handvest van de grondrechten van de Europese Unie.",
+      "typologie": "factual",
+      "stance": "pro",
+      "spreker": "Wieke Paulusma",
+      "partij": "D66",
       "tags": [
         "Actor-Politicus",
         "Arena-Parlement",
         "Bewijs-Expert",
         "Frame-Thematisch",
-        "Frame-Verantwoordelijkheid",
-        "Ideologie-Rechts-Economisch",
-        "Moraliteit-Autoriteit",
-        "Moraliteit-Eerlijkheid",
-        "Walton-Consequentie"
+        "Ideologie-GAL",
+        "Moraliteit-Vrijheid",
+        "Walton-Regel"
       ],
       "claims": [
         {
-          "claim_text": "we hebben verschillende programma's om ervoor te zorgen dat abortuszorg voor de mensen in Nederland beschikbaar is",
-          "attributed_source_text": null
-        },
-        {
-          "claim_text": "signalen vanuit de abortusklinieken ... niet opwegen tegen de moeilijkheden die we dan over onszelf gaan afroepen",
-          "attributed_source_text": "signalen die wij krijgen vanuit de abortusklinieken"
+          "claim_text": "Het Europees Parlement heeft zich uitgesproken voor het vastleggen van het recht op abortus in de Handvest van de grondrechten van de Europese Unie",
+          "attributed_source_text": "Het Europees Parlement"
         }
       ],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08828",
       "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-09-08/troelstrazaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-09-08T10%3A00%3A04%2B0200&end=2025-09-08T13%3A47%3A37%2B0200",
-      "start_seconds": 13288.401,
-      "gist": "overheidsregeling onverzekerden roept problemen",
-      "samenvatting": "Een landelijke overheidsregeling voor onverzekerden roept onopgeloste vragen op, terwijl bestaande kliniekbuffers en initiatieven al opvang bieden."
+      "start_seconds": 10498.701,
+      "gist": "Europees Parlement steunt verankering",
+      "samenvatting": null
+    },
+    "1880": {
+      "id": 1880,
+      "citaat": "Abortuszorg is geen impulsieve keuze. Een verplichte beraadtermijn kan juist stress opleveren en voor logistieke en financiële belemmeringen zorgen, namelijk met betrekking tot het reizen naar de zorglocatie. Landen als Zweden en Canada hebben hier al jarenlang goede ervaringen mee. Vrouwen die zelf langer willen nadenken over een beslissing, kunnen dit doen. Er is ook hulp beschikbaar. Daarvoor is het invoeren van een beraadtermijn volgens ons niet nodig.",
+      "typologie": "factual",
+      "stance": "pro",
+      "spreker": "Elke Slagt-Tichelman",
+      "partij": "GroenLinks-PvdA",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Causaal",
+        "Context-Commissie",
+        "Frame-Economisch",
+        "Frame-Thematisch",
+        "Ideologie-GAL",
+        "Moraliteit-Vrijheid",
+        "Moraliteit-Zorg",
+        "Walton-Consequentie"
+      ],
+      "claims": [
+        {
+          "claim_text": "Een verplichte beraadtermijn kan juist stress opleveren en voor logistieke en financiële belemmeringen zorgen, namelijk met betrekking tot het reizen naar de zorglocatie.",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "Landen als Zweden en Canada hebben hier al jarenlang goede ervaringen mee.",
+          "attributed_source_text": null
+        }
+      ],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2025A00323",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-02-04/groenvanprinstererzaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-02-04T18%3A17%3A03%2B0100&end=2025-02-04T19%3A09%3A21%2B0100",
+      "start_seconds": 799.46,
+      "gist": "beraadtermijn veroorzaakt extra stress",
+      "samenvatting": null
+    },
+    "1885": {
+      "id": 1885,
+      "citaat": "Daarover kan ik zeggen dat er slechts een kleine groep is voor wie de kosten een barrière vormen voor het gebruik van anticonceptie.",
+      "typologie": "factual",
+      "stance": "contra",
+      "spreker": "Vincent Karremans",
+      "partij": "VVD",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Statistisch",
+        "Context-Commissie",
+        "Frame-Economisch",
+        "Frame-Thematisch",
+        "Ideologie-Rechts-Economisch",
+        "Moraliteit-Vrijheid",
+        "Walton-Consequentie"
+      ],
+      "claims": [
+        {
+          "claim_text": "er is slechts een kleine groep voor wie de kosten een barrière vormen voor het gebruik van anticonceptie",
+          "attributed_source_text": null
+        }
+      ],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2025A00323",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-02-04/groenvanprinstererzaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-02-04T18%3A17%3A03%2B0100&end=2025-02-04T19%3A09%3A21%2B0100",
+      "start_seconds": 1792.0,
+      "gist": "kosten belemmeren slechts enkelingen",
+      "samenvatting": "Kosten vormen slechts voor een heel kleine groep een belemmering voor anticonceptiegebruik; de werkelijke obstakels betreffen therapietrouw en keuzes, waardoor gratis verstrekking het probleem niet oplost."
+    },
+    "1886": {
+      "id": 1886,
+      "citaat": "Als die jonge doelgroep zou worden verbreed naar alle vrouwen in de vruchtbare leeftijd, kost dat 25 miljoen euro per jaar. Dat was een specifieke vraag van mevrouw Dobbe. In deze berekening is ervan uitgegaan dat anticonceptie onder het eigen risico valt. Meer dan de helft van deze groep vrouwen maakt het eigen risico overigens niet vol. Zij zullen daardoor alsnog moeten betalen voor anticonceptie. Als anticonceptie zou worden uitgezonderd van het eigen risico, dan kost het 60 miljoen euro per jaar.",
+      "typologie": "economic",
+      "stance": "contra",
+      "spreker": "Vincent Karremans",
+      "partij": "VVD",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Statistisch",
+        "Context-Commissie",
+        "Frame-Economisch",
+        "Frame-Thematisch",
+        "Ideologie-Rechts-Economisch",
+        "Walton-Consequentie"
+      ],
+      "claims": [
+        {
+          "claim_text": "uitbreiding naar alle vrouwen in vruchtbare leeftijd kost 25 miljoen euro per jaar (onder eigen risico)",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "meer dan de helft van deze groep vrouwen maakt het eigen risico niet vol",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "uitsluiting van eigen risico kost 60 miljoen euro per jaar",
+          "attributed_source_text": null
+        }
+      ],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2025A00323",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-02-04/groenvanprinstererzaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-02-04T18%3A17%3A03%2B0100&end=2025-02-04T19%3A09%3A21%2B0100",
+      "start_seconds": 1792.0,
+      "gist": "vergoeding basispakket kost miljoenen",
+      "samenvatting": null
+    },
+    "1887": {
+      "id": 1887,
+      "citaat": "Er zijn geen betrouwbare onderzoeken bekend die laten zien dat het gratis maken van condooms het daadwerkelijke gebruik daarvan verhoogt. U kunt zich voorstellen dat de onzekerheden die ik hier benoem, gelden voor de positieve effecten van het gratis maken van anticonceptie, waaronder condooms. Het is namelijk niet bekend in hoeverre het aantal soa's en onbedoelde zwangerschappen zal afnemen.",
+      "typologie": "factual",
+      "stance": "contra",
+      "spreker": "Vincent Karremans",
+      "partij": "VVD",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Expert",
+        "Context-Commissie",
+        "Frame-Thematisch",
+        "Ideologie-Rechts-Economisch",
+        "Walton-Expertise"
+      ],
+      "claims": [
+        {
+          "claim_text": "er zijn geen betrouwbare onderzoeken bekend die laten zien dat gratis condooms het gebruik verhoogt",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "het is niet bekend in hoeverre het aantal soa's en onbedoelde zwangerschappen zal afnemen",
+          "attributed_source_text": null
+        }
+      ],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2025A00323",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-02-04/groenvanprinstererzaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-02-04T18%3A17%3A03%2B0100&end=2025-02-04T19%3A09%3A21%2B0100",
+      "start_seconds": 1792.0,
+      "gist": "gratis anticonceptie onbewezen effectief",
+      "samenvatting": null
     },
     "1891": {
       "id": 1891,
@@ -1084,12 +1393,12 @@
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2025A00323",
       "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-02-04/groenvanprinstererzaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-02-04T18%3A17%3A03%2B0100&end=2025-02-04T19%3A09%3A21%2B0100",
       "start_seconds": 2784.0,
-      "gist": "liefdadigheid en netwerken vangen",
+      "gist": "bestaande noodfondsen volstaan reeds",
       "samenvatting": null
     },
-    "1893": {
-      "id": 1893,
-      "citaat": "Het online verstrekken van abortuspillen in strijd is met zowel de Geneesmiddelenwet als de Wet afbreking zwangerschap. Het online verstrekken van de abortuspil, in strijd met de Geneesmiddelenwet, is immers een misdrijf op grond van de Wet op de economische delicten. Het daadwerkelijk verrichten van de abortus zonder dat is voldaan aan de vereisten van de Wet afbreking zwangerschap is een misdrijf op grond van het Wetboek van Strafrecht. De initiatiefnemers achter Thuisabortus.nl handelen dus niet alleen laakbaar, maar ook strafbaar.",
+    "1892": {
+      "id": 1892,
+      "citaat": "De wet bevat geen recht op abortus, maar beschrijft de uitzonderingsgevallen waarin het plegen van abortus niet strafbaar is. Daarvoor moet aan strikte voorwaarden zijn voldaan: de arts is verplicht om een of meer gesprekken met de vrouw te voeren, de arts is verplicht om de vrouw voor te lichten over alternatieve oplossingen voor haar eventuele noodsituatie, de arts is verplicht zich ervan te verzekeren dat het verzoek van de vrouw vrijwillig en weloverwogen is gedaan, de arts is verplicht om op grond van zijn eigen bevindingen te beoordelen of de behandeling verantwoord is te achten en het besluit als zodanig om over te gaan tot abortus dient te worden genomen door de vrouw en de arts gezamenlijk. De arts is dus geen formulierenverwerker. Nee, hij is een toetser met eigen plichten en verantwoordelijkheden. In de dagelijkse abortuspraktijk blijken deze strikte wettelijke eisen al sinds jaar en dag schaamteloos terzijde te worden geschoven. Uit verschillende wetsevaluaties is gebleken dat de meerderheid van de artsen geen alternatieven voor abortus bespreekt met de vrouw, terwijl de wet dat wel verplicht.",
       "typologie": "legal",
       "stance": "contra",
       "spreker": "Gideon van Meijeren",
@@ -1097,77 +1406,85 @@
       "tags": [
         "Actor-Politicus",
         "Arena-Parlement",
+        "Bewijs-Expert",
         "Context-Commissie",
         "Frame-Thematisch",
         "Frame-Verantwoordelijkheid",
         "Ideologie-TAN",
         "Moraliteit-Autoriteit",
+        "Stijl-Antithese",
         "Walton-Regel"
       ],
-      "claims": [],
-      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08053",
-      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2026-04-01/groenvanprinstererzaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2026-04-01T13%3A02%3A34%2B0200&end=2026-04-01T17%3A18%3A50%2B0200",
-      "start_seconds": null,
-      "gist": "online verstrekking is strafbaar",
-      "samenvatting": null
-    },
-    "1894": {
-      "id": 1894,
-      "citaat": "we zouden het toch met elkaar eens moeten zijn dat de wet zoals die op dit moment luidt in ieder geval gehandhaafd moet worden en dat criminele abortuscowboys die alle regels aan hun laars lappen keihard moeten worden aangepakt? Want wettelijke bepalingen die gericht zijn op het beschermen van het ongeboren menselijk leven mogen niet verworden tot een dode letter.",
-      "typologie": "legal",
-      "stance": "contra",
-      "spreker": "Gideon van Meijeren",
-      "partij": "FVD",
-      "tags": [
-        "Actor-Politicus",
-        "Arena-Parlement",
-        "Context-Commissie",
-        "Drogreden-Bespelen-Publiek",
-        "Drogreden-Stropop",
-        "Frame-Moraliteit",
-        "Frame-Thematisch",
-        "Frame-Verantwoordelijkheid",
-        "Ideologie-TAN",
-        "Moraliteit-Autoriteit",
-        "Moraliteit-Zorg",
-        "Stijl-Retorische-Vraag",
-        "Stijl-Slogan",
-        "Walton-Regel"
+      "claims": [
+        {
+          "claim_text": "de meerderheid van de artsen geen alternatieven voor abortus bespreekt met de vrouw",
+          "attributed_source_text": "verschillende wetsevaluaties"
+        }
       ],
-      "claims": [],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A08053",
       "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2026-04-01/groenvanprinstererzaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2026-04-01T13%3A02%3A34%2B0200&end=2026-04-01T17%3A18%3A50%2B0200",
-      "start_seconds": 4528.839,
-      "gist": "strafrecht handhaaft bescherming leven",
-      "samenvatting": "Wettelijke strafbepalingen zijn noodzakelijk om het ongeboren leven te beschermen en illegale abortuspraktijken aan te pakken."
+      "start_seconds": 4354.758999999998,
+      "gist": "abortus blijft strafrechtelijke uitzondering",
+      "samenvatting": "De wet bevat geen algemeen recht op abortus maar een strafrechtelijke uitzondering die strikte toetsing door artsen vereist om de balans tussen beschermwaardigheid en noodsituatie te bewaken."
     },
-    "1981": {
-      "id": 1981,
-      "citaat": "De abortuspil is potentieel gevaarlijk. We erkennen dat er in enkele situaties zeker twijfel kan zijn of vrouwen een vroegere zwangerschapsduur opgeven of andere data noemen. Stel dat de zorgverlener daar twijfels over heeft in dat contact, dan denk ik dat een fysiek consult alsnog op zijn plaats is. Als er twijfel is bij de zorgverlener, is een fysiek consult op zijn plaats.",
+    "1901": {
+      "id": 1901,
+      "citaat": "Toch is onze fractie daar kritisch op, want abortuszorg is meer dan het toedienen van medicatie. Het begint voordat de abortuspil wordt voorgeschreven met een consult waarin over de ingrijpende beslissing zorgvuldig gesproken wordt en ook de duur van de zwangerschap wordt vastgesteld. Maar het vaststellen van die duur is bij een digitaal consult lastig. Sterker nog, ik heb abortusartsen gesproken die vrezen dat vrouwen waarschijnlijk en mogelijk uit wanhoop aan zullen geven dat ze langer zwanger zijn dan werkelijk het geval is. De abortuspil is dan potentieel gevaarlijk.",
       "typologie": "factual",
       "stance": "contra",
-      "spreker": "Elke Slagt-Tichelman",
-      "partij": "GroenLinks-PvdA",
+      "spreker": "Sophie Hermans",
+      "partij": "VVD",
       "tags": [
         "Actor-Politicus",
         "Arena-Parlement",
         "Bewijs-Causaal",
+        "Bewijs-Expert",
         "Frame-Thematisch",
         "Frame-Verantwoordelijkheid",
+        "Ideologie-TAN",
+        "Moraliteit-Autoriteit",
         "Moraliteit-Zorg",
-        "Stijl-Herhaling",
+        "Walton-Expertise"
+      ],
+      "claims": [
+        {
+          "claim_text": "abortusartsen vrezen dat vrouwen waarschijnlijk en mogelijk uit wanhoop aan zullen geven dat ze langer zwanger zijn dan werkelijk het geval is",
+          "attributed_source_text": "abortusartsen"
+        }
+      ],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A00656",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-04-08/groenvanprinstererzaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-04-08T10%3A04%3A47%2B0200&end=2024-04-08T14%3A00%3A09%2B0200",
+      "start_seconds": 263.75999999999976,
+      "gist": "termijnbepaling op afstand onbetrouwbaar",
+      "samenvatting": "Digitaal voorschrijven van de abortuspil is riskant omdat de zwangerschapsduur lastig vast te stellen is en eventuele medische complicaties op afstand veel moeilijker adequaat te behandelen zijn."
+    },
+    "1903": {
+      "id": 1903,
+      "citaat": "Daarnaast is er bij de behandeling kans op complicaties. Bij abortuszorg wordt niet voor niets nazorg gegeven. Ook die is bij deze zorg op afstand niet of veel lastiger mogelijk.",
+      "typologie": "factual",
+      "stance": "contra",
+      "spreker": "Sophie Hermans",
+      "partij": "VVD",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Causaal",
+        "Frame-Menselijk-Belang",
+        "Frame-Thematisch",
+        "Ideologie-TAN",
+        "Moraliteit-Zorg",
         "Walton-Consequentie"
       ],
       "claims": [],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A00656",
       "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-04-08/groenvanprinstererzaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-04-08T10%3A04%3A47%2B0200&end=2024-04-08T14%3A00%3A09%2B0200",
-      "start_seconds": 7317.101000000001,
-      "gist": "twijfel termijn vereist consult",
+      "start_seconds": 352.221,
+      "gist": "complicatierisico vereist fysieke nazorg",
       "samenvatting": null
     },
-    "2016": {
-      "id": 2016,
-      "citaat": "Een embryo onder de tien of twaalf weken is niet levensvatbaar.",
+    "1953": {
+      "id": 1953,
+      "citaat": "Internationale richtlijnen houden al steeds meer rekening met de mogelijkheid van abortuszorg op afstand. Deze zijn nog niet verwerkt in de Nederlandse richtlijnen. Er zijn al wel veel kwalitatief goede onderzoeken om deze richtlijnen vast te stellen en op te stellen.",
       "typologie": "factual",
       "stance": "pro",
       "spreker": "Elke Slagt-Tichelman",
@@ -1178,19 +1495,95 @@
         "Bewijs-Expert",
         "Frame-Thematisch",
         "Ideologie-GAL",
+        "Moraliteit-Zorg",
         "Walton-Expertise"
       ],
       "claims": [
         {
-          "claim_text": "Een embryo onder de tien of twaalf weken is niet levensvatbaar.",
+          "claim_text": "Internationale richtlijnen houden al steeds meer rekening met de mogelijkheid van abortuszorg op afstand",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "Er zijn al wel veel kwalitatief goede onderzoeken om deze richtlijnen vast te stellen en op te stellen",
           "attributed_source_text": null
         }
       ],
       "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A00656",
       "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-04-08/groenvanprinstererzaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-04-08T10%3A04%3A47%2B0200&end=2024-04-08T14%3A00%3A09%2B0200",
-      "start_seconds": 9782.42,
-      "gist": "embryo onder twaalf niet-levensvatbaar",
+      "start_seconds": 6830.739,
+      "gist": "internationale richtlijnen erkennen teleconsultatie",
       "samenvatting": null
+    },
+    "1971": {
+      "id": 1971,
+      "citaat": "De minister kan niet garanderen dat bij abortuszorg op afstand alle zorgvuldigheidseisen uit de Wet afbreking zwangerschap kunnen worden gewaarborgd.",
+      "typologie": "legal",
+      "stance": "contra",
+      "spreker": "Vicky Maeijer",
+      "partij": "PVV",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Frame-Thematisch",
+        "Frame-Verantwoordelijkheid",
+        "Ideologie-TAN",
+        "Moraliteit-Autoriteit",
+        "Moraliteit-Zorg",
+        "Walton-Regel"
+      ],
+      "claims": [],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A00656",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-04-08/groenvanprinstererzaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-04-08T10%3A04%3A47%2B0200&end=2024-04-08T14%3A00%3A09%2B0200",
+      "start_seconds": 3136.6189999999997,
+      "gist": "wettelijke waarborgen ontbreken digitaal",
+      "samenvatting": null
+    },
+    "1972": {
+      "id": 1972,
+      "citaat": "De richtlijnen voor abortuszorg houden geen rekening met het voorschrijven van abortuszorg via een digitaal consult.",
+      "typologie": "legal",
+      "stance": "contra",
+      "spreker": "Vicky Maeijer",
+      "partij": "PVV",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Frame-Thematisch",
+        "Frame-Verantwoordelijkheid",
+        "Ideologie-TAN",
+        "Moraliteit-Autoriteit",
+        "Walton-Regel"
+      ],
+      "claims": [],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A00656",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-04-08/groenvanprinstererzaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-04-08T10%3A04%3A47%2B0200&end=2024-04-08T14%3A00%3A09%2B0200",
+      "start_seconds": 3145.4399999999996,
+      "gist": "richtlijnen ontbreken voor teleconsultatie",
+      "samenvatting": null
+    },
+    "2033": {
+      "id": 2033,
+      "citaat": "Bij het op afstand voorschrijven van de abortuspil gelden alle zorgvuldigheidseisen uit de wet afbreking zwangerschap, net als voor de reguliere abortuszorg, maar ook de eisen die we stellen aan het gedogen van artikel 67 van de Geneesmiddelenwet. Het is aan de inspectie om daarop toe te zien.",
+      "typologie": "factual",
+      "stance": "pro",
+      "spreker": "Pia Dijkstra",
+      "partij": "D66",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Frame-Thematisch",
+        "Frame-Verantwoordelijkheid",
+        "Ideologie-GAL",
+        "Meta-Bevoegdheid",
+        "Moraliteit-Autoriteit",
+        "Walton-Regel"
+      ],
+      "claims": [],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2024A00656",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-04-08/groenvanprinstererzaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-04-08T10%3A04%3A47%2B0200&end=2024-04-08T14%3A00%3A09%2B0200",
+      "start_seconds": 11614.0,
+      "gist": "zorgvuldigheid gewaarborgd op afstand",
+      "samenvatting": "Bij het op afstand voorschrijven van de abortuspil gelden dezelfde wettelijke zorgvuldigheidseisen als in de kliniek, wat aansluit bij internationale richtlijnen voor teleconsultatie."
     }
   },
   "bands": [
@@ -1201,171 +1594,306 @@
         "type": "node",
         "id": 1648,
         "kids": [
-          1673
+          {
+            "id": 1673,
+            "scheme": "Argument from Cause to Effect",
+            "reden": "Dat het strafrecht de toegang tot zorg belemmert, noemt een direct negatief gevolg van strafbaarstelling dat specifiek aansluit bij de stelling om abortus uit het strafrecht te halen."
+          }
         ]
       },
       "contra": {
         "type": "node",
-        "id": 1894,
-        "kids": [
-          1893
-        ]
+        "id": 1892,
+        "kids": []
       },
       "oppositie": {
-        "argument_a_id": 1648,
-        "argument_b_id": 1894,
-        "relation_type": "direct_rebuttal"
+        "argument_a_id": 1892,
+        "argument_b_id": 1648,
+        "scheme": null,
+        "reden": "Het premise-argument gaat direct in op de specifieke strafrechtelijke status van abortus door te motiveren waarom abortus juist wel een strafrechtelijke uitzondering moet blijven (met strikte toetsing en beschermwaardigheid) in plaats van een regulier zorgrecht buiten het strafrecht."
       }
     },
     {
       "nummer": 2,
-      "thema": "Is een verplichte beraadtermijn noodzakelijk voor zorgvuldige besluitvorming?",
+      "thema": "Is een verplichte bedenktijd noodzakelijk voor zorgvuldigheid?",
       "pro": {
         "type": "node",
         "id": 1680,
         "kids": [
-          1633,
-          1671
+          {
+            "id": 1671,
+            "scheme": null,
+            "reden": "Het argument dat de stijging van abortussen losstaat van de beraadtermijn biedt een directe feitelijke grond voor de stelling in het doelargument dat de afschaffing van de termijn niet de oorzaak is en de beraadtermijn dus niet noodzakelijk is."
+          }
         ]
       },
       "contra": {
         "type": "node",
         "id": 1664,
         "kids": [
-          1631,
-          1642
+          {
+            "id": 1642,
+            "scheme": null,
+            "reden": "Het beschermen tegen familiedruk noemt een specifiek positief effect/reden waarom een bedenktijd vrouwen helpt."
+          }
         ]
       },
       "oppositie": {
         "argument_a_id": 1680,
         "argument_b_id": 1664,
-        "relation_type": "direct_rebuttal"
+        "scheme": null,
+        "reden": "Argument 1680 gaat inhoudelijk direct in op de kernstelling van argument 1664 door te stellen dat een verplichte beraadtermijn/bedenktijd geen noodzakelijke voorwaarde is voor zorgvuldige besluitvorming."
       }
     },
     {
       "nummer": 3,
-      "thema": "Moet de 24-wekengrens voor abortus worden verkort?",
-      "pro": {
-        "type": "node",
-        "id": 2016,
-        "kids": []
-      },
-      "contra": {
-        "type": "node",
-        "id": 1655,
-        "kids": [
-          1668,
-          1868
-        ]
-      },
-      "oppositie": {
-        "argument_a_id": 2016,
-        "argument_b_id": 1655,
-        "relation_type": "direct_rebuttal"
-      }
-    },
-    {
-      "nummer": 4,
-      "thema": "Moeten redenen voor abortus verplicht geregistreerd worden?",
+      "thema": "Moeten de motieven voor abortus geregistreerd worden?",
       "pro": {
         "type": "node",
         "id": 1678,
         "kids": [
-          1688,
-          1695
+          {
+            "id": 1688,
+            "scheme": "Argument from Expert Opinion",
+            "reden": "De premissen (dat vinklijstjes de complexe werkelijkheid negeren en slechts schijnantwoorden opleveren) sluiten direct aan op de expliciete gronden in het doelwit-argument waarom standaard redenregistratie ongewenst is."
+          },
+          {
+            "id": 1695,
+            "scheme": "Argument from Expert Opinion",
+            "reden": "De premissen (dat vinklijstjes de complexe werkelijkheid negeren en slechts schijnantwoorden opleveren) sluiten direct aan op de expliciete gronden in het doelwit-argument waarom standaard redenregistratie ongewenst is."
+          }
         ]
       },
       "contra": {
         "type": "node",
-        "id": 1645,
-        "kids": [
-          1666
-        ]
+        "id": 1640,
+        "kids": []
       },
       "oppositie": {
         "argument_a_id": 1678,
-        "argument_b_id": 1645,
-        "relation_type": "direct_rebuttal"
+        "argument_b_id": 1640,
+        "scheme": null,
+        "reden": "Het premise-argument gaat direct in op het specifieke voorstel uit het target-argument om redenen/motieven voor abortus te registreren, en beargumenteert expliciet waarom een dergelijke registratie ongewenst en niet effectief is."
       }
     },
     {
-      "nummer": 5,
-      "thema": "Moet de abortuspil via de huisarts verstrekt worden?",
-      "pro": {
-        "type": "node",
-        "id": 1691,
-        "kids": []
-      },
-      "contra": {
-        "type": "node",
-        "id": 1814,
-        "kids": []
-      },
-      "oppositie": {
-        "argument_a_id": 1691,
-        "argument_b_id": 1814,
-        "relation_type": "direct_rebuttal"
-      }
-    },
-    {
-      "nummer": 6,
-      "thema": "Moet de overheid abortuszorg voor onverzekerden vergoeden?",
+      "nummer": 4,
+      "thema": "Moet de overheid abortuszorg voor onverzekerden financieren?",
       "pro": {
         "type": "node",
         "id": 1618,
         "kids": [
-          1616,
-          1617,
-          1703
+          {
+            "id": 1616,
+            "scheme": null,
+            "reden": "Het feit dat honderden de toegang tot financiering missen noemt de concrete aanleiding en grond voor het voorstel om financiering voor onverzekerden via het CAK te regelen."
+          }
         ]
       },
       "contra": {
         "type": "node",
-        "id": 1875,
-        "kids": [
-          1847,
-          1891
-        ]
+        "id": 1621,
+        "kids": []
       },
       "oppositie": {
-        "argument_a_id": 1618,
-        "argument_b_id": 1875,
-        "relation_type": "direct_rebuttal"
+        "argument_a_id": 1621,
+        "argument_b_id": 1618,
+        "scheme": null,
+        "reden": "Het premise-argument gaat direct in op het specifieke voorstel uit het target-argument om de zorg via het CAK te regelen, door te stellen dat onderbrenging bij het CAK juridisch onmogelijk is."
       }
     },
     {
-      "nummer": 7,
-      "thema": "Moet anticonceptie vergoed worden in het basispakket?",
+      "nummer": 5,
+      "thema": "Moet anticonceptie in het basispakket tegen abortus?",
       "pro": {
         "type": "node",
-        "id": 1639,
+        "id": 1657,
         "kids": [
-          1638,
-          1657
+          {
+            "id": 1638,
+            "scheme": "Argument from Cause to Effect",
+            "reden": "Het feit dat veel abortussen plaatsvinden zonder voorafgaand anticonceptiegebruik fungeert als directe feitelijke grond voor de stelling dat vergoeding van anticonceptie ongewenste zwangerschappen voorkomt en kosten bespaart."
+          }
         ]
       },
       "contra": {
         "type": "node",
-        "id": 1632,
+        "id": 1885,
         "kids": [
-          1707,
-          1630
+          {
+            "id": 1705,
+            "scheme": null,
+            "reden": "Het argument dat de barrières bij het daadwerkelijke gebruik liggen, vormt een inhoudelijke grond voor de stelling dat niet de kosten de voornaamste belemmering zijn en gratis verstrekking het probleem daarom niet oplost."
+          }
         ]
       },
       "oppositie": {
-        "argument_a_id": 1639,
-        "argument_b_id": 1632,
-        "relation_type": "direct_rebuttal"
+        "argument_a_id": 1885,
+        "argument_b_id": 1657,
+        "scheme": null,
+        "reden": "Het premise-argument betwist direct de kern van het doelwit-argument dat vergoeding (gratis verstrekking via het basispakket) ongewenste zwangerschappen oplost, door te stellen dat kosten nauwelijks een belemmering vormen voor anticonceptiegebruik."
+      }
+    },
+    {
+      "nummer": 6,
+      "thema": "Moet abortus erkend worden als internationaal mensenrecht?",
+      "pro": {
+        "type": "node",
+        "id": 1786,
+        "kids": [
+          {
+            "id": 1813,
+            "scheme": null,
+            "reden": "Het argument dat EU-verankering beschermt tegen rechtenafbraak noemt een direct positief gevolg/functie die de stelling onderbouwt dat verankering in o.a. het EU-Handvest noodzakelijk is ter bescherming van rechten."
+          }
+        ]
+      },
+      "contra": {
+        "type": "node",
+        "id": 1733,
+        "kids": [
+          {
+            "id": 1721,
+            "scheme": null,
+            "reden": "De premisse noemt het schadelijke gevolg dat erkenning als mensenrecht de bescherming van het kwetsbare ongeboren leven ontneemt, wat direct aansluit op de kern dat abortus wegens die belangenbegrenzing geen mensenrecht kan zijn."
+          }
+        ]
+      },
+      "oppositie": {
+        "argument_a_id": 1733,
+        "argument_b_id": 1786,
+        "scheme": null,
+        "reden": "Het premise-argument betwist direct de kwalificatie van abortus als mensenrecht en gaat inhoudelijk in op het zelfbeschikkingsargument uit het doelwit-argument."
       }
     }
   ],
-  "losse_groepen": [],
-  "losse_argumenten": [],
+  "losse_groepen": [
+    {
+      "kind": "group",
+      "label": "stress en autonomie bij besluitvorming",
+      "samenvatting": "Vrouwen zijn prima in staat direct weloverwogen te beslissen en een verplichte beraadtermijn leidt tot onnodige logistieke en emotionele stress.",
+      "member_ids": [
+        1633,
+        1880
+      ]
+    },
+    {
+      "kind": "group",
+      "label": "zorgen over besluitvorming zonder bedenktijd",
+      "samenvatting": "Sinds de afschaffing van de beraadtermijn vindt ruim driekwart van de abortussen plaats met nul dagen bedenktijd, wat de zorgvuldigheid onder druk zet.",
+      "member_ids": [
+        1662,
+        1666
+      ]
+    },
+    {
+      "kind": "group",
+      "label": "financiële drempels voor onverzekerde vrouwen",
+      "samenvatting": "Klinieken hebben onvoldoende buffers voor onverzekerden en de kosten van ruim vijfhonderd euro maken de abortuspil voor kwetsbare groepen onbetaalbaar.",
+      "member_ids": [
+        1624,
+        1650
+      ]
+    },
+    {
+      "kind": "group",
+      "label": "toestroom- en precedentbezwaren bij vergoeding",
+      "samenvatting": "Gratis abortus leidt tot een aanzuigende werking en hoge kosten, terwijl bestaande regelingen en particuliere noodfondsen reeds een toereikend vangnet bieden.",
+      "member_ids": [
+        1702,
+        1891
+      ]
+    },
+    {
+      "kind": "group",
+      "label": "financiële barrières rondom anticonceptie",
+      "samenvatting": "Kosten belemmeren het gebruik van anticonceptie voor kwetsbare groepen, terwijl vergoeding in het basispakket goedkoper is dan de kosten van ongewenste zwangerschappen.",
+      "member_ids": [
+        1639,
+        1670
+      ]
+    },
+    {
+      "kind": "group",
+      "label": "kosten en effectiviteit van anticonceptievergoeding",
+      "samenvatting": "Volledige vergoeding kost tientallen miljoenen euro's terwijl velen het eigen risico niet volmaken en bewijs voor effectiviteit van gratis verstrekking ontbreekt.",
+      "member_ids": [
+        1886,
+        1887
+      ]
+    },
+    {
+      "kind": "group",
+      "label": "ontbrekende waarborgen bij digitale zorg",
+      "samenvatting": "De geldende richtlijnen voorzien niet in digitale zorg en de minister kan niet garanderen dat alle wettelijke zorgvuldigheidseisen op afstand worden nageleefd.",
+      "member_ids": [
+        1971,
+        1972
+      ]
+    },
+    {
+      "kind": "group",
+      "label": "internationale steun voor fundamenteel abortusrecht",
+      "samenvatting": "Het Europees Parlement en vooroplopende lidstaten zoals Frankrijk spreken zich uit voor de formele grondwettelijke en verdragsmatige verankering van abortus.",
+      "member_ids": [
+        1649,
+        1856
+      ]
+    },
+    {
+      "kind": "group",
+      "label": "soevereiniteits- en verdragsbezwaren tegen mensenrechtstatus",
+      "samenvatting": "Het afdwingen van een internationaal recht schendt de nationale autonomie en het heropenen van verdragen vereist onhaalbare unanimiteit met grote juridische risico's.",
+      "member_ids": [
+        1789,
+        1843
+      ]
+    },
+    {
+      "kind": "group",
+      "label": "bescherming van ongeboren menselijk leven",
+      "samenvatting": "Ieder menselijk leven is heilig en het zelfbeschikkingsrecht van de moeder mag het fundamentele recht op leven van het ongeboren kind niet terzijde schuiven.",
+      "member_ids": [
+        1723,
+        1830
+      ]
+    }
+  ],
+  "losse_argumenten": [
+    1700,
+    1660,
+    1622,
+    2033,
+    1901,
+    1628,
+    1810,
+    1655
+  ],
   "twijfelachtige_classificaties": [
     {
       "argument_id": 1890,
       "huidige_stance": "contra",
-      "reden": "Het citaat pleit voor het wegnemen van financiële barrières en willekeur bij abortuszorg voor onverzekerde vrouwen, wat inhoudelijk een pro-access (PRO) standpunt is."
+      "reden": "Sarah Dobbe (SP) bekritiseert dat onverzekerde vrouwen geen abortus vergoed krijgen en noemt dit incompleet en onverantwoord beleid; dit pleit ondubbelzinnig vóór toegang tot abortuszorg."
+    },
+    {
+      "argument_id": 1663,
+      "huidige_stance": "contra",
+      "reden": "Harry Bevers (VVD) verzet zich tegen het voorstel om abortusmotieven te registreren omdat vrouwen zich dan moeten verantwoorden; dit verdedigt de keuzevrijheid en privacy van de vrouw."
+    },
+    {
+      "argument_id": 1876,
+      "huidige_stance": "contra",
+      "reden": "Judith Tielen (VVD) ontraadt de motie van Gideon van Meijeren om de abortustermijn in te korten en verdedigt daarmee de bestaande wettelijke kaders en de medische beroepsgroep."
+    },
+    {
+      "argument_id": 1870,
+      "huidige_stance": "contra",
+      "reden": "David van Weel (VVD) ontraadt de motie van Mirjam Bikker die de regering verzoekt om expliciet te sturen op het terugdringen van het aantal abortussen."
+    },
+    {
+      "argument_id": 1625,
+      "huidige_stance": "pro",
+      "reden": "Judith Tielen (VVD) wijst een uitbreiding van de vergoeding van abortuszorg voor onverzekerden af en stelt dat er vanuit klinieken geen vraag is om de regeling aan te passen."
     }
   ]
 }

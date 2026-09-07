@@ -1,7 +1,7 @@
 import type { Argument } from "./types";
 
 // Gedeelde stripping van zware, per-argument herhaalde velden (quote_context,
-// claims, oppositions, tag-`reden`) die de filter- en
+// claims, tag-`reden`) die de filter- en
 // correspondentiekaart-componenten (lib/filters.ts, lib/correspondence.ts)
 // toch nooit lezen. Eén definitie, gebruikt door zowel
 // de Astro-build (build-time aggregaten) als scripts/export_public_data.ts
@@ -32,7 +32,6 @@ export function toLeanArgument(argument: any): Argument {
 			published_at: argument.document.published_at,
 			speaker_video_url: null,
 			tweedekamer_activiteit_url: null,
-			redactie_review: null,
 			raw_video_url: argument.document.raw_video_url,
 		},
 		periode: argument.periode,
@@ -45,6 +44,5 @@ export function toLeanArgument(argument: any): Argument {
 			created_by: tag.created_by,
 			reden: null,
 		})),
-		oppositions: [],
 	};
 }

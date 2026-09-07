@@ -8,8 +8,8 @@ Voor elk topic, vier categorieën:
   extract_argument.md-promptversie (PROMPT_VERSION in pipeline/extract_arguments.py)
 - tagging: arguments nog niet getagd, of getagd met een verouderde
   tag_argument.md-promptversie
-- redactie: documenten met arguments maar nog geen redactie_reviews-rij, of
-  gereviewd met een verouderde redactie_bias_check.md-promptversie
+- argumentenboom: of data/export/argument-trees/<slug>.json al bestaat, en
+  hoeveel confrontatie-banden 'm bevat
 - (topic zelf: ontbrekende description blokkeert extractie hard, zie
   extract_arguments.py -- hier gewoon gemeld, niet hard gefaald)
 
@@ -24,8 +24,10 @@ Gebruik:
 """
 
 import argparse
+import json
 import logging
 
+from pipeline.build_confrontatie_export import TREE_EXPORT_DIR
 from pipeline.db import db
 from pipeline.extract_arguments import (
     EXCLUDED_ACTIVITEIT_SOORTEN,
@@ -33,7 +35,6 @@ from pipeline.extract_arguments import (
     TOPIC_TITLE_KEYWORDS,
 )
 from pipeline.periodes import PeriodeIndex
-from pipeline.redactie_check import PROMPT_VERSION as REDACTIE_PROMPT_VERSION
 from pipeline.tag_arguments import PROMPT_VERSION as TAG_PROMPT_VERSION
 
 logger = logging.getLogger(__name__)
@@ -62,6 +63,16 @@ def _count_pending_extraction(conn, topic_id, topic_slug, vanaf):
         params.extend(f"%{keyword.lower()}%" for keyword in title_keywords)
 
     return _count(conn, f"SELECT COUNT(*) FROM documents WHERE {' AND '.join(conditions)}", params)
+
+
+def _argumentenboom_status(topic_slug):
+    """(bestaat, aantal_banden) uit de gepubliceerde argumentenboom-export --
+    geen DB-query, de boom leeft in JSON (zie pipeline/build_confrontatie_export.py)."""
+    tree_path = TREE_EXPORT_DIR / f"{topic_slug}.json"
+    if not tree_path.exists():
+        return False, 0
+    tree_export = json.loads(tree_path.read_text())
+    return True, len(tree_export.get("bands", []))
 
 
 def topic_status(conn, topic_id, topic_slug, vanaf):
@@ -99,22 +110,6 @@ def topic_status(conn, topic_id, topic_slug, vanaf):
         (topic_id, TAG_PROMPT_VERSION),
     )
 
-    pending_redactie = _count(
-        conn,
-        """SELECT COUNT(DISTINCT d.id) FROM documents d
-           JOIN arguments ar ON ar.document_id = d.id
-           LEFT JOIN redactie_reviews rr ON rr.document_id = d.id
-           WHERE d.topic_id = ? AND rr.id IS NULL""",
-        (topic_id,),
-    )
-    outdated_redactie = _count(
-        conn,
-        """SELECT COUNT(*) FROM redactie_reviews rr
-           JOIN documents d ON d.id = rr.document_id
-           WHERE d.topic_id = ? AND (rr.prompt_version IS NULL OR rr.prompt_version != ?)""",
-        (topic_id, REDACTIE_PROMPT_VERSION),
-    )
-
     # video_url-enrichment (pipeline/enrich_video_url.py) draait mee in
     # `make export`, maar wordt hier ook los geteld: anders valt een topic
     # waarvoor de enrichment nog nooit draaide (bv. net toegevoegd) pas op
@@ -126,6 +121,8 @@ def topic_status(conn, topic_id, topic_slug, vanaf):
         (topic_id,),
     )
 
+    boom_bestaat, boom_banden = _argumentenboom_status(topic_slug)
+
     return {
         "documents": total_documents,
         "voorzitter_turns": voorzitter_turns,
@@ -136,8 +133,8 @@ def topic_status(conn, topic_id, topic_slug, vanaf):
         "arguments": total_arguments,
         "pending_tagging": pending_tagging,
         "outdated_tagging": outdated_tagging,
-        "pending_redactie": pending_redactie,
-        "outdated_redactie": outdated_redactie,
+        "argumentenboom_bestaat": boom_bestaat,
+        "argumentenboom_banden": boom_banden,
         "pending_video": pending_video,
     }
 
@@ -154,8 +151,8 @@ def fetch_topics(conn, topic_slug=None):
 def print_report(conn, topics):
     vanaf = PeriodeIndex().drempel
     logger.info(
-        "Huidige promptversies: extract=%s tag=%s redactie=%s",
-        EXTRACT_PROMPT_VERSION, TAG_PROMPT_VERSION, REDACTIE_PROMPT_VERSION,
+        "Huidige promptversies: extract=%s tag=%s",
+        EXTRACT_PROMPT_VERSION, TAG_PROMPT_VERSION,
     )
     logger.info("Verwerkingsdrempel (publicatiedatum): vanaf %s", vanaf)
     for topic in topics:
@@ -175,10 +172,15 @@ def print_report(conn, topics):
             "  arguments:  %d totaal | %d nog niet getagd | %d met verouderde tag-prompt",
             status["arguments"], status["pending_tagging"], status["outdated_tagging"],
         )
-        logger.info(
-            "  redactie:   %d documenten nog niet gecontroleerd | %d reviews met verouderde prompt",
-            status["pending_redactie"], status["outdated_redactie"],
-        )
+        if status["argumentenboom_bestaat"]:
+            logger.info(
+                "  boom:       %d confrontatie-banden",
+                status["argumentenboom_banden"],
+            )
+        else:
+            logger.info(
+                "  boom:       nog niet gegenereerd (make redactie TOPIC=%s)", topic["slug"],
+            )
         logger.info(
             "  video_url:  %d documenten nog zonder video_url (make enrich-video TOPIC=%s)",
             status["pending_video"], topic["slug"],
