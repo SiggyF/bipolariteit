@@ -1,16 +1,14 @@
 from pipeline.build_confrontatie_export import _build_registry, build_bands_and_losse
 
 
-def _relation(relation_type, premise_argument_ids, target_argument_id, thema=None, scheme=None):
+def _relation(relation_type, premise_argument_ids, target_argument_id, thema=None, scheme=None, reden=""):
     return {
         "relation_type": relation_type,
         "premise_argument_ids": premise_argument_ids,
         "target_argument_id": target_argument_id,
         "thema": thema,
         "scheme": scheme,
-        "weak_link": False,
-        "beoordeeld_door": ["pro", "contra"],
-        "confidence": 1.0,
+        "reden": reden,
     }
 
 
@@ -127,23 +125,20 @@ def test_opposed_group_member_gets_its_own_card_and_drops_out_of_losse_groepen()
     assert result["losse_argumenten"] == []
 
 
-def test_kids_carry_their_own_weak_link_from_the_support_relation():
+def test_kids_carry_their_own_reden_from_the_support_relation():
     tree = _tree()
-    tree["relations"][0]["weak_link"] = True  # support [3] -> 1
+    tree["relations"][0]["reden"] = "3 noemt een expliciete oorzaak voor 1."  # support [3] -> 1
     registry = _build_registry(tree, _stance_by_id())
-    assert registry[1]["children"] == [{"id": 3, "weak_link": True, "scheme": None}]
-    # een andere kid, ongewijzigde support-relatie, blijft niet weak_link
-    assert registry[20]["children"] == [{"id": 11, "weak_link": False, "scheme": None}]
+    assert registry[1]["children"] == [{"id": 3, "scheme": None, "reden": "3 noemt een expliciete oorzaak voor 1."}]
+    # een andere kid, ongewijzigde support-relatie, blijft zonder reden
+    assert registry[20]["children"] == [{"id": 11, "scheme": None, "reden": ""}]
 
 
-def test_band_carries_weak_link_and_scheme_from_relation():
+def test_band_carries_reden_and_scheme_from_relation():
     tree = _tree()
-    tree["relations"][2]["weak_link"] = True
     tree["relations"][2]["scheme"] = "frame_shift"
-    tree["relations"][2]["beoordeeld_door"] = ["pro"]
-    tree["relations"][2]["confidence"] = 0.5
+    tree["relations"][2]["reden"] = "3 gaat rechtstreeks in op de kern van 30."
     result = build_bands_and_losse(tree, _stance_by_id())
     oppositie = result["bands"][0]["oppositie"]
-    assert oppositie["weak_link"] is True
     assert oppositie["scheme"] == "frame_shift"
-    assert oppositie["confidence"] == 0.5
+    assert oppositie["reden"] == "3 gaat rechtstreeks in op de kern van 30."

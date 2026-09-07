@@ -64,9 +64,9 @@ const generated = new Date(status.generated_at).toLocaleString("nl-NL", {
 				</li>
 			</ul>
 			<p class="panel-note">
-				Argumentenboom (Stage 2, structureren + tweezijdige redactie):{" "}
+				Argumentenboom (Stage 2, structureren + per-relatie redactiecheck):{" "}
 				{topic.argumentenboom_banden > 0
-					? `${topic.argumentenboom_banden} confrontatie-banden, waarvan ${topic.argumentenboom_weak_link} slechts door één van de twee redacteuren onderschreven.`
+					? `${topic.argumentenboom_banden} confrontatie-banden.`
 					: "nog niet gegenereerd."}
 			</p>
 			<p class="status-total">{topic.arguments_total} argumenten in {topic.documents_total} documenten.</p>

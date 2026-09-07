@@ -9,9 +9,7 @@ Voor elk topic, vier categorieën:
 - tagging: arguments nog niet getagd, of getagd met een verouderde
   tag_argument.md-promptversie
 - argumentenboom: of data/export/argument-trees/<slug>.json al bestaat, en
-  hoeveel confrontatie-banden daarin een weak_link hebben (#252: door
-  slechts één van de twee redacteuren onderschreven, zie
-  pipeline/confrontatie_tree.py)
+  hoeveel confrontatie-banden 'm bevat
 - (topic zelf: ontbrekende description blokkeert extractie hard, zie
   extract_arguments.py -- hier gewoon gemeld, niet hard gefaald)
 
@@ -68,16 +66,13 @@ def _count_pending_extraction(conn, topic_id, topic_slug, vanaf):
 
 
 def _argumentenboom_status(topic_slug):
-    """(bestaat, aantal_banden, aantal_weak_link) uit de gepubliceerde
-    argumentenboom-export -- geen DB-query, de boom leeft in JSON (zie
-    pipeline/build_confrontatie_export.py)."""
+    """(bestaat, aantal_banden) uit de gepubliceerde argumentenboom-export --
+    geen DB-query, de boom leeft in JSON (zie pipeline/build_confrontatie_export.py)."""
     tree_path = TREE_EXPORT_DIR / f"{topic_slug}.json"
     if not tree_path.exists():
-        return False, 0, 0
+        return False, 0
     tree_export = json.loads(tree_path.read_text())
-    bands = tree_export.get("bands", [])
-    weak_link = sum(1 for band in bands if band.get("oppositie", {}).get("weak_link"))
-    return True, len(bands), weak_link
+    return True, len(tree_export.get("bands", []))
 
 
 def topic_status(conn, topic_id, topic_slug, vanaf):
@@ -126,7 +121,7 @@ def topic_status(conn, topic_id, topic_slug, vanaf):
         (topic_id,),
     )
 
-    boom_bestaat, boom_banden, boom_weak_link = _argumentenboom_status(topic_slug)
+    boom_bestaat, boom_banden = _argumentenboom_status(topic_slug)
 
     return {
         "documents": total_documents,
@@ -140,7 +135,6 @@ def topic_status(conn, topic_id, topic_slug, vanaf):
         "outdated_tagging": outdated_tagging,
         "argumentenboom_bestaat": boom_bestaat,
         "argumentenboom_banden": boom_banden,
-        "argumentenboom_weak_link": boom_weak_link,
         "pending_video": pending_video,
     }
 
@@ -180,8 +174,8 @@ def print_report(conn, topics):
         )
         if status["argumentenboom_bestaat"]:
             logger.info(
-                "  boom:       %d confrontatie-banden | %d met weak_link (slechts 1 van 2 redacteuren eens)",
-                status["argumentenboom_banden"], status["argumentenboom_weak_link"],
+                "  boom:       %d confrontatie-banden",
+                status["argumentenboom_banden"],
             )
         else:
             logger.info(

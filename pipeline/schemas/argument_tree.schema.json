@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://bipolariteit.org/schemas/argument_tree.schema.json",
   "title": "Argument tree (confrontatie-as)",
-  "description": "Output contract for the bipolariteit.org argumentenboom pipeline (issue #252): a topic-independent set of nodes plus typed relations between them, produced in three stages -- a structuring pass selects nodes/relations, two review passes (one per side of the debate) each judge every relation, and a deterministic merge folds those judgements into the final relations[] (weak_link, confidence, beoordeeld_door). This schema validates only the final, merged output -- the intermediate per-stage LLM outputs have their own simpler shapes, see pipeline/prompts/argument_tree_gemini.md and pipeline/prompts/boomredactie.md. The relation shape below is the tree-specific superset of pipeline/schemas/argument_relations.schema.json's AIF-core relation (thema + beoordeeld_door added) -- duplicated rather than $ref'd across files so each schema stays independently valid without a schema registry.",
+  "description": "Output contract for the bipolariteit.org argumentenboom pipeline (issue #252): a topic-independent set of nodes plus typed relations between them, produced in two stages -- a structuring pass selects nodes/relations, then a redactie pass judges each relation in its own isolated call with a single neutral, functional question ('does the premise argument demonstrably engage the target argument's core point?' for conflict, 'does the premise argument give an explicit reason to believe the target?' for support) -- never a validity/quality judgement, and never from an assigned pro/contra role. A relation the check answers 'no' to is dropped before this schema is validated; it never appears here. See pipeline/prompts/boomredactie_rebuttal_detection.md and pipeline/prompts/boomredactie_support_check.md, and issue #252 for why the earlier two-sided-review design (weak_link from reviewer disagreement) was replaced -- it turned out not to discriminate between relations at all, converging on a single label regardless of content. The relation shape below is the tree-specific superset of pipeline/schemas/argument_relations.schema.json's AIF-core relation (thema added) -- duplicated rather than $ref'd across files so each schema stays independently valid without a schema registry.",
   "type": "object",
   "properties": {
     "nodes": {
@@ -52,23 +52,12 @@
             "type": ["string", "null"],
             "description": "Refinement of relation_type. For conflict: 'direct_rebuttal' (explicitly rebuts the same point), 'thematic' (touches the same sub-topic, no direct rebuttal), or 'frame_shift' (shifts the discussion to a different value/framing instead of rebutting the point itself). For support: a Walton argumentation-scheme name if one clearly applies, otherwise null."
           },
-          "weak_link": {
-            "type": "boolean",
-            "description": "true if only one of the two side-reviewers endorsed this relation -- a measured disagreement signal, not a self-reported one. Set by the deterministic merge step, never by an LLM directly."
-          },
-          "beoordeeld_door": {
-            "type": "array",
-            "items": { "type": "string", "enum": ["pro", "contra"] },
-            "description": "Which side-reviewers endorsed this relation. Both present = weak_link false; exactly one = weak_link true. A relation endorsed by neither is dropped before this schema is validated -- it never appears here with an empty list."
-          },
-          "confidence": {
-            "type": "number",
-            "minimum": 0,
-            "maximum": 1,
-            "description": "1.0 when both reviewers endorsed the relation, 0.5 when only one did. Derived by the merge step, not self-reported by the LLM."
+          "reden": {
+            "type": "string",
+            "description": "One short, case-specific sentence from the redactie pass justifying why this relation passed its neutral engagement check (see the schema-level description) -- never a generic restatement of the relation_type, always grounded in what the two arguments actually say."
           }
         },
-        "required": ["relation_type", "target_argument_id", "premise_argument_ids", "thema", "scheme", "weak_link", "beoordeeld_door", "confidence"],
+        "required": ["relation_type", "target_argument_id", "premise_argument_ids", "thema", "scheme", "reden"],
         "additionalProperties": false
       }
     },

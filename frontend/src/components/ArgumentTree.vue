@@ -80,7 +80,6 @@
 								:linked="isLinked(band.pro.id)"
 								:show-citaat="toonCitaten"
 								:opp-gist="oppositionGist(band.pro.id)"
-								:weak-link="band.oppositie?.weak_link ?? false"
 								@select="selectArgument"
 								@hover="hoverId = $event"
 								@unhover="hoverId = null"
@@ -104,7 +103,6 @@
 									:linked="isLinked(kid.id)"
 									:show-citaat="toonCitaten"
 									:opp-gist="oppositionGist(kid.id)"
-									:weak-link="kid.weak_link"
 									@select="selectArgument"
 									@hover="hoverId = $event"
 									@unhover="hoverId = null"
@@ -131,7 +129,6 @@
 								:linked="isLinked(band.contra.id)"
 								:show-citaat="toonCitaten"
 								:opp-gist="oppositionGist(band.contra.id)"
-								:weak-link="band.oppositie?.weak_link ?? false"
 								@select="selectArgument"
 								@hover="hoverId = $event"
 								@unhover="hoverId = null"
@@ -155,7 +152,6 @@
 									:linked="isLinked(kid.id)"
 									:show-citaat="toonCitaten"
 									:opp-gist="oppositionGist(kid.id)"
-									:weak-link="kid.weak_link"
 									@select="selectArgument"
 									@hover="hoverId = $event"
 									@unhover="hoverId = null"
@@ -335,8 +331,8 @@ interface ExportArgument {
 
 interface Kid {
 	id: number;
-	weak_link: boolean;
 	scheme: string | null;
+	reden: string;
 }
 
 interface BandSlot {
@@ -356,8 +352,7 @@ interface Band {
 		argument_a_id: number;
 		argument_b_id: number;
 		scheme: string | null;
-		weak_link: boolean;
-		confidence: number;
+		reden: string;
 	} | null;
 }
 

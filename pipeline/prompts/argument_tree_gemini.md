@@ -112,9 +112,9 @@ de brondata blijven ongewijzigd.
 ## Output
 
 Antwoord ALLEEN met geldige JSON, geen uitleg, geen markdown-codeblok
-eromheen, in dit exacte formaat (dit is een tussenformaat -- de twee
-redactiestappen die hierna volgen vullen `weak_link`/`beoordeeld_door`/
-`confidence` pas in, dus die velden laat jij hier weg):
+eromheen, in dit exacte formaat (dit is een tussenformaat -- de redactiecheck
+die hierna per relatie volgt vult `reden` pas in, dus dat veld laat jij hier
+weg):
 
 ```json
 {{

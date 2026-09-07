@@ -1,8 +1,9 @@
 """
 Confrontatie-as-export: combineert de argumentenboom-pipeline-output
 (data/export/argument-docs/<slug>-gemini-tree.json, zie
-pipeline/prompts/argument_tree_gemini.md + pipeline/prompts/boomredactie.md +
-pipeline/confrontatie_tree.py -- samen "de redactiestap", zie
+pipeline/prompts/argument_tree_gemini.md +
+pipeline/prompts/boomredactie_rebuttal_detection.md/boomredactie_support_check.md
++ pipeline/confrontatie_tree.py -- samen "de redactiestap", zie
 scripts/agy_run_confrontatie_tree.py) met de volledige argumentgegevens uit
 de database, tot de JSON die de nieuwe ArgumentTree.vue (pro links, contra
 rechts, gestapeld in confrontatie-"banden") nodig heeft.
@@ -41,13 +42,13 @@ def _build_registry(tree, stance_by_id):
     """Eén rij per node uit de tree: gist/samenvatting uit de tree zelf,
     stance uit de database (de tree-JSON kent geen kant-indeling), children
     en top_id afgeleid uit de support-relaties. `children` is een platte
-    lijst kid-objecten ({id, weak_link, scheme}, zie
+    lijst kid-objecten ({id, scheme, reden}, zie
     pipeline/schemas/argument_tree.schema.json): zowel een simpele
     onderbouwing (1 premisse) als een coördinatieve steungroep (meerdere
     premissen die een target gezamenlijk dragen) leveren kid-kaarten op,
-    geen apart begrip in de export -- elke premisse draagt wel zijn eigen
-    weak_link mee, het #252-signaal dat maar één van de twee redacteuren
-    deze onderbouwing daadwerkelijk logisch vond."""
+    geen apart begrip in de export. `reden` is de korte, per-relatie
+    onderbouwing van de redactiecheck (issue #252) -- waarom dit argument
+    aantoonbaar een reden geeft om de ouder te geloven."""
     registry = {}
     for node in tree["nodes"]:
         nid = node["argument_id"]
@@ -65,8 +66,8 @@ def _build_registry(tree, stance_by_id):
         for premise_id in relation["premise_argument_ids"]:
             registry[target_id]["children"].append({
                 "id": premise_id,
-                "weak_link": relation["weak_link"],
                 "scheme": relation.get("scheme"),
+                "reden": relation.get("reden", ""),
             })
             registry[premise_id]["parent_id"] = target_id
 
@@ -123,8 +124,7 @@ def build_bands_and_losse(tree, stance_by_id):
                     "argument_a_id": a_id,
                     "argument_b_id": b_id,
                     "scheme": relation.get("scheme"),
-                    "weak_link": relation["weak_link"],
-                    "confidence": relation["confidence"],
+                    "reden": relation.get("reden", ""),
                 },
             }
         )

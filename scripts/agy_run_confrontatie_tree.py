@@ -1,32 +1,42 @@
 """
 Draait de volledige argumentenboom-pipeline (issue #252) niet-interactief
-via `agy` in Docker (docker/agy/Dockerfile): structureren + tweezijdige
-redactie + samenvoegen + valideren, in één run. Schrijft het eindresultaat
-naar data/export/argument-docs/<topic>-gemini-tree.json (zelfde bestandsnaam
-als voorheen, ondanks dat het nu drie LLM-calls zijn i.p.v. één).
+via `agy` in Docker (docker/agy/Dockerfile): structureren + per-relatie
+redactiecheck + samenvoegen + valideren, in één run. Schrijft het
+eindresultaat naar data/export/argument-docs/<topic>-gemini-tree.json.
 
-Drie stappen:
+Twee stappen:
 1. **Structureren** (pipeline/prompts/argument_tree_gemini.md): bouwt het
    argumentdocument zelf op (dezelfde functies als
    pipeline/export_argument_doc.py -- geen tussenbestand nodig) en laat
    Gemini een concept-boom bouwen (nodes/relations/coordinatieve_groepen/
    twijfelachtige_classificaties, zie pipeline/schemas/argument_tree.schema.json).
-2. **Redactie, twee keer** (pipeline/prompts/boomredactie.md): een pro- en
-   een contra-redacteur beoordelen onafhankelijk elke relatie uit stap 1 op
-   diezelfde concept-boom.
-3. **Samenvoegen + valideren** (pipeline/confrontatie_tree.py, zuivere
-   Python, geen LLM): een relatie die door beide kanten onderschreven wordt
-   telt als stevig, door precies één kant blijft ze staan maar gemarkeerd
-   (weak_link), door geen van beide verdwijnt ze. Het resultaat wordt tegen
-   het schema gevalideerd vóór het wegschrijven -- faalt de validatie, dan
-   wordt niets weggeschreven.
+2. **Redactie, per relatie apart** (pipeline/prompts/boomredactie_rebuttal_detection.md
+   voor `conflict`, pipeline/prompts/boomredactie_support_check.md voor
+   `support`): elke relatie uit stap 1 krijgt een eigen, geïsoleerde call met
+   een zuiver feitelijke ja/nee-vraag ("engageert dit argument aantoonbaar
+   met de kern van het andere?") -- nooit een geldigheidsoordeel, nooit vanuit
+   een toegewezen pro/contra-rol. `pipeline/confrontatie_tree.py` voegt de
+   uitkomsten samen (zuivere Python, geen LLM): een relatie die "nee" krijgt
+   verdwijnt, de rest wordt tegen het schema gevalideerd vóór het
+   wegschrijven -- faalt de validatie, dan wordt niets weggeschreven.
+
+   Voorgeschiedenis (zie issue #252 en pipeline/confrontatie_tree.py se
+   moduledocstring): dit verving een eerdere tweezijdige pro/contra-redactie
+   (2 calls, weak_link uit onenigheid) die bleek niet te discrimineren --
+   vier varianten daarvan convergeerden steeds naar hetzelfde label voor
+   alle relaties in een topic. Losse, neutrale, feitelijke per-relatie-calls
+   discrimineren wel (getest op alle vier topics, zie issue #252).
 
 Wordt aangeroepen door `make redactie TOPIC=<topic>`, dat er meteen ook
 pipeline.build_confrontatie_export achteraan plakt.
 
-In tegenstelling tot de extractie-/tagging-agy-scripts (honderden calls,
-dus een goedkoop `flash-low`-model) zijn dit maar drie calls per topic -- de
-default is daarom een zwaarder model. Zie
+Aanzienlijk meer calls dan het oude 3-call-ontwerp (1 structureren + 1 per
+relatie, dus ~25-35 per topic i.p.v. 3) -- vergelijkbaar met de extractie-/
+tagging-agy-scripts qua aantal, maar met hetzelfde zwaardere model als
+voorheen (deze taak is inhoudelijk lastiger dan per-document-extractie).
+Elke relatie in een eigen call is een bewuste keuze (minder onderlinge
+leakage tussen relaties dan bij één batch-call, zelfde reden als bij
+scripts/agy_run_tagging_batch.py). Zie
 docs/design/argumentenboom/thema-en-samenvatting-workflow.md voor de
 volledige workflow en hoe je itereert als de output niet scherp/leesbaar
 genoeg is.
@@ -46,9 +56,9 @@ faalt al met "Argument list too long" ruim onder 1,5 MB) en ook niet via
 stdin (agy gebruikt stdin niet als input voor het model -- beide geprobeerd,
 zie git-historie van dit bestand). In plaats daarvan wordt het document als
 bestand in een tijdelijke map gemount en met `--add-dir` aan agy's workspace
-toegevoegd -- alleen nodig voor de structureringsstap; de twee redactiestappen
-werken op de al-geselecteerde concept-boom (~15-30 argumenten per kant), die
-ruim binnen een gewoon `--print`-argument past.
+toegevoegd -- alleen nodig voor de structureringsstap; elke redactiecheck
+werkt op maar één relatie (2-3 argumenten uit de al-geselecteerde
+concept-boom), die ruim binnen een gewoon `--print`-argument past.
 
 Permissies: volgens https://antigravity.google/docs/cli/permissions bestaan
 er zes permissie-acties (`read_file`, `write_file`, `command`, `read_url`,
@@ -88,7 +98,7 @@ from pathlib import Path
 
 from jsonschema import Draft202012Validator, ValidationError
 
-from pipeline.confrontatie_tree import merge_reviews
+from pipeline.confrontatie_tree import merge_engagement_checks
 from pipeline.db import db
 from pipeline.export_argument_doc import build_document, fetch_stance_arguments
 from pipeline.extract_arguments import _extract_json
@@ -97,7 +107,8 @@ from pipeline.periodes import PeriodeIndex
 logger = logging.getLogger(__name__)
 
 STRUCTURE_PROMPT_PATH = Path(__file__).parent.parent / "pipeline" / "prompts" / "argument_tree_gemini.md"
-REDACTIE_PROMPT_PATH = Path(__file__).parent.parent / "pipeline" / "prompts" / "boomredactie.md"
+REBUTTAL_PROMPT_PATH = Path(__file__).parent.parent / "pipeline" / "prompts" / "boomredactie_rebuttal_detection.md"
+SUPPORT_PROMPT_PATH = Path(__file__).parent.parent / "pipeline" / "prompts" / "boomredactie_support_check.md"
 TREE_SCHEMA_PATH = Path(__file__).parent.parent / "pipeline" / "schemas" / "argument_tree.schema.json"
 GEMINI_TREE_DIR = Path(__file__).parent.parent / "data" / "export" / "argument-docs"
 LOG_PATH = Path(__file__).parent.parent / "data" / "export" / "agy_confrontatie_tree.log"
@@ -348,15 +359,36 @@ def build_prompt(conn, topic_row, stances, vanaf):
     return document, instructions, total
 
 
-def run_redactie(structured, topic_name, kant, model, timeout, skip_permissions):
-    tree_json = json.dumps(structured, ensure_ascii=False, indent=2)
-    prompt = REDACTIE_PROMPT_PATH.read_text().format(topic=topic_name, kant=kant, tree_json=tree_json)
-    stdout, stderr, elapsed = run_agy_prompt(prompt, model, timeout, f"redactie-{kant}", skip_permissions)
-    logger.info("redactie-%s-call klaar in %.1fs", kant, elapsed)
-    review = _parse_or_die(stdout, stderr, f"redactie-{kant}")
-    if "beoordelingen" not in review:
-        raise SystemExit(f"redactie-{kant}-output mist 'beoordelingen'-veld: {stdout[:500]}")
-    return review
+def _nodes_for_relation(structured, relation):
+    ids = set(relation["premise_argument_ids"]) | {relation["target_argument_id"]}
+    return [n for n in structured["nodes"] if n["argument_id"] in ids]
+
+
+def run_engagement_check(structured, relation_index, topic_name, model, timeout, skip_permissions):
+    """Eén geïsoleerde call per relatie: een zuiver feitelijke ja/nee-vraag,
+    geen geldigheidsoordeel, geen rol -- zie moduledocstring. `conflict` en
+    `support` krijgen elk hun eigen, licht andere formulering (weerlegging
+    vs. onderbouwing), maar dezelfde functionele aard."""
+    relation = structured["relations"][relation_index]
+    mini = {"nodes": _nodes_for_relation(structured, relation), "relations": [relation]}
+    tree_json = json.dumps(mini, ensure_ascii=False, indent=2)
+
+    if relation["relation_type"] == "conflict":
+        prompt_path, key, label = REBUTTAL_PROMPT_PATH, "reageert_op_kern", f"rebuttal-{relation_index}"
+    else:
+        prompt_path, key, label = SUPPORT_PROMPT_PATH, "geeft_expliciete_reden", f"support-{relation_index}"
+
+    prompt = prompt_path.read_text().format(topic=topic_name, tree_json=tree_json)
+    stdout, stderr, elapsed = run_agy_prompt(prompt, model, timeout, label, skip_permissions)
+    logger.info("%s klaar in %.1fs", label, elapsed)
+    result = _parse_or_die(stdout, stderr, label)
+    if key not in result:
+        raise SystemExit(f"{label}-output mist '{key}'-veld: {stdout[:500]}")
+    return {
+        "relation_index": relation_index,
+        "engageert": bool(result[key]),
+        "reden": result.get("reden", ""),
+    }
 
 
 def main():
@@ -412,16 +444,15 @@ def main():
     structured.setdefault("coordinatieve_groepen", [])
     structured.setdefault("twijfelachtige_classificaties", [])
 
-    # 2. Redactie, twee keer -- dezelfde concept-boom, onafhankelijk beoordeeld
-    pro_review = run_redactie(
-        structured, topic_row["name"], "pro", args.model, args.timeout, args.dangerously_skip_permissions
-    )
-    contra_review = run_redactie(
-        structured, topic_row["name"], "contra", args.model, args.timeout, args.dangerously_skip_permissions
-    )
+    # 2. Redactie, per relatie een eigen geïsoleerde call
+    checks = []
+    for i in range(len(structured["relations"])):
+        checks.append(run_engagement_check(
+            structured, i, topic_row["name"], args.model, args.timeout, args.dangerously_skip_permissions
+        ))
 
     # 3. Samenvoegen + valideren -- geen LLM, puur Python (pipeline/confrontatie_tree.py)
-    result = merge_reviews(structured, pro_review, contra_review)
+    result = merge_engagement_checks(structured, checks)
     schema = json.loads(TREE_SCHEMA_PATH.read_text())
     try:
         Draft202012Validator(schema).validate(result)
@@ -432,10 +463,9 @@ def main():
         )
 
     dropped = len(structured["relations"]) - len(result["relations"])
-    weak_link = sum(1 for r in result["relations"] if r["weak_link"])
     logger.info(
-        "Redactie klaar: %d relaties gevalideerd, %d met weak_link, %d verworpen (door geen van beide redacteuren onderschreven).",
-        len(result["relations"]), weak_link, dropped,
+        "Redactie klaar: %d relaties gevalideerd, %d verworpen (engagement-check gaf 'nee').",
+        len(result["relations"]), dropped,
     )
 
     out_path = Path(args.out) if args.out else GEMINI_TREE_DIR / f"{args.topic}-gemini-tree.json"

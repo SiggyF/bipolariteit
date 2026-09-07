@@ -321,7 +321,7 @@ def fetch_pipeline_status(conn, topic_row, drempel):
         (topic_id, drempel),
     ).fetchall()
 
-    boom_bands, boom_weak_links = _fetch_argumentenboom_status(topic_row["slug"])
+    boom_bands = _fetch_argumentenboom_status(topic_row["slug"])
 
     return {
         "slug": topic_row["slug"],
@@ -333,12 +333,10 @@ def fetch_pipeline_status(conn, topic_row, drempel):
         "arguments_tagged": arguments_tagged,
         # Redactie zit sinds issue #252 niet meer in een per-document-telling
         # (het oude Stage 2, argument_oppositions/redactie_reviews), maar in
-        # de argumentenboom-pipeline zelf: elke band is tot stand gekomen via
-        # een pro- en een contra-redacteur die de relatie onderschreven
-        # moesten hebben (zie pipeline/confrontatie_tree.py). weak_link telt
-        # hoeveel banden daarbij slechts door één kant onderschreven zijn.
+        # de argumentenboom-pipeline zelf: elke relatie in een band is
+        # per relatie apart, neutraal gecontroleerd (zie
+        # pipeline/confrontatie_tree.py) voordat 'm de boom in mag.
         "argumentenboom_banden": boom_bands,
-        "argumentenboom_weak_link": boom_weak_links,
         "arguments_ander_onderwerp": sum(row["aantal"] for row in ander_onderwerp_rows),
         "ander_onderwerp_top": [
             {"onderwerp": row["onderwerp"], "aantal": row["aantal"]} for row in ander_onderwerp_rows[:10]
@@ -347,17 +345,15 @@ def fetch_pipeline_status(conn, topic_row, drempel):
 
 
 def _fetch_argumentenboom_status(slug):
-    """(aantal_banden, aantal_weak_link) uit de gepubliceerde argumentenboom-
-    export, of (0, 0) als die nog niet bestaat voor dit topic -- puur
-    telwerk voor de /status-pagina, geen DB-query (de boom leeft in JSON,
-    zie pipeline/build_confrontatie_export.py)."""
+    """Aantal confrontatie-banden uit de gepubliceerde argumentenboom-export,
+    of 0 als die nog niet bestaat voor dit topic -- puur telwerk voor de
+    /status-pagina, geen DB-query (de boom leeft in JSON, zie
+    pipeline/build_confrontatie_export.py)."""
     tree_path = TREE_EXPORT_DIR / f"{slug}.json"
     if not tree_path.exists():
-        return 0, 0
+        return 0
     tree_export = json.loads(tree_path.read_text())
-    bands = tree_export.get("bands", [])
-    weak_link = sum(1 for band in bands if band.get("oppositie", {}).get("weak_link"))
-    return len(bands), weak_link
+    return len(tree_export.get("bands", []))
 
 
 def fetch_llm_call_stats(conn, topic_id):

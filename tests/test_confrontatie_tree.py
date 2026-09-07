@@ -2,7 +2,7 @@ import json
 
 from jsonschema import Draft202012Validator
 
-from pipeline.confrontatie_tree import merge_reviews
+from pipeline.confrontatie_tree import merge_engagement_checks
 from pipeline.paths import REPO_ROOT
 
 SCHEMA = json.loads((REPO_ROOT / "pipeline" / "schemas" / "argument_tree.schema.json").read_text())
@@ -27,113 +27,78 @@ def _structured():
     }
 
 
-def _review(beoordelingen):
-    return {"beoordelingen": beoordelingen}
-
-
-def test_relation_endorsed_by_both_sides_is_not_weak():
+def test_relation_that_passes_the_engagement_check_is_kept():
     structured = _structured()
-    pro = _review([
-        {"relation_index": 0, "onderschrijft": True, "scheme": None},
-        {"relation_index": 1, "onderschrijft": True, "scheme": None},
-    ])
-    contra = _review([
-        {"relation_index": 0, "onderschrijft": True, "scheme": None},
-        {"relation_index": 1, "onderschrijft": True, "scheme": None},
-    ])
+    checks = [
+        {"relation_index": 0, "engageert": True, "reden": "163 noemt een expliciete oorzaak voor 159."},
+        {"relation_index": 1, "engageert": True, "reden": "1280 gaat rechtstreeks in op de kern van 159."},
+    ]
 
-    result = merge_reviews(structured, pro, contra)
+    result = merge_engagement_checks(structured, checks)
 
     assert len(result["relations"]) == 2
     for relation in result["relations"]:
-        assert relation["weak_link"] is False
-        assert relation["confidence"] == 1.0
-        assert relation["beoordeeld_door"] == ["pro", "contra"]
+        assert relation["reden"]
 
 
-def test_relation_endorsed_by_one_side_becomes_weak_link():
+def test_relation_that_fails_the_engagement_check_is_dropped():
     structured = _structured()
-    pro = _review([
-        {"relation_index": 0, "onderschrijft": True, "scheme": None},
-        {"relation_index": 1, "onderschrijft": True, "scheme": None},
-    ])
-    contra = _review([
-        {"relation_index": 0, "onderschrijft": False, "scheme": None},
-        {"relation_index": 1, "onderschrijft": True, "scheme": None},
-    ])
+    checks = [
+        {"relation_index": 0, "engageert": False, "reden": "163 raakt niet de kern van 159."},
+        {"relation_index": 1, "engageert": True, "reden": "1280 gaat rechtstreeks in op de kern van 159."},
+    ]
 
-    result = merge_reviews(structured, pro, contra)
-
-    assert len(result["relations"]) == 2
-    support_relation = next(r for r in result["relations"] if r["relation_type"] == "support")
-    assert support_relation["weak_link"] is True
-    assert support_relation["confidence"] == 0.5
-    assert support_relation["beoordeeld_door"] == ["pro"]
-
-
-def test_relation_endorsed_by_neither_side_is_dropped():
-    structured = _structured()
-    pro = _review([
-        {"relation_index": 0, "onderschrijft": False, "scheme": None},
-        {"relation_index": 1, "onderschrijft": True, "scheme": None},
-    ])
-    contra = _review([
-        {"relation_index": 0, "onderschrijft": False, "scheme": None},
-        {"relation_index": 1, "onderschrijft": True, "scheme": None},
-    ])
-
-    result = merge_reviews(structured, pro, contra)
+    result = merge_engagement_checks(structured, checks)
 
     assert len(result["relations"]) == 1
     assert result["relations"][0]["relation_type"] == "conflict"
 
 
-def test_scheme_override_only_applied_when_both_sides_independently_agree():
+def test_relation_missing_from_checks_is_dropped():
     structured = _structured()
-    pro = _review([
-        {"relation_index": 0, "onderschrijft": True, "scheme": None},
-        {"relation_index": 1, "onderschrijft": True, "scheme": "frame_shift"},
-    ])
-    contra = _review([
-        {"relation_index": 0, "onderschrijft": True, "scheme": None},
-        {"relation_index": 1, "onderschrijft": True, "scheme": "thematic"},
-    ])
+    checks = [
+        {"relation_index": 1, "engageert": True, "reden": "1280 gaat rechtstreeks in op de kern van 159."},
+    ]
 
-    result = merge_reviews(structured, pro, contra)
+    result = merge_engagement_checks(structured, checks)
 
-    conflict_relation = next(r for r in result["relations"] if r["relation_type"] == "conflict")
-    # pro en contra zijn het oneens over de scheme-bijstelling -> origineel blijft staan
-    assert conflict_relation["scheme"] == "direct_rebuttal"
+    assert len(result["relations"]) == 1
+    assert result["relations"][0]["relation_type"] == "conflict"
 
 
-def test_scheme_override_applied_when_both_sides_agree():
+def test_scheme_override_applied_when_check_provides_one():
     structured = _structured()
-    pro = _review([
-        {"relation_index": 0, "onderschrijft": True, "scheme": None},
-        {"relation_index": 1, "onderschrijft": True, "scheme": "frame_shift"},
-    ])
-    contra = _review([
-        {"relation_index": 0, "onderschrijft": True, "scheme": None},
-        {"relation_index": 1, "onderschrijft": True, "scheme": "frame_shift"},
-    ])
+    checks = [
+        {"relation_index": 0, "engageert": True, "reden": "..."},
+        {"relation_index": 1, "engageert": True, "reden": "...", "scheme": "frame_shift"},
+    ]
 
-    result = merge_reviews(structured, pro, contra)
+    result = merge_engagement_checks(structured, checks)
 
     conflict_relation = next(r for r in result["relations"] if r["relation_type"] == "conflict")
     assert conflict_relation["scheme"] == "frame_shift"
 
 
+def test_scheme_falls_back_to_structuring_step_when_check_gives_none():
+    structured = _structured()
+    checks = [
+        {"relation_index": 0, "engageert": True, "reden": "..."},
+        {"relation_index": 1, "engageert": True, "reden": "..."},
+    ]
+
+    result = merge_engagement_checks(structured, checks)
+
+    conflict_relation = next(r for r in result["relations"] if r["relation_type"] == "conflict")
+    assert conflict_relation["scheme"] == "direct_rebuttal"
+
+
 def test_merged_output_validates_against_schema():
     structured = _structured()
-    pro = _review([
-        {"relation_index": 0, "onderschrijft": True, "scheme": None},
-        {"relation_index": 1, "onderschrijft": False, "scheme": None},
-    ])
-    contra = _review([
-        {"relation_index": 0, "onderschrijft": True, "scheme": None},
-        {"relation_index": 1, "onderschrijft": True, "scheme": None},
-    ])
+    checks = [
+        {"relation_index": 0, "engageert": True, "reden": "163 noemt een expliciete oorzaak voor 159."},
+        {"relation_index": 1, "engageert": True, "reden": "1280 gaat rechtstreeks in op de kern van 159."},
+    ]
 
-    result = merge_reviews(structured, pro, contra)
+    result = merge_engagement_checks(structured, checks)
 
     Draft202012Validator(SCHEMA).validate(result)
