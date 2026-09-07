@@ -76,7 +76,8 @@ van toepassing is:
   KDW-norm losgelaten worden om vergunningen weer te verlenen?" (het echte
   geschilpunt).
 
-Elk argument krijgt een `gist` van **maximaal 3-4 woorden**, en waar
+Elk argument krijgt een `gist` van **maximaal 3-4 woorden**, beginnend met
+een hoofdletter (het is een korte titel, geen zinsfragment), en waar
 zinvol een `samenvatting`: 1-2 zinnen (richtlijn: max. ~30 woorden) die
 het argument samen met alles wat eronder hangt parafraseert tot één
 leesbare, samenhangende stelling. Voor een los top-level argument zonder
@@ -119,11 +120,11 @@ weg):
 ```json
 {{
   "nodes": [
-    {{"argument_id": 12, "gist": "vergunningverlening loopt vast",
+    {{"argument_id": 12, "gist": "Vergunningverlening loopt vast",
       "samenvatting": "Vergunningverlening zit vast omdat natuurvergunningen niet meer afgegeven worden."}},
-    {{"argument_id": 45, "gist": "ook natuurvergunningen vertraagd", "samenvatting": null}},
-    {{"argument_id": 47, "gist": "duizenden boeren gedwongen stoppen", "samenvatting": null}},
-    {{"argument_id": 103, "gist": "biologische boeren niet rendabel", "samenvatting": null}}
+    {{"argument_id": 45, "gist": "Ook natuurvergunningen vertraagd", "samenvatting": null}},
+    {{"argument_id": 47, "gist": "Duizenden boeren gedwongen stoppen", "samenvatting": null}},
+    {{"argument_id": 103, "gist": "Biologische boeren niet rendabel", "samenvatting": null}}
   ],
   "relations": [
     {{"relation_type": "support", "premise_argument_ids": [45], "target_argument_id": 12, "scheme": null}},
