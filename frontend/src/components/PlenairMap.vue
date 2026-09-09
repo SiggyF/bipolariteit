@@ -47,6 +47,11 @@ type ClusterHullItem = {
 	centroid: [number, number];
 	hull: [number, number][] | null;
 	topic_breakdown: Record<string, number>;
+	// contained_by_sibling is het cluster_id van het buurcluster dat deze hull
+	// geometrisch omsluit (render-artefact), of null als er geen is -- geen
+	// boolean. "Actief" betekent dus != null, niet === true.
+	contained_by_sibling?: number | null;
+	redundant_with_parent?: boolean;
 };
 
 type ClustersExport = {
@@ -234,6 +239,20 @@ function hullArea(hull: [number, number][] | null): number {
 
 const HULL_AREA_HIDE_THRESHOLD = 18;
 
+// Vlaggen berekend in de Python-pijplijn (scripts/experiment_umap_documents.py,
+// build_multilevel_clusters/label_multilevel_clusters, issue #281): "fat
+// pipeline, thin client" -- topologie (redundantie/containment) wordt
+// offline berekend, de client filtert hier alleen. redundant_with_parent
+// dekt een kind-hull die vrijwel identiek is aan zijn ouder (geen nieuwe
+// ruimtelijke info); contained_by_sibling (een cluster_id, geen boolean)
+// dekt een hull die volledig binnen een ander cluster op hetzelfde niveau
+// ligt (altijd een render-artefact, clusters zijn per niveau disjunct qua
+// punten maar niet qua hull-geometrie). Beide zijn puur teken-filters: het
+// onderliggende punt blijft aanklikbaar/highlightbaar (zie rawFineClusters).
+function isHullRenderArtefact(c: ClusterHullItem): boolean {
+	return c.redundant_with_parent === true || (c.contained_by_sibling ?? null) !== null;
+}
+
 function scaleClusterX(items: ClusterHullItem[], xScale: number): ClusterHullItem[] {
 	return items.map((c) => ({
 		...c,
@@ -246,7 +265,10 @@ const coarseClusters = computed<ClusterHullItem[]>(() => {
 	if (!clustersData.value) return [];
 	const xScale = canvasAspectRatio.value > 0 ? canvasAspectRatio.value : 1.618;
 	if ("coarse" in clustersData.value && Array.isArray(clustersData.value.coarse)) {
-		return scaleClusterX(clustersData.value.coarse.filter((c) => hullArea(c.hull) <= HULL_AREA_HIDE_THRESHOLD), xScale);
+		return scaleClusterX(
+			clustersData.value.coarse.filter((c) => hullArea(c.hull) <= HULL_AREA_HIDE_THRESHOLD && !isHullRenderArtefact(c)),
+			xScale,
+		);
 	}
 	return [];
 });
@@ -255,10 +277,16 @@ const fineClusters = computed<ClusterHullItem[]>(() => {
 	if (!clustersData.value) return [];
 	const xScale = canvasAspectRatio.value > 0 ? canvasAspectRatio.value : 1.618;
 	if ("fine" in clustersData.value && Array.isArray(clustersData.value.fine)) {
-		return scaleClusterX(clustersData.value.fine.filter((c) => hullArea(c.hull) <= HULL_AREA_HIDE_THRESHOLD), xScale);
+		return scaleClusterX(
+			clustersData.value.fine.filter((c) => hullArea(c.hull) <= HULL_AREA_HIDE_THRESHOLD && !isHullRenderArtefact(c)),
+			xScale,
+		);
 	}
 	if (Array.isArray(clustersData.value)) {
-		return scaleClusterX(clustersData.value.filter((c) => hullArea(c.hull) <= HULL_AREA_HIDE_THRESHOLD), xScale);
+		return scaleClusterX(
+			clustersData.value.filter((c) => hullArea(c.hull) <= HULL_AREA_HIDE_THRESHOLD && !isHullRenderArtefact(c)),
+			xScale,
+		);
 	}
 	return [];
 });

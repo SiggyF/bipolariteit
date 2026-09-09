@@ -42,7 +42,7 @@ Waarom een los script i.p.v. rechtstreeks scripts/experiment_umap_documents.py
 aanpassen: dat script draait de volle ~99k-punten-dataset en schrijft naar de
 productie-export (data/export/plenair-map*.json, frontend-input). Dit script
 hergebruikt zijn kernfuncties (fetch_documents, strip_speaker_prefix,
-run_clustering, label_hierarchical_clusters, ...) maar werkt op een kleine,
+run_clustering, label_multilevel_clusters, ...) maar werkt op een kleine,
 snel te herhalen steekproef en schrijft nergens naar productie-output.
 
 Let op -- een steekproef geeft grovere clusters dan de volle dataset: een
@@ -115,7 +115,7 @@ from scripts.experiment_umap_documents import (
     fetch_actor_and_party_stopwords,
     fetch_alpino_non_content_stopwords,
     fetch_documents,
-    label_hierarchical_clusters,
+    label_multilevel_clusters,
     strip_speaker_prefix,
 )
 
@@ -360,13 +360,15 @@ all_stopwords = (
 topic_labels = [r["topic_slug"] or "plenair" for r in sample_rows]
 
 # Eén schaalniveau (de genoemde clusters uit de boomwandeling hierboven):
-# coarse_ids == fine_ids geeft platte (niet-hiërarchische) TF-IDF-labels
-# terug, zie scripts/experiment_umap_documents.py::main() se dbscan-tak
-# voor hetzelfde patroon.
-_, cluster_summaries, _ = label_hierarchical_clusters(
-    texts, coords, cluster_ids, cluster_ids, topic_labels,
+# een lijst van precies 1 level_ids-array geeft platte (niet-hiërarchische)
+# TF-IDF-labels terug (issue #281: build_hierarchical_clusters/
+# label_hierarchical_clusters zijn uitgefaseerd in scripts/experiment_umap_documents.py,
+# label_multilevel_clusters is nu het enige clusteringpad).
+level_lists, _ = label_multilevel_clusters(
+    texts, coords, [cluster_ids], topic_labels,
     top_terms=CLUSTER_TOP_TERMS, extra_stopwords=all_stopwords,
 )
+cluster_summaries = level_lists[0]
 tfidf_terms_by_cluster = {s["cluster_id"]: s["terms"] for s in cluster_summaries}
 
 
