@@ -12,6 +12,11 @@ vinden (bv. via cosine-afstand tussen mean-vectors of overlap van
 ledensets) -- dat terugmatchen zelf gebeurt hier NIET, pas zodra er een
 nieuwe clustering-run is om tegen te matchen.
 
+Output is Parquet (zstd), niet JSON: de 199x1024 mean_vector-floats wegen als
+JSON-tekst 4,1 MiB, als binaire float32-kolom met zstd-compressie ~0,6 MiB
+(6,8x kleiner) -- en met bv. duckdb/pandas ook kolomgewijs te doorzoeken
+zonder alles te parsen.
+
 Gebruik:
     uv run python scripts/build_cluster_label_anchors.py
 """
@@ -22,6 +27,8 @@ from pathlib import Path
 
 import click
 import numpy as np
+import pyarrow as pa
+import pyarrow.parquet as pq
 
 from pipeline.paths import REPO_ROOT
 
@@ -29,7 +36,26 @@ OVERRIDES_PATH = REPO_ROOT / "config" / "cluster_label_overrides.toml"
 CLUSTERS_FULL_PATH = REPO_ROOT / "data" / "export" / "a0-map" / "maps" / "plenair-map-clusters-full.json"
 POINTS_FULL_PATH = REPO_ROOT / "data" / "export" / "a0-map" / "maps" / "plenair-map-full.json"
 EMBEDDINGS_PATH = REPO_ROOT / "data" / "embeddings" / "text-embedding-bge-m3_plenair-full.npz"
-OUTPUT_PATH = REPO_ROOT / "data" / "cluster-label-anchors.json"
+OUTPUT_PATH = REPO_ROOT / "data" / "cluster-label-anchors.parquet"
+
+# Parquet i.p.v. JSON (issue #281): JSON schreef de 199x1024 mean_vector-floats
+# als volledige-precisie tekst, plus alle veldnamen letterlijk herhaald per
+# record -- 4,1 MiB. Parquet met zstd (binaire float32-arrays, kolomgewijs)
+# komt op ~0,6 MiB (6,8x kleiner), en is bovendien met bv. duckdb of pandas
+# direct kolomgewijs te doorzoeken zonder alles in het geheugen te parsen.
+SCHEMA = pa.schema([
+    ("key", pa.string()),
+    ("level", pa.int32()),
+    ("cluster_id", pa.int32()),
+    ("label", pa.string()),
+    ("size", pa.int32()),
+    ("centroid", pa.list_(pa.float32())),
+    ("hull", pa.list_(pa.list_(pa.float32()))),
+    ("terms", pa.list_(pa.string())),
+    ("topic_breakdown", pa.map_(pa.string(), pa.int32())),
+    ("member_document_ids", pa.list_(pa.int64())),
+    ("mean_vector", pa.list_(pa.float32())),
+])
 
 
 def parse_override_key(key):
@@ -92,6 +118,11 @@ def main(overrides_path: Path, clusters_json: Path, points_json: Path, embedding
         if missing:
             click.echo(f"  {key}: {missing}/{len(member_ids)} document-id's ontbreken in de embeddings-cache", err=True)
 
+        # Afronden op 5 decimalen (ruim voldoende precisie voor toekomstige
+        # cosine-matching) comprimeert met zstd merkbaar beter dan de volle
+        # float64-precisie: minder entropie in de laagste mantissa-bits,
+        # zonder dat gemiste embeddings ooit tot exact 0 leiden (zie ook
+        # de bestaande afronding elders in dit script, bv. de hull-punten).
         mean_vector = (
             np.mean(emb_vectors[vec_indices], axis=0).round(5).tolist() if vec_indices else None
         )
@@ -102,16 +133,17 @@ def main(overrides_path: Path, clusters_json: Path, points_json: Path, embedding
             "cluster_id": cluster_id,
             "label": label,
             "size": cluster["size"],
-            "centroid": cluster["centroid"],
-            "hull": cluster["hull"],
+            "centroid": [float(x) for x in cluster["centroid"]],
+            "hull": [[float(x), float(y)] for x, y in cluster["hull"]] if cluster["hull"] else None,
             "terms": cluster["terms"],
-            "topic_breakdown": cluster["topic_breakdown"],
+            "topic_breakdown": list(cluster["topic_breakdown"].items()),
             "member_document_ids": sorted(member_ids),
             "mean_vector": mean_vector,
         })
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
-    output_path.write_text(json.dumps(anchors, ensure_ascii=False, indent=2), encoding="utf-8")
+    table = pa.Table.from_pylist(anchors, schema=SCHEMA)
+    pq.write_table(table, output_path, compression="zstd")
     size_kb = output_path.stat().st_size / 1024
     click.echo(
         f"{len(anchors)} anchors geschreven naar {output_path} ({size_kb:.0f} KiB), "
