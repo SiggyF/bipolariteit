@@ -225,112 +225,6 @@ def _condensed_tree_children_by_parent(clusterer):
     return children_by_parent, root
 
 
-def build_hierarchical_clusters(coords, hdbscan_min_cluster_size, min_size_to_name):
-    """Vervangt vaste coarse/fine HDBSCAN-drempels door een boomwandeling
-    over de HDBSCAN condensed tree (zie notebooks/explore_plenary_umap_clusters.py
-    en docs/hierarchische-clustering-plenaire-spreekbeurten.md voor de
-    volledige uitleg/motivatie -- vaste drempels bleken op deze data telkens
-    in te storten tot 1-3 dominante clusters, ook op de volledige dataset).
-
-    Coarse-niveau: wandelt alleen de hoofdtak af (niet-recursief); bij elke
-    splitsing waarvan de kleinste kant >= min_size_to_name is, wordt die kant
-    een eigen coarse-domein (met zijn VOLLEDIGE, nog niet verder-gesplitste
-    puntenverzameling); te kleine subtakken versmelten met de rest van de
-    hoofdtak. Zodra de hoofdtak zelf geen zinnige splitsing meer heeft, wordt
-    wat overblijft (incl. versmolten restjes) het laatste coarse-domein.
-
-    Fine-niveau: binnen elk coarse-domein wordt dezelfde wandeling recursief
-    toegepast (dus ook op al benoemde subtakken, die zelf weer kunnen
-    splitsen -- bv. een subtak van 302 spreekbeurten bleek zelf in twee
-    groepen van 144 en 147 te splitsen) tot er geen zinnige splitsing meer
-    over is; dat laatste restje hoort dan bij hetzelfde coarse-domein.
-
-    Geeft (coarse_ids, fine_ids) terug: twee even lange arrays (int, één
-    label per punt in coords), analoog aan run_clustering()'s labels_.
-    fine_ids nest altijd binnen coarse_ids (elk fine-cluster hoort bij precies
-    één coarse-domein)."""
-    import hdbscan as hdbscan_pkg
-
-    n = len(coords)
-    clusterer = hdbscan_pkg.HDBSCAN(min_cluster_size=hdbscan_min_cluster_size).fit(coords)
-    children_by_parent, root = _condensed_tree_children_by_parent(clusterer)
-
-    def collect_points(node_id):
-        if node_id < n:
-            return [node_id]
-        points = []
-        for child, size in children_by_parent.get(node_id, []):
-            points.extend([child] if size == 1 else collect_points(child))
-        return points
-
-    def coarse_partition():
-        current, branches, carried = root, [], []
-        while True:
-            entries = children_by_parent.get(current, [])
-            real_children = [(ch, sz) for ch, sz in entries if sz > 1]
-            qualifying = [(ch, sz) for ch, sz in real_children if sz >= min_size_to_name]
-            carried.extend(ch for ch, sz in entries if sz == 1)
-            for child, size in real_children:
-                if size < min_size_to_name:
-                    carried.extend(collect_points(child))
-            if not qualifying:
-                branches.append((current, carried, True))
-                return branches
-            qualifying.sort(key=lambda cs: cs[1])
-            *smaller, (largest, _size) = qualifying
-            for child, _size in smaller:
-                branches.append((child, [], False))
-            current = largest
-            # let op: `carried` NIET resetten -- moet over de hele wandeling
-            # blijven optellen, anders raken eerder opgevangen te-kleine
-            # subtakken zoek zodra er weer een kwalificerende afsplitsing volgt.
-
-    def fine_partition(node_id):
-        current, leaves, merged = node_id, [], []
-        while True:
-            entries = children_by_parent.get(current, [])
-            real_children = [(ch, sz) for ch, sz in entries if sz > 1]
-            qualifying = [(ch, sz) for ch, sz in real_children if sz >= min_size_to_name]
-            merged.extend(ch for ch, sz in entries if sz == 1)
-            for child, size in real_children:
-                if size < min_size_to_name:
-                    merged.extend(collect_points(child))
-            if not qualifying:
-                leaves.append(merged)
-                return leaves
-            qualifying.sort(key=lambda cs: cs[1])
-            *smaller, (largest, _size) = qualifying
-            for child, _size in smaller:
-                leaves.extend(fine_partition(child))
-            current = largest
-
-    coarse_branches = coarse_partition()
-    coarse_ids = np.full(n, -1, dtype=int)
-    fine_ids = np.full(n, -1, dtype=int)
-    fine_label = 0
-    for coarse_label, (node_id, carried, is_terminal) in enumerate(coarse_branches):
-        own_pts = [] if is_terminal else collect_points(node_id)
-        coarse_ids[own_pts + carried] = coarse_label
-
-        fine_leaves = fine_partition(node_id)
-        if is_terminal and carried:
-            # de te-kleine subtakken die tijdens de coarse-wandeling zijn
-            # opgevangen horen bij hetzelfde "overgebleven" fine-cluster
-            if fine_leaves:
-                fine_leaves[-1] = fine_leaves[-1] + carried
-            else:
-                fine_leaves = [carried]
-        for leaf_pts in fine_leaves:
-            fine_ids[leaf_pts] = fine_label
-            fine_label += 1
-
-    logger.info(
-        "boomwandeling: %d coarse-domeinen, %d fine-sub-onderwerpen (min_cluster_size=%d, min_size_to_name=%d)",
-        len(coarse_branches), fine_label, hdbscan_min_cluster_size, min_size_to_name,
-    )
-    return coarse_ids, fine_ids
-
-
 def format_title_from_terms(terms):
     """Formatteert een enkel leesbaar trefwoord uit de top-termen (bv. ['asiel'] -> 'Asiel')."""
     if not terms:
@@ -639,8 +533,12 @@ def label_hierarchical_clusters(
 
 
 def build_multilevel_clusters(coords, hdbscan_min_cluster_size, level_sizes, dominance_ratio=4.0):
-    """N-laags veralgemening van build_hierarchical_clusters (die ongewijzigd
-    blijft, voor backward compat met notebooks/explore_plenary_umap_clusters.py).
+    """Enige HDBSCAN-clusteringpad voor main() (issue #281) -- de vroegere,
+    aparte 2-niveau `build_hierarchical_clusters` (coarse via één
+    splitsingsronde vanaf de root, fine via `partition_exhaustive`) is
+    uitgefaseerd; met `level_sizes` van lengte 2 dekt deze functie ook dat
+    geval (zij het met coarse nu via dezelfde exhaustieve partitie als fine,
+    zie main()'s toelichting bij het ontbreken van --cluster-level-sizes).
 
     `level_sizes` is een dalende lijst van min_size_to_name-drempels (grofste
     niveau eerst). In plaats van coarse/fine recursief-per-tak op te bouwen,
@@ -739,7 +637,10 @@ def label_multilevel_clusters(
     redundancy_overlap=0.8,
 ):
     """N-laags veralgemening van label_hierarchical_clusters (die ongewijzigd
-    blijft). `level_ids` is een lijst van N even lange int-arrays (grofste
+    blijft, nog gebruikt door main()'s --cluster-method dbscan-pad). Voor
+    platte (niet-hiërarchische) labels op een enkel niveau -- zoals
+    notebooks/explore_plenary_umap_clusters.py doet -- volstaat een
+    `level_ids`-lijst van lengte 1. `level_ids` is een lijst van N even lange int-arrays (grofste
     niveau eerst, zie build_multilevel_clusters). Niveau 0 krijgt globale
     TF-IDF-labels (net als coarse); elk dieper niveau k>0 krijgt contrastieve
     labels t.o.v. zijn ouder op niveau k-1 (net als fine). "Ouder" wordt
@@ -1142,34 +1043,33 @@ def main():
     parser.add_argument(
         "--hdbscan-min-cluster-size", type=int, default=15,
         help="alleen bij --cluster-method hdbscan: granulariteit van de onderliggende condensed "
-        "tree waarover build_hierarchical_clusters() wandelt (zie die functie's docstring). "
+        "tree waarover build_multilevel_clusters() wandelt (zie die functie's docstring). "
         "Vervangt de vroegere aparte coarse(200)/fine(15)-drempels, die op deze data telkens "
         "instortten tot 1-3 dominante clusters -- zie docs/hierarchische-clustering-plenaire-spreekbeurten.md.",
     )
     parser.add_argument(
         "--cluster-min-size-to-name", type=int, default=200,
         help="hoeveel spreekbeurten een afgesplitste subtak minstens moet hebben om een eigen "
-        "coarse/fine-cluster te worden tijdens de boomwandeling; kleinere subtakken versmelten "
-        "met de rest. Live getest op een steekproef van ~40k punten: 200 -> 31 coarse/48 fine. "
-        "Genegeerd als --cluster-level-sizes is opgegeven.",
+        "cluster te worden. Genegeerd als --cluster-level-sizes is opgegeven; zonder die vlag "
+        "wordt dit voor beide niveaus (coarse en fine) gebruikt -- zie --cluster-level-sizes.",
     )
     parser.add_argument(
         "--cluster-level-sizes", default=None,
         help="komma-gescheiden, DALENDE lijst van min_size_to_name-drempels, één per niveau "
-        "(grofste eerst), voor N-laagse clustering i.p.v. de vaste coarse/fine-tweedeling -- "
-        "bv. '4000,1500,500,150,50' voor 5 niveaus. Zonder deze vlag: 2 niveaus op "
-        "[--cluster-min-size-to-name, --cluster-min-size-to-name] (oud gedrag, ongewijzigd). "
-        "Zie build_multilevel_clusters()/label_multilevel_clusters().",
+        "(grofste eerst) -- bv. '4000,1500,500,150,50' voor 5 niveaus. Zonder deze vlag: 2 "
+        "niveaus op [--cluster-min-size-to-name, --cluster-min-size-to-name] (let op: dit is "
+        "GEEN 1-op-1 vervanging van de vroegere coarse/fine-tweedeling, zie de toelichting in "
+        "main()). Zie build_multilevel_clusters()/label_multilevel_clusters().",
     )
     parser.add_argument(
         "--cluster-dominance-ratio", type=float, default=4.0,
-        help="alleen bij --cluster-level-sizes: als het grootste cluster op een niveau meer dan "
+        help="alleen bij --cluster-method hdbscan: als het grootste cluster op een niveau meer dan "
         "dit veelvoud van het op-één-na-grootste is, wordt het als ruis (-1) behandeld i.p.v. als "
         "genummerd cluster -- zie build_multilevel_clusters().",
     )
     parser.add_argument(
         "--cluster-redundancy-overlap", type=float, default=0.8,
-        help="alleen bij --cluster-level-sizes: minimale IoU/Jaccard (intersection-over-union "
+        help="alleen bij --cluster-method hdbscan: minimale IoU/Jaccard (intersection-over-union "
         "van de convex hulls, NIET puntenaantal-verhouding -- die kan de werkelijke geometrische "
         "overlap flink onderschatten) tussen een cluster en zijn ouder-cluster (vorig niveau) om "
         "als 'geen echte splitsing' te gelden -- gemarkeerd als \"redundant_with_parent\" i.p.v. "
@@ -1285,52 +1185,28 @@ def main():
             raise SystemExit("--cluster-level-sizes moet minstens 2 drempels bevatten")
         if sorted(level_sizes, reverse=True) != level_sizes:
             raise SystemExit("--cluster-level-sizes moet dalend zijn (grofste niveau eerst)")
+    else:
+        # Zonder --cluster-level-sizes: 2 niveaus op dezelfde drempel (oud
+        # CLI-gedrag). Let op: dit is GEEN 1-op-1 vervanging van de vroegere
+        # build_hierarchical_clusters-coarse (die coarse via één
+        # splitsingsronde vanaf de root bepaalde, niet via dezelfde
+        # exhaustieve partitie als fine) -- een productie-drempelpaar dat
+        # weer een vergelijkbaar coarse-beeld geeft, moet empirisch opnieuw
+        # bepaald worden (zie issue #281).
+        level_sizes = [args.cluster_min_size_to_name, args.cluster_min_size_to_name]
 
     cluster_ids, cluster_summaries, hierarchy, all_level_ids = None, None, None, None
     if not args.skip_clustering:
-        if args.cluster_method == "hdbscan" and not args.cluster_level_sizes:
-            # Ongewijzigd oorspronkelijk pad (coarse/fine via
-            # build_hierarchical_clusters/label_hierarchical_clusters) --
-            # bewust puur behouden voor de bestaande, op ~40k punten
-            # performance-getunede plenair-map.json/PlenairMap.vue, zodat
-            # het nieuwe N-laagse pad (hieronder) daar geen enkel risico
-            # voor vormt. Zie ook notebooks/explore_plenary_umap_clusters.py,
-            # die deze functies rechtstreeks importeert.
-            coarse_ids, fine_ids = build_hierarchical_clusters(
-                coords, args.hdbscan_min_cluster_size, args.cluster_min_size_to_name,
-            )
-            coarse_summaries, fine_summaries, hierarchy = label_hierarchical_clusters(
-                texts,
-                coords,
-                coarse_ids,
-                fine_ids,
-                topic_labels,
-                top_terms=args.cluster_top_terms,
-                extra_stopwords=all_stopwords,
-                max_df=0.25,
-            )
-
-            if not args.skip_llm_naming:
-                llm_base_url = detect_base_url(args.base_url)
-                label_clusters_with_llm(
-                    [coarse_ids, fine_ids], [list(coarse_summaries.values()), fine_summaries], hierarchy,
-                    texts, coords, rows, llm_base_url, args.llm_chat_model,
-                    args.llm_reasoning_effort, args.llm_examples_per_cluster,
-                )
-
-            cluster_ids = fine_ids
-            all_level_ids = [coarse_ids, fine_ids]
-            cluster_summaries = {
-                "coarse": list(coarse_summaries.values()),
-                "fine": fine_summaries,
-            }
-
-            for coarse in hierarchy:
-                logger.info("Domein '%s' (n=%d, %d sub-onderwerpen):", coarse["name"], coarse["value"], len(coarse["children"]))
-                for child in coarse["children"][:5]:
-                    terms_str = ", ".join(child["terms"][:4])
-                    logger.info("  └─ %s (n=%d) [%s]", child["name"], child["value"], terms_str)
-        elif args.cluster_method == "hdbscan":
+        if args.cluster_method == "hdbscan":
+            # Enige HDBSCAN-clusteringpad (build_multilevel_clusters/
+            # label_multilevel_clusters), voorheen gesplitst in een apart
+            # vast-2-niveau-pad (build_hierarchical_clusters) en een N-laags
+            # pad -- samengevoegd zodat de restgroep- en overlap-mitigaties
+            # (dominance_ratio/redundant_with_parent/contained_by_sibling)
+            # ook de standaard coarse/fine-export bereiken (issue #281,
+            # t.b.v. #186 punt 2 en 4). build_hierarchical_clusters/
+            # label_hierarchical_clusters zelf blijven bestaan, uitsluitend
+            # nog voor notebooks/explore_plenary_umap_clusters.py.
             level_ids = build_multilevel_clusters(
                 coords, args.hdbscan_min_cluster_size, level_sizes,
                 dominance_ratio=args.cluster_dominance_ratio,
@@ -1357,10 +1233,11 @@ def main():
             cluster_ids = level_ids[-1]
             all_level_ids = level_ids
             cluster_summaries = {
-                # Puur "levels" (geen coarse/fine-duplicatie): dit N-laagse
-                # pad wordt alleen gebruikt voor de losse -full-export
-                # (TiledPlenairMap.vue), niet voor de bestaande, op 2 niveaus
-                # vaste plenair-map-clusters.json/PlenairMap.vue.
+                # coarse/fine blijven top-level sleutels voor backward compat
+                # (PlenairMap.vue), verrijkt met de nieuwe vlagvelden; levels
+                # bevat de volledige N-laagse lijst (architectenadvies #281 §5).
+                "coarse": level_lists[0],
+                "fine": level_lists[-1],
                 "levels": level_lists,
             }
 
