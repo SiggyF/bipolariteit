@@ -60,10 +60,26 @@ class VerslagenPeriodeSpider(scrapy.Spider):
 
     def parse_vergaderingen(self, response, buffer):
         body = json.loads(response.text)
-        buffer = buffer + body.get("value", [])
+        page = body.get("value", [])
+        buffer = buffer + page
+        under_limit = self.limit is None or len(buffer) < self.limit
+
         next_link = body.get("@odata.nextLink")
-        if next_link and (self.limit is None or len(buffer) < self.limit):
+        if next_link and under_limit:
             yield scrapy.Request(next_link, callback=self.parse_vergaderingen, cb_kwargs={"buffer": buffer})
+            return
+
+        # Deze $filter+$orderby-combinatie op Vergadering geeft geen
+        # @odata.nextLink terug, ook niet als er meer dan MAX_TOP rijen
+        # bestaan (zie odata.vergaderingen_url's docstring) -- een volle
+        # pagina (len(page) == MAX_TOP) is dan het enige signaal dat er
+        # nog meer is. Zelf doorpagineren met $skip totdat een pagina
+        # niet meer vol is.
+        if not next_link and len(page) == odata.MAX_TOP and under_limit:
+            next_url = odata.vergaderingen_url(
+                self.start_date, self.end_date, top=odata.MAX_TOP, soort=self.soort, skip=len(buffer),
+            )
+            yield scrapy.Request(next_url, callback=self.parse_vergaderingen, cb_kwargs={"buffer": buffer})
             return
 
         vergaderingen = buffer[: self.limit] if self.limit is not None else buffer
