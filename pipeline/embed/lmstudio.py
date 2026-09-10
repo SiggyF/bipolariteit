@@ -22,7 +22,12 @@ def detect_base_url(explicit_base_url):
     raise SystemExit("geen LM Studio-backend bereikbaar op localhost of host.docker.internal:1234")
 
 
-def embed_texts(base_url, texts, model, batch_size=32):
+def embed_texts(base_url, texts, model, batch_size=32, on_batch=None):
+    """on_batch(start_index, batch_vectors), indien gegeven, wordt na elke
+    losse HTTP-batch aangeroepen -- zo kan de aanroeper elke batch meteen
+    persisteren i.p.v. pas na het volledige (mogelijk urenlange) verzoek,
+    zodat een tussentijdse onderbreking niet alle al opgehaalde batches
+    verliest."""
     vectors = []
     batches = range(0, len(texts), batch_size)
     for i in tqdm(batches, desc=f"{model}-embeddings ophalen", unit="batch"):
@@ -34,5 +39,8 @@ def embed_texts(base_url, texts, model, batch_size=32):
         )
         resp.raise_for_status()
         data = resp.json()["data"]
-        vectors.extend(item["embedding"] for item in data)
-    return np.array(vectors)
+        batch_vectors = np.array([item["embedding"] for item in data])
+        vectors.append(batch_vectors)
+        if on_batch is not None:
+            on_batch(i, batch_vectors)
+    return np.concatenate(vectors) if vectors else np.array([])
