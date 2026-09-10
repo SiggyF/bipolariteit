@@ -76,7 +76,13 @@ def fetch_arguments(conn, topic_slug, min_quote_len):
 
 
 def run_umap(vectors, seed=42):
-    reducer = umap.UMAP(n_neighbors=15, min_dist=0.1, metric="cosine", random_state=seed, verbose=True)
+    # low_memory=True: op de volle ~768k x 1024-dim plenaire dataset kostte de
+    # nearest-neighbor-opbouw (NN-descent) zonder deze vlag genoeg piekgeheugen
+    # om de container's OOM-killer te triggeren (live bevestigd, container-
+    # cgroup oom_kill-teller). Trager, maar chunked i.p.v. alles-in-1x.
+    reducer = umap.UMAP(
+        n_neighbors=15, min_dist=0.1, metric="cosine", random_state=seed, verbose=True, low_memory=True,
+    )
     return reducer.fit_transform(vectors)
 
 

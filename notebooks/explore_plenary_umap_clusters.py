@@ -21,7 +21,7 @@ docs/hierarchische-clustering-plenaire-spreekbeurten.md.
 Wat dit script doet, in volgorde:
   1. Een steekproef spreekbeurten (`documents`) uit de database halen.
   2. De bijbehorende bge-m3-embeddings laden -- bij voorkeur uit de bestaande
-     cache (`data/embeddings/text-embedding-bge-m3_plenair-combined.npz`,
+     cache (`data/embeddings/text-embedding-bge-m3_plenair-combined/`,
      ~98.9k spreekbeurten, geproduceerd door
      scripts/experiment_umap_documents.py), zodat je zonder LM Studio te
      starten meteen kunt experimenteren. Ontbrekende ids worden zo nodig
@@ -103,6 +103,7 @@ import numpy as np
 import pandas as pd
 
 from pipeline.db import db
+from pipeline.embed.documents import load_embedding_cache
 from pipeline.tag_arguments import call_llm
 from scripts.experiment_umap_arguments import detect_base_url, embed_texts, run_umap
 from scripts.experiment_umap_documents import (
@@ -170,7 +171,7 @@ LLM_REASONING_EFFORT = "none"
 # Bestaande volledige embeddingcache (scripts/experiment_umap_documents.py
 # --label combined) -- als de steekproef-ids hierin zitten, is embedden
 # overbodig. Val terug op live embedden voor wat ontbreekt.
-FULL_CACHE_PATH = CACHE_DIR / f"{MODEL}_plenair-combined.npz"
+FULL_CACHE_PATH = CACHE_DIR / f"{MODEL}_plenair-combined"
 
 
 # In[20]:
@@ -210,12 +211,8 @@ def load_embeddings_for_sample(ids, texts):
     """Probeert embeddings uit de bestaande volledige cache te hergebruiken
     (ID-subset lookup, zie scripts/experiment_umap_documents.py::main() voor
     het origineel van dit patroon); embedt live wat ontbreekt."""
-    id_to_vector = {}
-    if FULL_CACHE_PATH.exists():
-        cached = np.load(FULL_CACHE_PATH, allow_pickle=True)
-        cached_ids = list(cached["ids"])
-        cached_vectors = cached["vectors"]
-        id_to_vector = {doc_id: cached_vectors[idx] for idx, doc_id in enumerate(cached_ids)}
+    id_to_vector = load_embedding_cache(FULL_CACHE_PATH)
+    if id_to_vector:
         logger.info(
             "volledige embeddingcache geladen: %s (%d vectoren beschikbaar)",
             FULL_CACHE_PATH, len(id_to_vector),
@@ -357,15 +354,14 @@ all_stopwords = (
     | db_stopwords
     | alpino_stopwords
 )
-topic_labels = [r["topic_slug"] or "plenair" for r in sample_rows]
-
 # Eén schaalniveau (de genoemde clusters uit de boomwandeling hierboven):
 # een lijst van precies 1 level_ids-array geeft platte (niet-hiërarchische)
 # TF-IDF-labels terug (issue #281: build_hierarchical_clusters/
 # label_hierarchical_clusters zijn uitgefaseerd in scripts/experiment_umap_documents.py,
-# label_multilevel_clusters is nu het enige clusteringpad).
+# label_multilevel_clusters is nu het enige clusteringpad). Geen topic_labels
+# meer (issue #288: topic is geen eigenschap van de embed-/clusterworkflow).
 level_lists, _ = label_multilevel_clusters(
-    texts, coords, [cluster_ids], topic_labels,
+    texts, coords, [cluster_ids],
     top_terms=CLUSTER_TOP_TERMS, extra_stopwords=all_stopwords,
 )
 cluster_summaries = level_lists[0]

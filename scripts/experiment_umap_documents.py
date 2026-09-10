@@ -1,18 +1,17 @@
 """
-Vervolg op experiment_umap_arguments.py (issue #156): past de 4 gecureerde
-topics (stikstof, abortus, asiel, energietransitie) binnen de bredere
-ruimte van álle plenaire Kamerdebatten uit dezelfde periode? Embedt
+Vervolg op experiment_umap_arguments.py (issue #156): embedt
 `documents.content` (ruwe sprekerbeurttekst) i.p.v. `arguments.quote_text`
--- er is bewust geen LLM-argumentextractie gedraaid voor de bredere,
-topic-onafhankelijke dataset (te duur voor een onderzoekje, zie
-pipeline.ingest.ingest_tk.ingest_plenair()).
+over álle plenaire Kamerdebatten, topic-onafhankelijk -- er is bewust geen
+LLM-argumentextractie gedraaid voor deze bredere dataset (te duur voor een
+onderzoekje, zie pipeline.ingest.ingest_tk.ingest_plenair()). Topic is geen
+eigenschap van deze workflow: geen join op topics/topic_id, geen
+topic-gebaseerde filtering of labeling. Een latere topic-koppeling (bv.
+kruisverwijzing naar de argumentenboom) is een aparte, latere join op de
+output hiervan.
 
-Bron van de bredere dataset: documents met topic_id IS NULL, ingelezen via
-`uv run python -m pipeline.ingest.ingest_tk --plenair-dir <naam>` uit een
-`verslagen_periode`-crawl (crawlers/tweede_kamer/tweede_kamer/spiders/
-verslagen_periode.py) -- topic-onafhankelijk, dus geen keyword-filter.
-De 4 topics' eigen documenten (topic_id IS NOT NULL) worden er zonder
-her-crawl bij gehaald, simpelweg via hetzelfde published_at-datumfilter.
+Bron van de dataset: `uv run python -m pipeline.ingest.ingest_tk
+--plenair-dir <naam>` uit een `verslagen_periode`-crawl
+(crawlers/tweede_kamer/tweede_kamer/spiders/verslagen_periode.py).
 
 Puur leesactie op de database. Output: coords+labels als JSON in
 docs/poc/umap-documenten/, voor de losse Cosmograph-HTML-pagina
@@ -28,8 +27,7 @@ parameters getuned zijn. Dit script roept fetch_and_embed() daaruit aan.
 
 Gebruik:
     uv run python scripts/experiment_umap_documents.py \
-        --start 2025-11-12 --end 2026-08-22 --label 2025-heden \
-        --full-range-topics abortus
+        --start 2025-11-12 --end 2026-08-22 --label 2025-heden
 """
 import argparse
 import json
@@ -47,7 +45,7 @@ from sklearn.cluster import DBSCAN, HDBSCAN
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 
 from pipeline.db import db
-from pipeline.embed.documents import CACHE_DIR, MODEL, NOISE_ACTIVITEIT_SOORTEN, fetch_and_embed, fetch_documents, strip_speaker_prefix
+from pipeline.embed.documents import CACHE_DIR, MODEL, fetch_and_embed, fetch_documents, strip_speaker_prefix
 from pipeline.embed.lmstudio import detect_base_url
 from pipeline.paths import REPO_ROOT
 from pipeline.tag_arguments import call_llm
@@ -287,7 +285,7 @@ def compute_spatially_diffuse_stopwords(
 
 
 def label_hierarchical_clusters(
-    texts, coords, coarse_ids, fine_ids, topic_labels, top_terms=6, extra_stopwords=None, max_df=0.25
+    texts, coords, coarse_ids, fine_ids, top_terms=6, extra_stopwords=None, max_df=0.25
 ):
     """Berekent hiërarchische TF-IDF-labels en convex hulls.
 
@@ -405,7 +403,6 @@ def label_hierarchical_clusters(
             hull, centroid = compute_cluster_hull(coords[member_idx], percentile=92.0)
 
         kws = rank_hull_anchored_terms(member_idx, hull, centroid)
-        topic_counts = Counter(topic_labels[i] for i in member_idx)
 
         coarse_summaries[coarse_id] = {
             "cluster_id": int(coarse_id),
@@ -414,7 +411,6 @@ def label_hierarchical_clusters(
             "size": len(member_idx),
             "centroid": centroid,
             "hull": hull,
-            "topic_breakdown": dict(topic_counts.most_common()),
         }
 
     # 2. Bepaal per fijn cluster het bovenliggende grove cluster (meerderheidsoverlap)
@@ -448,7 +444,6 @@ def label_hierarchical_clusters(
         if not kws:
             kws = rank_hull_anchored_terms(member_idx, hull, centroid, base_weights=fine_mean)
 
-        topic_counts = Counter(topic_labels[i] for i in member_idx)
         parent_name = coarse_summaries[parent_id]["name"] if (parent_id is not None and parent_id in coarse_summaries) else None
 
         fine_summaries[fine_id] = {
@@ -460,7 +455,6 @@ def label_hierarchical_clusters(
             "size": len(member_idx),
             "centroid": centroid,
             "hull": hull,
-            "topic_breakdown": dict(topic_counts.most_common()),
         }
 
     # 4. Hiërarchieboom bouwen
@@ -475,7 +469,6 @@ def label_hierarchical_clusters(
                 "terms": fine["terms"],
                 "centroid": fine["centroid"],
                 "hull": fine["hull"],
-                "topic_breakdown": fine["topic_breakdown"],
             })
 
     tree = []
@@ -488,7 +481,6 @@ def label_hierarchical_clusters(
             "terms": coarse["terms"],
             "centroid": coarse["centroid"],
             "hull": coarse["hull"],
-            "topic_breakdown": coarse["topic_breakdown"],
             "children": children,
         })
 
@@ -597,7 +589,7 @@ def build_multilevel_clusters(coords, hdbscan_min_cluster_size, level_sizes, dom
 
 
 def label_multilevel_clusters(
-    texts, coords, level_ids, topic_labels, top_terms=6, extra_stopwords=None, max_df=0.25,
+    texts, coords, level_ids, top_terms=6, extra_stopwords=None, max_df=0.25,
     redundancy_overlap=0.8,
 ):
     """N-laags veralgemening van label_hierarchical_clusters (die ongewijzigd
@@ -748,7 +740,6 @@ def label_multilevel_clusters(
             if not kws and base_weights is not None:
                 kws = rank_hull_anchored_terms(member_idx, hull, centroid, base_weights=mean_vec)
 
-            topic_counts = Counter(topic_labels[i] for i in member_idx)
             parent_name = None
             if level_idx > 0 and parent_id is not None and parent_id in level_summaries[level_idx - 1]:
                 parent_name = level_summaries[level_idx - 1][parent_id]["name"]
@@ -763,7 +754,6 @@ def label_multilevel_clusters(
                 "size": len(member_idx),
                 "centroid": centroid,
                 "hull": hull,
-                "topic_breakdown": dict(topic_counts.most_common()),
                 "redundant_with_parent": False,
                 "contained_by_sibling": None,
             }
@@ -835,7 +825,6 @@ def label_multilevel_clusters(
             "terms": summary["terms"],
             "centroid": summary["centroid"],
             "hull": summary["hull"],
-            "topic_breakdown": summary["topic_breakdown"],
             "redundant_with_parent": summary["redundant_with_parent"],
             "contained_by_sibling": summary["contained_by_sibling"],
             "children": [],
@@ -981,11 +970,6 @@ def main():
         "expliciet --dataset-version blijft de betrouwbare optie als het ertoe doet. De "
         "Zenodo-publicatie zelf blijft hoe dan ook een bewuste, handmatige stap.",
     )
-    parser.add_argument(
-        "--full-range-topics", default="",
-        help="komma-gescheiden topic-slugs die altijd volledig meegenomen worden, ongeacht "
-        "--start/--end (bv. abortus: piekgedreven debatten i.p.v. doorlopend, zie issue #186 punt 3)",
-    )
     parser.add_argument("--min-content-len", type=int, default=30)
     parser.add_argument("--base-url", default=None)
     parser.add_argument("--refresh", action="store_true", help="cache negeren en embeddings herberekenen")
@@ -1073,27 +1057,30 @@ def main():
 
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
-    full_range_topic_slugs = [s.strip() for s in args.full_range_topics.split(",") if s.strip()]
-
     # Fetch + strippen + incrementeel embedden zit nu in pipeline/embed/documents.py
     # (eerste stage van de pijplijn, los te draaien met `uv run python -m
     # pipeline.embed.documents`) -- hier alleen nog aanroepen, niet meer inline.
     rows, texts, vectors, embed_elapsed = fetch_and_embed(
-        args.start, args.end, args.min_content_len, full_range_topic_slugs, args.label,
+        args.start, args.end, args.min_content_len, args.label,
         base_url=args.base_url, refresh=args.refresh,
     )
 
     conn = db.connect()
     db_stopwords = fetch_actor_and_party_stopwords(conn)
+    # Topic is geen eigenschap van de embed-/clusterworkflow (fetch_and_embed
+    # hierboven doet geen join op topics/topic_id, zie #288) -- alleen hier,
+    # als aparte, latere stap puur t.b.v. de topic-legenda/kleuring bij het
+    # visualiseren (plot-html/frontend-export), joinen we topic terug op de
+    # al opgehaalde document-ids.
+    # Geen WHERE id IN (...): bij honderdduizenden document-ids overschrijdt
+    # dat sqlite's parameterlimiet (live bevestigd: "too many SQL variables").
+    # De hele id->slug-mapping is twee smalle kolommen -- goedkoop genoeg om
+    # in één keer op te halen i.p.v. te chunken.
+    topic_rows = conn.execute("SELECT d.id, t.slug FROM documents d LEFT JOIN topics t ON t.id = d.topic_id").fetchall()
+    topic_by_id = {r["id"]: r["slug"] or "plenair" for r in topic_rows}
     conn.close()
 
-    topic_labels = [r["topic_slug"] or "plenair" for r in rows]
-    logger.info(
-        "%d documenten tussen %s en %s (%d binnen de 4 topics, %d overig plenair)",
-        len(texts), args.start, args.end,
-        sum(1 for l in topic_labels if l != "plenair"),
-        sum(1 for l in topic_labels if l == "plenair"),
-    )
+    logger.info("%d documenten tussen %s en %s", len(texts), args.start, args.end)
 
     t0 = time.monotonic()
     coords = run_umap(vectors)
@@ -1146,7 +1133,6 @@ def main():
                 texts,
                 coords,
                 level_ids,
-                topic_labels,
                 top_terms=args.cluster_top_terms,
                 extra_stopwords=all_stopwords,
                 max_df=0.25,
@@ -1191,7 +1177,6 @@ def main():
                 coords,
                 fine_ids,
                 fine_ids,
-                topic_labels,
                 top_terms=args.cluster_top_terms,
                 extra_stopwords=all_stopwords,
                 max_df=0.25,
@@ -1204,12 +1189,12 @@ def main():
             }
 
     points = []
-    for i, (row, (x, y), topic_label) in enumerate(zip(rows, coords, topic_labels)):
+    for i, (row, (x, y)) in enumerate(zip(rows, coords)):
         points.append({
             "id": row["id"],
             "x": float(x),
             "y": float(y),
-            "topic": topic_label,
+            "topic": topic_by_id.get(row["id"], "plenair"),
             "text": texts[i][:160],
             "actor": row["actor_name"],
             "party": row["party"] or "onbekend",
