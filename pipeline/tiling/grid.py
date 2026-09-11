@@ -48,10 +48,33 @@ DEFAULT_MAXZOOM = 8
 MARGIN_FACTOR = 1.08
 
 # Standaard Web-Mercator-halve-extent (EPSG:3857, meters) -- dezelfde
-# constante die elke WebMercatorQuad-implementatie gebruikt.
+# constante die elke WebMercatorQuad-implementatie gebruikt. Blijft de
+# extent van het grid-metadatabestand (write_grid_metadata) en dus van de
+# echte z/x/y-tegeladressering -- ONAFHANKELIJK van hoeveel van die extent de
+# data daadwerkelijk gebruikt (zie MAX_LON_DEG/MAX_LAT_DEG hieronder).
 WEB_MERCATOR_HALF_EXTENT = 20037508.342789244
 
+# Harde grens op het daadwerkelijke voetprint van de data: geen punt voorbij
+# ±60 breedte-/lengtegraad (expliciete gebruikerswens, issue #281 -- de data
+# heeft geen echte geografische betekenis, dus de volle breedtegraadrange
+# (tot ±85,05° bij het vullen van de bredere as) oogt op een kaart/print
+# alsof het over de polen uitsmeert). Breedtegraad is niet-lineair in
+# Mercator-meters (secans-vervorming), dus x- en y-cap apart via een echte
+# voorwaartse projectie berekenen i.p.v. dezelfde meterswaarde voor beide.
+MAX_LON_DEG = 60.0
+MAX_LAT_DEG = 60.0
+
 STANDARD_TMS = morecantile.tms.get("WebMercatorQuad")
+
+
+def _mercator_cap(lon_deg: float, lat_deg: float) -> tuple[float, float]:
+    transformer = pyproj.Transformer.from_crs("EPSG:4326", CRS, always_xy=True)
+    cap_x, _ = transformer.transform(lon_deg, 0.0)
+    _, cap_y = transformer.transform(0.0, lat_deg)
+    return cap_x, cap_y
+
+
+MERCATOR_CAP_X, MERCATOR_CAP_Y = _mercator_cap(MAX_LON_DEG, MAX_LAT_DEG)
 
 
 def bounds_from_points(points: list) -> tuple[float, float, float, float]:
@@ -72,13 +95,18 @@ def bounds_from_points(points: list) -> tuple[float, float, float, float]:
 
 
 def umap_to_mercator_affine(points: list) -> tuple[float, float, float]:
-    """(scale, cx, cy) die de UMAP-bounding-box (met marge, vierkant gemaakt
-    aan de grootste as) exact op de volle standaard Web-Mercator-extent
-    afbeeldt: `mx = (x - cx) * scale`, `my = (y - cy) * scale`."""
+    """(scale, cx, cy) die de UMAP-bounding-box (met marge) uniform (aspect-
+    ratio-behoudend) naar Mercator-meters schaalt, begrensd tot
+    ±MAX_LON_DEG/±MAX_LAT_DEG: `mx = (x - cx) * scale`, `my = (y - cy) * scale`.
+    Neemt de kleinste van de twee toegestane schalen (x- en y-as apart tegen
+    hun eigen cap getoetst) zodat GEEN van beide assen zijn cap overschrijdt --
+    de andere as vult dan het eigen cap niet helemaal, wat prima is (geen
+    vaste aspect ratio tussen de twee caps zelf, want breedtegraad is
+    niet-lineair)."""
     minx, miny, maxx, maxy = bounds_from_points(points)
     cx, cy = (minx + maxx) / 2, (miny + maxy) / 2
-    span = max(maxx - minx, maxy - miny)
-    scale = (2 * WEB_MERCATOR_HALF_EXTENT) / span
+    half_x, half_y = (maxx - minx) / 2, (maxy - miny) / 2
+    scale = min(MERCATOR_CAP_X / half_x, MERCATOR_CAP_Y / half_y)
     return scale, cx, cy
 
 
