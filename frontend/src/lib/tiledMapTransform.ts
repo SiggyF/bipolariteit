@@ -10,8 +10,20 @@ export type GridMetadata = {
 	tile_size: number;
 	minzoom: number;
 	maxzoom: number;
-	extent: [number, number, number, number]; // [minx, miny, maxx, maxy]
+	extent: [number, number, number, number]; // [minx, miny, maxx, maxy], altijd de volle Web-Mercator-extent
+	umap_scale: number;
+	umap_center: [number, number];
 };
+
+// UMAP-coördinaten (bv. cluster-hull-polygonen/-centroids uit
+// plenair-map-clusters(-full).json, die los van de tile-pyramide staan en
+// dus niet zelf al naar Mercator-meters herschaald zijn) omrekenen naar
+// dezelfde ruimte als de punten die uit de tiles gedecodeerd worden -- zie
+// pipeline/tiling/grid.py's `umap_to_mercator()`, exacte spiegeling hiervan.
+export function umapToMercator(x: number, y: number, grid: GridMetadata): [number, number] {
+	const [cx, cy] = grid.umap_center;
+	return [(x - cx) * grid.umap_scale, (y - cy) * grid.umap_scale];
+}
 
 export type WorldBounds = { minx: number; miny: number; maxx: number; maxy: number };
 

@@ -23,6 +23,32 @@ import mapbox_vector_tile
 
 LAYER_NAME = "points"
 
+# Basisvelden die point_to_feature() altijd zet, met hun MVT-vector_layers-
+# typenaam (spec: https://github.com/mapbox/vector-tile-spec, "String"/
+# "Number"/"Boolean") -- losse bron van waarheid voor zowel de encoder hier
+# als de pmtiles-metadata (build_pyramid.py), zodat een viewer (QGIS,
+# pmtiles.io) de velden ook daadwerkelijk als los te filteren/queryen attribuut
+# ziet i.p.v. alleen de generieke tile_type/metadata-blob.
+BASE_FIELD_TYPES: dict[str, str] = {
+    "id": "Number",
+    "topic": "String",
+    "actor": "String",
+    "party": "String",
+    "debate": "String",
+    "soort": "String",
+    "published_at": "String",
+    "text": "String",
+    "cluster": "Number",
+}
+
+
+def field_types(cluster_level_count: int = 0) -> dict[str, str]:
+    """`vector_layers[0].fields`-waarde: basisvelden + evt. `cluster_l0..N` bij N-laagse clustering."""
+    fields = dict(BASE_FIELD_TYPES)
+    for level_idx in range(cluster_level_count):
+        fields[f"cluster_l{level_idx}"] = "Number"
+    return fields
+
 
 def point_to_feature(point: list, lookups: dict[str, list[str]]) -> dict[str, Any]:
     """Eén punt-rij -> een MVT-feature-dict (geometry + properties)."""

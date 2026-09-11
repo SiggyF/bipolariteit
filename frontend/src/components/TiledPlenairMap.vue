@@ -25,6 +25,7 @@ import {
 	tileBounds,
 	tileLocalToWorld,
 	tilesForWorldRect,
+	umapToMercator,
 	type GridMetadata,
 	type TileKey,
 } from "../lib/tiledMapTransform";
@@ -140,7 +141,17 @@ onMounted(async () => {
 			// (plenair-map-clusters.json) of het nieuwe N-laagse formaat
 			// (plenair-map-clusters-full.json, alleen een "levels"-array) --
 			// in beide gevallen tonen we hier het grofste niveau.
-			coarseClusters.value = Array.isArray(clusters) ? clusters : (clusters.levels?.[0] ?? clusters.coarse ?? []);
+			const raw: ClusterHullItem[] = Array.isArray(clusters) ? clusters : (clusters.levels?.[0] ?? clusters.coarse ?? []);
+			// Hull-/centroid-coördinaten staan nog in ruwe UMAP-ruimte (los
+			// bestand, niet via de tile-pyramide gegaan) -- omrekenen naar
+			// dezelfde Mercator-ruimte als de punten die uit de tiles komen,
+			// anders lopen hulls en punten uit elkaar (zie tiledMapTransform.ts).
+			const grid = gridMeta.value!;
+			coarseClusters.value = raw.map((cluster) => ({
+				...cluster,
+				centroid: umapToMercator(cluster.centroid[0], cluster.centroid[1], grid),
+				hull: cluster.hull ? cluster.hull.map(([hx, hy]) => umapToMercator(hx, hy, grid)) : null,
+			}));
 		}
 		pmtiles = new PMTiles(`${props.dataBaseUrl}/plenair-map.pmtiles`);
 		await pmtiles.getHeader();

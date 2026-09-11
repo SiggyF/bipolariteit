@@ -30,12 +30,12 @@ import time
 import matplotlib.pyplot as plt
 import nltk
 import numpy as np
-import requests
 import umap
 from sklearn.feature_extraction.text import TfidfVectorizer
 from tqdm import tqdm
 
 from pipeline.db import db
+from pipeline.embed.lmstudio import detect_base_url, embed_texts  # noqa: F401 -- re-export, verhuisd naar pipeline/embed/, andere scripts/de notebook importeren deze twee nog van hieruit
 from pipeline.paths import REPO_ROOT
 
 OUTPUT_DIR = REPO_ROOT / "docs" / "poc" / "umap-argumenten"
@@ -75,36 +75,14 @@ def fetch_arguments(conn, topic_slug, min_quote_len):
     return rows
 
 
-def detect_base_url(explicit_base_url):
-    if explicit_base_url:
-        return explicit_base_url
-    for candidate in ("http://localhost:1234/v1", "http://host.docker.internal:1234/v1"):
-        try:
-            requests.get(f"{candidate}/models", timeout=2).raise_for_status()
-            return candidate
-        except requests.RequestException:
-            continue
-    raise SystemExit("geen LM Studio-backend bereikbaar op localhost of host.docker.internal:1234")
-
-
-def embed_texts(base_url, texts, model, batch_size=32):
-    vectors = []
-    batches = range(0, len(texts), batch_size)
-    for i in tqdm(batches, desc=f"{model}-embeddings ophalen", unit="batch"):
-        batch = texts[i : i + batch_size]
-        resp = requests.post(
-            f"{base_url}/embeddings",
-            json={"model": model, "input": batch},
-            timeout=120,
-        )
-        resp.raise_for_status()
-        data = resp.json()["data"]
-        vectors.extend(item["embedding"] for item in data)
-    return np.array(vectors)
-
-
 def run_umap(vectors, seed=42):
-    reducer = umap.UMAP(n_neighbors=15, min_dist=0.1, metric="cosine", random_state=seed, verbose=True)
+    # low_memory=True: op de volle ~768k x 1024-dim plenaire dataset kostte de
+    # nearest-neighbor-opbouw (NN-descent) zonder deze vlag genoeg piekgeheugen
+    # om de container's OOM-killer te triggeren (live bevestigd, container-
+    # cgroup oom_kill-teller). Trager, maar chunked i.p.v. alles-in-1x.
+    reducer = umap.UMAP(
+        n_neighbors=15, min_dist=0.1, metric="cosine", random_state=seed, verbose=True, low_memory=True,
+    )
     return reducer.fit_transform(vectors)
 
 
