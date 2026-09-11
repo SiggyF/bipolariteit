@@ -20,13 +20,14 @@ puntenlaag). De .pmtiles-puntenlaag heeft dit probleem niet: vector-tile-
 rendering gebruikt de gedeclareerde header-bounds puur lineair (behandelt het
 hele archief als "de hele wereld"), geen echte CRS-herprojectie.
 
-Om dezelfde lineaire "hele wereld"-truc te volgen i.p.v. een neppe CRS te
-declareren, wordt hier expliciet dezelfde grid-extent (uit
-plenair-map-<suffix>-grid.json, door pipeline/tiling/grid.py geschreven)
-lineair herschaald naar -180..180 / -90..90 -- exact hoe de tile-pyramide
-zijn eigen custom-grid al behandelt als "de hele wereld" op zoom 0. De
-GeoJSON draagt dan gewoon impliciet WGS84 (RFC7946-default, geen crs-member
-nodig), en lijnt zo op natuurlijke wijze uit met de puntenlaag.
+Om dezelfde herschaling te volgen als de puntenlaag zelf, wordt hier
+`pipeline.tiling.grid.umap_to_mercator()` hergebruikt met dezelfde
+`umap_scale`/`umap_center`-affiene-transform uit plenair-map-<suffix>-grid.json
+(door pipeline/tiling/grid.py geschreven, zie die module voor waarom de data
+begrensd blijft tot ±60° i.p.v. de volle wereldwijde extent) -- daarna
+dezelfde échte EPSG:3857->WGS84-terugprojectie. De GeoJSON draagt dan gewoon
+impliciet WGS84 (RFC7946-default, geen crs-member nodig), en lijnt zo op
+natuurlijke wijze uit met de puntenlaag.
 
 Gebruik:
     uv run python scripts/a0_map/export_clusters_geojson.py \
@@ -59,24 +60,9 @@ import numpy as np
 from pyproj import Transformer
 from scipy.interpolate import splev, splprep
 
-logger = logging.getLogger(__name__)
+from pipeline.tiling.grid import umap_to_mercator
 
-# Halve omtrek van de EPSG:3857-vierkante wereldkaart in meter (pyproj/PROJ-
-# constante, gebaseerd op de WGS84-equatorradius). De .pmtiles-puntenlaag
-# (pipeline/tiling/grid.py) bucket't punten via een custom morecantile-grid
-# met dezelfde quadtree-onderverdeling (2^z x 2^z) als de STANDAARD globale
-# Web Mercator-tegelpiramide -- een generieke MVT/PMTiles-viewer kent onze
-# custom grid-extent niet en interpreteert diezelfde z/x/y-tegelindices dus
-# als tegels in de standaard wereldwijde piramide. Relatieve positie binnen
-# onze grid-extent bepaalt zo (via de quadtree-onderverdeling) al impliciet
-# een ECHTE Web Mercator-locatie. Door hier expliciet dezelfde stap te zetten
-# (relatieve positie -> echte 3857-meters -> terugprojecteren naar WGS84)
-# krijgt de clusterlaag precies dezelfde projectie-vervorming als de
-# puntenlaag al ondergaat, i.p.v. een losse, inconsistente lineaire
-# graden-schaling. Bijkomend effect (geen doel op zich): de breedtegraad
-# verzadigt vanzelf bij ±85.0511° (de bekende Web Mercator-afkapgrens),
-# zonder handmatige clamp.
-WEB_MERCATOR_HALF_EXTENT = 20037508.342789244
+logger = logging.getLogger(__name__)
 
 _to_wgs84 = Transformer.from_crs("EPSG:3857", "EPSG:4326", always_xy=True)
 
@@ -86,16 +72,10 @@ def flat_rescale(point: list[float]) -> list[float]:
 
 
 def make_rescaler(grid: dict):
-    left, bottom, right, top = grid["extent"]
-    span_x = right - left
-    span_y = top - bottom
+    affine = (grid["umap_scale"], grid["umap_center"][0], grid["umap_center"][1])
 
     def rescale(point: list[float]) -> list[float]:
-        x, y = point
-        fraction_x = (x - left) / span_x
-        fraction_y = (y - bottom) / span_y
-        merc_x = -WEB_MERCATOR_HALF_EXTENT + fraction_x * 2 * WEB_MERCATOR_HALF_EXTENT
-        merc_y = -WEB_MERCATOR_HALF_EXTENT + fraction_y * 2 * WEB_MERCATOR_HALF_EXTENT
+        merc_x, merc_y = umap_to_mercator(point[0], point[1], affine)
         lon, lat = _to_wgs84.transform(merc_x, merc_y)
         return [lon, lat]
 
