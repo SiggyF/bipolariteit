@@ -25,7 +25,7 @@ else
   RESOLVE_BASE_URL = scripts/detect_llm_base_url.sh
 endif
 
-.PHONY: help probe crawl ingest embed pipeline test test-js test-frontend ca-fixture status build dev dev-stop extract extract-agy tag tag-agy redactie validate export enrich-video fetch-debate-events fetch-subtitles match-video-spans check-video-urls tags-taxonomy db-init pipeline-status backup-db release release-dry release-www release-www-dry check-public-exposure argument-doc export-public-data publish-data tiles
+.PHONY: help probe crawl ingest embed pipeline test test-js test-frontend ca-fixture status build dev dev-stop extract extract-agy tag tag-agy redactie validate export enrich-video fetch-debate-events fetch-subtitles match-video-spans check-video-urls tags-taxonomy db-init pipeline-status backup-db release release-dry release-www release-www-dry check-public-exposure argument-doc export-public-data publish-data publish-zenodo tiles tiles-full
 
 help: ## Toon deze lijst
 	@grep -E '^[a-zA-Z_-]+:.*## ' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*## "}; {printf "  \033[36m%-16s\033[0m %s\n", $$1, $$2}'
@@ -138,8 +138,19 @@ export-public-data: ## data/export/topics/*.json -> data/export/gepubliceerd/ (l
 tiles: ## data/export/plenair-map.json -> plenair-map.pmtiles (vector-tile-pyramide, morecantile-grid + dask, zie issue #215/#253) -- experimenteel alternatief renderpad, los van `export`
 	uv run python -m pipeline.tiling.build_pyramid
 
+tiles-full: ## Zelfde als `tiles`, maar op de volle-dataset-export (plenair-map-full.json -> data/export/zenodo/plenair-map-full.pmtiles, zie issue #281) -- verwacht dat scripts/experiment_umap_documents.py --export-suffix=-full al gedraaid is. Bundelt meteen de companion-bestanden voor `make publish-zenodo` in dezelfde map (zie docs/release.md)
+	mkdir -p data/export/zenodo
+	uv run python -m pipeline.tiling.build_pyramid \
+		--input data/export/plenair-map-full.json \
+		--out data/export/zenodo/plenair-map-full.pmtiles \
+		--grid-out data/export/zenodo/plenair-map-full-grid.json
+	cp data/export/plenair-map-full.json data/export/plenair-map-clusters-full.json data/export/plenair-map-hierarchy-full.json data/export/zenodo/
+
 publish-data: export-public-data ## Commit + push data/export/gepubliceerd/ (submodule) naar bipolariteit/bipolariteit-data, gefetcht via jsDelivr (zie docs/release.md). Los van een frontend-release, niet automatisch in CI
 	uv run python scripts/publish_data.py
+
+publish-zenodo: ## Nieuwe Zenodo-versie (draft) van de volle-dataset-tegelpyramide (plenair-map-full.pmtiles e.a. -- te groot voor git/GitHub, zie docs/release.md). Publiceren zelf blijft een handmatige stap in de Zenodo-UI. Vars: ZENODO_TOKEN
+	uv run python scripts/publish_zenodo.py
 
 build: ## Frontend production build (frontend/dist/)
 	cd frontend && npm run build

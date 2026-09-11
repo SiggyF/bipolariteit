@@ -37,6 +37,13 @@ data/export/*-full.geojson
 data/export/*-flat.geojson
 data/export/*-full-grid.json
 data/export/plenair-map-grid.json
+# Bundel-map voor scripts/publish_zenodo.py (issue #281): grote,
+# archiefachtige bestanden die niet in git/de gepubliceerde-submodule horen,
+# zie docs/release.md. `make tiles-full` schrijft de tegelpyramide er
+# rechtstreeks in; de overige -full-companions worden er losstaand naartoe
+# gekopieerd -- alle losse patronen hierboven dekken de inhoud toch al,
+# expliciet vermeld voor de duidelijkheid.
+data/export/zenodo/
 data/*.db
 data/*.db-journal
 data/*.db-wal

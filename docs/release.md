@@ -330,6 +330,36 @@ creditcard om te activeren, ook binnen de gratis tier. Zenodo is ook
 overwogen (DOI/archivering) maar past niet bij een "overschrijf de huidige
 data"-flow met live browser-fetch.
 
+### Grote, archiefachtige bestanden -> Zenodo, niet jsDelivr
+
+De volle-dataset-tegelpyramide van de plenaire kaart (issue #281,
+`data/export/plenair-map-full.pmtiles`, ~1,25 GiB, plus
+`plenair-map-full.json`, ~119 MiB) is te groot voor git/GitHub (100 MB
+harde bestandslimiet) en hoort dus niet in `data/export/gepubliceerd/` zoals
+hierboven -- die route is specifiek voor de kleine, live door de site
+gefetchte dataset (`plenair-map.pmtiles`, dat wél al in de submodule zit).
+
+In plaats daarvan gaat dit soort grote, archiefachtige data (QGIS-inspectie,
+A0-printposter issue #215 -- niet de interactieve site) naar Zenodo, als
+nieuwe versie onder het bestaande concept-record
+<https://doi.org/10.5281/zenodo.22181704> (zelfde archief als de eerdere
+publicatie, zie `docs/handoff.md` 2026-08-29-sessie):
+
+```sh
+make tiles-full          # bouwt de tegelpyramide + bundelt companions in data/export/zenodo/
+make publish-zenodo      # uploadt alles in data/export/zenodo/ als nieuwe Zenodo-versie (draft, ZENODO_TOKEN nodig)
+```
+
+`data/export/zenodo/` (gitignored) is de expliciete bundel-map: `tiles-full`
+schrijft `plenair-map-full.pmtiles`/`-grid.json` er rechtstreeks in en
+kopieert `plenair-map-full.json`/`-clusters-full.json`/`-hierarchy-full.json`
+erbij, zodat `publish-zenodo` zonder losse bestandenlijst gewoon alles daarin
+publiceert -- de twee stappen kunnen zo niet uit de pas lopen over welke
+bestanden erbij horen. `scripts/publish_zenodo.py` maakt alleen een **draft**
+aan (nieuwe versie, bestanden geüpload). Publiceren zelf (onomkeerbaar, eigen
+DOI per versie) blijft een bewuste, handmatige stap in de Zenodo-UI -- zelfde
+terughoudende patroon als hierboven bij `publish-data`.
+
 ## Data publiceren
 
 ```sh
