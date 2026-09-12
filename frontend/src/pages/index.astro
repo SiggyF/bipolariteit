@@ -2,6 +2,7 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import ClaimsHighlights from "../components/ClaimsHighlights.vue";
 import DebateVideoView from "../components/DebateVideoView.vue";
+import HomeVideoPreview from "../components/HomeVideoPreview.vue";
 import { debateId } from "../lib/debateId";
 import { debateName } from "../lib/debateName";
 import { debateThumbnailUrl } from "../lib/debateThumbnail";
@@ -111,6 +112,10 @@ for (const mod of Object.values(topicModules as any) as any[]) {
 					</p>
 					<p class="motto">"We listen and we don't judge."</p>
 				</div>
+				<section class="video-preview-section">
+					<h2>Kort fragment</h2>
+					<HomeVideoPreview dataBaseUrl={dataBaseUrl} client:only="vue" />
+				</section>
 				{highlightedDebates.length > 0 && (
 					<section class="highlighted-debates">
 						<h2>Uitgelicht</h2>
@@ -147,7 +152,7 @@ for (const mod of Object.values(topicModules as any) as any[]) {
 
 	@media (min-width: 901px) {
 		.home {
-			grid-template-areas: "intro" "video" "highlighted";
+			grid-template-areas: "intro" "video" "preview" "highlighted";
 		}
 
 		.home-intro {
@@ -156,6 +161,10 @@ for (const mod of Object.values(topicModules as any) as any[]) {
 
 		.latest-debate {
 			grid-area: video;
+		}
+
+		.video-preview-section {
+			grid-area: preview;
 		}
 
 		.highlighted-debates {

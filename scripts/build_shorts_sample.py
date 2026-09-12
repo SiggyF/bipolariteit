@@ -224,10 +224,16 @@ def render_clip(raw_video_url, start_seconds, duration_seconds, output_path):
 
 
 def build_manifest_entry(entry):
+    """`raw_video_url` gaat mee in het manifest zodat de frontend zelf
+    `debateId(raw_video_url)` (frontend/src/lib/debateId.ts) kan toepassen om
+    naar de volledige /debatten/[id]/-pagina te linken -- dezelfde sleutel
+    herimplementeren in Python zou de FNV-1a-hash op twee plekken uit sync
+    kunnen laten lopen."""
     row = entry["row"]
     start, duration = clip_window(row)
     return {
         "debatdirect_id": row["debatdirect_id"],
+        "raw_video_url": row["raw_video_url"],
         "topic_slug": row["topic_slug"],
         "topic_name": row["topic_name"],
         "spreker": row["spreker"],
