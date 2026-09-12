@@ -7,4 +7,5 @@ export const TEGENSTELLING: Record<string, string> = {
 	abortus: "Keuzevrijheid van de vrouw versus bescherming van het ongeboren kind.",
 	asiel: "Het recht op asiel en humane opvang versus beperking van de instroom.",
 	energietransitie: "Overheidsgestuurd verduurzamen versus betaalbaarheid en een rustiger tempo.",
+	oekraine: "Assertieve steun aan Oekraïne en hoge druk op Rusland versus terughoudendheid en onderhandelen.",
 };
