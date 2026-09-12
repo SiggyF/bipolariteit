@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-07T21:36:01+02:00",
+  "generated_at": "2026-09-12T22:17:32+02:00",
   "topics": [
     {
       "slug": "stikstof",
@@ -8,7 +8,7 @@
       "documents_total": 4381,
       "documents_extracted": 3889,
       "arguments_total": 1988,
-      "arguments_tagged": 1567,
+      "arguments_tagged": 1977,
       "argumentenboom_banden": 6,
       "arguments_ander_onderwerp": 10,
       "ander_onderwerp_top": [
@@ -40,6 +40,17 @@
           "total_completion_tokens": 107290,
           "first_call_at": "2026-08-07T20:19:55.234257+00:00",
           "last_call_at": "2026-09-05T17:53:08.696420+00:00"
+        },
+        {
+          "stage": "tagging",
+          "model": "Qwen/Qwen3.8-27B:ovhcloud",
+          "n_calls": 421,
+          "total_duration_s": 5015.854801693968,
+          "avg_duration_s": 11.914144422075932,
+          "n_errors": 11,
+          "total_completion_tokens": 225435,
+          "first_call_at": "2026-09-12T19:08:21.419464+00:00",
+          "last_call_at": "2026-09-12T19:18:35.848971+00:00"
         },
         {
           "stage": "tagging",
@@ -83,8 +94,8 @@
       "slug": "asiel",
       "name": "Asiel en migratie",
       "vanaf": "2023-12-06",
-      "documents_total": 7820,
-      "documents_extracted": 4809,
+      "documents_total": 7812,
+      "documents_extracted": 4807,
       "arguments_total": 3555,
       "arguments_tagged": 1826,
       "argumentenboom_banden": 3,
@@ -160,20 +171,44 @@
       "slug": "energietransitie",
       "name": "Energietransitie",
       "vanaf": "2023-12-06",
-      "documents_total": 11723,
-      "documents_extracted": 5612,
-      "arguments_total": 4143,
-      "arguments_tagged": 1835,
+      "documents_total": 11717,
+      "documents_extracted": 7623,
+      "arguments_total": 5782,
+      "arguments_tagged": 5764,
       "argumentenboom_banden": 3,
-      "arguments_ander_onderwerp": 119,
+      "arguments_ander_onderwerp": 187,
       "ander_onderwerp_top": [
         {
           "onderwerp": "diepzeemijnbouw",
           "aantal": 8
         },
         {
+          "onderwerp": "landbouwbeleid",
+          "aantal": 7
+        },
+        {
+          "onderwerp": "Biologische landbouw",
+          "aantal": 6
+        },
+        {
+          "onderwerp": "landbouw",
+          "aantal": 4
+        },
+        {
           "onderwerp": "armoedebeleid",
           "aantal": 4
+        },
+        {
+          "onderwerp": "Stikstofbeleid",
+          "aantal": 4
+        },
+        {
+          "onderwerp": "woningbouw en stedelijke ontwikkeling",
+          "aantal": 3
+        },
+        {
+          "onderwerp": "voedselzekerheid en landbouwbeleid",
+          "aantal": 3
         },
         {
           "onderwerp": "overheidsfinanciën",
@@ -182,43 +217,52 @@
         {
           "onderwerp": "openbaar vervoer",
           "aantal": 3
-        },
-        {
-          "onderwerp": "Groninger gaswinning",
-          "aantal": 3
-        },
-        {
-          "onderwerp": "steun aan Oekraïne",
-          "aantal": 2
-        },
-        {
-          "onderwerp": "ontwikkelingssamenwerking",
-          "aantal": 2
-        },
-        {
-          "onderwerp": "landbouwbeleid en natuurbeleid",
-          "aantal": 2
-        },
-        {
-          "onderwerp": "duurzame energie als economische poot op Caribische eilanden",
-          "aantal": 2
-        },
-        {
-          "onderwerp": "brandstofaccijns",
-          "aantal": 2
         }
       ],
       "llm_calls_by_model": [
         {
           "stage": "extraction",
+          "model": "Qwen/Qwen3.8-27B:ovhcloud",
+          "n_calls": 2013,
+          "total_duration_s": 13593.125003514062,
+          "avg_duration_s": 6.752670145809271,
+          "n_errors": 11,
+          "total_completion_tokens": 385546,
+          "first_call_at": "2026-09-12T16:35:45.872164+00:00",
+          "last_call_at": "2026-09-12T17:05:38.440792+00:00"
+        },
+        {
+          "stage": "extraction",
           "model": "qwen/qwen3.6-27b",
-          "n_calls": 5284,
-          "total_duration_s": 106536.13990353374,
-          "avg_duration_s": 20.16202496281865,
-          "n_errors": 34,
-          "total_completion_tokens": 901411,
+          "n_calls": 5297,
+          "total_duration_s": 108236.64179447773,
+          "avg_duration_s": 20.4335740597466,
+          "n_errors": 38,
+          "total_completion_tokens": 907323,
           "first_call_at": "2026-08-13T09:24:46.527798+00:00",
-          "last_call_at": "2026-08-28T16:36:08.186542+00:00"
+          "last_call_at": "2026-09-12T08:42:50.833422+00:00"
+        },
+        {
+          "stage": "tagging",
+          "model": "Qwen/Qwen3.6-27B:cheapest",
+          "n_calls": 15,
+          "total_duration_s": 130.94483110199508,
+          "avg_duration_s": 8.729655406799672,
+          "n_errors": 0,
+          "total_completion_tokens": 8351,
+          "first_call_at": "2026-09-12T12:37:19.377410+00:00",
+          "last_call_at": "2026-09-12T12:39:21.942475+00:00"
+        },
+        {
+          "stage": "tagging",
+          "model": "Qwen/Qwen3.8-27B:ovhcloud",
+          "n_calls": 4000,
+          "total_duration_s": 46103.361171359946,
+          "avg_duration_s": 11.525840292839986,
+          "n_errors": 86,
+          "total_completion_tokens": 2146013,
+          "first_call_at": "2026-09-12T17:10:37.778374+00:00",
+          "last_call_at": "2026-09-12T18:52:17.190653+00:00"
         },
         {
           "stage": "tagging",
@@ -230,6 +274,83 @@
           "total_completion_tokens": 1073874,
           "first_call_at": "2026-08-13T10:16:21.437585+00:00",
           "last_call_at": "2026-08-29T18:05:20.431101+00:00"
+        }
+      ]
+    },
+    {
+      "slug": "oekraine",
+      "name": "Oekraïne",
+      "vanaf": "2023-12-06",
+      "documents_total": 5716,
+      "documents_extracted": 1022,
+      "arguments_total": 824,
+      "arguments_tagged": 800,
+      "argumentenboom_banden": 0,
+      "arguments_ander_onderwerp": 24,
+      "ander_onderwerp_top": [
+        {
+          "onderwerp": "Gaza",
+          "aantal": 7
+        },
+        {
+          "onderwerp": "zorg",
+          "aantal": 2
+        },
+        {
+          "onderwerp": "stikstofbeleid",
+          "aantal": 2
+        },
+        {
+          "onderwerp": "zorgtekort",
+          "aantal": 1
+        },
+        {
+          "onderwerp": "zorg en sociale zekerheid",
+          "aantal": 1
+        },
+        {
+          "onderwerp": "windenergie en volksgezondheid",
+          "aantal": 1
+        },
+        {
+          "onderwerp": "waterbeheer in de landbouw",
+          "aantal": 1
+        },
+        {
+          "onderwerp": "visserijbeleid / Europese onderhandelingen",
+          "aantal": 1
+        },
+        {
+          "onderwerp": "verkeersveiligheid en maximumsnelheid",
+          "aantal": 1
+        },
+        {
+          "onderwerp": "sociale veiligheid op middelbare scholen",
+          "aantal": 1
+        }
+      ],
+      "llm_calls_by_model": [
+        {
+          "stage": "extraction",
+          "model": "Qwen/Qwen3.8-27B:ovhcloud",
+          "n_calls": 1678,
+          "total_duration_s": 9224.345628525982,
+          "avg_duration_s": 5.49722623869248,
+          "n_errors": 0,
+          "total_completion_tokens": 211087,
+          "first_call_at": "2026-09-12T18:52:57.317135+00:00",
+          "last_call_at": "2026-09-12T19:42:49.814367+00:00"
+        },
+        {
+          "stage": "tagging",
+          "model": "Qwen/Qwen3.8-27B:ovhcloud",
+          "n_calls": 824,
+          "total_duration_s": 9604.770084593889,
+          "avg_duration_s": 11.656274374507147,
+          "n_errors": 24,
+          "total_completion_tokens": 466110,
+          "first_call_at": "2026-09-12T19:00:26.722001+00:00",
+          "last_call_at": "2026-09-12T20:07:51.728229+00:00"
         }
       ]
     }

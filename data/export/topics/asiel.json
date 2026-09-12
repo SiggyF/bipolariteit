@@ -261843,34 +261843,6 @@
       "token_count": 207
     },
     {
-      "id": 6369,
-      "actor": {
-        "name": "Henk Vermeer",
-        "party": "BBB"
-      },
-      "char_count": 810,
-      "word_count": 140,
-      "sentence_count": 11,
-      "syllable_count": 210,
-      "long_word_count": 29,
-      "unique_word_count": 75,
-      "token_count": 199
-    },
-    {
-      "id": 6370,
-      "actor": {
-        "name": "Dilan Yeşilgöz-Zegerius",
-        "party": "VVD"
-      },
-      "char_count": 1158,
-      "word_count": 204,
-      "sentence_count": 11,
-      "syllable_count": 309,
-      "long_word_count": 36,
-      "unique_word_count": 119,
-      "token_count": 270
-    },
-    {
       "id": 6371,
       "actor": {
         "name": "Caroline van der Plas",
@@ -263941,20 +263913,6 @@
       "long_word_count": 35,
       "unique_word_count": 80,
       "token_count": 181
-    },
-    {
-      "id": 6521,
-      "actor": {
-        "name": "Raymond de Roon",
-        "party": "PVV"
-      },
-      "char_count": 1105,
-      "word_count": 197,
-      "sentence_count": 14,
-      "syllable_count": 294,
-      "long_word_count": 29,
-      "unique_word_count": 105,
-      "token_count": 253
     },
     {
       "id": 6522,
@@ -275101,62 +275059,6 @@
       "token_count": 221
     },
     {
-      "id": 8141,
-      "actor": {
-        "name": "Geert Wilders",
-        "party": "PVV"
-      },
-      "char_count": 2341,
-      "word_count": 385,
-      "sentence_count": 23,
-      "syllable_count": 659,
-      "long_word_count": 95,
-      "unique_word_count": 199,
-      "token_count": 512
-    },
-    {
-      "id": 8142,
-      "actor": {
-        "name": "Rob Jetten",
-        "party": "D66"
-      },
-      "char_count": 1544,
-      "word_count": 268,
-      "sentence_count": 14,
-      "syllable_count": 429,
-      "long_word_count": 53,
-      "unique_word_count": 147,
-      "token_count": 360
-    },
-    {
-      "id": 8143,
-      "actor": {
-        "name": "Dick Schoof",
-        "party": "Onafhankelijk"
-      },
-      "char_count": 245,
-      "word_count": 47,
-      "sentence_count": 2,
-      "syllable_count": 69,
-      "long_word_count": 9,
-      "unique_word_count": 37,
-      "token_count": 56
-    },
-    {
-      "id": 8144,
-      "actor": {
-        "name": "Dick Schoof",
-        "party": "Onafhankelijk"
-      },
-      "char_count": 1246,
-      "word_count": 227,
-      "sentence_count": 9,
-      "syllable_count": 345,
-      "long_word_count": 38,
-      "unique_word_count": 123,
-      "token_count": 278
-    },
-    {
       "id": 8145,
       "actor": {
         "name": "Don Ceder",
@@ -279159,20 +279061,6 @@
       "long_word_count": 33,
       "unique_word_count": 80,
       "token_count": 157
-    },
-    {
-      "id": 8517,
-      "actor": {
-        "name": "Stephan van Baarle",
-        "party": "DENK"
-      },
-      "char_count": 817,
-      "word_count": 130,
-      "sentence_count": 7,
-      "syllable_count": 227,
-      "long_word_count": 29,
-      "unique_word_count": 90,
-      "token_count": 181
     },
     {
       "id": 8518,
