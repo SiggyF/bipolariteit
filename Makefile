@@ -75,10 +75,9 @@ embed: ## Plenaire-kaart-pijplijn stage 1 -- documenten embedden met bge-m3, inc
 		--start $(EMBED_START) --end $(EMBED_END) --label $(EMBED_LABEL) \
 		$(if $(EMBED_FULL_RANGE_TOPICS),--full-range-topics $(EMBED_FULL_RANGE_TOPICS),) --base-url $$url
 
-umap: ## Plenaire-kaart-pijplijn stage 2a -- UMAP op de embeddings (host-only qua geheugengebruik op de volle dataset, zie docs/handoff.md). Schrijft alleen coördinaten weg voor `make cluster-plenary-map`, GEEN clustering/labeling. Vars: EMBED_START, EMBED_END, EMBED_LABEL, BASE_URL
-	@url=$$($(RESOLVE_BASE_URL)) || exit 1; \
+umap: ## Plenaire-kaart-pijplijn stage 2a -- UMAP op de embeddings (host-only qua geheugengebruik op de volle dataset, zie docs/handoff.md). Verwacht dat `make embed` al gedraaid is (volledige cache-hit, praat zelf niet met LM Studio). Schrijft alleen coördinaten weg voor `make cluster-plenary-map`, GEEN clustering/labeling. Vars: EMBED_START, EMBED_END, EMBED_LABEL
 	uv run python -m pipeline.plenary_map.cluster \
-		--start $(EMBED_START) --end $(EMBED_END) --label $(EMBED_LABEL) --base-url $$url \
+		--start $(EMBED_START) --end $(EMBED_END) --label $(EMBED_LABEL) \
 		--skip-clustering --export-coords docs/poc/umap-documenten/coords-$(EMBED_LABEL).json
 
 cluster-plenary-map: ## Plenaire-kaart-pijplijn stage 2b -- hiërarchische clustering + TF-IDF-labels op de coördinaten van `make umap` (geen UMAP, geen LLM-call, dus overal draaibaar). Vars: EMBED_START, EMBED_END, EMBED_LABEL, CLUSTER_LEVEL_SIZES, EXPORT_SUFFIX
