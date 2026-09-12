@@ -5,6 +5,7 @@ import { debateId } from "../../lib/debateId";
 import { debateName } from "../../lib/debateName";
 import { debateThumbnailUrl } from "../../lib/debateThumbnail";
 import { resolveDataBaseUrl } from "../../lib/dataBaseUrl";
+import { formatDate } from "../../lib/formatDate";
 
 // Route puur op debateId(raw_video_url), niet genest onder een topic-slug:
 // welke links (persoon/topic-pagina's) hier precies naartoe gaan verwijzen
@@ -42,16 +43,24 @@ export function getStaticPaths() {
 		let videoUrl: string | null = null;
 		let rawVideoUrl: string | null = null;
 		let posterUrl: string | null = null;
+		// Vroegste published_at van alle spreekbeurten in dit debat -- zelfde
+		// aanpak als DebateList.vue's earliestPublishedAt, want een debat kan
+		// over middernacht heen lopen en de eerste spreekbeurt is dan de
+		// betrouwbaarste datum-indicator.
+		let publishedAt: string | null = null;
 		for (const argument of entry.arguments) {
 			videoUrl ??= argument.document.video_url ?? null;
 			rawVideoUrl ??= argument.document.raw_video_url ?? null;
 			posterUrl ??= debateThumbnailUrl(argument.document.video_url, argument.document.published_at, argument.start_seconds);
+			if (argument.document.published_at && (!publishedAt || argument.document.published_at < publishedAt)) {
+				publishedAt = argument.document.published_at;
+			}
 		}
-		return { params: { id }, props: { topicSlug: entry.topicSlug, videoUrl, rawVideoUrl, posterUrl } };
+		return { params: { id }, props: { topicSlug: entry.topicSlug, videoUrl, rawVideoUrl, posterUrl, publishedAt } };
 	});
 }
 
-const { topicSlug, videoUrl, rawVideoUrl, posterUrl } = Astro.props;
+const { topicSlug, videoUrl, rawVideoUrl, posterUrl, publishedAt } = Astro.props;
 const { id } = Astro.params;
 const name = debateName(videoUrl);
 const title = `${name ?? "Debat"} - Bipolariteit`;
@@ -60,6 +69,7 @@ const title = `${name ?? "Debat"} - Bipolariteit`;
 <BaseLayout title={title}>
 	<a href={`/onderwerpen/${topicSlug}/`} class="back-link">&larr; terug naar {topicSlug}</a>
 	<h1 class="debate-title">{name ?? "Debat"}</h1>
+	<p class="debate-date mono">{formatDate(publishedAt)}</p>
 	<DebateVideoView
 		debateId={id}
 		topicSlug={topicSlug}
@@ -73,5 +83,13 @@ const title = `${name ?? "Debat"} - Bipolariteit`;
 <style>
 	.debate-title {
 		margin-top: var(--space-1);
+		margin-bottom: 0;
+	}
+
+	.debate-date {
+		font-size: var(--step--1);
+		font-weight: 500;
+		color: var(--color-muted);
+		margin-top: 0;
 	}
 </style>

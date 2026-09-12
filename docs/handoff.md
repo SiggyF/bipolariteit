@@ -2,6 +2,37 @@
 
 Status per 2026-07-27. Zie `docs/plan.md` voor het volledige, goedgekeurde architectuurplan. Dit document is voor het vervolg: wat staat er al, wat is er onderweg ontdekt, en wat is de volgende concrete stap.
 
+## Stand bij einde sessie (2026-09-12, video-shorts vereenvoudigd naar landscape, issue #268) — begin hier bij een nieuwe sessie
+
+Vervolg op de sessie hieronder: op verzoek van de gebruiker is de verticale
+9:16-crop (en daarmee de hele OpenCV-gezichtsdetectie) losgelaten. De 4
+huidige steekproefclips in `bipolariteit-data` (`shorts/`) zijn nu gewoon
+landscape (960x540, originele 16:9), zonder crop. `scripts/build_shorts_sample.py`
+is dienovereenkomstig vereenvoudigd (`render_clip` schaalt alleen nog,
+geen `extract_frame`/`detect_speaker_x_fraction`/`build_crop_x_expr` meer),
+`opencv-python-headless` is uit `pyproject.toml`/`uv.lock`. De
+selectie-restricties die alleen voor de crop-betrouwbaarheid bestonden
+(`turn_type='woordvoerder'`, alleen plenaire zaal) zijn ook losgelaten —
+zonder crop maakt de cameravoering niet meer uit, dus commissiezalen en
+interrupties doen nu ook mee. Nog steeds niet gebouwd: de eigenlijke
+homepage-previewcomponent uit issue #268 zelf.
+
+## Stand bij einde sessie (2026-09-07 avond, video-shorts steekproef, issue #268) — begin hier bij een nieuwe sessie
+
+**Resultaat van de avond staat in geen verhouding tot de tijd die erin ging.** Concreet opgeleverd: 8 verticale (9:16) preview-clips + `manifest.json` in `bipolariteit-data` (`shorts/`), plus twee kleine, op zichzelf staande fixes die tussendoor zijn meegenomen (ffmpeg in de devcontainer, en een bug waarbij de debatdatum nergens zichtbaar was — zie onder). Dat is veel minder dan er in een avond had gepast; de reden staat hieronder, zonder het mooier te maken dan het was.
+
+**Procesfout, niet verdoezelen**: het overgrote deel van de sessie ging op aan het kiezen van een crop-positioneringsmethode voor de verticale video, niet aan de video's zelf:
+1. Eerste aanpak: een vision-LLM (qwen/qwen3.6-27b via LM Studio) laten kijken naar een frame en de positie van de spreker laten teruggeven. Werkte een enkele keer in een handmatige test, maar liep in de batch-run herhaaldelijk vast — timeouts, lege antwoorden, en minutenlange hangs zonder duidelijke oorzaak. Er is te lang doorgeknutseld aan deze aanpak (hogere timeouts, meer tokens, een retry) in plaats van na de eerste paar mislukkingen de aanpak zelf ter discussie te stellen.
+2. Onderweg ook een tijdelijke "fallback naar center-crop bij mislukte detectie" gebouwd, terwijl de gebruiker expliciet had aangegeven geen fallbacks te willen — moest terugdraaien en de foutafhandeling opnieuw doen (mislukte detectie = clip overslaan, niet gokken).
+3. Pas na expliciete, herhaalde ongeduld-signalen van de gebruiker overgestapt op een lokale OpenCV Haar-cascade-detectie — geen netwerk, milliseconden per frame, en meteen stabiel. Dit had de eerste keuze moeten zijn: geen externe afhankelijkheid, geen latency-risico, en achteraf ruim voldoende nauwkeurig (8/10 bruikbaar op de eerste run, na een gerichte fix — alleen plenaire zaal, geen interrupties — voor de twee mislukkingen).
+4. Ook de review zelf ging moeizaam: afbeeldingen getoond via de tool-uitvoer kwamen niet aan bij de gebruiker, en pas na meerdere keren "ik zie niks" is overgestapt op bestanden direct in de workspace zetten. Had eerder getest moeten worden of beeldweergave uberhaupt aankwam, in plaats van dezelfde methode een aantal keer te herhalen.
+
+**Wat wél goed ging**: de selectielogica (tags + interruptiebonus, alleen `turn_type='woordvoerder'`, alleen plenaire zaal) werkte in één keer goed en leverde herkenbare, emotioneel geladen fragmenten op (BBB/stikstof, asielcommissiedebatten, abortus). Ook de twee losstaande fixes (ffmpeg-devcontainer, debatdatum) waren scherp afgebakend en snel geverifieerd.
+
+**Nog te doen** (issue #268 zelf is dus nog niet gebouwd, alleen de datasteekproef ervoor):
+- Geen frontend-pagina/component toont deze shorts nog — de eigenlijke homepage-preview (waar issue #268 om vraagt) moet nog gebouwd worden.
+- De huidige steekproef is klein (8 clips, 5 sprekers deels dubbel) en beperkt tot de plenaire zaal — met de nu werkende, snelle OpenCV-pipeline (~10s/clip, geen LLM-latency) is opschalen naar een groter aantal debatten in principe goedkoop; commissiezalen zijn bewust uitgesloten (camera toont daar vaak niet de spreker, zie `scripts/build_shorts_sample.py`'s moduledocstring) en zouden een andere aanpak nodig hebben om ook mee te nemen.
+- Bij het opschalen: het frame voor gezichtsdetectie wordt nu op het exacte begin van de clip gepakt, wat één keer een brede overzichtsopname trof i.p.v. de close-up (uitzending zoomt soms pas na een seconde of twee in) — een frame iets later in de clip nemen is een goedkope verbetering, niet gedaan in deze sessie.
 ## Stand bij einde sessie (2026-09-10, embedcache naar parquet + OOM-crash op de volle-dataset-embed opgelost, issue #281) — begin hier bij een nieuwe sessie
 
 **Context**: op `feature/281-embed-pipeline-en-crawl-fixes` (1 bestaande commit, nog niet gepusht/PR'd; issue #281 zelf staat nog open). `make embed` op de volle dataset (`--start 2000-01-01 --end vandaag --label full`, ~767.700 documenten na filtering) crashte met `Error 137` (SIGKILL, OOM) — ná het eigenlijke, dure embedden (632.110 nieuwe vectoren in 21.021,9s, plus 135.590 al gecacet), dus in het samenvoegen tot het eindresultaat.
