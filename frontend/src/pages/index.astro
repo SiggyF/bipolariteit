@@ -202,7 +202,12 @@ for (const mod of Object.values(topicModules as any) as any[]) {
 	   debattitel ("Samenhangende aanpak landbouw natuur en stikstof") is een
 	   stuk langer dan een partij- of onderwerpnaam en verdrinkt anders in
 	   drie/vier regels op een te smalle tegel. */
+	/* auto-fit i.p.v. auto-fill: laat lege kolombanen instorten als er
+	   minder tegels zijn dan er op deze breedte zouden passen (bv. minder
+	   dan 4 uitgelichte debatten) -- anders blijven die banen meetellen voor
+	   de 1fr-verdeling en worden de tegels smaller dan in de fragmentensectie
+	   erboven (HomeVideoPreview.vue), die dezelfde minmax gebruikt. */
 	.highlighted-debates .card-grid {
-		grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+		grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
 	}
 </style>

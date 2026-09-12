@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { reactive, ref } from "vue";
 import { debateId } from "../lib/debateId";
+import { debateName } from "../lib/debateName";
 import { displayPartyName } from "../lib/parties";
 import { formatDate } from "../lib/formatDate";
 import { tagIconPath, tagKleur } from "../lib/tagIcon";
+import { formatClock } from "../lib/videoTime";
 import PartyLogo from "./PartyLogo.vue";
 
 // Issue #268: i.p.v. de volledige speler (DebateVideoView) toont de homepage
@@ -22,6 +24,7 @@ const TILE_COUNT = 4;
 interface ShortsManifestEntry {
 	debatdirect_id: string;
 	raw_video_url: string;
+	video_url: string | null;
 	published_at: string | null;
 	topic_slug: string;
 	topic_name: string;
@@ -63,8 +66,12 @@ fetch(`${props.dataBaseUrl}/shorts/manifest.json`)
 function clipUrl(entry: ShortsManifestEntry): string {
 	return `${props.dataBaseUrl}/shorts/${entry.bestand}`;
 }
+// ?t=<seconden>: zelfde patroon als VideoPlayer.vue's debateHrefWithTime --
+// een teaser die doorlinkt naar de volledige debatpagina neemt de
+// afspeelpositie mee, zodat je daar niet weer bij 0:00 begint maar bij het
+// getoonde fragment.
 function debateHref(entry: ShortsManifestEntry): string {
-	return `/debatten/${debateId(entry.raw_video_url)}/`;
+	return `/debatten/${debateId(entry.raw_video_url)}/?t=${Math.floor(entry.clip_start_seconds)}`;
 }
 
 // Play-on-hover (zoals YouTube's hover-preview op een thumbnail), i.p.v.
@@ -162,6 +169,11 @@ function toggleMuted(entry: ShortsManifestEntry, event: MouseEvent) {
 								</svg>
 							</span>
 						</span>
+						<!-- Tijdstip van het fragment IN het debat (niet de clipduur) --
+						     zelfde plek/stijl als YouTube's duurbadge, maar hier het
+						     startpunt: geeft aan waar in het debat dit moment zit, en
+						     komt overeen met de ?t= in debateHref() hierboven. -->
+						<span class="fragment-time-pointer">{{ formatClock(entry.clip_start_seconds) }}</span>
 						<div class="preview-caption">
 							<p class="preview-quote">&ldquo;{{ entry.citaat }}&rdquo;</p>
 						</div>
@@ -170,6 +182,7 @@ function toggleMuted(entry: ShortsManifestEntry, event: MouseEvent) {
 						<PartyLogo v-if="entry.partij" :party="entry.partij" :title="displayPartyName(entry.partij)" />
 						{{ entry.spreker }}
 					</span>
+					<span v-if="debateName(entry.video_url)" class="fragment-debate-title">{{ debateName(entry.video_url) }}</span>
 					<span class="card-tile-subtitle">{{ entry.topic_name }}</span>
 					<span class="card-tile-count">{{ formatDate(entry.published_at) }}</span>
 				</a>
@@ -181,9 +194,15 @@ function toggleMuted(entry: ShortsManifestEntry, event: MouseEvent) {
 <style scoped>
 /* Bredere kolommen dan .card-grid's 140px-default (main.css): een 16:9-video
    heeft meer ruimte nodig dan een topic-still om herkenbaar te blijven --
-   zelfde aanpak als index.astro's .highlighted-debates .card-grid. */
+   zelfde minmax als index.astro's .highlighted-debates .card-grid, zodat
+   beide secties op dezelfde tegelbreedte uitkomen. auto-fit i.p.v. auto-fill:
+   met minder tegels dan er kolommen passen, laat auto-fill de resterende
+   (lege) kolombanen toch meetellen voor de 1fr-verdeling -- de tegels worden
+   dan smaller dan in de sectie eronder, die toevallig wél evenveel kolommen
+   als tegels heeft. auto-fit laat lege banen instorten, dus de tegels
+   vullen altijd de volle rijbreedte, ongeacht het aantal. */
 .card-grid--fragmenten {
-	grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+	grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
 }
 
 /* Overlay rechtsboven op de video (mute-knop staat linksboven, zie
@@ -261,6 +280,28 @@ function toggleMuted(entry: ShortsManifestEntry, event: MouseEvent) {
 
 .preview-mute-toggle:hover {
 	background: rgba(0, 0, 0, 0.75);
+}
+
+/* Zelfde plek/stijl als YouTube's duurbadge (rechtsonder op de thumbnail),
+   maar hier het startpunt van het fragment ín het debat i.p.v. de clipduur
+   -- zie de template-comment bij .fragment-time-pointer. */
+.fragment-time-pointer {
+	position: absolute;
+	bottom: var(--space-1);
+	right: var(--space-1);
+	z-index: 1;
+	padding: 1px 5px;
+	border-radius: 3px;
+	background: rgba(0, 0, 0, 0.7);
+	color: #fff;
+	font-family: var(--font-mono);
+	font-size: var(--step--1);
+	font-variant-numeric: tabular-nums;
+}
+
+.fragment-debate-title {
+	font-size: var(--step--1);
+	line-height: 1.3;
 }
 
 /* Gradient onder de tekst i.p.v. een vlak vlak: houdt het citaat leesbaar

@@ -102,6 +102,7 @@ def fetch_candidates(conn, since_days):
             a.end_seconds,
             d.debatdirect_id,
             d.raw_video_url,
+            d.video_url,
             d.tweedekamer_activiteit_url,
             d.published_at,
             act.name AS spreker,
@@ -243,12 +244,15 @@ def build_manifest_entry(entry):
     `debateId(raw_video_url)` (frontend/src/lib/debateId.ts) kan toepassen om
     naar de volledige /debatten/[id]/-pagina te linken -- dezelfde sleutel
     herimplementeren in Python zou de FNV-1a-hash op twee plekken uit sync
-    kunnen laten lopen."""
+    kunnen laten lopen. Zelfde reden voor `video_url`: de frontend leidt de
+    debattitel daaruit af (lib/debateName.ts), geen los "titel"-veld
+    herimplementeren in Python."""
     row = entry["row"]
     start, duration = clip_window(row)
     return {
         "debatdirect_id": row["debatdirect_id"],
         "raw_video_url": row["raw_video_url"],
+        "video_url": row["video_url"],
         "published_at": row["published_at"],
         "topic_slug": row["topic_slug"],
         "topic_name": row["topic_name"],
