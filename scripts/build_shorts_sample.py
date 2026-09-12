@@ -1,7 +1,8 @@
 """
 Experiment voor issue #268 (homepage-videopreview, TikTok/Shorts-stijl):
 snijdt uit een steekproef debatten telkens het meest "emotionele" fragment,
-gecropt naar verticaal 9:16, als losse mp4's + manifest.json.
+op de originele 16:9-beeldverhouding (geen crop), als losse mp4's +
+manifest.json.
 
 Selectie (issue-discussie): tag-gebaseerd, met interrupties als bonus. Een
 argument scoort hoger naarmate het meer van deze tags heeft --
@@ -14,18 +15,11 @@ een proxy voor "reuring in de zaal", niet zelf een sentimentsignaal.
 Bewust GEEN nieuwe LLM-pass: dit hergebruikt tags die tag_arguments.py al
 heeft toegekend, dus geen extra kosten/latency voor deze steekproef.
 
-Video-crop: een vaste center-crop naar 9:16 bleek in de praktijk onbetrouwbaar
--- de TK-camera volgt niet altijd het spreekgestoelte (commissiezalen,
-brede tafelopstellingen), dus de spreker viel regelmatig buiten een simpele
-middelste crop (empirisch gevonden op meerdere zalen, zie git-historie van
-dit bestand). Een lokaal vision-LLM (qwen via LM Studio) is hiervoor ook
-geprobeerd, maar bleek in de praktijk te traag/instabiel voor een
-batch-script (minutenlange hangs, lege antwoorden) -- vervangen door OpenCV's
-ingebouwde Haar-cascade gezichtsdetectie (haarcascade_frontalface_default.xml,
-gebundeld met opencv-python-headless, zie cv2.data.haarcascades -- LET OP:
-opencv-python-headless is expliciet <5 gepind, want CascadeClassifier bestaat
-niet meer in OpenCV 5.x): lokaal, deterministisch, milliseconden per frame,
-geen netwerk-afhankelijkheid.
+Eerdere versie cropte naar verticaal 9:16 (spreker gelokaliseerd via een
+lokaal vision-LLM, later vervangen door OpenCV-gezichtsdetectie) -- beide
+bleken meer complexiteit dan waarde voor deze steekproef (zie
+docs/handoff.md), dus laten we de crop hier los en tonen we de clip zoals
+de bron 'm aanlevert.
 
 Output: data/export/gepubliceerd/shorts/<debatdirect_id>.mp4 + manifest.json
 in dezelfde map (debat, spreker, partij, citaat, tags, clip-venster) -- de
@@ -44,11 +38,8 @@ import argparse
 import json
 import logging
 import subprocess
-import tempfile
 from datetime import datetime
-from pathlib import Path
 
-import cv2
 import requests
 
 from pipeline.check_video_urls import check_manifest
@@ -59,8 +50,6 @@ from pipeline.paths import REPO_ROOT
 logger = logging.getLogger(__name__)
 
 OUTPUT_DIR = REPO_ROOT / "data" / "export" / "gepubliceerd" / "shorts"
-
-FACE_CASCADE_PATH = Path(cv2.data.haarcascades) / "haarcascade_frontalface_default.xml"
 
 # Tag -> gewicht. Hoger = sterker signaal voor een "emotioneel moment".
 TAG_WEIGHTS = {
@@ -78,13 +67,13 @@ POST_ROLL_SECONDS = 1.0
 MIN_CLIP_SECONDS = 8.0
 MAX_CLIP_SECONDS = 18.0
 
-# 720x1280 i.p.v. volle 1080x1920: dit is een gemuted-of-klein homepage-
+# 960x540 i.p.v. de volle bronresolutie: dit is een gemuted-of-klein homepage-
 # previewtegeltje (zoals YouTube's eigen hover-previews, die ook ruim onder
 # de bron-resolutie zitten), geen vervanging van de echte debatpagina --
-# scheelt ~2-3x in bestandsgrootte voor de (publieke, git-versiebeheerde)
+# scheelt in bestandsgrootte voor de (publieke, git-versiebeheerde)
 # data-submodule zonder zichtbaar kwaliteitsverlies op een preview-tegel.
-OUTPUT_WIDTH = 720
-OUTPUT_HEIGHT = 1280
+OUTPUT_WIDTH = 960
+OUTPUT_HEIGHT = 540
 
 
 def fetch_candidates(conn):
@@ -113,21 +102,6 @@ def fetch_candidates(conn):
           AND a.end_seconds IS NOT NULL
           AND d.raw_video_url IS NOT NULL
           AND d.debatdirect_id IS NOT NULL
-          -- Alleen hoofdredes vanaf het spreekgestoelte, geen interrupties:
-          -- de camera volgt bij een interruptie de roving mic op de eigen
-          -- zitplaats, niet de spreker, dus een center-crop snijdt daar
-          -- vaak de verkeerde persoon uit beeld (empirisch gevonden op
-          -- argument 4632, Michiel van Nispen).
-          AND d.turn_type = 'woordvoerder'
-          -- Alleen de plenaire zaal: daar filmt de camera altijd de ene
-          -- spreker op het spreekgestoelte van dichtbij, dus "grootste
-          -- gezicht in beeld" is daar betrouwbaar de spreker. In
-          -- commissiezalen (Troelstrazaal, Groen van Prinstererzaal,
-          -- Klompezaal, ...) zitten meerdere mensen aan een tafel in beeld;
-          -- daar bleek het grootste gezicht regelmatig een ander
-          -- Kamerlid/de griffier te zijn, niet de spreker (empirisch
-          -- gevonden op meerdere gerenderde clips, zie git-historie).
-          AND d.raw_video_url LIKE '%/plenairezaal/%'
           AND a.id IN (
               SELECT argument_id FROM argument_tags WHERE tag_sleutel IN ({placeholders})
           )
@@ -207,90 +181,11 @@ def clip_window(row):
     return start, duration
 
 
-def extract_frame(raw_video_url, timestamp_seconds, output_path):
-    """Eén enkel frame uit het ONgecropte 16:9-bronbeeld op
-    `timestamp_seconds` -- de gezichtspositie die OpenCV hierop vindt wordt
-    later (zie build_crop_x_expr) uitgedrukt als fractie van de breedte, dus
-    onafhankelijk van de uiteindelijke exportresolutie. Volle resolutie
-    (geen scale=480 meer, was zuinig-op-vision-tokens voor de vervangen
-    LLM-aanpak) -- een Haar-cascade heeft meer pixels nodig om kleine/verre
-    gezichten te vinden."""
-    command = [
-        "ffmpeg",
-        "-y",
-        "-ss",
-        f"{timestamp_seconds:.2f}",
-        "-extension_picky",
-        "0",
-        "-i",
-        raw_video_url,
-        "-frames:v",
-        "1",
-        "-update",
-        "1",
-        str(output_path),
-    ]
-    subprocess.run(command, check=True, capture_output=True, text=True, timeout=60)
-
-
-class FaceDetectionError(Exception):
-    """Geen gezicht gevonden op het frame. Bewust geen fallback naar een
-    gegokte center-crop -- de aanroeper slaat deze clip dan over."""
-
-
-_face_cascade = None
-
-
-def get_face_cascade():
-    """Lazy-loaded, één keer per proces -- cv2.CascadeClassifier inladen
-    kost duidelijk meetbare tijd, niet iets om per clip te herhalen."""
-    global _face_cascade
-    if _face_cascade is None:
-        _face_cascade = cv2.CascadeClassifier(str(FACE_CASCADE_PATH))
-        if _face_cascade.empty():
-            raise RuntimeError(f"kon Haar-cascade niet laden: {FACE_CASCADE_PATH}")
-    return _face_cascade
-
-
-def detect_speaker_x_fraction(frame_path):
-    """Grootste gedetecteerde gezicht op `frame_path` (áls meerdere mensen in
-    beeld zijn, is de spreker vrijwel altijd degene die het dichtst bij de
-    camera/lectern staat en dus het grootste gezicht heeft -- geen aparte
-    "wie spreekt er" classificatie nodig, i.t.t. de vervangen LLM-aanpak).
-    Geeft de horizontale positie van het midden van dat gezicht terug als
-    fractie (0.0-1.0) van de framebreedte. Gooit FaceDetectionError als er
-    geen enkel gezicht gevonden wordt."""
-    image = cv2.imread(str(frame_path))
-    if image is None:
-        raise FaceDetectionError(f"kon frame niet lezen: {frame_path}")
-    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    faces = get_face_cascade().detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5, minSize=(40, 40))
-    if len(faces) == 0:
-        raise FaceDetectionError("geen gezicht gevonden")
-    x, _y, w, _h = max(faces, key=lambda face: face[2] * face[3])
-    width = image.shape[1]
-    return (x + w / 2) / width
-
-
-def build_crop_x_expr(x_fraction):
-    """ffmpeg-filterexpressie voor de linker-x van de 9:16-crop, gecentreerd
-    op x_fraction*iw (het door het vision-model aangewezen gezicht) --
-    geclampt zodat de crop nooit buiten het bronbeeld valt. Komma's binnen
-    min()/max() moeten ge-escaped worden (\\,) -- de -vf-waarde wordt eerst
-    op ongeëscapete komma's gesplitst in een filterketen (crop=...,scale=...),
-    dus een letterlijke "," in dit expressie-argument brak dat eerder in
-    losse, ongeldige filternamen."""
-    expr = f"min(max((iw*{x_fraction:.4f})-out_w/2,0),iw-out_w)"
-    return expr.replace(",", "\\,")
-
-
-def render_clip(raw_video_url, start_seconds, duration_seconds, output_path, x_fraction):
-    """Snijdt en cropt met ffmpeg direct uit het HLS-manifest -- geen aparte
-    downloadstap. Crop naar 9:16 gecentreerd op x_fraction (zie
-    detect_speaker_x_fraction/moduledocstring), daarna geschaald naar
+def render_clip(raw_video_url, start_seconds, duration_seconds, output_path):
+    """Snijdt met ffmpeg direct uit het HLS-manifest -- geen aparte
+    downloadstap, geen crop: schaalt de originele 16:9-beeldverhouding naar
     OUTPUT_WIDTH x OUTPUT_HEIGHT."""
     output_path.parent.mkdir(parents=True, exist_ok=True)
-    crop_x = build_crop_x_expr(x_fraction)
     command = [
         "ffmpeg",
         "-y",
@@ -309,7 +204,7 @@ def render_clip(raw_video_url, start_seconds, duration_seconds, output_path, x_f
         "-t",
         f"{duration_seconds:.2f}",
         "-vf",
-        f"crop=ih*9/16:ih:{crop_x}:0,scale={OUTPUT_WIDTH}:{OUTPUT_HEIGHT}",
+        f"scale={OUTPUT_WIDTH}:{OUTPUT_HEIGHT}",
         "-c:v",
         "libx264",
         "-preset",
@@ -404,21 +299,8 @@ def main():
         start, duration = clip_window(entry["row"])
         output_path = OUTPUT_DIR / manifest_entry["bestand"]
 
-        # Eén frame aan het begin van het clip-venster is genoeg om de
-        # spreker te lokaliseren -- geen losse frames door de hele clip heen
-        # nodig, de camera staat binnen zo'n korte clip vrijwel altijd stil.
-        with tempfile.TemporaryDirectory() as tmp_dir:
-            frame_path = Path(tmp_dir) / "frame.png"
-            try:
-                extract_frame(entry["row"]["raw_video_url"], start, frame_path)
-                x_fraction = detect_speaker_x_fraction(frame_path)
-            except (subprocess.CalledProcessError, subprocess.TimeoutExpired, FaceDetectionError) as exc:
-                logger.error("Crop-detectie mislukt voor %s, clip overgeslagen: %s", entry["row"]["debatdirect_id"], exc)
-                continue
-        logger.info("crop x_fraction=%.3f voor %s", x_fraction, entry["row"]["debatdirect_id"])
-
         try:
-            render_clip(entry["row"]["raw_video_url"], start, duration, output_path, x_fraction)
+            render_clip(entry["row"]["raw_video_url"], start, duration, output_path)
         except subprocess.CalledProcessError as exc:
             logger.error("ffmpeg faalde voor %s: %s", entry["row"]["debatdirect_id"], exc.stderr[-2000:])
             continue

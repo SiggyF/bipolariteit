@@ -9,10 +9,10 @@ FROM mcr.microsoft.com/devcontainers/base:ubuntu
 # scripts/experiment_umap_documents.py) uit source te bouwen -- er is geen
 # prebuilt aarch64/py3.14-wheel, dus zonder deze laag faalt `uv sync
 # --all-groups`/`--group experiments` op een gcc-fout.
-# ffmpeg: nodig om korte, verticaal gecropte preview-clips uit de
-# HLS-livestreams (raw_video_url, .m3u8) te snijden voor de video-shorts
-# (issue #268) -- ffmpeg kan zelf op tijdstip seeken/segmenten pakken uit een
-# m3u8-manifest, dus geen aparte download-stap nodig.
+# ffmpeg: nodig om korte preview-clips uit de HLS-livestreams
+# (raw_video_url, .m3u8) te snijden voor de video-shorts (issue #268) --
+# ffmpeg kan zelf op tijdstip seeken/segmenten pakken uit een m3u8-manifest,
+# dus geen aparte download-stap nodig.
 RUN apt-get update \
 	&& apt-get install -y --no-install-recommends \
 		python3.14 \

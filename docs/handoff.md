@@ -2,6 +2,21 @@
 
 Status per 2026-07-27. Zie `docs/plan.md` voor het volledige, goedgekeurde architectuurplan. Dit document is voor het vervolg: wat staat er al, wat is er onderweg ontdekt, en wat is de volgende concrete stap.
 
+## Stand bij einde sessie (2026-09-12, video-shorts vereenvoudigd naar landscape, issue #268) — begin hier bij een nieuwe sessie
+
+Vervolg op de sessie hieronder: op verzoek van de gebruiker is de verticale
+9:16-crop (en daarmee de hele OpenCV-gezichtsdetectie) losgelaten. De 4
+huidige steekproefclips in `bipolariteit-data` (`shorts/`) zijn nu gewoon
+landscape (960x540, originele 16:9), zonder crop. `scripts/build_shorts_sample.py`
+is dienovereenkomstig vereenvoudigd (`render_clip` schaalt alleen nog,
+geen `extract_frame`/`detect_speaker_x_fraction`/`build_crop_x_expr` meer),
+`opencv-python-headless` is uit `pyproject.toml`/`uv.lock`. De
+selectie-restricties die alleen voor de crop-betrouwbaarheid bestonden
+(`turn_type='woordvoerder'`, alleen plenaire zaal) zijn ook losgelaten —
+zonder crop maakt de cameravoering niet meer uit, dus commissiezalen en
+interrupties doen nu ook mee. Nog steeds niet gebouwd: de eigenlijke
+homepage-previewcomponent uit issue #268 zelf.
+
 ## Stand bij einde sessie (2026-09-07 avond, video-shorts steekproef, issue #268) — begin hier bij een nieuwe sessie
 
 **Resultaat van de avond staat in geen verhouding tot de tijd die erin ging.** Concreet opgeleverd: 8 verticale (9:16) preview-clips + `manifest.json` in `bipolariteit-data` (`shorts/`), plus twee kleine, op zichzelf staande fixes die tussendoor zijn meegenomen (ffmpeg in de devcontainer, en een bug waarbij de debatdatum nergens zichtbaar was — zie onder). Dat is veel minder dan er in een avond had gepast; de reden staat hieronder, zonder het mooier te maken dan het was.
