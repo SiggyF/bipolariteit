@@ -38,8 +38,11 @@ import time
 from datetime import datetime, timezone
 from pathlib import Path
 
+from dask.distributed import as_completed
+
 from pipeline.dask_client import make_client
 from pipeline.db import db
+from pipeline.hf_pricing import get_baseline_pricing, price_still_matches
 from pipeline.llm_client import call_llm
 from pipeline.llm_log import record_llm_call
 from pipeline.periodes import PeriodeIndex
@@ -317,6 +320,14 @@ def main():
     total_errors = 0
     latencies = []
 
+    # Prijs vooraf vastleggen (alleen zinvol tegen de HF-router, zie
+    # pipeline/hf_pricing.py) en tijdens de run periodiek herchecken -- een
+    # provider kan halverwege een lange batch stilletjes gaan rekenen (zie
+    # de OVHcloud/Qwen-observatie in docs/handoff.md), en dat mag onopgemerkt
+    # geen kosten opleveren. Een prijsdáling is geen reden om te stoppen.
+    price_baseline = get_baseline_pricing(args.model, args.base_url)
+    PRICE_CHECK_INTERVAL = 100
+
     if args.parallel:
         client = make_client(dashboard=True)
         logger.info("Parallelle modus: %d LLM-calls verdeeld over dask (dashboard: %s)", len(documents), client.dashboard_link)
@@ -326,16 +337,28 @@ def main():
             reasoning_effort=args.reasoning_effort, timeout=args.timeout, max_tokens=args.max_tokens,
             api_key=args.api_key,
         )
-        results = client.gather(futures)
+        results = []
+        for i, future in enumerate(as_completed(futures), 1):
+            results.append(future.result())
+            if i % PRICE_CHECK_INTERVAL == 0 and not price_still_matches(args.model, args.base_url, price_baseline):
+                remaining = [f for f in futures if not f.done()]
+                logger.error(
+                    "Batch afgebroken na %d/%d documenten wegens prijsstijging (%d resterende taken geannuleerd).",
+                    i, len(documents), len(remaining),
+                )
+                client.cancel(remaining)
+                break
         client.close()
     else:
-        results = [
-            _extract_one(
+        results = []
+        for i, doc in enumerate(documents, 1):
+            results.append(_extract_one(
                 doc, topic_name, topic_description, args.model, args.base_url, args.reasoning_effort,
                 args.timeout, args.max_tokens, args.api_key,
-            )
-            for doc in documents
-        ]
+            ))
+            if i % PRICE_CHECK_INTERVAL == 0 and not price_still_matches(args.model, args.base_url, price_baseline):
+                logger.error("Batch afgebroken na %d/%d documenten wegens prijsstijging.", i, len(documents))
+                break
 
     for r in results:
         doc, elapsed, started_at = r["doc"], r["elapsed"], r["started_at"]
