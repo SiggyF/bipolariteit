@@ -328,39 +328,14 @@ def main():
     price_baseline = get_baseline_pricing(args.model, args.base_url)
     PRICE_CHECK_INTERVAL = 100
 
-    if args.parallel:
-        client = make_client(dashboard=True)
-        logger.info("Parallelle modus: %d LLM-calls verdeeld over dask (dashboard: %s)", len(documents), client.dashboard_link)
-        futures = client.map(
-            _extract_one, documents,
-            topic_name=topic_name, topic_description=topic_description, model=args.model, base_url=args.base_url,
-            reasoning_effort=args.reasoning_effort, timeout=args.timeout, max_tokens=args.max_tokens,
-            api_key=args.api_key,
-        )
-        results = []
-        for i, future in enumerate(as_completed(futures), 1):
-            results.append(future.result())
-            if i % PRICE_CHECK_INTERVAL == 0 and not price_still_matches(args.model, args.base_url, price_baseline):
-                remaining = [f for f in futures if not f.done()]
-                logger.error(
-                    "Batch afgebroken na %d/%d documenten wegens prijsstijging (%d resterende taken geannuleerd).",
-                    i, len(documents), len(remaining),
-                )
-                client.cancel(remaining)
-                break
-        client.close()
-    else:
-        results = []
-        for i, doc in enumerate(documents, 1):
-            results.append(_extract_one(
-                doc, topic_name, topic_description, args.model, args.base_url, args.reasoning_effort,
-                args.timeout, args.max_tokens, args.api_key,
-            ))
-            if i % PRICE_CHECK_INTERVAL == 0 and not price_still_matches(args.model, args.base_url, price_baseline):
-                logger.error("Batch afgebroken na %d/%d documenten wegens prijsstijging.", i, len(documents))
-                break
-
-    for r in results:
+    def process_result(r):
+        """Schrijft één resultaat direct weg zodra het binnenkomt -- i.p.v.
+        eerst alle resultaten te verzamelen en pas daarna te verwerken, wat
+        bij --parallel alle voortgang/writes tot na de laatste taak zou
+        uitstellen (geen tussentijds zicht op voortgang, en bij een
+        onderbroken run meer al-uitgevoerd LLM-werk dat nooit weggeschreven
+        werd)."""
+        nonlocal total_arguments, total_claims, total_errors
         doc, elapsed, started_at = r["doc"], r["elapsed"], r["started_at"]
         if not r["ok"]:
             logger.error("[doc %5d] %-25s FOUT na %5.1fs: %s", doc["id"], doc["actor_name"], elapsed, r["error"])
@@ -371,7 +346,7 @@ def main():
                     prompt_version=PROMPT_VERSION, started_at=started_at, duration_s=elapsed,
                     status="error", error_message=r["error"],
                 )
-            continue
+            return
         latencies.append(elapsed)
         raw_content, usage, arguments = r["raw_content"], r["usage"], r["arguments"]
         if not args.dry_run:
@@ -418,6 +393,36 @@ def main():
         )
         total_arguments += n_valid
         total_claims += n_claims
+
+    if args.parallel:
+        client = make_client(dashboard=True)
+        logger.info("Parallelle modus: %d LLM-calls verdeeld over dask (dashboard: %s)", len(documents), client.dashboard_link)
+        futures = client.map(
+            _extract_one, documents,
+            topic_name=topic_name, topic_description=topic_description, model=args.model, base_url=args.base_url,
+            reasoning_effort=args.reasoning_effort, timeout=args.timeout, max_tokens=args.max_tokens,
+            api_key=args.api_key,
+        )
+        for i, future in enumerate(as_completed(futures), 1):
+            process_result(future.result())
+            if i % PRICE_CHECK_INTERVAL == 0 and not price_still_matches(args.model, args.base_url, price_baseline):
+                remaining = [f for f in futures if not f.done()]
+                logger.error(
+                    "Batch afgebroken na %d/%d documenten wegens prijsstijging (%d resterende taken geannuleerd).",
+                    i, len(documents), len(remaining),
+                )
+                client.cancel(remaining)
+                break
+        client.close()
+    else:
+        for i, doc in enumerate(documents, 1):
+            process_result(_extract_one(
+                doc, topic_name, topic_description, args.model, args.base_url, args.reasoning_effort,
+                args.timeout, args.max_tokens, args.api_key,
+            ))
+            if i % PRICE_CHECK_INTERVAL == 0 and not price_still_matches(args.model, args.base_url, price_baseline):
+                logger.error("Batch afgebroken na %d/%d documenten wegens prijsstijging.", i, len(documents))
+                break
 
     conn.close()
 
