@@ -9,7 +9,7 @@
 <script src="https://cdn.jsdelivr.net/npm/pmtiles@3/dist/pmtiles.js"></script>
 <style>
   :root { color-scheme: dark; }
-  html, body { margin: 0; padding: 0; height: 100%; background: #111; color: #eee; font: 14px/1.4 -apple-system, system-ui, sans-serif; }
+  html, body { margin: 0; padding: 0; height: 100%; background: #000; color: #eee; font: 14px/1.4 -apple-system, system-ui, sans-serif; }
   #map { position: absolute; inset: 0; }
   #panel {
     position: absolute; top: 8px; left: 8px; z-index: 1;
@@ -40,19 +40,32 @@
     (<code>thin_tile_points()</code>), zie issue #259 voor de meting die dat
     nodig maakte.
   </p>
+  <p>
+    Kleur = jaar van <code>published_at</code> (vaste, willekeurig ogende
+    kleur per jaar). MapLibre's circle-layer ondersteunt geen echte
+    GL-"screen"-blending (dat kan wél in <code>TiledPlenairMap.vue</code>'s
+    Canvas2D-renderer via <code>globalCompositeOperation</code>) -- hier
+    benaderd met lage dekking + <code>additive</code> laag-compositing van de
+    kaart-canvas zelf op een zwarte achtergrond.
+  </p>
 </div>
 <script>
   const protocol = new pmtiles.Protocol();
   maplibregl.addProtocol("pmtiles", protocol.tile);
 
-  const TOPIC_COLOR = [
-    "match", ["get", "topic"],
-    "stikstof", "#4a7a4a",
-    "abortus", "#a64d5f",
-    "asiel", "#c07a2e",
-    "energietransitie", "#3d6e8f",
-    "#a89e8c",
-  ];
+  // Vaste, willekeurig ogende maar deterministische kleur per jaar (golden-
+  // angle-hue-spreiding, zie pipeline/tiling/build_pyramid.py's
+  // point_priority() voor hetzelfde "deterministisch i.p.v. random-module"-
+  // idee). Jaren 2013-2026 live gecontroleerd in plenair-map-full.json.
+  const YEARS = ["2013","2014","2015","2016","2017","2018","2019","2020","2021","2022","2023","2024","2025","2026"];
+  const GOLDEN_ANGLE = 137.508;
+  function yearColor(year, index) {
+    const hue = (index * GOLDEN_ANGLE) % 360;
+    return `hsl(${hue.toFixed(1)} 85% 60%)`;
+  }
+  const YEAR_COLOR = ["match", ["slice", ["get", "published_at"], 0, 4]];
+  YEARS.forEach((year, i) => YEAR_COLOR.push(year, yearColor(year, i)));
+  YEAR_COLOR.push("#888"); // fallback voor onbekend/ontbrekend jaar
 
   const HF_PMTILES_URL =
     "https://huggingface.co/datasets/SiggyF/bipolariteit-pmtiles/resolve/main/plenair-map-full.pmtiles";
@@ -68,7 +81,7 @@
         },
       },
       layers: [
-        { id: "bg", type: "background", paint: { "background-color": "#221f1b" } },
+        { id: "bg", type: "background", paint: { "background-color": "#000000" } },
         {
           id: "points",
           type: "circle",
@@ -76,8 +89,13 @@
           "source-layer": "points",
           paint: {
             "circle-radius": ["interpolate", ["linear"], ["zoom"], 0, 1.5, 6, 3],
-            "circle-color": TOPIC_COLOR,
-            "circle-opacity": 0.75,
+            "circle-color": YEAR_COLOR,
+            // Lage dekking + kleine blur op zwart benadert screen-blending
+            // (overlappende punten stapelen op tot lichter/witter) -- echte
+            // GL-blendFunc-screen is niet beschikbaar via de MapLibre-
+            // style-spec, zie panel-toelichting in de pagina zelf.
+            "circle-opacity": 0.35,
+            "circle-blur": 0.2,
           },
         },
       ],
@@ -91,7 +109,7 @@
     new maplibregl.Popup()
       .setLngLat(e.lngLat)
       .setHTML(
-        `<strong>${props.actor}</strong> (${props.party})<br>` +
+        `<strong>${props.actor}</strong> (${props.party}) -- ${props.published_at}<br>` +
         `${props.debate}<br><em>cluster ${props.cluster}</em><br>` +
         `${props.text}`
       )

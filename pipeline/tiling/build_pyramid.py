@@ -22,6 +22,7 @@ Gebruik:
 """
 
 import argparse
+import hashlib
 import json
 import logging
 import time
@@ -77,19 +78,31 @@ def assign_tiles_for_zoom(points: list, tms, zoom: int) -> dict[int, list]:
     return grouped
 
 
+def point_priority(point_id: int) -> float:
+    """Vaste, deterministische pseudo-random rangorde per punt (0..1), zelfde
+    voor elk zoomniveau/elke tile -- hash-gebaseerd i.p.v. Python's `random`,
+    dus reproduceerbaar zonder seed-beheer. Cruciaal voor `thin_tile_points()`:
+    omdat elk punt op elk niveau dezelfde prioriteit heeft, kan een child-tile
+    (striktere geometrische deelverzameling van zijn parent-tile op het vorige
+    zoomniveau) nooit een lagere afkapgrens krijgen dan zijn parent -- een punt
+    dat op een grof niveau wordt getoond, wordt dus per definitie ook op elk
+    fijner niveau getoond (geen "pop in/out" bij zoomen, geen blokkerige
+    dichtheidsgrenzen zoals bij op-id-gesorteerde selectie)."""
+    digest = hashlib.blake2b(str(point_id).encode(), digest_size=8).digest()
+    return int.from_bytes(digest, "big") / (2**64 - 1)
+
+
 def thin_tile_points(points: list, max_points_per_tile: int) -> list:
-    """Cap het aantal punten in één tile door een deterministische, evenredig
-    verdeelde subset te nemen (gesorteerd op punt-id, dan elke Nde punt) --
-    geen `random`-module nodig, dus reproduceerbaar zonder seed-beheer. Zonder
-    deze cap groeit een tile ongeveer lineair met het totale puntenaantal op
-    lage zoomniveaus (bv. de hele dataset in de ene zoom-0-tile), wat een
-    pmtiles-archief onbruikbaar groot maakt (live gemeten: 1,2GB/9 zoomniveaus
-    voor de volledige dataset, zie issue #259)."""
+    """Cap het aantal punten in één tile op de `max_points_per_tile` punten met
+    de laagste `point_priority()` -- zie die functie voor waarom dit
+    zoom-consistent is. Zonder deze cap groeit een tile ongeveer lineair met
+    het totale puntenaantal op lage zoomniveaus (bv. de hele dataset in de ene
+    zoom-0-tile), wat een pmtiles-archief onbruikbaar groot maakt (live
+    gemeten: 1,2GB/9 zoomniveaus voor de volledige dataset, zie issue #259)."""
     if len(points) <= max_points_per_tile:
         return points
-    ordered = sorted(points, key=lambda p: p[0])
-    step = len(ordered) / max_points_per_tile
-    return [ordered[int(i * step)] for i in range(max_points_per_tile)]
+    ranked = sorted(points, key=lambda p: point_priority(p[0]))
+    return ranked[:max_points_per_tile]
 
 
 def encode_one_tile(tile_id: int, points: list, lookups: dict, tms) -> tuple[int, bytes]:
