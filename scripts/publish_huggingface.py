@@ -92,13 +92,10 @@ def main(argv: list[str] | None = None) -> int:
     for f in args.files:
         logger.info("upload %s ...", f.name)
         api.upload_file(path_or_fileobj=f, path_in_repo=f.name, repo_id=args.repo_id, repo_type="dataset")
-        logger.info("klaar: %s", f.name)
-
-    logger.info(
-        "klaar -- live op https://huggingface.co/datasets/%s (resolve-URL per bestand: "
-        "https://huggingface.co/datasets/%s/resolve/main/<bestandsnaam>)",
-        args.repo_id, args.repo_id,
-    )
+        logger.info(
+            "klaar: %s -- live op https://huggingface.co/datasets/%s/resolve/main/%s",
+            f.name, args.repo_id, f.name,
+        )
     return 0
 
 
