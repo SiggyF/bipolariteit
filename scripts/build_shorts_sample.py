@@ -90,6 +90,7 @@ def fetch_candidates(conn):
             d.debatdirect_id,
             d.raw_video_url,
             d.tweedekamer_activiteit_url,
+            d.published_at,
             act.name AS spreker,
             act.party AS partij,
             t.slug AS topic_slug,
@@ -234,6 +235,7 @@ def build_manifest_entry(entry):
     return {
         "debatdirect_id": row["debatdirect_id"],
         "raw_video_url": row["raw_video_url"],
+        "published_at": row["published_at"],
         "topic_slug": row["topic_slug"],
         "topic_name": row["topic_name"],
         "spreker": row["spreker"],
