@@ -29,11 +29,9 @@ import re
 import time
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import NamedTuple
-
-import requests
 
 from pipeline.db import db
+from pipeline.llm_client import call_llm
 from pipeline.llm_log import record_llm_call
 from pipeline.periodes import PeriodeIndex
 
@@ -93,12 +91,6 @@ def _extract_json(raw_text):
     return json.loads(candidate)
 
 
-class LLMResponse(NamedTuple):
-    content: str
-    usage: dict
-    finish_reason: str | None
-
-
 def _extract_arguments(parsed):
     """Sommige modellen geven de argumentenlijst kaal terug in plaats van
     ingepakt in {"arguments": [...]}, zoals de prompt vraagt."""
@@ -107,26 +99,6 @@ def _extract_arguments(parsed):
     if isinstance(parsed, dict):
         return parsed.get("arguments", [])
     raise ValueError(f"onverwachte JSON-vorm: {type(parsed).__name__}")
-
-
-def call_llm(base_url, model, prompt, reasoning_effort, timeout, max_tokens):
-    payload = {
-        "model": model,
-        "messages": [{"role": "user", "content": prompt}],
-        "temperature": 0.1,
-        "max_tokens": max_tokens,
-    }
-    if reasoning_effort:
-        payload["reasoning_effort"] = reasoning_effort
-
-    resp = requests.post(f"{base_url}/chat/completions", json=payload, timeout=timeout)
-    resp.raise_for_status()
-    data = resp.json()
-    choice = data["choices"][0]
-    content = choice["message"].get("content", "")
-    usage = data.get("usage", {})
-    finish_reason = choice.get("finish_reason")
-    return LLMResponse(content, usage, finish_reason)
 
 
 def _validate_argument(arg):
@@ -248,6 +220,11 @@ def main():
     parser.add_argument("--model", default="qwen/qwen3.6-27b")
     parser.add_argument("--base-url", default="http://localhost:1234/v1")
     parser.add_argument(
+        "--api-key", default=None,
+        help="Bearer-token voor de --base-url-backend, indien vereist (bv. een HF-router-token; "
+             "lokale LM Studio/agy hebben dit niet nodig, dan gewoon weglaten)",
+    )
+    parser.add_argument(
         "--reasoning-effort",
         default="none",
         help="LM Studio reasoning_effort ('none' om denkstappen uit te schakelen; leeg om het veld weg te laten)",
@@ -306,7 +283,8 @@ def main():
         started_at = datetime.now(timezone.utc).isoformat()
         try:
             raw_content, usage, finish_reason = call_llm(
-                args.base_url, args.model, prompt, args.reasoning_effort, args.timeout, args.max_tokens
+                args.base_url, args.model, prompt, args.reasoning_effort, args.timeout, args.max_tokens,
+                api_key=args.api_key,
             )
             if finish_reason == "length":
                 # Afgekapt antwoord levert ongeldige JSON op; melden waaróm het misging,

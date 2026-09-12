@@ -26,11 +26,9 @@ import re
 import time
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import NamedTuple
-
-import requests
 
 from pipeline.db import db
+from pipeline.llm_client import call_llm
 from pipeline.llm_log import record_llm_call
 from pipeline.periodes import PeriodeIndex
 from pipeline.taxonomy import DERIVED_LABELGROEPEN, field_name_for
@@ -138,32 +136,6 @@ def _extract_json(raw_text):
     fence_match = _JSON_FENCE_RE.search(raw_text)
     candidate = fence_match.group(1) if fence_match else raw_text.strip()
     return json.loads(candidate)
-
-
-class LLMResponse(NamedTuple):
-    content: str
-    usage: dict
-    finish_reason: str | None
-
-
-def call_llm(base_url, model, prompt, reasoning_effort, timeout, max_tokens):
-    payload = {
-        "model": model,
-        "messages": [{"role": "user", "content": prompt}],
-        "temperature": 0.1,
-        "max_tokens": max_tokens,
-    }
-    if reasoning_effort:
-        payload["reasoning_effort"] = reasoning_effort
-
-    resp = requests.post(f"{base_url}/chat/completions", json=payload, timeout=timeout)
-    resp.raise_for_status()
-    data = resp.json()
-    choice = data["choices"][0]
-    content = choice["message"].get("content", "")
-    usage = data.get("usage", {})
-    finish_reason = choice.get("finish_reason")
-    return LLMResponse(content, usage, finish_reason)
 
 
 # Sentinel voor "het model bedoelde hier expliciet geen tag" -- onderscheiden
@@ -281,7 +253,7 @@ def insert_llm_tags(conn, argument_id, tag_reden_pairs):
         )
 
 
-def fetch_untagged_arguments(conn, topic_id, limit, min_id=0, vanaf=None, ids=None):
+def fetch_untagged_arguments(conn, topic_id, limit, min_id=0, vanaf=None, ids=None, recent_first=False):
     """`vanaf` is een ISO-datum op de publicatiedatum van het brondocument;
     zelfde drempel als bij de extractie ([verwerking].vanaf), zodat we
     geen argumenten taggen uit een periode die we verder buiten beschouwing
@@ -290,7 +262,11 @@ def fetch_untagged_arguments(conn, topic_id, limit, min_id=0, vanaf=None, ids=No
     `ids`, indien gegeven, beperkt de selectie tot precies die argument-id's
     (bv. een gerichte hertag-batch na een gefaalde eerdere poging) -- min_id/
     vanaf worden dan genegeerd, `tagged_at IS NULL` blijft wel gelden zodat
-    dit nooit per ongeluk een al goed getagd argument overschrijft."""
+    dit nooit per ongeluk een al goed getagd argument overschrijft.
+
+    `recent_first`: sorteer op documentdatum aflopend i.p.v. op argument-id
+    oplopend, om bij een beperkte `limit` het meest recente parlementaire
+    jaar voorrang te geven boven oudere achterstand."""
     if ids is not None:
         if not ids:
             return []
@@ -310,8 +286,9 @@ def fetch_untagged_arguments(conn, topic_id, limit, min_id=0, vanaf=None, ids=No
 
     if vanaf is None:
         vanaf = PeriodeIndex().drempel
+    order_by = "d.published_at DESC, ar.id" if recent_first else "ar.id"
     return conn.execute(
-        """SELECT ar.id, ar.document_id, ar.actor_id, ar.stance, ar.typology,
+        f"""SELECT ar.id, ar.document_id, ar.actor_id, ar.stance, ar.typology,
                   ar.quote_text, ar.quote_context,
                   act.name AS actor_name, act.party AS actor_party
            FROM arguments ar
@@ -321,7 +298,7 @@ def fetch_untagged_arguments(conn, topic_id, limit, min_id=0, vanaf=None, ids=No
              AND ar.id >= ?
              AND d.published_at >= ?
              AND ar.tagged_at IS NULL
-           ORDER BY ar.id
+           ORDER BY {order_by}
            LIMIT ?""",
         (topic_id, min_id, vanaf, limit),
     ).fetchall()
@@ -344,6 +321,11 @@ def main():
     )
     parser.add_argument("--model", default="qwen/qwen3.6-27b")
     parser.add_argument("--base-url", default="http://localhost:1234/v1")
+    parser.add_argument(
+        "--api-key", default=None,
+        help="Bearer-token voor de --base-url-backend, indien vereist (bv. een HF-router-token; "
+             "lokale LM Studio/agy hebben dit niet nodig, dan gewoon weglaten)",
+    )
     parser.add_argument("--reasoning-effort", default="none")
     parser.add_argument("--timeout", type=float, default=120.0)
     parser.add_argument(
@@ -355,6 +337,10 @@ def main():
         default=None,
         help="ISO-datum; overschrijft [verwerking].vanaf uit data/politieke-periodes.toml "
              "(voor een bewuste backfill van een oudere periode)",
+    )
+    parser.add_argument(
+        "--recent-first", action="store_true",
+        help="prioriteer argumenten met de meest recente documentdatum (i.p.v. de default, oplopend op id)",
     )
     parser.add_argument("--dry-run", action="store_true", help="niets naar de database schrijven, alleen printen")
     args = parser.parse_args()
@@ -380,7 +366,9 @@ def main():
                     ids.append(int(regel))
         ids = sorted(set(ids))
 
-    arguments = fetch_untagged_arguments(conn, topic_id, args.limit, args.min_id, args.vanaf, ids=ids)
+    arguments = fetch_untagged_arguments(
+        conn, topic_id, args.limit, args.min_id, args.vanaf, ids=ids, recent_first=args.recent_first
+    )
     if not arguments:
         logger.info("Geen ongetagde argumenten (al verwerkt, of geen argumenten voor deze topic).")
         return
@@ -416,7 +404,8 @@ def main():
         raw_content = None
         try:
             raw_content, usage, finish_reason = call_llm(
-                args.base_url, args.model, prompt, args.reasoning_effort, args.timeout, args.max_tokens
+                args.base_url, args.model, prompt, args.reasoning_effort, args.timeout, args.max_tokens,
+                api_key=args.api_key,
             )
             if finish_reason == "length":
                 raise ValueError(f"antwoord afgekapt op max_tokens={args.max_tokens} (verhoog --max-tokens)")
