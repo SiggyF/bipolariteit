@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>plenair-map tile-pyramide-debugviewer -- Hugging Face-bron (issue #259)</title>
+<link href="https://cdn.jsdelivr.net/npm/maplibre-gl@4/dist/maplibre-gl.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/maplibre-gl@4/dist/maplibre-gl.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/pmtiles@3/dist/pmtiles.js"></script>
+<style>
+  :root { color-scheme: dark; }
+  html, body { margin: 0; padding: 0; height: 100%; background: #111; color: #eee; font: 14px/1.4 -apple-system, system-ui, sans-serif; }
+  #map { position: absolute; inset: 0; }
+  #panel {
+    position: absolute; top: 8px; left: 8px; z-index: 1;
+    background: rgba(17,17,17,0.85); border: 1px solid #444; border-radius: 6px;
+    padding: 8px 10px; max-width: 340px;
+  }
+  #panel h1 { font-size: 0.95rem; margin: 0 0 4px; }
+  #panel p { color: #aaa; margin: 4px 0; font-size: 0.8rem; }
+  #panel code { color: #ddd; }
+  #panel.warning { border-color: #a64d5f; }
+  #panel .warning-text { color: #e0a0a0; }
+</style>
+</head>
+<body>
+<div id="map"></div>
+<div id="panel" class="warning">
+  <h1>DEBUG: plenair-map tegen Hugging Face-pmtiles (issue #259)</h1>
+  <p class="warning-text">
+    Experimentele debug-variant, geen productiepagina -- laadt de volledige
+    dataset rechtstreeks via range-requests vanaf
+    <code>huggingface.co</code> i.p.v. een lokaal/CDN-bestand, om te testen of
+    dat laadgedrag bruikbaar is (zie <code>docs/release.md</code>, issue #293).
+  </p>
+  <p>
+    Zelfde onafhankelijke MapLibre-controle als <code>plenair-map-viewer.html</code>
+    (ziet alleen de rauwe tiles, geen clusterhulls/labels) -- puntenaantal per
+    tile is inmiddels gecapt in <code>pipeline/tiling/build_pyramid.py</code>
+    (<code>thin_tile_points()</code>), zie issue #259 voor de meting die dat
+    nodig maakte.
+  </p>
+</div>
+<script>
+  const protocol = new pmtiles.Protocol();
+  maplibregl.addProtocol("pmtiles", protocol.tile);
+
+  const TOPIC_COLOR = [
+    "match", ["get", "topic"],
+    "stikstof", "#4a7a4a",
+    "abortus", "#a64d5f",
+    "asiel", "#c07a2e",
+    "energietransitie", "#3d6e8f",
+    "#a89e8c",
+  ];
+
+  const HF_PMTILES_URL =
+    "https://huggingface.co/datasets/SiggyF/bipolariteit-pmtiles/resolve/main/plenair-map-full.pmtiles";
+
+  const map = new maplibregl.Map({
+    container: "map",
+    style: {
+      version: 8,
+      sources: {
+        points: {
+          type: "vector",
+          url: "pmtiles://" + HF_PMTILES_URL,
+        },
+      },
+      layers: [
+        { id: "bg", type: "background", paint: { "background-color": "#221f1b" } },
+        {
+          id: "points",
+          type: "circle",
+          source: "points",
+          "source-layer": "points",
+          paint: {
+            "circle-radius": ["interpolate", ["linear"], ["zoom"], 0, 1.5, 6, 3],
+            "circle-color": TOPIC_COLOR,
+            "circle-opacity": 0.75,
+          },
+        },
+      ],
+    },
+    center: [0, 0],
+    zoom: 0,
+  });
+
+  map.on("click", "points", (e) => {
+    const props = e.features[0].properties;
+    new maplibregl.Popup()
+      .setLngLat(e.lngLat)
+      .setHTML(
+        `<strong>${props.actor}</strong> (${props.party})<br>` +
+        `${props.debate}<br><em>cluster ${props.cluster}</em><br>` +
+        `${props.text}`
+      )
+      .addTo(map);
+  });
+  map.on("mouseenter", "points", () => (map.getCanvas().style.cursor = "pointer"));
+  map.on("mouseleave", "points", () => (map.getCanvas().style.cursor = ""));
+</script>
+</body>
+</html>

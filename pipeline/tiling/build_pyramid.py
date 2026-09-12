@@ -60,6 +60,12 @@ DEFAULT_GRID_OUTPUT = REPO_ROOT / "data" / "export" / "plenair-map-grid.json"
 
 LOOKUP_KEYS = ["topics", "actors", "parties", "debates", "soorten"]
 
+# Zonder cap zit op zoom 0 letterlijk de hele dataset in de ene tile (live
+# gemeten: 731.985 punten, 134MB voor de volledige dataset, zie issue #259) --
+# 3000 hield in die meting elke tile onder ~1-2MB MVT-bytes, ruim genoeg voor
+# een overzichtsbeeld per zoomniveau.
+DEFAULT_MAX_POINTS_PER_TILE = 3000
+
 
 def assign_tiles_for_zoom(points: list, tms, zoom: int) -> dict[int, list]:
     """Groepeer alle punten per tile-id op één zoomniveau."""
@@ -69,6 +75,21 @@ def assign_tiles_for_zoom(points: list, tms, zoom: int) -> dict[int, list]:
         tile_id = zxy_to_tileid(tile.z, tile.x, tile.y)
         grouped.setdefault(tile_id, []).append(point)
     return grouped
+
+
+def thin_tile_points(points: list, max_points_per_tile: int) -> list:
+    """Cap het aantal punten in één tile door een deterministische, evenredig
+    verdeelde subset te nemen (gesorteerd op punt-id, dan elke Nde punt) --
+    geen `random`-module nodig, dus reproduceerbaar zonder seed-beheer. Zonder
+    deze cap groeit een tile ongeveer lineair met het totale puntenaantal op
+    lage zoomniveaus (bv. de hele dataset in de ene zoom-0-tile), wat een
+    pmtiles-archief onbruikbaar groot maakt (live gemeten: 1,2GB/9 zoomniveaus
+    voor de volledige dataset, zie issue #259)."""
+    if len(points) <= max_points_per_tile:
+        return points
+    ordered = sorted(points, key=lambda p: p[0])
+    step = len(ordered) / max_points_per_tile
+    return [ordered[int(i * step)] for i in range(max_points_per_tile)]
 
 
 def encode_one_tile(tile_id: int, points: list, lookups: dict, tms) -> tuple[int, bytes]:
@@ -105,6 +126,7 @@ def build(
     output_path,
     grid_output_path,
     maxzoom: int,
+    max_points_per_tile: int = DEFAULT_MAX_POINTS_PER_TILE,
     dashboard: bool = True,
     dashboard_hold_seconds: int = 0,
 ) -> None:
@@ -148,6 +170,7 @@ def build(
         encode_tasks = []
         for grouped in per_zoom_assignments:
             for tile_id, tile_points in grouped.items():
+                tile_points = thin_tile_points(tile_points, max_points_per_tile)
                 encode_tasks.append(dask.delayed(encode_one_tile)(tile_id, tile_points, lookups_d, tms_d))
         logger.info("%d tiles te encoderen (dask-taak per tile)", len(encode_tasks))
 
@@ -196,6 +219,10 @@ def main() -> None:
     parser.add_argument("--out", type=str, default=str(DEFAULT_OUTPUT))
     parser.add_argument("--grid-out", type=str, default=str(DEFAULT_GRID_OUTPUT))
     parser.add_argument("--maxzoom", type=int, default=DEFAULT_MAXZOOM)
+    parser.add_argument(
+        "--max-points-per-tile", type=int, default=DEFAULT_MAX_POINTS_PER_TILE,
+        help="cap op punten per tile (per zoomniveau apart toegepast) -- zie thin_tile_points()",
+    )
     parser.add_argument("--no-dashboard", dest="dashboard", action="store_false", help="Draai zonder dask-distributed-dashboard (synchronous scheduler)")
     parser.add_argument(
         "--dashboard-hold-seconds",
@@ -210,6 +237,7 @@ def main() -> None:
         Path(args.out),
         Path(args.grid_out),
         args.maxzoom,
+        max_points_per_tile=args.max_points_per_tile,
         dashboard=args.dashboard,
         dashboard_hold_seconds=args.dashboard_hold_seconds,
     )
