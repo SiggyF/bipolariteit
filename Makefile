@@ -75,19 +75,19 @@ embed: ## Plenaire-kaart-pijplijn stage 1 -- documenten embedden met bge-m3, inc
 		--start $(EMBED_START) --end $(EMBED_END) --label $(EMBED_LABEL) \
 		$(if $(EMBED_FULL_RANGE_TOPICS),--full-range-topics $(EMBED_FULL_RANGE_TOPICS),) --base-url $$url
 
-umap: ## Plenaire-kaart-pijplijn stage 2a -- UMAP op de embeddings (host-only qua geheugengebruik op de volle dataset, zie docs/handoff.md). Verwacht dat `make embed` al gedraaid is (volledige cache-hit, praat zelf niet met LM Studio). Schrijft alleen coördinaten weg voor `make cluster-plenary-map`, GEEN clustering/labeling. Vars: EMBED_START, EMBED_END, EMBED_LABEL
-	uv run python -m pipeline.plenary_map.cluster \
+umap: ## Plenaire-kaart-pijplijn stage 2 -- UMAP op de embeddings (host-only qua geheugengebruik op de volle dataset, zie docs/handoff.md). Verwacht dat `make embed` al gedraaid is (volledige cache-hit, praat zelf niet met LM Studio). Schrijft alleen coördinaten weg voor `make cluster-plenary-map`. Vars: EMBED_START, EMBED_END, EMBED_LABEL
+	uv run python -m pipeline.plenary_map.umap \
 		--start $(EMBED_START) --end $(EMBED_END) --label $(EMBED_LABEL) \
-		--skip-clustering --export-coords docs/poc/umap-documenten/coords-$(EMBED_LABEL).json
+		--export-coords docs/poc/umap-documenten/coords-$(EMBED_LABEL).json
 
-cluster-plenary-map: ## Plenaire-kaart-pijplijn stage 2b -- hiërarchische clustering + TF-IDF-labels op de coördinaten van `make umap` (geen UMAP, geen LLM-call, dus overal draaibaar). Vars: EMBED_START, EMBED_END, EMBED_LABEL, CLUSTER_LEVEL_SIZES, EXPORT_SUFFIX
+cluster-plenary-map: ## Plenaire-kaart-pijplijn stage 3 -- hiërarchische clustering + TF-IDF-labels op de coördinaten van `make umap` (geen UMAP, geen LLM-call, dus overal draaibaar). Vars: EMBED_START, EMBED_END, EMBED_LABEL, CLUSTER_LEVEL_SIZES, EXPORT_SUFFIX
 	uv run python -m pipeline.plenary_map.cluster \
 		--start $(EMBED_START) --end $(EMBED_END) --label $(EMBED_LABEL) \
 		--coords-path docs/poc/umap-documenten/coords-$(EMBED_LABEL).json \
 		--export-frontend $(if $(EXPORT_SUFFIX),--export-suffix=$(EXPORT_SUFFIX),) \
 		$(if $(CLUSTER_LEVEL_SIZES),--cluster-level-sizes $(CLUSTER_LEVEL_SIZES),)
 
-label-clusters: ## Plenaire-kaart-pijplijn stage 3 -- LLM-naamgeving van de clusters uit `make cluster-plenary-map` (hervatbaar, in porties met LIMIT_CLUSTERS). Vars: EMBED_LABEL, EXPORT_SUFFIX, LIMIT_CLUSTERS, MODEL, API_KEY, BASE_URL
+label-clusters: ## Plenaire-kaart-pijplijn stage 4 -- LLM-naamgeving van de clusters uit `make cluster-plenary-map` (hervatbaar, in porties met LIMIT_CLUSTERS). Vars: EMBED_LABEL, EXPORT_SUFFIX, LIMIT_CLUSTERS, MODEL, API_KEY, BASE_URL
 	@url=$$($(RESOLVE_BASE_URL)) || exit 1; \
 	uv run python -m pipeline.plenary_map.label_export --label $(EMBED_LABEL) \
 		--base-url $$url --llm-chat-model $(MODEL) $(if $(API_KEY),--llm-api-key $(API_KEY),) \

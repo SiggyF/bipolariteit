@@ -20,36 +20,34 @@ eigen toelichting waarom hier bewust geen matplotlib-PNG (zoals
 experiment_umap_arguments.py) of Plotly is gebruikt.
 
 De volle pijplijn is embedden -> UMAP -> clusteren -> labelen -> exporteren,
-verdeeld over drie los draaibare stages (elk met zijn eigen geheugen-/
-kostenprofiel, zie make umap/make cluster-plenary-map/make label-clusters):
+verdeeld over vier los draaibare stages (elk met zijn eigen geheugen-/
+kostenprofiel, zie make embed/make umap/make cluster-plenary-map/make
+label-clusters):
 
-1. Embedden (pipeline/embed/documents.py, `uv run python -m
-   pipeline.embed.documents`) -- incrementeel gecachet, ook los draaibaar
-   vóór de UMAP/clustering-parameters getuned zijn.
-2. UMAP + clusteren (dit bestand): `fetch_and_embed()` roept stage 1 aan,
-   `run_umap()` zet de embeddings om in 2D-coördinaten (dure, host-only stap
-   qua geheugengebruik op de volle dataset, zie docs/handoff.md), en
+1. Embedden (pipeline/embed/documents.py) -- incrementeel gecachet.
+2. UMAP (pipeline/plenary_map/umap.py) -- zet de embeddings om in
+   2D-coördinaten; dure, host-only stap qua geheugengebruik op de volle
+   dataset (zie docs/handoff.md). Schrijft alleen die coördinaten weg.
+3. Clusteren (dit bestand): leest de coördinaten van stap 2 (--coords-path,
+   verplicht -- UMAP zelf is GEEN onderdeel van dit script), en
    `build_multilevel_clusters()`/`label_multilevel_clusters()` clusteren +
-   TF-IDF-labelen die coördinaten. Met `--export-coords` schrijft dit script
-   de coördinaten apart weg, zodat een latere run met `--coords-path` de
-   dure UMAP-fit kan overslaan en alleen de (veel goedkopere) clustering
-   herhaalt -- bv. om cluster-parameters te tunen zonder telkens opnieuw op
-   de host te hoeven draaien.
-3. LLM-naamgeving (pipeline/plenary_map/label_export.py, `make
-   label-clusters`) -- geen onderdeel meer van dit script, werkt op de hier
-   weggeschreven cluster-label-input-<label>.json, dus overal (bv. de
-   devcontainer tegen een gratis remote router) en in porties te draaien.
+   TF-IDF-labelen ze. Geen bijzonder geheugengebruik, dus overal draaibaar
+   (bv. de devcontainer).
+4. LLM-naamgeving (pipeline/plenary_map/label_export.py, `make
+   label-clusters`) -- werkt op de hier weggeschreven
+   cluster-label-input-<label>.json, dus ook overal en in porties te
+   draaien (bv. tegen een gratis remote router).
 
 Gebruik:
     uv run python -m pipeline.plenary_map.cluster \
-        --start 2025-11-12 --end 2026-08-22 --label 2025-heden
+        --start 2025-11-12 --end 2026-08-22 --label 2025-heden \
+        --coords-path docs/poc/umap-documenten/coords-2025-heden.json
 """
 import argparse
 import json
 import logging
 import math
 import re
-import time
 from collections import Counter
 from pathlib import Path
 
@@ -64,7 +62,7 @@ from pipeline.db import db
 from pipeline.embed.documents import CACHE_DIR, MODEL, fetch_and_embed, fetch_documents, strip_speaker_prefix
 from pipeline.paths import REPO_ROOT
 from pipeline.plenary_map.label import compute_representative_examples
-from scripts.experiment_umap_arguments import DUTCH_STOPWORDS, run_umap
+from scripts.experiment_umap_arguments import DUTCH_STOPWORDS
 
 logger = logging.getLogger(__name__)
 
@@ -866,16 +864,6 @@ def label_multilevel_clusters(
     return level_lists, tree
 
 
-def write_umap_coords(path: Path, rows, coords) -> None:
-    """Schrijft de UMAP-uitkomst weg als platte (document-id -> [x, y])-JSON,
-    voor de losse clustering-stap (--coords-path hieronder) die deze coords
-    inleest i.p.v. UMAP -- de dure, host-only stap qua geheugengebruik op de
-    volle dataset (zie docs/handoff.md) -- zelf opnieuw te draaien."""
-    data = {str(row["id"]): [round(float(x), 4), round(float(y), 4)] for row, (x, y) in zip(rows, coords)}
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
-
-
 def load_umap_coords(path: Path, rows) -> np.ndarray:
     """Leest een write_umap_coords()-bestand terug, uitgelijnd op `rows`
     (dezelfde volgorde als `texts`/`vectors` in main() -- de rest van de
@@ -972,15 +960,9 @@ def main():
         "(zie pipeline/plenary_map/label_export.py -- de LLM-call zelf gebeurt niet meer in dit script).",
     )
     parser.add_argument(
-        "--coords-path", default=None,
-        help="pad naar een write_umap_coords()-bestand van een eerdere run (zie --export-coords) -- als "
-        "gegeven wordt UMAP overgeslagen en deze coördinaten gebruikt (voor de losse clustering-stap na "
-        "een host-only UMAP-run, zie pipeline/plenary_map/cluster.py's moduledocstring).",
-    )
-    parser.add_argument(
-        "--export-coords", default=None,
-        help="pad om de UMAP-coördinaten (of, met --coords-path, de doorgegeven coördinaten) naar weg te "
-        "schrijven, voor een latere --coords-path-run.",
+        "--coords-path", required=True,
+        help="pad naar een pipeline.plenary_map.umap --export-coords-bestand van dezelfde "
+        "--start/--end/--label-documentenselectie (UMAP zelf is geen onderdeel meer van dit script).",
     )
     args = parser.parse_args()
 
@@ -1016,25 +998,13 @@ def main():
 
     logger.info("%d documenten tussen %s en %s", len(texts), args.start, args.end)
 
-    umap_elapsed = None
-    if args.coords_path:
-        # Stap 2 (clustering) van de 3-staps-pijplijn (UMAP -> clustering ->
-        # LLM-naamgeving, zie --export-coords hieronder): coördinaten laden
-        # i.p.v. UMAP opnieuw te draaien. UMAP zelf is de dure, host-only
-        # stap (geheugengebruik op de volle dataset, zie docs/handoff.md);
-        # deze stap draait op de kleine (id, x, y)-export daarvan en heeft
-        # dus geen bijzonder geheugenbudget nodig.
-        coords = load_umap_coords(Path(args.coords_path), rows)
-        logger.info("UMAP-coördinaten geladen uit %s", args.coords_path)
-    else:
-        t0 = time.monotonic()
-        coords = run_umap(vectors)
-        umap_elapsed = time.monotonic() - t0
-        logger.info("UMAP in %.1fs", umap_elapsed)
-
-    if args.export_coords:
-        write_umap_coords(Path(args.export_coords), rows, coords)
-        logger.info("UMAP-coördinaten geschreven naar %s", args.export_coords)
+    # UMAP zelf (pipeline.plenary_map.umap, host-only qua geheugengebruik op
+    # de volle dataset, zie docs/handoff.md) is geen onderdeel meer van dit
+    # script -- alleen de coördinaten daarvan inlezen. `vectors` (van
+    # fetch_and_embed hierboven) wordt hier dus niet gebruikt, alleen
+    # rows/texts voor de TF-IDF-labeling/representatieve voorbeelden.
+    coords = load_umap_coords(Path(args.coords_path), rows)
+    logger.info("UMAP-coördinaten geladen uit %s", args.coords_path)
 
     alpino_stopwords = fetch_alpino_non_content_stopwords()
     all_stopwords = (
@@ -1189,13 +1159,7 @@ def main():
     write_plot_html(points, html_path, title=f"UMAP (bge-m3) -- alle plenaire debatten, {args.label}")
     logger.info("%d punten geschreven naar %s", len(points), html_path)
     if embed_elapsed is not None:
-        if umap_elapsed is not None:
-            logger.info(
-                "timing: embeddings %.1fs, UMAP %.1fs, totaal %.1fs",
-                embed_elapsed, umap_elapsed, embed_elapsed + umap_elapsed,
-            )
-        else:
-            logger.info("timing: embeddings %.1fs (UMAP overgeslagen, --coords-path gebruikt)", embed_elapsed)
+        logger.info("timing: embeddings %.1fs (missende ids alsnog opgehaald)", embed_elapsed)
 
     if args.export_frontend:
         write_frontend_export(points, export_path=_suffixed(EXPORT_PATH), dataset_version=args.dataset_version)
