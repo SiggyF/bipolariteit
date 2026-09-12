@@ -184,7 +184,7 @@ function toggleMuted(entry: ShortsManifestEntry, event: MouseEvent) {
 					</span>
 					<span v-if="debateName(entry.video_url)" class="fragment-debate-title">{{ debateName(entry.video_url) }}</span>
 					<span class="card-tile-subtitle">{{ entry.topic_name }}</span>
-					<span class="card-tile-count">{{ formatDate(entry.published_at) }}</span>
+					<span class="card-tile-count">{{ formatDate(entry.published_at) }} &middot; {{ formatClock(entry.clip_start_seconds) }}</span>
 				</a>
 			</li>
 		</ul>
