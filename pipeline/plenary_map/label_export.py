@@ -55,10 +55,6 @@ def main():
     clusters_path = OUTPUT_DIR / f"clusters-{args.label}.json"
     hierarchy_path = OUTPUT_DIR / f"hierarchy-{args.label}.json"
     examples_path = OUTPUT_DIR / f"cluster-label-input-{args.label}.json"
-    for p in (clusters_path, hierarchy_path, examples_path):
-        if not p.exists():
-            raise SystemExit(f"{p} ontbreekt -- eerst pipeline.plenary_map.cluster --label {args.label} draaien")
-
     cluster_summaries = json.loads(clusters_path.read_text(encoding="utf-8"))
     hierarchy = json.loads(hierarchy_path.read_text(encoding="utf-8"))
     examples_by_level = json.loads(examples_path.read_text(encoding="utf-8"))
