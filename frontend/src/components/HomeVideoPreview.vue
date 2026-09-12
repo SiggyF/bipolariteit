@@ -3,7 +3,7 @@ import { reactive, ref } from "vue";
 import { debateId } from "../lib/debateId";
 import { displayPartyName } from "../lib/parties";
 import { formatDate } from "../lib/formatDate";
-import { slugify } from "../lib/slug";
+import { tagIconPath, tagKleur } from "../lib/tagIcon";
 
 // Issue #268: i.p.v. de volledige speler (DebateVideoView) toont de homepage
 // hier een paar korte, vooraf gerenderde preview-fragmenten
@@ -142,6 +142,24 @@ function toggleMuted(entry: ShortsManifestEntry, event: MouseEvent) {
 								<path d="M18.5 5.5a9 9 0 0 1 0 13" />
 							</svg>
 						</button>
+						<!-- Icoon-only, thematisch gekleurd (zelfde bron als
+						     DebateVideoView.vue's perspective-toggles: PERSPECTIEVEN,
+						     via tagKleur()/tagIconPath() in lib/tagIcon.ts), overlay
+						     linksboven op de video, geen tekstlabel en geen eigen link
+						     (zou een a in een a zijn, ongeldige HTML binnen de tegel-link). -->
+						<span v-if="entry.tags.length" class="fragment-tag-icons">
+							<span
+								v-for="tagSleutel in entry.tags"
+								:key="tagSleutel"
+								class="fragment-tag-icon"
+								:title="tagSleutel"
+								:style="{ '--tag-color': tagKleur(tagSleutel) ?? 'var(--color-muted)' }"
+							>
+								<svg v-if="tagIconPath(tagSleutel)" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+									<path :d="tagIconPath(tagSleutel)!" />
+								</svg>
+							</span>
+						</span>
 						<div class="preview-caption">
 							<p class="preview-quote">&ldquo;{{ entry.citaat }}&rdquo;</p>
 						</div>
@@ -152,14 +170,6 @@ function toggleMuted(entry: ShortsManifestEntry, event: MouseEvent) {
 					<span class="card-tile-subtitle">{{ entry.topic_name }}</span>
 					<span class="card-tile-count">{{ formatDate(entry.published_at) }}</span>
 				</a>
-				<!-- Buiten de tegel-link (nesten van <a> in <a> is ongeldige HTML):
-				     de tagbadges linken zelf naar hun tagpagina, dus staan als
-				     los rijtje onder de tegel, niet in de tegel-link zelf. -->
-				<ul v-if="entry.tags.length" class="tags fragment-tags">
-					<li v-for="tagSleutel in entry.tags" :key="tagSleutel" class="tag-item">
-						<a class="tag-badge" :href="`/tags/${slugify(tagSleutel)}/`" :title="`Bekijk tagpagina: ${tagSleutel}`">{{ tagSleutel }}</a>
-					</li>
-				</ul>
 			</li>
 		</ul>
 	</section>
@@ -171,14 +181,6 @@ function toggleMuted(entry: ShortsManifestEntry, event: MouseEvent) {
    zelfde aanpak als index.astro's .highlighted-debates .card-grid. */
 .card-grid--fragmenten {
 	grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-}
-
-/* .card-grid > li is standaard een rij-flexcontainer (main.css) -- prima
-   zolang de tegel zijn enige kind is, maar met de tagbadges als losse buur
-   ernaast (zie template: buiten de tegel-link, want <a> in <a> is ongeldig)
-   moet die buur ONDER de tegel komen, niet ernaast. */
-.card-grid--fragmenten > li {
-	flex-direction: column;
 }
 
 .fragment-tile {
@@ -200,8 +202,30 @@ function toggleMuted(entry: ShortsManifestEntry, event: MouseEvent) {
 	margin-bottom: var(--space-2);
 }
 
-.fragment-tags {
-	margin: var(--space-1) 0 0;
+/* Overlay linksboven op de video (mute-knop staat rechtsboven, zie
+   .preview-mute-toggle) -- icoon-only, cirkelvormig zoals de mute-knop. */
+.fragment-tag-icons {
+	position: absolute;
+	top: var(--space-1);
+	left: var(--space-1);
+	display: flex;
+	gap: 4px;
+	z-index: 1;
+}
+
+/* Thematische kleur + icoon per tag (zelfde bron als DebateVideoView.vue's
+   perspective-toggles/ActorTagUsage.vue: PERSPECTIEVEN, via tagKleur()/
+   tagIconPath() in lib/tagIcon.ts) -- het icoon draagt de identiteit
+   (dataviz-skill: "identity is never color-alone"), de kleur versterkt 'm. */
+.fragment-tag-icon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 24px;
+	height: 24px;
+	border-radius: 50%;
+	background: rgba(0, 0, 0, 0.55);
+	color: var(--tag-color);
 }
 
 /* Gecombineerde selector (i.p.v. alleen .fragment-video-wrap) om zeker te

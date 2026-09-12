@@ -1,12 +1,15 @@
 import { ICOON_PAD, PERSPECTIEVEN } from "./tagIcons.generated";
 
-// tagsleutel -> icoonpad, over alle perspectieven heen. Eén lookup i.p.v. dit
-// in elke component die een tagicoon toont opnieuw te doorzoeken.
+// tagsleutel -> icoonpad/perspectiefkleur, over alle perspectieven heen. Eén
+// lookup i.p.v. dit in elke component die een tagicoon/-kleur toont opnieuw
+// te doorzoeken.
 const TAG_ICOON_PAD = new Map<string, string>();
+const TAG_KLEUR = new Map<string, string>();
 for (const perspectief of PERSPECTIEVEN) {
 	for (const [sleutel, icoon] of Object.entries(perspectief.tags)) {
 		const pad = ICOON_PAD[icoon];
 		if (pad) TAG_ICOON_PAD.set(sleutel, pad);
+		TAG_KLEUR.set(sleutel, perspectief.kleur);
 	}
 }
 
@@ -14,6 +17,13 @@ for (const perspectief of PERSPECTIEVEN) {
  * (bv. de "overig"-rij uit `bucketSmallCounts`). */
 export function tagIconPath(sleutel: string): string | null {
 	return TAG_ICOON_PAD.get(sleutel) ?? null;
+}
+
+/** Perspectiefkleur voor een tagsleutel (zelfde kleur als de tag overal
+ * elders draagt, bv. DebateVideoView.vue's perspective-toggles/
+ * ActorTagUsage.vue), of `null` als de tag bij geen bekend perspectief hoort. */
+export function tagKleur(sleutel: string): string | null {
+	return TAG_KLEUR.get(sleutel) ?? null;
 }
 
 /** Icoon als data-URI, voor plekken waar geen los SVG-element kan (bv. een
