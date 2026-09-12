@@ -57,7 +57,7 @@ ingest: ## Stage 0b -- gecrawlde VLOS-XML importeren naar SQLite (documents/acto
 	@test -n "$(TOPIC)" || { echo 'Gebruik: make ingest TOPIC=stikstof'; exit 1; }
 	uv run python -m pipeline.ingest.ingest_tk --topic $(TOPIC)
 
-embed: ## Plenaire-kaart-pijplijn stage 1 -- documenten embedden met bge-m3, incrementele cache in data/embeddings/ (pipeline/embed/documents.py). Vóór UMAP/clustering (scripts/experiment_umap_documents.py). Vars: EMBED_START, EMBED_END, EMBED_LABEL, EMBED_FULL_RANGE_TOPICS, BASE_URL
+embed: ## Plenaire-kaart-pijplijn stage 1 -- documenten embedden met bge-m3, incrementele cache in data/embeddings/ (pipeline/embed/documents.py). Vóór UMAP/clustering (pipeline/plenary_map/cluster.py). Vars: EMBED_START, EMBED_END, EMBED_LABEL, EMBED_FULL_RANGE_TOPICS, BASE_URL
 	@url=$$($(RESOLVE_BASE_URL)) || exit 1; \
 	uv run python -m pipeline.embed.documents \
 		--start $(EMBED_START) --end $(EMBED_END) --label $(EMBED_LABEL) \
@@ -138,7 +138,7 @@ export-public-data: ## data/export/topics/*.json -> data/export/gepubliceerd/ (l
 tiles: ## data/export/plenair-map.json -> plenair-map.pmtiles (vector-tile-pyramide, morecantile-grid + dask, zie issue #215/#253) -- experimenteel alternatief renderpad, los van `export`
 	uv run python -m pipeline.tiling.build_pyramid
 
-tiles-full: ## Zelfde als `tiles`, maar op de volle-dataset-export (plenair-map-full.json -> data/export/zenodo/plenair-map-full.pmtiles, zie issue #281) -- verwacht dat scripts/experiment_umap_documents.py --export-suffix=-full al gedraaid is. Bundelt meteen de companion-bestanden voor `make publish-zenodo` in dezelfde map (zie docs/release.md)
+tiles-full: ## Zelfde als `tiles`, maar op de volle-dataset-export (plenair-map-full.json -> data/export/zenodo/plenair-map-full.pmtiles, zie issue #281) -- verwacht dat pipeline/plenary_map/cluster.py --export-suffix=-full al gedraaid is. Bundelt meteen de companion-bestanden voor `make publish-zenodo` in dezelfde map (zie docs/release.md)
 	mkdir -p data/export/zenodo
 	uv run python -m pipeline.tiling.build_pyramid \
 		--input data/export/plenair-map-full.json \

@@ -19,7 +19,7 @@ referentiebeelden).
   `data/export/*-full.geojson`/`*.pmtiles`) -- regenereer ze lokaal voor je
   het project opent:
   ```
-  uv run python scripts/experiment_umap_documents.py --start 2000-01-01 --end 2026-08-30 \
+  uv run python -m pipeline.plenary_map.cluster --start 2000-01-01 --end 2026-08-30 \
       --label full --full-range-topics stikstof,abortus,asiel,energietransitie \
       --export-frontend --export-suffix=-full --cluster-level-sizes 4000,1200,350,100,30
   uv run python -m pipeline.tiling.build_pyramid \

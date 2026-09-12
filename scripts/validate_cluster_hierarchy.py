@@ -1,6 +1,6 @@
 """
 Topologische validatie van een N-laagse `plenair-map-clusters*.json`
-(zie `scripts/experiment_umap_documents.py`'s `label_multilevel_clusters()`).
+(zie `pipeline/plenary_map/cluster.py`'s `label_multilevel_clusters()`).
 
 Twee regels, beide bedoeld om de "hoofdtak overheerst het hele niveau"-bug
 te detecteren die live in QGIS zichtbaar werd (zie ook build_multilevel_clusters'

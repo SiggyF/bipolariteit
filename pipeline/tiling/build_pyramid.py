@@ -1,7 +1,7 @@
 """
 Bouwt de vector-tile-pyramide voor de plenaire kaart: leest de bestaande
 `data/export/plenair-map.json` (dezelfde brondata als `PlenairMap.vue`,
-gegenereerd door `scripts/experiment_umap_documents.py --export-frontend`) en
+gegenereerd door `pipeline/plenary_map/cluster.py --export-frontend`) en
 schrijft `data/export/plenair-map.pmtiles` -- een MVT-tile-pyramide over een
 custom morecantile-grid (`pipeline.tiling.grid`), met tile-encodering
 (`pipeline.tiling.encode`) verdeeld over dask-taken per `(z, x, y)`-tile.

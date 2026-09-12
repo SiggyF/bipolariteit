@@ -1,6 +1,6 @@
 """
 Zet een `plenair-map-clusters*.json`-bestand (coarse/fine of N-laags, zie
-`scripts/experiment_umap_documents.py`'s `label_hierarchical_clusters()`/
+`pipeline/plenary_map/cluster.py`'s `label_hierarchical_clusters()`/
 `label_multilevel_clusters()`) om naar GeoJSON, voor visuele inspectie in
 QGIS naast de puntenlaag (het .pmtiles-bestand, zie pipeline/tiling/).
 

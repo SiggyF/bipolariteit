@@ -49,7 +49,7 @@ def build_entries(conn, point_ids):
     """point_ids: de document-id's die daadwerkelijk als punt in
     plenair-map.json voorkomen. Zonder deze filter zou dit bestand alle
     ~187k documenten met video_url bevatten i.p.v. de ~39k die de kaart
-    ooit opvraagt (documenten die door experiment_umap_documents.py's
+    ooit opvraagt (documenten die door pipeline/plenary_map/cluster.py's
     percentiel-trimming/sampling nooit een punt worden, zijn hier
     onnodige bagage) -- op schaal het verschil tussen een 3 MB en een
     50+ MB bestand."""

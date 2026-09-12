@@ -47,7 +47,7 @@ from pipeline.paths import REPO_ROOT
 logger = logging.getLogger(__name__)
 
 ZENODO_API = "https://zenodo.org/api"
-# Zelfde concept-record als scripts/experiment_umap_documents.py's
+# Zelfde concept-record als pipeline/plenary_map/cluster.py's
 # ZENODO_CONCEPT_RECID -- blijft stabiel over alle versies heen.
 ZENODO_CONCEPT_RECID = "22181704"
 

@@ -556,7 +556,7 @@ def ingest_plenair_file(conn, xml_path, meta_path):
 
 def ingest_plenair(raw_dir_name, raw_dir=RAW_DIR):
     """Als ingest(), maar voor de topic-onafhankelijke plenaire crawl
-    (zie scripts/experiment_umap_documents.py / issue #156): scant
+    (zie pipeline/plenary_map/cluster.py / issue #156): scant
     raw_dir/<raw_dir_name>/ (de pseudo-topic-map die
     verslagen_periode.py gebruikt) en importeert alle activiteiten zonder
     keyword-filter, met topic_id = NULL."""
