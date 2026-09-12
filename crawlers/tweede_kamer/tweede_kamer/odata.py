@@ -30,7 +30,7 @@ BASE_URL = "https://gegevensmagazijn.tweedekamer.nl/OData/v4/2.0"
 MAX_TOP = 250
 
 
-def build_url(entity, filter=None, select=None, expand=None, orderby=None, top=None):
+def build_url(entity, filter=None, select=None, expand=None, orderby=None, top=None, skip=None):
     params = {}
     if filter:
         params["$filter"] = filter
@@ -42,6 +42,8 @@ def build_url(entity, filter=None, select=None, expand=None, orderby=None, top=N
         params["$orderby"] = orderby
     if top:
         params["$top"] = top
+    if skip:
+        params["$skip"] = skip
     query = urllib.parse.urlencode(params)
     url = f"{BASE_URL}/{entity}"
     return f"{url}?{query}" if query else url
@@ -58,7 +60,7 @@ def activiteiten_url(topic_keyword, soort, top):
     return build_url("Activiteit", filter=filter_expr, orderby="Datum desc", top=top)
 
 
-def vergaderingen_url(start_date, end_date, top, soort="Plenair"):
+def vergaderingen_url(start_date, end_date, top, soort="Plenair", skip=None):
     """Rechtstreeks alle Vergaderingen van een bepaald Soort in een
     datumbereik, zonder Activiteit-omweg -- voor een topic-onafhankelijke
     crawl (bv. "alle plenaire/commissiedebatten in kamerperiode X") is er
@@ -70,12 +72,20 @@ def vergaderingen_url(start_date, end_date, top, soort="Plenair"):
     start_date/end_date zijn ISO-datums (YYYY-MM-DD), inclusief. `soort` is
     Vergadering.Soort ('Plenair' of 'Commissie', zie
     vergadering_soort_for_activiteit hierboven -- dat zijn de enige twee
-    waarden, geverifieerd live tegen de OData API)."""
+    waarden, geverifieerd live tegen de OData API).
+
+    `skip`: deze combinatie van $filter+$orderby levert GEEN
+    @odata.nextLink terug, ook niet als er meer dan `top` rijen zijn --
+    live geverifieerd (issue: 7,5 jaar Plenair-Vergaderingen opvragen gaf
+    stilzwijgend maar 250 resultaten terug, precies MAX_TOP, zonder enige
+    foutmelding of nextLink). De caller moet dus zelf doorpagineren met
+    $skip in stappen van `top` totdat een pagina minder dan `top` rijen
+    teruggeeft (zie VerslagenPeriodeSpider.parse_vergaderingen)."""
     filter_expr = (
         f"Datum ge {start_date}T00:00:00Z and Datum le {end_date}T23:59:59Z "
         f"and Kamer eq 'Tweede Kamer' and Soort eq '{soort}' and Verwijderd eq false"
     )
-    return build_url("Vergadering", filter=filter_expr, orderby="Datum desc", top=top)
+    return build_url("Vergadering", filter=filter_expr, orderby="Datum desc", top=top, skip=skip)
 
 
 def vergadering_soort_for_activiteit(activiteit_soort):

@@ -98,5 +98,15 @@
   // pipeline.tiling.build_pyramid 'm hergebruikt i.p.v. bij elke run een
   // eigen, na afloop meteen weer verdwenen cluster op te zetten (issue
   // #215-discussie: dashboard moet echt te bekijken zijn).
-  "postStartCommand": "sudo chown -R vscode:vscode ~/.claude ~/.gemini && (nohup uv run --group tiling dask scheduler --host 127.0.0.1 --port 8786 --dashboard-address :8787 > /tmp/dask-scheduler.log 2>&1 &) && (nohup uv run --group tiling dask worker tcp://127.0.0.1:8786 > /tmp/dask-worker.log 2>&1 &)"
+  //
+  // `setsid ... </dev/null` (niet alleen `nohup ... &`): live bevestigd dat
+  // zonder setsid beide processen wél starten (logbestand wordt aangemaakt)
+  // maar binnen enkele seconden weer verdwijnen, met een 0-byte logbestand
+  // -- nohup voorkomt alleen SIGHUP, niet dat de devcontainer-tooling de
+  // hele procesgroep van postStartCommand opruimt zodra dat commando
+  // terugkeert (en `(cmd &)` keert vrijwel synchroon terug). setsid start
+  // een nieuwe sessie, losgekoppeld van die procesgroep, en overleeft die
+  // opruiming; stdin expliciet sluiten voorkomt dat het proces alsnog aan
+  // een sessie hangt die straks wegvalt.
+  "postStartCommand": "sudo chown -R vscode:vscode ~/.claude ~/.gemini && setsid nohup uv run --group tiling dask scheduler --host 127.0.0.1 --port 8786 --dashboard-address :8787 > /tmp/dask-scheduler.log 2>&1 < /dev/null & setsid nohup uv run --group tiling dask worker tcp://127.0.0.1:8786 > /tmp/dask-worker.log 2>&1 < /dev/null &"
 }

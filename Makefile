@@ -3,6 +3,14 @@
 TOPIC ?= stikstof
 LIMIT ?= 15
 DATASET ?= elecdebate60to16
+# Plenaire-kaart-embeddings (make embed, zie pipeline/embed/documents.py):
+# default is de volledige historie + de 4 gecureerde topics altijd volledig
+# meegenomen (piekgedreven, zie fetch_documents()'s docstring), zelfde
+# instelling als de laatste volledige-historie-run (issue #281/#285).
+EMBED_START ?= 2000-01-01
+EMBED_END ?= $(shell date +%F)
+EMBED_LABEL ?= full
+EMBED_FULL_RANGE_TOPICS ?= stikstof,abortus,asiel,energietransitie
 MODEL ?= qwen/qwen3.6-27b
 # Los van MODEL: dat is de default voor de lokale qwen-pipeline (extract/tag/
 # validate) en is geen geldig model voor agy (Docker/Gemini). Leeg = laat het
@@ -17,7 +25,7 @@ else
   RESOLVE_BASE_URL = scripts/detect_llm_base_url.sh
 endif
 
-.PHONY: help probe crawl ingest pipeline test test-js test-frontend ca-fixture status build dev dev-stop extract extract-agy tag tag-agy redactie validate export enrich-video fetch-debate-events fetch-subtitles match-video-spans check-video-urls tags-taxonomy db-init pipeline-status backup-db release release-dry release-www release-www-dry check-public-exposure argument-doc export-public-data publish-data tiles
+.PHONY: help probe crawl ingest embed pipeline test test-js test-frontend ca-fixture status build dev dev-stop extract extract-agy tag tag-agy redactie validate export enrich-video fetch-debate-events fetch-subtitles match-video-spans check-video-urls tags-taxonomy db-init pipeline-status backup-db release release-dry release-www release-www-dry check-public-exposure argument-doc export-public-data publish-data publish-zenodo tiles tiles-full
 
 help: ## Toon deze lijst
 	@grep -E '^[a-zA-Z_-]+:.*## ' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*## "}; {printf "  \033[36m%-16s\033[0m %s\n", $$1, $$2}'
@@ -48,6 +56,12 @@ crawl: ## Stage 0 -- TK-verslagen crawlen naar data/raw/tweede_kamer/, vóór in
 ingest: ## Stage 0b -- gecrawlde VLOS-XML importeren naar SQLite (documents/actors), vóór extract. Vars: TOPIC
 	@test -n "$(TOPIC)" || { echo 'Gebruik: make ingest TOPIC=stikstof'; exit 1; }
 	uv run python -m pipeline.ingest.ingest_tk --topic $(TOPIC)
+
+embed: ## Plenaire-kaart-pijplijn stage 1 -- documenten embedden met bge-m3, incrementele cache in data/embeddings/ (pipeline/embed/documents.py). Vóór UMAP/clustering (scripts/experiment_umap_documents.py). Vars: EMBED_START, EMBED_END, EMBED_LABEL, EMBED_FULL_RANGE_TOPICS, BASE_URL
+	@url=$$($(RESOLVE_BASE_URL)) || exit 1; \
+	uv run python -m pipeline.embed.documents \
+		--start $(EMBED_START) --end $(EMBED_END) --label $(EMBED_LABEL) \
+		$(if $(EMBED_FULL_RANGE_TOPICS),--full-range-topics $(EMBED_FULL_RANGE_TOPICS),) --base-url $$url
 
 pipeline: ## Volledige analyse-pipeline voor één topic op rij: crawl -> ingest -> extract -> tag -> export (zie docs/pipeline.md). Vars: TOPIC, LIMIT, SOORT, BASE_URL. `redactie` draait hier bewust niet in mee -- vereist Docker agy/Gemini i.p.v. de lokale LLM van de rest van deze keten, en herstructureert de hele argumentenboom (zie #252), dus een bewuste losse stap. export regenereert ook data/export/gepubliceerd/ lokaal; publiceren naar bipolariteit-data (tags-taxonomy/publish-data) blijft een bewuste losse stap erna.
 	$(MAKE) crawl TOPIC=$(TOPIC) LIMIT=$(LIMIT)
@@ -124,8 +138,19 @@ export-public-data: ## data/export/topics/*.json -> data/export/gepubliceerd/ (l
 tiles: ## data/export/plenair-map.json -> plenair-map.pmtiles (vector-tile-pyramide, morecantile-grid + dask, zie issue #215/#253) -- experimenteel alternatief renderpad, los van `export`
 	uv run python -m pipeline.tiling.build_pyramid
 
+tiles-full: ## Zelfde als `tiles`, maar op de volle-dataset-export (plenair-map-full.json -> data/export/zenodo/plenair-map-full.pmtiles, zie issue #281) -- verwacht dat scripts/experiment_umap_documents.py --export-suffix=-full al gedraaid is. Bundelt meteen de companion-bestanden voor `make publish-zenodo` in dezelfde map (zie docs/release.md)
+	mkdir -p data/export/zenodo
+	uv run python -m pipeline.tiling.build_pyramid \
+		--input data/export/plenair-map-full.json \
+		--out data/export/zenodo/plenair-map-full.pmtiles \
+		--grid-out data/export/zenodo/plenair-map-full-grid.json
+	cp data/export/plenair-map-full.json data/export/plenair-map-clusters-full.json data/export/plenair-map-hierarchy-full.json data/export/zenodo/
+
 publish-data: export-public-data ## Commit + push data/export/gepubliceerd/ (submodule) naar bipolariteit/bipolariteit-data, gefetcht via jsDelivr (zie docs/release.md). Los van een frontend-release, niet automatisch in CI
 	uv run python scripts/publish_data.py
+
+publish-zenodo: ## Nieuwe Zenodo-versie (draft) van de volle-dataset-tegelpyramide (plenair-map-full.pmtiles e.a. -- te groot voor git/GitHub, zie docs/release.md). Publiceren zelf blijft een handmatige stap in de Zenodo-UI. Vars: ZENODO_TOKEN
+	uv run python scripts/publish_zenodo.py
 
 build: ## Frontend production build (frontend/dist/)
 	cd frontend && npm run build

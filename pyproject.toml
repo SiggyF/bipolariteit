@@ -5,6 +5,7 @@ requires-python = ">=3.12"
 dependencies = [
     "numpy>=2.5.1",
     "prince>=0.20.1",
+    "pyarrow>=25.0.1",
     "python-dotenv>=1.2.3",
     "requests>=2.34.2",
     "scrapy>=2.17.0",

@@ -34,8 +34,17 @@ from pmtiles.tile import Compression, TileType, tileid_to_zxy, zxy_to_tileid
 from pmtiles.writer import write
 
 from pipeline.paths import REPO_ROOT
-from pipeline.tiling.encode import encode_tile
-from pipeline.tiling.grid import DEFAULT_MAXZOOM, build_grid, tile_bounds, tile_for_point, write_grid_metadata
+from pipeline.tiling.encode import encode_tile, field_types
+from pipeline.tiling.grid import (
+    DEFAULT_MAXZOOM,
+    build_grid,
+    lonlat_bounds,
+    tile_bounds,
+    tile_for_point,
+    umap_to_mercator,
+    umap_to_mercator_affine,
+    write_grid_metadata,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -108,8 +117,17 @@ def build(
         lookups = {key: raw[key] for key in LOOKUP_KEYS}
         logger.info("%d punten geladen", len(points))
 
-        tms = build_grid(points, maxzoom=maxzoom)
-        write_grid_metadata(tms, grid_output_path)
+        # UMAP-coördinaten (x, y op index 1, 2) één keer uniform naar
+        # Mercator-meters herschalen zodat de tile-pyramide de volle
+        # standaard Web-Mercator-extent vult -- zie grid.py's moduledocstring
+        # voor waarom een custom, kleinere extent hier fout gaat in generieke
+        # viewers (QGIS/pmtiles.io/MapLibre).
+        affine = umap_to_mercator_affine(points)
+        lon_min, lat_min, lon_max, lat_max = lonlat_bounds(points, affine)
+        points = [[p[0], *umap_to_mercator(p[1], p[2], affine), *p[3:]] for p in points]
+
+        tms = build_grid()
+        write_grid_metadata(affine, maxzoom, grid_output_path)
         logger.info("Grid geschreven naar %s (zoom 0-%d)", grid_output_path, maxzoom)
 
         # `points`/`tms`/`lookups` één keer als delayed-waarde wrappen i.p.v.
@@ -136,6 +154,10 @@ def build(
         encoded_tiles = dask.compute(*encode_tasks)
         encoded_tiles = sorted(encoded_tiles, key=lambda entry: entry[0])
 
+        # 12e element (cluster-ids per niveau) is optioneel, zie encode.py's
+        # module-docstring -- alleen aanwezig bij N-laagse clustering.
+        cluster_level_count = len(points[0][11]) if points and len(points[0]) > 11 else 0
+
         logger.info("Schrijf %s", output_path)
         with write(str(output_path)) as writer:
             for tile_id, data in encoded_tiles:
@@ -143,11 +165,17 @@ def build(
             header = {
                 "tile_type": TileType.MVT,
                 "tile_compression": Compression.NONE,
+                "min_lon_e7": round(lon_min * 10_000_000),
+                "min_lat_e7": round(lat_min * 10_000_000),
+                "max_lon_e7": round(lon_max * 10_000_000),
+                "max_lat_e7": round(lat_max * 10_000_000),
+                "center_lon_e7": round((lon_min + lon_max) / 2 * 10_000_000),
+                "center_lat_e7": round((lat_min + lat_max) / 2 * 10_000_000),
             }
             metadata = {
                 "name": "plenair-map",
                 "format": "pbf",
-                "vector_layers": [{"id": "points", "fields": {}}],
+                "vector_layers": [{"id": "points", "fields": field_types(cluster_level_count)}],
             }
             writer.finalize(header, metadata)
         logger.info("Klaar: %d tiles geschreven", len(encoded_tiles))
