@@ -328,9 +328,10 @@ client-side gefetcht (`onMounted` in bv. `PerspectiefView.vue`).
 R2 (Cloudflare) is eerder overwogen maar afgewezen: het vereist een
 creditcard om te activeren, ook binnen de gratis tier. Zenodo is ook
 overwogen (DOI/archivering) maar past niet bij een "overschrijf de huidige
-data"-flow met live browser-fetch.
+data"-flow met live browser-fetch -- vandaar de Hugging Face-route hieronder
+voor precies dat geval.
 
-### Grote, archiefachtige bestanden -> Zenodo, niet jsDelivr
+### Grote bestanden -> Zenodo (archief) + Hugging Face (live data), niet jsDelivr
 
 De volle-dataset-tegelpyramide van de plenaire kaart (issue #281,
 `data/export/plenair-map-full.pmtiles`, ~1,25 GiB, plus
@@ -339,26 +340,45 @@ harde bestandslimiet) en hoort dus niet in `data/export/gepubliceerd/` zoals
 hierboven -- die route is specifiek voor de kleine, live door de site
 gefetchte dataset (`plenair-map.pmtiles`, dat wél al in de submodule zit).
 
-In plaats daarvan gaat dit soort grote, archiefachtige data (QGIS-inspectie,
-A0-printposter issue #215 -- niet de interactieve site) naar Zenodo, als
-nieuwe versie onder het bestaande concept-record
-<https://doi.org/10.5281/zenodo.22181704> (zelfde archief als de eerdere
-publicatie, zie `docs/handoff.md` 2026-08-29-sessie):
+In plaats daarvan gaat dit soort grote data naar twee bestemmingen met een
+losse rol (besluit uit issue #293), zelfde bronbundel, geen van beide
+vervangt de ander:
+
+- **Zenodo** is het archief: DOI/versionering, voor QGIS-inspectie en de
+  A0-printposter (issue #215) -- niet de interactieve site.
+- **Hugging Face** is de live-databron: bestanden worden direct
+  overschreven, zonder aparte publiceerstap, en zijn zo geschikt om de
+  interactieve kaart tegen te laten fetchen (bevestigd: CORS + HTTP Range
+  werken op HF's dataset-CDN voor bestanden van deze grootte, issue #293) --
+  iets wat jsDelivr/git boven de 100 MB-limiet niet kan.
 
 ```sh
-make tiles-full          # bouwt de tegelpyramide + bundelt companions in data/export/zenodo/
-make publish-zenodo      # uploadt alles in data/export/zenodo/ als nieuwe Zenodo-versie (draft, ZENODO_TOKEN nodig)
+make tiles-full            # bouwt de tegelpyramide + bundelt companions in data/export/zenodo/
+make publish-zenodo        # uploadt alles in data/export/zenodo/ als nieuwe Zenodo-versie (draft, ZENODO_TOKEN nodig)
+make publish-huggingface   # uploadt dezelfde bundel als live data naar een publieke HF-dataset-repo (HUGGINGFACE_TOKEN nodig)
 ```
 
 `data/export/zenodo/` (gitignored) is de expliciete bundel-map: `tiles-full`
 schrijft `plenair-map-full.pmtiles`/`-grid.json` er rechtstreeks in en
 kopieert `plenair-map-full.json`/`-clusters-full.json`/`-hierarchy-full.json`
-erbij, zodat `publish-zenodo` zonder losse bestandenlijst gewoon alles daarin
-publiceert -- de twee stappen kunnen zo niet uit de pas lopen over welke
-bestanden erbij horen. `scripts/publish_zenodo.py` maakt alleen een **draft**
-aan (nieuwe versie, bestanden geüpload). Publiceren zelf (onomkeerbaar, eigen
-DOI per versie) blijft een bewuste, handmatige stap in de Zenodo-UI -- zelfde
-terughoudende patroon als hierboven bij `publish-data`.
+erbij, zodat beide publiceerstappen zonder losse bestandenlijst gewoon alles
+daarin publiceren -- ze kunnen zo niet uit de pas lopen over welke bestanden
+erbij horen (ondanks de mapnaam is dit dus ook de bron voor
+`publish-huggingface`, niet iets Zenodo-specifieks).
+
+`scripts/publish_zenodo.py` maakt alleen een **draft** aan (nieuwe versie,
+bestanden geüpload). Publiceren zelf (onomkeerbaar, eigen DOI per versie)
+blijft een bewuste, handmatige stap in de Zenodo-UI -- zelfde terughoudende
+patroon als hierboven bij `publish-data`.
+
+`scripts/publish_huggingface.py` heeft dat tussenstapje niet: de bestanden
+staan meteen live op
+`https://huggingface.co/datasets/SiggyF/bipolariteit-pmtiles/resolve/main/<bestandsnaam>`
+zodra het script klaar is, zelfde "overschrijf de huidige data"-flow als
+`publish-data`'s jsDelivr-route. Nog niet gedaan: de frontend daadwerkelijk
+tegen deze URL laten fetchen (welke workflows dat gaan gebruiken is een
+bewust nog niet genomen besluit, zie issue #293) -- deze stap publiceert de
+data alvast, los van die keuze.
 
 ## Data publiceren
 
