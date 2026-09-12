@@ -28,17 +28,23 @@ data/export/gepubliceerd/ kan uitlezen. Committen/pushen gebeurt niet door
 dit script; dat is een aparte, bewuste stap in die submodule.
 
 Gebruik:
-    uv run python -m scripts.build_shorts_sample [--limit 10] [--dry-run]
+    uv run python -m scripts.build_shorts_sample [--limit 10] [--since-days 180] [--dry-run]
 
 --dry-run schrijft alleen het manifest (geen ffmpeg-render) -- handig om de
 selectie te controleren voordat je 10x een mp4 rendert.
+
+--since-days beperkt de kandidaten tot recente debatten (default 180 dagen) --
+niet t.o.v. de systeemklok, want de crawler loopt altijd wat achter op
+vandaag (nieuwe debatten moeten eerst verschijnen, gecrawld en getagd worden),
+dus een venster t.o.v. "nu" zou structureel een deel van de staart missen.
+In plaats daarvan t.o.v. het recentste debat dat al in de database staat.
 """
 
 import argparse
 import json
 import logging
 import subprocess
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import requests
 
@@ -76,10 +82,17 @@ OUTPUT_WIDTH = 960
 OUTPUT_HEIGHT = 540
 
 
-def fetch_candidates(conn):
+def fetch_candidates(conn, since_days):
     """Eén rij per (argument, debat) met alles wat nodig is om te scoren en
     te renderen -- alleen argumenten met een tijdspanne, een afspeelbare
-    videobron én minstens één van de emotie-tags."""
+    videobron, minstens één van de emotie-tags, én een debat van de laatste
+    `since_days` dagen (zie module-docstring voor waarom t.o.v. het recentste
+    debat i.p.v. de systeemklok)."""
+    max_published_at = conn.execute(
+        "SELECT MAX(published_at) FROM documents WHERE raw_video_url IS NOT NULL"
+    ).fetchone()[0]
+    cutoff = (datetime.fromisoformat(max_published_at) - timedelta(days=since_days)).isoformat()
+
     placeholders = ",".join("?" for _ in TAG_WEIGHTS)
     query = f"""
         SELECT
@@ -103,11 +116,12 @@ def fetch_candidates(conn):
           AND a.end_seconds IS NOT NULL
           AND d.raw_video_url IS NOT NULL
           AND d.debatdirect_id IS NOT NULL
+          AND d.published_at >= ?
           AND a.id IN (
               SELECT argument_id FROM argument_tags WHERE tag_sleutel IN ({placeholders})
           )
     """
-    rows = conn.execute(query, list(TAG_WEIGHTS)).fetchall()
+    rows = conn.execute(query, [cutoff, *TAG_WEIGHTS]).fetchall()
 
     tag_rows = conn.execute(
         f"SELECT argument_id, tag_sleutel FROM argument_tags WHERE tag_sleutel IN ({placeholders})",
@@ -253,17 +267,23 @@ def build_manifest_entry(entry):
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--limit", type=int, default=10, help="aantal debatten in de steekproef (default: 10)")
+    parser.add_argument(
+        "--since-days",
+        type=int,
+        default=180,
+        help="alleen debatten van de laatste N dagen t.o.v. het recentste debat in de database (default: 180)",
+    )
     parser.add_argument("--dry-run", action="store_true", help="alleen manifest.json schrijven, geen ffmpeg-render")
     args = parser.parse_args()
 
     conn = db.connect()
     try:
-        rows, tags_by_argument = fetch_candidates(conn)
+        rows, tags_by_argument = fetch_candidates(conn, args.since_days)
     finally:
         conn.close()
 
     if not rows:
-        logger.warning("Geen kandidaat-argumenten gevonden (emotie-tags %s).", list(TAG_WEIGHTS))
+        logger.warning("Geen kandidaat-argumenten gevonden (emotie-tags %s, laatste %d dagen).", list(TAG_WEIGHTS), args.since_days)
         return
 
     all_ranked = pick_best_per_debate(rows, tags_by_argument)

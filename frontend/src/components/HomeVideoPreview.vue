@@ -3,6 +3,7 @@ import { reactive, ref } from "vue";
 import { debateId } from "../lib/debateId";
 import { displayPartyName } from "../lib/parties";
 import { formatDate } from "../lib/formatDate";
+import { slugify } from "../lib/slug";
 
 // Issue #268: i.p.v. de volledige speler (DebateVideoView) toont de homepage
 // hier een paar korte, vooraf gerenderde preview-fragmenten
@@ -26,6 +27,7 @@ interface ShortsManifestEntry {
 	spreker: string;
 	partij: string | null;
 	citaat: string;
+	tags: string[];
 	score: number;
 	clip_start_seconds: number;
 	clip_duration_seconds: number;
@@ -150,6 +152,14 @@ function toggleMuted(entry: ShortsManifestEntry, event: MouseEvent) {
 					<span class="card-tile-subtitle">{{ entry.topic_name }}</span>
 					<span class="card-tile-count">{{ formatDate(entry.published_at) }}</span>
 				</a>
+				<!-- Buiten de tegel-link (nesten van <a> in <a> is ongeldige HTML):
+				     de tagbadges linken zelf naar hun tagpagina, dus staan als
+				     los rijtje onder de tegel, niet in de tegel-link zelf. -->
+				<ul v-if="entry.tags.length" class="tags fragment-tags">
+					<li v-for="tagSleutel in entry.tags" :key="tagSleutel" class="tag-item">
+						<a class="tag-badge" :href="`/tags/${slugify(tagSleutel)}/`" :title="`Bekijk tagpagina: ${tagSleutel}`">{{ tagSleutel }}</a>
+					</li>
+				</ul>
 			</li>
 		</ul>
 	</section>
@@ -161,6 +171,14 @@ function toggleMuted(entry: ShortsManifestEntry, event: MouseEvent) {
    zelfde aanpak als index.astro's .highlighted-debates .card-grid. */
 .card-grid--fragmenten {
 	grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+}
+
+/* .card-grid > li is standaard een rij-flexcontainer (main.css) -- prima
+   zolang de tegel zijn enige kind is, maar met de tagbadges als losse buur
+   ernaast (zie template: buiten de tegel-link, want <a> in <a> is ongeldig)
+   moet die buur ONDER de tegel komen, niet ernaast. */
+.card-grid--fragmenten > li {
+	flex-direction: column;
 }
 
 .fragment-tile {
@@ -180,6 +198,10 @@ function toggleMuted(entry: ShortsManifestEntry, event: MouseEvent) {
 
 .fragment-tile .card-tile-count {
 	margin-bottom: var(--space-2);
+}
+
+.fragment-tags {
+	margin: var(--space-1) 0 0;
 }
 
 /* Gecombineerde selector (i.p.v. alleen .fragment-video-wrap) om zeker te
