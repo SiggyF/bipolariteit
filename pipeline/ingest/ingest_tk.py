@@ -340,15 +340,25 @@ def is_voorzitter_turn(turn_el, parent_map, content=None):
     return False
 
 
-def get_or_create_topic(conn, topic_keyword):
+def get_topic(conn, topic_keyword):
+    """Zoekt de topic-rij op -- maakt er NOOIT stilzwijgend een nieuwe aan.
+    Een verkeerd getypte of exploratieve --topic (bv. een losse zoekterm die
+    eigenlijk bij een bestaand topic hoort, zie TOPIC_TITLE_KEYWORDS in
+    extract_arguments.py) creëerde vroeger een permanente, ongecureerde
+    topic-rij zonder description -- die her en der (status-pagina, export)
+    als een "echt" topic verscheen, en moest achteraf handmatig opgeruimd
+    worden. Een nieuw topic toevoegen is nu een bewuste, expliciete stap
+    (zie CLI-foutmelding hieronder), geen bijeffect van een ingest-run."""
     row = conn.execute("SELECT id FROM topics WHERE slug = ?", (topic_keyword,)).fetchone()
-    if row:
-        return row["id"]
-    cur = conn.execute(
-        "INSERT INTO topics (slug, name, description) VALUES (?, ?, ?)",
-        (topic_keyword, topic_keyword, None),
-    )
-    return cur.lastrowid
+    if row is None:
+        raise SystemExit(
+            f"onbekend topic '{topic_keyword}' -- er wordt geen nieuwe topic-rij aangemaakt. "
+            f"Bedoelde je een bestaand topic (of een title-keyword ervan, zie TOPIC_TITLE_KEYWORDS "
+            f"in pipeline/extract_arguments.py)? Voor een écht nieuw topic: voeg het eerst bewust toe, "
+            f"bv. via `INSERT INTO topics (slug, name, description) VALUES (...)` met een curated "
+            f"pro/contra-description, niet via deze ingest-CLI."
+        )
+    return row["id"]
 
 
 def get_or_create_source(conn):
@@ -393,7 +403,7 @@ def ingest_file(conn, xml_path, meta_path, topic_keyword, also_keywords=()):
     root = tree.getroot()
     parent_map = build_parent_map(root)
 
-    topic_id = get_or_create_topic(conn, topic_keyword)
+    topic_id = get_topic(conn, topic_keyword)
     source_id = get_or_create_source(conn)
 
     keywords = [topic_keyword.lower(), *(k.lower() for k in also_keywords)]
