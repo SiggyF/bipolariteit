@@ -51,7 +51,7 @@ from pipeline.db import db
 from pipeline.embed.documents import CACHE_DIR, MODEL, fetch_and_embed, fetch_documents, strip_speaker_prefix
 from pipeline.embed.lmstudio import detect_base_url
 from pipeline.paths import REPO_ROOT
-from pipeline.plenary_map.label import label_clusters_with_llm
+from pipeline.plenary_map.label import compute_representative_examples, label_clusters_with_llm
 from scripts.experiment_umap_arguments import DUTCH_STOPWORDS, run_umap
 
 logger = logging.getLogger(__name__)
@@ -1043,13 +1043,23 @@ def main():
                 redundancy_overlap=args.cluster_redundancy_overlap,
             )
 
+            # Representatieve voorbeelden vastleggen (geen LLM-call, puur de
+            # UMAP-afhankelijke berekening) zodat de LLM-naamgeving zelf ook
+            # LOS van deze host-only UMAP-run kan draaien -- bv. in de
+            # devcontainer tegen een gratis remote router, en desgewenst in
+            # meerdere losse aanroepen (zie pipeline/plenary_map/label_export.py).
+            examples_by_level = compute_representative_examples(
+                level_ids, level_lists, texts, coords, rows, args.llm_examples_per_cluster,
+            )
+            examples_path = OUTPUT_DIR / f"cluster-label-input-{args.label}.json"
+            examples_path.write_text(json.dumps(examples_by_level, ensure_ascii=False), encoding="utf-8")
+            logger.info("representatieve voorbeelden voor LLM-naamgeving geschreven naar %s", examples_path)
+
             if not args.skip_llm_naming:
                 llm_base_url = detect_base_url(args.base_url)
                 label_clusters_with_llm(
-                    level_ids, level_lists, hierarchy,
-                    texts, coords, rows, llm_base_url, args.llm_chat_model,
-                    args.llm_reasoning_effort, args.llm_examples_per_cluster,
-                    api_key=args.llm_api_key,
+                    level_lists, hierarchy, examples_by_level, llm_base_url, args.llm_chat_model,
+                    args.llm_reasoning_effort, api_key=args.llm_api_key,
                 )
 
             cluster_ids = level_ids[-1]
