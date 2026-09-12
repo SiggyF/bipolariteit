@@ -4,6 +4,7 @@ import { debateId } from "../lib/debateId";
 import { displayPartyName } from "../lib/parties";
 import { formatDate } from "../lib/formatDate";
 import { tagIconPath, tagKleur } from "../lib/tagIcon";
+import PartyLogo from "./PartyLogo.vue";
 
 // Issue #268: i.p.v. de volledige speler (DebateVideoView) toont de homepage
 // hier een paar korte, vooraf gerenderde preview-fragmenten
@@ -145,8 +146,9 @@ function toggleMuted(entry: ShortsManifestEntry, event: MouseEvent) {
 						<!-- Icoon-only, thematisch gekleurd (zelfde bron als
 						     DebateVideoView.vue's perspective-toggles: PERSPECTIEVEN,
 						     via tagKleur()/tagIconPath() in lib/tagIcon.ts), overlay
-						     linksboven op de video, geen tekstlabel en geen eigen link
-						     (zou een a in een a zijn, ongeldige HTML binnen de tegel-link). -->
+						     rechtsboven op de video (consistent met tagbadges elders
+						     op de site), geen tekstlabel en geen eigen link (zou een a
+						     in een a zijn, ongeldige HTML binnen de tegel-link). -->
 						<span v-if="entry.tags.length" class="fragment-tag-icons">
 							<span
 								v-for="tagSleutel in entry.tags"
@@ -155,7 +157,7 @@ function toggleMuted(entry: ShortsManifestEntry, event: MouseEvent) {
 								:title="tagSleutel"
 								:style="{ '--tag-color': tagKleur(tagSleutel) ?? 'var(--color-muted)' }"
 							>
-								<svg v-if="tagIconPath(tagSleutel)" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+								<svg v-if="tagIconPath(tagSleutel)" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
 									<path :d="tagIconPath(tagSleutel)!" />
 								</svg>
 							</span>
@@ -165,7 +167,8 @@ function toggleMuted(entry: ShortsManifestEntry, event: MouseEvent) {
 						</div>
 					</span>
 					<span class="card-tile-name">
-						{{ entry.spreker }}<span v-if="entry.partij"> ({{ displayPartyName(entry.partij) }})</span>
+						<PartyLogo v-if="entry.partij" :party="entry.partij" :title="displayPartyName(entry.partij)" />
+						{{ entry.spreker }}
 					</span>
 					<span class="card-tile-subtitle">{{ entry.topic_name }}</span>
 					<span class="card-tile-count">{{ formatDate(entry.published_at) }}</span>
@@ -183,31 +186,13 @@ function toggleMuted(entry: ShortsManifestEntry, event: MouseEvent) {
 	grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
 }
 
-.fragment-tile {
-	padding: 0;
-	overflow: hidden;
-}
-
-.fragment-tile .card-tile-name,
-.fragment-tile .card-tile-subtitle,
-.fragment-tile .card-tile-count {
-	padding: 0 var(--space-2);
-}
-
-.fragment-tile .card-tile-name {
-	margin-top: var(--space-1);
-}
-
-.fragment-tile .card-tile-count {
-	margin-bottom: var(--space-2);
-}
-
-/* Overlay linksboven op de video (mute-knop staat rechtsboven, zie
-   .preview-mute-toggle) -- icoon-only, cirkelvormig zoals de mute-knop. */
+/* Overlay rechtsboven op de video (mute-knop staat linksboven, zie
+   .preview-mute-toggle) -- zelfde plek als tagbadges/-iconen elders op de
+   site (bv. ArgumentCard.vue), icoon-only, cirkelvormig zoals de mute-knop. */
 .fragment-tag-icons {
 	position: absolute;
 	top: var(--space-1);
-	left: var(--space-1);
+	right: var(--space-1);
 	display: flex;
 	gap: 4px;
 	z-index: 1;
@@ -221,8 +206,8 @@ function toggleMuted(entry: ShortsManifestEntry, event: MouseEvent) {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	width: 24px;
-	height: 24px;
+	width: 32px;
+	height: 32px;
 	border-radius: 50%;
 	background: rgba(0, 0, 0, 0.55);
 	color: var(--tag-color);
@@ -244,15 +229,24 @@ function toggleMuted(entry: ShortsManifestEntry, event: MouseEvent) {
 	height: 100%;
 	object-fit: cover;
 	display: block;
-	/* Geen desaturatie zoals .card-tile-image img elders: dit is een levend
-	   fragment, geen still-thumbnail, dus moet er niet gedempt uitzien. */
+	/* Zelfde desaturatie als .card-tile-image img elders (main.css), voor een
+	   consistente stijl tussen deze sectie en "Uitgelichte debatten" -- alleen
+	   tijdens het afspelen (hover/focus, zie .fragment-tile:hover/:focus-within
+	   hieronder) weer volle kleur, zodat het fragment dan juist wél levendig
+	   oogt. */
+	filter: saturate(0.6);
+	transition: filter 0.15s ease;
+}
+
+.fragment-tile:hover video,
+.fragment-tile:focus-within video {
 	filter: none;
 }
 
 .preview-mute-toggle {
 	position: absolute;
 	top: var(--space-1);
-	right: var(--space-1);
+	left: var(--space-1);
 	width: 32px;
 	height: 32px;
 	display: flex;
