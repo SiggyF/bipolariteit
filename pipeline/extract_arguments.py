@@ -9,6 +9,14 @@ docs/handoff.md):
     uv run python -m pipeline.extract_arguments --topic stikstof --limit 15 --model google/gemma-4-e4b
     uv run python -m pipeline.extract_arguments --topic stikstof --limit 15 --dry-run
 
+Ook bruikbaar tegen een remote OpenAI-compatibele provider i.p.v. lokale LM
+Studio (zie pipeline/llm_client.py) -- met --parallel lopen de LLM-calls dan
+via dask (pipeline/dask_client.py) over de devcontainer's persistente
+scheduler i.p.v. sequentieel, wat bij een remote provider veel tijd scheelt:
+    uv run python -m pipeline.extract_arguments --topic energietransitie --limit 1000 \\
+        --base-url https://router.huggingface.co/v1 --model Qwen/Qwen3.8-27B:ovhcloud \\
+        --api-key "$HUGGINGFACE_INFERENCE_TOKEN" --parallel
+
 Reeds verwerkte documenten worden overgeslagen via `documents.extraction_attempted_at`
 (gezet zodra een document door de LLM is gestuurd, ook als dat 0 arguments
 opleverde -- zelfde patroon als `arguments.tagged_at` in tag_arguments.py),
@@ -30,7 +38,11 @@ import time
 from datetime import datetime, timezone
 from pathlib import Path
 
+from dask.distributed import as_completed
+
+from pipeline.dask_client import make_client
 from pipeline.db import db
+from pipeline.hf_pricing import get_baseline_pricing, price_still_matches
 from pipeline.llm_client import call_llm
 from pipeline.llm_log import record_llm_call
 from pipeline.periodes import PeriodeIndex
@@ -212,6 +224,28 @@ def fetch_pending_documents(conn, topic_slug, limit, min_id=0, vanaf=None):
     ).fetchall()
 
 
+def _extract_one(doc, topic_name, topic_description, model, base_url, reasoning_effort, timeout, max_tokens, api_key):
+    """Eén document door de LLM halen, zonder DB-writes -- puur zodat dit
+    veilig via dask over meerdere workers/threads kan lopen (--parallel).
+    sqlite3-writes blijven altijd in het hoofdproces, in `main()`."""
+    prompt = _build_prompt(topic_name, topic_description, doc["actor_name"], doc["actor_party"], doc["content"])
+    start = time.monotonic()
+    started_at = datetime.now(timezone.utc).isoformat()
+    try:
+        raw_content, usage, finish_reason = call_llm(
+            base_url, model, prompt, reasoning_effort, timeout, max_tokens, api_key=api_key,
+        )
+        if finish_reason == "length":
+            raise ValueError(f"antwoord afgekapt op max_tokens={max_tokens} (verhoog --max-tokens)")
+        arguments = _extract_arguments(_extract_json(raw_content))
+        return {
+            "doc": doc, "ok": True, "raw_content": raw_content, "usage": usage, "arguments": arguments,
+            "elapsed": time.monotonic() - start, "started_at": started_at,
+        }
+    except Exception as exc:
+        return {"doc": doc, "ok": False, "error": str(exc), "elapsed": time.monotonic() - start, "started_at": started_at}
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--topic", required=True, help="topic-slug, bv. stikstof")
@@ -249,6 +283,12 @@ def main():
              "(voor een bewuste backfill van een oudere periode)",
     )
     parser.add_argument("--dry-run", action="store_true", help="niets naar de database schrijven, alleen printen")
+    parser.add_argument(
+        "--parallel", action="store_true",
+        help="verdeel LLM-calls over dask (de devcontainer's persistente scheduler, zie pipeline/dask_client.py) "
+             "i.p.v. sequentieel -- alleen zinvol tegen een remote provider die concurrency aankan (bv. de "
+             "HF-router); lokale LM Studio verwerkt toch maar één request tegelijk",
+    )
     args = parser.parse_args()
 
     conn = db.connect()
@@ -266,6 +306,9 @@ def main():
     if not documents:
         logger.info("Geen openstaande documenten (al verwerkt, of geen documenten voor deze topic).")
         return
+    # dask kan sqlite3.Row niet deterministisch tokenizen/serialiseren (nodig
+    # voor --parallel); gewone dicts werken overal waar Row ook werkte.
+    documents = [dict(doc) for doc in documents]
 
     logger.info(
         "Model: %s | reasoning_effort=%r | prompt_version=%s | %d documenten",
@@ -277,34 +320,35 @@ def main():
     total_errors = 0
     latencies = []
 
-    for doc in documents:
-        prompt = _build_prompt(topic_name, topic_description, doc["actor_name"], doc["actor_party"], doc["content"])
-        start = time.monotonic()
-        started_at = datetime.now(timezone.utc).isoformat()
-        try:
-            raw_content, usage, finish_reason = call_llm(
-                args.base_url, args.model, prompt, args.reasoning_effort, args.timeout, args.max_tokens,
-                api_key=args.api_key,
-            )
-            if finish_reason == "length":
-                # Afgekapt antwoord levert ongeldige JSON op; melden waaróm het misging,
-                # anders lijkt het op een willekeurige parse-fout.
-                raise ValueError(f"antwoord afgekapt op max_tokens={args.max_tokens} (verhoog --max-tokens)")
-            parsed = _extract_json(raw_content)
-            arguments = _extract_arguments(parsed)
-        except Exception as exc:
-            elapsed = time.monotonic() - start
-            logger.error("[doc %5d] %-25s FOUT na %5.1fs: %s", doc["id"], doc["actor_name"], elapsed, exc)
+    # Prijs vooraf vastleggen (alleen zinvol tegen de HF-router, zie
+    # pipeline/hf_pricing.py) en tijdens de run periodiek herchecken -- een
+    # provider kan halverwege een lange batch stilletjes gaan rekenen (zie
+    # de OVHcloud/Qwen-observatie in docs/handoff.md), en dat mag onopgemerkt
+    # geen kosten opleveren. Een prijsdáling is geen reden om te stoppen.
+    price_baseline = get_baseline_pricing(args.model, args.base_url)
+    PRICE_CHECK_INTERVAL = 100
+
+    def process_result(r):
+        """Schrijft één resultaat direct weg zodra het binnenkomt -- i.p.v.
+        eerst alle resultaten te verzamelen en pas daarna te verwerken, wat
+        bij --parallel alle voortgang/writes tot na de laatste taak zou
+        uitstellen (geen tussentijds zicht op voortgang, en bij een
+        onderbroken run meer al-uitgevoerd LLM-werk dat nooit weggeschreven
+        werd)."""
+        nonlocal total_arguments, total_claims, total_errors
+        doc, elapsed, started_at = r["doc"], r["elapsed"], r["started_at"]
+        if not r["ok"]:
+            logger.error("[doc %5d] %-25s FOUT na %5.1fs: %s", doc["id"], doc["actor_name"], elapsed, r["error"])
             total_errors += 1
             if not args.dry_run:
                 record_llm_call(
                     conn, stage="extraction", topic_id=topic_id, document_id=doc["id"], model=args.model,
                     prompt_version=PROMPT_VERSION, started_at=started_at, duration_s=elapsed,
-                    status="error", error_message=str(exc),
+                    status="error", error_message=r["error"],
                 )
-            continue
-        elapsed = time.monotonic() - start
+            return
         latencies.append(elapsed)
+        raw_content, usage, arguments = r["raw_content"], r["usage"], r["arguments"]
         if not args.dry_run:
             record_llm_call(
                 conn, stage="extraction", topic_id=topic_id, document_id=doc["id"], model=args.model,
@@ -349,6 +393,36 @@ def main():
         )
         total_arguments += n_valid
         total_claims += n_claims
+
+    if args.parallel:
+        client = make_client(dashboard=True)
+        logger.info("Parallelle modus: %d LLM-calls verdeeld over dask (dashboard: %s)", len(documents), client.dashboard_link)
+        futures = client.map(
+            _extract_one, documents,
+            topic_name=topic_name, topic_description=topic_description, model=args.model, base_url=args.base_url,
+            reasoning_effort=args.reasoning_effort, timeout=args.timeout, max_tokens=args.max_tokens,
+            api_key=args.api_key,
+        )
+        for i, future in enumerate(as_completed(futures), 1):
+            process_result(future.result())
+            if i % PRICE_CHECK_INTERVAL == 0 and not price_still_matches(args.model, args.base_url, price_baseline):
+                remaining = [f for f in futures if not f.done()]
+                logger.error(
+                    "Batch afgebroken na %d/%d documenten wegens prijsstijging (%d resterende taken geannuleerd).",
+                    i, len(documents), len(remaining),
+                )
+                client.cancel(remaining)
+                break
+        client.close()
+    else:
+        for i, doc in enumerate(documents, 1):
+            process_result(_extract_one(
+                doc, topic_name, topic_description, args.model, args.base_url, args.reasoning_effort,
+                args.timeout, args.max_tokens, args.api_key,
+            ))
+            if i % PRICE_CHECK_INTERVAL == 0 and not price_still_matches(args.model, args.base_url, price_baseline):
+                logger.error("Batch afgebroken na %d/%d documenten wegens prijsstijging.", i, len(documents))
+                break
 
     conn.close()
 

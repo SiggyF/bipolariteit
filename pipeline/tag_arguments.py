@@ -27,7 +27,11 @@ import time
 from datetime import datetime, timezone
 from pathlib import Path
 
+from dask.distributed import as_completed
+
+from pipeline.dask_client import make_client
 from pipeline.db import db
+from pipeline.hf_pricing import get_baseline_pricing, price_still_matches
 from pipeline.llm_client import call_llm
 from pipeline.llm_log import record_llm_call
 from pipeline.periodes import PeriodeIndex
@@ -304,6 +308,35 @@ def fetch_untagged_arguments(conn, topic_id, limit, min_id=0, vanaf=None, ids=No
     ).fetchall()
 
 
+def _tag_one(arg, topic_name, tag_catalogue, tag_json_skeleton, valid_tags, model, base_url, reasoning_effort, timeout, max_tokens, api_key):
+    """Eén argument door de LLM halen, zonder DB-writes -- puur zodat dit
+    veilig via dask over meerdere workers/threads kan lopen (--parallel).
+    sqlite3-writes (incl. assign_derived_tags) blijven altijd in het
+    hoofdproces, in `main()`."""
+    prompt = _build_prompt(
+        topic_name, arg["actor_name"], arg["actor_party"], arg["stance"], arg["typology"],
+        arg["quote_text"], arg["quote_context"], tag_catalogue, tag_json_skeleton,
+    )
+    start = time.monotonic()
+    started_at = datetime.now(timezone.utc).isoformat()
+    try:
+        raw_content, usage, finish_reason = call_llm(
+            base_url, model, prompt, reasoning_effort, timeout, max_tokens, api_key=api_key,
+        )
+        if finish_reason == "length":
+            raise ValueError(f"antwoord afgekapt op max_tokens={max_tokens} (verhoog --max-tokens)")
+        llm_tags = _validate_tags(_extract_json(raw_content), valid_tags)
+        return {
+            "arg": arg, "ok": True, "raw_content": raw_content, "usage": usage, "llm_tags": llm_tags,
+            "elapsed": time.monotonic() - start, "started_at": started_at,
+        }
+    except Exception as exc:
+        return {
+            "arg": arg, "ok": False, "raw_content": None, "error": str(exc),
+            "elapsed": time.monotonic() - start, "started_at": started_at,
+        }
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--topic", required=True, help="topic-slug, bv. stikstof")
@@ -343,6 +376,12 @@ def main():
         help="prioriteer argumenten met de meest recente documentdatum (i.p.v. de default, oplopend op id)",
     )
     parser.add_argument("--dry-run", action="store_true", help="niets naar de database schrijven, alleen printen")
+    parser.add_argument(
+        "--parallel", action="store_true",
+        help="verdeel LLM-calls over dask (de devcontainer's persistente scheduler, zie pipeline/dask_client.py) "
+             "i.p.v. sequentieel -- alleen zinvol tegen een remote provider die concurrency aankan (bv. de "
+             "HF-router); lokale LM Studio verwerkt toch maar één request tegelijk",
+    )
     args = parser.parse_args()
 
     conn = db.connect()
@@ -372,6 +411,9 @@ def main():
     if not arguments:
         logger.info("Geen ongetagde argumenten (al verwerkt, of geen argumenten voor deze topic).")
         return
+    # dask kan sqlite3.Row niet deterministisch tokenizen/serialiseren (nodig
+    # voor --parallel); gewone dicts werken overal waar Row ook werkte.
+    arguments = [dict(arg) for arg in arguments]
     if ids is not None and len(arguments) < len(ids):
         gevonden = {row["id"] for row in arguments}
         gemist = [i for i in ids if i not in gevonden]
@@ -390,40 +432,33 @@ def main():
     total_errors = 0
     latencies = []
 
-    for arg in arguments:
+    # Prijs vooraf vastleggen (alleen zinvol tegen de HF-router, zie
+    # pipeline/hf_pricing.py) en tijdens de run periodiek herchecken -- zie
+    # dezelfde aanpak in extract_arguments.py. Een prijsdáling is geen reden
+    # om te stoppen.
+    price_baseline = get_baseline_pricing(args.model, args.base_url)
+    PRICE_CHECK_INTERVAL = 100
+
+    def process_result(r):
+        """Schrijft één resultaat direct weg zodra het binnenkomt -- zie
+        dezelfde toelichting in extract_arguments.py's process_result()."""
+        nonlocal total_derived, total_llm, total_errors
+        arg, elapsed, started_at = r["arg"], r["elapsed"], r["started_at"]
         derived = assign_derived_tags(conn, arg["id"], arg["document_id"], arg["actor_id"], dry_run=True)
         total_derived += len(derived)
 
-        prompt = _build_prompt(
-            topic_name, arg["actor_name"], arg["actor_party"], arg["stance"], arg["typology"],
-            arg["quote_text"], arg["quote_context"], tag_catalogue, tag_json_skeleton,
-        )
-        start = time.monotonic()
-        started_at = datetime.now(timezone.utc).isoformat()
-        llm_tags = []
-        raw_content = None
-        try:
-            raw_content, usage, finish_reason = call_llm(
-                args.base_url, args.model, prompt, args.reasoning_effort, args.timeout, args.max_tokens,
-                api_key=args.api_key,
-            )
-            if finish_reason == "length":
-                raise ValueError(f"antwoord afgekapt op max_tokens={args.max_tokens} (verhoog --max-tokens)")
-            parsed = _extract_json(raw_content)
-            llm_tags = _validate_tags(parsed, valid_tags)
-        except Exception as exc:
-            elapsed = time.monotonic() - start
-            logger.error("[arg %5d] %-25s FOUT na %5.1fs: %s", arg["id"], arg["actor_name"], elapsed, exc)
+        if not r["ok"]:
+            logger.error("[arg %5d] %-25s FOUT na %5.1fs: %s", arg["id"], arg["actor_name"], elapsed, r["error"])
             total_errors += 1
             if not args.dry_run:
                 record_llm_call(
                     conn, stage="tagging", topic_id=topic_id, document_id=arg["document_id"], argument_id=arg["id"],
                     model=args.model, prompt_version=PROMPT_VERSION, started_at=started_at, duration_s=elapsed,
-                    response=raw_content, status="error", error_message=str(exc),
+                    response=r["raw_content"], status="error", error_message=r["error"],
                 )
-            continue
-        elapsed = time.monotonic() - start
+            return
         latencies.append(elapsed)
+        raw_content, usage, llm_tags = r["raw_content"], r["usage"], r["llm_tags"]
         if not args.dry_run:
             record_llm_call(
                 conn, stage="tagging", topic_id=topic_id, document_id=arg["document_id"], argument_id=arg["id"],
@@ -446,6 +481,36 @@ def main():
             "[arg %5d] %-25s %5.1fs | derived: %s | llm: %s",
             arg["id"], arg["actor_name"], elapsed, derived, llm_sleutels,
         )
+
+    if args.parallel:
+        client = make_client(dashboard=True)
+        logger.info("Parallelle modus: %d LLM-calls verdeeld over dask (dashboard: %s)", len(arguments), client.dashboard_link)
+        futures = client.map(
+            _tag_one, arguments,
+            topic_name=topic_name, tag_catalogue=tag_catalogue, tag_json_skeleton=tag_json_skeleton,
+            valid_tags=valid_tags, model=args.model, base_url=args.base_url, reasoning_effort=args.reasoning_effort,
+            timeout=args.timeout, max_tokens=args.max_tokens, api_key=args.api_key,
+        )
+        for i, future in enumerate(as_completed(futures), 1):
+            process_result(future.result())
+            if i % PRICE_CHECK_INTERVAL == 0 and not price_still_matches(args.model, args.base_url, price_baseline):
+                remaining = [f for f in futures if not f.done()]
+                logger.error(
+                    "Batch afgebroken na %d/%d argumenten wegens prijsstijging (%d resterende taken geannuleerd).",
+                    i, len(arguments), len(remaining),
+                )
+                client.cancel(remaining)
+                break
+        client.close()
+    else:
+        for i, arg in enumerate(arguments, 1):
+            process_result(_tag_one(
+                arg, topic_name, tag_catalogue, tag_json_skeleton, valid_tags, args.model, args.base_url,
+                args.reasoning_effort, args.timeout, args.max_tokens, args.api_key,
+            ))
+            if i % PRICE_CHECK_INTERVAL == 0 and not price_still_matches(args.model, args.base_url, price_baseline):
+                logger.error("Batch afgebroken na %d/%d argumenten wegens prijsstijging.", i, len(arguments))
+                break
 
     conn.close()
 

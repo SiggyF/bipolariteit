@@ -28,11 +28,11 @@ import time
 from pathlib import Path
 
 import dask
-from dask.distributed import Client
 from morecantile.commons import Tile
 from pmtiles.tile import Compression, TileType, tileid_to_zxy, zxy_to_tileid
 from pmtiles.writer import write
 
+from pipeline.dask_client import make_client
 from pipeline.paths import REPO_ROOT
 from pipeline.tiling.encode import encode_tile, field_types
 from pipeline.tiling.grid import (
@@ -47,12 +47,6 @@ from pipeline.tiling.grid import (
 )
 
 logger = logging.getLogger(__name__)
-
-# Vast adres, zodat `make dev`-achtige devcontainer-opstart al een `dask
-# scheduler`/`dask worker` (built-in dask-CLI, zie `dask --help`) op deze
-# poorten kan klaarzetten -- build_pyramid hoeft dan zelf geen cluster meer
-# op te tuigen (zie .devcontainer/devcontainer.json postStartCommand).
-SCHEDULER_ADDRESS = "tcp://127.0.0.1:8786"
 
 DEFAULT_INPUT = REPO_ROOT / "data" / "export" / "plenair-map.json"
 DEFAULT_OUTPUT = REPO_ROOT / "data" / "export" / "plenair-map.pmtiles"
@@ -76,28 +70,6 @@ def encode_one_tile(tile_id: int, points: list, lookups: dict, tms) -> tuple[int
     bounds = tile_bounds(tms, Tile(x=x, y=y, z=z))
     data = encode_tile(points, lookups, bounds)
     return tile_id, data
-
-
-def make_client(dashboard: bool) -> Client | None:
-    """Verbind bij voorkeur met een al draaiende `dask scheduler` (built-in
-    dask-CLI, zie `dask --help` -- geen eigen wrapper eromheen), die in de
-    devcontainer al vanaf postStartCommand draait samen met een `dask worker`
-    (.devcontainer/devcontainer.json). Dashboard blijft zo staan onafhankelijk
-    van welke pipeline-stap er net draait. Geen scheduler bereikbaar (bv.
-    buiten de devcontainer, of los uitgevoerd)? Val terug op een eigen,
-    kortstondige lokale cluster -- zelfde dashboard-poort, maar verdwijnt met
-    dit proces.
-    """
-    if not dashboard:
-        return None
-    try:
-        client = Client(SCHEDULER_ADDRESS, timeout="2s")
-        logger.info("Verbonden met bestaande dask-scheduler %s (dashboard: %s)", SCHEDULER_ADDRESS, client.dashboard_link)
-        return client
-    except OSError:
-        client = Client(processes=False, dashboard_address=":8787")
-        logger.info("Geen bestaande scheduler gevonden, eigen lokale cluster gestart (dashboard: %s)", client.dashboard_link)
-        return client
 
 
 def build(

@@ -53,7 +53,10 @@ experiments = [
     "umap-learn>=0.5.12",
 ]
 tiling = [
-    "bokeh>=3.1.0",
+    # <3.10: bokeh 3.10 breekt distributed 2026.8.0's dashboard (Document.title
+    # is nu een kale string i.p.v. een Title-object) -- AttributeError, 500 op
+    # /status. distributed volgt bokeh-compat meestal met vertraging.
+    "bokeh>=3.1.0,<3.10",
     "dask[distributed]>=2026.8.0",
     "mapbox-vector-tile>=2.2.0",
     "morecantile>=7.0.3",
