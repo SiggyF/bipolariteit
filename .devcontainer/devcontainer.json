@@ -109,10 +109,12 @@
   // opruiming; stdin expliciet sluiten voorkomt dat het proces alsnog aan
   // een sessie hangt die straks wegvalt.
   //
-  // --nthreads 12 (i.p.v. de default = aantal cores, hier 8): de LLM-extractie/
+  // --nthreads 10 (i.p.v. de default = aantal cores, hier 8): de LLM-extractie/
   // tagging-batches (pipeline/extract_arguments.py, pipeline/tag_arguments.py
   // --parallel) zijn netwerk-IO-bound, niet CPU-bound (de thread-cpu-tijd per
   // taak is verwaarloosbaar t.o.v. de wachttijd op de HTTP-response) -- meer
-  // gelijktijdige threads dan cores is dus prima en verhoogt de doorvoer.
-  "postStartCommand": "sudo chown -R vscode:vscode ~/.claude ~/.gemini && setsid nohup uv run --group tiling dask scheduler --host 127.0.0.1 --port 8786 --dashboard-address :8787 > /tmp/dask-scheduler.log 2>&1 < /dev/null & setsid nohup uv run --group tiling dask worker tcp://127.0.0.1:8786 --nthreads 12 > /tmp/dask-worker.log 2>&1 < /dev/null &"
+  // gelijktijdige threads dan cores is dus prima en verhoogt de doorvoer. 12
+  // bleek te veel: de Hugging Face-router rate-limitte toen met HTTP 429
+  // (105 van de 1000 requests in een batch), bij 10 gebeurde dat niet.
+  "postStartCommand": "sudo chown -R vscode:vscode ~/.claude ~/.gemini && setsid nohup uv run --group tiling dask scheduler --host 127.0.0.1 --port 8786 --dashboard-address :8787 > /tmp/dask-scheduler.log 2>&1 < /dev/null & setsid nohup uv run --group tiling dask worker tcp://127.0.0.1:8786 --nthreads 10 > /tmp/dask-worker.log 2>&1 < /dev/null &"
 }
