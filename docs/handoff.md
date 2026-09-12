@@ -2,7 +2,20 @@
 
 Status per 2026-07-27. Zie `docs/plan.md` voor het volledige, goedgekeurde architectuurplan. Dit document is voor het vervolg: wat staat er al, wat is er onderweg ontdekt, en wat is de volgende concrete stap.
 
-## Stand bij einde sessie (2026-09-12, video-shorts vereenvoudigd naar landscape, issue #268) — begin hier bij een nieuwe sessie
+## Stand bij einde sessie (2026-09-12, zoom-afhankelijke puntreductie tile-pyramide, issue #259) — begin hier bij een nieuwe sessie
+
+**Context**: PR #296 (`feature/259-tiled-map-point-reduction`, open, nog niet gemerged). Startpunt was de vraag om `TiledPlenairMap.vue`/de HF-gepubliceerde pmtiles te testen; bleek dat `pipeline/tiling/build_pyramid.py` nooit puntreductie per zoomniveau deed -- elk van de 731.985 punten zat op elk van de 9 zoomniveaus in zijn tile (live gemeten: 1,22GB, zoom-0-tile alleen al 134MB).
+
+**Wat er nu staat**:
+- `point_priority(point_id)`: vaste, hash-gebaseerde pseudo-random rangorde per punt (0..1, deterministisch, geen `random`-module/seed nodig).
+- Nieuw debug-hulpmiddel: `frontend/public/plenair-map-viewer-hf.html` -- standalone MapLibre+pmtiles-viewer die rechtstreeks tegen de Hugging-Face-URL laadt (i.p.v. lokaal bestand), kleurt per jaar (`published_at`), zwarte achtergrond. Live geverifieerd: `206 Partial Content` via de HF-CDN-redirect, geen CORS-fouten.
+- Tiling-builds lopen op de host, niet in de devcontainer (gebruikersinstructie) -- devcontainer's eigen persistente dask-scheduler/worker (`postStartCommand`) bleek trouwens niet te draaien tijdens deze sessie, is opnieuw gestart voor toekomstig gebruik in de devcontainer zelf.
+
+**Openstaand, nog NIET gefixt** -- eerste puntreductie-poging (`thin_tile_points()`, inmiddels weer aangepast in de laatste commit maar het onderliggende ontwerpprobleem staat nog open): een **vlakke cap per tile** (altijd max `--max-points-per-tile`, ongeacht hoeveel een tile daadwerkelijk bevat) geeft een misleidend beeld. Live bevestigd met een screenshot van de gebruiker: aan de randen van de UMAP-ruimte zitten kleine, geometrisch compacte "satelliet"-clusters (afgelegen punten, ca. 1% van de dataset spant al een groot deel van de coördinatenrange op) die van nature al onder de cap zitten en dus **niet** uitgedund worden, terwijl de grote centrale massa keihard uitgedund wordt tot dezelfde absolute cap. Resultaat: na thinning oogt het dunne centrum leger dan de kleine randclusters, het omgekeerde van de werkelijke dichtheid.
+
+**Voorgestelde fix (nog te implementeren)**: budget niet per tile vastzetten, maar **per zoomniveau globaal** verdelen naar rato van de werkelijke verdeling. Omdat elke tile-groepering per zoom toch al alle punten bevat (`assign_tiles_for_zoom()` dekt de volledige dataset), volstaat: (1) één keer alle punten sorteren op `point_priority()`, (2) per zoomniveau een budget = `aantal_tiles(zoom) * max_points_per_tile`, (3) de eerste `budget` punten uit de gesorteerde lijst behouden, ongeacht in welke tile ze vallen, en dat filter toepassen per tile vóór het encoderen. Omdat priority positie-onafhankelijk is, is de "kept"-set dan een representatieve steekproef van de ruimtelijke verdeling (drukke tiles houden proportioneel meer, dunne tiles proportioneel minder) -- en de zoom-monotonie-garantie blijft intact, want budget groeit met het aantal tiles per zoom (elk zoomniveau kwadrant-splitst, dus budget verviervoudigt ongeveer per stap), dus "top-budget(z)" blijft een subset van "top-budget(z+1)" bij dezelfde globale rangorde.
+
+**Volgende stap**: dit implementeren in `pipeline/tiling/build_pyramid.py` (in plaats van/naast het huidige `thin_tile_points()`), opnieuw bouwen op de host, opnieuw publiceren naar HF, en visueel controleren dat rand- en centrumtiles nu een consistente dichtheidsindruk geven.
 
 Vervolg op de sessie hieronder: op verzoek van de gebruiker is de verticale
 9:16-crop (en daarmee de hele OpenCV-gezichtsdetectie) losgelaten. De 4
