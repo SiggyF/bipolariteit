@@ -17,21 +17,25 @@ Gebruik:
     uv run python -m pipeline.plenary_map.label_export --label full \
         --base-url https://router.huggingface.co/v1 \
         --llm-chat-model Qwen/Qwen3.8-27B:ovhcloud --llm-api-key $HF_TOKEN \
-        --export-suffix=-full-v2 --export-frontend --limit 100
+        --export-suffix=-full-v2 --export-frontend --limit 100 --parallel
 """
 import argparse
 import json
 import logging
 
+from pipeline.dask_client import make_client
 from pipeline.embed.lmstudio import detect_base_url
+from pipeline.hf_pricing import get_baseline_pricing, price_still_matches
 from pipeline.paths import REPO_ROOT
-from pipeline.plenary_map.label import label_clusters_with_llm
+from pipeline.plenary_map.label import label_clusters_with_llm, label_clusters_with_llm_dask
 
 logger = logging.getLogger(__name__)
 
 OUTPUT_DIR = REPO_ROOT / "data" / "plenary-map"
 CLUSTERS_EXPORT_PATH = REPO_ROOT / "data" / "export" / "plenair-map-clusters.json"
 HIERARCHY_EXPORT_PATH = REPO_ROOT / "data" / "export" / "plenair-map-hierarchy.json"
+WRITE_INTERVAL = 20
+PRICE_CHECK_INTERVAL = 100
 
 
 def main():
@@ -44,6 +48,12 @@ def main():
     parser.add_argument(
         "--limit", type=int, default=None,
         help="max aantal NOG NIET gelabelde clusters deze aanroep (default: alles in één keer)",
+    )
+    parser.add_argument(
+        "--parallel", action="store_true",
+        help="verdeel LLM-calls over dask (de devcontainer's persistente scheduler, zie pipeline/dask_client.py) "
+             "i.p.v. sequentieel -- alleen zinvol tegen een remote provider die concurrency aankan (bv. de "
+             "HF-router); lokale LM Studio verwerkt toch maar één request tegelijk",
     )
     parser.add_argument(
         "--export-frontend", action="store_true",
@@ -67,7 +77,7 @@ def main():
     def _suffixed(path):
         return path.with_name(f"{path.stem}{args.export_suffix}{path.suffix}") if args.export_suffix else path
 
-    def _persist(level_idx, cluster_id):
+    def _write():
         # coarse/fine zijn losse top-level sleutels (backward compat,
         # PlenairMap.vue) die na json.load() NIET meer hetzelfde list-object
         # zijn als levels[0]/levels[-1] -- expliciet opnieuw gelijk zetten
@@ -84,13 +94,41 @@ def main():
                 json.dumps(hierarchy, ensure_ascii=False), encoding="utf-8",
             )
 
-    llm_base_url = detect_base_url(args.base_url)
-    label_clusters_with_llm(
-        level_lists, hierarchy, examples_by_level, llm_base_url, args.llm_chat_model,
-        args.llm_reasoning_effort, api_key=args.llm_api_key,
-        limit=args.limit, on_cluster_labeled=_persist,
-    )
+    # Elk cluster wegschrijven is op de volle ~3600-cluster-dataset onnodig
+    # veel I/O (clusters+hierarchy+suffixed-kopieën, tot ~22 MiB per keer) --
+    # elke WRITE_INTERVAL clusters is frequent genoeg om bij een afgebroken
+    # run weinig voortgang te verliezen, zonder de disk plat te leggen.
+    done_count = 0
 
+    def _persist(level_idx, cluster_id):
+        nonlocal done_count
+        done_count += 1
+        if done_count % WRITE_INTERVAL == 0:
+            _write()
+
+    llm_base_url = detect_base_url(args.base_url)
+    price_baseline = get_baseline_pricing(args.llm_chat_model, llm_base_url)
+
+    if args.parallel:
+        client = make_client(dashboard=True)
+        logger.info("Parallelle modus: LLM-naamgeving verdeeld over dask (dashboard: %s)", client.dashboard_link)
+        label_clusters_with_llm_dask(
+            level_lists, hierarchy, examples_by_level, llm_base_url, args.llm_chat_model,
+            args.llm_reasoning_effort, client, api_key=args.llm_api_key,
+            limit=args.limit, on_cluster_labeled=_persist,
+            price_check=lambda i: i % PRICE_CHECK_INTERVAL != 0 or price_still_matches(
+                args.llm_chat_model, llm_base_url, price_baseline,
+            ),
+        )
+        client.close()
+    else:
+        label_clusters_with_llm(
+            level_lists, hierarchy, examples_by_level, llm_base_url, args.llm_chat_model,
+            args.llm_reasoning_effort, api_key=args.llm_api_key,
+            limit=args.limit, on_cluster_labeled=_persist,
+        )
+
+    _write()
     remaining = sum(1 for summaries in level_lists for s in summaries if not s.get("duiding"))
     logger.info("klaar -- %d clusters nog te labelen (roep opnieuw aan om verder te gaan)", remaining)
 

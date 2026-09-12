@@ -28,6 +28,7 @@ API_KEY ?=
 CLUSTER_LEVEL_SIZES ?=
 EXPORT_SUFFIX ?=
 LIMIT_CLUSTERS ?=
+PARALLEL ?=
 # Zonder expliciete BASE_URL=... op de command line wordt scripts/detect_llm_base_url.sh
 # gebruikt: probeert localhost:1234 en host.docker.internal:1234 (devcontainer),
 # en stopt met een foutmelding als geen van beide een LM Studio-instance heeft.
@@ -87,12 +88,12 @@ cluster-plenary-map: ## Plenaire-kaart-pijplijn stage 3 -- hiërarchische cluste
 		--export-frontend $(if $(EXPORT_SUFFIX),--export-suffix=$(EXPORT_SUFFIX),) \
 		$(if $(CLUSTER_LEVEL_SIZES),--cluster-level-sizes $(CLUSTER_LEVEL_SIZES),)
 
-label-clusters: ## Plenaire-kaart-pijplijn stage 4 -- LLM-naamgeving van de clusters uit `make cluster-plenary-map` (hervatbaar, in porties met LIMIT_CLUSTERS). Vars: EMBED_LABEL, EXPORT_SUFFIX, LIMIT_CLUSTERS, MODEL, API_KEY, BASE_URL
+label-clusters: ## Plenaire-kaart-pijplijn stage 4 -- LLM-naamgeving van de clusters uit `make cluster-plenary-map` (hervatbaar, in porties met LIMIT_CLUSTERS, PARALLEL=1 voor dask). Vars: EMBED_LABEL, EXPORT_SUFFIX, LIMIT_CLUSTERS, PARALLEL, MODEL, API_KEY, BASE_URL
 	@url=$$($(RESOLVE_BASE_URL)) || exit 1; \
 	uv run python -m pipeline.plenary_map.label_export --label $(EMBED_LABEL) \
 		--base-url $$url --llm-chat-model $(MODEL) $(if $(API_KEY),--llm-api-key $(API_KEY),) \
 		--export-frontend $(if $(EXPORT_SUFFIX),--export-suffix=$(EXPORT_SUFFIX),) \
-		$(if $(LIMIT_CLUSTERS),--limit $(LIMIT_CLUSTERS),)
+		$(if $(LIMIT_CLUSTERS),--limit $(LIMIT_CLUSTERS),) $(if $(PARALLEL),--parallel,)
 
 pipeline: ## Volledige analyse-pipeline voor één topic op rij: crawl -> ingest -> extract -> tag -> export (zie docs/pipeline.md). Vars: TOPIC, LIMIT, SOORT, BASE_URL. `redactie` draait hier bewust niet in mee -- vereist Docker agy/Gemini i.p.v. de lokale LLM van de rest van deze keten, en herstructureert de hele argumentenboom (zie #252), dus een bewuste losse stap. export regenereert ook data/export/gepubliceerd/ lokaal; publiceren naar bipolariteit-data (tags-taxonomy/publish-data) blijft een bewuste losse stap erna.
 	$(MAKE) crawl TOPIC=$(TOPIC) LIMIT=$(LIMIT)
