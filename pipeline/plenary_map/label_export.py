@@ -1,11 +1,11 @@
 """
-Losse LLM-naamgevingsstap voor een al gedraaide UMAP/HDBSCAN-clustering
-(pipeline/plenary_map/cluster.py --skip-clustering=False --skip-llm-naming).
-Werkt uitsluitend op de opgeslagen clusters-/hierarchy-/cluster-label-input-
-bestanden in docs/poc/umap-documenten/ -- geen UMAP-coördinaten of
-documentcorpus nodig, dus geschikt om los te draaien (bv. in de
-devcontainer tegen een gratis remote router, terwijl de UMAP-fit zelf op de
-host draaide vanwege geheugengebruik, zie docs/handoff.md).
+Losse LLM-naamgevingsstap voor een al gedraaide clustering
+(pipeline/plenary_map/cluster.py). Werkt uitsluitend op de opgeslagen
+clusters-/hierarchy-/cluster-label-input-bestanden in data/plenary-map/ --
+geen UMAP-coördinaten of documentcorpus nodig, dus geschikt om los te
+draaien (bv. in de devcontainer tegen een gratis remote router, terwijl de
+UMAP-fit zelf op de host draaide vanwege geheugengebruik, zie
+docs/handoff.md).
 
 Hervatbaar: een cluster met een al gevulde `duiding` wordt overgeslagen, dus
 herhaald aanroepen op dezelfde `--label` labelt alleen wat nog ontbreekt.
@@ -29,7 +29,7 @@ from pipeline.plenary_map.label import label_clusters_with_llm
 
 logger = logging.getLogger(__name__)
 
-OUTPUT_DIR = REPO_ROOT / "docs" / "poc" / "umap-documenten"
+OUTPUT_DIR = REPO_ROOT / "data" / "plenary-map"
 CLUSTERS_EXPORT_PATH = REPO_ROOT / "data" / "export" / "plenair-map-clusters.json"
 HIERARCHY_EXPORT_PATH = REPO_ROOT / "data" / "export" / "plenair-map-hierarchy.json"
 
