@@ -382,12 +382,16 @@ patroon als hierboven bij `publish-data`.
 
 `scripts/publish_huggingface.py` heeft dat tussenstapje niet: de bestanden
 staan meteen live op
-`https://huggingface.co/datasets/SiggyF/bipolariteit-pmtiles/resolve/main/<bestandsnaam>`
-zodra het script klaar is, zelfde "overschrijf de huidige data"-flow als
-`publish-data`'s jsDelivr-route. Nog niet gedaan: de frontend daadwerkelijk
-tegen deze URL laten fetchen (welke workflows dat gaan gebruiken is een
-bewust nog niet genomen besluit, zie issue #293) -- deze stap publiceert de
-data alvast, los van die keuze.
+`https://huggingface.co/datasets/SiggyF/bipolariteit-pmtiles/resolve/main/<submap>/<bestandsnaam>`
+zodra het script klaar is (`<submap>` = `--repo-subdir`, default
+`plenair-map` — één submap per dataset in deze repo, niet alles plat naast
+elkaar), zelfde "overschrijf de huidige data"-flow als `publish-data`'s
+jsDelivr-route. Sinds issue #316 fetcht `TiledPlenairMap.vue` de kleine
+`plenair-map.pmtiles`/`-grid.json` daadwerkelijk tegen deze URL
+(`resolveTilesBaseUrl()`, zie `frontend/src/lib/dataBaseUrl.ts`) -- de
+volle-dataset-bundel (`plenair-map-full.*`) blijft archief-/downloaddata,
+nog niet door een frontend-workflow gefetcht (welke dat gaat worden is een
+bewust nog niet genomen besluit, zie issue #293).
 
 ## Data publiceren
 

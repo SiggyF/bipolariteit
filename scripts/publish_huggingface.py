@@ -7,6 +7,14 @@ Gebruik:
     uv run python scripts/publish_huggingface.py --dry-run
     uv run python scripts/publish_huggingface.py --files data/export/plenair-map-full.pmtiles
 
+Bestanden komen te staan onder een submap in de dataset-repo (--repo-subdir,
+default "plenair-map") -- in tegenstelling tot Zenodo's platte bucket
+(waar een "/" in de bestandsnaam slechts een S3-key-truc is, zie
+docs/data-layout.md) ondersteunt de Hugging Face Hub-API `path_in_repo` als
+een echt pad. Eén submap per dataset houdt de repo opgeruimd nu er zowel de
+volle-dataset-bundel (`make publish-huggingface`) als de kleine
+alledaagse pmtiles (`make publish-tiles`) in dezelfde repo terechtkomen.
+
 Zelfde bundel als `scripts/publish_zenodo.py` (`data/export/zenodo/`, gevuld
 door `make tiles-full`) -- de twee publiceerstappen delen zo altijd dezelfde
 bestandenlijst. Het verschil zit in de bestemming, niet in de inhoud: Zenodo
@@ -38,6 +46,7 @@ logger = logging.getLogger(__name__)
 
 DEFAULT_BUNDLE_DIR = REPO_ROOT / "data" / "export" / "zenodo"
 DEFAULT_REPO_ID = "SiggyF/bipolariteit-pmtiles"
+DEFAULT_REPO_SUBDIR = "plenair-map"
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -50,6 +59,12 @@ def main(argv: list[str] | None = None) -> int:
         help=f"te uploaden bestanden (default: alles in {DEFAULT_BUNDLE_DIR}, zie `make tiles-full`)",
     )
     parser.add_argument("--repo-id", default=DEFAULT_REPO_ID, help=f"HF dataset-repo (default: {DEFAULT_REPO_ID})")
+    parser.add_argument(
+        "--repo-subdir",
+        default=DEFAULT_REPO_SUBDIR,
+        help=f"submap in de dataset-repo waaronder de bestanden komen (default: {DEFAULT_REPO_SUBDIR!r}, "
+        "leeg '' voor de repo-root)",
+    )
     parser.add_argument("--dry-run", action="store_true", help="toon wat er zou gebeuren, upload niets")
     args = parser.parse_args(argv)
 
@@ -72,10 +87,18 @@ def main(argv: list[str] | None = None) -> int:
         logger.error("bestand(en) niet gevonden: %s", ", ".join(missing))
         return 1
 
+    subdir = args.repo_subdir.strip("/")
+
+    def path_in_repo(f: Path) -> str:
+        return f"{subdir}/{f.name}" if subdir else f.name
+
     total_mb = sum(f.stat().st_size for f in args.files) / 1024 / 1024
-    logger.info("repo: %s -- %d bestand(en), %.1f MiB totaal:", args.repo_id, len(args.files), total_mb)
+    logger.info(
+        "repo: %s%s -- %d bestand(en), %.1f MiB totaal:",
+        args.repo_id, f"/{subdir}" if subdir else "", len(args.files), total_mb,
+    )
     for f in args.files:
-        logger.info("  %s (%.1f MiB)", f, f.stat().st_size / 1024 / 1024)
+        logger.info("  %s -> %s (%.1f MiB)", f, path_in_repo(f), f.stat().st_size / 1024 / 1024)
 
     if args.dry_run:
         logger.info("dry-run, geen Hugging Face-aanroepen gedaan")
@@ -90,11 +113,12 @@ def main(argv: list[str] | None = None) -> int:
     api.create_repo(repo_id=args.repo_id, repo_type="dataset", private=False, exist_ok=True)
 
     for f in args.files:
-        logger.info("upload %s ...", f.name)
-        api.upload_file(path_or_fileobj=f, path_in_repo=f.name, repo_id=args.repo_id, repo_type="dataset")
+        target = path_in_repo(f)
+        logger.info("upload %s ...", target)
+        api.upload_file(path_or_fileobj=f, path_in_repo=target, repo_id=args.repo_id, repo_type="dataset")
         logger.info(
             "klaar: %s -- live op https://huggingface.co/datasets/%s/resolve/main/%s",
-            f.name, args.repo_id, f.name,
+            target, args.repo_id, target,
         )
     return 0
 

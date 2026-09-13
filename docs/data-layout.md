@@ -218,6 +218,13 @@ Gekozen boven jsDelivr/git omdat CORS + HTTP Range bevestigd werken op HF's
 dataset-CDN voor bestanden ver boven de 100 MB-/20 MB-grenzen van
 GitHub/jsDelivr (issue #293).
 
+Bestanden komen te staan onder een submap per dataset (`--repo-subdir`,
+default `plenair-map`) in plaats van plat naast elkaar — in tegenstelling
+tot Zenodo's platte S3-bucket (§3) ondersteunt de Hugging Face Hub-API
+`path_in_repo` als een echt pad. Nu zowel de kleine als de volle-dataset-
+bundel in dezelfde repo staan, voorkomt dat een herhaling van de platte-
+lijst-rommel die Zenodo had.
+
 `make tiles-full` vult de bundelmap:
 `plenair-map-full.pmtiles`, `-full-grid.json`, `-full.json`,
 `-clusters-full.json`, `-hierarchy-full.json`.

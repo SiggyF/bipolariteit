@@ -20,7 +20,12 @@ export function resolveDataBaseUrl(): string {
 // dezelfde /data-fallback als hierboven: sirv serveert ook .pmtiles-
 // bestanden, dus een lokale data/export/gepubliceerd/-checkout met de
 // tegelpyramide erin werkt zonder aparte publiceerstap.
-const TILES_CDN_BASE_URL = "https://huggingface.co/datasets/SiggyF/bipolariteit-pmtiles/resolve/main";
+//
+// /plenair-map is de submap waar scripts/publish_huggingface.py
+// (--repo-subdir, default "plenair-map") naartoe publiceert -- één submap
+// per dataset in deze repo, i.p.v. alle bestanden plat naast elkaar, nu er
+// zowel de kleine als de volle-dataset-bundel in dezelfde HF-repo komen.
+const TILES_CDN_BASE_URL = "https://huggingface.co/datasets/SiggyF/bipolariteit-pmtiles/resolve/main/plenair-map";
 
 export function resolveTilesBaseUrl(): string {
 	return import.meta.env.PUBLIC_TILES_BASE_URL ?? (import.meta.env.DEV ? "/data" : TILES_CDN_BASE_URL);
