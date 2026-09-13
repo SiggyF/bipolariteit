@@ -337,8 +337,17 @@ De volle-dataset-tegelpyramide van de plenaire kaart (issue #281,
 `data/export/plenair-map-full.pmtiles`, ~1,25 GiB, plus
 `plenair-map-full.json`, ~119 MiB) is te groot voor git/GitHub (100 MB
 harde bestandslimiet) en hoort dus niet in `data/export/gepubliceerd/` zoals
-hierboven -- die route is specifiek voor de kleine, live door de site
-gefetchte dataset (`plenair-map.pmtiles`, dat wél al in de submodule zit).
+hierboven.
+
+**Sinds issue #316 geldt dat ook voor de kleine variant** (`plenair-map.pmtiles`,
+~50 MiB): pmtiles hoort principieel bij Hugging Face, niet bij de compacte
+jsDelivr-hosting, ook al zou hij onder jsDelivr's bestandslimiet blijven.
+`TiledPlenairMap.vue` fetcht 'm via een losse `tilesBaseUrl`-prop
+(`resolveTilesBaseUrl()` in `frontend/src/lib/dataBaseUrl.ts`), naast de
+gewone `dataBaseUrl` voor de rest van de submodule-data. `make tiles`
+schrijft het bestand zoals altijd naar `data/export/`;
+`make publish-tiles` publiceert het naar dezelfde HF-dataset-repo als
+`publish-huggingface` hieronder.
 
 In plaats daarvan gaat dit soort grote data naar twee bestemmingen met een
 losse rol (besluit uit issue #293), zelfde bronbundel, geen van beide

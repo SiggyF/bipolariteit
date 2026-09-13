@@ -55,7 +55,7 @@ Gevuld door `make export` (`pipeline/build_static_data.py`) en
 | `argument-trees/*.json` | `pipeline/build_confrontatie_export.py` (`make redactie`) | `pages/onderwerpen/[slug].astro` |
 | `eval/*.json` | `scripts/convert_elecdebate.py` + benchmark | `pages/validatie-rapportage*.astro` |
 | `plenair-map.json`, `-clusters.json`, `-hierarchy.json` | `pipeline/plenary_map/cluster.py --export-frontend` | client-side fetch (`PlenairMap.vue`), en gekopieerd naar de submodule |
-| `plenair-map.pmtiles`, `plenair-map-grid.json` | `pipeline/tiling/build_pyramid.py` (`make tiles`) | *(zie PR 2: verhuist naar Hugging Face)* |
+| `plenair-map.pmtiles`, `plenair-map-grid.json` | `pipeline/tiling/build_pyramid.py` (`make tiles`) | `TiledPlenairMap.vue`, via Hugging Face (§4) — niet de submodule |
 
 **Wees, wordt opgeruimd (issue #316):** `plenair-map-debates.json` — geschreven
 door `build_static_data.py`, door niets gelezen.
@@ -222,9 +222,17 @@ GitHub/jsDelivr (issue #293).
 `plenair-map-full.pmtiles`, `-full-grid.json`, `-full.json`,
 `-clusters-full.json`, `-hierarchy-full.json`.
 
-**In behandeling (issue #316, PR 2)**: ook de kleine `plenair-map.pmtiles`
-(nu nog handmatig in de submodule gezet, zonder schrijver) verhuist hierheen
-— pmtiles horen bij Hugging Face, niet bij de compacte jsDelivr-hosting.
+**De kleine `plenair-map.pmtiles`/`plenair-map-grid.json` gaan hier ook
+naartoe** (issue #316) — pmtiles horen bij Hugging Face, niet bij de
+compacte jsDelivr-hosting, ook al zou het kleine bestand (~50 MiB) onder
+jsDelivr's 20 MB-limiet sowieso al niet passen. `make tiles` schrijft ze
+naar `data/export/` zoals altijd; `make publish-tiles` publiceert ze naar
+dezelfde `SiggyF/bipolariteit-pmtiles`-repo (los van de `-full`-bundel, dus
+zonder dat elke kleine kaartupdate de hele volle-dataset-bundel opnieuw
+hoeft). `TiledPlenairMap.vue` fetcht ze via `resolveTilesBaseUrl()`
+(`frontend/src/lib/dataBaseUrl.ts`), een losse basis-URL naast
+`resolveDataBaseUrl()` voor de rest van de submodule-data. De bestanden
+zijn uit `data/export/gepubliceerd/` (de submodule) verwijderd.
 
 ## Bekende openstaande problemen (niet in dit issue opgelost)
 

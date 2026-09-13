@@ -10,3 +10,18 @@ const CDN_BASE_URL = "https://cdn.jsdelivr.net/gh/bipolariteit/bipolariteit-data
 export function resolveDataBaseUrl(): string {
 	return import.meta.env.PUBLIC_DATA_BASE_URL ?? (import.meta.env.DEV ? "/data" : CDN_BASE_URL);
 }
+
+// Losse basis-URL voor de tile-pyramide van de plenaire kaart
+// (plenair-map.pmtiles/-grid.json, TiledPlenairMap.vue): pmtiles hoort bij
+// Hugging Face, niet bij de compacte jsDelivr-hosting hierboven (zie
+// docs/data-layout.md, issue #316) -- ook de kleine variant, ondanks dat
+// jsDelivr's 20 MB-limiet er nog onder zou blijven, om niet twee
+// publicatiepaden voor hetzelfde bestandstype te laten bestaan. In dev
+// dezelfde /data-fallback als hierboven: sirv serveert ook .pmtiles-
+// bestanden, dus een lokale data/export/gepubliceerd/-checkout met de
+// tegelpyramide erin werkt zonder aparte publiceerstap.
+const TILES_CDN_BASE_URL = "https://huggingface.co/datasets/SiggyF/bipolariteit-pmtiles/resolve/main";
+
+export function resolveTilesBaseUrl(): string {
+	return import.meta.env.PUBLIC_TILES_BASE_URL ?? (import.meta.env.DEV ? "/data" : TILES_CDN_BASE_URL);
+}

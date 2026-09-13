@@ -38,7 +38,7 @@ else
   RESOLVE_BASE_URL = scripts/detect_llm_base_url.sh
 endif
 
-.PHONY: help probe crawl ingest embed umap label-clusters pipeline test test-js test-frontend ca-fixture status build dev dev-stop extract extract-agy tag tag-agy redactie validate export enrich-video fetch-debate-events fetch-subtitles match-video-spans check-video-urls tags-taxonomy db-init pipeline-status backup-db release release-dry release-www release-www-dry check-public-exposure argument-doc export-public-data publish-data publish-zenodo publish-huggingface tiles tiles-full
+.PHONY: help probe crawl ingest embed umap label-clusters pipeline test test-js test-frontend ca-fixture status build dev dev-stop extract extract-agy tag tag-agy redactie validate export enrich-video fetch-debate-events fetch-subtitles match-video-spans check-video-urls tags-taxonomy db-init pipeline-status backup-db release release-dry release-www release-www-dry check-public-exposure argument-doc export-public-data publish-data publish-zenodo publish-huggingface publish-tiles tiles tiles-full
 
 help: ## Toon deze lijst
 	@grep -E '^[a-zA-Z_-]+:.*## ' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*## "}; {printf "  \033[36m%-16s\033[0m %s\n", $$1, $$2}'
@@ -186,6 +186,9 @@ publish-zenodo: ## Nieuwe Zenodo-versie (draft) van de volle-dataset-tegelpyrami
 
 publish-huggingface: ## Zelfde bundel als publish-zenodo, maar naar een publieke HF-dataset-repo als live data (direct overschreven, geen aparte publiceerstap, zie docs/release.md). Vars: HUGGINGFACE_TOKEN
 	uv run python scripts/publish_huggingface.py
+
+publish-tiles: ## Publiceert de kleine plenair-map.pmtiles/-grid.json (van `make tiles`) naar dezelfde Hugging Face-dataset-repo als publish-huggingface -- pmtiles hoort bij HF, niet bij de jsDelivr-submodule (issue #316, TiledPlenairMap.vue). Vars: HUGGINGFACE_TOKEN
+	uv run python scripts/publish_huggingface.py --files data/export/plenair-map.pmtiles data/export/plenair-map-grid.json
 
 build: ## Frontend production build (frontend/dist/)
 	cd frontend && npm run build
