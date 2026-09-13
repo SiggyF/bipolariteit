@@ -902,11 +902,17 @@ def main():
     parser.add_argument(
         "--export-suffix",
         default="",
+        choices=["", "-full"],
         help="voegt <suffix> toe aan de export-bestandsnamen (plenair-map<suffix>.json enz.), "
-        "i.p.v. het bestaande plenair-map.json te overschrijven -- bv. --export-suffix -full "
-        "voor een volledigere dataset naast de bestaande, op ~40k punten performance-getunede "
-        "PlenairMap.vue-export (die blijft ongewijzigd, zie TiledPlenairMap.vue/pipeline.tiling "
-        "voor het renderpad dat wél een groter puntenaantal aankan).",
+        "i.p.v. het bestaande plenair-map.json te overschrijven -- '-full' voor de volledigere "
+        "dataset naast de bestaande, op ~40k punten performance-getunede PlenairMap.vue-export "
+        "(die blijft ongewijzigd, zie TiledPlenairMap.vue/pipeline.tiling voor het renderpad dat "
+        "wél een groter puntenaantal aankan). Bewust beperkt tot deze twee vaste waarden (issue "
+        "#316): een vrij getypte suffix zoals het vroegere '-full-v2' laat oude generaties "
+        "achter in zowel de werkboom als (via publish_zenodo.py's copy-forward-mechanisme) "
+        "élke latere Zenodo-versie, omdat niets met dezelfde naam ze ooit vervangt. Bij een "
+        "nieuwe '-full'-run: archiveer eerst de vorige met `make publish-zenodo`/`publish-"
+        "huggingface`, overschrijf dan pas lokaal.",
     )
     parser.add_argument("--skip-clustering", action="store_true", help="clustering + TF-IDF-labeling overslaan")
     parser.add_argument("--cluster-method", choices=["hdbscan", "dbscan"], default="hdbscan")

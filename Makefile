@@ -175,8 +175,7 @@ tiles-full: ## Zelfde als `tiles`, maar op de volle-dataset-export (plenair-map-
 	mkdir -p data/export/zenodo
 	uv run python -m pipeline.tiling.build_pyramid \
 		--input data/export/plenair-map-full.json \
-		--out data/export/zenodo/plenair-map-full.pmtiles \
-		--grid-out data/export/zenodo/plenair-map-full-grid.json
+		--out data/export/zenodo/plenair-map-full.pmtiles
 	cp data/export/plenair-map-full.json data/export/plenair-map-clusters-full.json data/export/plenair-map-hierarchy-full.json data/export/zenodo/
 
 publish-data: export-public-data ## Commit + push data/export/gepubliceerd/ (submodule) naar bipolariteit/bipolariteit-data, gefetcht via jsDelivr (zie docs/release.md). Los van een frontend-release, niet automatisch in CI

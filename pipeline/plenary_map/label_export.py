@@ -17,7 +17,7 @@ Gebruik:
     uv run python -m pipeline.plenary_map.label_export --label full \
         --base-url https://router.huggingface.co/v1 \
         --llm-chat-model Qwen/Qwen3.8-27B:ovhcloud --llm-api-key $HF_TOKEN \
-        --export-suffix=-full-v2 --export-frontend --limit 100 --parallel
+        --export-suffix=-full --export-frontend --limit 100 --parallel
 """
 import argparse
 import json
@@ -59,7 +59,11 @@ def main():
         "--export-frontend", action="store_true",
         help="ook data/export/plenair-map-clusters<suffix>.json en -hierarchy<suffix>.json bijwerken",
     )
-    parser.add_argument("--export-suffix", default="")
+    parser.add_argument(
+        "--export-suffix", default="", choices=["", "-full"],
+        help="zie pipeline/plenary_map/cluster.py's --export-suffix -- zelfde vaste keuze "
+        "('' of '-full'), om dezelfde reden (issue #316).",
+    )
     args = parser.parse_args()
 
     clusters_path = OUTPUT_DIR / f"clusters-{args.label}.json"

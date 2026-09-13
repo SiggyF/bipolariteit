@@ -136,8 +136,26 @@ boven.
 `scripts/publish_data.py::open_main_repo_pr()` commit **alles** wat
 `git status --porcelain -- data/export` in de hoofdrepo meldt, zonder
 grootte- of patroonfilter. `.gitignore` is de enige bescherming — zo lekte
-ooit een 125 MiB `-full-v2`-export mee (PR #315). Houd `.gitignore` compleet
-bij elke nieuwe `--export-suffix`-variant.
+ooit een 125 MiB `-full-v2`-export mee (PR #315).
+
+**`--export-suffix` staat sinds issue #316 vast op `''` of `'-full'`**
+(`pipeline/plenary_map/cluster.py`/`label_export.py`, argparse `choices`) —
+geen vrije tekst meer. Een los getypte versiesuffix als `-full-v2` gaf niet
+alleen `.gitignore`-gaten, maar liet ook oude generaties permanent
+achter op Zenodo: `publish_zenodo.py::create_new_version()` kopieert een
+nieuwe versie altijd inclusief alle bestanden van de vorige, en
+`remove_stale_files()` vervangt alléén bestanden met exact dezelfde naam.
+Met een vaste naam per run vervangt elke nieuwe `-full`-publicatie de
+vorige daadwerkelijk, in plaats van er telkens een nieuwe naast te zetten.
+Wil je een oude `-full`-generatie behouden voor vergelijk? Archiveer 'm
+eerst expliciet (`make publish-zenodo`) vóórdat je 'm lokaal overschrijft
+— niet via een verzonnen suffix.
+
+Dezelfde reden lag onder de inconsistente grid-bestandsnamen
+(`plenair-map-full-grid.json` vs. `-grid-full.json`, zie §1): `--grid-out`
+in `pipeline/tiling/build_pyramid.py` werd los getypt. Sinds #316 wordt het
+standaard afgeleid van `--out` (`<stem>-grid.json`) — alleen expliciet
+zetten voor een bewust afwijkend pad.
 
 ## 3. Zenodo — archief
 
@@ -148,6 +166,15 @@ bundelmap `data/export/zenodo/` (zie §4), maakt een nieuwe versie aan als
 kopie van de vorige (bestaande bestanden blijven staan tenzij gelijknamig
 vervangen), en blijft een **draft** — publiceren is een bewuste handmatige
 stap in de Zenodo-UI. Vereist `ZENODO_TOKEN`.
+
+Dat copy-forward-gedrag is bewust voor de ruwe crawl-XML (elke
+`raw_xml__<onderwerp>.zip` hoort een groeiend archief per onderwerp te zijn
+— een hercrawl overschrijft 'm gewoon onder dezelfde naam) maar ongewenst
+voor afgeleide artefacten: die horen bij elke versie **vervangen** te
+worden, niet te stapelen. Zorg dus dat elke categorie een vaste bestandsnaam
+gebruikt (zie hierboven, `--export-suffix`) in plaats van een naam die per
+run verandert — anders blijven oude, overbodige generaties voor altijd in
+élke latere versie zitten.
 
 **Huidige dekking** (record 22181705): 13 raw-XML-zips per crawl-zoekterm,
 één `embeddings__..._plenair-full.npz` (1,1 GiB, ouder npz-formaat — de
@@ -162,12 +189,19 @@ actuele cache in `data/embeddings/` is parquet), en vier
   (`_plenair_2017-2024`, `_commissie_2017-2024`, `_commissie_2024-2025-gat`,
   `_plenair_2025-gat`, samen ~2,2 GB). Deze bestaan nergens anders.
 
-**Bestandsnaamconventie is niet afdwingbaar**: de huidige
+**Bestandsstructuur is nu plat en niet afdwingbaar**: de huidige
 `raw_xml__`/`derived__`/`embeddings__`-prefixen staan alleen in de
 bestandsnamen zelf, niet in `publish_zenodo.py` (die uploadt gewoon
-`path.name`). Bij een volgende herstructurering: submappen per categorie in
-de bundelmap, één zip per categorie bij upload, zodat het record een
-handvol logische bundels heeft in plaats van tientallen losse bestanden.
+`path.name`), en alle ~19 bestanden staan zo onder elkaar in één platte
+lijst. Zenodo's bucket-API is S3-achtig: een bestandsnaam mag `/` bevatten,
+en Zenodo toont de map vóór de laatste `/` als een map in de
+bestandenlijst (geen echte geneste buckets, wel een bruikbare boomweergave,
+en elk bestand blijft individueel downloadbaar — in tegenstelling tot een
+zip). Bij de eerstvolgende herstructurering (PR 3): categorie-prefixen
+vervangen door echte paden, bv. `raw_xml/tweede_kamer_abortus.zip`,
+`derived/plenair-map-full.json`, `a0-map/density_color_a0_300dpi_rotated.tif`.
+Eerst met één bestand op de draft testen — dit is afgeleid S3-gedrag, geen
+expliciet gedocumenteerde Zenodo-feature.
 
 ## 4. Hugging Face — live grote data
 

@@ -117,9 +117,12 @@ data/export/*-grid-full.json
 data/export/plenair-map-grid.json
 data/plenary-map/*-full.geojson
 data/plenary-map/grid-*.json
-# Versienummer-varianten van bovenstaande (bv. --export-suffix=-full-v2 voor
-# een nieuwe clustering/labeling naast de bestaande -full, zie docs/handoff.md):
-# zelfde reden om ze te negeren.
+# Vangnet voor het vroegere vrij-getypte --export-suffix (bv. -full-v2):
+# pipeline/plenary_map/cluster.py en label_export.py staan sinds issue #316
+# alleen nog '' of '-full' toe (een vrije versiesuffix liet oude generaties
+# achter in zowel de werkboom als, via publish_zenodo.py's copy-forward-
+# mechanisme, élke latere Zenodo-versie). Deze regel blijft als vangnet
+# mocht er ooit toch weer los mee gerommeld worden.
 data/export/*-full-v*.json
 # Gedeelde bundelmap voor scripts/publish_zenodo.py EN
 # scripts/publish_huggingface.py (issue #281): grote, archiefachtige
