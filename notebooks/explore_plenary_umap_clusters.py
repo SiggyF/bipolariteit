@@ -40,7 +40,7 @@ Wat dit script doet, in volgorde:
 
 Waarom een los script i.p.v. rechtstreeks pipeline/plenary_map/cluster.py
 aanpassen: dat script draait de volle ~99k-punten-dataset en schrijft naar de
-productie-export (data/export/plenair-map*.json, frontend-input). Dit script
+productie-export (data/export/plenair-map/plenair-map*.json, frontend-input). Dit script
 hergebruikt zijn kernfuncties (fetch_documents, strip_speaker_prefix,
 run_clustering, label_multilevel_clusters, ...) maar werkt op een kleine,
 snel te herhalen steekproef en schrijft nergens naar productie-output.

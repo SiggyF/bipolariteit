@@ -68,9 +68,6 @@ data/export/tag_batch_stikstof_response.json
 data/export/tag_quality_review.md
 data/export/extractie_review_feedback.md
 data/export/extractie_review_stikstof.md
-# Geschreven door pipeline/build_static_data.py maar door niets gelezen
-# (frontend noch scripts) -- wees, zie issue #316.
-data/export/plenair-map-debates.json
 # A0-printposter-renderpijplijn (issue #215, scripts/a0_map/): grote
 # rasters/PSD/QGIS-tussenproducten, regenereerbaar en/of op Zenodo
 # gearchiveerd (zie docs/data-layout.md) -- alleen de kleine, herbruikbare
@@ -89,10 +86,16 @@ data/export/a0-map/*
 !data/export/a0-map/methodology_workflow.d2
 !data/export/a0-map/methodology_workflow.svg
 !data/export/a0-map/cielab_legend_widget.svg
+# data/export/plenair-map/ bundelt alle plenair-map-exportbestanden bij
+# elkaar (issue #316) i.p.v. los tussen de rest van data/export/ -- alleen
+# de 4 kleine, live-databestanden zijn hieronder ingecheckt
+# (plenair-map.json/-clusters.json/-hierarchy.json/-videos.json), de rest
+# is tussenproduct/grote-datasetvariant.
+#
 # Tile-pyramide (pipeline/tiling/, issue #215/#253): regenereerbaar via
 # `make tiles`/`make tiles-full` -- .pmtiles-bestanden (tot 250+ MiB voor de
 # volle-dataset-variant) horen sowieso niet in git.
-data/export/*.pmtiles
+data/export/plenair-map/*.pmtiles
 # Tussenproducten van pipeline/plenary_map/umap.py resp. cluster.py: pure,
 # regenereerbare pijplijndata, op de volle dataset te groot om in git te
 # willen -- coords ~20 MiB, cluster-label-input ~30 MiB.
@@ -103,18 +106,19 @@ data/plenary-map/cluster-label-input-*.json
 # varianten (tot 16 MiB) -- niet meenemen in git.
 data/plenary-map/plot-full.html
 # -full-varianten van de UMAP/cluster-export (data/plenary-map/ én
-# data/export/): bestemd voor Zenodo/Hugging Face (make publish-zenodo/
-# publish-huggingface), niet voor de website-data (make publish-data) --
-# zonder deze regels veegt scripts/publish_data.py ze per ongeluk mee (zag
-# ooit een 125 MiB bestand GitHub's 100 MiB-limiet overschrijden). Geldt
-# ook voor het bijbehorende affiene-grid-metadatabestand, ongeacht de
-# naamvolgorde (plenair-map-full-grid.json vs. -grid-full.json).
-data/export/*-full.json
-data/export/*-full.geojson
-data/export/*-flat.geojson
-data/export/*-full-grid.json
-data/export/*-grid-full.json
-data/export/plenair-map-grid.json
+# data/export/plenair-map/): bestemd voor Zenodo/Hugging Face (make
+# publish-zenodo/publish-huggingface), niet voor de website-data (make
+# publish-data) -- zonder deze regels veegt scripts/publish_data.py ze per
+# ongeluk mee (zag ooit een 125 MiB bestand GitHub's 100 MiB-limiet
+# overschrijden). Geldt ook voor het bijbehorende affiene-grid-
+# metadatabestand, ongeacht de naamvolgorde (plenair-map-full-grid.json
+# vs. -grid-full.json).
+data/export/plenair-map/*-full.json
+data/export/plenair-map/*-full.geojson
+data/export/plenair-map/*-flat.geojson
+data/export/plenair-map/*-full-grid.json
+data/export/plenair-map/*-grid-full.json
+data/export/plenair-map/plenair-map-grid.json
 data/plenary-map/*-full.geojson
 data/plenary-map/grid-*.json
 # Vangnet voor het vroegere vrij-getypte --export-suffix (bv. -full-v2):
@@ -123,7 +127,7 @@ data/plenary-map/grid-*.json
 # achter in zowel de werkboom als, via publish_zenodo.py's copy-forward-
 # mechanisme, élke latere Zenodo-versie). Deze regel blijft als vangnet
 # mocht er ooit toch weer los mee gerommeld worden.
-data/export/*-full-v*.json
+data/export/plenair-map/*-full-v*.json
 # Gedeelde bundelmap voor scripts/publish_zenodo.py EN
 # scripts/publish_huggingface.py (issue #281): grote, archiefachtige
 # bestanden die niet in git/de gepubliceerde-submodule horen, zie
@@ -131,7 +135,7 @@ data/export/*-full-v*.json
 # rechtstreeks in; de overige -full-companions worden er losstaand naartoe
 # gekopieerd -- alle losse patronen hierboven dekken de inhoud toch al,
 # expliciet vermeld voor de duidelijkheid.
-data/export/zenodo/
+data/export/plenair-map/bundel/
 
 node_modules/
 frontend/dist/

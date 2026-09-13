@@ -54,11 +54,18 @@ Gevuld door `make export` (`pipeline/build_static_data.py`) en
 | `llm_calls/*.json` | idem | `pages/prompts/*.astro` |
 | `argument-trees/*.json` | `pipeline/build_confrontatie_export.py` (`make redactie`) | `pages/onderwerpen/[slug].astro` |
 | `eval/*.json` | `scripts/convert_elecdebate.py` + benchmark | `pages/validatie-rapportage*.astro` |
-| `plenair-map.json`, `-clusters.json`, `-hierarchy.json` | `pipeline/plenary_map/cluster.py --export-frontend` | client-side fetch (`PlenairMap.vue`), en gekopieerd naar de submodule |
-| `plenair-map.pmtiles`, `plenair-map-grid.json` | `pipeline/tiling/build_pyramid.py` (`make tiles`) | `TiledPlenairMap.vue`, via Hugging Face (§4) — niet de submodule |
+| `plenair-map/plenair-map.json`, `-clusters.json`, `-hierarchy.json`, `-videos.json` | `pipeline/plenary_map/cluster.py --export-frontend` | client-side fetch (`PlenairMap.vue`), en gekopieerd naar de submodule |
+| `plenair-map/plenair-map.pmtiles`, `-grid.json` | `pipeline/tiling/build_pyramid.py` (`make tiles`) | `TiledPlenairMap.vue`, via Hugging Face (§4) — niet de submodule |
 
-**Wees, wordt opgeruimd (issue #316):** `plenair-map-debates.json` — geschreven
-door `build_static_data.py`, door niets gelezen.
+**`data/export/plenair-map/`** bundelt alle plenair-map-exportbestanden bij
+elkaar (issue #316) i.p.v. los tussen de rest van `data/export/` — een
+losse map per dataset, net als `topics/`, `llm_calls/`, `argument-trees/`
+en `a0-map/` hiernaast al hadden. Alleen de 4 kleine live-databestanden
+hierboven zijn getrackt; de rest (`.pmtiles`, `-full`-varianten, `grid.json`,
+`bundel/`) is gitignored, zie hieronder. De vroegere wees
+`plenair-map-debates.json` (geschreven door niets meer, gelezen door niets)
+is bij deze opruiming permanent verwijderd, geen enkele writer bestaat er
+nog voor.
 
 **Niet in git** (gitignored, zie `.gitignore` voor de volledige regels):
 `*.pmtiles`, alle `*-full*`-varianten (bestemd voor Zenodo/Hugging Face, niet
@@ -162,7 +169,7 @@ zetten voor een bewust afwijkend pad.
 `scripts/publish_zenodo.py`, concept-record
 [10.5281/zenodo.22181704](https://doi.org/10.5281/zenodo.22181704) (huidige
 publieke versie: 22181705). Uploadt standaard alles in de gedeelde
-bundelmap `data/export/zenodo/` (zie §4), maakt een nieuwe versie aan als
+bundelmap `data/export/plenair-map/bundel/` (zie §4), maakt een nieuwe versie aan als
 kopie van de vorige (bestaande bestanden blijven staan tenzij gelijknamig
 vervangen), en blijft een **draft** — publiceren is een bewuste handmatige
 stap in de Zenodo-UI. Vereist `ZENODO_TOKEN`.
@@ -207,8 +214,8 @@ expliciet gedocumenteerde Zenodo-feature.
 
 `scripts/publish_huggingface.py`, dataset-repo
 `SiggyF/bipolariteit-pmtiles` (publiek). Zelfde bron als Zenodo
-(`data/export/zenodo/`, ondanks de naam ook de Hugging Face-bundel — bewust
-gedeeld zodat beide publicatiestappen niet uit de pas kunnen lopen), maar
+(`data/export/plenair-map/bundel/`, gedeeld tussen beide publicatiestappen
+zodat ze niet uit de pas kunnen lopen), maar
 bestanden worden **direct overschreven** zonder aparte publiceerstap: dit is
 de live-databron, niet het archief. Vereist `HUGGINGFACE_TOKEN` — let op:
 dit is het publicatietoken, niet `HUGGINGFACE_INFERENCE_TOKEN` dat voor

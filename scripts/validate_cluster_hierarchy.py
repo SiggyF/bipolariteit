@@ -19,7 +19,7 @@ hangen, is in feite geen zinvolle subdivisie van dat niveau.
 
 Gebruik:
     uv run python scripts/validate_cluster_hierarchy.py \
-        data/export/plenair-map-clusters-full.json
+        data/export/plenair-map/plenair-map-clusters-full.json
 """
 
 import argparse

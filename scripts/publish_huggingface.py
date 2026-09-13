@@ -5,7 +5,7 @@ Gebruik:
 
     uv run python scripts/publish_huggingface.py
     uv run python scripts/publish_huggingface.py --dry-run
-    uv run python scripts/publish_huggingface.py --files data/export/plenair-map-full.pmtiles
+    uv run python scripts/publish_huggingface.py --files data/export/plenair-map/plenair-map-full.pmtiles
 
 Bestanden komen te staan onder een submap in de dataset-repo (--repo-subdir,
 default "plenair-map") -- in tegenstelling tot Zenodo's platte bucket
@@ -15,8 +15,9 @@ een echt pad. Eén submap per dataset houdt de repo opgeruimd nu er zowel de
 volle-dataset-bundel (`make publish-huggingface`) als de kleine
 alledaagse pmtiles (`make publish-tiles`) in dezelfde repo terechtkomen.
 
-Zelfde bundel als `scripts/publish_zenodo.py` (`data/export/zenodo/`, gevuld
-door `make tiles-full`) -- de twee publiceerstappen delen zo altijd dezelfde
+Zelfde bundel als `scripts/publish_zenodo.py`
+(`data/export/plenair-map/bundel/`, gevuld door `make tiles-full`) -- de
+twee publiceerstappen delen zo altijd dezelfde
 bestandenlijst. Het verschil zit in de bestemming, niet in de inhoud: Zenodo
 is het archief (DOI/versionering, handmatig gepubliceerd, zie
 `publish_zenodo.py`), Hugging Face is de live-databron -- bestanden hier
@@ -44,7 +45,7 @@ from pipeline.paths import REPO_ROOT
 
 logger = logging.getLogger(__name__)
 
-DEFAULT_BUNDLE_DIR = REPO_ROOT / "data" / "export" / "zenodo"
+DEFAULT_BUNDLE_DIR = REPO_ROOT / "data" / "export" / "plenair-map" / "bundel"
 DEFAULT_REPO_ID = "SiggyF/bipolariteit-pmtiles"
 DEFAULT_REPO_SUBDIR = "plenair-map"
 

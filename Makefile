@@ -168,15 +168,15 @@ tags-taxonomy: ## data/tags.toml -> frontend/src/lib/tagsTaxonomy.generated.ts
 export-public-data: ## data/export/topics/*.json -> data/export/gepubliceerd/ (lean, per perspectief/onderwerp/tag), voor publish-data (issue #163)
 	cd frontend && npx tsx scripts/export_public_data.ts
 
-tiles: ## data/export/plenair-map.json -> plenair-map.pmtiles (vector-tile-pyramide, morecantile-grid + dask, zie issue #215/#253) -- experimenteel alternatief renderpad, los van `export`
+tiles: ## data/export/plenair-map/plenair-map.json -> plenair-map.pmtiles (vector-tile-pyramide, morecantile-grid + dask, zie issue #215/#253) -- experimenteel alternatief renderpad, los van `export`
 	uv run python -m pipeline.tiling.build_pyramid
 
-tiles-full: ## Zelfde als `tiles`, maar op de volle-dataset-export (plenair-map-full.json -> data/export/zenodo/plenair-map-full.pmtiles, zie issue #281) -- verwacht dat pipeline/plenary_map/cluster.py --export-suffix=-full al gedraaid is. Bundelt meteen de companion-bestanden voor `make publish-zenodo` in dezelfde map (zie docs/release.md)
-	mkdir -p data/export/zenodo
+tiles-full: ## Zelfde als `tiles`, maar op de volle-dataset-export (plenair-map-full.json -> data/export/plenair-map/bundel/plenair-map-full.pmtiles, zie issue #281) -- verwacht dat pipeline/plenary_map/cluster.py --export-suffix=-full al gedraaid is. Bundelt meteen de companion-bestanden voor `make publish-zenodo` in dezelfde map (zie docs/release.md)
+	mkdir -p data/export/plenair-map/bundel
 	uv run python -m pipeline.tiling.build_pyramid \
-		--input data/export/plenair-map-full.json \
-		--out data/export/zenodo/plenair-map-full.pmtiles
-	cp data/export/plenair-map-full.json data/export/plenair-map-clusters-full.json data/export/plenair-map-hierarchy-full.json data/export/zenodo/
+		--input data/export/plenair-map/plenair-map-full.json \
+		--out data/export/plenair-map/bundel/plenair-map-full.pmtiles
+	cp data/export/plenair-map/plenair-map-full.json data/export/plenair-map/plenair-map-clusters-full.json data/export/plenair-map/plenair-map-hierarchy-full.json data/export/plenair-map/bundel/
 
 publish-data: export-public-data ## Commit + push data/export/gepubliceerd/ (submodule) naar bipolariteit/bipolariteit-data, gefetcht via jsDelivr (zie docs/release.md). Los van een frontend-release, niet automatisch in CI
 	uv run python scripts/publish_data.py
@@ -188,7 +188,7 @@ publish-huggingface: ## Zelfde bundel als publish-zenodo, maar naar een publieke
 	uv run python scripts/publish_huggingface.py
 
 publish-tiles: ## Publiceert de kleine plenair-map.pmtiles/-grid.json (van `make tiles`) naar dezelfde Hugging Face-dataset-repo als publish-huggingface -- pmtiles hoort bij HF, niet bij de jsDelivr-submodule (issue #316, TiledPlenairMap.vue). Vars: HUGGINGFACE_TOKEN
-	uv run python scripts/publish_huggingface.py --files data/export/plenair-map.pmtiles data/export/plenair-map-grid.json
+	uv run python scripts/publish_huggingface.py --files data/export/plenair-map/plenair-map.pmtiles data/export/plenair-map/plenair-map-grid.json
 
 build: ## Frontend production build (frontend/dist/)
 	cd frontend && npm run build
