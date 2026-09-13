@@ -1,3 +1,12 @@
+# Zie docs/data-layout.md voor het volledige overzicht van databestemmingen
+# (repo/git, bipolariteit-data-submodule, Zenodo, Hugging Face) -- de secties
+# hieronder volgen diezelfde indeling.
+
+# ---------------------------------------------------------------------------
+# data/raw/ -- ruwe crawl-input, lokaal regenereerbaar via `make crawl`/
+# `make ingest` (staat al volledig in data/bipolariteit.db), gedeeltelijk
+# gearchiveerd op Zenodo (zie docs/data-layout.md voor de dekking).
+# ---------------------------------------------------------------------------
 # let op: `data/raw/*` i.p.v. `data/raw/` -- met een dichte directory-regel
 # kan git een negation-regel op een bestand daaronder niet meer toepassen
 # (git doorzoekt een uitgesloten directory dan niet meer), zie de
@@ -9,68 +18,118 @@ data/raw/*
 !data/raw/elecdebate60to16/
 data/raw/elecdebate60to16/*
 !data/raw/elecdebate60to16/Makefile
+
+# ---------------------------------------------------------------------------
+# Lokaal-only, regenereerbaar uit de database/pijplijn -- geen brondata om
+# te committen, geen publicatiekanaal.
+# ---------------------------------------------------------------------------
+# WebVTT-ondertitel-cache van pipeline/fetch_subtitles.py -- lokaal
+# hergebruikt tussen runs.
+data/subtitles/
+# Idem, events-cache van pipeline/fetch_debate_events.py.
+data/debate_events/
+# Lokaal gecachte embeddings (pipeline/embed/documents.py), regenereerbaar
+# vanuit de database.
+data/embeddings/
+
+# ---------------------------------------------------------------------------
+# Privé, mag niet publiek -- data/bipolariteit.db bevat naast publieke
+# Kamerstukken ook LLM-call-logs (prompts/responses). Zie issue #301 voor
+# een offsite-backupplan (Google Drive of een privé Hugging Face-dataset);
+# tot die tijd geen enkel publicatiekanaal, alleen `make backup-db` lokaal.
+# ---------------------------------------------------------------------------
+data/*.db
+data/*.db-journal
+data/*.db-wal
+data/*.db-shm
+data/*.db.bak-*
+
+# ---------------------------------------------------------------------------
+# data/export/ -- lean frontend-input die met een release meeleeft (git,
+# hoofdrepo). Alles hieronder is ofwel een groot/experimenteel tussenproduct
+# (niet voor de website) ofwel bestemd voor een ander kanaal (submodule/
+# Zenodo/Hugging Face) en hoort dus NIET in de hoofdrepo.
+# ---------------------------------------------------------------------------
 # data/export/argument-trees/ is wél frontend-input (zie
-# frontend/src/pages/topics/[slug].astro) en wordt dus wel ingecheckt --
+# frontend/src/pages/onderwerpen/[slug].astro) en wordt dus wel ingecheckt --
 # zonder die JSON's blijft de Argumentenboom-sectie op elk topic verborgen.
 # De rest hieronder is experimentele tussendocumentatie, lokale
 # verificatie/input voor handmatig LLM-werk, bewust niet gecommit.
 data/export/argument-docs/
 data/export/design-handoff/
 data/export/agy_confrontatie_tree.log
-# A0-printposter-renderexperimenten (issue #215): regenereerbaar via
-# scripts/render_a0_datashader.py/render_a0_svg.py, geen van beide nog
-# stabiel genoeg voor een definitieve export -- zie de handoff-notitie.
-data/export/a0-map/
-# Tile-pyramide-experiment (pipeline/tiling/, issue #215/#253): regenereerbaar
-# via `make tiles`/`scripts/experiment_umap_documents.py --export-frontend`,
-# net als embeddings/subtitles/debate-events hieronder -- .pmtiles-bestanden
-# (tot 250+ MiB voor de volle-dataset-variant) horen sowieso niet in git, en
-# de -full-varianten wijzigen nog vaak zolang de N-laagse clustering/labeling
-# in ontwikkeling is.
+# Batchlogs/reviewnotities van eenmalige agy-/tag-experimenten (issue #316):
+# stonden ooit ingecheckt, sindsdien niet meer aangeraakt -- lokale
+# werkaantekeningen, geen brondata of frontend-input.
+data/export/run-logs/
+data/export/batch-experiment/
+data/export/tag_batch_stikstof.md
+data/export/tag_batch_stikstof_response.json
+data/export/tag_quality_review.md
+data/export/extractie_review_feedback.md
+data/export/extractie_review_stikstof.md
+# Geschreven door pipeline/build_static_data.py maar door niets gelezen
+# (frontend noch scripts) -- wees, zie issue #316.
+data/export/plenair-map-debates.json
+# A0-printposter-renderpijplijn (issue #215, scripts/a0_map/): grote
+# rasters/PSD/QGIS-tussenproducten, regenereerbaar en/of op Zenodo
+# gearchiveerd (zie docs/data-layout.md) -- alleen de kleine, herbruikbare
+# artefacten (colofon/legenda-HTML, methodology-diagram, QGIS-stijlen en
+# -projecten) worden hieronder expliciet weer ingecheckt.
+data/export/a0-map/*
+!data/export/a0-map/clusters.qml
+!data/export/a0-map/clusters_frosted_glass.qml
+!data/export/a0-map/points.qml
+!data/export/a0-map/a0-umap.qgz
+!data/export/a0-map/a0-umap-frosted-glass.qgz
+!data/export/a0-map/a0-umap-frosted-glass-rotated.qgz
+!data/export/a0-map/colofon.html
+!data/export/a0-map/colofon.md
+!data/export/a0-map/legenda.html
+!data/export/a0-map/methodology_workflow.d2
+!data/export/a0-map/methodology_workflow.svg
+!data/export/a0-map/cielab_legend_widget.svg
+# Tile-pyramide (pipeline/tiling/, issue #215/#253): regenereerbaar via
+# `make tiles`/`make tiles-full` -- .pmtiles-bestanden (tot 250+ MiB voor de
+# volle-dataset-variant) horen sowieso niet in git.
 data/export/*.pmtiles
+# Tussenproducten van pipeline/plenary_map/umap.py resp. cluster.py: pure,
+# regenereerbare pijplijndata, op de volle dataset te groot om in git te
+# willen -- coords ~20 MiB, cluster-label-input ~30 MiB.
+data/plenary-map/coords-*.json
+data/plenary-map/cluster-label-input-*.json
 # Idem: de Cosmograph-plot-HTML voor de volle dataset is met 50+ MiB veel
 # groter dan de overige, wel ingecheckte data/plenary-map/plot-<label>.html-
 # varianten (tot 16 MiB) -- niet meenemen in git.
 data/plenary-map/plot-full.html
-# Tussenproducten van pipeline/plenary_map/umap.py resp. cluster.py: pure,
-# regenereerbare pijplijndata (geen "bekijk dit"-demo zoals de plot-HTML's
-# hierboven), en op de volle dataset te groot om in git te willen -- coords
-# ~20 MiB, cluster-label-input ~30 MiB.
-data/plenary-map/coords-*.json
-data/plenary-map/cluster-label-input-*.json
+# -full-varianten van de UMAP/cluster-export (data/plenary-map/ én
+# data/export/): bestemd voor Zenodo/Hugging Face (make publish-zenodo/
+# publish-huggingface), niet voor de website-data (make publish-data) --
+# zonder deze regels veegt scripts/publish_data.py ze per ongeluk mee (zag
+# ooit een 125 MiB bestand GitHub's 100 MiB-limiet overschrijden). Geldt
+# ook voor het bijbehorende affiene-grid-metadatabestand, ongeacht de
+# naamvolgorde (plenair-map-full-grid.json vs. -grid-full.json).
 data/export/*-full.json
 data/export/*-full.geojson
 data/export/*-flat.geojson
 data/export/*-full-grid.json
+data/export/*-grid-full.json
 data/export/plenair-map-grid.json
+data/plenary-map/*-full.geojson
+data/plenary-map/grid-*.json
 # Versienummer-varianten van bovenstaande (bv. --export-suffix=-full-v2 voor
 # een nieuwe clustering/labeling naast de bestaande -full, zie docs/handoff.md):
-# zelfde reden om ze te negeren, plus ze zijn bestemd voor Zenodo/Hugging Face
-# (make publish-zenodo/publish-huggingface), niet voor de website-data
-# (make publish-data) -- zonder deze regel veegt scripts/publish_data.py ze
-# per ongeluk mee (zag ooit een 125 MiB bestand GitHub's 100 MiB-limiet
-# overschrijden).
+# zelfde reden om ze te negeren.
 data/export/*-full-v*.json
-# Bundel-map voor scripts/publish_zenodo.py (issue #281): grote,
-# archiefachtige bestanden die niet in git/de gepubliceerde-submodule horen,
-# zie docs/release.md. `make tiles-full` schrijft de tegelpyramide er
+# Gedeelde bundelmap voor scripts/publish_zenodo.py EN
+# scripts/publish_huggingface.py (issue #281): grote, archiefachtige
+# bestanden die niet in git/de gepubliceerde-submodule horen, zie
+# docs/data-layout.md. `make tiles-full` schrijft de tegelpyramide er
 # rechtstreeks in; de overige -full-companions worden er losstaand naartoe
 # gekopieerd -- alle losse patronen hierboven dekken de inhoud toch al,
 # expliciet vermeld voor de duidelijkheid.
 data/export/zenodo/
-data/*.db
-data/*.db-journal
-data/*.db-wal
-data/*.db-shm
-data/*.db.bak-*
-# WebVTT-ondertitel-cache van pipeline/fetch_subtitles.py -- lokaal
-# hergebruikt tussen runs, geen brondata om te committen.
-data/subtitles/
-# Idem, events-cache van pipeline/fetch_debate_events.py.
-data/debate_events/
-# Lokaal gecachte embeddings (scripts/experiment_find_similar_arguments.py),
-# regenereerbaar vanuit de database, geen brondata om te committen.
-data/embeddings/
+
 node_modules/
 frontend/dist/
 frontend/public/data/
