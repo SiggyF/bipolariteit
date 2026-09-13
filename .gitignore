@@ -43,6 +43,14 @@ data/export/*-full.geojson
 data/export/*-flat.geojson
 data/export/*-full-grid.json
 data/export/plenair-map-grid.json
+# Versienummer-varianten van bovenstaande (bv. --export-suffix=-full-v2 voor
+# een nieuwe clustering/labeling naast de bestaande -full, zie docs/handoff.md):
+# zelfde reden om ze te negeren, plus ze zijn bestemd voor Zenodo/Hugging Face
+# (make publish-zenodo/publish-huggingface), niet voor de website-data
+# (make publish-data) -- zonder deze regel veegt scripts/publish_data.py ze
+# per ongeluk mee (zag ooit een 125 MiB bestand GitHub's 100 MiB-limiet
+# overschrijden).
+data/export/*-full-v*.json
 # Bundel-map voor scripts/publish_zenodo.py (issue #281): grote,
 # archiefachtige bestanden die niet in git/de gepubliceerde-submodule horen,
 # zie docs/release.md. `make tiles-full` schrijft de tegelpyramide er
