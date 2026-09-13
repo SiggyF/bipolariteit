@@ -13,7 +13,7 @@ draaien.
 Gebruik:
     uv run python -m pipeline.plenary_map.umap \
         --start 2000-01-01 --end 2026-08-30 --label full \
-        --export-coords data/plenary-map/coords-full.json
+        --export-coords data/plenair-map/coords-full.json
 """
 import argparse
 import json

@@ -73,7 +73,17 @@ voor de website), `a0-map/` (op een handvol herbruikbare artefacten na, zie
 hieronder), `argument-docs/`, `design-handoff/`, `agy_confrontatie_tree.log`,
 `zenodo/` (de gedeelde bundelmap, zie §3).
 
-### `data/plenary-map/` — pijplijn-tussenproducten
+### `data/plenair-map/` — pijplijn-tussenproducten
+
+Tot issue #316 heette deze map `data/plenary-map/` (Engelse spelling) naast
+`data/export/plenair-map/` (Nederlandse stam) voor exact hetzelfde dataset
+— nu gelijkgetrokken naar `plenair-map`, zoals vrijwel elke andere plek die
+naar dit dataset verwijst (bestandsnamen, embeddings-mapnamen, Vue-
+componenten). De Python-package (`pipeline/plenary_map/`) en het
+Makefile-target (`cluster-plenary-map`) blijven bewust de Engelse spelling
+gebruiken — dat zijn code-identifiers, geen databestemmingen, en een
+package-/target-hernoeming heeft een eigen, grotere blast radius (import-
+paden). Zie issue #316 voor die afweging.
 
 Gevuld door `make umap` (coords) en `make cluster-plenary-map`
 (clusters/hierarchy/plot). Per `--label` (`sample10pct`, `combined`,
@@ -86,7 +96,7 @@ frontend-export. Niet getrackt: `coords-*.json`/`cluster-label-input-*.json`
 **Let op de naamconventie**: bestanden met `-full` als suffix
 (`clusters-full.geojson`, `grid-full.json`) horen bij de Zenodo/Hugging
 Face-route, niet bij deze `--label`-reeks — zie `.gitignore`'s
-`data/plenary-map/*-full.geojson`/`grid-*.json`-regels.
+`data/plenair-map/*-full.geojson`/`grid-*.json`-regels.
 
 ### `data/export/a0-map/` — A0-printposter (issue #215)
 

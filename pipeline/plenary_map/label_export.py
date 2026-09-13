@@ -1,7 +1,7 @@
 """
 Losse LLM-naamgevingsstap voor een al gedraaide clustering
 (pipeline/plenary_map/cluster.py). Werkt uitsluitend op de opgeslagen
-clusters-/hierarchy-/cluster-label-input-bestanden in data/plenary-map/ --
+clusters-/hierarchy-/cluster-label-input-bestanden in data/plenair-map/ --
 geen UMAP-coördinaten of documentcorpus nodig, dus geschikt om los te
 draaien (bv. in de devcontainer tegen een gratis remote router, terwijl de
 UMAP-fit zelf op de host draaide vanwege geheugengebruik, zie
@@ -31,7 +31,7 @@ from pipeline.plenary_map.label import label_clusters_with_llm, label_clusters_w
 
 logger = logging.getLogger(__name__)
 
-OUTPUT_DIR = REPO_ROOT / "data" / "plenary-map"
+OUTPUT_DIR = REPO_ROOT / "data" / "plenair-map"
 # data/export/plenair-map/ bundelt alle plenair-map-exportbestanden bij
 # elkaar (issue #316), zelfde EXPORT_DIR als pipeline/plenary_map/cluster.py.
 EXPORT_DIR = REPO_ROOT / "data" / "export" / "plenair-map"

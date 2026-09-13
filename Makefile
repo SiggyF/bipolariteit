@@ -79,12 +79,12 @@ embed: ## Plenaire-kaart-pijplijn stage 1 -- documenten embedden met bge-m3, inc
 umap: ## Plenaire-kaart-pijplijn stage 2 -- UMAP op de embeddings (host-only qua geheugengebruik op de volle dataset, zie docs/handoff.md). Verwacht dat `make embed` al gedraaid is (volledige cache-hit, praat zelf niet met LM Studio). Schrijft alleen coördinaten weg voor `make cluster-plenary-map`. Vars: EMBED_START, EMBED_END, EMBED_LABEL
 	uv run python -m pipeline.plenary_map.umap \
 		--start $(EMBED_START) --end $(EMBED_END) --label $(EMBED_LABEL) \
-		--export-coords data/plenary-map/coords-$(EMBED_LABEL).json
+		--export-coords data/plenair-map/coords-$(EMBED_LABEL).json
 
 cluster-plenary-map: ## Plenaire-kaart-pijplijn stage 3 -- hiërarchische clustering + TF-IDF-labels op de coördinaten van `make umap` (geen UMAP, geen LLM-call, dus overal draaibaar). Vars: EMBED_START, EMBED_END, EMBED_LABEL, CLUSTER_LEVEL_SIZES, EXPORT_SUFFIX
 	uv run python -m pipeline.plenary_map.cluster \
 		--start $(EMBED_START) --end $(EMBED_END) --label $(EMBED_LABEL) \
-		--coords-path data/plenary-map/coords-$(EMBED_LABEL).json \
+		--coords-path data/plenair-map/coords-$(EMBED_LABEL).json \
 		--export-frontend $(if $(EXPORT_SUFFIX),--export-suffix=$(EXPORT_SUFFIX),) \
 		$(if $(CLUSTER_LEVEL_SIZES),--cluster-level-sizes $(CLUSTER_LEVEL_SIZES),)
 
