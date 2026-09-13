@@ -10,11 +10,14 @@ Gebruik:
 `data/export/plenair-map-full.pmtiles` (~1,25 GiB, issue #281) en
 `data/export/plenair-map-full.json` (~119 MiB) zijn te groot voor git/GitHub
 (100 MB-harde-limiet) en horen niet in `data/export/gepubliceerd/`
-(`scripts/publish_data.py`'s jsDelivr-route is voor de kleine, live door de
-site gefetchte dataset -- `data/export/plenair-map.pmtiles`, dat wél al in
-die submodule zit). Zie docs/release.md: Zenodo is bewust gekozen voor dit
-soort grote, archiefachtige data (DOI/versionering), niet voor de
-"overschrijf de huidige data"-jsDelivr-flow.
+(`scripts/publish_data.py`'s jsDelivr-route is voor de kleine JSON-/tags-
+data die de site verder gebruikt -- niet voor pmtiles, dat sinds issue #316
+altijd naar Hugging Face gaat, zowel de kleine `data/export/plenair-map.pmtiles`
+(`make publish-tiles`) als deze volle-dataset-variant hieronder). Zie
+docs/release.md: Zenodo is bewust gekozen voor dit soort grote,
+archiefachtige data (DOI/versionering), niet voor de "overschrijf de
+huidige data"-flow die zowel `publish-data` (jsDelivr) als
+`publish-huggingface`/`publish-tiles` (Hugging Face) gebruiken.
 
 `make tiles-full` bundelt de tegelpyramide + companion-bestanden al in
 `data/export/zenodo/` (gitignored) -- default hier is gewoon "alles wat
