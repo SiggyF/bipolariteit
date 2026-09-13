@@ -57,7 +57,7 @@ data/*.db.bak-*
 # verificatie/input voor handmatig LLM-werk, bewust niet gecommit.
 data/export/argument-docs/
 data/export/design-handoff/
-data/export/agy_confrontatie_tree.log
+data/export/argument-trees/agy_confrontatie_tree.log
 # Batchlogs/reviewnotities van eenmalige agy-/tag-experimenten (issue #316):
 # stonden ooit ingecheckt, sindsdien niet meer aangeraakt -- lokale
 # werkaantekeningen, geen brondata of frontend-input.

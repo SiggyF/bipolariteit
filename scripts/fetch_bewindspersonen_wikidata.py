@@ -1,5 +1,5 @@
 """
-Bouwt data/bewindspersonen.toml: ministers/staatssecretarissen relevant voor
+Bouwt data/wikidata/bewindspersonen.toml: ministers/staatssecretarissen relevant voor
 de laatste 2 kamerperiodes (Tweede Kamer 2023-2025 en 2025-heden, samen
 [verwerking].vanaf = 2023-12-06 in config/politieke-periodes.toml) met hun
 partij, via Wikidata. SINDS (zie hieronder) ligt op 2022 -- de start van
@@ -39,7 +39,7 @@ import requests
 
 SPARQL_URL = "https://query.wikidata.org/sparql"
 HEADERS = {"User-Agent": "bipolariteit-wikidata-fetch/0.1 (contact: f.baart@gmail.com; onderzoeksproject)"}
-OUT_PATH = Path(__file__).parent.parent / "data" / "bewindspersonen.toml"
+OUT_PATH = Path(__file__).parent.parent / "data" / "wikidata" / "bewindspersonen.toml"
 
 # De relevante kamerperiodes zijn Tweede Kamer 2023-2025 en 2025-heden (samen
 # [verwerking].vanaf = 2023-12-06 in config/politieke-periodes.toml -- alleen

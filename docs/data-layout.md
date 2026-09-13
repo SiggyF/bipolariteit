@@ -32,6 +32,11 @@ Daarnaast drie categorieën die niet via een publicatiekanaal gaan:
   `scripts/publish_huggingface.py` hergebruiken, met een apart, privé
   dataset-repo).
 
+`data/` heeft bewust geen losse bestanden meer op de root: elk stuk data
+staat in een map die zijn bron of dataset benoemt (`data/wikidata/`,
+`data/plenair-map/`, ...), zodat je aan de padnaam al ziet waar iets
+vandaan komt.
+
 ## 0. `config/` — handmatig onderhouden, apart van `data/`
 
 Sinds issue #316 expliciet gescheiden op **handmatig ingevoerd vs.
@@ -46,22 +51,51 @@ bijgehouden, `data/` is uitsluitend pijplijn-input/-output.
 - `topic-descriptions/*.md` — handgeschreven PRO/CONTRA-duiding per
   onderwerp, input voor `scripts/db/add_topic.py`.
 - `cluster_label_overrides.toml` — handmatige clusterlabel-correcties (zie
-  §1 hieronder voor de gegenereerde `cluster-label-anchors.parquet` die
+  hieronder voor de gegenereerde `cluster-label-anchors.parquet` die
   ermee paart).
 
-**Blijft in `data/` ondanks dat het een `.toml` op de root is**:
-`bewindspersonen.toml` — expliciet "niet met de hand bijgehouden" (eigen
-commentaar in het bestand), gegenereerd door
+**Blijft in `data/`, ondanks dat het ook een `.toml` is**:
+`data/wikidata/bewindspersonen.toml` — expliciet "niet met de hand
+bijgehouden" (eigen commentaar in het bestand), gegenereerd door
 `scripts/fetch_bewindspersonen_wikidata.py` uit Wikidata. Toml-bestand zijn
-is niet de indelingsregel; herkomst wel.
+is niet de indelingsregel; herkomst wel. Eigen map (`data/wikidata/`, niet
+de root) omdat het puur een backend-fallback is voor
+`pipeline/ingest/ingest_tk.py` — nooit door de frontend gelezen, dus geen
+`data/export/`-kandidaat ondanks dat het wel "klaar voor gebruik" is.
 
 ## 1. Hoofdrepo — `data/`
 
-### Handmatig onderhouden, maar hier gebleven (gegenereerd, geen `config/`-kandidaat)
+`data/` heeft geen losse bestanden meer op de root (issue #316): elke map
+noemt óf een dataset (`plenair-map/`, `export/`) óf de externe bron van
+wat erin staat.
 
-`bewindspersonen.toml` (zie §0), `cluster-label-anchors.parquet`
-(gegenereerd door `scripts/build_cluster_label_anchors.py`, bewust getrackt
-als snapshot — pairt met de handmatige `config/cluster_label_overrides.toml`).
+### `data/wikidata/bewindspersonen.toml`, `data/tk-opendata/kamerstukdossiers.json`
+
+Twee kleine, generieke referentietabellen die extern worden opgehaald en
+door niets in de frontend gelezen worden — dus geen `data/export/`-
+kandidaat, ook al zijn ze "klaar voor gebruik". Elk in een eigen map
+genoemd naar de bron, zelfde patroon als `data/raw/` (TK-crawl) en
+`data/embeddings/` (bge-m3):
+
+- `data/wikidata/bewindspersonen.toml` — ministers/staatssecretarissen,
+  `scripts/fetch_bewindspersonen_wikidata.py`. Enige consument:
+  `pipeline/ingest/ingest_tk.py`'s fallback bij een Kamerlid zonder eigen
+  Kamerzetel.
+- `data/tk-opendata/kamerstukdossiers.json` — officiële Kamerstukdossier-
+  nummers/titels, `scripts/fetch_tk_dossiers.py` tegen de TK Open Data
+  Gegevensmagazijn-API (OData v4) — een ander, eenmaliger endpoint dan de
+  Scrapy-crawler die `data/raw/tweede_kamer/` vult. Enige consument:
+  `scripts/a0_map/generate_a0_inverse_terminology.py`.
+
+### `data/plenair-map/cluster-label-anchors.parquet`
+
+Gegenereerd door `scripts/build_cluster_label_anchors.py`, bewust getrackt
+als snapshot (pairt met de handmatige `config/cluster_label_overrides.toml`
+hierboven). Leest uitsluitend `plenair-map`-bestanden
+(`data/export/a0-map/maps/plenair-map-*.json`,
+`data/embeddings/*_plenair-full.npz`) en wordt alleen door
+`scripts/rematch_cluster_label_anchors.py` teruggelezen — hoort dus bij
+`data/plenair-map/`, niet los op de `data/`-root.
 
 ### `data/export/` — frontend-input
 
@@ -90,8 +124,10 @@ nog voor.
 **Niet in git** (gitignored, zie `.gitignore` voor de volledige regels):
 `*.pmtiles`, alle `*-full*`-varianten (bestemd voor Zenodo/Hugging Face, niet
 voor de website), `a0-map/` (op een handvol herbruikbare artefacten na, zie
-hieronder), `argument-docs/`, `design-handoff/`, `agy_confrontatie_tree.log`,
-`zenodo/` (de gedeelde bundelmap, zie §3).
+hieronder), `argument-docs/`, `design-handoff/`,
+`argument-trees/agy_confrontatie_tree.log` (actief `make redactie`-logbestand,
+staat bij het dataset dat het bouwt, issue #316), `zenodo/` (de gedeelde
+bundelmap, zie §3).
 
 ### `data/plenair-map/` — pijplijn-tussenproducten
 

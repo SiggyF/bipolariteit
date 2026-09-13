@@ -2,12 +2,12 @@
 Haalt de officiële genummerde Kamerstukdossiers (onderwerpen) op uit het
 Tweede Kamer Open Data Gegevensmagazijn (OData v4).
 
-Slaat de dossiers op als JSON (`data/export/tk_kamerstukdossiers.json`) met:
+Slaat de dossiers op als JSON (`data/tk-opendata/kamerstukdossiers.json`) met:
 - `nummer`: het officiële dossiernummer (bv. 32813, 19637, 33576).
 - `titel`: de officiële onderwerpstitel.
 
 Gebruik:
-    uv run python scripts/fetch_tk_dossiers.py data/export/tk_kamerstukdossiers.json --limit 2000
+    uv run python scripts/fetch_tk_dossiers.py data/tk-opendata/kamerstukdossiers.json --limit 2000
 """
 
 import json
@@ -60,7 +60,7 @@ def fetch_dossiers(limit: int) -> list[dict]:
 
 
 @click.command()
-@click.argument("output_path", type=click.Path(dir_okay=False, path_type=Path), default=Path("data/export/tk_kamerstukdossiers.json"))
+@click.argument("output_path", type=click.Path(dir_okay=False, path_type=Path), default=Path("data/tk-opendata/kamerstukdossiers.json"))
 @click.option("--limit", type=int, default=2000, help="Maximaal aantal dossiers om op te halen (default: 2000).")
 def main(output_path: Path, limit: int):
     """Haal de officiële lijst met genummerde TK-onderwerpen (Kamerstukdossiers) op."""

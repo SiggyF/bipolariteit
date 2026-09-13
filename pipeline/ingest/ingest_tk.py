@@ -126,7 +126,7 @@ _bewindspersoon_party_cache = {}
 # Zeldzame, bewuste uitzondering op de automatische lookup hieronder: Jaimi
 # van Essen heeft geen Kamerlidschap (dus geen OData-Persoon-record), en zijn
 # Wikidata-positie-item mist zelf weer een label/jurisdictie (dus valt ook
-# buiten data/bewindspersonen.toml). Partij staat als losse tekst
+# buiten data/wikidata/bewindspersonen.toml). Partij staat als losse tekst
 # ("Partij: D66") in rijksoverheid.nl/regering/bewindspersonen/jaimi-van-essen,
 # geverifieerd op 2026-07-26.
 #
@@ -135,13 +135,13 @@ _bewindspersoon_party_cache = {}
 # worden, maar hij is geen lid van de partij en is dat ook niet van plan te
 # worden" (NOS-liveblog, 2024-07-13) -- inmiddels via Wikidata zelf opgelost
 # (P102 -> Q327591 "onafhankelijk politicus", 2026-08-01), dus die
-# uitzondering is niet meer nodig; data/bewindspersonen.toml levert hem nu
+# uitzondering is niet meer nodig; data/wikidata/bewindspersonen.toml levert hem nu
 # automatisch als "Onafhankelijk".
 BEWINDSPERSOON_PARTY_OVERRIDES = {
     "Jaimi van Essen": "D66",
 }
 
-_BEWINDSPERSONEN_TOML = Path(__file__).parent.parent.parent / "data" / "bewindspersonen.toml"
+_BEWINDSPERSONEN_TOML = Path(__file__).parent.parent.parent / "data" / "wikidata" / "bewindspersonen.toml"
 _bewindspersonen_wikidata = None
 
 
@@ -163,7 +163,7 @@ def lookup_bewindspersoon_party(name):
     uitzonderingenlijst voor de zeldzame gevallen die de andere twee lagen niet
     kunnen oplossen, (2) de laatst bekende Kamerzetel via de TK OData-API
     (Persoon -> FractieZetelPersoon -> FractieZetel -> Fractie.Afkorting), (3)
-    data/bewindspersonen.toml, gebouwd uit Wikidata voor bewindspersonen van de
+    data/wikidata/bewindspersonen.toml, gebouwd uit Wikidata voor bewindspersonen van de
     laatste 2 kamerperiodes zonder eigen Kamerzetel (zie
     scripts/fetch_bewindspersonen_wikidata.py). Geeft None terug (echte
     "Onbekend") als geen van de lagen een match heeft -- nooit gokken."""
