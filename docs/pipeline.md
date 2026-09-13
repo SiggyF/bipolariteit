@@ -73,7 +73,7 @@ tijdlijn):
 
 1. `enrich-video` — vult `documents.video_url`/`debatdirect_id` via Debat
    Direct.
-2. `fetch-debate-events` — cachet per-beurt-ankers naar `data/debate_events/`.
+2. `fetch-debate-events` — cachet per-beurt-ankers naar `data/debate-events/`.
 3. `fetch-subtitles` — cachet NL-ondertitel-VTT naar `data/subtitles/`.
 4. `match-video-spans` — matcht `quote_text` tegen de ondertitels, gekalibreerd
    op de events-ankers, en vult `arguments.start_seconds`/`end_seconds`.

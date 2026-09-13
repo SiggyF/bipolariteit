@@ -253,7 +253,7 @@ def match_debate(cues, rows):
 
 
 def load_events(events_json):
-    """events_json: geparste inhoud van data/debate_events/<id>.json
+    """events_json: geparste inhoud van data/debate-events/<id>.json
     ({"startedAt": ..., "events": [...]}). Retourneert (started_at, events)
     met events als lijst van {"video_seconds", "eventType", "objectId"} --
     eventStart - startedAt is hier al één keer vooraf omgerekend naar

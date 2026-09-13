@@ -20,7 +20,7 @@ bestanden -> Zenodo + Hugging Face").
 Daarnaast drie categorieën die niet via een publicatiekanaal gaan:
 
 - **Lokaal-only, regenereerbaar**: `data/raw/`, `data/embeddings/`,
-  `data/subtitles/`, `data/debate_events/`. Cache/tussenproduct van de
+  `data/subtitles/`, `data/debate-events/`. Cache/tussenproduct van de
   pijplijn, hoeft nergens gepubliceerd te worden.
 - **Handmatig onderhouden config** (`config/`, apart van `data/`): zie
   §0 hieronder. Geen pijplijn-output.

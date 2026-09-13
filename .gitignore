@@ -27,7 +27,7 @@ data/raw/elecdebate60to16/*
 # hergebruikt tussen runs.
 data/subtitles/
 # Idem, events-cache van pipeline/fetch_debate_events.py.
-data/debate_events/
+data/debate-events/
 # Lokaal gecachte embeddings (pipeline/embed/documents.py), regenereerbaar
 # vanuit de database.
 data/embeddings/

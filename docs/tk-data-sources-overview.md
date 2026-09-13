@@ -311,7 +311,7 @@ ondertitelklok.
   `hasSubtitles` in dezelfde respons bleek **niet** betrouwbaar als indicator (`false`
   ook voor debatten met bevestigd werkende ondertitels) — niet gebruikt.
 - **Implementatie**: `pipeline/fetch_debate_events.py` (nieuw, cachet naar
-  `data/debate_events/<id>.json`) + `pipeline/debatdirect_api.py` (de gedeelde
+  `data/debate-events/<id>.json`) + `pipeline/debatdirect_api.py` (de gedeelde
   `fetch_debate_detail()`-call, uit `fetch_subtitles.py` getrokken). Twee nieuwe
   kolommen op `documents` (`speaker_person_id`, `turn_type`, schema.sql) koppelen een
   VLOS-beurt aan zijn events-anker. `pipeline/match_argument_spans.py` gebruikt het
