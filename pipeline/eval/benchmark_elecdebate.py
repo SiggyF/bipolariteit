@@ -5,7 +5,7 @@ puur lezend -- geen DB-writes, zelfde patroon als scripts/compare_models.py.
 
 Scope (zie docs/eval-elecdebate.md voor de motivatie): alleen argument-
 herkenning (span-overlap) en de 2 drogreden-tags met een echte tegenhanger
-in data/tags.toml (label_mapping.FALLACY_TAG_MAP) worden gescoord. Stance,
+in config/tags.toml (label_mapping.FALLACY_TAG_MAP) worden gescoord. Stance,
 typology en de overige 4 ELECDEBATE-fallacy-typen worden bewust niet
 vergeleken.
 

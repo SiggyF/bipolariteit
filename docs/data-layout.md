@@ -22,10 +22,8 @@ Daarnaast drie categorieën die niet via een publicatiekanaal gaan:
 - **Lokaal-only, regenereerbaar**: `data/raw/`, `data/embeddings/`,
   `data/subtitles/`, `data/debate_events/`. Cache/tussenproduct van de
   pijplijn, hoeft nergens gepubliceerd te worden.
-- **Handgeschreven brondata**: `data/tags.toml`, `data/bewindspersonen.toml`,
-  `data/politieke-periodes.toml`, `data/topic-descriptions/`,
-  `config/cluster_label_overrides.toml`. Geen pijplijn-output — handmatig
-  onderhouden invoer, gewoon in git.
+- **Handmatig onderhouden config** (`config/`, apart van `data/`): zie
+  §0 hieronder. Geen pijplijn-output.
 - **Privé, mag niet publiek**: `data/bipolariteit.db`. Bevat naast publieke
   Kamerstukken ook LLM-call-logs (prompts/responses). Geen enkel
   publicatiekanaal; alleen `make backup-db` naar dezelfde-machine-map. Zie
@@ -34,14 +32,36 @@ Daarnaast drie categorieën die niet via een publicatiekanaal gaan:
   `scripts/publish_huggingface.py` hergebruiken, met een apart, privé
   dataset-repo).
 
+## 0. `config/` — handmatig onderhouden, apart van `data/`
+
+Sinds issue #316 expliciet gescheiden op **handmatig ingevoerd vs.
+gegenereerd**, niet op bestandsformaat: alles hier is met de hand
+bijgehouden, `data/` is uitsluitend pijplijn-input/-output.
+
+- `tags.toml` — de argumentatie-onderzoeker-taxonomie (labelgroepen/tags),
+  geladen via `pipeline/db/seed_tags.py`. Git-historie bevestigt hand-edits
+  ("nieuwe labelgroep toegevoegd").
+- `politieke-periodes.toml` — kamerperiode-/regeringsperiode-grenzen, alleen
+  gelezen (`pipeline/periodes.py`), nooit geschreven door code.
+- `topic-descriptions/*.md` — handgeschreven PRO/CONTRA-duiding per
+  onderwerp, input voor `scripts/db/add_topic.py`.
+- `cluster_label_overrides.toml` — handmatige clusterlabel-correcties (zie
+  §1 hieronder voor de gegenereerde `cluster-label-anchors.parquet` die
+  ermee paart).
+
+**Blijft in `data/` ondanks dat het een `.toml` op de root is**:
+`bewindspersonen.toml` — expliciet "niet met de hand bijgehouden" (eigen
+commentaar in het bestand), gegenereerd door
+`scripts/fetch_bewindspersonen_wikidata.py` uit Wikidata. Toml-bestand zijn
+is niet de indelingsregel; herkomst wel.
+
 ## 1. Hoofdrepo — `data/`
 
-### Handgeschreven brondata (altijd tracked)
+### Handmatig onderhouden, maar hier gebleven (gegenereerd, geen `config/`-kandidaat)
 
-`bewindspersonen.toml`, `politieke-periodes.toml`, `tags.toml`,
-`topic-descriptions/*.md`, `cluster-label-anchors.parquet` (gegenereerd door
-`scripts/build_cluster_label_anchors.py`, maar bewust getrackt als
-snapshot — pairt met de handmatige `config/cluster_label_overrides.toml`).
+`bewindspersonen.toml` (zie §0), `cluster-label-anchors.parquet`
+(gegenereerd door `scripts/build_cluster_label_anchors.py`, bewust getrackt
+als snapshot — pairt met de handmatige `config/cluster_label_overrides.toml`).
 
 ### `data/export/` — frontend-input
 

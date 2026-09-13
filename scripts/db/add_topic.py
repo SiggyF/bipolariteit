@@ -5,11 +5,11 @@ die sinds de opschoning van energie/energiedrager/klimaat/saldering/waterstof/
 migratie/Vragenuur (2026-09-12) geen nieuwe topic-rij meer stilzwijgend
 aanmaakt. Een nieuw topic is nu altijd een bewuste, aparte stap via dit
 script, met een description die vanuit een los, leesbaar/diffbaar bestand
-komt (zie data/topic-descriptions/) i.p.v. een string in de commandline.
+komt (zie config/topic-descriptions/) i.p.v. een string in de commandline.
 
 Gebruik:
     uv run python scripts/db/add_topic.py --slug oekraine --name "Oekraïne" \\
-        --description-file data/topic-descriptions/oekraine.md
+        --description-file config/topic-descriptions/oekraine.md
 
 Bestaat de slug al? Dan wordt alleen de description bijgewerkt (upsert),
 handig om een concept-tekst iteratief te verfijnen vóórdat er geëxtraheerd
@@ -41,7 +41,7 @@ def main():
     parser.add_argument("--name", required=True, help="weergavenaam, bv. Oekraïne")
     parser.add_argument(
         "--description-file", required=True,
-        help="pad naar een tekstbestand met de pro/contra-description (zie data/topic-descriptions/)",
+        help="pad naar een tekstbestand met de pro/contra-description (zie config/topic-descriptions/)",
     )
     args = parser.parse_args()
     description = open(args.description_file).read().strip()

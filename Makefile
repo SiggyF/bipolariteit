@@ -162,7 +162,7 @@ match-video-spans: ## Vult arguments.start_seconds/end_seconds door quote_text t
 argument-doc: ## Exporteert alle pro/contra-argumenten van TOPIC (met claims) als markdown -- invoer voor `make redactie`, geen LLM-call
 	uv run python -m pipeline.export_argument_doc --topic $(TOPIC)
 
-tags-taxonomy: ## data/tags.toml -> frontend/src/lib/tagsTaxonomy.generated.ts
+tags-taxonomy: ## config/tags.toml -> frontend/src/lib/tagsTaxonomy.generated.ts
 	PYTHONPATH=. uv run python scripts/export_tags_taxonomy.py
 
 export-public-data: ## data/export/topics/*.json -> data/export/gepubliceerd/ (lean, per perspectief/onderwerp/tag), voor publish-data (issue #163)

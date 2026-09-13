@@ -13,7 +13,7 @@ kolom uit de pas kan laten lopen.
 extractieprompt een argument opleverde -- de DB bevat nu een mix van vóór-
 en na-Gemini-review-fix geëxtraheerde argumenten.
 
-Exporteert alleen vanaf [verwerking].vanaf in data/politieke-periodes.toml
+Exporteert alleen vanaf [verwerking].vanaf in config/politieke-periodes.toml
 (de huidige en vorige kamerperiode); oudere argumenten blijven in de database
 maar komen niet in de JSON en dus niet op de site.
 
@@ -207,7 +207,7 @@ def fetch_arguments(conn, topic_id, periode_index):
                 },
                 # Kamer- en regeringsperiode van de publicatiedatum: staats-
                 # rechtelijke context waarop de frontend kan filteren zonder
-                # zelf datumgrenzen te kennen (data/politieke-periodes.toml).
+                # zelf datumgrenzen te kennen (config/politieke-periodes.toml).
                 "periode": periode_index.voor(row["published_at"]),
                 "claims": claims_by_argument.get(row["id"], []),
                 "tags": tags_by_argument.get(row["id"], []),

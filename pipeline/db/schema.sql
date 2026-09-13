@@ -102,7 +102,7 @@ CREATE INDEX idx_arguments_topic_stance ON arguments(topic_id, stance);
 CREATE INDEX idx_arguments_document ON arguments(document_id);
 CREATE INDEX idx_claims_argument ON claims(argument_id);
 
--- Argument-taxonomie van een argumentatie-onderzoeker (data/tags.toml), geladen
+-- Argument-taxonomie van een argumentatie-onderzoeker (config/tags.toml), geladen
 -- via pipeline/db/seed_tags.py. `active` is een soft-delete-vlag: elke seed-run
 -- zet eerst alles inactief en activeert vervolgens alles wat nog in tags.toml
 -- staat, zodat verwijderde/hernoemde tags stil worden zonder argument_tags-

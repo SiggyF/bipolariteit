@@ -1,6 +1,6 @@
 """Mapping tussen de drogreden-labels uit `fallacy`-kolom van
 data/raw/elecdebate60to16/fallacy_second_version.csv (pierpaologoffredo/
-ElecDeb60to20) en onze eigen tag-taxonomie (data/tags.toml, labelgroep
+ElecDeb60to20) en onze eigen tag-taxonomie (config/tags.toml, labelgroep
 "Debatzetten"). Zie docs/eval-elecdebate.md voor de volledige
 motivatie."""
 

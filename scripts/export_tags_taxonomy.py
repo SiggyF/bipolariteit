@@ -1,4 +1,4 @@
-"""Zet data/tags.toml om naar frontend/src/lib/tagsTaxonomy.generated.ts.
+"""Zet config/tags.toml om naar frontend/src/lib/tagsTaxonomy.generated.ts.
 
 De frontend heeft de volledige taxonomie (incl. beschrijvingen en tags zonder
 toekenning) nodig voor de /tags-overzichtspagina, maar leest zelf geen TOML.
@@ -11,7 +11,7 @@ from pathlib import Path
 
 from pipeline.taxonomy import DERIVED_LABELGROEPEN
 
-BRON = Path(__file__).resolve().parent.parent / "data" / "tags.toml"
+BRON = Path(__file__).resolve().parent.parent / "config" / "tags.toml"
 DOEL = Path(__file__).resolve().parent.parent / "frontend" / "src" / "lib" / "tagsTaxonomy.generated.ts"
 
 
@@ -45,7 +45,7 @@ def main() -> None:
     DOEL.parent.mkdir(parents=True, exist_ok=True)
     inhoud = (
         "// GEGENEREERD -- niet met de hand aanpassen.\n"
-        "// Bron: data/tags.toml.\n"
+        "// Bron: config/tags.toml.\n"
         "// Opnieuw maken: uv run python scripts/export_tags_taxonomy.py\n\n"
         "export interface TaxonomieTag {\n"
         "\tsleutel: string;\n"

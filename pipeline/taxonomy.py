@@ -1,5 +1,5 @@
 """
-Cardinaliteit per labelgroep uit data/tags.toml: onze eigen inschatting van
+Cardinaliteit per labelgroep uit config/tags.toml: onze eigen inschatting van
 welke labelgroepen enkelvoudig (precies één tag) versus meervoudig (nul of
 meer tags) zijn -- tags.toml zelf legt dit niet vast. Bewust in code i.p.v.
 in tags.toml, zodat de onderzoeker het bestand kan blijven bewerken zonder
