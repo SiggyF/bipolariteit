@@ -5,6 +5,145 @@ const evalModules = import.meta.glob("../../../data/export/eval/*.json", { eager
 const datasets = Object.values(evalModules)
 	.map((mod: any) => mod.default)
 	.sort((a: any, b: any) => a.dataset.localeCompare(b.dataset));
+
+// Een "-guideline"/"-tag-guideline"-dataset is altijd een eval-only herrun
+// van een bestaande dataset met een andere argument- resp. drogreden-
+// definitie (zie docs/eval-elecdebate.md, "Experiment: definitie- vs.
+// modelbeperking" resp. "Definitieverschil drogredenen", issue #313) --
+// zelfde model, zelfde records, telkens maar één definitie-as verschilt.
+// "-tag-guideline" moet vóór "-guideline" gecheckt worden want die eindigt
+// zelf ook op "-guideline". Zo'n paar naast elkaar als losse, cryptisch
+// genoemde kaarten tonen maakt niet duidelijk dat het dezelfde vergelijking
+// met een andere definitie is -- daarom hier gegroepeerd per basisdataset,
+// met een eigen tabel per definitie-as (argumentherkenning/drogreden-tags)
+// i.p.v. losse kaarten.
+const TAG_GUIDELINE_SUFFIX = "-tag-guideline";
+const EXTRACTION_GUIDELINE_SUFFIX = "-guideline";
+
+type Group = { baseName: string; base: any; extractionGuideline: any | null; tagGuideline: any | null };
+const groups = new Map<string, Group>();
+for (const d of datasets) {
+	let baseName: string | null = null;
+	let variant: "extraction" | "tag" | null = null;
+	if (d.dataset.endsWith(TAG_GUIDELINE_SUFFIX)) {
+		baseName = d.dataset.slice(0, -TAG_GUIDELINE_SUFFIX.length);
+		variant = "tag";
+	} else if (d.dataset.endsWith(EXTRACTION_GUIDELINE_SUFFIX)) {
+		baseName = d.dataset.slice(0, -EXTRACTION_GUIDELINE_SUFFIX.length);
+		variant = "extraction";
+	}
+	if (!baseName || !variant) continue;
+	const base = datasets.find((x: any) => x.dataset === baseName);
+	if (!base) continue;
+	const group = groups.get(baseName) ?? { baseName, base, extractionGuideline: null, tagGuideline: null };
+	if (variant === "extraction") group.extractionGuideline = d;
+	else group.tagGuideline = d;
+	groups.set(baseName, group);
+}
+const pairs = Array.from(groups.values());
+const pairedNames = new Set(
+	pairs.flatMap((p) => [p.base.dataset, p.extractionGuideline?.dataset, p.tagGuideline?.dataset].filter(Boolean)),
+);
+const standaloneDatasets = datasets.filter((d: any) => !pairedNames.has(d.dataset));
+
+function pct(value: number) {
+	return `${Math.round(value * 100)}%`;
+}
+
+function hasTagData(data: any) {
+	const f = data.summary.fallacy_tags;
+	return f.tp + f.fp + f.fn > 0;
+}
+
+// Drie soorten voorbeelden, per stuk gelabeld met de dataset waar het
+// vandaan komt (anders is uit een los citaat niet op te maken welke van de
+// twee runs het betreft) -- het concrete bewijs achter de precision/recall-
+// tabel hierboven, i.p.v. alleen de samengevatte cijfers.
+function categorizedExtractionExamples(base: any, guideline: any, limitPerCategory: number) {
+	const baseByText = new Map(base.extraction_items.map((e: any) => [e.text, e]));
+	const recovered: any[] = [];
+	const stillMissed: any[] = [];
+	for (const gItem of guideline.extraction_items) {
+		const bItem: any = baseByText.get(gItem.text);
+		if (!bItem || bItem.outcome !== "fout-negatief") continue;
+		if (gItem.outcome === "gevonden" && recovered.length < limitPerCategory) recovered.push(gItem);
+		else if (gItem.outcome === "fout-negatief" && stillMissed.length < limitPerCategory) stillMissed.push(gItem);
+	}
+	const extraFalsePositives = guideline.extraction_items
+		.filter((e: any) => e.outcome === "fout-positief")
+		.slice(0, limitPerCategory);
+	return [
+		{
+			heading: `Alleen door de brondataset-definitie gevonden (${guideline.dataset})`,
+			note: "Onze eigen definitie mist deze (fout-negatief), de brondataset-definitie vindt ze wel.",
+			items: recovered,
+		},
+		{
+			heading: `Door beide definities gemist (${base.dataset} en ${guideline.dataset})`,
+			note: "Ook de lossere brondataset-definitie vindt deze niet -- wijst op een echte modelbeperking, geen definitieverschil.",
+			items: stillMissed,
+		},
+		{
+			heading: `Extra fout-positief bij de brondataset-definitie (${guideline.dataset})`,
+			note: "Door de brondataset-definitie ten onrechte als argument herkend.",
+			items: extraFalsePositives,
+		},
+	].filter((group) => group.items.length > 0);
+}
+
+// Elk voorbeeld hieronder krijgt 3 losse labels (studie/strict-AI/
+// guideline-AI), zodat in één oogopslag duidelijk is wat de studie zelf
+// verwachtte en wat elk van de twee AI-runs voorspelde -- één badge met
+// "AI vond dit" is dubbelzinnig over WELKE AI-run en WELKE tag-definitie.
+function tagLabel(tags: string[]) {
+	return tags.length > 0 ? tags.join(", ") : "geen drogreden";
+}
+
+function withStates(item: any, base: any, tagGuideline: any) {
+	const baseItem = base.tagging_items.find((e: any) => e.quote_text === item.quote_text);
+	const guidelineItem = tagGuideline.tagging_items.find((e: any) => e.quote_text === item.quote_text);
+	return {
+		...item,
+		_studie: tagLabel(item.verwacht),
+		_strict: tagLabel(baseItem?.voorspeld ?? []),
+		_guideline: tagLabel(guidelineItem?.voorspeld ?? []),
+	};
+}
+
+// Zelfde soort categorisering als hierboven, maar voor de drogreden-
+// tagstap: "correct"/"fout-negatief"/"fout-positief" op quote_text i.p.v.
+// gevonden/fout-negatief/fout-positief op text.
+function categorizedTaggingExamples(base: any, tagGuideline: any, limitPerCategory: number) {
+	const baseByQuote = new Map(base.tagging_items.map((e: any) => [e.quote_text, e]));
+	const recovered: any[] = [];
+	const stillMissed: any[] = [];
+	for (const gItem of tagGuideline.tagging_items) {
+		const bItem: any = baseByQuote.get(gItem.quote_text);
+		if (!bItem || bItem.outcome !== "fout-negatief") continue;
+		if (gItem.outcome === "correct" && recovered.length < limitPerCategory) recovered.push(gItem);
+		else if (gItem.outcome === "fout-negatief" && stillMissed.length < limitPerCategory) stillMissed.push(gItem);
+	}
+	const extraFalsePositives = tagGuideline.tagging_items
+		.filter((e: any) => e.outcome === "fout-positief")
+		.slice(0, limitPerCategory);
+	return [
+		{
+			heading: `Alleen door de brondataset-definitie getagd (${tagGuideline.dataset})`,
+			note: "Onze eigen (engere) tag-omschrijving mist deze (fout-negatief), de brondataset-omschrijving vindt ze wel.",
+			items: recovered.map((item) => withStates(item, base, tagGuideline)),
+		},
+		{
+			heading: `Door beide definities gemist (${base.dataset} en ${tagGuideline.dataset})`,
+			note: "Ook de bredere brondataset-omschrijving tagt deze niet -- wijst op een echte modelbeperking, geen definitieverschil.",
+			items: stillMissed.map((item) => withStates(item, base, tagGuideline)),
+		},
+		{
+			heading: `Extra fout-positief bij de brondataset-definitie (${tagGuideline.dataset})`,
+			note: "Door de bredere brondataset-omschrijving ten onrechte getagd.",
+			items: extraFalsePositives.map((item) => withStates(item, base, tagGuideline)),
+		},
+	].filter((group) => group.items.length > 0);
+}
 ---
 
 <BaseLayout title="Validatie-rapportage - Bipolariteit" class="about">
@@ -29,18 +168,136 @@ const datasets = Object.values(evalModules)
 		<p class="panel-note">Nog geen datasetvalidatie gedraaid. Zie <code>docs/eval-elecdebate.md</code> in de repository.</p>
 	)}
 
-	<section class="validation-summary">
-		{datasets.map((data: any) => (
-			<a class="validation-summary-card validation-dataset-card" href={`/validatie-rapportage/${data.dataset}`}>
-				<h2>{data.dataset}</h2>
-				<dl>
-					<dt>Argumentherkenning F1</dt><dd>{Math.round(data.summary.argument_detection.f1 * 100)}%</dd>
-					<dt>Drogreden-tags F1</dt><dd>{Math.round(data.summary.fallacy_tags.f1 * 100)}%</dd>
-				</dl>
-				<p class="validation-summary-caption">
-					{data.n_records}/{data.total_records} sprekersbeurten gescoord, model {data.model}
-				</p>
-			</a>
-		))}
-	</section>
+	{pairs.map(({ baseName, base, extractionGuideline, tagGuideline }) => (
+		<section class="validation-comparison">
+			<h2>{baseName}: studie vs. AI</h2>
+			<p class="panel-note">
+				Scoringen van dezelfde 318 sprekersbeurten tegen dezelfde gouden data, met hetzelfde model
+				({base.model}) -- per tabel verschilt telkens maar één definitie (argumentherkenning of
+				drogreden-tags). Zie <code>docs/eval-elecdebate.md</code> ("Experiment: definitie- vs.
+				modelbeperking" resp. "Definitieverschil drogredenen") voor de volledige methodologie.
+			</p>
+
+			{extractionGuideline && (
+				<>
+					<h3>Argumentherkenning: vindt de AI dezelfde tekstspannen als de studie?</h3>
+					<div class="validation-comparison-table">
+						<table>
+							<thead>
+								<tr>
+									<th scope="col">Vergelijking</th>
+									<th scope="col">Precision</th>
+									<th scope="col">Recall</th>
+									<th scope="col">F1</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<th scope="row">Studie vs. AI (onze argumentdefinitie)</th>
+									<td>{pct(base.summary.argument_detection.precision)}</td>
+									<td>{pct(base.summary.argument_detection.recall)}</td>
+									<td>{pct(base.summary.argument_detection.f1)}</td>
+								</tr>
+								<tr>
+									<th scope="row">Studie vs. AI + argumentdefinitie van de studie zelf</th>
+									<td>{pct(extractionGuideline.summary.argument_detection.precision)}</td>
+									<td>{pct(extractionGuideline.summary.argument_detection.recall)}</td>
+									<td>{pct(extractionGuideline.summary.argument_detection.f1)}</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					{categorizedExtractionExamples(base, extractionGuideline, 5).map((group) => (
+						<>
+							<p class="panel-note"><strong>{group.heading}</strong> -- {group.note}</p>
+							<ul class="validation-item-list">
+								{group.items.map((item: any) => (
+									<li class="validation-item">
+										<div class="validation-item-meta">
+											<span class="validation-item-speaker">{item.speaker ?? "onbekend"}</span>
+										</div>
+										<blockquote class="validation-quote">{item.text}</blockquote>
+									</li>
+								))}
+							</ul>
+						</>
+					))}
+				</>
+			)}
+
+			{tagGuideline && (
+				<>
+					<h3>Drogreden-tags: kent de AI dezelfde drogreden toe als de studie?</h3>
+					<p class="panel-note">
+						Losstaande vraag van argumentherkenning hierboven (vandaar een eigen tabel): dit classificeert
+						de gouden drogreden-citaten van de studie zelf, met steeds dezelfde (strict) extractie --
+						alleen de tag-omschrijving verschilt.
+					</p>
+					<div class="validation-comparison-table">
+						<table>
+							<thead>
+								<tr>
+									<th scope="col">Vergelijking</th>
+									<th scope="col">Precision</th>
+									<th scope="col">Recall</th>
+									<th scope="col">F1</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<th scope="row">Studie vs. AI (onze tag-omschrijving)</th>
+									<td>{pct(base.summary.fallacy_tags.precision)}</td>
+									<td>{pct(base.summary.fallacy_tags.recall)}</td>
+									<td>{pct(base.summary.fallacy_tags.f1)}</td>
+								</tr>
+								<tr>
+									<th scope="row">Studie vs. AI + tag-omschrijving van de studie zelf</th>
+									<td>{pct(tagGuideline.summary.fallacy_tags.precision)}</td>
+									<td>{pct(tagGuideline.summary.fallacy_tags.recall)}</td>
+									<td>{pct(tagGuideline.summary.fallacy_tags.f1)}</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					{categorizedTaggingExamples(base, tagGuideline, 5).map((group) => (
+						<>
+							<p class="panel-note"><strong>{group.heading}</strong> -- {group.note}</p>
+							<ul class="validation-item-list">
+								{group.items.map((item: any) => (
+									<li class="validation-item">
+										<div class="validation-item-meta">
+											<span class="validation-item-speaker">{item.speaker ?? "onbekend"}</span>
+											<span class="validation-pills">
+												<span class="validation-pill">studie: {item._studie}</span>
+												<span class="validation-pill">AI, onze tag-definitie: {item._strict}</span>
+												<span class="validation-pill">AI, brondataset-tag-definitie: {item._guideline}</span>
+											</span>
+										</div>
+										<blockquote class="validation-quote">{item.quote_text}</blockquote>
+									</li>
+								))}
+							</ul>
+						</>
+					))}
+				</>
+			)}
+		</section>
+	))}
+
+	{standaloneDatasets.length > 0 && (
+		<section class="validation-summary">
+			{standaloneDatasets.map((data: any) => (
+				<div class="validation-summary-card">
+					<h2>{data.dataset}</h2>
+					<dl>
+						<dt>Argumentherkenning F1</dt><dd>{pct(data.summary.argument_detection.f1)}</dd>
+						<dt>Drogreden-tags F1</dt><dd>{hasTagData(data) ? pct(data.summary.fallacy_tags.f1) : "n.v.t."}</dd>
+					</dl>
+					<p class="validation-summary-caption">
+						{data.n_records}/{data.total_records} sprekersbeurten gescoord, model {data.model}
+					</p>
+				</div>
+			))}
+		</section>
+	)}
 </BaseLayout>

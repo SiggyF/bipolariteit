@@ -47,11 +47,17 @@ aaneengesloten citaat met zowel een standpunt ALS de onderbouwing erin
 ("geen onderbouwing = geen argument"), en voegt herhaling/uitwerking van
 hetzelfde punt samen tot één citaat.
 
-De dataset (`guidelines/annotation_guidelines.pdf`, Haddadan et al. 2018)
-annoteert Claim en Premise als **losse componenten**, vaak niet-aaneengesloten,
-en staat expliciet kale claims zonder premisse toe ("there are cases such
-that no clause is supporting a certain claim"). Herhaalde claims worden als
-aparte componenten geannoteerd, niet samengevoegd.
+De dataset (Haddadan, Cabrio & Villata 2019, "Yes, we can! Mining arguments
+in 50 years of US presidential campaign debates", ACL 2019,
+https://aclanthology.org/P19-1463/; de bijbehorende annotatierichtlijn staat
+los als `ElectDeb60To16_Guidelines.pdf` op
+https://github.com/ElecDeb60To16/Dataset) annoteert Claim en Premise als
+**losse componenten**, vaak niet-aaneengesloten, en staat expliciet kale
+claims zonder premisse toe ("there are cases such that no clause is
+supporting a certain claim"). Herhaalde claims worden als aparte componenten
+geannoteerd, niet samengevoegd -- BEHALVE als hetzelfde kernpunt kort na
+elkaar in andere woorden herhaald wordt: dan geldt wat daartussen staat als
+premise voor die (herhaalde) claim (richtlijn, sectie 4.2.2).
 
 Rechtstreeks Claim/Premise-zinnen als gouden "argument"-spans gebruiken (de
 eerste aanpak, met `full_components.csv`) vergelijkt dus twee verschillende
@@ -64,30 +70,106 @@ zou afwijzen) worden dus terecht niet meegenomen als gouden span.
 
 ## Bekende beperkingen van de referentiedataset
 
-Niet elke score-afwijking is een fout van onze pipeline. Twee voorbeelden uit
-`elecdebate60to16` (zie `/validatie-rapportage/elecdebate60to16`):
+Niet elke score-afwijking is een fout van onze pipeline. Voorbeelden uit
+`elecdebate60to16` (zie `/validatie-rapportage`):
 
 **Ontbrekende annotatie.** Trump: *"The NAFTA agreement is defective. Just
 because of the tax and many other reasons, but just because of the fact…"*.
 Onze extractie herkent dit terecht als standpunt + onderbouwing, maar de
 dataset heeft hier geen Claim-Premise-paar met een Support-relatie
 geannoteerd (zie "Definitieverschil" hierboven) -- dus telt dit als
-fout-positief ("onterecht herkend als argument"), terwijl het argument
-evident aanwezig is. Met andere woorden: de referentiedataset zelf mist hier
-een annotatie, dit is geen extractiefout.
+fout-positief, terwijl het argument evident aanwezig is. Met andere
+woorden: de referentiedataset zelf mist hier een annotatie, dit is geen
+extractiefout.
 
 **Te korte/inconsistente spangrenzen.** Dezelfde stop-and-frisk-uitspraak
 van Trump staat in de dataset met twee verschillende spangrenzen: eenmaal
 mét de aanloop (*"we went from 2,200 to 500 ... had a tremendous impact on
 the safety of New York City"*) en eenmaal alleen het sluitstuk (*"stop-and-
 frisk had a tremendous impact ... Tremendous beyond belief"*), allebei
-gelabeld als Appeal to Emotion (`Drogreden-Bespelen-Publiek`). Losstaand,
+gelabeld als Appeal to Emotion (`Debatzet-Gevoelens-Verwoorden`). Losstaand,
 zonder de voorafgaande cijfers over gedaalde criminaliteit, leest die korte
 versie niet overtuigend als emotionele bespeling -- eerder als een kale
 bewering. Onze tag-prompt classificeert 'm dan ook niet als zodanig
 (`voorspeld: []`), wat de precision op deze drogreden drukt zonder dat het
 per se een tagfout is: een te kort afgesneden span is voor mens én model
 moeilijk eenduidig te classificeren.
+
+**Tegenstrijdige dubbele drogreden-annotatie op exact dezelfde span**
+(ontdekt via de "studie/AI/AI"-labels op `/validatie-rapportage`, issue
+#313): drie citaten -- Trump *"xenophobic"*, Trump *"racist"*, Clinton
+*"trumped-up trickle-down"* -- staan elk met identieke tekenposities
+(`start`/`end`) TWEE keer in `fallacy_second_version.csv`, met telkens een
+ander label (één keer Ad Hominem/`Debatzet-Persoon-Aanspreken`, één keer
+Appeal to Emotion/`Debatzet-Gevoelens-Verwoorden`). Niet twee losse
+voorkomens van hetzelfde woord elders in de tekst (dat zou legitiem kunnen)
+-- letterlijk dezelfde span, tegenstrijdig gelabeld. Dat drukt zowel de
+precision als de recall van beide tags kunstmatig: onze AI kan onmogelijk
+"gelijk" hebben op zo'n citaat, welke van de twee labels ze ook toekent (of
+geen van beide) telt als een fout tegen het andere gouden label. Wijst op
+een reële grens aan de betrouwbaarheid van de drogreden-annotatie in deze
+referentiedataset, los van onze eigen definitiekeuzes.
+
+## Experiment: definitie- vs. modelbeperking (issue #313, 2026-09-13)
+
+De F1 van 0.366 (argumentherkenning, volle 318-record-steekproef) roept de
+vraag op: hoeveel daarvan is onze eigen strengere argumentdefinitie
+("geen onderbouwing = geen argument", zie hierboven), en hoeveel is een
+échte modelbeperking? Om dat te scheiden is een **eval-only** tweede
+extractieprompt gebouwd, `pipeline/prompts/extract_argument_guideline_eval.md`
+(`--extraction-prompt guideline` op `benchmark_elecdebate.py`/`make validate`),
+die i.p.v. onze productieregel de richtlijn van de brondataset zelf volgt:
+kale claims tellen mee, en de "herhaalde claim = claim+premise"-conventie
+(sectie 4.2.2 hierboven) wordt met het NAFTA-voorbeeld uit de richtlijn
+expliciet voorgedaan. Verder ongewijzigd: zelfde model, zelfde 318 records,
+zelfde tekenniveau-scoring. Tagging is hierbij overgeslagen
+(`--skip-tagging`) -- die as is onafhankelijk van de extractiestijl, dus
+opnieuw taggen levert geen nieuwe informatie op.
+
+Resultaat (`Qwen/Qwen3.8-27B:ovhcloud`, `data/export/eval/elecdebate60to16-guideline.json`):
+
+| | precision | recall | F1 |
+|---|---|---|---|
+| Strict (productieprompt) | 0.254 | 0.655 | 0.366 |
+| Guideline (brondataset-definitie) | 0.263 | 0.829 | 0.399 |
+
+Recall stijgt fors (+0.17), precision blijft nagenoeg gelijk. Drie eerder
+gevonden fout-negatieven die leken op de "herhaalde claim"-conventie --
+Pence "I'm pro-life. I don't apologize for it.", Trump "It was locker room
+talk, as I told you. That was locker room talk", Pence "Joe Biden says
+democracy's on the ballot. Make no mistake about it" -- zijn onder de
+guideline-prompt alle drie wél gevonden. Belangrijke kanttekening: dit komt
+niet doordat het model expliciet een claim+premise-structuur herkent (een
+losstaande test met alleen deze drie citaten, zonder omringende beurttekst,
+liet het model ze steevast als kale claim classificeren, zonder premise) --
+het komt doordat de guideline-prompt kale claims al als volwaardig argument
+telt, waardoor de volledige (tautologische) herhaling toch als één
+`quote_text` wordt geëxtraheerd en zo toevallig exact de gouden spangrenzen
+raakt.
+
+In totaal zijn 144 van de 318 strict-fout-negatieven onder de guideline-
+prompt alsnog gevonden (zelfde `quote_text`, exacte match). Niet allemaal
+zijn dat herhalingen: twee voorbeelden met een gewone, niet-herhaalde
+`because`-onderbouwing die de guideline-prompt wél maar de strict-prompt
+niet extraheerde:
+
+- CLINTON: *"it matters because he has not told the truth about that
+  position"*.
+- CLINTON: *"you continue to get help from him, because he has a very clear
+  favorite in this race"*.
+
+Waarom de strict-prompt precies deze twee miste is niet verder
+gediagnosticeerd -- een plausibele hypothese is dat de "Eén punt = één
+argument"-samenvoegregel in `pipeline/prompts/extract_argument.md` deze
+tekst al in een groter, anders afgebakend citaat had opgenomen waarvan de
+grenzen niet met dit specifieke gouden fragment overlapten, maar dat is niet
+bevestigd.
+
+Conclusie: een substantieel deel van de F1-kloof (recall +0.17) is
+inderdaad een definitieverschil, niet een modelbeperking -- maar de
+resterende recall-fout (17%) en de nagenoeg ongewijzigde precision (~0.26)
+wijzen op een echt, resterend model-/pipelineplafond dat een lossere
+definitie niet oplost.
 
 ## De dataset
 
@@ -171,8 +253,8 @@ over of de onderliggende redenering klopt?
 
 - **Ad Hominem, Appeal to Emotion** -- structureel vast te stellen (is dit
   een persoonlijke aanval? wordt hier emotie ingezet?), geen oordeel nodig
-  over de inhoud. Vandaar `Drogreden-Ad-Hominem`/`Drogreden-Bespelen-
-  Publiek` in `config/tags.toml`.
+  over de inhoud. Vandaar `Debatzet-Persoon-Aanspreken`/`Debatzet-Gevoelens-
+  Verwoorden` in `config/tags.toml`.
 - **Appeal to Authority, False Cause, Slippery Slope** -- vereisen wél een
   inhoudelijk oordeel (is de autoriteit terecht overtuigend? klopt de
   causale claim niet? is het voorspelde gevolg implausibel?). Dat
@@ -184,6 +266,53 @@ over of de onderliggende redenering klopt?
   voor een apart labelgroep "Stijlmiddelen" (niet nu uit te werken).
 
 Zie `pipeline/eval/label_mapping.py` voor de mapping zelf.
+
+## Definitieverschil drogredenen: dezelfde vraag als bij argumenten (issue #313)
+
+Net als bij "is dit een argument?" (zie hierboven) is ook hier niet
+gecheckt of onze eigen tag-omschrijving (`config/tags.toml`) hetzelfde
+afbakent als de bron. Alsnog opgezocht in `paper-goffredo-2023.pdf`
+(citeert Da San Martino et al. 2019a en Walton 1987 voor de categorisering):
+
+| | Bron (Goffredo et al. 2023) | Onze omschrijving (`config/tags.toml`) |
+|---|---|---|
+| Ad Hominem / `Debatzet-Persoon-Aanspreken` | "an excessive attack on an arguer's position" | "Persoonlijke aanval op de tegenstander... in plaats van een inhoudelijke weerlegging" |
+| Appeal to Emotion / `Debatzet-Gevoelens-Verwoorden` | "unessential loading of the argument with emotional language" (elke emotie) | "Emotioneel argumenteren gericht op het oproepen van **angst, woede of medelijden**" (specifiek deze drie) |
+
+De tweede rij is een concreet definitieverschil: onze omschrijving beperkt
+zich tot drie negatieve emoties, de bron niet. Dat verklaart mogelijk (deels)
+de lage recall (0.389, zie "Concrete voorbeelden" hierboven) op deze tag --
+een steekproef van de 129 fout-negatieve citaten laat vooral enthousiaste/
+positieve taal zien (*"tremendous"*, *"a beautiful thing to watch"*,
+*"beauty"*) of misprijzende taal buiten angst/woede/medelijden (*"pigs,
+slobs and dogs"*, *"xenophobic"*, *"ghost town"*) -- precies het soort
+emotionele taal dat de bron wél, maar onze eigen omschrijving niet expliciet
+dekt.
+
+**Getest** met een tag-catalogue-variant die alleen de omschrijving van deze
+2 tags vervangt door de bron-brede definitie (`--tag-prompt guideline` op
+`benchmark_elecdebate.py`/`make validate`, zie
+`build_tag_catalogue_guideline()` -- i.p.v. een hele nieuwe prompt-template
+wordt hier alleen de beschrijvingsregel van de 2 relevante tags in de al
+gegenereerde `tag_catalogue`-tekst vervangen, de rest van de taxonomie blijft
+ongewijzigd). Extractie blijft hierbij `strict` (onze eigen definitie) --
+alleen de tag-as verandert, zodat deze vergelijking niet met de
+argumentherkenning-vergelijking hierboven verstrengeld raakt.
+
+Resultaat (`Qwen/Qwen3.8-27B:ovhcloud`, `data/export/eval/elecdebate60to16-tag-guideline.json`):
+
+| | precision | recall | F1 |
+|---|---|---|---|
+| Strict (`config/tags.toml`) | 0.74 | 0.50 | 0.60 |
+| Guideline (bron-brede emotiedefinitie) | 0.72 | 0.64 | 0.68 |
+
+Zelfde patroon als bij argumentherkenning: recall stijgt fors (+0.14),
+precision blijft nagenoeg gelijk. De herstelde citaten bevestigen de
+hypothese direct: *"tremendously"*, *"stolen"*, *"ripped off"* -- precies de
+enthousiaste/afkeurende taal buiten angst/woede/medelijden die nu wél
+meetelt. Conclusie: ook hier is een substantieel deel van de kloof
+definitieverschil, niet modelbeperking -- de resterende 36% gemiste recall
+wijst op een resterend model-/pipelineplafond.
 
 ## Het evalharnas
 
@@ -235,9 +364,10 @@ uv run python -m pipeline.eval.benchmark_elecdebate \
     --base-url http://localhost:1234/v1 --limit 20
 ```
 
-Resultaten bekijken (samenvatting + per-voorbeeld items, gegroepeerd op
-gevonden/gemist/hallucinatie resp. correct/gemist/onterecht):
-`make dev`, dan `/validatie-rapportage/<dataset>` in de browser.
+Resultaten bekijken (vergelijkingstabellen + gecategoriseerde voorbeelden,
+per definitie-as): `make dev`, dan `/validatie-rapportage` in de browser --
+alle datasets/varianten van een basisdataset staan daar samen op één pagina,
+er is geen aparte per-dataset-pagina meer.
 
 `TOPIC_NAME`/`TOPIC_DESCRIPTION`/`DEBATE_CONTEXT` in `benchmark_elecdebate.py`
 geven de extractieprompt context. Twee dingen zijn hierin gecorrigeerd:

@@ -2,6 +2,171 @@
 
 Status per 2026-07-27. Zie `docs/plan.md` voor het volledige, goedgekeurde architectuurplan. Dit document is voor het vervolg: wat staat er al, wat is er onderweg ontdekt, en wat is de volgende concrete stap.
 
+## Stand bij einde sessie (2026-09-13, volle ElecDeb60to20-validatiesteekproef bekeken, issue #313) — begin hier bij een nieuwe sessie
+
+Vervolg op de sessie hieronder: de volle 318/318-`make validate`-run
+(`Qwen/Qwen3.8-27B:ovhcloud`, commit `fd62c31`) is nu daadwerkelijk bekeken
+op `/validatie-rapportage/elecdebate60to16` en in
+`data/export/eval/elecdebate60to16.json`, niet alleen gedraaid.
+
+**Samenvatting**: argumentherkenning precision 0.254 / recall 0.655 / f1
+0.366 (tekenniveau, 318 records); drogreden-tags precision 0.737 / recall
+0.504 / f1 0.598 (143 correct, 9 fout-positief, 141 fout-negatief, per
+citaat). Drogreden-tag-F1 is een duidelijke sprong t.o.v. de eerdere
+10-record-steekproef (F1 0.00 → 0.40, zie sessie 2026-08-10 hieronder).
+
+**Terminologiefix, tijdens het bekijken van de resultaten**: de
+uitkomst-labels `hallucinatie` en `onterecht` op `/validatie-rapportage/
+<dataset>` bleken misleidend -- ze impliceren een oordeel ("dit is fout")
+terwijl juist een deel van deze categorie geen pipeline-fout is maar een
+gat in de referentiedataset (zie "Beperkingen van de referentiedataset"
+hieronder). Vervangen door de neutrale, symmetrische termen
+`fout-positief`/`fout-negatief` (vgl. [Wikipedia: Foutpositief en
+foutnegatief](https://nl.wikipedia.org/wiki/Foutpositief_en_foutnegatief)),
+in `pipeline/eval/benchmark_elecdebate.py` (outcome-waarden),
+`frontend/src/pages/validatie-rapportage/[dataset].astro` +
+`frontend/src/styles/main.css` (labels/CSS-classes), `docs/eval-elecdebate.md`,
+en met terugwerkende kracht in de al gegenereerde
+`data/export/eval/elecdebate60to16.json` (alleen de outcome-strings herschreven,
+geen herrun nodig).
+
+**Concrete voorbeelden, uit de rapportagepagina**:
+
+- **Argumentherkenning, fout-negatief (echte mis)**: CLINTON — *"we have to
+  build an economy that works for everyone, not just those at the top. That
+  means we need new jobs, good jobs, with rising incomes. I want us…"* — een
+  helder standpunt+onderbouwing die onze extractie niet oppikte. Dit soort
+  missers (213 in totaal) lijkt niet gedomineerd door één patroon in de
+  steekproef die bekeken is; nader onderzoek zou moeten uitwijzen of dit
+  clustert op zinslengte, spreker, of onderwerp.
+- **Argumentherkenning, fout-positief maar géén pipeline-fout**: Trump's
+  NAFTA-uitspraak en de stop-and-frisk-dubbele-spangrenzen, beide al
+  gedocumenteerd in `docs/eval-elecdebate.md` ("Bekende beperkingen van de
+  referentiedataset") — de referentiedataset zelf mist hier annotaties of
+  is inconsistent, niet onze extractie.
+- **Drogreden-tags, duidelijke asymmetrie tussen de twee getagde
+  drogredenen**: `Debatzet-Gevoelens-Verwoorden` (Appeal to Emotion) scoort
+  precision 0.837 / recall 0.389 (82 tp, 16 fp, 129 fn) — het model is hier
+  conservatief en mist systematisch korte/losse citaten zoals *"stolen"*,
+  *"tremendously"*, *"trumped-up trickle-down"*, *"a beautiful thing to
+  watch"* (allemaal "Loaded Language"-stijl eenwoord-annotaties uit de
+  brondataset, zie ook punt 3 in de 2026-08-10-sessie hieronder over
+  context-window). `Debatzet-Persoon-Aanspreken` (Ad Hominem) doet het
+  spiegelbeeld: precision 0.635 / recall 0.836 (61 tp, 35 fp, 12 fn) — het
+  model tagt hier juist té gretig, bv. bij directe aanvallen op de
+  tegenstander die inhoudelijk dichter bij een feitelijke beschuldiging dan
+  bij een drogreden liggen ("I am going to instruct my attorney general to
+  get a special prosecutor to look into your situation, because there has
+  never been so many lies, so much deception"). Waard om bij een
+  prompt-iteratie op te pakken: de twee drogredenen hebben tegengestelde
+  precision/recall-profielen, één gedeelde tagprompt-aanscherping zal
+  waarschijnlijk niet voor beide werken.
+
+**Vervolgexperiment, zelfde sessie: definitie- vs. modelbeperking.** Bij het
+doorlopen van de fout-negatieven bleek een terugkerend patroon: drie citaten
+(Pence "I'm pro-life. I don't apologize for it.", Trump "It was locker room
+talk, as I told you. That was locker room talk", Pence "Joe Biden says
+democracy's on the ballot. Make no mistake about it") staan in de gouden
+data als Claim+Support, maar de "onderbouwing" is telkens een bijna-
+letterlijke herhaling van de claim zelf -- opgezocht in de daadwerkelijke
+brondata (`final_relation_graph.csv`) en teruggeleid tot een specifieke,
+niet-triviale annotatieconventie in de echte richtlijn (Haddadan, Cabrio &
+Villata 2019, `ElectDeb60To16_Guidelines.pdf`, sectie 4.2.2: een kort na
+elkaar herhaalde claim telt met het ertussen liggende stuk als
+claim+premise). Om te testen hoeveel van onze F1-kloof dit definitieverschil
+verklaart t.o.v. een echte modelbeperking, is een tweede, **eval-only**
+extractieprompt gebouwd (`pipeline/prompts/extract_argument_guideline_eval.md`,
+`--extraction-prompt guideline` op `benchmark_elecdebate.py`/`make validate`,
+nooit gebruikt door de productiepipeline) die deze richtlijn zelf volgt
+i.p.v. onze eigen "geen onderbouwing = geen argument"-regel. Volledig
+uitgeschreven met methodologie in `docs/eval-elecdebate.md` ("Experiment:
+definitie- vs. modelbeperking").
+
+Volle 318-record-run (zelfde model, `Qwen/Qwen3.8-27B:ovhcloud`,
+`data/export/eval/elecdebate60to16-guideline.json`, tagging bewust
+overgeslagen via `--skip-tagging` -- onafhankelijk van extractiestijl):
+recall steeg van 0.655 naar 0.829, F1 van 0.366 naar 0.399, precision bleef
+nagenoeg gelijk (0.254 → 0.263). Alle drie de aanleiding-citaten werden nu
+wél gevonden. Dus: een substantieel deel van de kloof (~17 recall-punten)
+is inderdaad definitieverschil, niet modelbeperking -- maar de resterende
+17% gemiste recall en de vlakke precision (~0.26) wijzen op een echt,
+resterend plafond dat een lossere definitie niet oplost.
+
+Twee aanvullende voorbeelden uit de 144 herstelde fout-negatieven, naast de
+drie hierboven (die allemaal het "herhaalde claim"-patroon volgen) --
+deze twee tonen dat de guideline-prompt ook gewoon-goedgevormde
+claim+premise-argumenten terugvond, zonder enige herhaling:
+
+- CLINTON: *"it matters because he has not told the truth about that
+  position"* -- een claim met een expliciete `because`-onderbouwing, geen
+  spoor van herhaling. Waarom de strict-prompt dit miste is niet verder
+  gediagnosticeerd (geen scope-/onderwerpprobleem: beide prompts kregen
+  dezelfde `TOPIC_DESCRIPTION`); vermoedelijk ging deze tekst op in een
+  andere, groter samengevoegde `quote_text` bij de strict-extractie
+  (regel "Eén punt = één argument" voegt immers agressief samen) waarvan de
+  grenzen net niet met dit specifieke gouden fragment overlapten.
+- CLINTON: *"you continue to get help from him, because he has a very clear
+  favorite in this race"* -- zelfde patroon: een compacte, met "because"
+  onderbouwde claim die de strict-prompt niet als losstaand argument
+  terugvond.
+
+**Zelfde definitieverschil-vraag ook voor de drogreden-tags gesteld.**
+Tot nu toe was nooit gecheckt of `config/tags.toml`'s eigen omschrijving van
+`Debatzet-Persoon-Aanspreken`/`Debatzet-Gevoelens-Verwoorden` overeenkomt met
+hoe de brondataset Ad Hominem/Appeal to Emotion afbakent -- alsnog opgezocht
+in `paper-goffredo-2023.pdf` (had de definities al lokaal staan, citeert Da
+San Martino et al. 2019a/Walton 1987). Concreet gat gevonden: onze
+`Debatzet-Gevoelens-Verwoorden`-omschrijving noemt specifiek "angst, woede
+of medelijden", de bron laat elke emotionele taal toe. Een steekproef van de
+129 gemiste citaten op deze tag bevestigt het beeld: vooral enthousiaste taal
+("tremendous", "a beautiful thing to watch") en misprijzing buiten die drie
+emoties ("pigs, slobs and dogs", "xenophobic") -- precies het soort taal dat
+buiten onze eigen, engere omschrijving valt. Volledig uitgeschreven in
+`docs/eval-elecdebate.md` ("Definitieverschil drogredenen").
+
+**Ook getest, zelfde sessie**: `--tag-prompt guideline` toegevoegd aan
+`benchmark_elecdebate.py`/`make validate` (`build_tag_catalogue_guideline()`
+-- vervangt alleen de 2 relevante beschrijvingsregels in de gegenereerde
+tag_catalogue-tekst, geen nieuwe prompt-template nodig). Volle 318-record-run
+(`data/export/eval/elecdebate60to16-tag-guideline.json`, extractie bewust op
+`strict` gehouden zodat alleen de tag-as varieert): recall van 0.50 naar
+0.64, F1 van 0.60 naar 0.68, precision nagenoeg gelijk (0.74 → 0.72) --
+zelfde patroon als de extractie-kant. Herstelde citaten bevestigen de
+hypothese direct: "tremendously", "stolen", "ripped off". Prijs vooraf
+gecheckt: nog steeds $0/$0 (zie kanttekening hieronder over de
+betrouwbaarheid daarvan).
+
+**Prijsbewaking, met een belangrijke kanttekening.** Prijs vooraf en tijdens
+de run gecheckt: nog steeds $0/$0 (`fetch_provider_pricing`). Maar dat $0
+is GEEN betrouwbaar signaal om op te bouwen: zoals eerder al vastgesteld
+(`project_hf_router_ovhcloud_not_free`-memory, met archiefbewijs in
+`reference_ovhcloud_pricing_archive`) staat `Qwen/Qwen3.8-27B:ovhcloud`
+vermoedelijk abusievelijk op $0 bij de provider (`is_free: false` in de
+API zelf) -- dit kan elk moment weer normaal gaan rekenen, net als eerder
+al eens kortstondig gebeurde. De prijsbewaking in `pipeline/hf_pricing.py`
+detecteert een stijging tijdens een lopende batch, maar "kosten waren $0"
+is geen garantie voor een volgende sessie en mag niet als basis dienen voor
+toekomstige planning van vergelijkbare batches.
+
+**Issue #313 hiermee afgerond.** Het laatste actiepunt (kosten terugkoppelen
+uit het HF-billing-dashboard) wordt niet verder uitgezocht -- gezien de
+kanttekening hierboven zou dat toch alleen bevestigen dat er deze specifieke
+keer niets is afgeschreven, niet dat de $0-pricing-aanname klopt. Geen
+losse controlestap meer nodig.
+
+**Rapportagepagina achteraf vereenvoudigd.** Na feedback bleek de aparte
+per-dataset-pagina (`/validatie-rapportage/<dataset>`, met alle
+honderden ruwe extractie-/tag-voorbeelden per dataset) overbodig en
+verwarrend naast de nieuwe vergelijkingstabellen op de indexpagina --
+verwijderd (`frontend/src/pages/validatie-rapportage/[dataset].astro`).
+`/validatie-rapportage` (de index) bevat nu alles: per basisdataset een
+tabel voor argumentherkenning én een voor drogreden-tags (elk zijn eigen
+definitie-as, apart getest), met per foutsoort een steekproef van 5
+voorbeelden. Elk voorbeeld toont drie losse labels (`studie`, `AI, onze
+definitie`, `AI, brondataset-definitie`) i.p.v. één dubbelzinnige
+tag-badge, zodat meteen duidelijk is wat de gouden data zegt en wat elk van
+de twee AI-runs voorspelde.
+
 ## Stand bij einde sessie (2026-09-12/13, gratis HF-router-batches + nieuw topic oekraine + plenaire-kaart-pijplijn gepromoveerd) — begin hier bij een nieuwe sessie
 
 **Aanleiding**: de Hugging Face-router bleek `Qwen/Qwen3.8-27B` via OVHcloud tijdelijk voor $0/M tokens aan te bieden (bevestigd via `/v1/models`-API én de gebruiker's eigen billing-dashboard; `is_free: false` in de API, dus vermoedelijk een niet-afgemaakte pricing-entry van de provider, geen bewuste actie — archiefbewijs in `reference_ovhcloud_pricing_archive`-memory). Dat is de rode draad van de hele sessie: zoveel mogelijk achterstallig LLM-werk erdoorheen jagen zolang het gratis is, met een prijsstijging-vangnet zodat een onopgemerkte wijziging niet alsnog kosten oplevert.
