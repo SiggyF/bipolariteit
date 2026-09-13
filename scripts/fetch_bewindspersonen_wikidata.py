@@ -1,7 +1,7 @@
 """
-Bouwt data/bewindspersonen.toml: ministers/staatssecretarissen relevant voor
+Bouwt data/wikidata/bewindspersonen.toml: ministers/staatssecretarissen relevant voor
 de laatste 2 kamerperiodes (Tweede Kamer 2023-2025 en 2025-heden, samen
-[verwerking].vanaf = 2023-12-06 in data/politieke-periodes.toml) met hun
+[verwerking].vanaf = 2023-12-06 in config/politieke-periodes.toml) met hun
 partij, via Wikidata. SINDS (zie hieronder) ligt op 2022 -- de start van
 Kabinet-Rutte IV -- niet op de kamerperiode zelf, omdat een bewindspersoon
 zijn functie vóór de exportdrempel kan zijn gestart en die tot erna kan
@@ -39,10 +39,10 @@ import requests
 
 SPARQL_URL = "https://query.wikidata.org/sparql"
 HEADERS = {"User-Agent": "bipolariteit-wikidata-fetch/0.1 (contact: f.baart@gmail.com; onderzoeksproject)"}
-OUT_PATH = Path(__file__).parent.parent / "data" / "bewindspersonen.toml"
+OUT_PATH = Path(__file__).parent.parent / "data" / "wikidata" / "bewindspersonen.toml"
 
 # De relevante kamerperiodes zijn Tweede Kamer 2023-2025 en 2025-heden (samen
-# [verwerking].vanaf = 2023-12-06 in data/politieke-periodes.toml -- alleen
+# [verwerking].vanaf = 2023-12-06 in config/politieke-periodes.toml -- alleen
 # documenten van die datum af worden geexporteerd). SINDS ligt bewust eerder
 # (start Kabinet-Rutte IV, 2022-01-10): een bewindspersoon kan zijn functie
 # vóór de drempel gestart zijn en tot erna hebben behouden, dus zijn positie-

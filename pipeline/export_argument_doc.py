@@ -168,7 +168,7 @@ def main():
              "grote contextvenster, niet voor een lokaal model)",
     )
     parser.add_argument(
-        "--vanaf", default=None, help="ISO-datum; overschrijft [verwerking].vanaf uit data/politieke-periodes.toml"
+        "--vanaf", default=None, help="ISO-datum; overschrijft [verwerking].vanaf uit config/politieke-periodes.toml"
     )
     parser.add_argument("--out", default=None, help="uitvoerpad (default: data/export/argument-docs/<topic>.md)")
     parser.add_argument("--dry-run", action="store_true", help="niets wegschrijven, alleen printen")

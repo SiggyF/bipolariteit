@@ -38,7 +38,7 @@ else
   RESOLVE_BASE_URL = scripts/detect_llm_base_url.sh
 endif
 
-.PHONY: help probe crawl ingest embed umap label-clusters pipeline test test-js test-frontend ca-fixture status build dev dev-stop extract extract-agy tag tag-agy redactie validate export enrich-video fetch-debate-events fetch-subtitles match-video-spans check-video-urls tags-taxonomy db-init pipeline-status backup-db release release-dry release-www release-www-dry check-public-exposure argument-doc export-public-data publish-data publish-zenodo publish-huggingface tiles tiles-full
+.PHONY: help probe crawl ingest embed umap label-clusters pipeline test test-js test-frontend ca-fixture status build dev dev-stop extract extract-agy tag tag-agy redactie validate export enrich-video fetch-debate-events fetch-subtitles match-video-spans check-video-urls tags-taxonomy db-init pipeline-status backup-db release release-dry release-www release-www-dry check-public-exposure argument-doc export-public-data publish-data publish-zenodo publish-huggingface publish-tiles tiles tiles-full
 
 help: ## Toon deze lijst
 	@grep -E '^[a-zA-Z_-]+:.*## ' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*## "}; {printf "  \033[36m%-16s\033[0m %s\n", $$1, $$2}'
@@ -79,12 +79,12 @@ embed: ## Plenaire-kaart-pijplijn stage 1 -- documenten embedden met bge-m3, inc
 umap: ## Plenaire-kaart-pijplijn stage 2 -- UMAP op de embeddings (host-only qua geheugengebruik op de volle dataset, zie docs/handoff.md). Verwacht dat `make embed` al gedraaid is (volledige cache-hit, praat zelf niet met LM Studio). Schrijft alleen coördinaten weg voor `make cluster-plenary-map`. Vars: EMBED_START, EMBED_END, EMBED_LABEL
 	uv run python -m pipeline.plenary_map.umap \
 		--start $(EMBED_START) --end $(EMBED_END) --label $(EMBED_LABEL) \
-		--export-coords data/plenary-map/coords-$(EMBED_LABEL).json
+		--export-coords data/plenair-map/coords-$(EMBED_LABEL).json
 
 cluster-plenary-map: ## Plenaire-kaart-pijplijn stage 3 -- hiërarchische clustering + TF-IDF-labels op de coördinaten van `make umap` (geen UMAP, geen LLM-call, dus overal draaibaar). Vars: EMBED_START, EMBED_END, EMBED_LABEL, CLUSTER_LEVEL_SIZES, EXPORT_SUFFIX
 	uv run python -m pipeline.plenary_map.cluster \
 		--start $(EMBED_START) --end $(EMBED_END) --label $(EMBED_LABEL) \
-		--coords-path data/plenary-map/coords-$(EMBED_LABEL).json \
+		--coords-path data/plenair-map/coords-$(EMBED_LABEL).json \
 		--export-frontend $(if $(EXPORT_SUFFIX),--export-suffix=$(EXPORT_SUFFIX),) \
 		$(if $(CLUSTER_LEVEL_SIZES),--cluster-level-sizes $(CLUSTER_LEVEL_SIZES),)
 
@@ -147,7 +147,7 @@ export: ## SQLite -> data/export/topics/<slug>.json + topics-index.json + data/e
 enrich-video: ## Vult documents.video_url/debatdirect_id via Debat Direct, voor alle topics (geen LLM, geen netstroom nodig, gebruik pipeline.enrich_video_url --topic direct voor één topic)
 	uv run python -m pipeline.enrich_video_url
 
-fetch-debate-events: ## Cachet de debatdirect events-array (exact per-beurt-anker) per debat naar data/debate_events/, voor alle topics (voorbereiding op arguments.start_seconds/end_seconds, geen LLM, gebruik pipeline.fetch_debate_events --topic direct voor één topic)
+fetch-debate-events: ## Cachet de debatdirect events-array (exact per-beurt-anker) per debat naar data/debate-events/, voor alle topics (voorbereiding op arguments.start_seconds/end_seconds, geen LLM, gebruik pipeline.fetch_debate_events --topic direct voor één topic)
 	uv run python -m pipeline.fetch_debate_events
 
 fetch-subtitles: ## Cachet het NL-ondertitel-VTT per debat naar data/subtitles/, voor alle topics (voorbereiding op arguments.start_seconds/end_seconds, geen LLM, gebruik pipeline.fetch_subtitles --topic direct voor één topic)
@@ -162,21 +162,21 @@ match-video-spans: ## Vult arguments.start_seconds/end_seconds door quote_text t
 argument-doc: ## Exporteert alle pro/contra-argumenten van TOPIC (met claims) als markdown -- invoer voor `make redactie`, geen LLM-call
 	uv run python -m pipeline.export_argument_doc --topic $(TOPIC)
 
-tags-taxonomy: ## data/tags.toml -> frontend/src/lib/tagsTaxonomy.generated.ts
+tags-taxonomy: ## config/tags.toml -> frontend/src/lib/tagsTaxonomy.generated.ts
 	PYTHONPATH=. uv run python scripts/export_tags_taxonomy.py
 
 export-public-data: ## data/export/topics/*.json -> data/export/gepubliceerd/ (lean, per perspectief/onderwerp/tag), voor publish-data (issue #163)
 	cd frontend && npx tsx scripts/export_public_data.ts
 
-tiles: ## data/export/plenair-map.json -> plenair-map.pmtiles (vector-tile-pyramide, morecantile-grid + dask, zie issue #215/#253) -- experimenteel alternatief renderpad, los van `export`
+tiles: ## data/export/plenair-map/plenair-map.json -> plenair-map.pmtiles (vector-tile-pyramide, morecantile-grid + dask, zie issue #215/#253) -- experimenteel alternatief renderpad, los van `export`
 	uv run python -m pipeline.tiling.build_pyramid
 
-tiles-full: ## Zelfde als `tiles`, maar op de volle-dataset-export (plenair-map-full.json -> data/export/zenodo/plenair-map-full.pmtiles, zie issue #281) -- verwacht dat pipeline/plenary_map/cluster.py --export-suffix=-full al gedraaid is. Bundelt meteen de companion-bestanden voor `make publish-zenodo` in dezelfde map (zie docs/release.md)
-	mkdir -p data/export/zenodo
+tiles-full: ## Zelfde als `tiles`, maar op de volle-dataset-export (plenair-map-full.json -> data/export/plenair-map/bundel/plenair-map-full.pmtiles, zie issue #281) -- verwacht dat pipeline/plenary_map/cluster.py --export-suffix=-full al gedraaid is. Bundelt meteen de companion-bestanden voor `make publish-zenodo` in dezelfde map (zie docs/release.md)
+	mkdir -p data/export/plenair-map/bundel
 	uv run python -m pipeline.tiling.build_pyramid \
-		--input data/export/plenair-map-full.json \
-		--out data/export/zenodo/plenair-map-full.pmtiles
-	cp data/export/plenair-map-full.json data/export/plenair-map-clusters-full.json data/export/plenair-map-hierarchy-full.json data/export/zenodo/
+		--input data/export/plenair-map/plenair-map-full.json \
+		--out data/export/plenair-map/bundel/plenair-map-full.pmtiles
+	cp data/export/plenair-map/plenair-map-full.json data/export/plenair-map/plenair-map-clusters-full.json data/export/plenair-map/plenair-map-hierarchy-full.json data/export/plenair-map/bundel/
 
 publish-data: export-public-data ## Commit + push data/export/gepubliceerd/ (submodule) naar bipolariteit/bipolariteit-data, gefetcht via jsDelivr (zie docs/release.md). Los van een frontend-release, niet automatisch in CI
 	uv run python scripts/publish_data.py
@@ -186,6 +186,9 @@ publish-zenodo: ## Nieuwe Zenodo-versie (draft) van de volle-dataset-tegelpyrami
 
 publish-huggingface: ## Zelfde bundel als publish-zenodo, maar naar een publieke HF-dataset-repo als live data (direct overschreven, geen aparte publiceerstap, zie docs/release.md). Vars: HUGGINGFACE_TOKEN
 	uv run python scripts/publish_huggingface.py
+
+publish-tiles: ## Publiceert de kleine plenair-map.pmtiles/-grid.json (van `make tiles`) naar dezelfde Hugging Face-dataset-repo als publish-huggingface -- pmtiles hoort bij HF, niet bij de jsDelivr-submodule (issue #316, TiledPlenairMap.vue). Vars: HUGGINGFACE_TOKEN
+	uv run python scripts/publish_huggingface.py --files data/export/plenair-map/plenair-map.pmtiles data/export/plenair-map/plenair-map-grid.json
 
 build: ## Frontend production build (frontend/dist/)
 	cd frontend && npm run build

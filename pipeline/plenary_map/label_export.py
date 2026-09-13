@@ -1,7 +1,7 @@
 """
 Losse LLM-naamgevingsstap voor een al gedraaide clustering
 (pipeline/plenary_map/cluster.py). Werkt uitsluitend op de opgeslagen
-clusters-/hierarchy-/cluster-label-input-bestanden in data/plenary-map/ --
+clusters-/hierarchy-/cluster-label-input-bestanden in data/plenair-map/ --
 geen UMAP-coördinaten of documentcorpus nodig, dus geschikt om los te
 draaien (bv. in de devcontainer tegen een gratis remote router, terwijl de
 UMAP-fit zelf op de host draaide vanwege geheugengebruik, zie
@@ -31,9 +31,12 @@ from pipeline.plenary_map.label import label_clusters_with_llm, label_clusters_w
 
 logger = logging.getLogger(__name__)
 
-OUTPUT_DIR = REPO_ROOT / "data" / "plenary-map"
-CLUSTERS_EXPORT_PATH = REPO_ROOT / "data" / "export" / "plenair-map-clusters.json"
-HIERARCHY_EXPORT_PATH = REPO_ROOT / "data" / "export" / "plenair-map-hierarchy.json"
+OUTPUT_DIR = REPO_ROOT / "data" / "plenair-map"
+# data/export/plenair-map/ bundelt alle plenair-map-exportbestanden bij
+# elkaar (issue #316), zelfde EXPORT_DIR als pipeline/plenary_map/cluster.py.
+EXPORT_DIR = REPO_ROOT / "data" / "export" / "plenair-map"
+CLUSTERS_EXPORT_PATH = EXPORT_DIR / "plenair-map-clusters.json"
+HIERARCHY_EXPORT_PATH = EXPORT_DIR / "plenair-map-hierarchy.json"
 WRITE_INTERVAL = 20
 PRICE_CHECK_INTERVAL = 100
 
@@ -57,7 +60,7 @@ def main():
     )
     parser.add_argument(
         "--export-frontend", action="store_true",
-        help="ook data/export/plenair-map-clusters<suffix>.json en -hierarchy<suffix>.json bijwerken",
+        help="ook data/export/plenair-map/plenair-map-clusters<suffix>.json en -hierarchy<suffix>.json bijwerken",
     )
     parser.add_argument(
         "--export-suffix", default="", choices=["", "-full"],
@@ -91,6 +94,7 @@ def main():
         clusters_path.write_text(json.dumps(cluster_summaries, ensure_ascii=False, indent=2), encoding="utf-8")
         hierarchy_path.write_text(json.dumps(hierarchy, ensure_ascii=False, indent=2), encoding="utf-8")
         if args.export_frontend:
+            EXPORT_DIR.mkdir(parents=True, exist_ok=True)
             _suffixed(CLUSTERS_EXPORT_PATH).write_text(
                 json.dumps(cluster_summaries, ensure_ascii=False), encoding="utf-8",
             )

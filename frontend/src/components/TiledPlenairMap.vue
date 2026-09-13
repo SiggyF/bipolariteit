@@ -32,6 +32,9 @@ import {
 
 const props = defineProps<{
 	dataBaseUrl: string;
+	// pmtiles + grid-metadata komen van Hugging Face, niet van de
+	// jsDelivr-databasis hierboven (zie lib/dataBaseUrl.ts, issue #316).
+	tilesBaseUrl: string;
 }>();
 
 type DecodedPoint = {
@@ -130,7 +133,7 @@ async function loadTile(grid: GridMetadata, tile: TileKey): Promise<void> {
 onMounted(async () => {
 	try {
 		const [gridResponse, clustersResponse] = await Promise.all([
-			fetch(`${props.dataBaseUrl}/plenair-map-grid.json`),
+			fetch(`${props.tilesBaseUrl}/plenair-map-grid.json`),
 			fetch(`${props.dataBaseUrl}/plenair-map-clusters.json`).catch(() => null),
 		]);
 		if (!gridResponse.ok) throw new Error(`Status ${gridResponse.status}`);
@@ -153,7 +156,7 @@ onMounted(async () => {
 				hull: cluster.hull ? cluster.hull.map(([hx, hy]) => umapToMercator(hx, hy, grid)) : null,
 			}));
 		}
-		pmtiles = new PMTiles(`${props.dataBaseUrl}/plenair-map.pmtiles`);
+		pmtiles = new PMTiles(`${props.tilesBaseUrl}/plenair-map.pmtiles`);
 		await pmtiles.getHeader();
 		status.value = "ready";
 		updateCanvasDimensions();

@@ -93,7 +93,7 @@ def _fresh_conn():
 
 class _FakePeriodeIndex:
     """Stand-in voor pipeline.periodes.PeriodeIndex (leest normaliter
-    data/politieke-periodes.toml) -- deze tests hebben alleen .drempel nodig."""
+    config/politieke-periodes.toml) -- deze tests hebben alleen .drempel nodig."""
 
     def __init__(self, drempel="2020-01-01"):
         self.drempel = drempel

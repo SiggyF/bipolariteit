@@ -23,7 +23,7 @@ opleverde -- zelfde patroon als `arguments.tagged_at` in tag_arguments.py),
 dus herhaald draaien is veilig en de volle batch kan onderbroken/herstart
 worden zonder dubbel werk.
 
-Documenten van vóór [verwerking].vanaf in data/politieke-periodes.toml
+Documenten van vóór [verwerking].vanaf in config/politieke-periodes.toml
 worden overgeslagen: we analyseren de huidige en de vorige Kamer. Die
 documenten blijven gewoon in de database staan; met --vanaf kan een oudere
 periode alsnog bewust verwerkt worden.
@@ -191,7 +191,7 @@ EXCLUDED_ACTIVITEIT_SOORTEN = ["Regeling van werkzaamheden", "Stemmingen"]
 def fetch_pending_documents(conn, topic_slug, limit, min_id=0, vanaf=None):
     """`vanaf` is een ISO-datum; oudere documenten blijven in de database maar
     komen hier niet uit. Default is [verwerking].vanaf uit
-    data/politieke-periodes.toml -- we analyseren de huidige en de vorige
+    config/politieke-periodes.toml -- we analyseren de huidige en de vorige
     Kamer, en dat scheelt aanzienlijk LLM-werk."""
     if vanaf is None:
         vanaf = PeriodeIndex().drempel
@@ -279,7 +279,7 @@ def main():
     parser.add_argument(
         "--vanaf",
         default=None,
-        help="ISO-datum; overschrijft [verwerking].vanaf uit data/politieke-periodes.toml "
+        help="ISO-datum; overschrijft [verwerking].vanaf uit config/politieke-periodes.toml "
              "(voor een bewuste backfill van een oudere periode)",
     )
     parser.add_argument("--dry-run", action="store_true", help="niets naar de database schrijven, alleen printen")

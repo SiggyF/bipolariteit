@@ -14,7 +14,7 @@ Bron van de dataset: `uv run python -m pipeline.ingest.ingest_tk
 (crawlers/tweede_kamer/tweede_kamer/spiders/verslagen_periode.py).
 
 Puur leesactie op de database. Output: coords+labels als JSON in
-data/plenary-map/, voor de losse Cosmograph-HTML-pagina
+data/plenair-map/, voor de losse Cosmograph-HTML-pagina
 (index.html in dezelfde map) om interactief te bekijken -- zie die map's
 eigen toelichting waarom hier bewust geen matplotlib-PNG (zoals
 experiment_umap_arguments.py) of Plotly is gebruikt.
@@ -41,7 +41,7 @@ label-clusters):
 Gebruik:
     uv run python -m pipeline.plenary_map.cluster \
         --start 2025-11-12 --end 2026-08-22 --label 2025-heden \
-        --coords-path data/plenary-map/coords-2025-heden.json
+        --coords-path data/plenair-map/coords-2025-heden.json
 """
 import argparse
 import json
@@ -139,10 +139,13 @@ def fetch_actor_and_party_stopwords(conn):
 
     return stopwords
 
-OUTPUT_DIR = REPO_ROOT / "data" / "plenary-map"
-EXPORT_PATH = REPO_ROOT / "data" / "export" / "plenair-map.json"
-CLUSTERS_EXPORT_PATH = REPO_ROOT / "data" / "export" / "plenair-map-clusters.json"
-HIERARCHY_EXPORT_PATH = REPO_ROOT / "data" / "export" / "plenair-map-hierarchy.json"
+OUTPUT_DIR = REPO_ROOT / "data" / "plenair-map"
+# data/export/plenair-map/ bundelt alle plenair-map-exportbestanden bij
+# elkaar (issue #316) i.p.v. los tussen de rest van data/export/ te staan.
+EXPORT_DIR = REPO_ROOT / "data" / "export" / "plenair-map"
+EXPORT_PATH = EXPORT_DIR / "plenair-map.json"
+CLUSTERS_EXPORT_PATH = EXPORT_DIR / "plenair-map-clusters.json"
+HIERARCHY_EXPORT_PATH = EXPORT_DIR / "plenair-map-hierarchy.json"
 
 # Concept-record van de Zenodo-archivering (docs/handoff.md, 2026-08-29-sessie):
 # https://doi.org/10.5281/zenodo.22181704 -- het concept-DOI blijft stabiel over
@@ -895,7 +898,7 @@ def main():
     parser.add_argument(
         "--export-frontend",
         action="store_true",
-        help="ook een lean JSON naar data/export/plenair-map.json schrijven (frontend-input, "
+        help="ook een lean JSON naar data/export/plenair-map/plenair-map.json schrijven (frontend-input, "
         "onderwerpen/index.astro). Nog een handmatige stap, geen make-target -- pas als "
         "pipeline-stage overwegen ná een interpreteerbaar resultaat op de volle dataset.",
     )

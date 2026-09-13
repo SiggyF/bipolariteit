@@ -1,8 +1,9 @@
 """
 Bouwt de vector-tile-pyramide voor de plenaire kaart: leest de bestaande
-`data/export/plenair-map.json` (dezelfde brondata als `PlenairMap.vue`,
-gegenereerd door `pipeline/plenary_map/cluster.py --export-frontend`) en
-schrijft `data/export/plenair-map.pmtiles` -- een MVT-tile-pyramide over een
+`data/export/plenair-map/plenair-map.json` (dezelfde brondata als
+`PlenairMap.vue`, gegenereerd door `pipeline/plenary_map/cluster.py
+--export-frontend`) en schrijft `data/export/plenair-map/plenair-map.pmtiles`
+-- een MVT-tile-pyramide over een
 custom morecantile-grid (`pipeline.tiling.grid`), met tile-encodering
 (`pipeline.tiling.encode`) verdeeld over dask-taken per `(z, x, y)`-tile.
 
@@ -48,8 +49,11 @@ from pipeline.tiling.grid import (
 
 logger = logging.getLogger(__name__)
 
-DEFAULT_INPUT = REPO_ROOT / "data" / "export" / "plenair-map.json"
-DEFAULT_OUTPUT = REPO_ROOT / "data" / "export" / "plenair-map.pmtiles"
+# data/export/plenair-map/ bundelt alle plenair-map-exportbestanden bij
+# elkaar (issue #316), zelfde map als pipeline/plenary_map/cluster.py's
+# EXPORT_DIR.
+DEFAULT_INPUT = REPO_ROOT / "data" / "export" / "plenair-map" / "plenair-map.json"
+DEFAULT_OUTPUT = REPO_ROOT / "data" / "export" / "plenair-map" / "plenair-map.pmtiles"
 # Geen los DEFAULT_GRID_OUTPUT meer: --grid-out wordt afgeleid van --out
 # (<stem>-grid.json), zie main() -- voor DEFAULT_OUTPUT komt dat nog steeds
 # uit op plenair-map-grid.json.

@@ -4,7 +4,7 @@ Vervolg op [issue #181](https://github.com/SiggyF/bipolariteit/issues/181) (clus
 [notebooks/explore_plenary_umap_clusters.py](../notebooks/explore_plenary_umap_clusters.py):
 een experimenteerscript op een steekproef spreekbeurten, los van de productie-pipeline
 (`pipeline/plenary_map/cluster.py`, die de volle ~99k-dataset draait en naar
-`data/export/plenair-map*.json` schrijft).
+`data/export/plenair-map/plenair-map*.json` schrijft).
 
 ## Het probleem: vaste HDBSCAN-drempels werken niet
 

@@ -4,7 +4,7 @@ kandidaat-trefwoord op, en van welke debatsoort?
 
 Bedoeld om de omvang en de ruis van een nieuw topic te kennen vóórdat er
 LLM-credits aan verbrand worden. Telt alleen activiteiten vanaf de
-verwerkingsdrempel (data/politieke-periodes.toml, [verwerking].vanaf) -- alles
+verwerkingsdrempel (config/politieke-periodes.toml, [verwerking].vanaf) -- alles
 daarvoor komt sowieso niet in de export terecht.
 
 Doet zelf HTTP (in tegenstelling tot de spider), want dit is een eenmalige

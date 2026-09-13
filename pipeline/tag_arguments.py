@@ -1,5 +1,5 @@
 """
-Tweede-pass tagging: kent taxonomie-tags (data/tags.toml, geladen via
+Tweede-pass tagging: kent taxonomie-tags (config/tags.toml, geladen via
 pipeline/db/seed_tags.py) toe aan reeds geëxtraheerde `arguments`-rijen.
 
 Draait NA extract_arguments.py en NA seed_tags.py, en laat extract_arguments.py
@@ -368,7 +368,7 @@ def main():
     parser.add_argument(
         "--vanaf",
         default=None,
-        help="ISO-datum; overschrijft [verwerking].vanaf uit data/politieke-periodes.toml "
+        help="ISO-datum; overschrijft [verwerking].vanaf uit config/politieke-periodes.toml "
              "(voor een bewuste backfill van een oudere periode)",
     )
     parser.add_argument(

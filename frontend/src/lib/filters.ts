@@ -53,7 +53,7 @@ export const DIMENSIONS: Dimension[] = [
 	{ key: "rol", label: "Rol", valuesOf: (a) => [a.actor.role_title ?? NO_ROLE] },
 	// Kabinetten en Kamers wisselen op andere momenten dan kalenderjaren, en
 	// niet gelijk met elkaar -- vandaar twee losse dimensies naast het vrije
-	// datumbereik. De grenzen komen uit data/politieke-periodes.toml en zijn
+	// datumbereik. De grenzen komen uit config/politieke-periodes.toml en zijn
 	// in de pipeline al per argument opgezocht.
 	{
 		key: "regering",

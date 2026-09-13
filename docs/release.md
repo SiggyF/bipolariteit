@@ -334,11 +334,21 @@ voor precies dat geval.
 ### Grote bestanden -> Zenodo (archief) + Hugging Face (live data), niet jsDelivr
 
 De volle-dataset-tegelpyramide van de plenaire kaart (issue #281,
-`data/export/plenair-map-full.pmtiles`, ~1,25 GiB, plus
+`data/export/plenair-map/plenair-map-full.pmtiles`, ~1,25 GiB, plus
 `plenair-map-full.json`, ~119 MiB) is te groot voor git/GitHub (100 MB
 harde bestandslimiet) en hoort dus niet in `data/export/gepubliceerd/` zoals
-hierboven -- die route is specifiek voor de kleine, live door de site
-gefetchte dataset (`plenair-map.pmtiles`, dat wél al in de submodule zit).
+hierboven.
+
+**Sinds issue #316 geldt dat ook voor de kleine variant** (`plenair-map.pmtiles`,
+~50 MiB): pmtiles hoort principieel bij Hugging Face, niet bij de compacte
+jsDelivr-hosting, ook al zou hij onder jsDelivr's bestandslimiet blijven.
+`TiledPlenairMap.vue` fetcht 'm via een losse `tilesBaseUrl`-prop
+(`resolveTilesBaseUrl()` in `frontend/src/lib/dataBaseUrl.ts`), naast de
+gewone `dataBaseUrl` voor de rest van de submodule-data. `make tiles`
+schrijft het bestand zoals altijd naar `data/export/plenair-map/`
+(alle plenair-map-exportbestanden bij elkaar, issue #316, i.p.v. los
+tussen de rest van `data/export/`); `make publish-tiles` publiceert het
+naar dezelfde HF-dataset-repo als `publish-huggingface` hieronder.
 
 In plaats daarvan gaat dit soort grote data naar twee bestemmingen met een
 losse rol (besluit uit issue #293), zelfde bronbundel, geen van beide
@@ -353,18 +363,19 @@ vervangt de ander:
   iets wat jsDelivr/git boven de 100 MB-limiet niet kan.
 
 ```sh
-make tiles-full            # bouwt de tegelpyramide + bundelt companions in data/export/zenodo/
-make publish-zenodo        # uploadt alles in data/export/zenodo/ als nieuwe Zenodo-versie (draft, ZENODO_TOKEN nodig)
+make tiles-full            # bouwt de tegelpyramide + bundelt companions in data/export/plenair-map/bundel/
+make publish-zenodo        # uploadt alles in data/export/plenair-map/bundel/ als nieuwe Zenodo-versie (draft, ZENODO_TOKEN nodig)
 make publish-huggingface   # uploadt dezelfde bundel als live data naar een publieke HF-dataset-repo (HUGGINGFACE_TOKEN nodig)
 ```
 
-`data/export/zenodo/` (gitignored) is de expliciete bundel-map: `tiles-full`
-schrijft `plenair-map-full.pmtiles`/`-grid.json` er rechtstreeks in en
-kopieert `plenair-map-full.json`/`-clusters-full.json`/`-hierarchy-full.json`
-erbij, zodat beide publiceerstappen zonder losse bestandenlijst gewoon alles
-daarin publiceren -- ze kunnen zo niet uit de pas lopen over welke bestanden
-erbij horen (ondanks de mapnaam is dit dus ook de bron voor
-`publish-huggingface`, niet iets Zenodo-specifieks).
+`data/export/plenair-map/bundel/` (gitignored) is de expliciete bundel-map:
+`tiles-full` schrijft `plenair-map-full.pmtiles`/`-grid.json` er
+rechtstreeks in en kopieert
+`plenair-map-full.json`/`-clusters-full.json`/`-hierarchy-full.json` erbij,
+zodat beide publiceerstappen zonder losse bestandenlijst gewoon alles
+daarin publiceren -- ze kunnen zo niet uit de pas lopen over welke
+bestanden erbij horen (gedeeld tussen Zenodo én Hugging Face, vandaar de
+neutrale naam `bundel/` in plaats van `zenodo/`, issue #316).
 
 `scripts/publish_zenodo.py` maakt alleen een **draft** aan (nieuwe versie,
 bestanden geüpload). Publiceren zelf (onomkeerbaar, eigen DOI per versie)
@@ -373,12 +384,16 @@ patroon als hierboven bij `publish-data`.
 
 `scripts/publish_huggingface.py` heeft dat tussenstapje niet: de bestanden
 staan meteen live op
-`https://huggingface.co/datasets/SiggyF/bipolariteit-pmtiles/resolve/main/<bestandsnaam>`
-zodra het script klaar is, zelfde "overschrijf de huidige data"-flow als
-`publish-data`'s jsDelivr-route. Nog niet gedaan: de frontend daadwerkelijk
-tegen deze URL laten fetchen (welke workflows dat gaan gebruiken is een
-bewust nog niet genomen besluit, zie issue #293) -- deze stap publiceert de
-data alvast, los van die keuze.
+`https://huggingface.co/datasets/SiggyF/bipolariteit-pmtiles/resolve/main/<submap>/<bestandsnaam>`
+zodra het script klaar is (`<submap>` = `--repo-subdir`, default
+`plenair-map` — één submap per dataset in deze repo, niet alles plat naast
+elkaar), zelfde "overschrijf de huidige data"-flow als `publish-data`'s
+jsDelivr-route. Sinds issue #316 fetcht `TiledPlenairMap.vue` de kleine
+`plenair-map.pmtiles`/`-grid.json` daadwerkelijk tegen deze URL
+(`resolveTilesBaseUrl()`, zie `frontend/src/lib/dataBaseUrl.ts`) -- de
+volle-dataset-bundel (`plenair-map-full.*`) blijft archief-/downloaddata,
+nog niet door een frontend-workflow gefetcht (welke dat gaat worden is een
+bewust nog niet genomen besluit, zie issue #293).
 
 ## Data publiceren
 

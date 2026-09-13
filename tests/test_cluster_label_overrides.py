@@ -18,7 +18,7 @@ def test_cluster_label_overrides_toml():
     assert "labels" in config
     assert "redundant" in config
 
-    clusters_json = Path("data/export/plenair-map-clusters-full.json")
+    clusters_json = Path("data/export/plenair-map/plenair-map-clusters-full.json")
     if not clusters_json.exists():
         return
 

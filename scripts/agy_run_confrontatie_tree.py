@@ -78,7 +78,7 @@ wegwerpbare Docker-container (--rm) is hier al de isolatiegrens.
 Schrijft de volledige (niet-afgeknotte) stdout/stderr van elke poging, plus
 agy's eigen `--log-file`-output (naar een apart schrijfbare gemounte map --
 niet te vinden op het pad dat docs/handoff.md noemt, zie run_agy()), naar
-data/export/agy_confrontatie_tree.log, zodat een eventuele permissiefout
+data/export/argument-trees/agy_confrontatie_tree.log, zodat een eventuele permissiefout
 z'n precieze toolnaam niet kwijtraakt in een teruggeknipte terminalregel.
 
 Gebruik:
@@ -111,7 +111,7 @@ REBUTTAL_PROMPT_PATH = Path(__file__).parent.parent / "pipeline" / "prompts" / "
 SUPPORT_PROMPT_PATH = Path(__file__).parent.parent / "pipeline" / "prompts" / "boomredactie_support_check.md"
 TREE_SCHEMA_PATH = Path(__file__).parent.parent / "pipeline" / "schemas" / "argument_tree.schema.json"
 GEMINI_TREE_DIR = Path(__file__).parent.parent / "data" / "export" / "argument-docs"
-LOG_PATH = Path(__file__).parent.parent / "data" / "export" / "agy_confrontatie_tree.log"
+LOG_PATH = Path(__file__).parent.parent / "data" / "export" / "argument-trees" / "agy_confrontatie_tree.log"
 
 # Buiten de repo (bevat een live OAuth-token, nooit in een git-repo laten
 # staan) -- zelfde sessie als scripts/agy_run_extraction_batch.py. Als

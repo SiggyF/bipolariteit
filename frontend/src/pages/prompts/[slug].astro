@@ -1,10 +1,10 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 
-const llmCallModules = import.meta.glob("../../../../data/export/llm_calls/*.json", { eager: true });
+const llmCallModules = import.meta.glob("../../../../data/export/llm-calls/*.json", { eager: true });
 
 export function getStaticPaths() {
-	const modules = import.meta.glob("../../../../data/export/llm_calls/*.json", { eager: true });
+	const modules = import.meta.glob("../../../../data/export/llm-calls/*.json", { eager: true });
 	return Object.values(modules).map((mod: any) => ({
 		params: { slug: mod.default.topic },
 	}));

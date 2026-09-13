@@ -3,7 +3,7 @@ Codering van plenair-map-punten naar MVT-tilebytes (mapbox_vector_tile), per
 `(z, x, y)`-tile uit het grid in `pipeline.tiling.grid`. Zie module-docstring
 van `pipeline.tiling.build_pyramid` voor de volledige pijplijn.
 
-Puntvolgorde in de brondata (`data/export/plenair-map.json`, geschreven door
+Puntvolgorde in de brondata (`data/export/plenair-map/plenair-map.json`, geschreven door
 `pipeline/plenary_map/cluster.py:write_frontend_export`): `id, x, y,
 topic_idx, actor_idx, party_idx, debate_idx, soort_idx, published_at, text,
 cluster[, cluster_levels]`. De lookup-tabellen (`topics`, `actors`, `parties`,

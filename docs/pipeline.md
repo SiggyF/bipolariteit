@@ -73,7 +73,7 @@ tijdlijn):
 
 1. `enrich-video` — vult `documents.video_url`/`debatdirect_id` via Debat
    Direct.
-2. `fetch-debate-events` — cachet per-beurt-ankers naar `data/debate_events/`.
+2. `fetch-debate-events` — cachet per-beurt-ankers naar `data/debate-events/`.
 3. `fetch-subtitles` — cachet NL-ondertitel-VTT naar `data/subtitles/`.
 4. `match-video-spans` — matcht `quote_text` tegen de ondertitels, gekalibreerd
    op de events-ankers, en vult `arguments.start_seconds`/`end_seconds`.
@@ -90,7 +90,7 @@ en die worden **niet automatisch** aan `make pipeline` geknoopt:
 
 | Target | Doet |
 | --- | --- |
-| `tags-taxonomy` | `data/tags.toml` -> `frontend/src/lib/tagsTaxonomy.generated.ts` |
+| `tags-taxonomy` | `config/tags.toml` -> `frontend/src/lib/tagsTaxonomy.generated.ts` |
 | `export-public-data` | `data/export/topics/*.json` -> `data/export/gepubliceerd/` (lean, per perspectief/onderwerp/tag, issue #163) |
 | `publish-data` | Commit + push van die submodule naar de publieke data-repo, via jsDelivr opgehaald door de live site |
 
@@ -127,7 +127,7 @@ vaste schakel:
 ```
 make probe KEYWORDS="..."          # optioneel, vooraf peilen
 make pipeline TOPIC=<slug>         # crawl -> ingest -> extract -> tag -> export
-make tags-taxonomy                 # als data/tags.toml gewijzigd is
+make tags-taxonomy                 # als config/tags.toml gewijzigd is
 make export-public-data
 make publish-data                  # bewuste, losse publicatiestap
 make build && make release TAG=... # of make release-www voor main

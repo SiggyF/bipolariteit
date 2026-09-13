@@ -172,7 +172,7 @@ over of de onderliggende redenering klopt?
 - **Ad Hominem, Appeal to Emotion** -- structureel vast te stellen (is dit
   een persoonlijke aanval? wordt hier emotie ingezet?), geen oordeel nodig
   over de inhoud. Vandaar `Drogreden-Ad-Hominem`/`Drogreden-Bespelen-
-  Publiek` in `data/tags.toml`.
+  Publiek` in `config/tags.toml`.
 - **Appeal to Authority, False Cause, Slippery Slope** -- vereisen wél een
   inhoudelijk oordeel (is de autoriteit terecht overtuigend? klopt de
   causale claim niet? is het voorspelde gevolg implausibel?). Dat

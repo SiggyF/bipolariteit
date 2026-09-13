@@ -1,5 +1,5 @@
 // GEGENEREERD -- niet met de hand aanpassen.
-// Bron: data/tags.toml.
+// Bron: config/tags.toml.
 // Opnieuw maken: uv run python scripts/export_tags_taxonomy.py
 
 export interface TaxonomieTag {

@@ -20,12 +20,10 @@ bestanden -> Zenodo + Hugging Face").
 Daarnaast drie categorieën die niet via een publicatiekanaal gaan:
 
 - **Lokaal-only, regenereerbaar**: `data/raw/`, `data/embeddings/`,
-  `data/subtitles/`, `data/debate_events/`. Cache/tussenproduct van de
+  `data/subtitles/`, `data/debate-events/`. Cache/tussenproduct van de
   pijplijn, hoeft nergens gepubliceerd te worden.
-- **Handgeschreven brondata**: `data/tags.toml`, `data/bewindspersonen.toml`,
-  `data/politieke-periodes.toml`, `data/topic-descriptions/`,
-  `config/cluster_label_overrides.toml`. Geen pijplijn-output — handmatig
-  onderhouden invoer, gewoon in git.
+- **Handmatig onderhouden config** (`config/`, apart van `data/`): zie
+  §0 hieronder. Geen pijplijn-output.
 - **Privé, mag niet publiek**: `data/bipolariteit.db`. Bevat naast publieke
   Kamerstukken ook LLM-call-logs (prompts/responses). Geen enkel
   publicatiekanaal; alleen `make backup-db` naar dezelfde-machine-map. Zie
@@ -34,14 +32,74 @@ Daarnaast drie categorieën die niet via een publicatiekanaal gaan:
   `scripts/publish_huggingface.py` hergebruiken, met een apart, privé
   dataset-repo).
 
+`data/` heeft bewust geen losse bestanden meer op de root: elk stuk data
+staat in een map die zijn bron of dataset benoemt (`data/wikidata/`,
+`data/plenair-map/`, ...), zodat je aan de padnaam al ziet waar iets
+vandaan komt.
+
+## 0. `config/` — handmatig onderhouden, apart van `data/`
+
+Sinds issue #316 expliciet gescheiden op **handmatig ingevoerd vs.
+gegenereerd**, niet op bestandsformaat: alles hier is met de hand
+bijgehouden, `data/` is uitsluitend pijplijn-input/-output.
+
+- `tags.toml` — de argumentatie-onderzoeker-taxonomie (labelgroepen/tags),
+  geladen via `pipeline/db/seed_tags.py`. Git-historie bevestigt hand-edits
+  ("nieuwe labelgroep toegevoegd").
+- `politieke-periodes.toml` — kamerperiode-/regeringsperiode-grenzen, alleen
+  gelezen (`pipeline/periodes.py`), nooit geschreven door code.
+- `topic-descriptions/*.md` — handgeschreven PRO/CONTRA-duiding per
+  onderwerp, input voor `scripts/db/add_topic.py`.
+- `cluster_label_overrides.toml` — handmatige clusterlabel-correcties (zie
+  hieronder voor de gegenereerde `cluster-label-anchors.parquet` die
+  ermee paart).
+
+**Blijft in `data/`, ondanks dat het ook een `.toml` is**:
+`data/wikidata/bewindspersonen.toml` — expliciet "niet met de hand
+bijgehouden" (eigen commentaar in het bestand), gegenereerd door
+`scripts/fetch_bewindspersonen_wikidata.py` uit Wikidata. Toml-bestand zijn
+is niet de indelingsregel; herkomst wel. Eigen map (`data/wikidata/`, niet
+de root) omdat het puur een backend-fallback is voor
+`pipeline/ingest/ingest_tk.py` — nooit door de frontend gelezen, dus geen
+`data/export/`-kandidaat ondanks dat het wel "klaar voor gebruik" is.
+
 ## 1. Hoofdrepo — `data/`
 
-### Handgeschreven brondata (altijd tracked)
+`data/` heeft geen losse bestanden meer op de root (issue #316): elke map
+noemt óf een dataset (`plenair-map/`, `export/`) óf de externe bron van
+wat erin staat. Nieuwe mapnamen onder `data/` zijn Engels
+(`docs/taalconventie.md` regel 1 — bestandsnamen zijn identifiers) tenzij
+ze onder een van de twee smalle uitzonderingen vallen; bestaande
+Nederlandse mapnamen (`plenair-map/`) zijn niet met terugwerkende kracht
+hernoemd.
 
-`bewindspersonen.toml`, `politieke-periodes.toml`, `tags.toml`,
-`topic-descriptions/*.md`, `cluster-label-anchors.parquet` (gegenereerd door
-`scripts/build_cluster_label_anchors.py`, maar bewust getrackt als
-snapshot — pairt met de handmatige `config/cluster_label_overrides.toml`).
+### `data/wikidata/bewindspersonen.toml`, `data/tk-opendata/kamerstukdossiers.json`
+
+Twee kleine, generieke referentietabellen die extern worden opgehaald en
+door niets in de frontend gelezen worden — dus geen `data/export/`-
+kandidaat, ook al zijn ze "klaar voor gebruik". Elk in een eigen map
+genoemd naar de bron, zelfde patroon als `data/raw/` (TK-crawl) en
+`data/embeddings/` (bge-m3):
+
+- `data/wikidata/bewindspersonen.toml` — ministers/staatssecretarissen,
+  `scripts/fetch_bewindspersonen_wikidata.py`. Enige consument:
+  `pipeline/ingest/ingest_tk.py`'s fallback bij een Kamerlid zonder eigen
+  Kamerzetel.
+- `data/tk-opendata/kamerstukdossiers.json` — officiële Kamerstukdossier-
+  nummers/titels, `scripts/fetch_tk_dossiers.py` tegen de TK Open Data
+  Gegevensmagazijn-API (OData v4) — een ander, eenmaliger endpoint dan de
+  Scrapy-crawler die `data/raw/tweede_kamer/` vult. Enige consument:
+  `scripts/a0_map/generate_a0_inverse_terminology.py`.
+
+### `data/plenair-map/cluster-label-anchors.parquet`
+
+Gegenereerd door `scripts/build_cluster_label_anchors.py`, bewust getrackt
+als snapshot (pairt met de handmatige `config/cluster_label_overrides.toml`
+hierboven). Leest uitsluitend `plenair-map`-bestanden
+(`data/export/a0-map/maps/plenair-map-*.json`,
+`data/embeddings/*_plenair-full.npz`) en wordt alleen door
+`scripts/rematch_cluster_label_anchors.py` teruggelezen — hoort dus bij
+`data/plenair-map/`, niet los op de `data/`-root.
 
 ### `data/export/` — frontend-input
 
@@ -51,22 +109,41 @@ Gevuld door `make export` (`pipeline/build_static_data.py`) en
 | Pad | Bron | Gebruikt door |
 | --- | --- | --- |
 | `topics/*.json`, `topics-index.json`, `status.json` | `build_static_data.py` | vrijwel alle Astro-pagina's (build-time) |
-| `llm_calls/*.json` | idem | `pages/prompts/*.astro` |
+| `llm-calls/*.json` | idem | `pages/prompts/*.astro` |
 | `argument-trees/*.json` | `pipeline/build_confrontatie_export.py` (`make redactie`) | `pages/onderwerpen/[slug].astro` |
 | `eval/*.json` | `scripts/convert_elecdebate.py` + benchmark | `pages/validatie-rapportage*.astro` |
-| `plenair-map.json`, `-clusters.json`, `-hierarchy.json` | `pipeline/plenary_map/cluster.py --export-frontend` | client-side fetch (`PlenairMap.vue`), en gekopieerd naar de submodule |
-| `plenair-map.pmtiles`, `plenair-map-grid.json` | `pipeline/tiling/build_pyramid.py` (`make tiles`) | *(zie PR 2: verhuist naar Hugging Face)* |
+| `plenair-map/plenair-map.json`, `-clusters.json`, `-hierarchy.json`, `-videos.json` | `pipeline/plenary_map/cluster.py --export-frontend` | client-side fetch (`PlenairMap.vue`), en gekopieerd naar de submodule |
+| `plenair-map/plenair-map.pmtiles`, `-grid.json` | `pipeline/tiling/build_pyramid.py` (`make tiles`) | `TiledPlenairMap.vue`, via Hugging Face (§4) — niet de submodule |
 
-**Wees, wordt opgeruimd (issue #316):** `plenair-map-debates.json` — geschreven
-door `build_static_data.py`, door niets gelezen.
+**`data/export/plenair-map/`** bundelt alle plenair-map-exportbestanden bij
+elkaar (issue #316) i.p.v. los tussen de rest van `data/export/` — een
+losse map per dataset, net als `topics/`, `llm-calls/`, `argument-trees/`
+en `a0-map/` hiernaast al hadden. Alleen de 4 kleine live-databestanden
+hierboven zijn getrackt; de rest (`.pmtiles`, `-full`-varianten, `grid.json`,
+`bundel/`) is gitignored, zie hieronder. De vroegere wees
+`plenair-map-debates.json` (geschreven door niets meer, gelezen door niets)
+is bij deze opruiming permanent verwijderd, geen enkele writer bestaat er
+nog voor.
 
 **Niet in git** (gitignored, zie `.gitignore` voor de volledige regels):
 `*.pmtiles`, alle `*-full*`-varianten (bestemd voor Zenodo/Hugging Face, niet
 voor de website), `a0-map/` (op een handvol herbruikbare artefacten na, zie
-hieronder), `argument-docs/`, `design-handoff/`, `agy_confrontatie_tree.log`,
-`zenodo/` (de gedeelde bundelmap, zie §3).
+hieronder), `argument-docs/`, `design-handoff/`,
+`argument-trees/agy_confrontatie_tree.log` (actief `make redactie`-logbestand,
+staat bij het dataset dat het bouwt, issue #316), `zenodo/` (de gedeelde
+bundelmap, zie §3).
 
-### `data/plenary-map/` — pijplijn-tussenproducten
+### `data/plenair-map/` — pijplijn-tussenproducten
+
+Tot issue #316 heette deze map `data/plenary-map/` (Engelse spelling) naast
+`data/export/plenair-map/` (Nederlandse stam) voor exact hetzelfde dataset
+— nu gelijkgetrokken naar `plenair-map`, zoals vrijwel elke andere plek die
+naar dit dataset verwijst (bestandsnamen, embeddings-mapnamen, Vue-
+componenten). De Python-package (`pipeline/plenary_map/`) en het
+Makefile-target (`cluster-plenary-map`) blijven bewust de Engelse spelling
+gebruiken — dat zijn code-identifiers, geen databestemmingen, en een
+package-/target-hernoeming heeft een eigen, grotere blast radius (import-
+paden). Zie issue #316 voor die afweging.
 
 Gevuld door `make umap` (coords) en `make cluster-plenary-map`
 (clusters/hierarchy/plot). Per `--label` (`sample10pct`, `combined`,
@@ -79,7 +156,7 @@ frontend-export. Niet getrackt: `coords-*.json`/`cluster-label-input-*.json`
 **Let op de naamconventie**: bestanden met `-full` als suffix
 (`clusters-full.geojson`, `grid-full.json`) horen bij de Zenodo/Hugging
 Face-route, niet bij deze `--label`-reeks — zie `.gitignore`'s
-`data/plenary-map/*-full.geojson`/`grid-*.json`-regels.
+`data/plenair-map/*-full.geojson`/`grid-*.json`-regels.
 
 ### `data/export/a0-map/` — A0-printposter (issue #215)
 
@@ -162,7 +239,7 @@ zetten voor een bewust afwijkend pad.
 `scripts/publish_zenodo.py`, concept-record
 [10.5281/zenodo.22181704](https://doi.org/10.5281/zenodo.22181704) (huidige
 publieke versie: 22181705). Uploadt standaard alles in de gedeelde
-bundelmap `data/export/zenodo/` (zie §4), maakt een nieuwe versie aan als
+bundelmap `data/export/plenair-map/bundel/` (zie §4), maakt een nieuwe versie aan als
 kopie van de vorige (bestaande bestanden blijven staan tenzij gelijknamig
 vervangen), en blijft een **draft** — publiceren is een bewuste handmatige
 stap in de Zenodo-UI. Vereist `ZENODO_TOKEN`.
@@ -207,8 +284,8 @@ expliciet gedocumenteerde Zenodo-feature.
 
 `scripts/publish_huggingface.py`, dataset-repo
 `SiggyF/bipolariteit-pmtiles` (publiek). Zelfde bron als Zenodo
-(`data/export/zenodo/`, ondanks de naam ook de Hugging Face-bundel — bewust
-gedeeld zodat beide publicatiestappen niet uit de pas kunnen lopen), maar
+(`data/export/plenair-map/bundel/`, gedeeld tussen beide publicatiestappen
+zodat ze niet uit de pas kunnen lopen), maar
 bestanden worden **direct overschreven** zonder aparte publiceerstap: dit is
 de live-databron, niet het archief. Vereist `HUGGINGFACE_TOKEN` — let op:
 dit is het publicatietoken, niet `HUGGINGFACE_INFERENCE_TOKEN` dat voor
@@ -218,13 +295,28 @@ Gekozen boven jsDelivr/git omdat CORS + HTTP Range bevestigd werken op HF's
 dataset-CDN voor bestanden ver boven de 100 MB-/20 MB-grenzen van
 GitHub/jsDelivr (issue #293).
 
+Bestanden komen te staan onder een submap per dataset (`--repo-subdir`,
+default `plenair-map`) in plaats van plat naast elkaar — in tegenstelling
+tot Zenodo's platte S3-bucket (§3) ondersteunt de Hugging Face Hub-API
+`path_in_repo` als een echt pad. Nu zowel de kleine als de volle-dataset-
+bundel in dezelfde repo staan, voorkomt dat een herhaling van de platte-
+lijst-rommel die Zenodo had.
+
 `make tiles-full` vult de bundelmap:
 `plenair-map-full.pmtiles`, `-full-grid.json`, `-full.json`,
 `-clusters-full.json`, `-hierarchy-full.json`.
 
-**In behandeling (issue #316, PR 2)**: ook de kleine `plenair-map.pmtiles`
-(nu nog handmatig in de submodule gezet, zonder schrijver) verhuist hierheen
-— pmtiles horen bij Hugging Face, niet bij de compacte jsDelivr-hosting.
+**De kleine `plenair-map.pmtiles`/`plenair-map-grid.json` gaan hier ook
+naartoe** (issue #316) — pmtiles horen bij Hugging Face, niet bij de
+compacte jsDelivr-hosting, ook al zou het kleine bestand (~50 MiB) onder
+jsDelivr's 20 MB-limiet sowieso al niet passen. `make tiles` schrijft ze
+naar `data/export/` zoals altijd; `make publish-tiles` publiceert ze naar
+dezelfde `SiggyF/bipolariteit-pmtiles`-repo (los van de `-full`-bundel, dus
+zonder dat elke kleine kaartupdate de hele volle-dataset-bundel opnieuw
+hoeft). `TiledPlenairMap.vue` fetcht ze via `resolveTilesBaseUrl()`
+(`frontend/src/lib/dataBaseUrl.ts`), een losse basis-URL naast
+`resolveDataBaseUrl()` voor de rest van de submodule-data. De bestanden
+zijn uit `data/export/gepubliceerd/` (de submodule) verwijderd.
 
 ## Bekende openstaande problemen (niet in dit issue opgelost)
 
