@@ -26,7 +26,7 @@ FALLACYDETECTION := https://raw.githubusercontent.com/pierpaologoffredo/FallacyD
 CONLL_FILES := train.conll dev.conll test.conll
 POS_FILES := pos_train_set.csv pos_test_set.csv
 
-.PHONY: help all speeches relations fallacies components pos conll paper clean
+.PHONY: help all speeches relations fallacies components pos conll paper guidelines clean
 
 help: ## Toon deze lijst
 	@grep -E '^[a-zA-Z_-]+:.*## ' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*## "}; {printf "  %-12s %s\n", $$1, $$2}'
@@ -48,6 +48,9 @@ components: ## (referentie, niet gebruikt door de converter) alle claim/premise-
 paper: ## Goffredo et al. 2023 (EMNLP), ACL Anthology
 	curl -sSL -o paper-goffredo-2023.pdf "https://aclanthology.org/2023.emnlp-main.684.pdf"
 
+guidelines: ## Haddadan, Cabrio & Villata's annotatierichtlijn (Claim/Premise-definities, zie docs/eval-elecdebate.md)
+	curl -sSL -o ElectDeb60To16_Guidelines.pdf "https://raw.githubusercontent.com/ElecDeb60To16/Dataset/master/ElectDeb60To16_Guidelines.pdf"
+
 pos: ## (legacy, niet meer gebruikt door de converter) pos_*.csv uit FallacyDetection
 	@for f in $(POS_FILES); do \
 		echo "fetching $$f"; \
@@ -62,4 +65,4 @@ conll: ## (legacy, niet meer gebruikt door de converter) token-level BIO-fallacy
 
 clean: ## Verwijder alle opgehaalde/gegenereerde bestanden (behalve dit Makefile)
 	rm -f full_speeches_new.csv final_relation_graph.csv fallacy_second_version.csv full_components.csv \
-		$(POS_FILES) $(CONLL_FILES) paper-goffredo-2023.pdf test.jsonl train.jsonl
+		$(POS_FILES) $(CONLL_FILES) paper-goffredo-2023.pdf ElectDeb60To16_Guidelines.pdf test.jsonl train.jsonl
