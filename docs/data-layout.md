@@ -105,7 +105,7 @@ Gevuld door `make export` (`pipeline/build_static_data.py`) en
 | Pad | Bron | Gebruikt door |
 | --- | --- | --- |
 | `topics/*.json`, `topics-index.json`, `status.json` | `build_static_data.py` | vrijwel alle Astro-pagina's (build-time) |
-| `llm_calls/*.json` | idem | `pages/prompts/*.astro` |
+| `llm-calls/*.json` | idem | `pages/prompts/*.astro` |
 | `argument-trees/*.json` | `pipeline/build_confrontatie_export.py` (`make redactie`) | `pages/onderwerpen/[slug].astro` |
 | `eval/*.json` | `scripts/convert_elecdebate.py` + benchmark | `pages/validatie-rapportage*.astro` |
 | `plenair-map/plenair-map.json`, `-clusters.json`, `-hierarchy.json`, `-videos.json` | `pipeline/plenary_map/cluster.py --export-frontend` | client-side fetch (`PlenairMap.vue`), en gekopieerd naar de submodule |
@@ -113,7 +113,7 @@ Gevuld door `make export` (`pipeline/build_static_data.py`) en
 
 **`data/export/plenair-map/`** bundelt alle plenair-map-exportbestanden bij
 elkaar (issue #316) i.p.v. los tussen de rest van `data/export/` — een
-losse map per dataset, net als `topics/`, `llm_calls/`, `argument-trees/`
+losse map per dataset, net als `topics/`, `llm-calls/`, `argument-trees/`
 en `a0-map/` hiernaast al hadden. Alleen de 4 kleine live-databestanden
 hierboven zijn getrackt; de rest (`.pmtiles`, `-full`-varianten, `grid.json`,
 `bundel/`) is gitignored, zie hieronder. De vroegere wees

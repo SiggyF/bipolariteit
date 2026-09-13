@@ -523,7 +523,7 @@ def main():
 
     topics_dir = EXPORT_DIR / "topics"
     topics_dir.mkdir(parents=True, exist_ok=True)
-    llm_calls_dir = EXPORT_DIR / "llm_calls"
+    llm_calls_dir = EXPORT_DIR / "llm-calls"
     llm_calls_dir.mkdir(parents=True, exist_ok=True)
 
     index = []
