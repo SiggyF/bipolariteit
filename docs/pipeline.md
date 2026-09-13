@@ -3,7 +3,9 @@
 Elke stap tussen "een debat vindt plaats" en "de argumenten staan op de site"
 heeft een eigen Makefile-target. Dit document geeft de volgorde en waar elk
 target in die volgorde hoort. Voor de deploy zelf (Cloudflare, DNS,
-wrangler), zie [release.md](release.md).
+wrangler), zie [release.md](release.md). Voor een overzicht van wélke
+databestanden waar horen en via welk kanaal ze gepubliceerd worden, zie
+[data-layout.md](data-layout.md).
 
 ## De kernketen
 

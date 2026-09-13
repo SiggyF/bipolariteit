@@ -50,7 +50,9 @@ logger = logging.getLogger(__name__)
 
 DEFAULT_INPUT = REPO_ROOT / "data" / "export" / "plenair-map.json"
 DEFAULT_OUTPUT = REPO_ROOT / "data" / "export" / "plenair-map.pmtiles"
-DEFAULT_GRID_OUTPUT = REPO_ROOT / "data" / "export" / "plenair-map-grid.json"
+# Geen los DEFAULT_GRID_OUTPUT meer: --grid-out wordt afgeleid van --out
+# (<stem>-grid.json), zie main() -- voor DEFAULT_OUTPUT komt dat nog steeds
+# uit op plenair-map-grid.json.
 
 LOOKUP_KEYS = ["topics", "actors", "parties", "debates", "soorten"]
 
@@ -166,7 +168,15 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--input", type=str, default=str(DEFAULT_INPUT))
     parser.add_argument("--out", type=str, default=str(DEFAULT_OUTPUT))
-    parser.add_argument("--grid-out", type=str, default=str(DEFAULT_GRID_OUTPUT))
+    parser.add_argument(
+        "--grid-out",
+        type=str,
+        default=None,
+        help="standaard afgeleid van --out als '<stem-van---out>-grid.json' (zelfde map, "
+        "consistente naamvolgorde <naam>-grid.json) -- alleen expliciet zetten voor een "
+        "afwijkend pad. Los getypte grid-paden hebben eerder tot inconsistente naamvolgorde "
+        "geleid (plenair-map-full-grid.json vs. plenair-map-grid-full.json, issue #316).",
+    )
     parser.add_argument("--maxzoom", type=int, default=DEFAULT_MAXZOOM)
     parser.add_argument("--no-dashboard", dest="dashboard", action="store_false", help="Draai zonder dask-distributed-dashboard (synchronous scheduler)")
     parser.add_argument(
@@ -177,10 +187,13 @@ def main() -> None:
     )
     args = parser.parse_args()
 
+    out_path = Path(args.out)
+    grid_out_path = Path(args.grid_out) if args.grid_out else out_path.with_name(f"{out_path.stem}-grid.json")
+
     build(
         Path(args.input),
-        Path(args.out),
-        Path(args.grid_out),
+        out_path,
+        grid_out_path,
         args.maxzoom,
         dashboard=args.dashboard,
         dashboard_hold_seconds=args.dashboard_hold_seconds,

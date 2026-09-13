@@ -397,6 +397,11 @@ dataset-wijzigingen.
 
 ## Lokale dev
 
-`make dev` fetcht gewoon de publieke jsDelivr-URL — geen mock/proxy nodig.
-Lokale wijzigingen aan `pipeline/build_static_data.py`'s outputvorm zijn dus
-pas zichtbaar in dev ná een `make publish-data`-run.
+`make dev` fetcht in DEV-mode `/data`, geserveerd door de sirv-middleware in
+`astro.config.mjs` over de lokaal uitgecheckte `data/export/gepubliceerd/`-
+submodule (zie `frontend/src/lib/dataBaseUrl.ts`) — geen mock/proxy, geen
+netwerkverkeer naar jsDelivr nodig. Lokale wijzigingen aan
+`pipeline/build_static_data.py`'s outputvorm zijn dus pas zichtbaar in dev
+ná een `make export-public-data`-run (die de submodule-werkboom ververst;
+`make publish-data` is pas nodig om diezelfde wijziging ook naar de live
+site en andere machines te krijgen).
