@@ -67,7 +67,11 @@ de root) omdat het puur een backend-fallback is voor
 
 `data/` heeft geen losse bestanden meer op de root (issue #316): elke map
 noemt óf een dataset (`plenair-map/`, `export/`) óf de externe bron van
-wat erin staat.
+wat erin staat. Nieuwe mapnamen onder `data/` zijn Engels
+(`docs/taalconventie.md` regel 1 — bestandsnamen zijn identifiers) tenzij
+ze onder een van de twee smalle uitzonderingen vallen; bestaande
+Nederlandse mapnamen (`plenair-map/`) zijn niet met terugwerkende kracht
+hernoemd.
 
 ### `data/wikidata/bewindspersonen.toml`, `data/tk-opendata/kamerstukdossiers.json`
 

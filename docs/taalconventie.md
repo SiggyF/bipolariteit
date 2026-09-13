@@ -27,6 +27,14 @@ zijn en blijven. De vraag is dus niet "welke taal", maar "welke taal waar".
    - Alles daarbuiten wordt vertaald. Generieke Nederlandse namen zonder domein- of
      schemabinding (`rij`, `tabel`, `spiegel`, `driedimensionaal`, `gefilterd`, ...) vallen
      niet onder de uitzondering, ook al voelen ze "Nederlands genoeg" aan.
+   - **Mapnamen onder `data/` zijn ook bestandsnamen** (regel 1) — expliciet gemaakt bij de
+     data-opruiming van issue #316, waar dit gaandeweg was scheefgegroeid (`data/plenary-map/`
+     Engels naast `data/export/plenair-map/` Nederlands voor exact hetzelfde dataset). Geen
+     terugwerkende-krachthernoeming van bestaande mappen die al ingeburgerd zijn (`plenair-map`
+     blijft `plenair-map`, ook al staat "plenair" niet op de uitzonderingslijst hierboven — de
+     naam zit te diep verweven in bestandsnamen/Vue-componenten/gepubliceerde data om nu om te
+     draaien), maar een **nieuwe** map onder `data/` krijgt een Engelse naam tenzij hij onder
+     a) of b) hierboven valt.
 3. **Domeinwaarden** (string-*waarden*, niet identifiers): **Nederlands**. Bijvoorbeeld
    `"partij"`, `"persoon"`, `"kamerperiode"` als waarden van `RowUnit`, en alle tekst die de
    gebruiker op het scherm ziet.
