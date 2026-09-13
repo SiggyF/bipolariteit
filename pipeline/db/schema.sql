@@ -132,6 +132,9 @@ CREATE TABLE IF NOT EXISTS argument_tags (
     created_by TEXT NOT NULL CHECK (created_by IN ('llm', 'derived', 'manual')),
     confidence REAL,
     reden TEXT, -- korte, argument-specifieke onderbouwing waarom deze tag hier toegekend is (niet de generieke tag-beschrijving); NULL voor tags toegekend vóór dit veld bestond
+    quote_fragment TEXT, -- verbatim, aaneengesloten stukje van arguments.quote_text waarop DEZE tag specifiek slaat (door het LLM zelf gekozen, zie pipeline/prompts/tag_argument.md); NULL als de tag op de hele quote slaat, of vóór dit veld bestond -- zie issue #109
+    start_seconds REAL, -- seconden sinds videobegin waarop quote_fragment start (zie pipeline/match_tag_spans.py), analoog aan arguments.start_seconds maar een niveau dieper. Nooit door het LLM gezet, alleen door die matching-pass. NULL als quote_fragment ontbreekt of niet matchte binnen de argument-spanne.
+    end_seconds REAL, -- idem, einde van quote_fragment. Samen met start_seconds altijd als paar gevuld (nooit één van de twee NULL).
     assigned_at TEXT NOT NULL,
     UNIQUE (argument_id, tag_sleutel)
 );

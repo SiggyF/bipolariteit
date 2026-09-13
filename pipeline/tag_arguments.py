@@ -24,6 +24,7 @@ import json
 import logging
 import re
 import time
+from collections import Counter
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -34,6 +35,7 @@ from pipeline.db import db
 from pipeline.hf_pricing import get_baseline_pricing, price_still_matches
 from pipeline.llm_client import call_llm
 from pipeline.llm_log import record_llm_call
+from pipeline.match_argument_spans import normalize_text
 from pipeline.periodes import PeriodeIndex
 from pipeline.taxonomy import DERIVED_LABELGROEPEN, field_name_for
 
@@ -101,8 +103,11 @@ def build_tag_catalogue(conn):
 
     Elke toegekende tag moet vergezeld gaan van een `reden` -- een korte,
     argument-specifieke onderbouwing (waarom past dit label HIER), niet een
-    herhaling van de generieke tag-beschrijving hierboven. Daarom is de
-    skeleton-waarde per tag een object {sleutel, reden} i.p.v. een kale string."""
+    herhaling van de generieke tag-beschrijving hierboven -- en een
+    `quote_fragment`: het letterlijke stukje van de quote waar de tag op
+    slaat, of null voor de hele quote (zie classify_quote_fragment, issue
+    #109). Daarom is de skeleton-waarde per tag een object
+    {sleutel, reden, quote_fragment} i.p.v. een kale string."""
     grouped = load_all_active_tags_by_labelgroep(conn)
     catalogue_lines = []
     skeleton = {}
@@ -115,7 +120,11 @@ def build_tag_catalogue(conn):
         for sleutel, beschrijving in info["tags"]:
             catalogue_lines.append(f"- {sleutel}: {beschrijving}")
         catalogue_lines.append("")
-        tag_obj = {"sleutel": "<TAG_SLEUTEL>", "reden": "<korte argument-specifieke onderbouwing>"}
+        tag_obj = {
+            "sleutel": "<TAG_SLEUTEL>",
+            "reden": "<korte argument-specifieke onderbouwing>",
+            "quote_fragment": "<letterlijk fragment uit de quote, of null>",
+        }
         skeleton[field] = tag_obj if info["selectie"] == "enkel" else [tag_obj]
     return "\n".join(catalogue_lines).strip(), json.dumps(skeleton, ensure_ascii=False, indent=2)
 
@@ -162,25 +171,86 @@ def _normalize_sleutel(sleutel):
 
 
 def _coerce_tag_entry(entry):
-    """Accepteert zowel het nieuwe {sleutel, reden}-object als (voor
-    achterwaartse compatibiliteit met oudere geplakte Gemini-antwoorden) een
-    kale sleutel-string zonder reden. Retourneert (sleutel, reden), _GEEN_TAG
-    als het model expliciet "geen tag" bedoelde, of None bij een echt
-    onherkenbare vorm."""
+    """Accepteert zowel het nieuwe {sleutel, reden, quote_fragment}-object als
+    (voor achterwaartse compatibiliteit met oudere geplakte Gemini-antwoorden)
+    een kale sleutel-string zonder reden/fragment. Retourneert
+    (sleutel, reden, quote_fragment), _GEEN_TAG als het model expliciet "geen
+    tag" bedoelde, of None bij een echt onherkenbare vorm."""
     if isinstance(entry, str):
-        return _normalize_sleutel(entry), None
+        return _normalize_sleutel(entry), None, None
     if isinstance(entry, dict) and "sleutel" in entry:
         sleutel = entry["sleutel"]
         if sleutel in _GEEN_TAG_WAARDEN:
             return _GEEN_TAG
         if isinstance(sleutel, str):
-            return _normalize_sleutel(sleutel), entry.get("reden")
+            quote_fragment = entry.get("quote_fragment")
+            if not isinstance(quote_fragment, str):
+                quote_fragment = None
+            return _normalize_sleutel(sleutel), entry.get("reden"), quote_fragment
     return None
 
 
-def _validate_tags(parsed, valid_tags):
-    """Retourneert lijst van (sleutel, reden) die geaccepteerd worden;
-    logt en slaat ongeldige velden/sleutels over i.p.v. de hele batch te laten falen."""
+# Classificatie van een quote_fragment tegen de bijbehorende quote_text (issue
+# #109) -- alleen "geldig"/"geldig_meerdelig" worden daadwerkelijk opgeslagen;
+# de rest wordt tot None herleid (nooit gokken, zelfde principe als
+# match_argument_spans.py).
+QF_GEEN_FRAGMENT = "geen_fragment"  # model gaf null: tag slaat op hele quote
+QF_GELDIG = "geldig"  # unieke, letterlijke substring van quote_text
+QF_GELDIG_MEERDELIG = "geldig_meerdelig"  # unieke match via ...-gat (zie hieronder), meerdere zinsdelen samen
+QF_NIET_GEVONDEN = "niet_gevonden"  # geen substring: geparafraseerd of verzonnen
+QF_AMBIGU = "ambigu"  # meer dan één voorkomen in quote_text -- welke bedoeld is, is niet af te leiden
+
+# Het model plakt bij tags die per definitie over meerdere plekken in de quote
+# gaan (vooral Stijl-Herhaling) regelmatig twee losse zinsdelen aan elkaar met
+# "..." i.p.v. één letterlijk aaneengesloten fragment te geven (bv. "Mensen
+# zijn gebaat... waar de mensen bij gebaat zijn"). Dat is geen parafrase/
+# verzinsel -- beide zinsdelen staan wél letterlijk in de quote, alleen niet
+# aaneengesloten. In plaats van dat af te keuren als "niet_gevonden", elk los
+# zinsdeel apart valideren en "..." als jokerteken behandelen (regex .*?)
+# tussen de delen: precies bruikbaar als latere video-spanne (begin van het
+# eerste deel tot eind van het laatste, zie pipeline/match_tag_spans.py).
+_ELLIPSIS_RE = re.compile(r"\.\.\.|…")
+
+
+def classify_quote_fragment(quote_fragment, quote_text):
+    """Zelfde "nooit gokken"-principe als match_argument_spans.py: een
+    fragment dat niet uniek in quote_text voorkomt (bv. bij een
+    Stijl-Herhaling-tag, waar het gemarkeerde zinsdeel per definitie kan
+    herhalen) wordt niet gedisambigueerd, maar afgekeurd."""
+    if not quote_fragment or not quote_fragment.strip():
+        return QF_GEEN_FRAGMENT
+    haystack = normalize_text(quote_text)
+
+    delen = [normalize_text(deel) for deel in _ELLIPSIS_RE.split(quote_fragment)]
+    delen = [deel for deel in delen if deel]
+    if not delen:
+        return QF_GEEN_FRAGMENT
+
+    if len(delen) == 1:
+        needle = delen[0]
+        count = haystack.count(needle)
+        if count == 0:
+            return QF_NIET_GEVONDEN
+        if count > 1:
+            return QF_AMBIGU
+        return QF_GELDIG
+
+    pattern = ".*?".join(re.escape(deel) for deel in delen)
+    matches = list(re.finditer(pattern, haystack))
+    if not matches:
+        return QF_NIET_GEVONDEN
+    if len(matches) > 1:
+        return QF_AMBIGU
+    return QF_GELDIG_MEERDELIG
+
+
+def _validate_tags(parsed, valid_tags, quote_text, qf_stats=None):
+    """Retourneert lijst van (sleutel, reden, quote_fragment) die
+    geaccepteerd worden; logt en slaat ongeldige velden/sleutels over i.p.v.
+    de hele batch te laten falen. quote_fragment is alleen gezet als
+    classify_quote_fragment() 'geldig'/'geldig_meerdelig' oordeelt, anders
+    None. qf_stats (als meegegeven) telt de classificatie van elke
+    toegekende tag, voor de compliance-samenvatting in main()."""
     accepted = []
     for field, (selectie, _labelgroep, allowed) in valid_tags.items():
         value = parsed.get(field)
@@ -202,11 +272,15 @@ def _validate_tags(parsed, valid_tags):
         if selectie == "enkel" and len(coerced) > 1:
             logger.warning("    overgeslagen veld %r: enkelvoudige labelgroep kreeg meerdere tags: %s", field, coerced)
             continue
-        for sleutel, reden in coerced:
-            if sleutel in allowed:
-                accepted.append((sleutel, reden))
-            else:
+        for sleutel, reden, quote_fragment_raw in coerced:
+            if sleutel not in allowed:
                 logger.warning("    overgeslagen onbekende sleutel in %r: %r", field, sleutel)
+                continue
+            classification = classify_quote_fragment(quote_fragment_raw, quote_text)
+            if qf_stats is not None:
+                qf_stats[classification] += 1
+            quote_fragment = quote_fragment_raw if classification in (QF_GELDIG, QF_GELDIG_MEERDELIG) else None
+            accepted.append((sleutel, reden, quote_fragment))
     return accepted
 
 
@@ -247,13 +321,13 @@ def assign_derived_tags(conn, argument_id, document_id, actor_id, dry_run=False)
     return [sleutel for sleutel, _reden in assigned]
 
 
-def insert_llm_tags(conn, argument_id, tag_reden_pairs):
+def insert_llm_tags(conn, argument_id, tags):
     now = datetime.now(timezone.utc).isoformat()
-    for sleutel, reden in tag_reden_pairs:
+    for sleutel, reden, quote_fragment in tags:
         conn.execute(
-            """INSERT OR IGNORE INTO argument_tags (argument_id, tag_sleutel, created_by, confidence, reden, assigned_at)
-               VALUES (?, ?, 'llm', NULL, ?, ?)""",
-            (argument_id, sleutel, reden, now),
+            """INSERT OR IGNORE INTO argument_tags (argument_id, tag_sleutel, created_by, confidence, reden, quote_fragment, assigned_at)
+               VALUES (?, ?, 'llm', NULL, ?, ?, ?)""",
+            (argument_id, sleutel, reden, quote_fragment, now),
         )
 
 
@@ -325,10 +399,11 @@ def _tag_one(arg, topic_name, tag_catalogue, tag_json_skeleton, valid_tags, mode
         )
         if finish_reason == "length":
             raise ValueError(f"antwoord afgekapt op max_tokens={max_tokens} (verhoog --max-tokens)")
-        llm_tags = _validate_tags(_extract_json(raw_content), valid_tags)
+        qf_stats = Counter()
+        llm_tags = _validate_tags(_extract_json(raw_content), valid_tags, arg["quote_text"], qf_stats=qf_stats)
         return {
             "arg": arg, "ok": True, "raw_content": raw_content, "usage": usage, "llm_tags": llm_tags,
-            "elapsed": time.monotonic() - start, "started_at": started_at,
+            "qf_stats": qf_stats, "elapsed": time.monotonic() - start, "started_at": started_at,
         }
     except Exception as exc:
         return {
@@ -431,6 +506,7 @@ def main():
     total_llm = 0
     total_errors = 0
     latencies = []
+    qf_totals = Counter()
 
     # Prijs vooraf vastleggen (alleen zinvol tegen de HF-router, zie
     # pipeline/hf_pricing.py) en tijdens de run periodiek herchecken -- zie
@@ -444,6 +520,7 @@ def main():
         dezelfde toelichting in extract_arguments.py's process_result()."""
         nonlocal total_derived, total_llm, total_errors
         arg, elapsed, started_at = r["arg"], r["elapsed"], r["started_at"]
+        qf_totals.update(r.get("qf_stats") or {})
         derived = assign_derived_tags(conn, arg["id"], arg["document_id"], arg["actor_id"], dry_run=True)
         total_derived += len(derived)
 
@@ -475,7 +552,7 @@ def main():
                     (datetime.now(timezone.utc).isoformat(), PROMPT_VERSION, args.model, arg["id"]),
                 )
 
-        llm_sleutels = [sleutel for sleutel, _reden in llm_tags]
+        llm_sleutels = [sleutel for sleutel, _reden, _quote_fragment in llm_tags]
         total_llm += len(llm_tags)
         logger.info(
             "[arg %5d] %-25s %5.1fs | derived: %s | llm: %s",
@@ -516,6 +593,12 @@ def main():
 
     logger.info("Klaar: %d argumenten verwerkt, %d fout(en).", len(arguments), total_errors)
     logger.info("Totaal: %d afgeleide tags, %d LLM-tags.", total_derived, total_llm)
+    if qf_totals:
+        logger.info(
+            "quote_fragment-compliance: geldig=%d geldig_meerdelig=%d geen_fragment=%d niet_gevonden=%d ambigu=%d",
+            qf_totals[QF_GELDIG], qf_totals[QF_GELDIG_MEERDELIG], qf_totals[QF_GEEN_FRAGMENT],
+            qf_totals[QF_NIET_GEVONDEN], qf_totals[QF_AMBIGU],
+        )
     if latencies:
         avg = sum(latencies) / len(latencies)
         logger.info("Latency: gem=%.1fs min=%.1fs max=%.1fs", avg, min(latencies), max(latencies))
