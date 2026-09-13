@@ -130,10 +130,11 @@ redactie: ## Stage 2 -- argumentenboom bouwen + per-relatie redactiecheck (struc
 	PYTHONPATH=. uv run python scripts/agy_run_confrontatie_tree.py --topic $(TOPIC) $(if $(AGY_MODEL),--model $(AGY_MODEL),)
 	uv run python -m pipeline.build_confrontatie_export --topic $(TOPIC)
 
-validate: ## Evalharnas draaien tegen een gouden validatiedataset (issue #62), zie docs/eval-elecdebate.md. Vars: DATASET, LIMIT, MODEL, BASE_URL
+validate: ## Evalharnas draaien tegen een gouden validatiedataset (issue #62), zie docs/eval-elecdebate.md. PARALLEL=1 voor dask (zie issue #313). Vars: DATASET, LIMIT, MODEL, BASE_URL, API_KEY, PARALLEL
 	uv run python scripts/convert_elecdebate.py
 	@url=$$($(RESOLVE_BASE_URL)) || exit 1; \
-	uv run python -m pipeline.eval.benchmark_elecdebate data/raw/$(DATASET)/test.jsonl $(MODEL) --dataset $(DATASET) --base-url $$url --limit $(LIMIT)
+	uv run python -m pipeline.eval.benchmark_elecdebate data/raw/$(DATASET)/test.jsonl $(MODEL) --dataset $(DATASET) --base-url $$url --limit $(LIMIT) \
+		$(if $(API_KEY),--api-key $(API_KEY),) $(if $(PARALLEL),--parallel,)
 
 export: ## SQLite -> data/export/topics/<slug>.json + topics-index.json + data/export/gepubliceerd/ (lean, zie #163), voor alle topics (incl. video_url-enrichment + video-matching, zie issue #209). Publiceren naar bipolariteit-data blijft een losse stap (make publish-data)
 	uv run python -m pipeline.enrich_video_url
