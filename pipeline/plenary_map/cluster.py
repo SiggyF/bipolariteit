@@ -14,28 +14,42 @@ Bron van de dataset: `uv run python -m pipeline.ingest.ingest_tk
 (crawlers/tweede_kamer/tweede_kamer/spiders/verslagen_periode.py).
 
 Puur leesactie op de database. Output: coords+labels als JSON in
-docs/poc/umap-documenten/, voor de losse Cosmograph-HTML-pagina
+data/plenary-map/, voor de losse Cosmograph-HTML-pagina
 (index.html in dezelfde map) om interactief te bekijken -- zie die map's
 eigen toelichting waarom hier bewust geen matplotlib-PNG (zoals
 experiment_umap_arguments.py) of Plotly is gebruikt.
 
-De pijplijn is embedden -> UMAP -> clusteren -> labelen -> exporteren. De
-eerste stage (fetch + strippen + incrementeel embedden+cachen) zit in
-pipeline/embed/documents.py, ook los draaibaar (`uv run python -m
-pipeline.embed.documents`) om vast te embedden vóór de UMAP/clustering-
-parameters getuned zijn. Dit script roept fetch_and_embed() daaruit aan.
+De volle pijplijn is embedden -> UMAP -> clusteren -> labelen -> exporteren,
+verdeeld over vier los draaibare stages (elk met zijn eigen geheugen-/
+kostenprofiel, zie make embed/make umap/make cluster-plenary-map/make
+label-clusters):
+
+1. Embedden (pipeline/embed/documents.py) -- incrementeel gecachet.
+2. UMAP (pipeline/plenary_map/umap.py) -- zet de embeddings om in
+   2D-coördinaten; dure, host-only stap qua geheugengebruik op de volle
+   dataset (zie docs/handoff.md). Schrijft alleen die coördinaten weg.
+3. Clusteren (dit bestand): leest de coördinaten van stap 2 (--coords-path,
+   verplicht -- UMAP zelf is GEEN onderdeel van dit script), en
+   `build_multilevel_clusters()`/`label_multilevel_clusters()` clusteren +
+   TF-IDF-labelen ze. Geen bijzonder geheugengebruik, dus overal draaibaar
+   (bv. de devcontainer).
+4. LLM-naamgeving (pipeline/plenary_map/label_export.py, `make
+   label-clusters`) -- werkt op de hier weggeschreven
+   cluster-label-input-<label>.json, dus ook overal en in porties te
+   draaien (bv. tegen een gratis remote router).
 
 Gebruik:
-    uv run python scripts/experiment_umap_documents.py \
-        --start 2025-11-12 --end 2026-08-22 --label 2025-heden
+    uv run python -m pipeline.plenary_map.cluster \
+        --start 2025-11-12 --end 2026-08-22 --label 2025-heden \
+        --coords-path data/plenary-map/coords-2025-heden.json
 """
 import argparse
 import json
 import logging
 import math
 import re
-import time
 from collections import Counter
+from pathlib import Path
 
 import numpy as np
 import requests
@@ -46,10 +60,9 @@ from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 
 from pipeline.db import db
 from pipeline.embed.documents import CACHE_DIR, MODEL, fetch_and_embed, fetch_documents, strip_speaker_prefix
-from pipeline.embed.lmstudio import detect_base_url
 from pipeline.paths import REPO_ROOT
-from pipeline.tag_arguments import call_llm
-from scripts.experiment_umap_arguments import DUTCH_STOPWORDS, run_umap
+from pipeline.plenary_map.label import compute_representative_examples
+from scripts.experiment_umap_arguments import DUTCH_STOPWORDS
 
 logger = logging.getLogger(__name__)
 
@@ -126,7 +139,7 @@ def fetch_actor_and_party_stopwords(conn):
 
     return stopwords
 
-OUTPUT_DIR = REPO_ROOT / "docs" / "poc" / "umap-documenten"
+OUTPUT_DIR = REPO_ROOT / "data" / "plenary-map"
 EXPORT_PATH = REPO_ROOT / "data" / "export" / "plenair-map.json"
 CLUSTERS_EXPORT_PATH = REPO_ROOT / "data" / "export" / "plenair-map-clusters.json"
 HIERARCHY_EXPORT_PATH = REPO_ROOT / "data" / "export" / "plenair-map-hierarchy.json"
@@ -851,108 +864,14 @@ def label_multilevel_clusters(
     return level_lists, tree
 
 
-def _build_cluster_naming_prompt(tfidf_terms, example_texts, example_titles):
-    terms_str = ", ".join(tfidf_terms) if tfidf_terms else "(geen trefwoorden gevonden)"
-    titles_str = "\n".join(f"- {t}" for t in sorted(set(example_titles)) if t) or "(geen debattitels bekend)"
-    # `example_texts` is de volledige, ongetrimde documenttekst (zie main()'s
-    # `texts = [stripped[i] for i in keep]`, geen aparte truncatie daar) --
-    # 1200 tekens (was 400) geeft de LLM meer inhoudelijke context per
-    # voorbeeld zonder de prompt onnodig op te blazen (8 voorbeelden default).
-    examples_str = "\n\n".join(f'"{t[:1200]}"' for t in example_texts)
-    return f"""Je krijgt trefwoorden en voorbeeldfragmenten uit spreekbeurten uit
-Tweede Kamerdebatten, allemaal uit hetzelfde cluster van een UMAP-kaart
-(spreekbeurten die semantisch dicht bij elkaar liggen). Geef een korte,
-inhoudelijke naam voor het onderwerp van dit cluster.
-
-TF-IDF-trefwoorden: {terms_str}
-
-Debattitels waarin deze spreekbeurten voorkwamen:
-{titles_str}
-
-Voorbeeldfragmenten:
-{examples_str}
-
-Antwoord in exact dit formaat, zonder verdere uitleg:
-Naam: <het beleidsonderwerp in zo min mogelijk woorden -- 1 woord is prima
-als dat al dekkend is, gebruik 2 woorden alleen als 1 woord het onderwerp
-niet duidelijk genoeg maakt>
-Duiding: <één zin, wat dit cluster inhoudelijk samenbindt>"""
-
-
-def _generate_llm_cluster_name(base_url, model, reasoning_effort, tfidf_terms, example_texts, example_titles):
-    prompt = _build_cluster_naming_prompt(tfidf_terms, example_texts, example_titles)
-    # call_llm() (pipeline/tag_arguments.py) vereist max_tokens (geen default) en
-    # geeft een LLMResponse-NamedTuple (content, usage, finish_reason) terug --
-    # het strikte "Naam: .../Duiding: ..."-tweeregelformaat heeft ruim voldoende
-    # aan 200 tokens, mits --llm-reasoning-effort op "none" staat (anders gaat
-    # het hele budget op aan onzichtbare <think>-redenering, zie main()'s toelichting).
-    response = call_llm(base_url, model, prompt, reasoning_effort=reasoning_effort, timeout=120, max_tokens=200)
-    raw_content = response.content
-    name, duiding = None, None
-    for line in raw_content.splitlines():
-        if line.lower().startswith("naam:"):
-            name = line.split(":", 1)[1].strip()
-        elif line.lower().startswith("duiding:"):
-            duiding = line.split(":", 1)[1].strip()
-    return name or raw_content.strip()[:60], duiding or ""
-
-
-def label_clusters_with_llm(
-    level_ids, level_lists, tree,
-    texts, coords, rows, base_url, model, reasoning_effort, examples_per_cluster,
-):
-    """Vervangt de TF-IDF-naam van elk cluster op elk niveau (in-place) door
-    een LLM-gegenereerde naam + duiding, op basis van representatieve
-    spreekbeurten (dichtst bij het clustercentroïde) + debattitels. De
-    TF-IDF-termen zelf blijven bewaard (`terms`-veld) voor een eventueel
-    latere "cluster-detail"-weergave (issue vervolgen op #181), alleen `name`
-    wordt overschreven. `level_ids`/`level_lists` zijn N-lang (grofste niveau
-    eerst, zie build_multilevel_clusters/label_multilevel_clusters) -- werkt
-    per niveau van grof naar fijn zodat een dieper niveau's `parent_name`
-    altijd de AL VERVANGEN ouder-naam kan opzoeken. Werkt ook `tree` (voor
-    plenair-map-hierarchy.json) bij, op willekeurige diepte: `to_node()`
-    kopieert `name` op bouwmoment (vóór LLM-naamgeving) naar de boomknoop,
-    dus zonder deze naderhand-patch zou de hierarchy-export de oude
-    TF-IDF-namen blijven tonen ook al is `summary["name"]` allang vervangen."""
-    def representative_examples(member_idx):
-        centroid = coords[member_idx].mean(axis=0)
-        dists = np.linalg.norm(coords[member_idx] - centroid, axis=1)
-        closest = member_idx[np.argsort(dists)[:examples_per_cluster]]
-        return [texts[i] for i in closest], [rows[i]["debate_title"] for i in closest]
-
-    total = sum(len(summaries) for summaries in level_lists)
-    logger.info(
-        "LLM-naamgeving voor %d clusters over %d niveaus (~%ds geschat, %.1fs/cluster live gemeten)",
-        total, len(level_lists), total * 7, 7.0,
-    )
-
-    names_by_level = []
-    for level_idx, (ids, summaries) in enumerate(zip(level_ids, level_lists)):
-        names_by_id = {}
-        for summary in summaries:
-            member_idx = np.where(ids == summary["cluster_id"])[0]
-            example_texts, example_titles = representative_examples(member_idx)
-            name, duiding = _generate_llm_cluster_name(
-                base_url, model, reasoning_effort, summary["terms"], example_texts, example_titles,
-            )
-            summary["name"] = name
-            summary["duiding"] = duiding
-            if level_idx > 0 and summary["parent_id"] is not None:
-                summary["parent_name"] = names_by_level[level_idx - 1].get(summary["parent_id"], summary["parent_name"])
-            names_by_id[summary["cluster_id"]] = name
-            logger.info(
-                "niveau %d, cluster %d (n=%d): LLM-naam '%s' -- %s",
-                level_idx, summary["cluster_id"], summary["size"], name, duiding,
-            )
-        names_by_level.append(names_by_id)
-
-    def _rename_tree(nodes, level_idx):
-        for node in nodes:
-            node["name"] = names_by_level[level_idx].get(node["id"], node["name"])
-            if node["children"]:
-                _rename_tree(node["children"], level_idx + 1)
-
-    _rename_tree(tree, 0)
+def load_umap_coords(path: Path, rows) -> np.ndarray:
+    """Leest een write_umap_coords()-bestand terug, uitgelijnd op `rows`
+    (dezelfde volgorde als `texts`/`vectors` in main() -- de rest van de
+    pijplijn indexeert coords/texts/rows overal parallel op positie, niet op
+    id). Een ontbrekend id (verkeerde --start/--end/--label t.o.v. de
+    coords-export) geeft gewoon een KeyError."""
+    data = json.loads(path.read_text(encoding="utf-8"))
+    return np.array([data[str(row["id"])] for row in rows], dtype=np.float64)
 
 
 def main():
@@ -1036,18 +955,15 @@ def main():
     )
     parser.add_argument("--cluster-top-terms", type=int, default=8, help="aantal TF-IDF-termen per cluster-label")
     parser.add_argument(
-        "--skip-llm-naming", action="store_true",
-        help="LLM-naamgeving overslaan (TF-IDF-naam blijft dan staan) -- handig zonder LM Studio, "
-        "of om snel alleen de clustering/hulls te controleren.",
+        "--cluster-llm-examples-per-cluster", type=int, default=8,
+        help="representatieve spreekbeurten per cluster om vast te leggen voor de LLM-naamgevingsprompt "
+        "(zie pipeline/plenary_map/label_export.py -- de LLM-call zelf gebeurt niet meer in dit script).",
     )
-    parser.add_argument("--llm-chat-model", default="qwen/qwen3.6-27b", help="zelfde default als pipeline/tag_arguments.py --model")
     parser.add_argument(
-        "--llm-reasoning-effort", default="none",
-        help='"none" schakelt reasoning-tokens uit -- zonder deze parameter verstookt qwen3.6-27b '
-        "het volledige max_tokens-budget van call_llm() aan een onzichtbare <think>-redenering en "
-        "blijft er niets over voor het eigenlijke antwoord (live bevestigd, zie docs/handoff.md).",
+        "--coords-path", required=True,
+        help="pad naar een pipeline.plenary_map.umap --export-coords-bestand van dezelfde "
+        "--start/--end/--label-documentenselectie (UMAP zelf is geen onderdeel meer van dit script).",
     )
-    parser.add_argument("--llm-examples-per-cluster", type=int, default=8, help="representatieve spreekbeurten per cluster in de LLM-naamgevingsprompt")
     args = parser.parse_args()
 
     if args.dataset_version is None:
@@ -1082,10 +998,13 @@ def main():
 
     logger.info("%d documenten tussen %s en %s", len(texts), args.start, args.end)
 
-    t0 = time.monotonic()
-    coords = run_umap(vectors)
-    umap_elapsed = time.monotonic() - t0
-    logger.info("UMAP in %.1fs", umap_elapsed)
+    # UMAP zelf (pipeline.plenary_map.umap, host-only qua geheugengebruik op
+    # de volle dataset, zie docs/handoff.md) is geen onderdeel meer van dit
+    # script -- alleen de coördinaten daarvan inlezen. `vectors` (van
+    # fetch_and_embed hierboven) wordt hier dus niet gebruikt, alleen
+    # rows/texts voor de TF-IDF-labeling/representatieve voorbeelden.
+    coords = load_umap_coords(Path(args.coords_path), rows)
+    logger.info("UMAP-coördinaten geladen uit %s", args.coords_path)
 
     alpino_stopwords = fetch_alpino_non_content_stopwords()
     all_stopwords = (
@@ -1139,13 +1058,23 @@ def main():
                 redundancy_overlap=args.cluster_redundancy_overlap,
             )
 
-            if not args.skip_llm_naming:
-                llm_base_url = detect_base_url(args.base_url)
-                label_clusters_with_llm(
-                    level_ids, level_lists, hierarchy,
-                    texts, coords, rows, llm_base_url, args.llm_chat_model,
-                    args.llm_reasoning_effort, args.llm_examples_per_cluster,
-                )
+            # Representatieve voorbeelden vastleggen (geen LLM-call, puur de
+            # UMAP-afhankelijke berekening) -- de LLM-naamgeving zelf is GEEN
+            # onderdeel meer van dit script (voorheen --skip-llm-naming): die
+            # draait uitsluitend via het aparte pipeline/plenary_map/
+            # label_export.py (make label-clusters), zodat de dure, host-only
+            # UMAP-fit (geheugengebruik, zie docs/handoff.md) nooit meer in
+            # dezelfde run zit als de LLM-naamgeving, die juist prima los,
+            # elders (bv. de devcontainer tegen een gratis remote router) en
+            # in meerdere porties kan draaien. `name` blijft hier dus de
+            # TF-IDF-naam (label_multilevel_clusters), `duiding` ontbreekt
+            # tot label_export.py 'm invult.
+            examples_by_level = compute_representative_examples(
+                level_ids, level_lists, texts, coords, rows, args.cluster_llm_examples_per_cluster,
+            )
+            examples_path = OUTPUT_DIR / f"cluster-label-input-{args.label}.json"
+            examples_path.write_text(json.dumps(examples_by_level, ensure_ascii=False), encoding="utf-8")
+            logger.info("representatieve voorbeelden voor LLM-naamgeving geschreven naar %s", examples_path)
 
             cluster_ids = level_ids[-1]
             all_level_ids = level_ids
@@ -1230,10 +1159,7 @@ def main():
     write_plot_html(points, html_path, title=f"UMAP (bge-m3) -- alle plenaire debatten, {args.label}")
     logger.info("%d punten geschreven naar %s", len(points), html_path)
     if embed_elapsed is not None:
-        logger.info(
-            "timing: embeddings %.1fs, UMAP %.1fs, totaal %.1fs",
-            embed_elapsed, umap_elapsed, embed_elapsed + umap_elapsed,
-        )
+        logger.info("timing: embeddings %.1fs (missende ids alsnog opgehaald)", embed_elapsed)
 
     if args.export_frontend:
         write_frontend_export(points, export_path=_suffixed(EXPORT_PATH), dataset_version=args.dataset_version)

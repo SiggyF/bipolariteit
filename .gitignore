@@ -29,9 +29,15 @@ data/export/a0-map/
 # in ontwikkeling is.
 data/export/*.pmtiles
 # Idem: de Cosmograph-plot-HTML voor de volle dataset is met 50+ MiB veel
-# groter dan de overige, wel ingecheckte docs/poc/umap-documenten/plot-
-# <label>.html-varianten (tot 16 MiB) -- niet meenemen in git.
-docs/poc/umap-documenten/plot-full.html
+# groter dan de overige, wel ingecheckte data/plenary-map/plot-<label>.html-
+# varianten (tot 16 MiB) -- niet meenemen in git.
+data/plenary-map/plot-full.html
+# Tussenproducten van pipeline/plenary_map/umap.py resp. cluster.py: pure,
+# regenereerbare pijplijndata (geen "bekijk dit"-demo zoals de plot-HTML's
+# hierboven), en op de volle dataset te groot om in git te willen -- coords
+# ~20 MiB, cluster-label-input ~30 MiB.
+data/plenary-map/coords-*.json
+data/plenary-map/cluster-label-input-*.json
 data/export/*-full.json
 data/export/*-full.geojson
 data/export/*-flat.geojson

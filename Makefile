@@ -16,6 +16,19 @@ MODEL ?= qwen/qwen3.6-27b
 # validate) en is geen geldig model voor agy (Docker/Gemini). Leeg = laat het
 # script zijn eigen Gemini-default kiezen.
 AGY_MODEL ?=
+# Bearer-token voor MODEL, alleen nodig tegen een remote router (bv. de
+# Hugging Face-router); leeg = geen Authorization-header, voor lokale LM
+# Studio (geen token nodig).
+API_KEY ?=
+# UMAP-clustering (make umap, zie pipeline/plenary_map/cluster.py) en de
+# losse LLM-naamgevingsstap erna (make label-clusters). Zonder
+# CLUSTER_LEVEL_SIZES: 2 niveaus op dezelfde drempel (zie cluster.py's
+# --cluster-level-sizes-toelichting) -- voor een echte hiërarchie altijd
+# expliciet zetten, bv. '4000,1200,350,100,30'.
+CLUSTER_LEVEL_SIZES ?=
+EXPORT_SUFFIX ?=
+LIMIT_CLUSTERS ?=
+PARALLEL ?=
 # Zonder expliciete BASE_URL=... op de command line wordt scripts/detect_llm_base_url.sh
 # gebruikt: probeert localhost:1234 en host.docker.internal:1234 (devcontainer),
 # en stopt met een foutmelding als geen van beide een LM Studio-instance heeft.
@@ -25,7 +38,7 @@ else
   RESOLVE_BASE_URL = scripts/detect_llm_base_url.sh
 endif
 
-.PHONY: help probe crawl ingest embed pipeline test test-js test-frontend ca-fixture status build dev dev-stop extract extract-agy tag tag-agy redactie validate export enrich-video fetch-debate-events fetch-subtitles match-video-spans check-video-urls tags-taxonomy db-init pipeline-status backup-db release release-dry release-www release-www-dry check-public-exposure argument-doc export-public-data publish-data publish-zenodo publish-huggingface tiles tiles-full
+.PHONY: help probe crawl ingest embed umap label-clusters pipeline test test-js test-frontend ca-fixture status build dev dev-stop extract extract-agy tag tag-agy redactie validate export enrich-video fetch-debate-events fetch-subtitles match-video-spans check-video-urls tags-taxonomy db-init pipeline-status backup-db release release-dry release-www release-www-dry check-public-exposure argument-doc export-public-data publish-data publish-zenodo publish-huggingface tiles tiles-full
 
 help: ## Toon deze lijst
 	@grep -E '^[a-zA-Z_-]+:.*## ' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*## "}; {printf "  \033[36m%-16s\033[0m %s\n", $$1, $$2}'
@@ -57,11 +70,30 @@ ingest: ## Stage 0b -- gecrawlde VLOS-XML importeren naar SQLite (documents/acto
 	@test -n "$(TOPIC)" || { echo 'Gebruik: make ingest TOPIC=stikstof'; exit 1; }
 	uv run python -m pipeline.ingest.ingest_tk --topic $(TOPIC)
 
-embed: ## Plenaire-kaart-pijplijn stage 1 -- documenten embedden met bge-m3, incrementele cache in data/embeddings/ (pipeline/embed/documents.py). Vóór UMAP/clustering (scripts/experiment_umap_documents.py). Vars: EMBED_START, EMBED_END, EMBED_LABEL, EMBED_FULL_RANGE_TOPICS, BASE_URL
+embed: ## Plenaire-kaart-pijplijn stage 1 -- documenten embedden met bge-m3, incrementele cache in data/embeddings/ (pipeline/embed/documents.py). Vóór UMAP/clustering (make umap). Vars: EMBED_START, EMBED_END, EMBED_LABEL, EMBED_FULL_RANGE_TOPICS, BASE_URL
 	@url=$$($(RESOLVE_BASE_URL)) || exit 1; \
 	uv run python -m pipeline.embed.documents \
 		--start $(EMBED_START) --end $(EMBED_END) --label $(EMBED_LABEL) \
 		$(if $(EMBED_FULL_RANGE_TOPICS),--full-range-topics $(EMBED_FULL_RANGE_TOPICS),) --base-url $$url
+
+umap: ## Plenaire-kaart-pijplijn stage 2 -- UMAP op de embeddings (host-only qua geheugengebruik op de volle dataset, zie docs/handoff.md). Verwacht dat `make embed` al gedraaid is (volledige cache-hit, praat zelf niet met LM Studio). Schrijft alleen coördinaten weg voor `make cluster-plenary-map`. Vars: EMBED_START, EMBED_END, EMBED_LABEL
+	uv run python -m pipeline.plenary_map.umap \
+		--start $(EMBED_START) --end $(EMBED_END) --label $(EMBED_LABEL) \
+		--export-coords data/plenary-map/coords-$(EMBED_LABEL).json
+
+cluster-plenary-map: ## Plenaire-kaart-pijplijn stage 3 -- hiërarchische clustering + TF-IDF-labels op de coördinaten van `make umap` (geen UMAP, geen LLM-call, dus overal draaibaar). Vars: EMBED_START, EMBED_END, EMBED_LABEL, CLUSTER_LEVEL_SIZES, EXPORT_SUFFIX
+	uv run python -m pipeline.plenary_map.cluster \
+		--start $(EMBED_START) --end $(EMBED_END) --label $(EMBED_LABEL) \
+		--coords-path data/plenary-map/coords-$(EMBED_LABEL).json \
+		--export-frontend $(if $(EXPORT_SUFFIX),--export-suffix=$(EXPORT_SUFFIX),) \
+		$(if $(CLUSTER_LEVEL_SIZES),--cluster-level-sizes $(CLUSTER_LEVEL_SIZES),)
+
+label-clusters: ## Plenaire-kaart-pijplijn stage 4 -- LLM-naamgeving van de clusters uit `make cluster-plenary-map` (hervatbaar, in porties met LIMIT_CLUSTERS, PARALLEL=1 voor dask). Vars: EMBED_LABEL, EXPORT_SUFFIX, LIMIT_CLUSTERS, PARALLEL, MODEL, API_KEY, BASE_URL
+	@url=$$($(RESOLVE_BASE_URL)) || exit 1; \
+	uv run python -m pipeline.plenary_map.label_export --label $(EMBED_LABEL) \
+		--base-url $$url --llm-chat-model $(MODEL) $(if $(API_KEY),--llm-api-key $(API_KEY),) \
+		--export-frontend $(if $(EXPORT_SUFFIX),--export-suffix=$(EXPORT_SUFFIX),) \
+		$(if $(LIMIT_CLUSTERS),--limit $(LIMIT_CLUSTERS),) $(if $(PARALLEL),--parallel,)
 
 pipeline: ## Volledige analyse-pipeline voor één topic op rij: crawl -> ingest -> extract -> tag -> export (zie docs/pipeline.md). Vars: TOPIC, LIMIT, SOORT, BASE_URL. `redactie` draait hier bewust niet in mee -- vereist Docker agy/Gemini i.p.v. de lokale LLM van de rest van deze keten, en herstructureert de hele argumentenboom (zie #252), dus een bewuste losse stap. export regenereert ook data/export/gepubliceerd/ lokaal; publiceren naar bipolariteit-data (tags-taxonomy/publish-data) blijft een bewuste losse stap erna.
 	$(MAKE) crawl TOPIC=$(TOPIC) LIMIT=$(LIMIT)
@@ -138,7 +170,7 @@ export-public-data: ## data/export/topics/*.json -> data/export/gepubliceerd/ (l
 tiles: ## data/export/plenair-map.json -> plenair-map.pmtiles (vector-tile-pyramide, morecantile-grid + dask, zie issue #215/#253) -- experimenteel alternatief renderpad, los van `export`
 	uv run python -m pipeline.tiling.build_pyramid
 
-tiles-full: ## Zelfde als `tiles`, maar op de volle-dataset-export (plenair-map-full.json -> data/export/zenodo/plenair-map-full.pmtiles, zie issue #281) -- verwacht dat scripts/experiment_umap_documents.py --export-suffix=-full al gedraaid is. Bundelt meteen de companion-bestanden voor `make publish-zenodo` in dezelfde map (zie docs/release.md)
+tiles-full: ## Zelfde als `tiles`, maar op de volle-dataset-export (plenair-map-full.json -> data/export/zenodo/plenair-map-full.pmtiles, zie issue #281) -- verwacht dat pipeline/plenary_map/cluster.py --export-suffix=-full al gedraaid is. Bundelt meteen de companion-bestanden voor `make publish-zenodo` in dezelfde map (zie docs/release.md)
 	mkdir -p data/export/zenodo
 	uv run python -m pipeline.tiling.build_pyramid \
 		--input data/export/plenair-map-full.json \
