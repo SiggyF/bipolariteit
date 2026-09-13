@@ -2,6 +2,51 @@
 
 Status per 2026-07-27. Zie `docs/plan.md` voor het volledige, goedgekeurde architectuurplan. Dit document is voor het vervolg: wat staat er al, wat is er onderweg ontdekt, en wat is de volgende concrete stap.
 
+## Stand bij einde sessie (2026-09-12/13, gratis HF-router-batches + nieuw topic oekraine + plenaire-kaart-pijplijn gepromoveerd) — begin hier bij een nieuwe sessie
+
+**Aanleiding**: de Hugging Face-router bleek `Qwen/Qwen3.8-27B` via OVHcloud tijdelijk voor $0/M tokens aan te bieden (bevestigd via `/v1/models`-API én de gebruiker's eigen billing-dashboard; `is_free: false` in de API, dus vermoedelijk een niet-afgemaakte pricing-entry van de provider, geen bewuste actie — archiefbewijs in `reference_ovhcloud_pricing_archive`-memory). Dat is de rode draad van de hele sessie: zoveel mogelijk achterstallig LLM-werk erdoorheen jagen zolang het gratis is, met een prijsstijging-vangnet zodat een onopgemerkte wijziging niet alsnog kosten oplevert.
+
+### Parallelle extractie/tagging + prijsbewaking (PR #297, gemerged)
+
+- `pipeline/extract_arguments.py`/`pipeline/tag_arguments.py` kregen `--parallel` (verdeelt LLM-calls over de dask-scheduler, zie `pipeline/dask_client.py`) en `--api-key` (nodig voor de HF-router, i.t.t. lokale LM Studio).
+- `pipeline/hf_pricing.py` (nieuw): `get_baseline_pricing()`/`price_still_matches()` -- checkt elke 100 items of de prijs niet gestegen is t.o.v. de start van de batch; bij een stijging worden de resterende dask-taken geannuleerd. Alleen actief tegen `router.huggingface.co`, no-op voor lokale backends.
+- Resultaatverwerking is nu incrementeel (`process_result()`-closure, aangeroepen per binnenkomend dask-future via `as_completed()`), niet meer "verzamel alles, verwerk pas aan het eind".
+- Dask-worker-threads verhoogd van 8 (= aantal cores) naar 10 (`.devcontainer/devcontainer.json`, PR #307, gemerged): deze workload is netwerk-IO-bound, niet CPU-bound. 12 threads gaf HTTP 429 (rate limit) bij de HF-router, 10 niet.
+- In losse batches (steeds handmatig gestart, geen doorlopende achtergrondtaak) zijn zo alle vier bestaande topics verder ge-extraheerd/getagd: stikstof, abortus, asiel en energietransitie staan alle vier op 0 openstaande extractie en (op een paar losse fouten na) 0 openstaande tagging.
+
+### Nieuw curated topic: oekraine (PR #302, #306 gemerged)
+
+- Description onderhandeld op basis van twee steekproeven van gecrawlde NAVO/Oekraïne/Rusland-argumenten, 7 assen (defensie-uitgaven, wapenleveranties, opvang, Rusland-houding, NAVO-aanwezigheid, inkoopstrategie, geografische reikwijdte) -- zie `data/topic-descriptions/oekraine.md`.
+- **Databug gevonden en gefixed**: de eerste documentkoppeling (678 documenten) bleek voor 674 daarvan titel "Vragenuur" te zijn -- inhoudelijk grotendeels niets met Oekraïne te maken, puur toeval-treffers. `scripts/db/relink_oekraine_by_title.py` (nieuw, PR #306) koppelt in plaats daarvan op de daadwerkelijke debattitel (`oekra`/`navo`/`rusland`/`poetin`, met een `irak`/`iran`/`isra`-uitsluiting voor NAVO-missiebegrotingen) -- resultaat: 1290 documenten ontkoppeld, 14.727 (echte) documenten gekoppeld. Extractie daarna: 46 → 778 argumenten in de eerste volle batch, ratio steeg van 6,8% naar 77,8% (in lijn met de andere topics).
+- Nog niet afgemaakt: verdere extractie/tagging van oekraine (13.7k documenten in totaal, meerdere batches nodig) -- laatst bekende stand: alle documenten binnen de huidige `[verwerking].vanaf`-drempel zijn ge-extraheerd, tagging loopt nog achter.
+- Losse issues aangemaakt voor later: #303 (Makefile `extract`/`tag`-targets missen `MODEL`/`API_KEY`/`PARALLEL`-vars, moest daardoor de Python-module rechtstreeks aanroepen), #309 (er is geen manier om argumenten met een verouderde prompt-versie gericht te hertaggen -- `--ids-file` respecteert altijd `tagged_at IS NULL`), #308 (Mona Keijzer: partij-veld/logo, klein, losstaand).
+
+### Plenaire-kaart-pijplijn gepromoveerd uit experiment-status (PR #310, **nog niet gemerged** -- gebruiker reviewt hem morgen)
+
+`scripts/experiment_umap_documents.py` was allang geen experiment meer (13 andere bestanden verwezen er al naar). Nu verplaatst naar `pipeline/plenary_map/`, en opgesplitst in vier losse stages/modules/Makefile-targets (was: alles in één script):
+
+1. **`make embed`** (bestond al) -- documenten embedden, `data/embeddings/`.
+2. **`make umap`** (`pipeline/plenary_map/umap.py`) -- UMAP-fit, host-only qua geheugengebruik (NN-descent op ~732k x 1024-dim gaf herhaaldelijk OOM, ook bij 32GB in de devcontainer -- alleen de host, 64GB, trekt 'm). Schrijft alleen `data/plenary-map/coords-<label>.json` weg (`{doc_id: [x, y]}`). Praat NIET met LM Studio bij een volledige embeddingscache-hit.
+3. **`make cluster-plenary-map`** (`pipeline/plenary_map/cluster.py`) -- leest die coördinaten (`--coords-path`, verplicht, geen UMAP meer hier), HDBSCAN-clustering (`--cluster-level-sizes`, bv. `4000,1200,350,100,30`) + TF-IDF-labels. **Bleek zelf óók geheugenzwaar** op de volle dataset (TF-IDF over alle ~732k documentteksten + een ruimtelijke-dispersie-stopwoordanalyse) -- gaf Error 137 in de devcontainer, moest alsnog naar de host. De aanname "clustering is licht, overal draaibaar" klopte dus niet voor de volledige-dataset-schaal.
+4. **`make label-clusters`** (`pipeline/plenary_map/label_export.py`) -- LLM-naamgeving, met `--parallel` (dask) + dezelfde prijsbewaking als extract/tag hierboven. Werkt op de door stap 3 weggeschreven `cluster-label-input-<label>.json` (representatieve voorbeeldteksten per cluster, vooraf berekend zodat deze stap geen UMAP-coördinaten nodig heeft) -- dus overal draaibaar, en hervatbaar (`duiding` al gevuld = overslaan, `LIMIT_CLUSTERS` voor porties).
+
+**Resultaat van een volledige run**: 3636 clusters over 5 niveaus, allemaal LLM-benoemd (Qwen3.8-27B via de HF-router, dask-parallel, ~10 min i.p.v. de geschatte uren sequentieel). Kleinste cluster op het fijnste niveau: exact 30 (de ingestelde ondergrens) -- er zit dus nog ruimte voor een 6e, fijner niveau (bv. drempel 15, de `--hdbscan-min-cluster-size`-bodem) als dat gewenst is, niet gedaan in deze sessie.
+
+**Output verplaatst**: `docs/poc/umap-documenten/` → `data/plenary-map/` (nu dit geen experiment meer is, hoort de output niet meer in `docs/poc/` thuis). Kleine/demo-bestanden (`clusters-*.json`, `hierarchy-*.json`, kleinere `plot-*.html`'s) blijven ingecheckt zoals voorheen; de nieuwe, op-de-volle-dataset grote tussenproducten (`coords-*.json`, `cluster-label-input-*.json`) zijn nu ook gitignored, zelfde redenering als de al bestaande `plot-full.html`-uitzondering.
+
+**Losstaande observatie, niet uitgezocht**: gebruiker merkte op dat sommige clusters lijken te worden bepaald door wie er wordt aangesproken (een persoon) i.p.v. het inhoudelijke onderwerp -- geen concreet voorbeeld nog gevonden/genoteerd, wel de moeite waard om bij een volgende clustering-sessie op te letten (mogelijk een gat in `fetch_actor_and_party_stopwords()`'s dekking, of een echt clustering-artefact).
+
+**Backup**: alle output van deze run (coords, cluster-label-input, clusters, hierarchy, plus de frontend-`-full-v2`-exports) staat als Zenodo-draft (concept-record 22181704, deposition [22730827](https://zenodo.org/deposit/22730827)) -- nog niet gepubliceerd, puur archief-backup.
+
+**Issue #311** (SVD-voorreductie 1024→~100 dims om UMAP's geheugengebruik te verlagen): getest en de hoop bleek niet te kloppen -- voor 95% verklaarde variantie zijn ~400 componenten nodig (2,6x kleiner dan 1024, niet de gehoopte 10x). Resultaat als comment op het issue gezet, geen verdere actie ondernomen (business case te zwak).
+
+**Nog te doen, volgende sessie**:
+- **PR #310 reviewen en mergen** (gebruiker doet dit morgen) -- daarna pas is de bovenstaande refactor definitief.
+- De nieuwe clustering/labeling (`data/export/plenair-map-{,clusters-,hierarchy-}full-v2.json`) staat nog NIET live -- `make tiles-full` (tegelpyramide) + `make publish-zenodo`/`make publish-huggingface` + de site-deploy moeten nog gedraaid worden om 'm daadwerkelijk te publiceren. Tot die tijd blijft de oude `-full`-export (zonder de gefixte hiërarchie) live.
+- Oekraine verder extraheren/taggen (zie hierboven).
+- Issues #299 (topic_id single-value → many-to-many), #300 (crawler multi-topic), #301 (offsite DB-backup), #303, #308, #309, #311 (zie boven) staan nog open, geen van alle opgepakt.
+- Prijs op de HF-router in de gaten houden -- kan elk moment weer normaal gaan rekenen (zoals eerder ook al eens kortstondig gebeurde).
+
 ## Stand bij einde sessie (2026-09-12, video-shorts vereenvoudigd naar landscape, issue #268) — begin hier bij een nieuwe sessie
 
 Vervolg op de sessie hieronder: op verzoek van de gebruiker is de verticale
