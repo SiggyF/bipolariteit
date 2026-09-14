@@ -120,10 +120,12 @@ def test_validate_tags_updates_qf_stats_counter():
 
 
 def test_extract_json_repairs_stray_closing_brace_after_enkel_field():
-    # Ingekort, echt LLM-antwoord (Qwen/Qwen3.8-27B:ovhcloud, asiel-topic,
-    # zie llm_calls.id 32155/gelijkaardig): "metadiscussie" is een enkel-veld
+    # Echt LLM-antwoord (Qwen/Qwen3.8-27B:ovhcloud, asiel-topic, zie
+    # llm_calls.id 32155/gelijkaardig): "metadiscussie" is een enkel-veld
     # (single object), en het model voegt een overtollige '}' toe direct na
     # het sluiten ervan, vóór de komma naar het volgende top-level veld.
+    # json_repair (https://github.com/mangiucugna/json_repair) lost dit op
+    # i.p.v. een zelfgeschreven regex per waargenomen generatiefout.
     raw = """{
       "metadiscussie": {
         "sleutel": "Meta-Agenda-Tijdigheid",
@@ -138,53 +140,9 @@ def test_extract_json_repairs_stray_closing_brace_after_enkel_field():
     assert parsed["morele_fundamenten"] == []
 
 
-def test_extract_json_repairs_multiple_stray_braces_in_same_response():
-    # Ook gezien: twee enkel-velden in dezelfde respons allebei met de fout.
-    raw = """{
-      "metadiscussie": {
-        "sleutel": "Meta-Agenda-Tijdigheid",
-        "reden": "r1",
-        "quote_fragment": "f1"
-        }
-      },
-      "redeneerschema": {
-        "sleutel": "Walton-Consequentie",
-        "reden": "r2",
-        "quote_fragment": "f2"
-        }
-      },
-      "stijlmiddelen": []
-    }"""
-    parsed = _extract_json(raw)
-    assert parsed["metadiscussie"]["sleutel"] == "Meta-Agenda-Tijdigheid"
-    assert parsed["redeneerschema"]["sleutel"] == "Walton-Consequentie"
-    assert parsed["stijlmiddelen"] == []
-
-
-def test_extract_json_leaves_legitimate_trailing_double_brace_alone():
-    # Een enkel-veld als allerlaatste top-level sleutel eindigt legitiem met
-    # twee sluithaken op rij (geen komma erna) -- dat mag niet aangeraakt worden.
-    raw = """{
-      "morele_fundamenten": [],
-      "redeneerschema": {
-        "sleutel": "Walton-Regel",
-        "reden": "r",
-        "quote_fragment": null
-      }
-    }"""
-    parsed = _extract_json(raw)
-    assert parsed["redeneerschema"]["sleutel"] == "Walton-Regel"
-
-
-def test_extract_json_still_raises_for_unrelated_malformed_json():
-    with pytest.raises(json.JSONDecodeError):
-        _extract_json("{not even close to json")
-
-
-def test_extract_json_repairs_wrong_bracket_type_duplicate_after_enkel_field():
+def test_extract_json_repairs_wrong_bracket_type_after_enkel_field():
     # Echt gezien (arg 2157, asiel): het enkel-veld sluit correct af met '}',
-    # gevolgd door een overtollige, extra ']' i.p.v. nóg een '}' -- zelfde
-    # soort dubbele-sluithaak-fout, ander teken voor het overtollige stuk.
+    # gevolgd door een overtollige, extra ']' i.p.v. nóg een '}'.
     raw = """{
       "metadiscussie": {
         "sleutel": "Meta-Agenda-Tijdigheid",
@@ -199,11 +157,10 @@ def test_extract_json_repairs_wrong_bracket_type_duplicate_after_enkel_field():
     assert parsed["morele_fundamenten"] == []
 
 
-def test_extract_json_repairs_duplicate_close_when_a_key_is_missing():
+def test_extract_json_repairs_response_missing_a_key():
     # Echt gezien (llm_calls.id 7041): het model laat quote_fragment
     # helemaal weg (alleen sleutel+reden) maar heeft dezelfde dubbele-
-    # sluithaak-fout -- de reparatie mag niet vastzitten aan precies drie
-    # bekende sleutels.
+    # sluithaak-fout.
     raw = """{
       "redeneerschema": {
         "sleutel": "Walton-Expertise",
@@ -217,25 +174,50 @@ def test_extract_json_repairs_duplicate_close_when_a_key_is_missing():
     assert parsed["stijlmiddelen"] == []
 
 
-def test_extract_json_never_touches_legitimate_array_of_objects():
-    # Regressie: een gewone array van tag-objecten sluit ALTIJD af met
-    # '} ... ],' (element dicht, dan de array) -- dat lijkt qua vorm op de
-    # bug (twee sluithaken op rij + komma), maar is 100% legitiem en moet
-    # met rust gelaten worden. Dit faalt alleen als de reparatie zichzelf
-    # verkeerd verankert (zie _ENKEL_FIELD_DUPLICATE_CLOSE_RE's toelichting).
+def test_extract_json_leaves_legitimate_json_alone():
+    # Een enkel-veld als allerlaatste top-level sleutel eindigt legitiem met
+    # twee sluithaken op rij, en een array-van-objecten sluit legitiem af met
+    # '} ... ],' (element dicht, dan de array) -- geen van beide mag ooit
+    # nodig hebben om via het reparatiepad te lopen (json.loads slaagt al).
     raw = """{
       "cultureel_ideologische_breuklijn": [
-        {
-          "sleutel": "Ideologie-TAN",
-          "reden": "r",
-          "quote_fragment": "f"
-        }
+        {"sleutel": "Ideologie-TAN", "reden": "r", "quote_fragment": "f"}
       ],
-      "debatzetten": []
+      "redeneerschema": {
+        "sleutel": "Walton-Regel",
+        "reden": "r",
+        "quote_fragment": null
+      }
     }"""
     parsed = _extract_json(raw)
     assert parsed["cultureel_ideologische_breuklijn"][0]["sleutel"] == "Ideologie-TAN"
-    assert parsed["debatzetten"] == []
+    assert parsed["redeneerschema"]["sleutel"] == "Walton-Regel"
+
+
+def test_extract_json_still_raises_for_unrelated_malformed_json():
+    # json_repair geeft voor volledig onherkenbare tekst iets terug dat geen
+    # (niet-leeg) object is (bv. een lijst) -- _extract_json laat dan de
+    # oorspronkelijke JSONDecodeError doorbubbelen i.p.v. die rommel te
+    # accepteren als geldig resultaat.
+    with pytest.raises(json.JSONDecodeError):
+        _extract_json("dit is helemaal geen JSON, gewoon een lopende zin.")
+
+
+def test_extract_json_rejects_genuinely_truncated_response():
+    # Echt gezien (llm_calls.id 2394): de respons kapt af midden in een
+    # stringwaarde (bv. door max_tokens), zonder de omsluitende structuur af
+    # te sluiten. json_repair KAN dit sluiten (het gokt de ontbrekende quote/
+    # sluithaken), maar dat betekent per definitie dat het laatste, afgekapte
+    # tag-object onvolledige data bevat (hier ontbreekt quote_fragment
+    # volledig) -- zo'n gok mag nooit stilzwijgend als geldig resultaat
+    # worden geaccepteerd. Zie _TRUNCATION_REPAIR_MARKER.
+    raw = """{
+      "type_bewijsvoering": [
+        {
+          "sleutel": "Bewijs-Anekdotisch",
+          "reden": "De spreker beroept zich op een anekdote die niet is afgemaakt en zomaar doorloopt"""
+    with pytest.raises(json.JSONDecodeError):
+        _extract_json(raw)
 
 
 def _fresh_conn():

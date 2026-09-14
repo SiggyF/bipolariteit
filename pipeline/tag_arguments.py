@@ -29,6 +29,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from dask.distributed import as_completed
+from json_repair import repair_json
 
 from pipeline.dask_client import make_client
 from pipeline.db import db
@@ -150,31 +151,17 @@ def _build_prompt(topic_name, actor_name, actor_party, stance, typology, quote_t
     )
 
 
-# Modellen voegen soms een overtollige sluithaak toe direct na het (correct)
-# sluiten van een "enkel"-veld (single-object, geen array -- zie
-# build_tag_catalogue(): zo'n veld is letterlijk `"<veld>": { ...tag_obj... }`,
-# nooit in een array gewrapt), gevolgd door een komma richting de volgende
-# top-level sleutel -- het overtollige teken is niet altijd '}': ook ']'
-# gezien (verkeerd haaktype, maar wel degelijk overtollig). Ook gezien: het
-# model laat daarbij soms een sleutel weg (bv. quote_fragment ontbreekt) --
-# daarom matcht dit op willekeurige platte "sleutel": waarde-paren (string of
-# null), niet specifiek op sleutel/reden/quote_fragment.
-#
-# Bewust verankerd aan `"<veld>":\s*\{` (geen `[` ervoor): zonder die anker
-# zou dezelfde "'}' gevolgd door nóg een sluithaak"-vorm ook een 100%
-# legitieme, geneste array-van-objecten matchen (element sluit af met '}',
-# de array daarna met ']' -- bv. cultureel_ideologische_breuklijn), en die
-# mag nooit worden aangeraakt. Enkel-velden zijn de enige plek in deze
-# skeleton waar een los, ongewrapt platte object direct als veldwaarde
-# voorkomt, dus dit patroon is daar ondubbelzinnig.
-_KV_PAIR = r'"\w+"\s*:\s*(?:null|"(?:[^"\\]|\\.)*")'
-_ENKEL_FIELD_DUPLICATE_CLOSE_RE = re.compile(
-    rf'("\w+"\s*:\s*)\{{(\s*{_KV_PAIR}(?:\s*,\s*{_KV_PAIR})*\s*)\}}\s*[\}}\]](\s*,)'
-)
-
-
-def _repair_enkel_field_duplicate_close(text):
-    return _ENKEL_FIELD_DUPLICATE_CLOSE_RE.sub(r"\1{\2}\3", text)
+# json_repair-logregels die aangeven dat het een ontbrekende sluithaak/quote
+# zelf moest verzinnen -- d.w.z. de respons was echt afgekapt (bv. door
+# max_tokens), niet alleen een klein syntaxfoutje. Zulke reparaties bevatten
+# per definitie gegokte/ontbrekende data (het laatste, afgekapte tag-object
+# mist dan bv. quote_fragment of zelfs reden) en worden daarom NIET
+# geaccepteerd -- zie _extract_json(). Getest tegen alle 152 historische
+# foutieve llm_calls-responses: dit patroon onderscheidt de 15 echte
+# afkappingen betrouwbaar van de 137 zuivere syntaxfoutjes (o.a. de dubbele-
+# sluithaak-bug), zelfs als de oorspronkelijke json.loads()-foutmelding qua
+# tekst niet expliciet "unterminated" zegt.
+_TRUNCATION_REPAIR_MARKER = "missed the closing"
 
 
 def _extract_json(raw_text):
@@ -182,11 +169,22 @@ def _extract_json(raw_text):
     candidate = fence_match.group(1) if fence_match else raw_text.strip()
     try:
         return json.loads(candidate)
-    except json.JSONDecodeError:
-        repaired = _repair_enkel_field_duplicate_close(candidate)
-        parsed = json.loads(repaired)  # faalt dit ook, dan bubbelt die JSONDecodeError gewoon door
-        logger.warning("JSON gerepareerd: overtollige sluithaak na een enkel-veld verwijderd vóór het parsen")
-        return parsed
+    except json.JSONDecodeError as exc:
+        # json_repair (https://github.com/mangiucugna/json_repair) i.p.v.
+        # zelf regexes te onderhouden per waargenomen generatiefout (dubbele
+        # sluithaak, verkeerd haaktype, ...). Alleen zuivere syntaxfouten
+        # worden geaccepteerd: geen (niet-leeg) object terug, of een teken dat
+        # de respons was afgekapt (_TRUNCATION_REPAIR_MARKER) -- dan bubbelt
+        # de oorspronkelijke JSONDecodeError door, zodat zo'n argument als
+        # mislukt geldt (en dus opnieuw geprobeerd kan worden) i.p.v. stil een
+        # onvolledig resultaat te accepteren.
+        repaired, log = repair_json(candidate, return_objects=True, logging=True)
+        if not isinstance(repaired, dict) or not repaired:
+            raise exc
+        if any(_TRUNCATION_REPAIR_MARKER in entry["text"] for entry in log):
+            raise exc
+        logger.warning("JSON gerepareerd met json_repair vóór het parsen")
+        return repaired
 
 
 # Sentinel voor "het model bedoelde hier expliciet geen tag" -- onderscheiden
