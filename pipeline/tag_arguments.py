@@ -407,8 +407,7 @@ def fetch_quote_fragment_backfill_arguments(conn, topic_id, limit, min_id=0, ids
         if not ids:
             return []
         placeholders = ",".join("?" for _ in ids)
-        return conn.execute(
-            f"""SELECT ar.id, ar.document_id, ar.actor_id, ar.stance, ar.typology,
+        query = f"""SELECT ar.id, ar.document_id, ar.actor_id, ar.stance, ar.typology,
                       ar.quote_text, ar.quote_context,
                       act.name AS actor_name, act.party AS actor_party
                FROM arguments ar
@@ -417,13 +416,12 @@ def fetch_quote_fragment_backfill_arguments(conn, topic_id, limit, min_id=0, ids
                  AND ar.id IN ({placeholders})
                  AND ar.tagged_at IS NOT NULL
                  AND {exists_clause}
-               ORDER BY ar.id""",
-            (topic_id, *ids),
-        ).fetchall()
+               ORDER BY ar.id"""
+        rows = conn.execute(query, (topic_id, *ids)).fetchall()
+        return rows
 
     order_by = "d.published_at DESC, ar.id" if recent_first else "ar.id"
-    return conn.execute(
-        f"""SELECT ar.id, ar.document_id, ar.actor_id, ar.stance, ar.typology,
+    query = f"""SELECT ar.id, ar.document_id, ar.actor_id, ar.stance, ar.typology,
                   ar.quote_text, ar.quote_context,
                   act.name AS actor_name, act.party AS actor_party
            FROM arguments ar
@@ -434,9 +432,9 @@ def fetch_quote_fragment_backfill_arguments(conn, topic_id, limit, min_id=0, ids
              AND ar.tagged_at IS NOT NULL
              AND {exists_clause}
            ORDER BY {order_by}
-           LIMIT ?""",
-        (topic_id, min_id, limit),
-    ).fetchall()
+           LIMIT ?"""
+    rows = conn.execute(query, (topic_id, min_id, limit)).fetchall()
+    return rows
 
 
 def _tag_one(arg, topic_name, tag_catalogue, tag_json_skeleton, valid_tags, model, base_url, reasoning_effort, timeout, max_tokens, api_key):
