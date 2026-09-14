@@ -45,11 +45,6 @@ logger = logging.getLogger(__name__)
 PROMPT_TEMPLATE = (Path(__file__).parent / "prompts" / "tag_argument.md").read_text()
 PROMPT_VERSION = hashlib.sha256(PROMPT_TEMPLATE.encode()).hexdigest()[:12]
 
-# Bevroren PROMPT_VERSION-waarde van de promptversie die quote_fragment
-# introduceerde (issue #109, commit c14d934) -- bewust NIET de live
-# PROMPT_VERSION hierboven, zie fetch_quote_fragment_backfill_arguments().
-_QUOTE_FRAGMENT_PROMPT_VERSION = "d3928db00fee"
-
 _JSON_FENCE_RE = re.compile(r"```(?:json)?\s*(.*?)\s*```", re.DOTALL)
 
 # Mapping van VLOS <activiteit soort="..."> naar Parlementaire-Context-tag.
@@ -360,20 +355,29 @@ def assign_derived_tags(conn, argument_id, document_id, actor_id, dry_run=False)
 def insert_llm_tags(conn, argument_id, tags):
     """Nieuwe (argument_id, tag_sleutel)-combinaties worden toegevoegd. Bestaat
     de combinatie al (bv. een --backfill-quote-fragment-herrun van een argument
-    dat al getagd was), dan wordt uitsluitend een leeg quote_fragment gevuld --
-    reden/created_by/assigned_at van de bestaande rij blijven ongemoeid, en een
-    al gevuld quote_fragment wordt nooit overschreven. Zie issue #109-vervolg:
-    additief aanvullen, nooit stilzwijgend verwijderen of overschrijven."""
+    dat al getagd was), dan wordt uitsluitend een leeg quote_fragment(_status)
+    gevuld -- reden/created_by/assigned_at van de bestaande rij blijven
+    ongemoeid, en een al opgeloste quote_fragment_status wordt nooit
+    overschreven. Zie issue #109-vervolg: additief aanvullen, nooit
+    stilzwijgend verwijderen of overschrijven.
+
+    quote_fragment_status maakt hier expliciet of quote_fragment=NULL "hele
+    quote" betekent (dit antwoord beoordeelde de tag en er is geen fragment
+    van toepassing) of gewoon nog nooit beoordeeld is (quote_fragment_status
+    blijft dan NULL, zie fetch_quote_fragment_backfill_arguments())."""
     now = datetime.now(timezone.utc).isoformat()
     for sleutel, reden, quote_fragment in tags:
+        status = "fragment" if quote_fragment is not None else "hele_quote"
         conn.execute(
-            """INSERT INTO argument_tags (argument_id, tag_sleutel, created_by, confidence, reden, quote_fragment, assigned_at)
-               VALUES (?, ?, 'llm', NULL, ?, ?, ?)
+            """INSERT INTO argument_tags
+                   (argument_id, tag_sleutel, created_by, confidence, reden, quote_fragment, quote_fragment_status, assigned_at)
+               VALUES (?, ?, 'llm', NULL, ?, ?, ?, ?)
                ON CONFLICT(argument_id, tag_sleutel) DO UPDATE SET
-                   quote_fragment = excluded.quote_fragment
-               WHERE argument_tags.quote_fragment IS NULL
+                   quote_fragment = excluded.quote_fragment,
+                   quote_fragment_status = excluded.quote_fragment_status
+               WHERE argument_tags.quote_fragment_status IS NULL
                  AND argument_tags.created_by = 'llm'""",
-            (argument_id, sleutel, reden, quote_fragment, now),
+            (argument_id, sleutel, reden, quote_fragment, status, now),
         )
 
 
@@ -429,31 +433,24 @@ def fetch_untagged_arguments(conn, topic_id, limit, min_id=0, vanaf=None, ids=No
 
 
 def fetch_quote_fragment_backfill_arguments(conn, topic_id, limit, min_id=0, ids=None, recent_first=False):
-    """Selecteert argumenten die al getagd zijn (`tagged_at` gezet), nog een
-    `llm`-tag zonder quote_fragment hebben, én nog niet zijn hergetagd met
-    de quote_fragment-introducerende promptversie. In tegenstelling tot
-    fetch_untagged_arguments() is `tagged_at IS NOT NULL` hier juist de
-    voorwaarde, niet het filter dat uitsluit. De herrun voegt alleen
-    ontbrekend quote_fragment toe (zie insert_llm_tags()), verwijdert of
-    overschrijft nooit bestaande argument_tags-rijen.
+    """Selecteert argumenten die al getagd zijn (`tagged_at` gezet) maar nog
+    een `llm`-tag hebben met `quote_fragment_status IS NULL` -- d.w.z. nooit
+    beoordeeld op quote_fragment, meestal getagd vóór issue #109. In
+    tegenstelling tot fetch_untagged_arguments() is `tagged_at IS NOT NULL`
+    hier juist de voorwaarde, niet het filter dat uitsluit. De herrun voegt
+    alleen ontbrekend quote_fragment(_status) toe (zie insert_llm_tags()),
+    verwijdert of overschrijft nooit bestaande argument_tags-rijen.
 
-    Die tweede voorwaarde (`tag_prompt_version`) is niet optioneel: een tag
-    mag legitiem quote_fragment=NULL hebben omdat-ie op de hele quote slaat
-    (zie schema.sql's toelichting bij die kolom) -- dat is aan de rij zelf
-    niet te onderscheiden van "nooit gevraagd" (vóór issue #109). Zonder
-    deze check blijft zo'n argument voor altijd een "kandidaat", ook na een
-    geslaagde herrun, en zou een volgende --backfill-quote-fragment-aanroep
-    het onnodig blijven hertaggen. We vergelijken bewust tegen de vaste
-    _QUOTE_FRAGMENT_PROMPT_VERSION (bevroren op de waarde van vandaag), niet
-    tegen de live PROMPT_VERSION: een latere, niet-additieve promptwijziging
-    (nieuwe/herschreven tag) mag deze veilige backfill niet stilzwijgend
-    weer op alles laten meelopen -- dat blijft issue #309's aparte,
-    destructieve wis-en-hertag-vraagstuk."""
+    `quote_fragment_status` (i.p.v. simpelweg `quote_fragment IS NULL`)
+    maakt het verschil expliciet tussen "hele_quote" (dit antwoord IS al
+    beoordeeld, en er is legitiem geen fragment van toepassing -- zie
+    schema.sql) en "nooit beoordeeld" (blijft NULL): zonder die scheiding
+    zou een argument met een legitieme hele_quote-tag voor altijd
+    "kandidaat" blijven, ook na een geslaagde herrun."""
     exists_clause = """EXISTS (
         SELECT 1 FROM argument_tags at
-        WHERE at.argument_id = ar.id AND at.created_by = 'llm' AND at.quote_fragment IS NULL
+        WHERE at.argument_id = ar.id AND at.created_by = 'llm' AND at.quote_fragment_status IS NULL
     )"""
-    not_yet_backfilled_clause = "(ar.tag_prompt_version IS NULL OR ar.tag_prompt_version != ?)"
     if ids is not None:
         if not ids:
             return []
@@ -466,10 +463,9 @@ def fetch_quote_fragment_backfill_arguments(conn, topic_id, limit, min_id=0, ids
                WHERE ar.topic_id = ?
                  AND ar.id IN ({placeholders})
                  AND ar.tagged_at IS NOT NULL
-                 AND {not_yet_backfilled_clause}
                  AND {exists_clause}
                ORDER BY ar.id"""
-        rows = conn.execute(query, (topic_id, *ids, _QUOTE_FRAGMENT_PROMPT_VERSION)).fetchall()
+        rows = conn.execute(query, (topic_id, *ids)).fetchall()
         return rows
 
     order_by = "d.published_at DESC, ar.id" if recent_first else "ar.id"
@@ -482,11 +478,10 @@ def fetch_quote_fragment_backfill_arguments(conn, topic_id, limit, min_id=0, ids
            WHERE ar.topic_id = ?
              AND ar.id >= ?
              AND ar.tagged_at IS NOT NULL
-             AND {not_yet_backfilled_clause}
              AND {exists_clause}
            ORDER BY {order_by}
            LIMIT ?"""
-    rows = conn.execute(query, (topic_id, min_id, _QUOTE_FRAGMENT_PROMPT_VERSION, limit)).fetchall()
+    rows = conn.execute(query, (topic_id, min_id, limit)).fetchall()
     return rows
 
 
