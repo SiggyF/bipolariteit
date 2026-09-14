@@ -44,6 +44,11 @@ logger = logging.getLogger(__name__)
 PROMPT_TEMPLATE = (Path(__file__).parent / "prompts" / "tag_argument.md").read_text()
 PROMPT_VERSION = hashlib.sha256(PROMPT_TEMPLATE.encode()).hexdigest()[:12]
 
+# Bevroren PROMPT_VERSION-waarde van de promptversie die quote_fragment
+# introduceerde (issue #109, commit c14d934) -- bewust NIET de live
+# PROMPT_VERSION hierboven, zie fetch_quote_fragment_backfill_arguments().
+_QUOTE_FRAGMENT_PROMPT_VERSION = "d3928db00fee"
+
 _JSON_FENCE_RE = re.compile(r"```(?:json)?\s*(.*?)\s*```", re.DOTALL)
 
 # Mapping van VLOS <activiteit soort="..."> naar Parlementaire-Context-tag.
@@ -145,10 +150,43 @@ def _build_prompt(topic_name, actor_name, actor_party, stance, typology, quote_t
     )
 
 
+# Modellen voegen soms een overtollige sluithaak toe direct na het (correct)
+# sluiten van een "enkel"-veld (single-object, geen array -- zie
+# build_tag_catalogue(): zo'n veld is letterlijk `"<veld>": { ...tag_obj... }`,
+# nooit in een array gewrapt), gevolgd door een komma richting de volgende
+# top-level sleutel -- het overtollige teken is niet altijd '}': ook ']'
+# gezien (verkeerd haaktype, maar wel degelijk overtollig). Ook gezien: het
+# model laat daarbij soms een sleutel weg (bv. quote_fragment ontbreekt) --
+# daarom matcht dit op willekeurige platte "sleutel": waarde-paren (string of
+# null), niet specifiek op sleutel/reden/quote_fragment.
+#
+# Bewust verankerd aan `"<veld>":\s*\{` (geen `[` ervoor): zonder die anker
+# zou dezelfde "'}' gevolgd door nóg een sluithaak"-vorm ook een 100%
+# legitieme, geneste array-van-objecten matchen (element sluit af met '}',
+# de array daarna met ']' -- bv. cultureel_ideologische_breuklijn), en die
+# mag nooit worden aangeraakt. Enkel-velden zijn de enige plek in deze
+# skeleton waar een los, ongewrapt platte object direct als veldwaarde
+# voorkomt, dus dit patroon is daar ondubbelzinnig.
+_KV_PAIR = r'"\w+"\s*:\s*(?:null|"(?:[^"\\]|\\.)*")'
+_ENKEL_FIELD_DUPLICATE_CLOSE_RE = re.compile(
+    rf'("\w+"\s*:\s*)\{{(\s*{_KV_PAIR}(?:\s*,\s*{_KV_PAIR})*\s*)\}}\s*[\}}\]](\s*,)'
+)
+
+
+def _repair_enkel_field_duplicate_close(text):
+    return _ENKEL_FIELD_DUPLICATE_CLOSE_RE.sub(r"\1{\2}\3", text)
+
+
 def _extract_json(raw_text):
     fence_match = _JSON_FENCE_RE.search(raw_text)
     candidate = fence_match.group(1) if fence_match else raw_text.strip()
-    return json.loads(candidate)
+    try:
+        return json.loads(candidate)
+    except json.JSONDecodeError:
+        repaired = _repair_enkel_field_duplicate_close(candidate)
+        parsed = json.loads(repaired)  # faalt dit ook, dan bubbelt die JSONDecodeError gewoon door
+        logger.warning("JSON gerepareerd: overtollige sluithaak na een enkel-veld verwijderd vóór het parsen")
+        return parsed
 
 
 # Sentinel voor "het model bedoelde hier expliciet geen tag" -- onderscheiden
@@ -393,23 +431,31 @@ def fetch_untagged_arguments(conn, topic_id, limit, min_id=0, vanaf=None, ids=No
 
 
 def fetch_quote_fragment_backfill_arguments(conn, topic_id, limit, min_id=0, ids=None, recent_first=False):
-    """Selecteert argumenten die al getagd zijn (`tagged_at` gezet) maar nog
-    een `llm`-tag zonder quote_fragment hebben -- bv. getagd vóór issue #109.
-    In tegenstelling tot fetch_untagged_arguments() is `tagged_at IS NOT NULL`
-    hier juist de voorwaarde, niet het filter dat uitsluit. De herrun voegt
-    alleen ontbrekend quote_fragment toe (zie insert_llm_tags()), verwijdert
-    of overschrijft nooit bestaande argument_tags-rijen.
+    """Selecteert argumenten die al getagd zijn (`tagged_at` gezet), nog een
+    `llm`-tag zonder quote_fragment hebben, én nog niet zijn hergetagd met
+    de quote_fragment-introducerende promptversie. In tegenstelling tot
+    fetch_untagged_arguments() is `tagged_at IS NOT NULL` hier juist de
+    voorwaarde, niet het filter dat uitsluit. De herrun voegt alleen
+    ontbrekend quote_fragment toe (zie insert_llm_tags()), verwijdert of
+    overschrijft nooit bestaande argument_tags-rijen.
 
-    Bewust GEEN `tag_prompt_version != huidige hash`-check (wat
-    `outdated_tagging` in scripts/pipeline_status.py telt): dat criterium is
-    breder en kan ook niet-additieve prompt-wijzigingen dekken (nieuwe/
-    herschreven tag), waarbij een herrun een bestaande tag zou kunnen laten
-    vallen -- dat is issue #309's destructieve wis-en-hertag-vraagstuk,
-    bewust apart van deze veilige, puur additieve backfill."""
+    Die tweede voorwaarde (`tag_prompt_version`) is niet optioneel: een tag
+    mag legitiem quote_fragment=NULL hebben omdat-ie op de hele quote slaat
+    (zie schema.sql's toelichting bij die kolom) -- dat is aan de rij zelf
+    niet te onderscheiden van "nooit gevraagd" (vóór issue #109). Zonder
+    deze check blijft zo'n argument voor altijd een "kandidaat", ook na een
+    geslaagde herrun, en zou een volgende --backfill-quote-fragment-aanroep
+    het onnodig blijven hertaggen. We vergelijken bewust tegen de vaste
+    _QUOTE_FRAGMENT_PROMPT_VERSION (bevroren op de waarde van vandaag), niet
+    tegen de live PROMPT_VERSION: een latere, niet-additieve promptwijziging
+    (nieuwe/herschreven tag) mag deze veilige backfill niet stilzwijgend
+    weer op alles laten meelopen -- dat blijft issue #309's aparte,
+    destructieve wis-en-hertag-vraagstuk."""
     exists_clause = """EXISTS (
         SELECT 1 FROM argument_tags at
         WHERE at.argument_id = ar.id AND at.created_by = 'llm' AND at.quote_fragment IS NULL
     )"""
+    not_yet_backfilled_clause = "(ar.tag_prompt_version IS NULL OR ar.tag_prompt_version != ?)"
     if ids is not None:
         if not ids:
             return []
@@ -422,9 +468,10 @@ def fetch_quote_fragment_backfill_arguments(conn, topic_id, limit, min_id=0, ids
                WHERE ar.topic_id = ?
                  AND ar.id IN ({placeholders})
                  AND ar.tagged_at IS NOT NULL
+                 AND {not_yet_backfilled_clause}
                  AND {exists_clause}
                ORDER BY ar.id"""
-        rows = conn.execute(query, (topic_id, *ids)).fetchall()
+        rows = conn.execute(query, (topic_id, *ids, _QUOTE_FRAGMENT_PROMPT_VERSION)).fetchall()
         return rows
 
     order_by = "d.published_at DESC, ar.id" if recent_first else "ar.id"
@@ -437,10 +484,11 @@ def fetch_quote_fragment_backfill_arguments(conn, topic_id, limit, min_id=0, ids
            WHERE ar.topic_id = ?
              AND ar.id >= ?
              AND ar.tagged_at IS NOT NULL
+             AND {not_yet_backfilled_clause}
              AND {exists_clause}
            ORDER BY {order_by}
            LIMIT ?"""
-    rows = conn.execute(query, (topic_id, min_id, limit)).fetchall()
+    rows = conn.execute(query, (topic_id, min_id, _QUOTE_FRAGMENT_PROMPT_VERSION, limit)).fetchall()
     return rows
 
 

@@ -1,15 +1,20 @@
+import json
 import sqlite3
 from collections import Counter
 from pathlib import Path
 
+import pytest
+
 from pipeline.tag_arguments import (
     _GEEN_TAG,
+    _QUOTE_FRAGMENT_PROMPT_VERSION,
     QF_AMBIGU,
     QF_GEEN_FRAGMENT,
     QF_GELDIG,
     QF_GELDIG_MEERDELIG,
     QF_NIET_GEVONDEN,
     _coerce_tag_entry,
+    _extract_json,
     _validate_tags,
     classify_quote_fragment,
     fetch_quote_fragment_backfill_arguments,
@@ -112,6 +117,125 @@ def test_validate_tags_updates_qf_stats_counter():
     _validate_tags(parsed, VALID_TAGS, QUOTE_TEXT, qf_stats=qf_stats)
     assert qf_stats[QF_GELDIG] == 1
     assert qf_stats[QF_NIET_GEVONDEN] == 1
+
+
+def test_extract_json_repairs_stray_closing_brace_after_enkel_field():
+    # Ingekort, echt LLM-antwoord (Qwen/Qwen3.8-27B:ovhcloud, asiel-topic,
+    # zie llm_calls.id 32155/gelijkaardig): "metadiscussie" is een enkel-veld
+    # (single object), en het model voegt een overtollige '}' toe direct na
+    # het sluiten ervan, vóór de komma naar het volgende top-level veld.
+    raw = """{
+      "metadiscussie": {
+        "sleutel": "Meta-Agenda-Tijdigheid",
+        "reden": "een reden",
+          "quote_fragment": "een fragment"
+        }
+      },
+      "morele_fundamenten": []
+    }"""
+    parsed = _extract_json(raw)
+    assert parsed["metadiscussie"]["sleutel"] == "Meta-Agenda-Tijdigheid"
+    assert parsed["morele_fundamenten"] == []
+
+
+def test_extract_json_repairs_multiple_stray_braces_in_same_response():
+    # Ook gezien: twee enkel-velden in dezelfde respons allebei met de fout.
+    raw = """{
+      "metadiscussie": {
+        "sleutel": "Meta-Agenda-Tijdigheid",
+        "reden": "r1",
+        "quote_fragment": "f1"
+        }
+      },
+      "redeneerschema": {
+        "sleutel": "Walton-Consequentie",
+        "reden": "r2",
+        "quote_fragment": "f2"
+        }
+      },
+      "stijlmiddelen": []
+    }"""
+    parsed = _extract_json(raw)
+    assert parsed["metadiscussie"]["sleutel"] == "Meta-Agenda-Tijdigheid"
+    assert parsed["redeneerschema"]["sleutel"] == "Walton-Consequentie"
+    assert parsed["stijlmiddelen"] == []
+
+
+def test_extract_json_leaves_legitimate_trailing_double_brace_alone():
+    # Een enkel-veld als allerlaatste top-level sleutel eindigt legitiem met
+    # twee sluithaken op rij (geen komma erna) -- dat mag niet aangeraakt worden.
+    raw = """{
+      "morele_fundamenten": [],
+      "redeneerschema": {
+        "sleutel": "Walton-Regel",
+        "reden": "r",
+        "quote_fragment": null
+      }
+    }"""
+    parsed = _extract_json(raw)
+    assert parsed["redeneerschema"]["sleutel"] == "Walton-Regel"
+
+
+def test_extract_json_still_raises_for_unrelated_malformed_json():
+    with pytest.raises(json.JSONDecodeError):
+        _extract_json("{not even close to json")
+
+
+def test_extract_json_repairs_wrong_bracket_type_duplicate_after_enkel_field():
+    # Echt gezien (arg 2157, asiel): het enkel-veld sluit correct af met '}',
+    # gevolgd door een overtollige, extra ']' i.p.v. nóg een '}' -- zelfde
+    # soort dubbele-sluithaak-fout, ander teken voor het overtollige stuk.
+    raw = """{
+      "metadiscussie": {
+        "sleutel": "Meta-Agenda-Tijdigheid",
+        "reden": "een reden",
+        "quote_fragment": "een fragment"
+      }
+      ],
+      "morele_fundamenten": []
+    }"""
+    parsed = _extract_json(raw)
+    assert parsed["metadiscussie"]["sleutel"] == "Meta-Agenda-Tijdigheid"
+    assert parsed["morele_fundamenten"] == []
+
+
+def test_extract_json_repairs_duplicate_close_when_a_key_is_missing():
+    # Echt gezien (llm_calls.id 7041): het model laat quote_fragment
+    # helemaal weg (alleen sleutel+reden) maar heeft dezelfde dubbele-
+    # sluithaak-fout -- de reparatie mag niet vastzitten aan precies drie
+    # bekende sleutels.
+    raw = """{
+      "redeneerschema": {
+        "sleutel": "Walton-Expertise",
+        "reden": "een reden"
+        }
+      },
+      "stijlmiddelen": []
+    }"""
+    parsed = _extract_json(raw)
+    assert parsed["redeneerschema"]["sleutel"] == "Walton-Expertise"
+    assert parsed["stijlmiddelen"] == []
+
+
+def test_extract_json_never_touches_legitimate_array_of_objects():
+    # Regressie: een gewone array van tag-objecten sluit ALTIJD af met
+    # '} ... ],' (element dicht, dan de array) -- dat lijkt qua vorm op de
+    # bug (twee sluithaken op rij + komma), maar is 100% legitiem en moet
+    # met rust gelaten worden. Dit faalt alleen als de reparatie zichzelf
+    # verkeerd verankert (zie _ENKEL_FIELD_DUPLICATE_CLOSE_RE's toelichting).
+    raw = """{
+      "cultureel_ideologische_breuklijn": [
+        {
+          "sleutel": "Ideologie-TAN",
+          "reden": "r",
+          "quote_fragment": "f"
+        }
+      ],
+      "debatzetten": []
+    }"""
+    parsed = _extract_json(raw)
+    assert parsed["cultureel_ideologische_breuklijn"][0]["sleutel"] == "Ideologie-TAN"
+    assert parsed["debatzetten"] == []
 
 
 def _fresh_conn():
@@ -241,6 +365,24 @@ def test_fetch_quote_fragment_backfill_arguments_skips_untagged_and_complete_arg
     )
     # Getagd, maar quote_fragment al compleet: ook geen kandidaat.
     assert fetch_quote_fragment_backfill_arguments(conn, topic_id=1, limit=10) == []
+
+
+def test_fetch_quote_fragment_backfill_arguments_excludes_already_backfilled_arguments():
+    # Regressie: een argument dat al hergetagd is met de quote_fragment-
+    # promptversie kan legitiem een tag met quote_fragment=NULL houden (de
+    # tag slaat op de hele quote, zie schema.sql) -- dat mag geen oneindige
+    # kandidaat blijven voor een volgende --backfill-quote-fragment-run.
+    conn = _seed_argument(_fresh_conn(), tagged_at="2026-01-01T00:00:00Z")
+    conn.execute(
+        "UPDATE arguments SET tag_prompt_version = ? WHERE id = 1", (_QUOTE_FRAGMENT_PROMPT_VERSION,)
+    )
+    conn.execute(
+        """INSERT INTO argument_tags (argument_id, tag_sleutel, created_by, reden, quote_fragment, assigned_at)
+           VALUES (1, 'Stijl-Herhaling', 'llm', 'r', NULL, '2025-01-01T00:00:00Z')"""
+    )
+
+    assert fetch_quote_fragment_backfill_arguments(conn, topic_id=1, limit=10) == []
+    assert fetch_quote_fragment_backfill_arguments(conn, topic_id=1, limit=10, ids=[1]) == []
 
 
 def test_fetch_untagged_arguments_unaffected_by_backfill_state():
