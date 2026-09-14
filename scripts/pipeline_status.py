@@ -7,7 +7,11 @@ Voor elk topic, vier categorieën:
 - extractie: documenten nog niet verwerkt, of verwerkt met een verouderde
   extract_argument.md-promptversie (PROMPT_VERSION in pipeline/extract_arguments.py)
 - tagging: arguments nog niet getagd, of getagd met een verouderde
-  tag_argument.md-promptversie
+  tag_argument.md-promptversie -- plus (los, alleen getoond als > 0) hoeveel
+  argument_tags-rijen naar een inactieve tag wijzen (tag verwijderd/hernoemd
+  in config/tags.toml sinds de laatste `uv run python -m pipeline.db.seed_tags`,
+  zie schema.sql's soft-delete-toelichting): kandidaten voor de losse
+  opruimstap uit issue #309, deze query verwijdert zelf niets
 - argumentenboom: of data/export/argument-trees/<slug>.json al bestaat, en
   hoeveel confrontatie-banden 'm bevat
 - (topic zelf: ontbrekende description blokkeert extractie hard, zie
@@ -109,6 +113,18 @@ def topic_status(conn, topic_id, topic_slug, vanaf):
              AND (tag_prompt_version IS NULL OR tag_prompt_version != ?)""",
         (topic_id, TAG_PROMPT_VERSION),
     )
+    # Rijen die naar een inactieve tag wijzen (seed_tags.py's soft-delete,
+    # zie schema.sql) -- de tag zelf is verwijderd/hernoemd in config/tags.toml,
+    # maar de argument_tags-rij bestaat nog. Kandidaat voor de losse, bewuste
+    # opruimstap (issue #309), nooit automatisch verwijderd door deze query.
+    purgeable_tags = _count(
+        conn,
+        """SELECT COUNT(*) FROM argument_tags at
+           JOIN arguments ar ON ar.id = at.argument_id
+           JOIN tags t ON t.sleutel = at.tag_sleutel
+           WHERE ar.topic_id = ? AND t.active = 0""",
+        (topic_id,),
+    )
 
     # video_url-enrichment (pipeline/enrich_video_url.py) draait mee in
     # `make export`, maar wordt hier ook los geteld: anders valt een topic
@@ -133,6 +149,7 @@ def topic_status(conn, topic_id, topic_slug, vanaf):
         "arguments": total_arguments,
         "pending_tagging": pending_tagging,
         "outdated_tagging": outdated_tagging,
+        "purgeable_tags": purgeable_tags,
         "argumentenboom_bestaat": boom_bestaat,
         "argumentenboom_banden": boom_banden,
         "pending_video": pending_video,
@@ -172,6 +189,11 @@ def print_report(conn, topics):
             "  arguments:  %d totaal | %d nog niet getagd | %d met verouderde tag-prompt",
             status["arguments"], status["pending_tagging"], status["outdated_tagging"],
         )
+        if status["purgeable_tags"]:
+            logger.info(
+                "  tags:       %d verouderde argument_tags-rijen (inactieve tag, kandidaat om op te ruimen)",
+                status["purgeable_tags"],
+            )
         if status["argumentenboom_bestaat"]:
             logger.info(
                 "  boom:       %d confrontatie-banden",

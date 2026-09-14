@@ -322,11 +322,21 @@ def assign_derived_tags(conn, argument_id, document_id, actor_id, dry_run=False)
 
 
 def insert_llm_tags(conn, argument_id, tags):
+    """Nieuwe (argument_id, tag_sleutel)-combinaties worden toegevoegd. Bestaat
+    de combinatie al (bv. een --backfill-quote-fragment-herrun van een argument
+    dat al getagd was), dan wordt uitsluitend een leeg quote_fragment gevuld --
+    reden/created_by/assigned_at van de bestaande rij blijven ongemoeid, en een
+    al gevuld quote_fragment wordt nooit overschreven. Zie issue #109-vervolg:
+    additief aanvullen, nooit stilzwijgend verwijderen of overschrijven."""
     now = datetime.now(timezone.utc).isoformat()
     for sleutel, reden, quote_fragment in tags:
         conn.execute(
-            """INSERT OR IGNORE INTO argument_tags (argument_id, tag_sleutel, created_by, confidence, reden, quote_fragment, assigned_at)
-               VALUES (?, ?, 'llm', NULL, ?, ?, ?)""",
+            """INSERT INTO argument_tags (argument_id, tag_sleutel, created_by, confidence, reden, quote_fragment, assigned_at)
+               VALUES (?, ?, 'llm', NULL, ?, ?, ?)
+               ON CONFLICT(argument_id, tag_sleutel) DO UPDATE SET
+                   quote_fragment = excluded.quote_fragment
+               WHERE argument_tags.quote_fragment IS NULL
+                 AND argument_tags.created_by = 'llm'""",
             (argument_id, sleutel, reden, quote_fragment, now),
         )
 
@@ -382,6 +392,58 @@ def fetch_untagged_arguments(conn, topic_id, limit, min_id=0, vanaf=None, ids=No
     ).fetchall()
 
 
+def fetch_quote_fragment_backfill_arguments(conn, topic_id, limit, min_id=0, ids=None, recent_first=False):
+    """Selecteert argumenten die al getagd zijn (`tagged_at` gezet) maar nog
+    een `llm`-tag zonder quote_fragment hebben -- bv. getagd vóór issue #109.
+    In tegenstelling tot fetch_untagged_arguments() is `tagged_at IS NOT NULL`
+    hier juist de voorwaarde, niet het filter dat uitsluit. De herrun voegt
+    alleen ontbrekend quote_fragment toe (zie insert_llm_tags()), verwijdert
+    of overschrijft nooit bestaande argument_tags-rijen.
+
+    Bewust GEEN `tag_prompt_version != huidige hash`-check (wat
+    `outdated_tagging` in scripts/pipeline_status.py telt): dat criterium is
+    breder en kan ook niet-additieve prompt-wijzigingen dekken (nieuwe/
+    herschreven tag), waarbij een herrun een bestaande tag zou kunnen laten
+    vallen -- dat is issue #309's destructieve wis-en-hertag-vraagstuk,
+    bewust apart van deze veilige, puur additieve backfill."""
+    exists_clause = """EXISTS (
+        SELECT 1 FROM argument_tags at
+        WHERE at.argument_id = ar.id AND at.created_by = 'llm' AND at.quote_fragment IS NULL
+    )"""
+    if ids is not None:
+        if not ids:
+            return []
+        placeholders = ",".join("?" for _ in ids)
+        query = f"""SELECT ar.id, ar.document_id, ar.actor_id, ar.stance, ar.typology,
+                      ar.quote_text, ar.quote_context,
+                      act.name AS actor_name, act.party AS actor_party
+               FROM arguments ar
+               JOIN actors act ON act.id = ar.actor_id
+               WHERE ar.topic_id = ?
+                 AND ar.id IN ({placeholders})
+                 AND ar.tagged_at IS NOT NULL
+                 AND {exists_clause}
+               ORDER BY ar.id"""
+        rows = conn.execute(query, (topic_id, *ids)).fetchall()
+        return rows
+
+    order_by = "d.published_at DESC, ar.id" if recent_first else "ar.id"
+    query = f"""SELECT ar.id, ar.document_id, ar.actor_id, ar.stance, ar.typology,
+                  ar.quote_text, ar.quote_context,
+                  act.name AS actor_name, act.party AS actor_party
+           FROM arguments ar
+           JOIN actors act ON act.id = ar.actor_id
+           JOIN documents d ON d.id = ar.document_id
+           WHERE ar.topic_id = ?
+             AND ar.id >= ?
+             AND ar.tagged_at IS NOT NULL
+             AND {exists_clause}
+           ORDER BY {order_by}
+           LIMIT ?"""
+    rows = conn.execute(query, (topic_id, min_id, limit)).fetchall()
+    return rows
+
+
 def _tag_one(arg, topic_name, tag_catalogue, tag_json_skeleton, valid_tags, model, base_url, reasoning_effort, timeout, max_tokens, api_key):
     """Eén argument door de LLM halen, zonder DB-writes -- puur zodat dit
     veilig via dask over meerdere workers/threads kan lopen (--parallel).
@@ -393,6 +455,10 @@ def _tag_one(arg, topic_name, tag_catalogue, tag_json_skeleton, valid_tags, mode
     )
     start = time.monotonic()
     started_at = datetime.now(timezone.utc).isoformat()
+    raw_content = None  # blijft None als call_llm() zelf al faalt (bv. timeout); anders
+    # overschreven zodra we een antwoord terug hebben, óók als de JSON-parse daarna
+    # alsnog faalt -- zonder dit ging elke parse-fout de ruwe respons kwijt (nergens
+    # meer te zien wat er precies mis was: afgekapt, extra tekst na de JSON, etc.)
     try:
         raw_content, usage, finish_reason = call_llm(
             base_url, model, prompt, reasoning_effort, timeout, max_tokens, api_key=api_key,
@@ -407,7 +473,7 @@ def _tag_one(arg, topic_name, tag_catalogue, tag_json_skeleton, valid_tags, mode
         }
     except Exception as exc:
         return {
-            "arg": arg, "ok": False, "raw_content": None, "error": str(exc),
+            "arg": arg, "ok": False, "raw_content": raw_content, "error": str(exc),
             "elapsed": time.monotonic() - start, "started_at": started_at,
         }
 
@@ -452,6 +518,12 @@ def main():
     )
     parser.add_argument("--dry-run", action="store_true", help="niets naar de database schrijven, alleen printen")
     parser.add_argument(
+        "--backfill-quote-fragment", action="store_true",
+        help="i.p.v. ongetagde argumenten: al getagde argumenten met een llm-tag zonder quote_fragment "
+             "opnieuw taggen en additief aanvullen (nooit bestaande argument_tags verwijderen/overschrijven "
+             "buiten het lege quote_fragment-veld) -- combineerbaar met --ids/--ids-file/--min-id/--limit/--recent-first",
+    )
+    parser.add_argument(
         "--parallel", action="store_true",
         help="verdeel LLM-calls over dask (de devcontainer's persistente scheduler, zie pipeline/dask_client.py) "
              "i.p.v. sequentieel -- alleen zinvol tegen een remote provider die concurrency aankan (bv. de "
@@ -480,12 +552,20 @@ def main():
                     ids.append(int(regel))
         ids = sorted(set(ids))
 
-    arguments = fetch_untagged_arguments(
-        conn, topic_id, args.limit, args.min_id, args.vanaf, ids=ids, recent_first=args.recent_first
-    )
-    if not arguments:
-        logger.info("Geen ongetagde argumenten (al verwerkt, of geen argumenten voor deze topic).")
-        return
+    if args.backfill_quote_fragment:
+        arguments = fetch_quote_fragment_backfill_arguments(
+            conn, topic_id, args.limit, args.min_id, ids=ids, recent_first=args.recent_first
+        )
+        if not arguments:
+            logger.info("Geen argumenten met ontbrekend quote_fragment (al aangevuld, of geen achterstand).")
+            return
+    else:
+        arguments = fetch_untagged_arguments(
+            conn, topic_id, args.limit, args.min_id, args.vanaf, ids=ids, recent_first=args.recent_first
+        )
+        if not arguments:
+            logger.info("Geen ongetagde argumenten (al verwerkt, of geen argumenten voor deze topic).")
+            return
     # dask kan sqlite3.Row niet deterministisch tokenizen/serialiseren (nodig
     # voor --parallel); gewone dicts werken overal waar Row ook werkte.
     arguments = [dict(arg) for arg in arguments]
