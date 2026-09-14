@@ -134,6 +134,9 @@ const co2Kg = co2.total_co2_kg.toLocaleString("nl-NL", { maximumFractionDigits: 
 const energyKwh = Math.round(co2.total_energy_kwh).toLocaleString("nl-NL");
 const totalCalls = co2.total_calls.toLocaleString("nl-NL");
 const remoteShare = Math.round((co2.by_source.remote.total_tokens / co2.total_tokens) * 100);
+const localKwh = co2.by_source.local.energy_kwh.toLocaleString("nl-NL", { maximumFractionDigits: 1 });
+const remoteKwh = co2.by_source.remote.energy_kwh.toLocaleString("nl-NL", { maximumFractionDigits: 1 });
+const remoteCo2Kg = (co2.by_source.remote.co2_g / 1000).toLocaleString("nl-NL", { maximumFractionDigits: 1 });
 ---
 
 <BaseLayout title="Over dit platform - Bipolariteit" class="about">
@@ -929,13 +932,14 @@ const remoteShare = Math.round((co2.by_source.remote.total_tokens / co2.total_to
 				<li>
 					<strong>Energieverbruik &amp; CO2 (ruwe schatting).</strong> Over de volledige geschiedenis van
 					extractie- en tag-calls (ca. {totalCalls} LLM-aanroepen) schatten we het energieverbruik op
-					ca. {energyKwh} kWh en de uitstoot op ca. {co2Kg} kg CO2. Dit is een grove indicatie, geen
-					meting: gebaseerd op een gepubliceerde vuistregel van ~0,3 Wh per 1000 tokens voor een
-					vergelijkbaar (grotere) model, toegepast op het totaal aantal prompt- + completion-tokens uit
-					onze eigen logging. De lokale calls (via LM Studio) draaien op groene stroom en tellen hier
-					daarom als CO2-vrij mee; de uitstoot komt vrijwel volledig van de {remoteShare}% van de tokens
-					die op afstand verwerkt zijn (OVHcloud via de Hugging Face-router), gerekend met OVHclouds
-					eigen 2024-cijfer van 0,16 kg CO2 per kWh. De redactie-stap (het bouwen van de argumentenboom,
+					ca. {energyKwh} kWh (ca. {localKwh} kWh lokaal, ca. {remoteKwh} kWh op afstand) en de uitstoot
+					op ca. {co2Kg} kg CO2. Dit is een grove indicatie, geen meting: gebaseerd op een gepubliceerde
+					vuistregel van ~0,3 Wh per 1000 tokens voor een vergelijkbaar (grotere) model, toegepast op het
+					totaal aantal prompt- + completion-tokens uit onze eigen logging. De lokale calls (via LM
+					Studio) draaien op groene stroom en tellen hier daarom als CO2-vrij mee; de uitstoot (ca. {remoteCo2Kg} kg)
+					komt dus volledig van de {remoteShare}% van de tokens die op afstand verwerkt zijn (OVHcloud
+					via de Hugging Face-router), gerekend met OVHclouds eigen 2024-cijfer van 0,16 kg CO2 per kWh.
+					De redactie-stap (het bouwen van de argumentenboom,
 					via Gemini) logt geen tokens en zit dus niet in dit cijfer — in verhouding tot het totaal
 					aantal extractie-/tag-calls is dat een klein deel van het werk.
 				</li>
