@@ -29,6 +29,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from dask.distributed import as_completed
+from json_repair import repair_json
 
 from pipeline.dask_client import make_client
 from pipeline.db import db
@@ -145,10 +146,40 @@ def _build_prompt(topic_name, actor_name, actor_party, stance, typology, quote_t
     )
 
 
+# json_repair-logregels die aangeven dat het een ontbrekende sluithaak/quote
+# zelf moest verzinnen -- d.w.z. de respons was echt afgekapt (bv. door
+# max_tokens), niet alleen een klein syntaxfoutje. Zulke reparaties bevatten
+# per definitie gegokte/ontbrekende data (het laatste, afgekapte tag-object
+# mist dan bv. quote_fragment of zelfs reden) en worden daarom NIET
+# geaccepteerd -- zie _extract_json(). Getest tegen alle 152 historische
+# foutieve llm_calls-responses: dit patroon onderscheidt de 15 echte
+# afkappingen betrouwbaar van de 137 zuivere syntaxfoutjes (o.a. de dubbele-
+# sluithaak-bug), zelfs als de oorspronkelijke json.loads()-foutmelding qua
+# tekst niet expliciet "unterminated" zegt.
+_TRUNCATION_REPAIR_MARKER = "missed the closing"
+
+
 def _extract_json(raw_text):
     fence_match = _JSON_FENCE_RE.search(raw_text)
     candidate = fence_match.group(1) if fence_match else raw_text.strip()
-    return json.loads(candidate)
+    try:
+        return json.loads(candidate)
+    except json.JSONDecodeError as exc:
+        # json_repair (https://github.com/mangiucugna/json_repair) i.p.v.
+        # zelf regexes te onderhouden per waargenomen generatiefout (dubbele
+        # sluithaak, verkeerd haaktype, ...). Alleen zuivere syntaxfouten
+        # worden geaccepteerd: geen (niet-leeg) object terug, of een teken dat
+        # de respons was afgekapt (_TRUNCATION_REPAIR_MARKER) -- dan bubbelt
+        # de oorspronkelijke JSONDecodeError door, zodat zo'n argument als
+        # mislukt geldt (en dus opnieuw geprobeerd kan worden) i.p.v. stil een
+        # onvolledig resultaat te accepteren.
+        repaired, log = repair_json(candidate, return_objects=True, logging=True)
+        if not isinstance(repaired, dict) or not repaired:
+            raise exc
+        if any(_TRUNCATION_REPAIR_MARKER in entry["text"] for entry in log):
+            raise exc
+        logger.warning("JSON gerepareerd met json_repair vóór het parsen")
+        return repaired
 
 
 # Sentinel voor "het model bedoelde hier expliciet geen tag" -- onderscheiden
@@ -324,20 +355,29 @@ def assign_derived_tags(conn, argument_id, document_id, actor_id, dry_run=False)
 def insert_llm_tags(conn, argument_id, tags):
     """Nieuwe (argument_id, tag_sleutel)-combinaties worden toegevoegd. Bestaat
     de combinatie al (bv. een --backfill-quote-fragment-herrun van een argument
-    dat al getagd was), dan wordt uitsluitend een leeg quote_fragment gevuld --
-    reden/created_by/assigned_at van de bestaande rij blijven ongemoeid, en een
-    al gevuld quote_fragment wordt nooit overschreven. Zie issue #109-vervolg:
-    additief aanvullen, nooit stilzwijgend verwijderen of overschrijven."""
+    dat al getagd was), dan wordt uitsluitend een leeg quote_fragment(_status)
+    gevuld -- reden/created_by/assigned_at van de bestaande rij blijven
+    ongemoeid, en een al opgeloste quote_fragment_status wordt nooit
+    overschreven. Zie issue #109-vervolg: additief aanvullen, nooit
+    stilzwijgend verwijderen of overschrijven.
+
+    quote_fragment_status maakt hier expliciet of quote_fragment=NULL "hele
+    quote" betekent (dit antwoord beoordeelde de tag en er is geen fragment
+    van toepassing) of gewoon nog nooit beoordeeld is (quote_fragment_status
+    blijft dan NULL, zie fetch_quote_fragment_backfill_arguments())."""
     now = datetime.now(timezone.utc).isoformat()
     for sleutel, reden, quote_fragment in tags:
+        status = "fragment" if quote_fragment is not None else "hele_quote"
         conn.execute(
-            """INSERT INTO argument_tags (argument_id, tag_sleutel, created_by, confidence, reden, quote_fragment, assigned_at)
-               VALUES (?, ?, 'llm', NULL, ?, ?, ?)
+            """INSERT INTO argument_tags
+                   (argument_id, tag_sleutel, created_by, confidence, reden, quote_fragment, quote_fragment_status, assigned_at)
+               VALUES (?, ?, 'llm', NULL, ?, ?, ?, ?)
                ON CONFLICT(argument_id, tag_sleutel) DO UPDATE SET
-                   quote_fragment = excluded.quote_fragment
-               WHERE argument_tags.quote_fragment IS NULL
+                   quote_fragment = excluded.quote_fragment,
+                   quote_fragment_status = excluded.quote_fragment_status
+               WHERE argument_tags.quote_fragment_status IS NULL
                  AND argument_tags.created_by = 'llm'""",
-            (argument_id, sleutel, reden, quote_fragment, now),
+            (argument_id, sleutel, reden, quote_fragment, status, now),
         )
 
 
@@ -394,21 +434,22 @@ def fetch_untagged_arguments(conn, topic_id, limit, min_id=0, vanaf=None, ids=No
 
 def fetch_quote_fragment_backfill_arguments(conn, topic_id, limit, min_id=0, ids=None, recent_first=False):
     """Selecteert argumenten die al getagd zijn (`tagged_at` gezet) maar nog
-    een `llm`-tag zonder quote_fragment hebben -- bv. getagd vóór issue #109.
-    In tegenstelling tot fetch_untagged_arguments() is `tagged_at IS NOT NULL`
+    een `llm`-tag hebben met `quote_fragment_status IS NULL` -- d.w.z. nooit
+    beoordeeld op quote_fragment, meestal getagd vóór issue #109. In
+    tegenstelling tot fetch_untagged_arguments() is `tagged_at IS NOT NULL`
     hier juist de voorwaarde, niet het filter dat uitsluit. De herrun voegt
-    alleen ontbrekend quote_fragment toe (zie insert_llm_tags()), verwijdert
-    of overschrijft nooit bestaande argument_tags-rijen.
+    alleen ontbrekend quote_fragment(_status) toe (zie insert_llm_tags()),
+    verwijdert of overschrijft nooit bestaande argument_tags-rijen.
 
-    Bewust GEEN `tag_prompt_version != huidige hash`-check (wat
-    `outdated_tagging` in scripts/pipeline_status.py telt): dat criterium is
-    breder en kan ook niet-additieve prompt-wijzigingen dekken (nieuwe/
-    herschreven tag), waarbij een herrun een bestaande tag zou kunnen laten
-    vallen -- dat is issue #309's destructieve wis-en-hertag-vraagstuk,
-    bewust apart van deze veilige, puur additieve backfill."""
+    `quote_fragment_status` (i.p.v. simpelweg `quote_fragment IS NULL`)
+    maakt het verschil expliciet tussen "hele_quote" (dit antwoord IS al
+    beoordeeld, en er is legitiem geen fragment van toepassing -- zie
+    schema.sql) en "nooit beoordeeld" (blijft NULL): zonder die scheiding
+    zou een argument met een legitieme hele_quote-tag voor altijd
+    "kandidaat" blijven, ook na een geslaagde herrun."""
     exists_clause = """EXISTS (
         SELECT 1 FROM argument_tags at
-        WHERE at.argument_id = ar.id AND at.created_by = 'llm' AND at.quote_fragment IS NULL
+        WHERE at.argument_id = ar.id AND at.created_by = 'llm' AND at.quote_fragment_status IS NULL
     )"""
     if ids is not None:
         if not ids:

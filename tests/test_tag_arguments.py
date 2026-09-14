@@ -1,6 +1,9 @@
+import json
 import sqlite3
 from collections import Counter
 from pathlib import Path
+
+import pytest
 
 from pipeline.tag_arguments import (
     _GEEN_TAG,
@@ -10,6 +13,7 @@ from pipeline.tag_arguments import (
     QF_GELDIG_MEERDELIG,
     QF_NIET_GEVONDEN,
     _coerce_tag_entry,
+    _extract_json,
     _validate_tags,
     classify_quote_fragment,
     fetch_quote_fragment_backfill_arguments,
@@ -114,6 +118,107 @@ def test_validate_tags_updates_qf_stats_counter():
     assert qf_stats[QF_NIET_GEVONDEN] == 1
 
 
+def test_extract_json_repairs_stray_closing_brace_after_enkel_field():
+    # Echt LLM-antwoord (Qwen/Qwen3.8-27B:ovhcloud, asiel-topic, zie
+    # llm_calls.id 32155/gelijkaardig): "metadiscussie" is een enkel-veld
+    # (single object), en het model voegt een overtollige '}' toe direct na
+    # het sluiten ervan, vóór de komma naar het volgende top-level veld.
+    # json_repair (https://github.com/mangiucugna/json_repair) lost dit op
+    # i.p.v. een zelfgeschreven regex per waargenomen generatiefout.
+    raw = """{
+      "metadiscussie": {
+        "sleutel": "Meta-Agenda-Tijdigheid",
+        "reden": "een reden",
+          "quote_fragment": "een fragment"
+        }
+      },
+      "morele_fundamenten": []
+    }"""
+    parsed = _extract_json(raw)
+    assert parsed["metadiscussie"]["sleutel"] == "Meta-Agenda-Tijdigheid"
+    assert parsed["morele_fundamenten"] == []
+
+
+def test_extract_json_repairs_wrong_bracket_type_after_enkel_field():
+    # Echt gezien (arg 2157, asiel): het enkel-veld sluit correct af met '}',
+    # gevolgd door een overtollige, extra ']' i.p.v. nóg een '}'.
+    raw = """{
+      "metadiscussie": {
+        "sleutel": "Meta-Agenda-Tijdigheid",
+        "reden": "een reden",
+        "quote_fragment": "een fragment"
+      }
+      ],
+      "morele_fundamenten": []
+    }"""
+    parsed = _extract_json(raw)
+    assert parsed["metadiscussie"]["sleutel"] == "Meta-Agenda-Tijdigheid"
+    assert parsed["morele_fundamenten"] == []
+
+
+def test_extract_json_repairs_response_missing_a_key():
+    # Echt gezien (llm_calls.id 7041): het model laat quote_fragment
+    # helemaal weg (alleen sleutel+reden) maar heeft dezelfde dubbele-
+    # sluithaak-fout.
+    raw = """{
+      "redeneerschema": {
+        "sleutel": "Walton-Expertise",
+        "reden": "een reden"
+        }
+      },
+      "stijlmiddelen": []
+    }"""
+    parsed = _extract_json(raw)
+    assert parsed["redeneerschema"]["sleutel"] == "Walton-Expertise"
+    assert parsed["stijlmiddelen"] == []
+
+
+def test_extract_json_leaves_legitimate_json_alone():
+    # Een enkel-veld als allerlaatste top-level sleutel eindigt legitiem met
+    # twee sluithaken op rij, en een array-van-objecten sluit legitiem af met
+    # '} ... ],' (element dicht, dan de array) -- geen van beide mag ooit
+    # nodig hebben om via het reparatiepad te lopen (json.loads slaagt al).
+    raw = """{
+      "cultureel_ideologische_breuklijn": [
+        {"sleutel": "Ideologie-TAN", "reden": "r", "quote_fragment": "f"}
+      ],
+      "redeneerschema": {
+        "sleutel": "Walton-Regel",
+        "reden": "r",
+        "quote_fragment": null
+      }
+    }"""
+    parsed = _extract_json(raw)
+    assert parsed["cultureel_ideologische_breuklijn"][0]["sleutel"] == "Ideologie-TAN"
+    assert parsed["redeneerschema"]["sleutel"] == "Walton-Regel"
+
+
+def test_extract_json_still_raises_for_unrelated_malformed_json():
+    # json_repair geeft voor volledig onherkenbare tekst iets terug dat geen
+    # (niet-leeg) object is (bv. een lijst) -- _extract_json laat dan de
+    # oorspronkelijke JSONDecodeError doorbubbelen i.p.v. die rommel te
+    # accepteren als geldig resultaat.
+    with pytest.raises(json.JSONDecodeError):
+        _extract_json("dit is helemaal geen JSON, gewoon een lopende zin.")
+
+
+def test_extract_json_rejects_genuinely_truncated_response():
+    # Echt gezien (llm_calls.id 2394): de respons kapt af midden in een
+    # stringwaarde (bv. door max_tokens), zonder de omsluitende structuur af
+    # te sluiten. json_repair KAN dit sluiten (het gokt de ontbrekende quote/
+    # sluithaken), maar dat betekent per definitie dat het laatste, afgekapte
+    # tag-object onvolledige data bevat (hier ontbreekt quote_fragment
+    # volledig) -- zo'n gok mag nooit stilzwijgend als geldig resultaat
+    # worden geaccepteerd. Zie _TRUNCATION_REPAIR_MARKER.
+    raw = """{
+      "type_bewijsvoering": [
+        {
+          "sleutel": "Bewijs-Anekdotisch",
+          "reden": "De spreker beroept zich op een anekdote die niet is afgemaakt en zomaar doorloopt"""
+    with pytest.raises(json.JSONDecodeError):
+        _extract_json(raw)
+
+
 def _fresh_conn():
     conn = sqlite3.connect(":memory:")
     conn.row_factory = sqlite3.Row
@@ -156,15 +261,17 @@ def _seed_argument(conn, argument_id=1, tagged_at=None):
 
 def test_insert_llm_tags_fills_missing_quote_fragment_without_touching_other_rows():
     conn = _seed_argument(_fresh_conn(), tagged_at="2026-01-01T00:00:00Z")
-    # Simuleert een argument getagd vóór issue #109: quote_fragment ontbreekt.
+    # Simuleert een argument getagd vóór issue #109: quote_fragment_status
+    # blijft NULL (nooit beoordeeld), niet gezet in deze INSERT.
     conn.execute(
         """INSERT INTO argument_tags (argument_id, tag_sleutel, created_by, reden, quote_fragment, assigned_at)
            VALUES (1, 'Stijl-Herhaling', 'llm', 'oude reden', NULL, '2025-01-01T00:00:00Z')"""
     )
-    # En een tweede tag die al wél een quote_fragment heeft -- moet ongemoeid blijven.
+    # Een tweede tag die al opgelost is als "hele quote" (legitiem NULL) --
+    # moet ongemoeid blijven, niet weer als kandidaat behandeld worden.
     conn.execute(
-        """INSERT INTO argument_tags (argument_id, tag_sleutel, created_by, reden, quote_fragment, assigned_at)
-           VALUES (1, 'Stijl-Metafoor', 'llm', 'bestaande reden', 'een stabiele overheid', '2025-01-01T00:00:00Z')"""
+        """INSERT INTO argument_tags (argument_id, tag_sleutel, created_by, reden, quote_fragment, quote_fragment_status, assigned_at)
+           VALUES (1, 'Stijl-Metafoor', 'llm', 'bestaande reden', NULL, 'hele_quote', '2025-01-01T00:00:00Z')"""
     )
     before = {row["tag_sleutel"]: dict(row) for row in conn.execute("SELECT * FROM argument_tags")}
 
@@ -172,7 +279,7 @@ def test_insert_llm_tags_fills_missing_quote_fragment_without_touching_other_row
         conn, 1,
         [
             ("Stijl-Herhaling", "nieuwe reden van de herrun", "aangevuld fragment"),
-            ("Stijl-Metafoor", "nieuwe reden van de herrun", "ander fragment"),
+            ("Stijl-Metafoor", "nieuwe reden van de herrun", None),
         ],
     )
 
@@ -182,13 +289,14 @@ def test_insert_llm_tags_fills_missing_quote_fragment_without_touching_other_row
     # Ontbrekend quote_fragment wordt aangevuld, id/reden/assigned_at blijven origineel.
     herhaling = after["Stijl-Herhaling"]
     assert herhaling["quote_fragment"] == "aangevuld fragment"
+    assert herhaling["quote_fragment_status"] == "fragment"
     assert herhaling["reden"] == "oude reden"
     assert herhaling["id"] == before["Stijl-Herhaling"]["id"]
     assert herhaling["assigned_at"] == before["Stijl-Herhaling"]["assigned_at"]
 
-    # Een al gevuld quote_fragment wordt nooit overschreven.
+    # Een al opgeloste quote_fragment_status wordt nooit overschreven.
     metafoor = after["Stijl-Metafoor"]
-    assert metafoor["quote_fragment"] == "een stabiele overheid"
+    assert metafoor["quote_fragment_status"] == "hele_quote"
     assert metafoor["reden"] == "bestaande reden"
 
 
@@ -236,11 +344,27 @@ def test_fetch_quote_fragment_backfill_arguments_skips_untagged_and_complete_arg
 
     conn.execute("UPDATE arguments SET tagged_at = '2026-01-01T00:00:00Z' WHERE id = 1")
     conn.execute(
-        """INSERT INTO argument_tags (argument_id, tag_sleutel, created_by, reden, quote_fragment, assigned_at)
-           VALUES (1, 'Stijl-Herhaling', 'llm', 'r', 'al gevuld fragment', '2025-01-01T00:00:00Z')"""
+        """INSERT INTO argument_tags (argument_id, tag_sleutel, created_by, reden, quote_fragment, quote_fragment_status, assigned_at)
+           VALUES (1, 'Stijl-Herhaling', 'llm', 'r', 'al gevuld fragment', 'fragment', '2025-01-01T00:00:00Z')"""
     )
-    # Getagd, maar quote_fragment al compleet: ook geen kandidaat.
+    # Getagd, quote_fragment_status al opgelost: ook geen kandidaat.
     assert fetch_quote_fragment_backfill_arguments(conn, topic_id=1, limit=10) == []
+
+
+def test_fetch_quote_fragment_backfill_arguments_excludes_resolved_whole_quote_tags():
+    # Regressie: een tag die al is opgelost als "hele_quote" (legitiem
+    # quote_fragment=NULL, zie schema.sql) mag geen oneindige kandidaat
+    # blijven voor een volgende --backfill-quote-fragment-run -- dat was de
+    # bug vóór quote_fragment_status bestond (destijds via een tag_prompt_
+    # version-vergelijking "opgelost", nu rechtstreeks aan de rij zelf te zien).
+    conn = _seed_argument(_fresh_conn(), tagged_at="2026-01-01T00:00:00Z")
+    conn.execute(
+        """INSERT INTO argument_tags (argument_id, tag_sleutel, created_by, reden, quote_fragment, quote_fragment_status, assigned_at)
+           VALUES (1, 'Stijl-Herhaling', 'llm', 'r', NULL, 'hele_quote', '2025-01-01T00:00:00Z')"""
+    )
+
+    assert fetch_quote_fragment_backfill_arguments(conn, topic_id=1, limit=10) == []
+    assert fetch_quote_fragment_backfill_arguments(conn, topic_id=1, limit=10, ids=[1]) == []
 
 
 def test_fetch_untagged_arguments_unaffected_by_backfill_state():

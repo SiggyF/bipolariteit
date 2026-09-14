@@ -1,15 +1,15 @@
 {
-  "generated_at": "2026-09-14T21:42:15+02:00",
+  "generated_at": "2026-09-15T00:30:12+02:00",
   "co2_estimate": {
     "energy_wh_per_1k_tokens_assumption": 0.3,
     "carbon_intensity_g_per_kwh": {
       "local": 0,
       "remote": 160
     },
-    "total_calls": 32458,
-    "total_tokens": 93954892,
-    "total_energy_kwh": 28.1864676,
-    "total_co2_kg": 2.557700544,
+    "total_calls": 35826,
+    "total_tokens": 105676211,
+    "total_energy_kwh": 31.7028633,
+    "total_co2_kg": 3.120323856,
     "by_source": {
       "local": {
         "n_calls": 14833,
@@ -19,11 +19,11 @@
         "co2_g": 0.0
       },
       "remote": {
-        "n_calls": 17625,
-        "total_tokens": 53285428,
-        "n_calls_missing_tokens": 362,
-        "energy_kwh": 15.9856284,
-        "co2_g": 2557.700544
+        "n_calls": 20993,
+        "total_tokens": 65006747,
+        "n_calls_missing_tokens": 481,
+        "energy_kwh": 19.5020241,
+        "co2_g": 3120.323856
       }
     }
   },
@@ -195,13 +195,13 @@
         {
           "stage": "tagging",
           "model": "Qwen/Qwen3.8-27B:ovhcloud",
-          "n_calls": 2051,
-          "total_duration_s": 22949.038816898545,
-          "avg_duration_s": 11.189194937541952,
-          "n_errors": 36,
-          "total_completion_tokens": 1155545,
+          "n_calls": 5415,
+          "total_duration_s": 77165.90015527801,
+          "avg_duration_s": 14.250397073920224,
+          "n_errors": 155,
+          "total_completion_tokens": 3444437,
           "first_call_at": "2026-09-12T20:31:49.832773+00:00",
-          "last_call_at": "2026-09-14T19:42:05.731837+00:00"
+          "last_call_at": "2026-09-14T22:29:47.902320+00:00"
         },
         {
           "stage": "tagging",
