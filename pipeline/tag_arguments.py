@@ -400,26 +400,12 @@ def fetch_quote_fragment_backfill_arguments(conn, topic_id, limit, min_id=0, ids
     alleen ontbrekend quote_fragment toe (zie insert_llm_tags()), verwijdert
     of overschrijft nooit bestaande argument_tags-rijen.
 
-    BEWUST GEEN `tag_prompt_version != huidige hash`-check (dat is wat
-    `outdated_tagging` in scripts/pipeline_status.py telt) -- die twee
-    criteria vallen nu toevallig samen, omdat quote_fragment de enige reden
-    is waarom PROMPT_VERSION sinds de vorige volledige pass gewijzigd is.
-    Een latere, andere prompt-wijziging (nieuwe tag, herschreven
-    tag-instructie, ...) zou tag_prompt_version óók verouderd maken zonder
-    dat er per se een quote_fragment ontbreekt; zulke argumenten worden door
-    déze functie dan NIET opgepikt, en blijven ook buiten fetch_untagged_
-    arguments() (die juist tagged_at IS NULL vereist) -- ze verdwijnen dus
-    niet stil, maar vragen dan een eigen, opnieuw doordachte aanpak.
-
-    Waarom niet gewoon breder selecteren op tag_prompt_version? Omdat
-    quote_fragment een puur additief veld is (invullen kan een bestaande
-    tag-toekenning nooit tegenspreken), maar een niet-additieve prompt-
-    wijziging dat wél kan: een herrun kan dan een tag laten vallen die het
-    model eerder wél gaf, of een nieuwe toekennen. Wat er dan met de "oude"
-    tags moet gebeuren is precies het destructieve wis-en-hertag-vraagstuk
-    uit issue #309 -- bewust apart gehouden van deze veilige, puur additieve
-    backfill. Zie ook de `tags:`-regel in `make status`
-    (scripts/pipeline_status.py) voor het aanverwante opruimvraagstuk."""
+    Bewust GEEN `tag_prompt_version != huidige hash`-check (wat
+    `outdated_tagging` in scripts/pipeline_status.py telt): dat criterium is
+    breder en kan ook niet-additieve prompt-wijzigingen dekken (nieuwe/
+    herschreven tag), waarbij een herrun een bestaande tag zou kunnen laten
+    vallen -- dat is issue #309's destructieve wis-en-hertag-vraagstuk,
+    bewust apart van deze veilige, puur additieve backfill."""
     exists_clause = """EXISTS (
         SELECT 1 FROM argument_tags at
         WHERE at.argument_id = ar.id AND at.created_by = 'llm' AND at.quote_fragment IS NULL
