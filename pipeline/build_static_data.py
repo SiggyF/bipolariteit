@@ -34,6 +34,7 @@ import pandas as pd
 import prince
 
 from pipeline.build_confrontatie_export import TREE_EXPORT_DIR
+from pipeline.co2_estimate import fetch_co2_estimate
 from pipeline.db import db
 from pipeline.extract_arguments import PROMPT_VERSION as EXTRACT_PROMPT_VERSION
 from pipeline.extract_arguments import _build_prompt as _build_extraction_prompt
@@ -527,7 +528,11 @@ def main():
     llm_calls_dir.mkdir(parents=True, exist_ok=True)
 
     index = []
-    status = {"generated_at": datetime.now(_AMSTERDAM).isoformat(timespec="seconds"), "topics": []}
+    status = {
+        "generated_at": datetime.now(_AMSTERDAM).isoformat(timespec="seconds"),
+        "co2_estimate": fetch_co2_estimate(conn),
+        "topics": [],
+    }
     for topic_row in all_topic_rows:
         export = build_topic_export(conn, topic_row, periode_index)
         out_path = topics_dir / f"{topic_row['slug']}.json"
