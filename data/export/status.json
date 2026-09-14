@@ -1,5 +1,32 @@
 {
-  "generated_at": "2026-09-13T16:12:26+02:00",
+  "generated_at": "2026-09-14T21:42:15+02:00",
+  "co2_estimate": {
+    "energy_wh_per_1k_tokens_assumption": 0.3,
+    "carbon_intensity_g_per_kwh": {
+      "local": 0,
+      "remote": 160
+    },
+    "total_calls": 32458,
+    "total_tokens": 93954892,
+    "total_energy_kwh": 28.1864676,
+    "total_co2_kg": 2.557700544,
+    "by_source": {
+      "local": {
+        "n_calls": 14833,
+        "total_tokens": 40669464,
+        "n_calls_missing_tokens": 133,
+        "energy_kwh": 12.2008392,
+        "co2_g": 0.0
+      },
+      "remote": {
+        "n_calls": 17625,
+        "total_tokens": 53285428,
+        "n_calls_missing_tokens": 362,
+        "energy_kwh": 15.9856284,
+        "co2_g": 2557.700544
+      }
+    }
+  },
   "topics": [
     {
       "slug": "stikstof",
@@ -8,7 +35,7 @@
       "documents_total": 4381,
       "documents_extracted": 3889,
       "arguments_total": 1988,
-      "arguments_tagged": 1977,
+      "arguments_tagged": 1971,
       "argumentenboom_banden": 6,
       "arguments_ander_onderwerp": 10,
       "ander_onderwerp_top": [
@@ -44,13 +71,13 @@
         {
           "stage": "tagging",
           "model": "Qwen/Qwen3.8-27B:ovhcloud",
-          "n_calls": 421,
-          "total_duration_s": 5015.854801693968,
-          "avg_duration_s": 11.914144422075932,
-          "n_errors": 11,
-          "total_completion_tokens": 225435,
+          "n_calls": 1128,
+          "total_duration_s": 12802.32982973892,
+          "avg_duration_s": 11.349583182392658,
+          "n_errors": 37,
+          "total_completion_tokens": 693800,
           "first_call_at": "2026-09-12T19:08:21.419464+00:00",
-          "last_call_at": "2026-09-12T19:18:35.848971+00:00"
+          "last_call_at": "2026-09-13T22:00:56.865701+00:00"
         },
         {
           "stage": "tagging",
@@ -77,6 +104,17 @@
       "arguments_ander_onderwerp": 0,
       "ander_onderwerp_top": [],
       "llm_calls_by_model": [
+        {
+          "stage": "tagging",
+          "model": "Qwen/Qwen3.8-27B:ovhcloud",
+          "n_calls": 452,
+          "total_duration_s": 6911.423953746809,
+          "avg_duration_s": 15.290760959616835,
+          "n_errors": 10,
+          "total_completion_tokens": 315569,
+          "first_call_at": "2026-09-14T18:44:33.462497+00:00",
+          "last_call_at": "2026-09-14T19:02:57.336662+00:00"
+        },
         {
           "stage": "tagging",
           "model": "qwen/qwen3.6-27b",
@@ -157,13 +195,13 @@
         {
           "stage": "tagging",
           "model": "Qwen/Qwen3.8-27B:ovhcloud",
-          "n_calls": 1745,
-          "total_duration_s": 17151.51351915772,
-          "avg_duration_s": 9.82894757544855,
-          "n_errors": 28,
-          "total_completion_tokens": 938842,
+          "n_calls": 2051,
+          "total_duration_s": 22949.038816898545,
+          "avg_duration_s": 11.189194937541952,
+          "n_errors": 36,
+          "total_completion_tokens": 1155545,
           "first_call_at": "2026-09-12T20:31:49.832773+00:00",
-          "last_call_at": "2026-09-12T21:08:45.728272+00:00"
+          "last_call_at": "2026-09-14T19:42:05.731837+00:00"
         },
         {
           "stage": "tagging",
@@ -185,7 +223,7 @@
       "documents_total": 11717,
       "documents_extracted": 7623,
       "arguments_total": 5782,
-      "arguments_tagged": 5764,
+      "arguments_tagged": 5779,
       "argumentenboom_banden": 3,
       "arguments_ander_onderwerp": 187,
       "ander_onderwerp_top": [
@@ -267,13 +305,13 @@
         {
           "stage": "tagging",
           "model": "Qwen/Qwen3.8-27B:ovhcloud",
-          "n_calls": 4000,
-          "total_duration_s": 46103.361171359946,
-          "avg_duration_s": 11.525840292839986,
-          "n_errors": 86,
-          "total_completion_tokens": 2146013,
+          "n_calls": 4237,
+          "total_duration_s": 48802.78544258106,
+          "avg_duration_s": 11.518240604810257,
+          "n_errors": 95,
+          "total_completion_tokens": 2296651,
           "first_call_at": "2026-09-12T17:10:37.778374+00:00",
-          "last_call_at": "2026-09-12T18:52:17.190653+00:00"
+          "last_call_at": "2026-09-13T21:57:02.911876+00:00"
         },
         {
           "stage": "tagging",
@@ -295,7 +333,7 @@
       "documents_total": 5716,
       "documents_extracted": 3892,
       "arguments_total": 2841,
-      "arguments_tagged": 2838,
+      "arguments_tagged": 2837,
       "argumentenboom_banden": 0,
       "arguments_ander_onderwerp": 93,
       "ander_onderwerp_top": [
@@ -355,13 +393,13 @@
         {
           "stage": "tagging",
           "model": "Qwen/Qwen3.8-27B:ovhcloud",
-          "n_calls": 2902,
-          "total_duration_s": 28788.171527052786,
-          "avg_duration_s": 9.920114240886557,
-          "n_errors": 64,
-          "total_completion_tokens": 1633172,
+          "n_calls": 3080,
+          "total_duration_s": 31224.99165411086,
+          "avg_duration_s": 10.137984303282748,
+          "n_errors": 68,
+          "total_completion_tokens": 1767199,
           "first_call_at": "2026-09-12T19:00:26.722001+00:00",
-          "last_call_at": "2026-09-12T22:11:51.128608+00:00"
+          "last_call_at": "2026-09-13T21:56:03.927970+00:00"
         }
       ]
     }

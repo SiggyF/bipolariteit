@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import status from "../../../data/export/status.json";
 import topicsIndex from "../../../data/export/topics-index.json";
 import { deriveTagUsage, type TagUsageRow } from "../lib/aggregate";
 import { analyseTable, canonicalSigns } from "../lib/correspondence";
@@ -124,6 +125,15 @@ const CA_ROW_LABEL_OFFSET: Record<string, CaLabelOffset> = {
 	D66: { dx: 0, dy: 20, anchor: "middle" },
 	SGP: { dx: 0, dy: -12, anchor: "middle" },
 };
+
+// Ruwe CO2-schatting (pipeline/co2_estimate.py), afgerond voor leesbaarheid
+// -- de exacte cijfers staan in data/export/status.json, hier alleen de
+// weergave-afronding.
+const co2 = status.co2_estimate;
+const co2Kg = co2.total_co2_kg.toLocaleString("nl-NL", { maximumFractionDigits: 1 });
+const energyKwh = Math.round(co2.total_energy_kwh).toLocaleString("nl-NL");
+const totalCalls = co2.total_calls.toLocaleString("nl-NL");
+const remoteShare = Math.round((co2.by_source.remote.total_tokens / co2.total_tokens) * 100);
 ---
 
 <BaseLayout title="Over dit platform - Bipolariteit" class="about">
@@ -915,6 +925,19 @@ const CA_ROW_LABEL_OFFSET: Record<string, CaLabelOffset> = {
 					Validatiesteekproeven gebruiken daarnaast Gemini als tweede beoordelaar. Van elk argument wordt
 					bijgehouden met welke promptversie het gemaakt is, zodat een prompt- of modelwijziging altijd
 					traceerbaar is.
+				</li>
+				<li>
+					<strong>Energieverbruik &amp; CO2 (ruwe schatting).</strong> Over de volledige geschiedenis van
+					extractie- en tag-calls (ca. {totalCalls} LLM-aanroepen) schatten we het energieverbruik op
+					ca. {energyKwh} kWh en de uitstoot op ca. {co2Kg} kg CO2. Dit is een grove indicatie, geen
+					meting: gebaseerd op een gepubliceerde vuistregel van ~0,3 Wh per 1000 tokens voor een
+					vergelijkbaar (grotere) model, toegepast op het totaal aantal prompt- + completion-tokens uit
+					onze eigen logging. De lokale calls (via LM Studio) draaien op groene stroom en tellen hier
+					daarom als CO2-vrij mee; de uitstoot komt vrijwel volledig van de {remoteShare}% van de tokens
+					die op afstand verwerkt zijn (OVHcloud via de Hugging Face-router), gerekend met OVHclouds
+					eigen 2024-cijfer van 0,16 kg CO2 per kWh. De redactie-stap (het bouwen van de argumentenboom,
+					via Gemini) logt geen tokens en zit dus niet in dit cijfer — in verhouding tot het totaal
+					aantal extractie-/tag-calls is dat een klein deel van het werk.
 				</li>
 				<li>
 					<strong>Validatie-rapportage.</strong> Vóór elke publicatieronde wordt een representatieve
