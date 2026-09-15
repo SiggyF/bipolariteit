@@ -79,6 +79,10 @@ export const TAXONOMIE: TaxonomiePerspectief[] = [
 					{
 						"sleutel": "Debatzet-Gevoelens-Verwoorden",
 						"beschrijving": "Emotioneel argumenteren gericht op het oproepen van angst, woede of medelijden bij de toehoorder."
+					},
+					{
+						"sleutel": "Debatzet-Cirkelredenering",
+						"beschrijving": "De premisse veronderstelt al de waarheid van de conclusie (petitio principii); het argument draait in een cirkel in plaats van onafhankelijk bewijs te leveren."
 					}
 				]
 			},
@@ -106,6 +110,10 @@ export const TAXONOMIE: TaxonomiePerspectief[] = [
 					{
 						"sleutel": "Stijl-Retorische-Vraag",
 						"beschrijving": "Een vraag waarvan het antwoord al besloten ligt in de formulering zelf."
+					},
+					{
+						"sleutel": "Stijl-Godwin",
+						"beschrijving": "Een vergelijking met de Tweede Wereldoorlog, nazi-Duitsland of het naziregime, ongeacht of de vergelijking terecht of overtuigend is."
 					}
 				]
 			},

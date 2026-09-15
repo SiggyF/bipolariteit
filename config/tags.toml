@@ -24,7 +24,8 @@ beschrijving = "Legt de interne logica en de retorische vormgeving van het argum
     { sleutel = "Debatzet-Herformuleren", beschrijving = "Het vertekenen of overdrijven van het standpunt van de opponent om dit makkelijker te kunnen aanvallen." },
     { sleutel = "Debatzet-Keuze-Aanscherpen", beschrijving = "Zwart-wit denken; de situatie voorstellen alsof er slechts twee uiterste, elkaar uitsluitende opties bestaan." },
     { sleutel = "Debatzet-Bewijs-Vragen", beschrijving = "Doen alsof een claim geen bewijs behoeft of de tegenstander dwingen het tegendeel te bewijzen." },
-    { sleutel = "Debatzet-Gevoelens-Verwoorden", beschrijving = "Emotioneel argumenteren gericht op het oproepen van angst, woede of medelijden bij de toehoorder." }
+    { sleutel = "Debatzet-Gevoelens-Verwoorden", beschrijving = "Emotioneel argumenteren gericht op het oproepen van angst, woede of medelijden bij de toehoorder." },
+    { sleutel = "Debatzet-Cirkelredenering", beschrijving = "De premisse veronderstelt al de waarheid van de conclusie (petitio principii); het argument draait in een cirkel in plaats van onafhankelijk bewijs te leveren." }
   ]
 
   [[perspectieven.labelgroepen]]
@@ -35,7 +36,8 @@ beschrijving = "Legt de interne logica en de retorische vormgeving van het argum
     { sleutel = "Stijl-Herhaling", beschrijving = "Herhaling van hetzelfde woord of dezelfde woordgroep binnen het fragment, ter nadruk." },
     { sleutel = "Stijl-Aangekondigde-Opsomming", beschrijving = "Vooraf het aantal elementen aankondigen (twee, drie, vijf, ...), gevolgd door een opsomming van precies dat aantal." },
     { sleutel = "Stijl-Antithese", beschrijving = "Het naast elkaar plaatsen van twee tegengestelde begrippen of ideeën." },
-    { sleutel = "Stijl-Retorische-Vraag", beschrijving = "Een vraag waarvan het antwoord al besloten ligt in de formulering zelf." }
+    { sleutel = "Stijl-Retorische-Vraag", beschrijving = "Een vraag waarvan het antwoord al besloten ligt in de formulering zelf." },
+    { sleutel = "Stijl-Godwin", beschrijving = "Een vergelijking met de Tweede Wereldoorlog, nazi-Duitsland of het naziregime, ongeacht of de vergelijking terecht of overtuigend is." }
   ]
 
   [[perspectieven.labelgroepen]]

@@ -11,7 +11,7 @@ EMBED_START ?= 2000-01-01
 EMBED_END ?= $(shell date +%F)
 EMBED_LABEL ?= full
 EMBED_FULL_RANGE_TOPICS ?= stikstof,abortus,asiel,energietransitie
-MODEL ?= qwen/qwen3.6-27b
+MODEL ?= qwen/qwen3.8-27b
 # Los van MODEL: dat is de default voor de lokale qwen-pipeline (extract/tag/
 # validate) en is geen geldig model voor agy (Docker/Gemini). Leeg = laat het
 # script zijn eigen Gemini-default kiezen.
@@ -38,7 +38,7 @@ else
   RESOLVE_BASE_URL = scripts/detect_llm_base_url.sh
 endif
 
-.PHONY: help probe crawl ingest embed umap label-clusters pipeline test test-js test-frontend ca-fixture status build dev dev-stop extract extract-agy tag tag-agy redactie validate export enrich-video fetch-debate-events fetch-subtitles match-video-spans check-video-urls tags-taxonomy db-init pipeline-status backup-db release release-dry release-www release-www-dry check-public-exposure argument-doc export-public-data publish-data publish-zenodo publish-huggingface publish-tiles tiles tiles-full
+.PHONY: help probe crawl ingest embed umap label-clusters pipeline test test-js test-frontend ca-fixture status build dev dev-stop extract extract-agy tag tag-agy tag-single redactie validate export enrich-video fetch-debate-events fetch-subtitles match-video-spans check-video-urls tags-taxonomy db-init pipeline-status backup-db release release-dry release-www release-www-dry check-public-exposure argument-doc export-public-data publish-data publish-zenodo publish-huggingface publish-tiles tiles tiles-full
 
 help: ## Toon deze lijst
 	@grep -E '^[a-zA-Z_-]+:.*## ' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*## "}; {printf "  \033[36m%-16s\033[0m %s\n", $$1, $$2}'
@@ -112,19 +112,23 @@ backup-db: ## Kopieer data/bipolariteit.db naar ~/data/bipolariteit/ (sync die m
 	mkdir -p ~/data/bipolariteit
 	cp data/bipolariteit.db ~/data/bipolariteit/bipolariteit-$$(date +%Y%m%d-%H%M%S).db
 
-extract: ## Stage 1 -- argumenten extraheren (LLM, alleen op netstroom). Vars: TOPIC, LIMIT, BASE_URL
+extract: ## Stage 1 -- argumenten extraheren (LLM, alleen op netstroom). Vars: TOPIC, LIMIT, BASE_URL, MODEL, API_KEY, PARALLEL (bv. voor de HF-router, zie issue #303)
 	@url=$$($(RESOLVE_BASE_URL)) || exit 1; \
-	uv run python -m pipeline.extract_arguments --topic $(TOPIC) --limit $(LIMIT) --base-url $$url
+	uv run python -m pipeline.extract_arguments --topic $(TOPIC) --limit $(LIMIT) --base-url $$url --model $(MODEL) $(if $(API_KEY),--api-key $(API_KEY),) $(if $(PARALLEL),--parallel,)
 
 extract-agy: ## Stage 1 -- argumenten extraheren via Docker agy (Gemini). Vars: TOPIC, LIMIT, AGY_MODEL, MIN_ID
 	PYTHONPATH=. uv run python scripts/agy_run_extraction_batch.py --topic $(TOPIC) --limit $(LIMIT) $(if $(AGY_MODEL),--model $(AGY_MODEL),) $(if $(MIN_ID),--min-id $(MIN_ID),)
 
-tag: ## Stage 1b -- tags toekennen (LLM, alleen op netstroom). Vars: TOPIC, LIMIT, BASE_URL, IDS, IDS_FILE (gerichte hertag-batch, negeert LIMIT)
+tag: ## Stage 1b -- tags toekennen (LLM, alleen op netstroom). Vars: TOPIC, LIMIT, BASE_URL, IDS, IDS_FILE (gerichte hertag-batch, negeert LIMIT), MODEL, API_KEY, PARALLEL (bv. voor de HF-router, zie issue #303)
 	@url=$$($(RESOLVE_BASE_URL)) || exit 1; \
-	uv run python -m pipeline.tag_arguments --topic $(TOPIC) --limit $(LIMIT) --base-url $$url $(if $(IDS),--ids $(IDS),) $(if $(IDS_FILE),--ids-file $(IDS_FILE),)
+	uv run python -m pipeline.tag_arguments --topic $(TOPIC) --limit $(LIMIT) --base-url $$url --model $(MODEL) $(if $(API_KEY),--api-key $(API_KEY),) $(if $(PARALLEL),--parallel,) $(if $(IDS),--ids $(IDS),) $(if $(IDS_FILE),--ids-file $(IDS_FILE),)
 
 tag-agy: ## Stage 1b -- tags toekennen via Docker agy (Gemini). Vars: TOPIC, LIMIT, AGY_MODEL
 	PYTHONPATH=. uv run python scripts/agy_run_tagging_batch.py --topic $(TOPIC) --limit $(LIMIT) $(if $(AGY_MODEL),--model $(AGY_MODEL),)
+
+tag-single: ## Gerichte hertag-pass: één nieuwe tag tegen al-getagde argumenten (na een taxonomie-uitbreiding, bv. issue #321/#262), zie pipeline/tag_single.py. Vars: TAG (verplicht), TOPIC of ALL_TOPICS=1, IDS, IDS_FILE, SINGLE_LIMIT (default: alles), BASE_URL, MODEL, API_KEY, PARALLEL
+	@url=$$($(RESOLVE_BASE_URL)) || exit 1; \
+	uv run python -m pipeline.tag_single --tag $(TAG) $(if $(ALL_TOPICS),--all-topics,--topic $(TOPIC)) --base-url $$url --model $(MODEL) $(if $(API_KEY),--api-key $(API_KEY),) $(if $(PARALLEL),--parallel,) $(if $(IDS),--ids $(IDS),) $(if $(IDS_FILE),--ids-file $(IDS_FILE),) $(if $(SINGLE_LIMIT),--limit $(SINGLE_LIMIT),)
 
 redactie: ## Stage 2 -- argumentenboom bouwen + per-relatie redactiecheck (structureren + neutrale engagement-check per relatie, via Docker agy/Gemini) en meteen exporteren (#252). Vars: TOPIC, AGY_MODEL (default gemini-3.8-flash-medium)
 	PYTHONPATH=. uv run python scripts/agy_run_confrontatie_tree.py --topic $(TOPIC) $(if $(AGY_MODEL),--model $(AGY_MODEL),)

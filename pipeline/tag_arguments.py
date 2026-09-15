@@ -557,7 +557,7 @@ def main():
         help="pad naar een bestand met één argument-id per regel (# begint een commentaarregel); "
              "combineerbaar met --ids",
     )
-    parser.add_argument("--model", default="qwen/qwen3.6-27b")
+    parser.add_argument("--model", default="qwen/qwen3.8-27b")
     parser.add_argument("--base-url", default="http://localhost:1234/v1")
     parser.add_argument(
         "--api-key", default=None,
