@@ -364,7 +364,19 @@ def insert_llm_tags(conn, argument_id, tags):
     quote_fragment_status maakt hier expliciet of quote_fragment=NULL "hele
     quote" betekent (dit antwoord beoordeelde de tag en er is geen fragment
     van toepassing) of gewoon nog nooit beoordeeld is (quote_fragment_status
-    blijft dan NULL, zie fetch_quote_fragment_backfill_arguments())."""
+    blijft dan NULL, zie fetch_quote_fragment_backfill_arguments()).
+
+    Alleen (argument_id, tag_sleutel)-paren die in `tags` zitten worden
+    aangeraakt -- een pre-bestaande llm-tag die dit antwoord niet opnieuw
+    voorstelt (bv. een --backfill-quote-fragment-herrun waarbij het model
+    ditmaal een andere sleutel koos binnen dezelfde labelgroep) blijft
+    anders voor altijd quote_fragment_status IS NULL, ononderscheidbaar van
+    een tag die nooit is beoordeeld. Daarom worden na de upserts hierboven
+    ALLE resterende onopgeloste llm-tags van dit argument (niet alleen die
+    in `tags`) als 'niet_herbeoordeeld' gemarkeerd: dit antwoord heeft het
+    argument als geheel wél opnieuw beoordeeld, alleen niet elke afzonderlijke
+    oude tag. Bij een eerste (niet-backfill) tagging-pass zijn hier nooit
+    pre-bestaande rijen om te resolven, dus dan is dit een no-op."""
     now = datetime.now(timezone.utc).isoformat()
     for sleutel, reden, quote_fragment in tags:
         status = "fragment" if quote_fragment is not None else "hele_quote"
@@ -379,6 +391,11 @@ def insert_llm_tags(conn, argument_id, tags):
                  AND argument_tags.created_by = 'llm'""",
             (argument_id, sleutel, reden, quote_fragment, status, now),
         )
+    conn.execute(
+        """UPDATE argument_tags SET quote_fragment_status = 'niet_herbeoordeeld'
+           WHERE argument_id = ? AND created_by = 'llm' AND quote_fragment_status IS NULL""",
+        (argument_id,),
+    )
 
 
 def fetch_untagged_arguments(conn, topic_id, limit, min_id=0, vanaf=None, ids=None, recent_first=False):
@@ -442,11 +459,17 @@ def fetch_quote_fragment_backfill_arguments(conn, topic_id, limit, min_id=0, ids
     verwijdert of overschrijft nooit bestaande argument_tags-rijen.
 
     `quote_fragment_status` (i.p.v. simpelweg `quote_fragment IS NULL`)
-    maakt het verschil expliciet tussen "hele_quote" (dit antwoord IS al
-    beoordeeld, en er is legitiem geen fragment van toepassing -- zie
-    schema.sql) en "nooit beoordeeld" (blijft NULL): zonder die scheiding
-    zou een argument met een legitieme hele_quote-tag voor altijd
-    "kandidaat" blijven, ook na een geslaagde herrun."""
+    maakt drie gevallen expliciet uit elkaar (zie schema.sql): "hele_quote"
+    (dit antwoord IS beoordeeld, legitiem geen fragment van toepassing),
+    "niet_herbeoordeeld" (een pre-bestaande tag die een latere herrun niet
+    opnieuw voorstelde, dus wél al "klaar" maar zonder eigen fragmentoordeel
+    -- gezet door main()'s process_result() ná elke geslaagde
+    --backfill-quote-fragment-aanroep) en "nooit beoordeeld" (blijft NULL,
+    meestal getagd vóór issue #109). Alleen die laatste is nog een
+    kandidaat -- zonder dit onderscheid zou een argument met een hele_quote-
+    of niet_herbeoordeeld-tag voor altijd "kandidaat" blijven, ook na een
+    geslaagde herrun, en zou een volgende run het onnodig blijven hertaggen
+    zonder ooit te convergeren."""
     exists_clause = """EXISTS (
         SELECT 1 FROM argument_tags at
         WHERE at.argument_id = ar.id AND at.created_by = 'llm' AND at.quote_fragment_status IS NULL
