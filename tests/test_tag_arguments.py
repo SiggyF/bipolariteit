@@ -325,6 +325,36 @@ def test_insert_llm_tags_still_inserts_genuinely_new_tag():
     assert rows[0]["tag_sleutel"] == "Stijl-Metafoor"
 
 
+def test_insert_llm_tags_marks_pre_existing_unmentioned_tag_as_niet_herbeoordeeld():
+    # Regressie: als het model bij een herrun een andere sleutel binnen
+    # dezelfde labelgroep kiest (bv. Stijl-Metafoor i.p.v. het oude
+    # Stijl-Herhaling), moet de oude, niet-hernoemde tag niet voor altijd
+    # quote_fragment_status IS NULL blijven -- anders convergeert
+    # fetch_quote_fragment_backfill_arguments() nooit, ook al is het
+    # argument als geheel wel degelijk opnieuw beoordeeld.
+    conn = _seed_argument(_fresh_conn(), tagged_at="2026-01-01T00:00:00Z")
+    conn.execute(
+        """INSERT INTO argument_tags (argument_id, tag_sleutel, created_by, reden, quote_fragment, assigned_at)
+           VALUES (1, 'Stijl-Herhaling', 'llm', 'oude reden', NULL, '2025-01-01T00:00:00Z')"""
+    )
+
+    # De herrun stelt alleen Stijl-Metafoor voor -- Stijl-Herhaling komt niet
+    # meer terug in dit antwoord.
+    insert_llm_tags(conn, 1, [("Stijl-Metafoor", "nieuwe reden", "een fragment")])
+
+    rows = {row["tag_sleutel"]: dict(row) for row in conn.execute("SELECT * FROM argument_tags")}
+    assert len(rows) == 2
+    assert rows["Stijl-Metafoor"]["quote_fragment_status"] == "fragment"
+    herhaling = rows["Stijl-Herhaling"]
+    assert herhaling["quote_fragment_status"] == "niet_herbeoordeeld"
+    # De rij zelf (reden/quote_fragment) blijft ongemoeid -- alleen de status wordt opgelost.
+    assert herhaling["reden"] == "oude reden"
+    assert herhaling["quote_fragment"] is None
+
+    candidates = fetch_quote_fragment_backfill_arguments(conn, topic_id=1, limit=10)
+    assert candidates == []
+
+
 def test_fetch_quote_fragment_backfill_arguments_only_returns_tagged_arguments_missing_fragment():
     conn = _seed_argument(_fresh_conn(), tagged_at="2026-01-01T00:00:00Z")
     conn.execute(

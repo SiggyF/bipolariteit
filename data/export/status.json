@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-15T03:29:57+02:00",
+  "generated_at": "2026-09-15T08:19:56+02:00",
   "co2_estimate": {
     "energy_wh_per_1k_tokens_assumption": 0.3,
     "carbon_intensity_g_per_kwh": {
