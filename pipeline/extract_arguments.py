@@ -251,7 +251,7 @@ def main():
     parser.add_argument("--topic", required=True, help="topic-slug, bv. stikstof")
     parser.add_argument("--limit", type=int, default=15, help="max aantal documenten deze run (default 15)")
     parser.add_argument("--min-id", type=int, default=0, help="alleen documenten met id >= deze waarde")
-    parser.add_argument("--model", default="qwen/qwen3.6-27b")
+    parser.add_argument("--model", default="qwen/qwen3.8-27b")
     parser.add_argument("--base-url", default="http://localhost:1234/v1")
     parser.add_argument(
         "--api-key", default=None,

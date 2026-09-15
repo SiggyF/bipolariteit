@@ -169,3 +169,7 @@ CREATE TABLE IF NOT EXISTS llm_calls (
 );
 CREATE INDEX IF NOT EXISTS idx_llm_calls_topic_model ON llm_calls(topic_id, model);
 CREATE INDEX IF NOT EXISTS idx_llm_calls_stage ON llm_calls(stage);
+-- Voor de "is dit argument al gecheckt?"-lookup in pipeline/tag_single.py
+-- (NOT EXISTS tegen argument_id+stage+prompt_version+status) -- zonder deze
+-- index is dat een correlated subquery-scan van heel llm_calls per kandidaat.
+CREATE INDEX IF NOT EXISTS idx_llm_calls_argument_prompt ON llm_calls(argument_id, stage, prompt_version, status);
