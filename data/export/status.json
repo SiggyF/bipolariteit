@@ -1,15 +1,15 @@
 {
-  "generated_at": "2026-09-15T08:19:56+02:00",
+  "generated_at": "2026-09-15T23:37:52+02:00",
   "co2_estimate": {
     "energy_wh_per_1k_tokens_assumption": 0.3,
     "carbon_intensity_g_per_kwh": {
       "local": 0,
       "remote": 160
     },
-    "total_calls": 45393,
-    "total_tokens": 140350590,
-    "total_energy_kwh": 42.105177,
-    "total_co2_kg": 4.784694048,
+    "total_calls": 60524,
+    "total_tokens": 152489872,
+    "total_energy_kwh": 45.746961600000006,
+    "total_co2_kg": 5.367379584,
     "by_source": {
       "local": {
         "n_calls": 14833,
@@ -19,11 +19,11 @@
         "co2_g": 0.0
       },
       "remote": {
-        "n_calls": 30560,
-        "total_tokens": 99681126,
-        "n_calls_missing_tokens": 482,
-        "energy_kwh": 29.9043378,
-        "co2_g": 4784.694048
+        "n_calls": 45691,
+        "total_tokens": 111820408,
+        "n_calls_missing_tokens": 499,
+        "energy_kwh": 33.5461224,
+        "co2_g": 5367.379584
       }
     }
   },
@@ -71,13 +71,13 @@
         {
           "stage": "tagging",
           "model": "Qwen/Qwen3.8-27B:ovhcloud",
-          "n_calls": 2481,
-          "total_duration_s": 27303.606753403677,
-          "avg_duration_s": 11.005081319388825,
+          "n_calls": 4902,
+          "total_duration_s": 36052.96494680778,
+          "avg_duration_s": 7.354746011180697,
           "n_errors": 38,
-          "total_completion_tokens": 1659994,
+          "total_completion_tokens": 1708674,
           "first_call_at": "2026-09-12T19:08:21.419464+00:00",
-          "last_call_at": "2026-09-15T01:29:22.193432+00:00"
+          "last_call_at": "2026-09-15T20:12:44.126639+00:00"
         },
         {
           "stage": "tagging",
@@ -107,13 +107,13 @@
         {
           "stage": "tagging",
           "model": "Qwen/Qwen3.8-27B:ovhcloud",
-          "n_calls": 452,
-          "total_duration_s": 6911.423953746809,
-          "avg_duration_s": 15.290760959616835,
+          "n_calls": 891,
+          "total_duration_s": 9005.416057505397,
+          "avg_duration_s": 10.107088728962287,
           "n_errors": 10,
-          "total_completion_tokens": 315569,
+          "total_completion_tokens": 324349,
           "first_call_at": "2026-09-14T18:44:33.462497+00:00",
-          "last_call_at": "2026-09-14T19:02:57.336662+00:00"
+          "last_call_at": "2026-09-15T19:03:21.493096+00:00"
         },
         {
           "stage": "tagging",
@@ -195,13 +195,13 @@
         {
           "stage": "tagging",
           "model": "Qwen/Qwen3.8-27B:ovhcloud",
-          "n_calls": 5415,
-          "total_duration_s": 77165.90015527801,
-          "avg_duration_s": 14.250397073920224,
-          "n_errors": 155,
-          "total_completion_tokens": 3444437,
+          "n_calls": 9010,
+          "total_duration_s": 99419.04884570604,
+          "avg_duration_s": 11.034300648802002,
+          "n_errors": 172,
+          "total_completion_tokens": 3516596,
           "first_call_at": "2026-09-12T20:31:49.832773+00:00",
-          "last_call_at": "2026-09-14T22:29:47.902320+00:00"
+          "last_call_at": "2026-09-15T21:04:15.008987+00:00"
         },
         {
           "stage": "tagging",
@@ -305,13 +305,13 @@
         {
           "stage": "tagging",
           "model": "Qwen/Qwen3.8-27B:ovhcloud",
-          "n_calls": 9789,
-          "total_duration_s": 108015.33954208274,
-          "avg_duration_s": 11.034358927580216,
+          "n_calls": 15582,
+          "total_duration_s": 132373.44899739677,
+          "avg_duration_s": 8.495279745693542,
           "n_errors": 95,
-          "total_completion_tokens": 6199639,
+          "total_completion_tokens": 6315563,
           "first_call_at": "2026-09-12T17:10:37.778374+00:00",
-          "last_call_at": "2026-09-15T00:13:13.065470+00:00"
+          "last_call_at": "2026-09-15T20:29:45.168948+00:00"
         },
         {
           "stage": "tagging",
@@ -393,13 +393,13 @@
         {
           "stage": "tagging",
           "model": "Qwen/Qwen3.8-27B:ovhcloud",
-          "n_calls": 5742,
-          "total_duration_s": 60592.246350407215,
-          "avg_duration_s": 10.552463662557857,
+          "n_calls": 8625,
+          "total_duration_s": 80657.45550285478,
+          "avg_duration_s": 9.35158904380925,
           "n_errors": 68,
-          "total_completion_tokens": 3749024,
+          "total_completion_tokens": 3807705,
           "first_call_at": "2026-09-12T19:00:26.722001+00:00",
-          "last_call_at": "2026-09-15T01:03:18.104146+00:00"
+          "last_call_at": "2026-09-15T21:03:00.804921+00:00"
         }
       ]
     }
