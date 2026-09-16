@@ -161,3 +161,6 @@ docker/agy/gemini_config/
 .env.local
 .devcontainer/.env.local
 .devcontainer/gpg-pubkey.asc
+
+# Live-tagging PoC: overlay-tekstbestanden tijdens een lopende restream
+docs/poc/live-tagging/.run/
