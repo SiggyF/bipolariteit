@@ -101,6 +101,11 @@ data/export/plenair-map/*.pmtiles
 # willen -- coords ~20 MiB, cluster-label-input ~30 MiB.
 data/plenair-map/coords-*.json
 data/plenair-map/cluster-label-input-*.json
+# Werkbestand van scripts/rematch_cluster_label_anchors.py's analyse
+# (issue #291/#338): afgeleid van de -full-bestanden hierboven, niet de bron
+# van waarheid (dat is config/full/cluster_label_overrides.toml) -- lokaal
+# regenereerbaar, hoort niet in git.
+data/plenair-map/label-rematch-resultaat.csv
 # Idem: de Cosmograph-plot-HTML voor de volle dataset is met 50+ MiB veel
 # groter dan de overige, wel ingecheckte data/plenair-map/plot-<label>.html-
 # varianten (tot 16 MiB) -- niet meenemen in git.
@@ -120,6 +125,7 @@ data/export/plenair-map/*-full-grid.json
 data/export/plenair-map/*-grid-full.json
 data/export/plenair-map/plenair-map-grid.json
 data/plenair-map/*-full.geojson
+data/plenair-map/*-full-flat.geojson
 data/plenair-map/grid-*.json
 # Vangnet voor het vroegere vrij-getypte --export-suffix (bv. -full-v2):
 # pipeline/plenary_map/cluster.py en label_export.py staan sinds issue #316

@@ -2,8 +2,11 @@
 Pas clusterlabel-overrides en redundantie toe op plenair-map-clusters-full.json
 en re-exporteer de GeoJSON-bestanden voor de kaartvisualisatie.
 
-Gebruik:
-    uv run python scripts/apply_cluster_label_overrides.py
+Gebruik (voorbeeld voor de 8-jaar/"full"-clustering):
+    uv run python scripts/apply_cluster_label_overrides.py \
+        --config-path config/full/cluster_label_overrides.toml \
+        --clusters-json data/plenair-map/clusters-full.json \
+        --grid-json data/plenair-map/plenair-map-full-grid.json
 """
 
 import json
@@ -18,20 +21,26 @@ import click
 @click.option(
     "--config-path",
     type=click.Path(exists=True, path_type=Path),
-    default=Path("config/cluster_label_overrides.toml"),
-    help="Pad naar het TOML-configuratiebestand met overrides.",
+    required=True,
+    help="Pad naar het TOML-configuratiebestand met overrides -- "
+    "config/a0map/cluster_label_overrides.toml (1-jaar/A0-clustering) of "
+    "config/full/cluster_label_overrides.toml (8-jaar-clustering). Geen "
+    "default: de twee bestanden gebruiken hetzelfde (level, cluster_id)-"
+    "sleutelformaat voor twee verschillende datasets, dus een stilzwijgende "
+    "default zou op het verkeerde bestand kunnen matchen.",
 )
 @click.option(
     "--clusters-json",
     type=click.Path(exists=True, path_type=Path),
-    default=Path("data/export/a0-map/maps/plenair-map-clusters-full.json"),
-    help="Pad naar plenair-map-clusters-full.json.",
+    required=True,
+    help="Pad naar plenair-map-clusters-full.json, moet bij dezelfde dataset horen als --config-path.",
 )
 @click.option(
     "--grid-json",
     type=click.Path(path_type=Path),
-    default=Path("data/export/a0-map/maps/plenair-map-full-grid.json"),
-    help="Pad naar plenair-map-full-grid.json voor WGS84 GeoJSON export.",
+    required=True,
+    help="Pad naar plenair-map-full-grid.json voor WGS84 GeoJSON export, "
+    "moet bij dezelfde dataset horen als --config-path.",
 )
 @click.option(
     "--export-geojson/--no-export-geojson",
