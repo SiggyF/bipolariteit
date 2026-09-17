@@ -91,7 +91,12 @@
       }      
     }
   },
-  "postCreateCommand": "gpg --import .devcontainer/gpg-pubkey.asc && git config --global commit.gpgsign true && uv sync --all-groups && cd frontend && npx playwright install --with-deps chromium",
+  // gpg-pubkey.asc staat in .gitignore (elke gebruiker levert zijn eigen
+  // publieke sleutel aan) -- het bestand ontbreekt dus op een verse clone.
+  // Als het er niet is: alleen waarschuwen en commit.gpgsign uitlaten, in
+  // plaats van de hele keten (incl. uv sync/playwright install) te laten
+  // stuklopen op een missend bestand (zie issue #255).
+  "postCreateCommand": "if [ -f .devcontainer/gpg-pubkey.asc ]; then gpg --import .devcontainer/gpg-pubkey.asc && git config --global commit.gpgsign true; else echo 'WAARSCHUWING: .devcontainer/gpg-pubkey.asc ontbreekt -- commit.gpgsign blijft uit (zie issue #255)'; fi; uv sync --all-groups && cd frontend && npx playwright install --with-deps chromium",
   // Persistente dask-scheduler+worker op een vast adres/dashboardpoort, met
   // dask's eigen built-in CLI (`dask scheduler`/`dask worker`, zie `dask
   // --help` -- geen zelfgebouwde wrapper eromheen), zodat
