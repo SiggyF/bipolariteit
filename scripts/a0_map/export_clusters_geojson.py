@@ -138,6 +138,8 @@ def cluster_to_feature(cluster: dict, level: int, rescale) -> dict:
             "size": cluster["size"],
             "topic_breakdown": json.dumps(cluster.get("topic_breakdown", {}), ensure_ascii=False),
             "redundant_with_parent": cluster.get("redundant_with_parent", False),
+            "overlap_with_parent": cluster.get("overlap_with_parent"),
+            "max_overlap_with_parents": cluster.get("max_overlap_with_parents"),
         },
     }
 
