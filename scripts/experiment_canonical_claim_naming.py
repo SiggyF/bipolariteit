@@ -22,9 +22,11 @@ Gebruik:
 import argparse
 import json
 import re
+import time
 from pathlib import Path
 
 import numpy as np
+import requests
 
 from pipeline.embed.lmstudio import detect_base_url, embed_texts
 from pipeline.llm_client import call_llm
@@ -52,11 +54,20 @@ def name_cluster(cluster, topic_slug, base_url, model, reasoning_effort, timeout
         stance=cluster["stance"],
         quotes_json=json.dumps(cluster["member_texts"], ensure_ascii=False, indent=2),
     )
-    response = call_llm(base_url, model, prompt, reasoning_effort, timeout, max_tokens)
-    try:
-        return _extract_json(response.content)["canonical_claim"]
-    except (json.JSONDecodeError, KeyError) as exc:
-        raise ValueError(f"kon geen canonical_claim parsen uit LLM-respons (finish_reason={response.finish_reason!r}): {response.content!r}") from exc
+    # LM Studio's lokale engine loopt af en toe intern vast (bv. engine-
+    # protocol-timeout bij het wisselen tussen embed- en chatmodel op één
+    # host-GPU) -- geen data-/promptprobleem, dus een enkele retry volstaat.
+    last_exc = None
+    for attempt in range(3):
+        try:
+            response = call_llm(base_url, model, prompt, reasoning_effort, timeout, max_tokens)
+            return _extract_json(response.content)["canonical_claim"]
+        except requests.exceptions.HTTPError as exc:
+            last_exc = exc
+            time.sleep(2 * (attempt + 1))
+        except (json.JSONDecodeError, KeyError) as exc:
+            raise ValueError(f"kon geen canonical_claim parsen uit LLM-respons (finish_reason={response.finish_reason!r}): {response.content!r}") from exc
+    raise last_exc
 
 
 def fidelity_check(claim_vector, member_vectors, baseline):
