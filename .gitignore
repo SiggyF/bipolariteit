@@ -127,6 +127,12 @@ data/export/plenair-map/plenair-map-grid.json
 data/plenair-map/*-full.geojson
 data/plenair-map/*-full-flat.geojson
 data/plenair-map/grid-*.json
+# Gefitte UMAP-reducer (pipeline/plenary_map/umap.py --export-reducer):
+# optioneel, groot (comprimeerd nog altijd GiB's), hoort net als de overige
+# -full-varianten hierboven bij de Zenodo/Hugging Face-bundel
+# (make tiles-full/publish-zenodo), niet standaard lokaal nodig -- alleen
+# ophalen wanneer reducer.transform()/.inverse_transform() echt nodig is.
+data/plenair-map/umap-reducer-*.joblib
 # Vangnet voor het vroegere vrij-getypte --export-suffix (bv. -full-v2):
 # pipeline/plenary_map/cluster.py en label_export.py staan sinds issue #316
 # alleen nog '' of '-full' toe (een vrije versiesuffix liet oude generaties
