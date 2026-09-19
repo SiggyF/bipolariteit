@@ -5,7 +5,7 @@ draaien. Alleen nodig als een eerdere run zonder compress= is weggeschreven
 (zag ooit 10+ GiB ongecomprimeerd voor de volle dataset).
 
 Gebruik:
-    uv run python scripts/experiments/recompress_umap_reducer.py \
+    uv run python scripts/recompress_umap_reducer.py \
         data/plenair-map/umap-reducer-full.joblib
 """
 import argparse

@@ -18,7 +18,7 @@ kopie van de reducer of de trainingsvectoren), zodat het resultaat probleemloos
 overal verder geanalyseerd kan worden.
 
 Gebruik:
-    uv run python scripts/experiments/transform_arguments_into_umap.py \
+    uv run python scripts/transform_arguments_into_umap.py \
         --topic-slug abortus \
         --reducer-path data/plenair-map/umap-reducer-full.joblib \
         --plenair-map-export data/export/plenair-map/plenair-map-full.json \
