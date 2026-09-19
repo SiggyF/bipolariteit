@@ -76,10 +76,11 @@ embed: ## Plenaire-kaart-pijplijn stage 1 -- documenten embedden met bge-m3, inc
 		--start $(EMBED_START) --end $(EMBED_END) --label $(EMBED_LABEL) \
 		$(if $(EMBED_FULL_RANGE_TOPICS),--full-range-topics $(EMBED_FULL_RANGE_TOPICS),) --base-url $$url
 
-umap: ## Plenaire-kaart-pijplijn stage 2 -- UMAP op de embeddings (host-only qua geheugengebruik op de volle dataset, zie docs/handoff.md). Verwacht dat `make embed` al gedraaid is (volledige cache-hit, praat zelf niet met LM Studio). Schrijft alleen coördinaten weg voor `make cluster-plenary-map`. Vars: EMBED_START, EMBED_END, EMBED_LABEL
+umap: ## Plenaire-kaart-pijplijn stage 2 -- UMAP op de embeddings (host-only qua geheugengebruik op de volle dataset, zie docs/handoff.md). Verwacht dat `make embed` al gedraaid is (volledige cache-hit, praat zelf niet met LM Studio). Schrijft coördinaten weg voor `make cluster-plenary-map` én de gefitte reducer (joblib), zodat latere, losse punten (bv. argument-embeddings) via reducer.transform() in dezelfde ruimte geplaatst kunnen worden. Vars: EMBED_START, EMBED_END, EMBED_LABEL
 	uv run python -m pipeline.plenary_map.umap \
 		--start $(EMBED_START) --end $(EMBED_END) --label $(EMBED_LABEL) \
-		--export-coords data/plenair-map/coords-$(EMBED_LABEL).json
+		--export-coords data/plenair-map/coords-$(EMBED_LABEL).json \
+		--export-reducer data/plenair-map/umap-reducer-$(EMBED_LABEL).joblib
 
 cluster-plenary-map: ## Plenaire-kaart-pijplijn stage 3 -- hiërarchische clustering + TF-IDF-labels op de coördinaten van `make umap` (geen UMAP, geen LLM-call, dus overal draaibaar). Vars: EMBED_START, EMBED_END, EMBED_LABEL, CLUSTER_LEVEL_SIZES, EXPORT_SUFFIX
 	uv run python -m pipeline.plenary_map.cluster \
@@ -177,12 +178,15 @@ export-public-data: ## data/export/topics/*.json -> data/export/gepubliceerd/ (l
 tiles: ## data/export/plenair-map/plenair-map.json -> plenair-map.pmtiles (vector-tile-pyramide, morecantile-grid + dask, zie issue #215/#253) -- experimenteel alternatief renderpad, los van `export`
 	uv run python -m pipeline.tiling.build_pyramid
 
-tiles-full: ## Zelfde als `tiles`, maar op de volle-dataset-export (plenair-map-full.json -> data/export/plenair-map/bundel/plenair-map-full.pmtiles, zie issue #281) -- verwacht dat pipeline/plenary_map/cluster.py --export-suffix=-full al gedraaid is. Bundelt meteen de companion-bestanden voor `make publish-zenodo` in dezelfde map (zie docs/release.md)
+tiles-full: ## Zelfde als `tiles`, maar op de volle-dataset-export (plenair-map-full.json -> data/export/plenair-map/bundel/plenair-map-full.pmtiles, zie issue #281) -- verwacht dat pipeline/plenary_map/cluster.py --export-suffix=-full al gedraaid is. Bundelt meteen de companion-bestanden (incl. de UMAP-reducer, indien aanwezig) voor `make publish-zenodo` in dezelfde map (zie docs/release.md)
 	mkdir -p data/export/plenair-map/bundel
 	uv run python -m pipeline.tiling.build_pyramid \
 		--input data/export/plenair-map/plenair-map-full.json \
 		--out data/export/plenair-map/bundel/plenair-map-full.pmtiles
 	cp data/export/plenair-map/plenair-map-full.json data/export/plenair-map/plenair-map-clusters-full.json data/export/plenair-map/plenair-map-hierarchy-full.json data/export/plenair-map/bundel/
+	@if [ -f data/plenair-map/umap-reducer-full.joblib ]; then \
+		cp data/plenair-map/umap-reducer-full.joblib data/export/plenair-map/bundel/; \
+	fi
 
 publish-data: export-public-data ## Commit + push data/export/gepubliceerd/ (submodule) naar bipolariteit/bipolariteit-data, gefetcht via jsDelivr (zie docs/release.md). Los van een frontend-release, niet automatisch in CI
 	uv run python scripts/publish_data.py
