@@ -1,5 +1,5 @@
 """
-Vervolg op scripts/experiment_argument_vs_document_clustering.py (issue #253):
+Vervolg op scripts/experiments/experiment_argument_vs_document_clustering.py (issue #253):
 plaats argument-embeddings met de al-gefitte UMAP-reducer
 (pipeline/plenary_map/umap.py --export-reducer) in dezelfde 2D-ruimte als de
 gepubliceerde plenaire-kaart-coördinaten, i.p.v. een eigen, losse UMAP-fit.
@@ -18,7 +18,7 @@ kopie van de reducer of de trainingsvectoren), zodat het resultaat probleemloos
 overal verder geanalyseerd kan worden.
 
 Gebruik:
-    uv run python scripts/transform_arguments_into_umap.py \
+    uv run python scripts/experiments/transform_arguments_into_umap.py \
         --topic-slug abortus \
         --reducer-path data/plenair-map/umap-reducer-full.joblib \
         --plenair-map-export data/export/plenair-map/plenair-map-full.json \
@@ -27,22 +27,25 @@ Gebruik:
 import argparse
 import json
 import logging
+from pathlib import Path
 
 import joblib
 import numpy as np
+from shapely.geometry import Point, Polygon
 
 from pipeline.paths import REPO_ROOT
+from scripts.experiments.experiment_argument_vs_document_clustering import cache_path
 
 logging.basicConfig(level=logging.INFO, format="%(message)s")
 logger = logging.getLogger(__name__)
 
 
 def load_argument_cache(topic_slug):
-    path = REPO_ROOT / "data" / "embeddings" / f"text-embedding-bge-m3_{topic_slug}_argvsdoc.npz"
+    path = cache_path(topic_slug)
     if not path.exists():
         raise SystemExit(
             f"{path} niet gevonden -- draai eerst "
-            f"scripts/experiment_argument_vs_document_clustering.py --topic-slug {topic_slug} "
+            f"scripts/experiments/experiment_argument_vs_document_clustering.py --topic-slug {topic_slug} "
             "om de argument-embeddings te cachen"
         )
     data = np.load(path, allow_pickle=True)
@@ -63,27 +66,44 @@ def load_document_points(export_path, topic_slug):
 def load_cluster_lookup(clusters_export_path):
     with open(clusters_export_path) as f:
         clusters = json.load(f)
-    return {c["cluster_id"]: c for c in clusters["fine"]}
+    lookup = {}
+    for c in clusters["fine"]:
+        hull = c.get("hull")
+        polygon = Polygon(hull) if hull and len(hull) >= 3 else None
+        lookup[c["cluster_id"]] = {**c, "polygon": polygon}
+    return lookup
 
 
 def nearest_cluster(xy, cluster_lookup):
-    x, y = xy
-    best_id, best_dist = None, float("inf")
+    """Dichtstbijzijnde cluster op hull-**rand**afstand (shapely
+    Polygon.distance/.contains), niet op centroïde-afstand -- bij
+    onregelmatige/grote hulls wijst centroïde-afstand soms een heel ander
+    cluster aan dan waar het punt zich feitelijk bevindt (live gezien: punt
+    lag tegen de rand van cluster "D66" aan, maar centroïde-afstand wees
+    "Transparantie" aan, 12x verder weg qua randafstand)."""
+    pt = Point(xy)
+    best_id, best_dist, best_contains = None, float("inf"), False
     for cluster_id, cluster in cluster_lookup.items():
-        cx, cy = cluster["centroid"]
-        dist = ((x - cx) ** 2 + (y - cy) ** 2) ** 0.5
+        polygon = cluster["polygon"]
+        if polygon is not None:
+            dist = polygon.distance(pt)
+            contains = polygon.contains(pt)
+        else:
+            cx, cy = cluster["centroid"]
+            dist = pt.distance(Point(cx, cy))
+            contains = False
         if dist < best_dist:
-            best_id, best_dist = cluster_id, dist
-    return best_id, best_dist
+            best_id, best_dist, best_contains = cluster_id, dist, contains
+    return best_id, best_dist, best_contains
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--topic-slug", default="abortus")
-    parser.add_argument("--reducer-path", required=True)
-    parser.add_argument("--plenair-map-export", required=True, help="plenair-map(-full).json, voor document-punten")
-    parser.add_argument("--clusters-export", required=True, help="plenair-map-clusters(-full).json, voor cluster-centroids")
-    parser.add_argument("--out-path", default=None, help="pad voor het resultaatbestand (geojson)")
+    parser.add_argument("--reducer-path", required=True, type=Path)
+    parser.add_argument("--plenair-map-export", required=True, type=Path, help="plenair-map(-full).json, voor document-punten")
+    parser.add_argument("--clusters-export", required=True, type=Path, help="plenair-map-clusters(-full).json, voor cluster-hulls")
+    parser.add_argument("--out-path", default=None, type=Path, help="pad voor het resultaatbestand (geojson)")
     args = parser.parse_args()
 
     ids, document_ids, vectors, texts, meta = load_argument_cache(args.topic_slug)
@@ -103,7 +123,7 @@ def main():
     same_cluster_flags = []
     for arg_id, doc_id, (x, y), text, meta_str in zip(ids, document_ids, coords, texts, meta):
         doc_point = document_points.get(int(doc_id))
-        nearest_id, nearest_dist = nearest_cluster((x, y), cluster_lookup)
+        nearest_id, nearest_dist, in_hull = nearest_cluster((x, y), cluster_lookup)
 
         own_dist = None
         same_cluster = None
@@ -124,6 +144,7 @@ def main():
                     "nearest_cluster_id": int(nearest_id) if nearest_id is not None else None,
                     "nearest_cluster_name": cluster_lookup[nearest_id]["name"] if nearest_id is not None else None,
                     "nearest_cluster_distance": round(float(nearest_dist), 4),
+                    "in_nearest_cluster_hull": bool(in_hull),
                     "document_cluster_id": int(doc_point["cluster"]) if doc_point else None,
                     "distance_to_own_document": round(own_dist, 4) if own_dist is not None else None,
                     "lands_in_own_document_cluster": same_cluster,
@@ -144,8 +165,11 @@ def main():
             "aandeel argumenten dat na transform in hetzelfde fine-cluster valt als het eigen brondocument: %.1f%% (n=%d)",
             rate * 100, len(same_cluster_flags),
         )
+    in_hull_rate = float(np.mean([f["properties"]["in_nearest_cluster_hull"] for f in features]))
+    logger.info("aandeel argumenten binnen een cluster-hull (niet alleen dichtstbij): %.1f%%", in_hull_rate * 100)
 
-    out_path = args.out_path or str(REPO_ROOT / "docs" / "research" / f"argument-transform-{args.topic_slug}.geojson")
+    out_path = args.out_path or REPO_ROOT / "docs" / "research" / f"argument-transform-{args.topic_slug}.geojson"
+    out_path.parent.mkdir(parents=True, exist_ok=True)
     with open(out_path, "w") as f:
         json.dump({"type": "FeatureCollection", "features": features}, f)
     logger.info("resultaat geschreven naar %s", out_path)

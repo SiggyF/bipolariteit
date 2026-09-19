@@ -20,11 +20,12 @@ data/embeddings/ (gitignored, regenereerbaar), net als
 scripts/experiment_find_similar_arguments.py.
 
 Gebruik:
-    uv run python scripts/experiment_argument_vs_document_clustering.py --topic-slug abortus
+    uv run python scripts/experiments/experiment_argument_vs_document_clustering.py --topic-slug abortus
 """
 import argparse
 import json
 import logging
+from pathlib import Path
 
 import numpy as np
 from sklearn.cluster import HDBSCAN
@@ -269,10 +270,10 @@ def main():
     parser.add_argument("--min-cluster-size", type=int, default=5)
     parser.add_argument("--refresh", action="store_true", help="embedding-cache negeren en opnieuw berekenen")
     parser.add_argument("--base-url", default=None, help="LM Studio base URL; standaard auto-detect")
-    parser.add_argument("--plenair-map-export", default=PLENAIR_MAP_EXPORT, type=type(PLENAIR_MAP_EXPORT))
+    parser.add_argument("--plenair-map-export", default=PLENAIR_MAP_EXPORT, type=Path)
     parser.add_argument("--top-n-examples", type=int, default=8)
     parser.add_argument("--seed", type=int, default=42)
-    parser.add_argument("--report-path", default=REPORT_PATH, type=type(REPORT_PATH))
+    parser.add_argument("--report-path", default=REPORT_PATH, type=Path)
     args = parser.parse_args()
 
     base_url = detect_base_url(args.base_url)
