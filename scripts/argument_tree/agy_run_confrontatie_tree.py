@@ -82,8 +82,8 @@ data/export/argument-trees/agy_confrontatie_tree.log, zodat een eventuele permis
 z'n precieze toolnaam niet kwijtraakt in een teruggeknipte terminalregel.
 
 Gebruik:
-    PYTHONPATH=. uv run python scripts/agy_run_confrontatie_tree.py --topic stikstof
-    PYTHONPATH=. uv run python scripts/agy_run_confrontatie_tree.py --topic stikstof --model gemini-3.6-flash-medium
+    PYTHONPATH=. uv run python scripts/argument_tree/agy_run_confrontatie_tree.py --topic stikstof
+    PYTHONPATH=. uv run python scripts/argument_tree/agy_run_confrontatie_tree.py --topic stikstof --model gemini-3.6-flash-medium
 """
 
 import argparse
@@ -106,12 +106,12 @@ from pipeline.periodes import PeriodeIndex
 
 logger = logging.getLogger(__name__)
 
-STRUCTURE_PROMPT_PATH = Path(__file__).parent.parent / "pipeline" / "prompts" / "argument_tree_gemini.md"
-REBUTTAL_PROMPT_PATH = Path(__file__).parent.parent / "pipeline" / "prompts" / "boomredactie_rebuttal_detection.md"
-SUPPORT_PROMPT_PATH = Path(__file__).parent.parent / "pipeline" / "prompts" / "boomredactie_support_check.md"
-TREE_SCHEMA_PATH = Path(__file__).parent.parent / "pipeline" / "schemas" / "argument_tree.schema.json"
-GEMINI_TREE_DIR = Path(__file__).parent.parent / "data" / "export" / "argument-docs"
-LOG_PATH = Path(__file__).parent.parent / "data" / "export" / "argument-trees" / "agy_confrontatie_tree.log"
+STRUCTURE_PROMPT_PATH = Path(__file__).parent.parent.parent / "pipeline" / "prompts" / "argument_tree_gemini.md"
+REBUTTAL_PROMPT_PATH = Path(__file__).parent.parent.parent / "pipeline" / "prompts" / "boomredactie_rebuttal_detection.md"
+SUPPORT_PROMPT_PATH = Path(__file__).parent.parent.parent / "pipeline" / "prompts" / "boomredactie_support_check.md"
+TREE_SCHEMA_PATH = Path(__file__).parent.parent.parent / "pipeline" / "schemas" / "argument_tree.schema.json"
+GEMINI_TREE_DIR = Path(__file__).parent.parent.parent / "data" / "export" / "argument-docs"
+LOG_PATH = Path(__file__).parent.parent.parent / "data" / "export" / "argument-trees" / "agy_confrontatie_tree.log"
 
 # Buiten de repo (bevat een live OAuth-token, nooit in een git-repo laten
 # staan) -- zelfde sessie als scripts/agy_run_extraction_batch.py. Als

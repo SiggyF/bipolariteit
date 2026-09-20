@@ -76,7 +76,7 @@ geïntegreerd:
   Opvangrichtlijn-naleving, opvang van Oekraïense ontheemden, statushouders
   in hotels -- elk cluster bevat zowel voor- als tegenstanders die
   inhoudelijk over precies hetzelfde deelpunt spreken.
-- **`scripts/experiment_find_similar_arguments.py`**: rechtstreekse
+- **`scripts/argument_tree/experiment_find_similar_arguments.py`**: rechtstreekse
   cosine-similarity-zoekopdracht op dezelfde bge-m3-vectoren (geen UMAP
   nodig, dat is alleen voor 2D-plotten), met de vectoren lokaal gecached in
   `data/embeddings/*.npz` (gitignored, regenereerbaar) zodat een herhaalde
@@ -205,6 +205,6 @@ Gemini-promptvariant naast `pipeline/prompts/argument_tree_gemini.md` voor
 "vul deze specifieke deelverzameling argumenten aan de bestaande boom toe"
 i.p.v. de huidige "bouw de hele boom vanaf nul"-opzet. Referentiemateriaal:
 `docs/poc/umap-argumenten/` (script, plots, eerdere bevindingen),
-`scripts/experiment_find_similar_arguments.py` (cosine-similarity-zoekfunctie
+`scripts/argument_tree/experiment_find_similar_arguments.py` (cosine-similarity-zoekfunctie
 + cache), `data/embeddings/` (gecachete bge-m3-vectoren per topic, lokaal,
 niet gecommit).

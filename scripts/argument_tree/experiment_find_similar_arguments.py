@@ -12,13 +12,13 @@ opnieuw naar LM Studio hoeft.
 
 Gebruik:
     # embeddings (her)berekenen en cachen voor een topic
-    uv run python scripts/experiment_find_similar_arguments.py --topic-slug abortus --refresh
+    uv run python scripts/argument_tree/experiment_find_similar_arguments.py --topic-slug abortus --refresh
 
     # dichtstbijzijnde argumenten opzoeken bij een bestaand argument-id
-    uv run python scripts/experiment_find_similar_arguments.py --topic-slug abortus --argument-id 1707
+    uv run python scripts/argument_tree/experiment_find_similar_arguments.py --topic-slug abortus --argument-id 1707
 
     # of bij losse tekst (bv. een nieuw citaat, nog niet in de database)
-    uv run python scripts/experiment_find_similar_arguments.py --topic-slug abortus --text "..."
+    uv run python scripts/argument_tree/experiment_find_similar_arguments.py --topic-slug abortus --text "..."
 """
 import argparse
 

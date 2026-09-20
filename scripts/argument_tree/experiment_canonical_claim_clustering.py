@@ -2,7 +2,7 @@
 Stap 1 voor issue #254 (canonieke KPA-achtige clustering, RFC-fase 1, #175):
 groepeer quotes binnen één topic en dezelfde stance tot canonieke stellingen,
 op basis van cosine-afstand tussen bge-m3-embeddings (zelfde route als
-scripts/experiment_find_similar_arguments.py, hergebruikt hier -- cache in
+scripts/argument_tree/experiment_find_similar_arguments.py, hergebruikt hier -- cache in
 data/embeddings/ wordt gedeeld).
 
 Puur embedding-clustering, GEEN LLM-call: het #253-onderzoek
@@ -29,8 +29,8 @@ Verificatie (zie --report, staat aan by default):
   het #253-onderzoek
 
 Gebruik:
-    uv run python scripts/experiment_canonical_claim_clustering.py --topic-slug abortus
-    uv run python scripts/experiment_canonical_claim_clustering.py --topic-slug abortus --threshold 0.2 --examples 5
+    uv run python scripts/argument_tree/experiment_canonical_claim_clustering.py --topic-slug abortus
+    uv run python scripts/argument_tree/experiment_canonical_claim_clustering.py --topic-slug abortus --threshold 0.2 --examples 5
 """
 import argparse
 
@@ -38,7 +38,7 @@ import numpy as np
 from sklearn.cluster import AgglomerativeClustering
 
 from pipeline.embed.lmstudio import detect_base_url
-from scripts.experiment_find_similar_arguments import build_cache, cache_path, load_cache
+from scripts.argument_tree.experiment_find_similar_arguments import build_cache, cache_path, load_cache
 
 DEFAULT_DISTANCE_THRESHOLD = 0.2  # cosine-afstand (1 - sim); sim >= 0.8 om samen te voegen
 

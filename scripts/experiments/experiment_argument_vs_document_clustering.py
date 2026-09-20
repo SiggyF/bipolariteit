@@ -17,7 +17,7 @@ een eerste antwoord op de vraag.
 
 Niet geïntegreerd in de pipeline. Embeddings worden lokaal gecached in
 data/embeddings/ (gitignored, regenereerbaar), net als
-scripts/experiment_find_similar_arguments.py.
+scripts/argument_tree/experiment_find_similar_arguments.py.
 
 Gebruik:
     uv run python scripts/experiments/experiment_argument_vs_document_clustering.py --topic-slug abortus

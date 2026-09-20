@@ -30,7 +30,7 @@ engageert niet aantoonbaar met de kern van het target-argument) verdwijnt
 uit de boom -- geen weak_link-tussenvorm meer, want er is geen onenigheid
 meer om te meten, alleen een feitelijke ja/nee-constatering per relatie.
 
-Zie scripts/agy_run_confrontatie_tree.py voor de orkestratie (1 structureer-
+Zie scripts/argument_tree/agy_run_confrontatie_tree.py voor de orkestratie (1 structureer-
 call + N losse redactiechecks + validatie).
 """
 

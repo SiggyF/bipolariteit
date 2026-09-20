@@ -1,6 +1,6 @@
 """
 Stap 2 voor issue #254 (canonieke KPA-achtige clustering, RFC-fase 1, #175):
-geef elk samengevoegd cluster uit scripts/experiment_canonical_claim_clustering.py
+geef elk samengevoegd cluster uit scripts/argument_tree/experiment_canonical_claim_clustering.py
 een canonieke stelling, via één geïsoleerde LLM-call per cluster (niet
 gebatcht -- minder onderlinge leakage, zelfde aanpak als de #252-redactiestap,
 zie pipeline/confrontatie_tree.py). Puur samenvattend ("wat is de gedeelde
@@ -17,7 +17,7 @@ Verificatie (zie --report, staat aan by default):
   handmatige steekproef.
 
 Gebruik:
-    uv run python scripts/experiment_canonical_claim_naming.py --topic-slug abortus
+    uv run python scripts/argument_tree/experiment_canonical_claim_naming.py --topic-slug abortus
 """
 import argparse
 import json
@@ -28,14 +28,14 @@ import numpy as np
 
 from pipeline.embed.lmstudio import detect_base_url, embed_texts
 from pipeline.llm_client import call_llm
-from scripts.experiment_canonical_claim_clustering import (
+from scripts.argument_tree.experiment_canonical_claim_clustering import (
     DEFAULT_DISTANCE_THRESHOLD,
     build_canonical_clusters,
     random_pair_baseline,
 )
-from scripts.experiment_find_similar_arguments import MODEL, build_cache, cache_path, load_cache
+from scripts.argument_tree.experiment_find_similar_arguments import MODEL, build_cache, cache_path, load_cache
 
-PROMPT_TEMPLATE = (Path(__file__).parent.parent / "pipeline" / "prompts" / "canonical_claim.md").read_text()
+PROMPT_TEMPLATE = (Path(__file__).parent.parent.parent / "pipeline" / "prompts" / "canonical_claim.md").read_text()
 _JSON_FENCE_RE = re.compile(r"```(?:json)?\s*(.*?)\s*```", re.DOTALL)
 
 

@@ -1,6 +1,6 @@
 """
 Argumentexport voor de structureringsstap (pipeline/prompts/argument_tree_gemini.md,
-zie scripts/agy_run_confrontatie_tree.py): dumpt alle pro/contra-argumenten
+zie scripts/argument_tree/agy_run_confrontatie_tree.py): dumpt alle pro/contra-argumenten
 van één topic (met typologie, tags, onderbouwende claims) als leesbaar
 markdown-document.
 

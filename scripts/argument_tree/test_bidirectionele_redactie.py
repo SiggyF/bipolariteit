@@ -9,7 +9,7 @@ pro/contra-rolversie die label-gedreven bleek te oordelen -- zie
 sessie-overleg).
 
 Gebruik:
-    PYTHONPATH=. uv run python scripts/test_bidirectionele_redactie.py
+    PYTHONPATH=. uv run python scripts/argument_tree/test_bidirectionele_redactie.py
 """
 
 import json
@@ -17,13 +17,13 @@ import logging
 from pathlib import Path
 
 from pipeline.confrontatie_tree import merge_review_neutraal
-from scripts.agy_run_confrontatie_tree import DEFAULT_MODEL, REDACTIE_PROMPT_PATH, run_agy_prompt
+from scripts.argument_tree.agy_run_confrontatie_tree import DEFAULT_MODEL, REDACTIE_PROMPT_PATH, run_agy_prompt
 from pipeline.extract_arguments import _extract_json
 
 logger = logging.getLogger(__name__)
 
-STRUCTURED_PATH = Path(__file__).parent.parent / "data" / "export" / "argument-docs" / "stikstof-structured-only.json"
-OUT_PATH = Path(__file__).parent.parent / "data" / "export" / "argument-docs" / "stikstof-neutraal-test.json"
+STRUCTURED_PATH = Path(__file__).parent.parent.parent / "data" / "export" / "argument-docs" / "stikstof-structured-only.json"
+OUT_PATH = Path(__file__).parent.parent.parent / "data" / "export" / "argument-docs" / "stikstof-neutraal-test.json"
 
 
 def run_neutrale_redactie(structured, topic_name, model, timeout):

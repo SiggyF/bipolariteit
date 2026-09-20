@@ -15,7 +15,7 @@ dus vrijwel niets om samen te voegen. Dit script voegt daarom samen VÓÓR
 Gemini het document ziet, zodat Gemini kiest tussen canonieke stellingen
 (met zichtbaar partijgewicht) i.p.v. tussen losse, deels overlappende quotes.
 
-NOG NIET gewired in scripts/agy_run_confrontatie_tree.py of
+NOG NIET gewired in scripts/argument_tree/agy_run_confrontatie_tree.py of
 pipeline/prompts/argument_tree_gemini.md -- dit is de losse, verifieerbare
 bouwsteen; wiring is een aparte, kleinere stap zodra dit document zelf
 gecontroleerd is.
@@ -27,8 +27,8 @@ Verificatie (zie --report, staat aan by default):
   dit ooit een Gemini-call kost
 
 Gebruik:
-    uv run python scripts/experiment_canonical_claim_document.py --topic stikstof
-    uv run python scripts/experiment_canonical_claim_document.py --topic stikstof \
+    uv run python scripts/argument_tree/experiment_canonical_claim_document.py --topic stikstof
+    uv run python scripts/argument_tree/experiment_canonical_claim_document.py --topic stikstof \
         --model qwen/qwen3.8-27b --out /tmp/stikstof-canoniek.md
 """
 import argparse
@@ -38,11 +38,11 @@ from pipeline.db import db
 from pipeline.embed.lmstudio import detect_base_url, embed_texts
 from pipeline.export_argument_doc import STANCE_LABELS, VALID_STANCES, _format_argument, fetch_stance_arguments
 from pipeline.periodes import PeriodeIndex
-from scripts.experiment_canonical_claim_clustering import DEFAULT_DISTANCE_THRESHOLD, build_canonical_clusters
-from scripts.experiment_canonical_claim_naming import name_cluster
-from scripts.experiment_find_similar_arguments import MODEL as EMBED_MODEL
+from scripts.argument_tree.experiment_canonical_claim_clustering import DEFAULT_DISTANCE_THRESHOLD, build_canonical_clusters
+from scripts.argument_tree.experiment_canonical_claim_naming import name_cluster
+from scripts.argument_tree.experiment_find_similar_arguments import MODEL as EMBED_MODEL
 
-DOC_EXPORT_DIR = Path(__file__).parent.parent / "data" / "export" / "argument-docs"
+DOC_EXPORT_DIR = Path(__file__).parent.parent.parent / "data" / "export" / "argument-docs"
 
 
 def cluster_by_stance(arguments, stance, base_url, distance_threshold):
