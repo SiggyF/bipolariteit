@@ -100,9 +100,12 @@ from jsonschema import Draft202012Validator, ValidationError
 
 from pipeline.confrontatie_tree import merge_engagement_checks
 from pipeline.db import db
+from pipeline.embed.lmstudio import detect_base_url
 from pipeline.export_argument_doc import build_document, fetch_stance_arguments
 from pipeline.extract_arguments import _extract_json
 from pipeline.periodes import PeriodeIndex
+from scripts.argument_tree.experiment_canonical_claim_clustering import DEFAULT_DISTANCE_THRESHOLD
+from scripts.argument_tree.experiment_canonical_claim_document import build_canonical_document, build_canonical_document_text
 
 logger = logging.getLogger(__name__)
 
@@ -349,11 +352,27 @@ def _parse_or_die(stdout, stderr, label):
         )
 
 
-def build_prompt(conn, topic_row, stances, vanaf):
+def build_prompt(conn, topic_row, stances, vanaf, canonical=False, canonical_model=None,
+                  canonical_threshold=DEFAULT_DISTANCE_THRESHOLD, canonical_reasoning_effort="none",
+                  canonical_timeout=60, canonical_max_tokens=500):
+    """`canonical=True` (issue #254): bijna-duplicaatquotes per topic/stance
+    zijn dan al vooraf samengevoegd tot canonieke stellingen (zie
+    scripts/argument_tree/experiment_canonical_claim_document.py) voordat
+    Gemini het document ziet -- de naamgeving van elk cluster is een losse
+    LM Studio-call (geen agy-credits nodig), alleen de structureringsstap
+    hierna gaat naar Gemini/agy."""
     stances_by_name = {
         stance: fetch_stance_arguments(conn, topic_row["id"], stance, vanaf, limit=None) for stance in stances
     }
-    document = build_document(topic_row, stances_by_name)
+    if canonical:
+        base_url = detect_base_url(None)
+        entries_by_stance, _stats = build_canonical_document(
+            topic_row, stances_by_name, base_url, canonical_model, canonical_threshold,
+            canonical_reasoning_effort, canonical_timeout, canonical_max_tokens,
+        )
+        document = build_canonical_document_text(topic_row, entries_by_stance)
+    else:
+        document = build_document(topic_row, stances_by_name)
     instructions = STRUCTURE_PROMPT_PATH.read_text().format(topic=topic_row["name"])
     total = sum(len(v) for v in stances_by_name.values())
     return document, instructions, total
@@ -406,6 +425,13 @@ def main():
         help="voeg --dangerously-skip-permissions toe aan agy -- alleen als laatste redmiddel, zie run_agy()",
     )
     parser.add_argument("--dry-run", action="store_true", help="alleen de opgebouwde prompt printen, geen agy-call")
+    parser.add_argument(
+        "--canonical", action="store_true",
+        help="issue #254: bijna-duplicaatquotes per stance vooraf samenvoegen tot canonieke stellingen "
+             "(lokale LM Studio-call, geen agy-credits nodig) vóórdat Gemini het document ziet",
+    )
+    parser.add_argument("--canonical-model", default="qwen/qwen3.8-27b", help="LM Studio-model voor het benoemen van clusters (alleen met --canonical)")
+    parser.add_argument("--canonical-threshold", type=float, default=DEFAULT_DISTANCE_THRESHOLD, help="clusterdrempel (alleen met --canonical)")
     args = parser.parse_args()
 
     stances = [s.strip() for s in args.stances.split(",") if s.strip()]
@@ -416,7 +442,10 @@ def main():
         raise SystemExit(f"onbekende topic-slug: {args.topic}")
 
     vanaf = args.vanaf if args.vanaf is not None else PeriodeIndex().drempel
-    document, instructions, total_args = build_prompt(conn, topic_row, stances, vanaf)
+    document, instructions, total_args = build_prompt(
+        conn, topic_row, stances, vanaf, canonical=args.canonical,
+        canonical_model=args.canonical_model, canonical_threshold=args.canonical_threshold,
+    )
     conn.close()
 
     logger.info(

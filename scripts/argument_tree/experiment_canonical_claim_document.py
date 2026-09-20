@@ -32,6 +32,7 @@ Gebruik:
         --model qwen/qwen3.8-27b --out /tmp/stikstof-canoniek.md
 """
 import argparse
+from datetime import datetime, timezone
 from pathlib import Path
 
 from pipeline.db import db
@@ -103,6 +104,39 @@ def build_canonical_document(topic_row, stances_by_name, base_url, model, distan
     return entries_by_stance, stats
 
 
+def build_canonical_document_text(topic_row, entries_by_stance):
+    """Zelfde documentkop als pipeline/export_argument_doc.py::build_document
+    (inclusief de 'Pro/contra-dimensie van dit onderwerp'-sectie waar
+    pipeline/prompts/argument_tree_gemini.md naar verwijst) -- alleen de
+    argumentsecties zelf zijn hier de al-samengevoegde canonieke entries
+    i.p.v. losse per-argument entries. Zo kan dit document 1-op-1 de plek
+    van het gewone document innemen in de structureringsstap."""
+    slug, name = topic_row["slug"], topic_row["name"]
+    total = sum(len(entries) for entries in entries_by_stance.values())
+    lines = [
+        f"# Argumentexport: {name} ({slug})",
+        "",
+        f"Gegenereerd: {datetime.now(timezone.utc).isoformat()}",
+        f"Totaal aantal entries (na samenvoegen van bijna-duplicaten): {total}",
+        "",
+        "## Pro/contra-dimensie van dit onderwerp",
+        "",
+        topic_row["description"] or "(geen description ingesteld voor dit topic)",
+        "",
+        "**Voorbehoud:** de stance (pro/contra) hieronder komt uit een eerdere, "
+        "niet-foutloze automatische classificatie -- vertrouw er niet blind op, "
+        "het citaat zelf is leidend.",
+        "",
+    ]
+    for stance, entries in entries_by_stance.items():
+        lines.append(f"## {STANCE_LABELS[stance]} ({len(entries)})")
+        lines.append("")
+        for entry in entries:
+            lines.append(entry)
+            lines.append("")
+    return "\n".join(lines)
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--topic", required=True)
@@ -152,13 +186,7 @@ def main():
                 shown += 1
 
     if args.out:
-        lines = [f"# Canoniek argumentexport: {topic_row['name']} ({topic_row['slug']})", ""]
-        for stance in stances:
-            lines.append(f"## {STANCE_LABELS[stance]} ({len(entries_by_stance[stance])} entries)")
-            lines.append("")
-            lines.extend(entries_by_stance[stance])
-            lines.append("")
-        Path(args.out).write_text("\n".join(lines))
+        Path(args.out).write_text(build_canonical_document_text(topic_row, entries_by_stance))
         print(f"\nweggeschreven naar {args.out}")
 
 

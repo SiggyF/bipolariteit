@@ -127,7 +127,7 @@ weg):
     {{"argument_id": 103, "gist": "Biologische boeren niet rendabel", "samenvatting": null}}
   ],
   "relations": [
-    {{"relation_type": "support", "premise_argument_ids": [45], "target_argument_id": 12, "scheme": null}},
+    {{"relation_type": "support", "premise_argument_ids": [45], "target_argument_id": 12, "thema": null, "scheme": null}},
     {{"relation_type": "conflict", "premise_argument_ids": [47], "target_argument_id": 12,
       "thema": "Moet vergunningverlening voorrang krijgen boven de gevolgen voor boeren?", "scheme": null}}
   ],
