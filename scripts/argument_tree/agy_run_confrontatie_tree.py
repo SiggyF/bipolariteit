@@ -432,6 +432,14 @@ def main():
     )
     parser.add_argument("--canonical-model", default="qwen/qwen3.8-27b", help="LM Studio-model voor het benoemen van clusters (alleen met --canonical)")
     parser.add_argument("--canonical-threshold", type=float, default=DEFAULT_DISTANCE_THRESHOLD, help="clusterdrempel (alleen met --canonical)")
+    parser.add_argument(
+        "--canonical-reasoning-effort", default="none",
+        help="LM Studio reasoning_effort voor het benoemen van clusters (alleen met --canonical; default 'none' -- "
+             "zet enable_thinking uit voor de default --canonical-model qwen/qwen3.8-27b, ondanks de LM Studio-"
+             "warning over het genegeerde modelspecifieke veld (onschuldig, zie "
+             "scripts/argument_tree/experiment_canonical_claim_document.py). 'low' laat denken juist aan staan en "
+             "liep daardoor vast op max_tokens.)",
+    )
     args = parser.parse_args()
 
     stances = [s.strip() for s in args.stances.split(",") if s.strip()]
@@ -445,6 +453,7 @@ def main():
     document, instructions, total_args = build_prompt(
         conn, topic_row, stances, vanaf, canonical=args.canonical,
         canonical_model=args.canonical_model, canonical_threshold=args.canonical_threshold,
+        canonical_reasoning_effort=args.canonical_reasoning_effort,
     )
     conn.close()
 

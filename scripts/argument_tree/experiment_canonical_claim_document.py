@@ -144,7 +144,14 @@ def main():
     parser.add_argument("--vanaf", default=None)
     parser.add_argument("--threshold", type=float, default=DEFAULT_DISTANCE_THRESHOLD)
     parser.add_argument("--model", default="qwen/qwen3.8-27b", help="chat-model voor het benoemen van clusters")
-    parser.add_argument("--reasoning-effort", default="none")
+    parser.add_argument("--reasoning-effort", default="none",
+                         help="LM Studio reasoning_effort ('none' default -- Qwen3's eigen chat-template "
+                              "(zie qwen3.8-27b/chat_template.jinja) laat reasoning_effort alleen meetellen als "
+                              "enable_thinking niet expliciet false is; LM Studio's 'none' zet enable_thinking op "
+                              "false (denken helemaal uit), 'low' laat denken juist aan staan met een 'houd het kort'"
+                              "-instructie in het think-blok -- dat kost dus WEL tokens en liep vast op max_tokens. "
+                              "De LM Studio-warning over het genegeerde modelspecifieke veld is daarmee onschuldig: "
+                              "thinking staat al op het niveau van enable_thinking uit)")
     parser.add_argument("--timeout", type=int, default=60)
     parser.add_argument("--max-tokens", type=int, default=500)
     parser.add_argument("--base-url", default=None)
