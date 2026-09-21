@@ -445,14 +445,6 @@ h3 {
 	border-bottom: 1px solid var(--color-border);
 }
 
-/* Op de homepage volgt het motto direct op de intro -- dan zou de eigen
-   onder-rand van .intro vlak boven de boven-rand van .motto komen te staan
-   (twee lijnen kort na elkaar). De rand van .motto is dan al genoeg. */
-.intro:has(+ .motto) {
-	padding-bottom: 0;
-	border-bottom: none;
-}
-
 .topic-header {
 	max-width: 70ch;
 	margin: 0 0 var(--space-4);
@@ -595,15 +587,6 @@ h3 {
 	padding: var(--space-2) 0;
 	border-top: 1px solid var(--color-border);
 	border-bottom: 1px solid var(--color-border);
-}
-
-/* Op de homepage is het motto het laatste element op de pagina -- de
-   onderrand-marge is daar dan gestapelde witruimte bovenop main's eigen
-   padding-bottom (main.css), en oogt te groot. Op de "Over"-pagina staat het
-   motto wel middenin de tekst, dus die basisstijl hierboven blijft daar
-   ongewijzigd. */
-.home-intro .motto {
-	margin-bottom: 0;
 }
 
 .back-link {
