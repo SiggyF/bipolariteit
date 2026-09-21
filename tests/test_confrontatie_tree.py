@@ -2,7 +2,7 @@ import json
 
 from jsonschema import Draft202012Validator
 
-from pipeline.confrontatie_tree import merge_engagement_checks
+from pipeline.confrontatie_tree import drop_degenerate_coordinatieve_groepen, merge_engagement_checks
 from pipeline.paths import REPO_ROOT
 
 SCHEMA = json.loads((REPO_ROOT / "pipeline" / "schemas" / "argument_tree.schema.json").read_text())
@@ -90,6 +90,41 @@ def test_scheme_falls_back_to_structuring_step_when_check_gives_none():
 
     conflict_relation = next(r for r in result["relations"] if r["relation_type"] == "conflict")
     assert conflict_relation["scheme"] == "direct_rebuttal"
+
+
+def test_drop_degenerate_coordinatieve_groepen_removes_single_member_groups():
+    structured = _structured()
+    structured["coordinatieve_groepen"] = [
+        {"label": "geldige groep", "samenvatting": None, "argument_ids": [159, 163]},
+        {"label": "verdwaald argument", "samenvatting": None, "argument_ids": [1280]},
+    ]
+
+    result = drop_degenerate_coordinatieve_groepen(structured, "asiel")
+
+    assert len(result["coordinatieve_groepen"]) == 1
+    assert result["coordinatieve_groepen"][0]["label"] == "geldige groep"
+
+
+def test_drop_degenerate_coordinatieve_groepen_leaves_valid_groups_untouched():
+    structured = _structured()
+    structured["coordinatieve_groepen"] = [
+        {"label": "geldige groep", "samenvatting": None, "argument_ids": [159, 163, 1280]},
+    ]
+
+    result = drop_degenerate_coordinatieve_groepen(structured)
+
+    assert result["coordinatieve_groepen"] == structured["coordinatieve_groepen"]
+
+
+def test_drop_degenerate_coordinatieve_groepen_does_not_mutate_input():
+    structured = _structured()
+    structured["coordinatieve_groepen"] = [
+        {"label": "verdwaald argument", "samenvatting": None, "argument_ids": [1280]},
+    ]
+
+    drop_degenerate_coordinatieve_groepen(structured)
+
+    assert len(structured["coordinatieve_groepen"]) == 1
 
 
 def test_merged_output_validates_against_schema():

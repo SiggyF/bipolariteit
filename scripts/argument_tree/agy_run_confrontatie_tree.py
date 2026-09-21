@@ -98,7 +98,7 @@ from pathlib import Path
 
 from jsonschema import Draft202012Validator, ValidationError
 
-from pipeline.confrontatie_tree import merge_engagement_checks
+from pipeline.confrontatie_tree import drop_degenerate_coordinatieve_groepen, merge_engagement_checks
 from pipeline.db import db
 from pipeline.embed.lmstudio import detect_base_url
 from pipeline.export_argument_doc import build_document, fetch_stance_arguments
@@ -481,6 +481,7 @@ def main():
             raise SystemExit(f"structureer-output mist '{verplicht}'-veld: {stdout[:500]}")
     structured.setdefault("coordinatieve_groepen", [])
     structured.setdefault("twijfelachtige_classificaties", [])
+    structured = drop_degenerate_coordinatieve_groepen(structured, topic_row["slug"])
 
     # 2. Redactie, per relatie een eigen geïsoleerde call
     checks = []

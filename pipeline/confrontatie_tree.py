@@ -34,6 +34,35 @@ Zie scripts/argument_tree/agy_run_confrontatie_tree.py voor de orkestratie (1 st
 call + N losse redactiechecks + validatie).
 """
 
+import logging
+
+logger = logging.getLogger(__name__)
+
+
+def drop_degenerate_coordinatieve_groepen(structured, topic_slug=None):
+    """Verwijdert `coordinatieve_groepen`-entries met < 2 `argument_ids` uit
+    de output van de structureringsstap (schema eist `minItems: 2`, zie
+    pipeline/schemas/argument_tree.schema.json -- een groep van 1 is per
+    definitie geen bundeling van onafhankelijk hetzelfde punt makende
+    argumenten). Geconstateerd bij handmatige validatie van de asiel-boom
+    (issue #254): Gemini volgt de instructie hier niet altijd.
+
+    Muteert `structured` niet, retourneert een nieuwe dict. De losgemaakte
+    argumenten blijven gewoon als node staan, alleen niet meer gegroepeerd."""
+    groepen = structured.get("coordinatieve_groepen", [])
+    behouden, verworpen = [], []
+    for groep in groepen:
+        (behouden if len(groep.get("argument_ids", [])) >= 2 else verworpen).append(groep)
+
+    for groep in verworpen:
+        logger.warning(
+            "coordinatieve_groepen%s: groep '%s' met %d lid/leden verworpen (schema eist >=2): %s",
+            f" ({topic_slug})" if topic_slug else "",
+            groep.get("label", "?"), len(groep.get("argument_ids", [])), groep.get("argument_ids"),
+        )
+
+    return {**structured, "coordinatieve_groepen": behouden}
+
 
 def merge_engagement_checks(structured, checks):
     """`structured` is de output van de structureringsstap (nodes/relations/
