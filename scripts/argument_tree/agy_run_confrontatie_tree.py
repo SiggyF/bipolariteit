@@ -115,6 +115,10 @@ SUPPORT_PROMPT_PATH = Path(__file__).parent.parent.parent / "pipeline" / "prompt
 TREE_SCHEMA_PATH = Path(__file__).parent.parent.parent / "pipeline" / "schemas" / "argument_tree.schema.json"
 GEMINI_TREE_DIR = Path(__file__).parent.parent.parent / "data" / "export" / "argument-docs"
 LOG_PATH = Path(__file__).parent.parent.parent / "data" / "export" / "argument-trees" / "agy_confrontatie_tree.log"
+# Tussenresultaten per topic (structureer-output + elke afgeronde
+# relatiecheck), zodat een fout halverwege de ~25-35 redactiecalls de dure
+# structureer-call en de al gedane checks niet weggooit -- zie --resume.
+CHECKPOINT_DIR = GEMINI_TREE_DIR / "checkpoints"
 
 # Buiten de repo (bevat een live OAuth-token, nooit in een git-repo laten
 # staan) -- zelfde sessie als scripts/agy_run_extraction_batch.py. Als
@@ -426,6 +430,11 @@ def main():
     )
     parser.add_argument("--dry-run", action="store_true", help="alleen de opgebouwde prompt printen, geen agy-call")
     parser.add_argument(
+        "--resume", action="store_true",
+        help="hervat vanaf data/export/argument-docs/checkpoints/<topic>/: slaat de structureer-call en al "
+             "afgeronde relatiechecks over (zonder deze vlag wordt een bestaande checkpoint weggegooid)",
+    )
+    parser.add_argument(
         "--canonical", action="store_true",
         help="issue #254: bijna-duplicaatquotes per stance vooraf samenvoegen tot canonieke stellingen "
              "(lokale LM Studio-call, geen agy-credits nodig) vóórdat Gemini het document ziet",
@@ -470,25 +479,52 @@ def main():
         logger.info("(--dry-run: geen agy-call)")
         return
 
+    checkpoint_dir = CHECKPOINT_DIR / topic_row["slug"]
+    structured_path = checkpoint_dir / "structured.json"
+    checks_path = checkpoint_dir / "checks.jsonl"
+    if not args.resume and checkpoint_dir.exists():
+        # Een vorige run zonder --resume wordt nooit stilzwijgend hergebruikt:
+        # verse run = verse checkpoint.
+        structured_path.unlink(missing_ok=True)
+        checks_path.unlink(missing_ok=True)
+    checkpoint_dir.mkdir(parents=True, exist_ok=True)
+
     # 1. Structureren
-    stdout, stderr, elapsed = run_agy(
-        document, instructions, args.model, args.timeout, skip_permissions=args.dangerously_skip_permissions
-    )
-    logger.info("structureer-call klaar in %.1fs -- volledige in/output in %s", elapsed, LOG_PATH)
-    structured = _parse_or_die(stdout, stderr, "structureren")
-    for verplicht in ("nodes", "relations"):
-        if verplicht not in structured:
-            raise SystemExit(f"structureer-output mist '{verplicht}'-veld: {stdout[:500]}")
-    structured.setdefault("coordinatieve_groepen", [])
-    structured.setdefault("twijfelachtige_classificaties", [])
-    structured = drop_degenerate_coordinatieve_groepen(structured, topic_row["slug"])
+    if structured_path.exists():
+        structured = json.loads(structured_path.read_text())
+        logger.info("--resume: structureer-output uit %s, geen agy-call", structured_path)
+    else:
+        stdout, stderr, elapsed = run_agy(
+            document, instructions, args.model, args.timeout, skip_permissions=args.dangerously_skip_permissions
+        )
+        logger.info("structureer-call klaar in %.1fs -- volledige in/output in %s", elapsed, LOG_PATH)
+        structured = _parse_or_die(stdout, stderr, "structureren")
+        for verplicht in ("nodes", "relations"):
+            if verplicht not in structured:
+                raise SystemExit(f"structureer-output mist '{verplicht}'-veld: {stdout[:500]}")
+        structured.setdefault("coordinatieve_groepen", [])
+        structured.setdefault("twijfelachtige_classificaties", [])
+        structured = drop_degenerate_coordinatieve_groepen(structured, topic_row["slug"])
+        structured_path.write_text(json.dumps(structured, ensure_ascii=False, indent=2))
+        logger.info("structureer-output -> %s", structured_path)
 
     # 2. Redactie, per relatie een eigen geïsoleerde call
+    done = {}
+    if checks_path.exists():
+        for line in checks_path.read_text().splitlines():
+            check = json.loads(line)
+            done[check["relation_index"]] = check
+    n_relations = len(structured["relations"])
+    logger.info("%d relaties te checken (%d al gedaan uit checkpoint)", n_relations, len(done))
     checks = []
-    for i in range(len(structured["relations"])):
-        checks.append(run_engagement_check(
-            structured, i, topic_row["name"], args.model, args.timeout, args.dangerously_skip_permissions
-        ))
+    for i in range(n_relations):
+        if i not in done:
+            done[i] = run_engagement_check(
+                structured, i, topic_row["name"], args.model, args.timeout, args.dangerously_skip_permissions
+            )
+            with checks_path.open("a") as f:
+                f.write(json.dumps(done[i], ensure_ascii=False) + "\n")
+        checks.append(done[i])
 
     # 3. Samenvoegen + valideren -- geen LLM, puur Python (pipeline/confrontatie_tree.py)
     result = merge_engagement_checks(structured, checks)
