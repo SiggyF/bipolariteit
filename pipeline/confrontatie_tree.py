@@ -64,12 +64,20 @@ def drop_degenerate_coordinatieve_groepen(structured, topic_slug=None):
     return {**structured, "coordinatieve_groepen": behouden}
 
 
-def merge_engagement_checks(structured, checks):
+def merge_engagement_checks(structured, checks, threshold=0.5):
     """`structured` is de output van de structureringsstap (nodes/relations/
     coordinatieve_groepen/twijfelachtige_classificaties, zonder `reden`).
     `checks` is een lijst, één entry per relatie in `structured["relations"]`
-    op dezelfde index: {"relation_index", "engageert": bool, "reden": str,
-    "scheme": str|None (alleen relevant bij conflict, optioneel)}.
+    op dezelfde index: {"relation_index", "sterkte": float (0.0-1.0),
+    "reden": str, "scheme": str|None (alleen relevant bij conflict,
+    optioneel)}. Een relatie blijft in de boom als `sterkte >= threshold`
+    (default 0.5) -- vóór de invoering van `sterkte` gaf de redactiecheck een
+    booleaanse `engageert`, die hier nog als fallback (1.0/0.0) wordt gelezen
+    zodat oudere checkpoints/checks.jsonl-bestanden bruikbaar blijven.
+
+    `threshold` is een zuivere nabewerking op al opgehaalde scores -- met
+    `--resume` kun je 'm dus lokaal bijstellen zonder de agy-calls opnieuw
+    te doen.
 
     Retourneert een dict die voldoet aan argument_tree.schema.json."""
     by_index = {c["relation_index"]: c for c in checks}
@@ -77,7 +85,10 @@ def merge_engagement_checks(structured, checks):
     final_relations = []
     for i, relation in enumerate(structured["relations"]):
         check = by_index.get(i)
-        if check is None or not check.get("engageert"):
+        if check is None:
+            continue
+        sterkte = check["sterkte"] if "sterkte" in check else (1.0 if check.get("engageert") else 0.0)
+        if sterkte < threshold:
             continue
 
         scheme = relation.get("scheme")
@@ -91,6 +102,7 @@ def merge_engagement_checks(structured, checks):
             "thema": relation.get("thema"),
             "scheme": scheme,
             "reden": check.get("reden", ""),
+            "sterkte": sterkte,
         })
 
     return {

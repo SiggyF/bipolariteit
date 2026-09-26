@@ -397,19 +397,22 @@ def run_engagement_check(structured, relation_index, topic_name, model, timeout,
     tree_json = json.dumps(mini, ensure_ascii=False, indent=2)
 
     if relation["relation_type"] == "conflict":
-        prompt_path, key, label = REBUTTAL_PROMPT_PATH, "reageert_op_kern", f"rebuttal-{relation_index}"
+        prompt_path, label = REBUTTAL_PROMPT_PATH, f"rebuttal-{relation_index}"
     else:
-        prompt_path, key, label = SUPPORT_PROMPT_PATH, "geeft_expliciete_reden", f"support-{relation_index}"
+        prompt_path, label = SUPPORT_PROMPT_PATH, f"support-{relation_index}"
 
     prompt = prompt_path.read_text().format(topic=topic_name, tree_json=tree_json)
     stdout, stderr, elapsed = run_agy_prompt(prompt, model, timeout, label, skip_permissions)
     logger.info("%s klaar in %.1fs", label, elapsed)
     result = _parse_or_die(stdout, stderr, label)
-    if key not in result:
-        raise SystemExit(f"{label}-output mist '{key}'-veld: {stdout[:500]}")
+    if "sterkte" not in result:
+        raise SystemExit(f"{label}-output mist 'sterkte'-veld: {stdout[:500]}")
+    sterkte = float(result["sterkte"])
+    if not 0.0 <= sterkte <= 1.0:
+        raise SystemExit(f"{label}-output heeft 'sterkte' buiten [0.0, 1.0]: {sterkte}")
     return {
         "relation_index": relation_index,
-        "engageert": bool(result[key]),
+        "sterkte": sterkte,
         "reden": result.get("reden", ""),
     }
 
@@ -433,6 +436,12 @@ def main():
         "--resume", action="store_true",
         help="hervat vanaf data/export/argument-docs/checkpoints/<topic>/: slaat de structureer-call en al "
              "afgeronde relatiechecks over (zonder deze vlag wordt een bestaande checkpoint weggegooid)",
+    )
+    parser.add_argument(
+        "--engagement-threshold", type=float, default=0.5,
+        help="drempel (0.0-1.0, default 0.5) voor de 'sterkte'-score uit de redactiecheck: een relatie met "
+             "sterkte >= drempel blijft in de boom. Puur een lokale nabewerking van al opgehaalde checks -- "
+             "samen met --resume kun je zo herhaaldelijk drempels uitproberen zonder nieuwe agy-calls.",
     )
     parser.add_argument(
         "--canonical", action="store_true",
@@ -527,7 +536,7 @@ def main():
         checks.append(done[i])
 
     # 3. Samenvoegen + valideren -- geen LLM, puur Python (pipeline/confrontatie_tree.py)
-    result = merge_engagement_checks(structured, checks)
+    result = merge_engagement_checks(structured, checks, threshold=args.engagement_threshold)
     schema = json.loads(TREE_SCHEMA_PATH.read_text())
     try:
         Draft202012Validator(schema).validate(result)

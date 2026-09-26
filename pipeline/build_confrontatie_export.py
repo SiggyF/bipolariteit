@@ -68,6 +68,7 @@ def _build_registry(tree, stance_by_id):
                 "id": premise_id,
                 "scheme": relation.get("scheme"),
                 "reden": relation.get("reden", ""),
+                "sterkte": relation.get("sterkte"),
             })
             registry[premise_id]["parent_id"] = target_id
 
@@ -125,6 +126,7 @@ def build_bands_and_losse(tree, stance_by_id):
                     "argument_b_id": b_id,
                     "scheme": relation.get("scheme"),
                     "reden": relation.get("reden", ""),
+                    "sterkte": relation.get("sterkte"),
                 },
             }
         )

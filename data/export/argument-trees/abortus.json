@@ -2,7 +2,7 @@
   "slug": "abortus",
   "name": "Abortus",
   "topic_description": "Dit debat gaat over het Nederlandse abortusbeleid. Aan de ene kant staat\nkeuzevrijheid van de vrouw, aan de andere kant bescherming van het ongeboren\nkind. De discussie omvat aspecten als decriminalisering, de 24-wekengrens, en\nde vorm van abortuszorg.\n\nPRO = pleit voor het schrappen van abortus uit het Wetboek van Strafrecht,\nvoor behoud of verruiming van de 24-wekengrens, voor afschaffing van de\nbedenktijd, en tegen actief aansturen op alternatieven -- de keuze is aan de\nvrouw zelf.\nCONTRA = pleit voor behoud van abortus als uitzondering in het strafrecht,\nvoor een kortere toegestane periode, voor behoud van de bedenktijd als\nzorgvuldigheidswaarborg, en voor actief hulp/informatie aanbieden over\nalternatieven voor abortus.",
-  "generated_at": "2026-09-26T11:58:07.994693+00:00",
+  "generated_at": "2026-09-26T15:47:04.764762+00:00",
   "stats": {
     "totaal_argumenten": 439,
     "aantal_pro": 216,
@@ -1659,7 +1659,8 @@
           {
             "id": 1925,
             "scheme": null,
-            "reden": "Het uitgangspunt dat actieve levensbeëindiging ongewenst is, vormt een directe inhoudelijke grond voor de stelling dat abortus (het beëindigen van menselijk leven) in het strafrecht thuishoort en slechts een strikte uitzondering mag zijn."
+            "reden": "Het uitgangspunt dat actieve levensbeëindiging ongewenst is, vormt een directe inhoudelijke grond voor de stelling dat abortus (het beëindigen van menselijk leven) in het strafrecht thuishoort en slechts een strikte uitzondering mag zijn.",
+            "sterkte": 1.0
           }
         ]
       },
@@ -1667,7 +1668,8 @@
         "argument_a_id": 1892,
         "argument_b_id": 1648,
         "scheme": null,
-        "reden": "Het premise-argument gaat direct in op de kernstelling over de verankering van abortus in het strafrecht: waar het target-argument stelt dat abortus uit het Wetboek van Strafrecht moet worden geschrapt, verdedigt de premise expliciet dat abortus in het strafrecht thuisbehoort (als strikte uitzondering)."
+        "reden": "Het premise-argument gaat direct in op de kernstelling over de verankering van abortus in het strafrecht: waar het target-argument stelt dat abortus uit het Wetboek van Strafrecht moet worden geschrapt, verdedigt de premise expliciet dat abortus in het strafrecht thuisbehoort (als strikte uitzondering).",
+        "sterkte": 1.0
       }
     },
     {
@@ -1680,7 +1682,8 @@
           {
             "id": 1880,
             "scheme": "Argument from Consequences",
-            "reden": "Het premise-argument noemt het specifieke negatieve gevolg van stress dat direct aansluit op de kern van het target-argument over de beraadtermijn."
+            "reden": "Het premise-argument noemt het specifieke negatieve gevolg van stress dat direct aansluit op de kern van het target-argument over de beraadtermijn.",
+            "sterkte": 1.0
           }
         ]
       },
@@ -1691,7 +1694,8 @@
           {
             "id": 1666,
             "scheme": null,
-            "reden": "Het premise-argument noemt het specifieke gevolg dat het wegvallen van de beraadtermijn leidt tot een stijging, wat direct aansluit op de stelling dat de bedenktijd behouden moet blijven om overhaaste abortussen te voorkomen."
+            "reden": "Het premise-argument noemt het specifieke gevolg dat het wegvallen van de beraadtermijn leidt tot een stijging, wat direct aansluit op de stelling dat de bedenktijd behouden moet blijven om overhaaste abortussen te voorkomen.",
+            "sterkte": 1.0
           }
         ]
       },
@@ -1699,7 +1703,8 @@
         "argument_a_id": 1664,
         "argument_b_id": 1680,
         "scheme": null,
-        "reden": "Beide argumenten gaan specifiek in op de noodzaak en functie van de verplichte beraadtermijn/bedenktijd voor zorgvuldige besluitvorming versus overhaaste besluiten."
+        "reden": "Beide argumenten gaan specifiek in op de noodzaak en functie van de verplichte beraadtermijn/bedenktijd voor zorgvuldige besluitvorming versus overhaaste besluiten.",
+        "sterkte": 1.0
       }
     },
     {
@@ -1712,7 +1717,8 @@
           {
             "id": 2030,
             "scheme": null,
-            "reden": "Het premise-argument voert onderzoek aan als bron en bewijs voor het optreden van de intimidatie die in het doelwit-argument wordt gesteld."
+            "reden": "Het premise-argument voert onderzoek aan als bron en bewijs voor het optreden van de intimidatie die in het doelwit-argument wordt gesteld.",
+            "sterkte": 1.0
           }
         ]
       },
@@ -1725,7 +1731,8 @@
         "argument_a_id": 1937,
         "argument_b_id": 1928,
         "scheme": null,
-        "reden": "Het premise-argument reageert direct op de kwalificatie van de acties bij klinieken door te betogen dat het aanspreken van bezoekers legitieme communicatie is en niet als intimidatie bestempeld mag worden."
+        "reden": "Het premise-argument reageert direct op de kwalificatie van de acties bij klinieken door te betogen dat het aanspreken van bezoekers legitieme communicatie is en niet als intimidatie bestempeld mag worden.",
+        "sterkte": 1.0
       }
     },
     {
@@ -1743,7 +1750,8 @@
           {
             "id": 1901,
             "scheme": "Argument from Consequences",
-            "reden": "Het risico op een onjuiste termijnbepaling vormt een specifiek gevolg dat direct aansluit bij de stelling dat zorgvuldigheidseisen bij verstrekking op afstand niet gewaarborgd of gecontroleerd kunnen worden."
+            "reden": "Het risico op een onjuiste termijnbepaling vormt een specifiek gevolg dat direct aansluit bij de stelling dat zorgvuldigheidseisen bij verstrekking op afstand niet gewaarborgd of gecontroleerd kunnen worden.",
+            "sterkte": 1.0
           }
         ]
       },
@@ -1751,7 +1759,8 @@
         "argument_a_id": 1971,
         "argument_b_id": 2033,
         "scheme": null,
-        "reden": "Het premise-argument gaat direct in op de uitvoerbaarheid en veiligheid van abortuszorg op afstand door te stellen dat het ontbreken van fysiek onderzoek leidt tot complicaties en risico's, waarmee het de claim over veilige begeleiding onder dezelfde zorgvuldigheidseisen inhoudelijk tegenspreekt."
+        "reden": "Het premise-argument gaat direct in op de uitvoerbaarheid en veiligheid van abortuszorg op afstand door te stellen dat het ontbreken van fysiek onderzoek leidt tot complicaties en risico's, waarmee het de claim over veilige begeleiding onder dezelfde zorgvuldigheidseisen inhoudelijk tegenspreekt.",
+        "sterkte": 1.0
       }
     },
     {
@@ -1769,12 +1778,14 @@
           {
             "id": 1914,
             "scheme": null,
-            "reden": "Het ontbreken van een verdragsrechtelijke basis dient als een juridische grond voor de stelling dat abortus geen universeel mensenrecht is dat internationaal kan worden opgelegd."
+            "reden": "Het ontbreken van een verdragsrechtelijke basis dient als een juridische grond voor de stelling dat abortus geen universeel mensenrecht is dat internationaal kan worden opgelegd.",
+            "sterkte": 1.0
           },
           {
             "id": 1964,
             "scheme": null,
-            "reden": "Het ontbreken van abortus in het EU-Handvest dient als specifiek bewijs of bron ter onderbouwing van de stelling dat abortus geen vastgelegd (universeel/supranationaal) mensenrecht is."
+            "reden": "Het ontbreken van abortus in het EU-Handvest dient als specifiek bewijs of bron ter onderbouwing van de stelling dat abortus geen vastgelegd (universeel/supranationaal) mensenrecht is.",
+            "sterkte": 1.0
           }
         ]
       },
@@ -1782,7 +1793,8 @@
         "argument_a_id": 1733,
         "argument_b_id": 1761,
         "scheme": null,
-        "reden": "Het target-argument bepleit het verankeren van abortus in internationale mensenrechtenverdragen, waarop het premise-argument direct inhoudelijk ingaat door te stellen dat abortus geen universeel mensenrecht is en niet internationaal mag worden opgelegd."
+        "reden": "Het target-argument bepleit het verankeren van abortus in internationale mensenrechtenverdragen, waarop het premise-argument direct inhoudelijk ingaat door te stellen dat abortus geen universeel mensenrecht is en niet internationaal mag worden opgelegd.",
+        "sterkte": 1.0
       }
     },
     {
@@ -1795,7 +1807,8 @@
           {
             "id": 1617,
             "scheme": "Argument from Example",
-            "reden": "Het uitwijken naar onveilige illegale alternatieven dient als concreet voorbeeld of gevolg van de genoemde schrijnende en gevaarlijke situaties wanneer tijdige zorg wordt belemmerd."
+            "reden": "Het uitwijken naar onveilige illegale alternatieven dient als concreet voorbeeld of gevolg van de genoemde schrijnende en gevaarlijke situaties wanneer tijdige zorg wordt belemmerd.",
+            "sterkte": 1.0
           }
         ]
       },
@@ -1806,7 +1819,8 @@
           {
             "id": 1891,
             "scheme": null,
-            "reden": "Het argument dat er al een vangnet via noodfondsen bestaat, sluit direct aan op de kern van de stelling dat een extra overheidsregeling onwenselijk of onnodig is."
+            "reden": "Het argument dat er al een vangnet via noodfondsen bestaat, sluit direct aan op de kern van de stelling dat een extra overheidsregeling onwenselijk of onnodig is.",
+            "sterkte": 1.0
           }
         ]
       },
@@ -1814,7 +1828,8 @@
         "argument_a_id": 1875,
         "argument_b_id": 1616,
         "scheme": null,
-        "reden": "Argument 1875 reageert direct op de stelling over overheidsfinanciering voor onverzekerden door te betogen dat noodfondsen en liefdadigheid al een toereikend vangnet bieden, waarmee het ingaat op het al dan niet belemmeren van de toegang."
+        "reden": "Argument 1875 reageert direct op de stelling over overheidsfinanciering voor onverzekerden door te betogen dat noodfondsen en liefdadigheid al een toereikend vangnet bieden, waarmee het ingaat op het al dan niet belemmeren van de toegang.",
+        "sterkte": 1.0
       }
     }
   ],

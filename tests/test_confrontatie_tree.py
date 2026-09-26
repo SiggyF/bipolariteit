@@ -54,6 +54,41 @@ def test_relation_that_fails_the_engagement_check_is_dropped():
     assert result["relations"][0]["relation_type"] == "conflict"
 
 
+def test_sterkte_boven_drempel_blijft_onder_drempel_vervalt():
+    """Issue #254-vervolg: 'sterkte' (0.0-1.0) i.p.v. een geforceerde
+    ja/nee, zodat een relatie die er net wel/net niet uit valt niet meer
+    afhangt van een enkele modelgok op de grens tussen 'ja' en 'nee'."""
+    structured = _structured()
+    checks = [
+        {"relation_index": 0, "sterkte": 0.3, "reden": "163 raakt slechts hetzelfde onderwerp."},
+        {"relation_index": 1, "sterkte": 0.7, "reden": "1280 gaat rechtstreeks in op de kern van 159."},
+    ]
+
+    result = merge_engagement_checks(structured, checks, threshold=0.5)
+
+    assert len(result["relations"]) == 1
+    assert result["relations"][0]["relation_type"] == "conflict"
+    assert result["relations"][0]["sterkte"] == 0.7
+
+
+def test_sterkte_drempel_is_instelbaar_zonder_nieuwe_checks():
+    """Drempel is een zuivere nabewerking op al opgehaalde scores -- dezelfde
+    checks moeten met een andere drempel een ander resultaat geven, zonder
+    de checks zelf aan te passen (dat is het hele punt: herthresholden kan
+    lokaal, zonder nieuwe agy-call)."""
+    structured = _structured()
+    checks = [
+        {"relation_index": 0, "sterkte": 0.4, "reden": "..."},
+        {"relation_index": 1, "sterkte": 0.7, "reden": "..."},
+    ]
+
+    strict = merge_engagement_checks(structured, checks, threshold=0.5)
+    soepel = merge_engagement_checks(structured, checks, threshold=0.3)
+
+    assert len(strict["relations"]) == 1
+    assert len(soepel["relations"]) == 2
+
+
 def test_relation_missing_from_checks_is_dropped():
     structured = _structured()
     checks = [

@@ -2,7 +2,7 @@
   "slug": "asiel",
   "name": "Asiel en migratie",
   "topic_description": "Dit debat gaat over het Nederlandse asiel- en migratiebeleid: de omvang van de\ninstroom, de opvang en spreiding daarvan, de asielprocedure, gezinshereniging,\nterugkeer en uitzetting, remigratie, en de ruimte die Europese en\ninternationale verplichtingen laten.\n\nPRO = bescherming van de asielzoeker. Nederland heeft een opvangprobleem: te\nweinig plekken en haperende procedures. Kenmerkende onderbouwingen: wie te laat\neen besluit krijgt houdt een rechtsmiddel, zorgvuldigheid gaat boven snelheid,\nopvang hoort kleinschalig en eerlijk verdeeld te zijn, gedwongen terugkeer kan\nalleen als het land van herkomst veilig is, en internationale en Europese\nverplichtingen worden nageleefd. Deze pool bekritiseert maatregelen vaak vanuit\nde rechtsstaat, niet vanuit een pleidooi voor meer migratie.\n\nCONTRA = beperking van de instroom. Nederland heeft te veel asielzoekers: er\nwordt te weinig afgewezen en teruggestuurd, en meer opvangcapaciteit lost dat\nniet op. Oplossingen die deze pool aandraagt: strengere toelating, sneller\nafwijzen, actief terugsturen en remigratie stimuleren, voorzieningen versoberen\nomdat ze als aanzuigende prikkel werken, gemeenten vrijlaten om niet mee te\nwerken aan opvang, en niet ruimhartiger zijn dan Europa vereist. Verder: het\ndraagvlak in de samenleving brokkelt af.",
-  "generated_at": "2026-09-26T13:02:25.726607+00:00",
+  "generated_at": "2026-09-26T15:47:05.448255+00:00",
   "stats": {
     "totaal_argumenten": 3463,
     "aantal_pro": 1187,
@@ -1416,12 +1416,14 @@
           {
             "id": 2266,
             "scheme": "Argument from Cause to Effect",
-            "reden": "De premissen noemen expliciet overbelasting van voorzieningen door hoge instroom en cijfers van een acute crisis, wat direct aansluit op de aangevoerde gronden voor een noodwet in het doelwit-argument."
+            "reden": "De premissen noemen expliciet overbelasting van voorzieningen door hoge instroom en cijfers van een acute crisis, wat direct aansluit op de aangevoerde gronden voor een noodwet in het doelwit-argument.",
+            "sterkte": 1.0
           },
           {
             "id": 2320,
             "scheme": "Argument from Cause to Effect",
-            "reden": "De premissen noemen expliciet overbelasting van voorzieningen door hoge instroom en cijfers van een acute crisis, wat direct aansluit op de aangevoerde gronden voor een noodwet in het doelwit-argument."
+            "reden": "De premissen noemen expliciet overbelasting van voorzieningen door hoge instroom en cijfers van een acute crisis, wat direct aansluit op de aangevoerde gronden voor een noodwet in het doelwit-argument.",
+            "sterkte": 1.0
           }
         ]
       },
@@ -1429,7 +1431,8 @@
         "argument_a_id": 6243,
         "argument_b_id": 6233,
         "scheme": null,
-        "reden": "Het premise-argument richt zich rechtstreeks op het door target voorgestelde instrument (staatsnoodrecht/noodwet) en stelt daar tegenover dat dit de rechtsstaat omzeilt."
+        "reden": "Het premise-argument richt zich rechtstreeks op het door target voorgestelde instrument (staatsnoodrecht/noodwet) en stelt daar tegenover dat dit de rechtsstaat omzeilt.",
+        "sterkte": 1.0
       }
     },
     {
@@ -1449,7 +1452,8 @@
         "argument_a_id": 6252,
         "argument_b_id": 6233,
         "scheme": null,
-        "reden": "Het premise-argument richt zich specifiek op het in het doelwit-argument voorgestelde instrument (staatsnoodrecht) door te stellen dat hiermee het parlement wordt omzeild."
+        "reden": "Het premise-argument richt zich specifiek op het in het doelwit-argument voorgestelde instrument (staatsnoodrecht) door te stellen dat hiermee het parlement wordt omzeild.",
+        "sterkte": 1.0
       }
     },
     {
@@ -1462,7 +1466,8 @@
           {
             "id": 2191,
             "scheme": null,
-            "reden": "De vrees van Syriërs voor hun veiligheid dient als expliciete grond voor de stelling dat Syrië onveilig is voor terugkeer en asielaanvragen niet geweigerd kunnen worden."
+            "reden": "De vrees van Syriërs voor hun veiligheid dient als expliciete grond voor de stelling dat Syrië onveilig is voor terugkeer en asielaanvragen niet geweigerd kunnen worden.",
+            "sterkte": 1.0
           }
         ]
       },
@@ -1473,7 +1478,8 @@
           {
             "id": 6364,
             "scheme": "Argument from Example",
-            "reden": "Het feit dat er al een miljoen Syriërs zijn teruggekeerd dient als een concreet voorbeeld ter onderbouwing van de stelling dat terugkeer naar Syrië mogelijk is."
+            "reden": "Het feit dat er al een miljoen Syriërs zijn teruggekeerd dient als een concreet voorbeeld ter onderbouwing van de stelling dat terugkeer naar Syrië mogelijk is.",
+            "sterkte": 1.0
           }
         ]
       },
@@ -1481,7 +1487,8 @@
         "argument_a_id": 5744,
         "argument_b_id": 2109,
         "scheme": null,
-        "reden": "Het doelwit-argument stelt dat Syrië fundamenteel onveilig is voor terugkeer, terwijl het premise-argument direct ingaat op deze mogelijkheid van terugkeer naar Syrië na de val van het regime-Assad."
+        "reden": "Het doelwit-argument stelt dat Syrië fundamenteel onveilig is voor terugkeer, terwijl het premise-argument direct ingaat op deze mogelijkheid van terugkeer naar Syrië na de val van het regime-Assad.",
+        "sterkte": 1.0
       }
     },
     {
@@ -1499,12 +1506,14 @@
           {
             "id": 4541,
             "scheme": "Argument from Consequences",
-            "reden": "De premissen noemen expliciet het positieve gevolg (voorkomen van misbruik) en de feitelijke grond (begrensde draagkracht) die direct aansluiten op de rechtvaardiging van het target om het nareisbeleid te beperken."
+            "reden": "De premissen noemen expliciet het positieve gevolg (voorkomen van misbruik) en de feitelijke grond (begrensde draagkracht) die direct aansluiten op de rechtvaardiging van het target om het nareisbeleid te beperken.",
+            "sterkte": 1.0
           },
           {
             "id": 5389,
             "scheme": "Argument from Consequences",
-            "reden": "De premissen noemen expliciet het positieve gevolg (voorkomen van misbruik) en de feitelijke grond (begrensde draagkracht) die direct aansluiten op de rechtvaardiging van het target om het nareisbeleid te beperken."
+            "reden": "De premissen noemen expliciet het positieve gevolg (voorkomen van misbruik) en de feitelijke grond (begrensde draagkracht) die direct aansluiten op de rechtvaardiging van het target om het nareisbeleid te beperken.",
+            "sterkte": 1.0
           }
         ]
       },
@@ -1512,7 +1521,8 @@
         "argument_a_id": 6273,
         "argument_b_id": 5356,
         "scheme": null,
-        "reden": "Het argument over het achterblijven van jongvolwassenen adresseert direct de specifieke afbakening van nareis tot het traditionele kerngezin, waar meerderjarige jongvolwassenen buiten vallen."
+        "reden": "Het argument over het achterblijven van jongvolwassenen adresseert direct de specifieke afbakening van nareis tot het traditionele kerngezin, waar meerderjarige jongvolwassenen buiten vallen.",
+        "sterkte": 1.0
       }
     },
     {
@@ -1532,7 +1542,8 @@
         "argument_a_id": 6274,
         "argument_b_id": 5356,
         "scheme": null,
-        "reden": "Het premise-argument reageert direct op het voorstel tot inperking van nareis door te wijzen op de specifieke onevenredige gevolgen die een beperking tot het traditionele kerngezin heeft voor ongehuwden."
+        "reden": "Het premise-argument reageert direct op het voorstel tot inperking van nareis door te wijzen op de specifieke onevenredige gevolgen die een beperking tot het traditionele kerngezin heeft voor ongehuwden.",
+        "sterkte": 1.0
       }
     },
     {
@@ -1552,7 +1563,8 @@
         "argument_a_id": 2339,
         "argument_b_id": 4805,
         "scheme": null,
-        "reden": "Het premise-argument noemt expliciet het schrappen van de LVV en reageert direct op deze specifieke beleidsmaatregel uit het doelwit door te wijzen op een direct gevolg (straatoverlast)."
+        "reden": "Het premise-argument noemt expliciet het schrappen van de LVV en reageert direct op deze specifieke beleidsmaatregel uit het doelwit door te wijzen op een direct gevolg (straatoverlast).",
+        "sterkte": 1.0
       }
     },
     {
@@ -1572,7 +1584,8 @@
         "argument_a_id": 4807,
         "argument_b_id": 4805,
         "scheme": null,
-        "reden": "Het premise-argument reageert direct op de beëindiging/sluiting van de LVV door te stellen dat het sluiten van deze voorziening mensenlevens bedreigt."
+        "reden": "Het premise-argument reageert direct op de beëindiging/sluiting van de LVV door te stellen dat het sluiten van deze voorziening mensenlevens bedreigt.",
+        "sterkte": 1.0
       }
     },
     {
@@ -1592,7 +1605,8 @@
         "argument_a_id": 2175,
         "argument_b_id": 4805,
         "scheme": null,
-        "reden": "Het doelwitargument stelt dat de opvang wordt beëindigd om in te zetten op daadwerkelijke terugkeer, waarop de premisse direct reageert door te stellen dat juist de samenwerking rond die terugkeer wordt gesloopt."
+        "reden": "Het doelwitargument stelt dat de opvang wordt beëindigd om in te zetten op daadwerkelijke terugkeer, waarop de premisse direct reageert door te stellen dat juist de samenwerking rond die terugkeer wordt gesloopt.",
+        "sterkte": 1.0
       }
     },
     {
@@ -1610,12 +1624,14 @@
           {
             "id": 3869,
             "scheme": "Argument from Cause to Effect",
-            "reden": "Het argument dat royale voorzieningen asielzoekers aantrekken (5013) noemt het causale mechanisme achter de aanzuigende werking, wat direct de grond vormt voor de stelling dat versobering die aanzuigende werking afremt (4014)."
+            "reden": "Het argument dat royale voorzieningen asielzoekers aantrekken (5013) noemt het causale mechanisme achter de aanzuigende werking, wat direct de grond vormt voor de stelling dat versobering die aanzuigende werking afremt (4014).",
+            "sterkte": 1.0
           },
           {
             "id": 5013,
             "scheme": "Argument from Cause to Effect",
-            "reden": "Het argument dat royale voorzieningen asielzoekers aantrekken (5013) noemt het causale mechanisme achter de aanzuigende werking, wat direct de grond vormt voor de stelling dat versobering die aanzuigende werking afremt (4014)."
+            "reden": "Het argument dat royale voorzieningen asielzoekers aantrekken (5013) noemt het causale mechanisme achter de aanzuigende werking, wat direct de grond vormt voor de stelling dat versobering die aanzuigende werking afremt (4014).",
+            "sterkte": 1.0
           }
         ]
       },
@@ -1623,7 +1639,8 @@
         "argument_a_id": 4059,
         "argument_b_id": 4014,
         "scheme": null,
-        "reden": "Het premise-argument betwist direct de onderbouwing van de 'aanzuigende werking', wat het centrale causale mechanisme vormt in de stelling van het target-argument."
+        "reden": "Het premise-argument betwist direct de onderbouwing van de 'aanzuigende werking', wat het centrale causale mechanisme vormt in de stelling van het target-argument.",
+        "sterkte": 1.0
       }
     },
     {
@@ -1643,7 +1660,8 @@
         "argument_a_id": 3785,
         "argument_b_id": 4014,
         "scheme": null,
-        "reden": "Het premise-argument betwist expliciet het door het target-argument gestelde beperkende effect van versobering op de asielinstroom."
+        "reden": "Het premise-argument betwist expliciet het door het target-argument gestelde beperkende effect van versobering op de asielinstroom.",
+        "sterkte": 1.0
       }
     },
     {
@@ -1663,7 +1681,8 @@
         "argument_a_id": 3752,
         "argument_b_id": 4014,
         "scheme": null,
-        "reden": "Het argument betwist direct het causale mechanisme van het doelwit (de aanzuigende werking van voorzieningen) door te stellen dat vluchtelingen worden gedreven door oorlogsgeweld in plaats van beleid of voorzieningen."
+        "reden": "Het argument betwist direct het causale mechanisme van het doelwit (de aanzuigende werking van voorzieningen) door te stellen dat vluchtelingen worden gedreven door oorlogsgeweld in plaats van beleid of voorzieningen.",
+        "sterkte": 1.0
       }
     }
   ],

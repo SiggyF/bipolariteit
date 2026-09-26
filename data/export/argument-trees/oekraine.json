@@ -2,7 +2,7 @@
   "slug": "oekraine",
   "name": "Oekraïne",
   "topic_description": "Dit debat gaat over de Nederlandse en NAVO-opstelling ten aanzien van Oekraïne en Rusland: de hoogte van de defensie-uitgaven, de omvang en aard van wapenleveranties aan Oekraïne, de opvang van ontheemden uit Oekraïne, de houding tegenover Rusland (sancties, onderhandelingen, verantwoordelijkheid bij incidenten zoals de Nord Stream-sabotage), de NAVO-aanwezigheid aan de Russische grens, de inkoopstrategie voor defensiematerieel, en de geografische reikwijdte/het gewenste eindresultaat van het conflict.\n\nPRO = voorstander van een assertieve, hoge-inzet-opstelling tegenover Rusland en voor Oekraïne, ongeacht kabinet. Zeven aspecten spelen hierbij: (1) hogere, structurele defensie-uitgaven, vanuit de aanname dat er wél een sterke (directe) dreiging vanuit Rusland uitgaat; (2) ruimere wapenleveranties aan Oekraïne, ook offensief materieel; (3) ruimere opvang van ontheemden uit Oekraïne; (4) een harde lijn tegenover Rusland: sancties, geen onderhandelingen, Rusland zwart afschilderen of ontmenselijken, en bij incidenten zoals Nord Stream uitgaan van Russische verantwoordelijkheid; (5) een actieve, zichtbare NAVO-aanwezigheid aan de Russische grens en scherpe reacties op schermutselingen; (6) vrije marktkeuze bij materieelinkoop, niet beperkt tot Europese leveranciers; (7) aanvallen op Russisch grondgebied aanmoedigen of toestaan, geen genoegen nemen met het verlies van Krim/Donbas.\n\nCONTRA = voorstander van een terughoudende opstelling. Zeven aspecten spelen hierbij: (1) geen of beperkte verhoging van defensie-uitgaven, vanuit de aanname dat er geen sterke (directe) dreiging vanuit Rusland uitgaat; (2) beperktere, uitsluitend defensieve wapenleveranties aan Oekraïne; (3) beperktere opvang van ontheemden uit Oekraïne; (4) onderhandelen met Rusland, Rusland als redelijke/benaderbare partij behandelen, en bij incidenten zoals Nord Stream ruimte laten voor onderzoek of een andere verantwoordelijke (bv. Oekraïne) in plaats van meteen Rusland aan te wijzen; (5) terughoudendheid bij NAVO-aanwezigheid en het vermijden van oorlogsretoriek; (6) een inkooprestrictie richting Europese leveranciers; (7) uitsluitend verdediging binnen eigen grondgebied, bereidheid het verlies van Krim/Donbas als realiteit te accepteren.",
-  "generated_at": "2026-09-26T12:29:14.002842+00:00",
+  "generated_at": "2026-09-26T15:47:05.070155+00:00",
   "stats": {
     "totaal_argumenten": 2748,
     "aantal_pro": 1891,
@@ -1636,22 +1636,30 @@
   "bands": [
     {
       "nummer": 1,
-      "thema": "Moeten defensie-uitgaven stijgen ten koste van publieke voorzieningen?",
+      "thema": "Leiden zware wapenleveranties tot escalatie met Rusland?",
       "pro": {
         "type": "node",
-        "id": 14627,
-        "kids": []
+        "id": 11840,
+        "kids": [
+          {
+            "id": 11837,
+            "scheme": null,
+            "reden": "De premisse ('luchtaanvallen tonen noodzaak') noemt expliciet de actuele aanvallen als concrete aanleiding/bewijs voor de noodzaak van militaire steun om vernietigingsaanvallen af te slaan.",
+            "sterkte": 0.85
+          }
+        ]
       },
       "contra": {
         "type": "node",
-        "id": 11967,
+        "id": 14146,
         "kids": []
       },
       "oppositie": {
-        "argument_a_id": 11967,
-        "argument_b_id": 14627,
+        "argument_a_id": 14146,
+        "argument_b_id": 11840,
         "scheme": null,
-        "reden": "Het premise-argument gaat direct in op de voorgestelde verhoging van de defensie-uitgaven ('extra miljarden naar defensie') door daaraan de specifieke randvoorwaarde te verbinden dat dit niet ten koste mag gaan van voorzieningen als zorg en onderwijs."
+        "reden": "Target stelt dat militaire steun noodzakelijk is om Rusland te stoppen, terwijl premise een zelfstandig tegenargument levert dat wapenleveranties het risico op een directe confrontatie met kernmacht Rusland vergroten.",
+        "sterkte": 0.75
       }
     },
     {
@@ -1665,35 +1673,62 @@
       "contra": {
         "type": "node",
         "id": 14272,
-        "kids": []
+        "kids": [
+          {
+            "id": 11892,
+            "scheme": null,
+            "reden": "Het argument dat kruisraketten het conflict escaleren sluit inhoudelijk aan op de stelling dat raketaanvallen rode lijnen overschrijden en vergelding uitlokken, al blijft de premisse beknopt en noemt het geen specifieke context zoals NAVO of Russisch grondgebied.",
+            "sterkte": 0.65
+          }
+        ]
       },
       "oppositie": {
         "argument_a_id": 14272,
         "argument_b_id": 11895,
         "scheme": null,
-        "reden": "Beide argumenten gaan specifiek over de toelaatbaarheid en gevolgen van het uitvoeren van aanvallen op doelen op Russisch grondgebied."
+        "reden": "Target verdedigt het recht om doelen diep in Rusland te treffen, terwijl premise zelfstandig beargumenteert dat aanvallen op Russisch grondgebied rode lijnen overschrijden en gevaarlijke escalatie uitlokken.",
+        "sterkte": 0.8
+      }
+    },
+    {
+      "nummer": 3,
+      "thema": "Moet er nu onderhandeld worden over vrede?",
+      "pro": {
+        "type": "node",
+        "id": 12191,
+        "kids": [
+          {
+            "id": 12827,
+            "scheme": null,
+            "reden": "Het argument dat een bestand gelegenheid biedt tot hergroepering sluit als causaal risico direct aan bij de stelling dat appeasement niet werkt en de druk op Rusland behouden moet blijven.",
+            "sterkte": 0.7
+          }
+        ]
+      },
+      "contra": {
+        "type": "node",
+        "id": 11838,
+        "kids": []
+      },
+      "oppositie": {
+        "argument_a_id": 11838,
+        "argument_b_id": 12191,
+        "scheme": null,
+        "reden": "De argumenten botsen over de te volgen strategie (nu diplomatiek vredesoverleg starten versus de druk op Rusland maximaal houden zonder concessies), maar sluiten elkaar niet direct uit omdat onderhandelen niet noodzakelijk gebiedsafstand inhoudt.",
+        "sterkte": 0.5
       }
     }
   ],
   "losse_groepen": [
     {
       "kind": "group",
-      "label": "zorgen over escalatie en wereldoorlog",
-      "samenvatting": "Het sturen van offensieve wapens dreigt Nederland in een rechtstreekse Derde Wereldoorlog met Rusland te storten.",
+      "label": "binnenlandse bezwaren tegen defensieverhoging",
+      "samenvatting": "Hogere defensie-uitgaven gaan ten koste van de verzorgingsstaat, terwijl burgers gebukt gaan onder armoede en bezuinigingen.",
       "member_ids": [
-        14146,
-        14178,
-        12341
-      ]
-    },
-    {
-      "kind": "group",
-      "label": "oproep tot diplomatie en onderhandeling",
-      "samenvatting": "De oorlog kan niet militair gewonnen worden en vergt een diplomatieke uitweg of gebiedsverdeling in plaats van verdere wapenleveranties.",
-      "member_ids": [
-        11838,
-        11968,
-        12501
+        11967,
+        12448,
+        12982,
+        11911
       ]
     },
     {
@@ -1716,20 +1751,17 @@
     }
   ],
   "losse_argumenten": [
+    14627,
     13560,
     12620,
     14170,
     12558,
-    11840,
     13739,
     11862,
     14151,
     14238,
     13774,
     12308,
-    11892,
-    12191,
-    12827,
     12721,
     13605,
     11858,

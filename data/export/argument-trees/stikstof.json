@@ -2,7 +2,7 @@
   "slug": "stikstof",
   "name": "Stikstof",
   "topic_description": "Dit debat gaat over het Nederlandse stikstofbeleid: de mate waarin stikstofuitstoot en -depositie verplichtend worden teruggedrongen, en welke maatstaf daarbij leidend is voor natuurherstel.\n\nPRO = voorstander van verplichtende, stevige stikstofreductie, ongeacht welk kabinet dat op een gegeven moment nastreeft of welk concreet instrument daarvoor wordt ingezet. Kenmerkende onderbouwingen: de kritische depositiewaarde (KDW) en het AERIUS-rekenmodel zijn een betrouwbare/wetenschappelijk onderbouwde maatstaf; natuurherstel vergt in de eerste plaats minder stikstof; Nederland moet aan de Habitatrichtlijn/Natura 2000-verplichtingen voldoen; de economische gevolgen voor landbouw, bouw en luchtvaart wegen niet op tegen die verplichtingen; vrijwilligheid heeft tot nu toe onvoldoende resultaat opgeleverd, dus is een verplichtend instrument (uitkoop, onteigening, normering) nodig.\n\nCONTRA = voorstander van afzwakking, uitstel, vrijwilligheid in plaats van verplichting, of een wezenlijk andere aanpak van het stikstofprobleem. Kenmerkende onderbouwingen: de KDW/het AERIUS-model overschat het probleem of is wetenschappelijk omstreden; observaties/feitelijke metingen van natuurkwaliteit zijn een betere basis voor beleid dan modelberekeningen; natuurherstel kan (ook) via andere maatregelen dan stikstofreductie (bv. waterhuishouding, bestrijding van invasieve soorten, natuurbeheer); de economische gevolgen voor landbouw, bouw en luchtvaart zijn onevenredig zwaar; vrijwillige/innovatieve oplossingen verdienen de voorkeur boven dwang.",
-  "generated_at": "2026-09-26T14:51:59.338916+00:00",
+  "generated_at": "2026-09-26T15:47:06.231888+00:00",
   "stats": {
     "totaal_argumenten": 1978,
     "aantal_pro": 691,
@@ -1365,7 +1365,8 @@
           {
             "id": 19,
             "scheme": null,
-            "reden": "Het risico op een terugkeer naar de stikstofimpasse noemt een specifiek nadelig gevolg dat fungeert als reden om de KDW volledig (ook uit vergunningverlening en beleid) te schrappen."
+            "reden": "Het risico op een terugkeer naar de stikstofimpasse noemt een specifiek nadelig gevolg dat fungeert als reden om de KDW volledig (ook uit vergunningverlening en beleid) te schrappen.",
+            "sterkte": 1.0
           }
         ]
       },
@@ -1373,7 +1374,8 @@
         "argument_a_id": 18,
         "argument_b_id": 623,
         "scheme": null,
-        "reden": "Beide argumenten richten zich specifiek op de status van de KDW als leidende norm in het beleid en de vergunningverlening: het doelwitargument stelt dat de KDW de leidende indicator moet zijn, terwijl de premisse bepleit dat de KDW juist volledig uit de vergunningverlening en het beleid geschrapt moet worden."
+        "reden": "Beide argumenten richten zich specifiek op de status van de KDW als leidende norm in het beleid en de vergunningverlening: het doelwitargument stelt dat de KDW de leidende indicator moet zijn, terwijl de premisse bepleit dat de KDW juist volledig uit de vergunningverlening en het beleid geschrapt moet worden.",
+        "sterkte": 1.0
       }
     },
     {
@@ -1386,7 +1388,8 @@
           {
             "id": 167,
             "scheme": null,
-            "reden": "De noodzaak om de veestapel te halveren vormt een directe inhoudelijke grond voor de stelling dat krimp van de veestapel onontkoombaar is."
+            "reden": "De noodzaak om de veestapel te halveren vormt een directe inhoudelijke grond voor de stelling dat krimp van de veestapel onontkoombaar is.",
+            "sterkte": 1.0
           }
         ]
       },
@@ -1399,7 +1402,8 @@
         "argument_a_id": 1589,
         "argument_b_id": 781,
         "scheme": null,
-        "reden": "Het premise-argument reageert direct op de specifieke stelling over de onontkoombaarheid van krimp door te stellen dat het coalitieakkoord deze krimp uitsluit."
+        "reden": "Het premise-argument reageert direct op de specifieke stelling over de onontkoombaarheid van krimp door te stellen dat het coalitieakkoord deze krimp uitsluit.",
+        "sterkte": 1.0
       }
     },
     {
@@ -1419,7 +1423,8 @@
         "argument_a_id": 1173,
         "argument_b_id": 1162,
         "scheme": null,
-        "reden": "De premisse stelt dat de huidige veestapel de vergunningsruimte overstijgt, wat direct inhoudelijk ingaat op de stelling dat krimp of halvering van de veestapel onnodig zou zijn."
+        "reden": "De premisse stelt dat de huidige veestapel de vergunningsruimte overstijgt, wat direct inhoudelijk ingaat op de stelling dat krimp of halvering van de veestapel onnodig zou zijn.",
+        "sterkte": 1.0
       }
     }
   ],

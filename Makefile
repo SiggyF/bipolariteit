@@ -131,8 +131,8 @@ tag-single: ## Gerichte hertag-pass: één nieuwe tag tegen al-getagde argumente
 	@url=$$($(RESOLVE_BASE_URL)) || exit 1; \
 	uv run python -m pipeline.tag_single --tag $(TAG) $(if $(ALL_TOPICS),--all-topics,--topic $(TOPIC)) --base-url $$url --model $(MODEL) $(if $(API_KEY),--api-key $(API_KEY),) $(if $(PARALLEL),--parallel,) $(if $(IDS),--ids $(IDS),) $(if $(IDS_FILE),--ids-file $(IDS_FILE),) $(if $(SINGLE_LIMIT),--limit $(SINGLE_LIMIT),)
 
-redactie: ## Stage 2 -- argumentenboom bouwen + per-relatie redactiecheck (structureren + neutrale engagement-check per relatie, via Docker agy/Gemini) en meteen exporteren (#252). Vars: TOPIC, AGY_MODEL (default gemini-3.8-flash-medium), CANONICAL=1 (canonieke claims vooraf, #254, vereist LM Studio), RESUME=1 (hervat vanaf checkpoint)
-	PYTHONPATH=. uv run python scripts/argument_tree/agy_run_confrontatie_tree.py --topic $(TOPIC) $(if $(AGY_MODEL),--model $(AGY_MODEL),) $(if $(CANONICAL),--canonical,) $(if $(RESUME),--resume,)
+redactie: ## Stage 2 -- argumentenboom bouwen + per-relatie redactiecheck (structureren + neutrale engagement-check per relatie, via Docker agy/Gemini) en meteen exporteren (#252). Vars: TOPIC, AGY_MODEL (default gemini-3.8-flash-medium), CANONICAL=1 (canonieke claims vooraf, #254, vereist LM Studio), RESUME=1 (hervat vanaf checkpoint), ENGAGEMENT_THRESHOLD (default 0.5, herthresholden op de 'sterkte'-score kan met RESUME=1 zonder nieuwe agy-calls)
+	PYTHONPATH=. uv run python scripts/argument_tree/agy_run_confrontatie_tree.py --topic $(TOPIC) $(if $(AGY_MODEL),--model $(AGY_MODEL),) $(if $(CANONICAL),--canonical,) $(if $(RESUME),--resume,) $(if $(ENGAGEMENT_THRESHOLD),--engagement-threshold $(ENGAGEMENT_THRESHOLD),)
 	uv run python -m pipeline.build_confrontatie_export --topic $(TOPIC)
 
 validate: ## Evalharnas draaien tegen een gouden validatiedataset (issue #62), zie docs/eval-elecdebate.md. PARALLEL=1 voor dask (zie issue #313). Vars: DATASET, LIMIT, MODEL, BASE_URL, API_KEY, PARALLEL, EXTRACTION_PROMPT (strict|guideline), SKIP_TAGGING=1, TAG_PROMPT (strict|guideline)
