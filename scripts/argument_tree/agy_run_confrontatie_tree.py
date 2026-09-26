@@ -82,8 +82,8 @@ data/export/argument-trees/agy_confrontatie_tree.log, zodat een eventuele permis
 z'n precieze toolnaam niet kwijtraakt in een teruggeknipte terminalregel.
 
 Gebruik:
-    PYTHONPATH=. uv run python scripts/agy_run_confrontatie_tree.py --topic stikstof
-    PYTHONPATH=. uv run python scripts/agy_run_confrontatie_tree.py --topic stikstof --model gemini-3.6-flash-medium
+    PYTHONPATH=. uv run python scripts/argument_tree/agy_run_confrontatie_tree.py --topic stikstof
+    PYTHONPATH=. uv run python scripts/argument_tree/agy_run_confrontatie_tree.py --topic stikstof --model gemini-3.6-flash-medium
 """
 
 import argparse
@@ -98,20 +98,27 @@ from pathlib import Path
 
 from jsonschema import Draft202012Validator, ValidationError
 
-from pipeline.confrontatie_tree import merge_engagement_checks
+from pipeline.confrontatie_tree import drop_degenerate_coordinatieve_groepen, merge_engagement_checks
 from pipeline.db import db
+from pipeline.embed.lmstudio import detect_base_url
 from pipeline.export_argument_doc import build_document, fetch_stance_arguments
 from pipeline.extract_arguments import _extract_json
 from pipeline.periodes import PeriodeIndex
+from scripts.argument_tree.experiment_canonical_claim_clustering import DEFAULT_DISTANCE_THRESHOLD
+from scripts.argument_tree.experiment_canonical_claim_document import build_canonical_document, build_canonical_document_text
 
 logger = logging.getLogger(__name__)
 
-STRUCTURE_PROMPT_PATH = Path(__file__).parent.parent / "pipeline" / "prompts" / "argument_tree_gemini.md"
-REBUTTAL_PROMPT_PATH = Path(__file__).parent.parent / "pipeline" / "prompts" / "boomredactie_rebuttal_detection.md"
-SUPPORT_PROMPT_PATH = Path(__file__).parent.parent / "pipeline" / "prompts" / "boomredactie_support_check.md"
-TREE_SCHEMA_PATH = Path(__file__).parent.parent / "pipeline" / "schemas" / "argument_tree.schema.json"
-GEMINI_TREE_DIR = Path(__file__).parent.parent / "data" / "export" / "argument-docs"
-LOG_PATH = Path(__file__).parent.parent / "data" / "export" / "argument-trees" / "agy_confrontatie_tree.log"
+STRUCTURE_PROMPT_PATH = Path(__file__).parent.parent.parent / "pipeline" / "prompts" / "argument_tree_gemini.md"
+REBUTTAL_PROMPT_PATH = Path(__file__).parent.parent.parent / "pipeline" / "prompts" / "boomredactie_rebuttal_detection.md"
+SUPPORT_PROMPT_PATH = Path(__file__).parent.parent.parent / "pipeline" / "prompts" / "boomredactie_support_check.md"
+TREE_SCHEMA_PATH = Path(__file__).parent.parent.parent / "pipeline" / "schemas" / "argument_tree.schema.json"
+GEMINI_TREE_DIR = Path(__file__).parent.parent.parent / "data" / "export" / "argument-docs"
+LOG_PATH = Path(__file__).parent.parent.parent / "data" / "export" / "argument-trees" / "agy_confrontatie_tree.log"
+# Tussenresultaten per topic (structureer-output + elke afgeronde
+# relatiecheck), zodat een fout halverwege de ~25-35 redactiecalls de dure
+# structureer-call en de al gedane checks niet weggooit -- zie --resume.
+CHECKPOINT_DIR = GEMINI_TREE_DIR / "checkpoints"
 
 # Buiten de repo (bevat een live OAuth-token, nooit in een git-repo laten
 # staan) -- zelfde sessie als scripts/agy_run_extraction_batch.py. Als
@@ -349,11 +356,27 @@ def _parse_or_die(stdout, stderr, label):
         )
 
 
-def build_prompt(conn, topic_row, stances, vanaf):
+def build_prompt(conn, topic_row, stances, vanaf, canonical=False, canonical_model=None,
+                  canonical_threshold=DEFAULT_DISTANCE_THRESHOLD, canonical_reasoning_effort="none",
+                  canonical_timeout=60, canonical_max_tokens=500):
+    """`canonical=True` (issue #254): bijna-duplicaatquotes per topic/stance
+    zijn dan al vooraf samengevoegd tot canonieke stellingen (zie
+    scripts/argument_tree/experiment_canonical_claim_document.py) voordat
+    Gemini het document ziet -- de naamgeving van elk cluster is een losse
+    LM Studio-call (geen agy-credits nodig), alleen de structureringsstap
+    hierna gaat naar Gemini/agy."""
     stances_by_name = {
         stance: fetch_stance_arguments(conn, topic_row["id"], stance, vanaf, limit=None) for stance in stances
     }
-    document = build_document(topic_row, stances_by_name)
+    if canonical:
+        base_url = detect_base_url(None)
+        entries_by_stance, _stats = build_canonical_document(
+            topic_row, stances_by_name, base_url, canonical_model, canonical_threshold,
+            canonical_reasoning_effort, canonical_timeout, canonical_max_tokens,
+        )
+        document = build_canonical_document_text(topic_row, entries_by_stance)
+    else:
+        document = build_document(topic_row, stances_by_name)
     instructions = STRUCTURE_PROMPT_PATH.read_text().format(topic=topic_row["name"])
     total = sum(len(v) for v in stances_by_name.values())
     return document, instructions, total
@@ -374,19 +397,22 @@ def run_engagement_check(structured, relation_index, topic_name, model, timeout,
     tree_json = json.dumps(mini, ensure_ascii=False, indent=2)
 
     if relation["relation_type"] == "conflict":
-        prompt_path, key, label = REBUTTAL_PROMPT_PATH, "reageert_op_kern", f"rebuttal-{relation_index}"
+        prompt_path, label = REBUTTAL_PROMPT_PATH, f"rebuttal-{relation_index}"
     else:
-        prompt_path, key, label = SUPPORT_PROMPT_PATH, "geeft_expliciete_reden", f"support-{relation_index}"
+        prompt_path, label = SUPPORT_PROMPT_PATH, f"support-{relation_index}"
 
     prompt = prompt_path.read_text().format(topic=topic_name, tree_json=tree_json)
     stdout, stderr, elapsed = run_agy_prompt(prompt, model, timeout, label, skip_permissions)
     logger.info("%s klaar in %.1fs", label, elapsed)
     result = _parse_or_die(stdout, stderr, label)
-    if key not in result:
-        raise SystemExit(f"{label}-output mist '{key}'-veld: {stdout[:500]}")
+    if "sterkte" not in result:
+        raise SystemExit(f"{label}-output mist 'sterkte'-veld: {stdout[:500]}")
+    sterkte = float(result["sterkte"])
+    if not 0.0 <= sterkte <= 1.0:
+        raise SystemExit(f"{label}-output heeft 'sterkte' buiten [0.0, 1.0]: {sterkte}")
     return {
         "relation_index": relation_index,
-        "engageert": bool(result[key]),
+        "sterkte": sterkte,
         "reden": result.get("reden", ""),
     }
 
@@ -406,6 +432,32 @@ def main():
         help="voeg --dangerously-skip-permissions toe aan agy -- alleen als laatste redmiddel, zie run_agy()",
     )
     parser.add_argument("--dry-run", action="store_true", help="alleen de opgebouwde prompt printen, geen agy-call")
+    parser.add_argument(
+        "--resume", action="store_true",
+        help="hervat vanaf data/export/argument-docs/checkpoints/<topic>/: slaat de structureer-call en al "
+             "afgeronde relatiechecks over (zonder deze vlag wordt een bestaande checkpoint weggegooid)",
+    )
+    parser.add_argument(
+        "--engagement-threshold", type=float, default=0.5,
+        help="drempel (0.0-1.0, default 0.5) voor de 'sterkte'-score uit de redactiecheck: een relatie met "
+             "sterkte >= drempel blijft in de boom. Puur een lokale nabewerking van al opgehaalde checks -- "
+             "samen met --resume kun je zo herhaaldelijk drempels uitproberen zonder nieuwe agy-calls.",
+    )
+    parser.add_argument(
+        "--canonical", action="store_true",
+        help="issue #254: bijna-duplicaatquotes per stance vooraf samenvoegen tot canonieke stellingen "
+             "(lokale LM Studio-call, geen agy-credits nodig) vóórdat Gemini het document ziet",
+    )
+    parser.add_argument("--canonical-model", default="qwen/qwen3.8-27b", help="LM Studio-model voor het benoemen van clusters (alleen met --canonical)")
+    parser.add_argument("--canonical-threshold", type=float, default=DEFAULT_DISTANCE_THRESHOLD, help="clusterdrempel (alleen met --canonical)")
+    parser.add_argument(
+        "--canonical-reasoning-effort", default="none",
+        help="LM Studio reasoning_effort voor het benoemen van clusters (alleen met --canonical; default 'none' -- "
+             "zet enable_thinking uit voor de default --canonical-model qwen/qwen3.8-27b, ondanks de LM Studio-"
+             "warning over het genegeerde modelspecifieke veld (onschuldig, zie "
+             "scripts/argument_tree/experiment_canonical_claim_document.py). 'low' laat denken juist aan staan en "
+             "liep daardoor vast op max_tokens.)",
+    )
     args = parser.parse_args()
 
     stances = [s.strip() for s in args.stances.split(",") if s.strip()]
@@ -416,7 +468,11 @@ def main():
         raise SystemExit(f"onbekende topic-slug: {args.topic}")
 
     vanaf = args.vanaf if args.vanaf is not None else PeriodeIndex().drempel
-    document, instructions, total_args = build_prompt(conn, topic_row, stances, vanaf)
+    document, instructions, total_args = build_prompt(
+        conn, topic_row, stances, vanaf, canonical=args.canonical,
+        canonical_model=args.canonical_model, canonical_threshold=args.canonical_threshold,
+        canonical_reasoning_effort=args.canonical_reasoning_effort,
+    )
     conn.close()
 
     logger.info(
@@ -432,27 +488,55 @@ def main():
         logger.info("(--dry-run: geen agy-call)")
         return
 
+    checkpoint_dir = CHECKPOINT_DIR / topic_row["slug"]
+    structured_path = checkpoint_dir / "structured.json"
+    checks_path = checkpoint_dir / "checks.jsonl"
+    if not args.resume and checkpoint_dir.exists():
+        # Een vorige run zonder --resume wordt nooit stilzwijgend hergebruikt:
+        # verse run = verse checkpoint.
+        structured_path.unlink(missing_ok=True)
+        checks_path.unlink(missing_ok=True)
+    checkpoint_dir.mkdir(parents=True, exist_ok=True)
+
     # 1. Structureren
-    stdout, stderr, elapsed = run_agy(
-        document, instructions, args.model, args.timeout, skip_permissions=args.dangerously_skip_permissions
-    )
-    logger.info("structureer-call klaar in %.1fs -- volledige in/output in %s", elapsed, LOG_PATH)
-    structured = _parse_or_die(stdout, stderr, "structureren")
-    for verplicht in ("nodes", "relations"):
-        if verplicht not in structured:
-            raise SystemExit(f"structureer-output mist '{verplicht}'-veld: {stdout[:500]}")
-    structured.setdefault("coordinatieve_groepen", [])
-    structured.setdefault("twijfelachtige_classificaties", [])
+    if structured_path.exists():
+        structured = json.loads(structured_path.read_text())
+        logger.info("--resume: structureer-output uit %s, geen agy-call", structured_path)
+    else:
+        stdout, stderr, elapsed = run_agy(
+            document, instructions, args.model, args.timeout, skip_permissions=args.dangerously_skip_permissions
+        )
+        logger.info("structureer-call klaar in %.1fs -- volledige in/output in %s", elapsed, LOG_PATH)
+        structured = _parse_or_die(stdout, stderr, "structureren")
+        for verplicht in ("nodes", "relations"):
+            if verplicht not in structured:
+                raise SystemExit(f"structureer-output mist '{verplicht}'-veld: {stdout[:500]}")
+        structured.setdefault("coordinatieve_groepen", [])
+        structured.setdefault("twijfelachtige_classificaties", [])
+        structured = drop_degenerate_coordinatieve_groepen(structured, topic_row["slug"])
+        structured_path.write_text(json.dumps(structured, ensure_ascii=False, indent=2))
+        logger.info("structureer-output -> %s", structured_path)
 
     # 2. Redactie, per relatie een eigen geïsoleerde call
+    done = {}
+    if checks_path.exists():
+        for line in checks_path.read_text().splitlines():
+            check = json.loads(line)
+            done[check["relation_index"]] = check
+    n_relations = len(structured["relations"])
+    logger.info("%d relaties te checken (%d al gedaan uit checkpoint)", n_relations, len(done))
     checks = []
-    for i in range(len(structured["relations"])):
-        checks.append(run_engagement_check(
-            structured, i, topic_row["name"], args.model, args.timeout, args.dangerously_skip_permissions
-        ))
+    for i in range(n_relations):
+        if i not in done:
+            done[i] = run_engagement_check(
+                structured, i, topic_row["name"], args.model, args.timeout, args.dangerously_skip_permissions
+            )
+            with checks_path.open("a") as f:
+                f.write(json.dumps(done[i], ensure_ascii=False) + "\n")
+        checks.append(done[i])
 
     # 3. Samenvoegen + valideren -- geen LLM, puur Python (pipeline/confrontatie_tree.py)
-    result = merge_engagement_checks(structured, checks)
+    result = merge_engagement_checks(structured, checks, threshold=args.engagement_threshold)
     schema = json.loads(TREE_SCHEMA_PATH.read_text())
     try:
         Draft202012Validator(schema).validate(result)

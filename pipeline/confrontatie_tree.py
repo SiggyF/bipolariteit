@@ -30,17 +30,54 @@ engageert niet aantoonbaar met de kern van het target-argument) verdwijnt
 uit de boom -- geen weak_link-tussenvorm meer, want er is geen onenigheid
 meer om te meten, alleen een feitelijke ja/nee-constatering per relatie.
 
-Zie scripts/agy_run_confrontatie_tree.py voor de orkestratie (1 structureer-
+Zie scripts/argument_tree/agy_run_confrontatie_tree.py voor de orkestratie (1 structureer-
 call + N losse redactiechecks + validatie).
 """
 
+import logging
 
-def merge_engagement_checks(structured, checks):
+logger = logging.getLogger(__name__)
+
+
+def drop_degenerate_coordinatieve_groepen(structured, topic_slug=None):
+    """Verwijdert `coordinatieve_groepen`-entries met < 2 `argument_ids` uit
+    de output van de structureringsstap (schema eist `minItems: 2`, zie
+    pipeline/schemas/argument_tree.schema.json -- een groep van 1 is per
+    definitie geen bundeling van onafhankelijk hetzelfde punt makende
+    argumenten). Geconstateerd bij handmatige validatie van de asiel-boom
+    (issue #254): Gemini volgt de instructie hier niet altijd.
+
+    Muteert `structured` niet, retourneert een nieuwe dict. De losgemaakte
+    argumenten blijven gewoon als node staan, alleen niet meer gegroepeerd."""
+    groepen = structured.get("coordinatieve_groepen", [])
+    behouden, verworpen = [], []
+    for groep in groepen:
+        (behouden if len(groep.get("argument_ids", [])) >= 2 else verworpen).append(groep)
+
+    for groep in verworpen:
+        logger.warning(
+            "coordinatieve_groepen%s: groep '%s' met %d lid/leden verworpen (schema eist >=2): %s",
+            f" ({topic_slug})" if topic_slug else "",
+            groep.get("label", "?"), len(groep.get("argument_ids", [])), groep.get("argument_ids"),
+        )
+
+    return {**structured, "coordinatieve_groepen": behouden}
+
+
+def merge_engagement_checks(structured, checks, threshold=0.5):
     """`structured` is de output van de structureringsstap (nodes/relations/
     coordinatieve_groepen/twijfelachtige_classificaties, zonder `reden`).
     `checks` is een lijst, één entry per relatie in `structured["relations"]`
-    op dezelfde index: {"relation_index", "engageert": bool, "reden": str,
-    "scheme": str|None (alleen relevant bij conflict, optioneel)}.
+    op dezelfde index: {"relation_index", "sterkte": float (0.0-1.0),
+    "reden": str, "scheme": str|None (alleen relevant bij conflict,
+    optioneel)}. Een relatie blijft in de boom als `sterkte >= threshold`
+    (default 0.5) -- vóór de invoering van `sterkte` gaf de redactiecheck een
+    booleaanse `engageert`, die hier nog als fallback (1.0/0.0) wordt gelezen
+    zodat oudere checkpoints/checks.jsonl-bestanden bruikbaar blijven.
+
+    `threshold` is een zuivere nabewerking op al opgehaalde scores -- met
+    `--resume` kun je 'm dus lokaal bijstellen zonder de agy-calls opnieuw
+    te doen.
 
     Retourneert een dict die voldoet aan argument_tree.schema.json."""
     by_index = {c["relation_index"]: c for c in checks}
@@ -48,7 +85,10 @@ def merge_engagement_checks(structured, checks):
     final_relations = []
     for i, relation in enumerate(structured["relations"]):
         check = by_index.get(i)
-        if check is None or not check.get("engageert"):
+        if check is None:
+            continue
+        sterkte = check["sterkte"] if "sterkte" in check else (1.0 if check.get("engageert") else 0.0)
+        if sterkte < threshold:
             continue
 
         scheme = relation.get("scheme")
@@ -62,6 +102,7 @@ def merge_engagement_checks(structured, checks):
             "thema": relation.get("thema"),
             "scheme": scheme,
             "reden": check.get("reden", ""),
+            "sterkte": sterkte,
         })
 
     return {

@@ -73,7 +73,7 @@ Op basis hiervan is er geen aanleiding om de oorspronkelijke opzet
 Naar aanleiding van de sub-topic-clusters bleek directe cosine-similarity-
 search op dezelfde bge-m3-vectoren (geen UMAP nodig, alleen voor 2D-plotten)
 goed te werken voor "vind gerelateerde argumenten" -- zie
-[`scripts/experiment_find_similar_arguments.py`](../../../scripts/experiment_find_similar_arguments.py)
+[`scripts/argument_tree/experiment_find_similar_arguments.py`](../../../scripts/argument_tree/experiment_find_similar_arguments.py)
 en de gecachete vectoren in `data/embeddings/` (gitignored, regenereerbaar).
 `bgem3_abortus_subtopic_clusters.png` in deze map toont drie handmatig
 geteste argumenten (1707, 1630, 1638) die inderdaad in dezelfde deelcluster
@@ -135,7 +135,7 @@ grondslag:
   die in principe in elk debat inzetbaar zijn, los van het onderwerp.
 
 Praktisch gevolg voor het "gerelateerde argumenten"-idee: dit is precies
-waarom `scripts/experiment_find_similar_arguments.py` similarity-search
+waarom `scripts/argument_tree/experiment_find_similar_arguments.py` similarity-search
 altijd binnen één topic scoped, niet topic-overstijgend -- cross-topic
 similarity wordt gedomineerd door dit generieke-formulering-/
 talking-point-effect, niet door inhoudelijke verwantschap.

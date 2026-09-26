@@ -1,5 +1,5 @@
 """
-Vervolg op scripts/test_bidirectionele_redactie.py: test of de perfecte
+Vervolg op scripts/argument_tree/test_bidirectionele_redactie.py: test of de perfecte
 uniformiteit (8 van de 8 conflict-relaties kregen steeds hetzelfde label,
 over drie verschillende prompt-versies heen) een batch-effect is -- het
 model leest alle relaties in één call en herhaalt zijn eerste
@@ -9,7 +9,7 @@ maar één relatie + de erbij horende nodes), zodat onderlinge besmetting
 tussen relaties binnen één antwoord onmogelijk is.
 
 Gebruik:
-    PYTHONPATH=. uv run python scripts/test_redactie_per_relatie.py
+    PYTHONPATH=. uv run python scripts/argument_tree/test_redactie_per_relatie.py
 """
 
 import json
@@ -17,13 +17,13 @@ import logging
 from pathlib import Path
 
 from pipeline.confrontatie_tree import merge_review_neutraal
-from scripts.agy_run_confrontatie_tree import DEFAULT_MODEL, REDACTIE_PROMPT_PATH, run_agy_prompt
+from scripts.argument_tree.agy_run_confrontatie_tree import DEFAULT_MODEL, REDACTIE_PROMPT_PATH, run_agy_prompt
 from pipeline.extract_arguments import _extract_json
 
 logger = logging.getLogger(__name__)
 
-STRUCTURED_PATH = Path(__file__).parent.parent / "data" / "export" / "argument-docs" / "stikstof-structured-only.json"
-OUT_PATH = Path(__file__).parent.parent / "data" / "export" / "argument-docs" / "stikstof-per-relatie-test.json"
+STRUCTURED_PATH = Path(__file__).parent.parent.parent / "data" / "export" / "argument-docs" / "stikstof-structured-only.json"
+OUT_PATH = Path(__file__).parent.parent.parent / "data" / "export" / "argument-docs" / "stikstof-per-relatie-test.json"
 
 
 def _nodes_for(structured, relation):

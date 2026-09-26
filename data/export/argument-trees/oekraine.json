@@ -1,0 +1,1801 @@
+{
+  "slug": "oekraine",
+  "name": "Oekraïne",
+  "topic_description": "Dit debat gaat over de Nederlandse en NAVO-opstelling ten aanzien van Oekraïne en Rusland: de hoogte van de defensie-uitgaven, de omvang en aard van wapenleveranties aan Oekraïne, de opvang van ontheemden uit Oekraïne, de houding tegenover Rusland (sancties, onderhandelingen, verantwoordelijkheid bij incidenten zoals de Nord Stream-sabotage), de NAVO-aanwezigheid aan de Russische grens, de inkoopstrategie voor defensiematerieel, en de geografische reikwijdte/het gewenste eindresultaat van het conflict.\n\nPRO = voorstander van een assertieve, hoge-inzet-opstelling tegenover Rusland en voor Oekraïne, ongeacht kabinet. Zeven aspecten spelen hierbij: (1) hogere, structurele defensie-uitgaven, vanuit de aanname dat er wél een sterke (directe) dreiging vanuit Rusland uitgaat; (2) ruimere wapenleveranties aan Oekraïne, ook offensief materieel; (3) ruimere opvang van ontheemden uit Oekraïne; (4) een harde lijn tegenover Rusland: sancties, geen onderhandelingen, Rusland zwart afschilderen of ontmenselijken, en bij incidenten zoals Nord Stream uitgaan van Russische verantwoordelijkheid; (5) een actieve, zichtbare NAVO-aanwezigheid aan de Russische grens en scherpe reacties op schermutselingen; (6) vrije marktkeuze bij materieelinkoop, niet beperkt tot Europese leveranciers; (7) aanvallen op Russisch grondgebied aanmoedigen of toestaan, geen genoegen nemen met het verlies van Krim/Donbas.\n\nCONTRA = voorstander van een terughoudende opstelling. Zeven aspecten spelen hierbij: (1) geen of beperkte verhoging van defensie-uitgaven, vanuit de aanname dat er geen sterke (directe) dreiging vanuit Rusland uitgaat; (2) beperktere, uitsluitend defensieve wapenleveranties aan Oekraïne; (3) beperktere opvang van ontheemden uit Oekraïne; (4) onderhandelen met Rusland, Rusland als redelijke/benaderbare partij behandelen, en bij incidenten zoals Nord Stream ruimte laten voor onderzoek of een andere verantwoordelijke (bv. Oekraïne) in plaats van meteen Rusland aan te wijzen; (5) terughoudendheid bij NAVO-aanwezigheid en het vermijden van oorlogsretoriek; (6) een inkooprestrictie richting Europese leveranciers; (7) uitsluitend verdediging binnen eigen grondgebied, bereidheid het verlies van Krim/Donbas als realiteit te accepteren.",
+  "generated_at": "2026-09-26T15:47:05.070155+00:00",
+  "stats": {
+    "totaal_argumenten": 2748,
+    "aantal_pro": 1891,
+    "aantal_contra": 803,
+    "aantal_geselecteerd": 45
+  },
+  "arguments": {
+    "11837": {
+      "id": 11837,
+      "citaat": "Neem de dreiging die uitgaat van Rusland en het voorbeeld van Oekraïne. Oekraïne biedt nu al een aantal maanden een onmiddellijk staakt-het-vuren aan, dus om nu de gevechten te stoppen, maar we zien dat Rusland aanvalt met 600 drones en 40 raketten tegelijkertijd. Het leed en het aantal slachtoffers zijn gigantisch en de schade is enorm. Wat moet je dan nog meer aan de-escalatie doen dan als Oekraïne zeggen, gesteund door alle Europese landen en door de Verenigde Staten, dat je morgen een staakt-het-vuren wilt en dat je in gesprek wilt? Poetin slaat die uitgestoken hand weg en reageert met raketten, drones en nog meer agressieve actie.",
+      "typologie": "factual",
+      "stance": "pro",
+      "spreker": "Ruben Brekelmans",
+      "partij": "VVD",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Anekdotisch",
+        "Bewijs-Statistisch",
+        "Context-Vragenuur",
+        "Debatzet-Gevoelens-Verwoorden",
+        "Frame-Conflict",
+        "Frame-Episodisch",
+        "Frame-Menselijk-Belang",
+        "Frame-Verantwoordelijkheid",
+        "Moraliteit-Vrijheid",
+        "Moraliteit-Zorg",
+        "Stijl-Retorische-Vraag",
+        "Walton-Analogie",
+        "Walton-Causaal"
+      ],
+      "claims": [
+        {
+          "claim_text": "Oekraïne biedt nu al een aantal maanden een onmiddellijk staakt-het-vuren aan",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "Rusland aanvalt met 600 drones en 40 raketten tegelijkertijd",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "Het leed en het aantal slachtoffers zijn gigantisch en de schade is enorm",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "Poetin slaat die uitgestoken hand weg en reageert met raketten, drones en nog meer agressieve actie",
+          "attributed_source_text": null
+        }
+      ],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2025A06444",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-09-30/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-09-30T14%3A01%3A18%2B0200&end=2025-09-30T15%3A05%3A13%2B0200",
+      "start_seconds": 3124.6399999999994,
+      "gist": "Luchtaanvallen tonen noodzaak",
+      "samenvatting": null
+    },
+    "11838": {
+      "id": 11838,
+      "citaat": "Juist daarom vind ik dat we er enorm op moeten inzetten om tot vrede te komen. Ik weet dat we hier vorige week ook een voorstel in de Kamer hadden, dat is ontraden door deze minister, om te kijken of we als Nederland in Europa samen met andere landen in de wereld kunnen komen tot onderhandelingen. Partijen moeten in ieder geval aan die tafel komen om het geweld te stoppen. Maar dat voorstel wordt door deze minister ontraden en door deze Kamer niet aangenomen. Dan vraag ik mij af: hoe komen we dan tot vrede als we niet investeren in vrede?",
+      "typologie": "factual",
+      "stance": "contra",
+      "spreker": "Sarah Dobbe",
+      "partij": "SP",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Anekdotisch",
+        "Context-Vragenuur",
+        "Debatzet-Keuze-Aanscherpen",
+        "Frame-Conflict",
+        "Frame-Thematisch",
+        "Frame-Verantwoordelijkheid",
+        "Ideologie-GAL",
+        "Moraliteit-Zorg",
+        "Stijl-Herhaling",
+        "Stijl-Retorische-Vraag",
+        "Walton-Causaal"
+      ],
+      "claims": [
+        {
+          "claim_text": "Er was vorige week een voorstel in de Kamer om te kijken of Nederland in Europa samen met andere landen tot onderhandelingen kan komen.",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "Dit voorstel is ontraden door de minister en niet aangenomen door de Kamer.",
+          "attributed_source_text": null
+        }
+      ],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2025A06444",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-09-30/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-09-30T14%3A01%3A18%2B0200&end=2025-09-30T15%3A05%3A13%2B0200",
+      "start_seconds": 3176.741000000002,
+      "gist": "Investeren in vredesoverleg",
+      "samenvatting": "Europa en Nederland moeten actief diplomatieke stappen zetten om vredesbesprekingen te starten en de oorlog te stoppen."
+    },
+    "11840": {
+      "id": 11840,
+      "citaat": "Denk je eens in dat je als Oekraïne, na drieënhalf jaar grootschalige agressie — ik weet niet of mevrouw Dobbe er zelf is geweest, maar de verwoesting is echt enorm; Rusland gaat dagelijks door met alleen maar meer aanvallen en agressie — toch zegt: wij zijn bereid om met die enorm grote vijand, die ons van de kaart wil vegen, in gesprek te gaan. Europa en de Verenigde Staten steunen dat en zijn bereid om mee te denken over hoe dat kan. Daar zijn we al maanden mee bezig. En waar beantwoordt Rusland dat mee? Met alleen maar meer raketten, alleen maar meer verwoesting, alleen maar meer leed. Tenzij mevrouw Dobbe zegt: \"Weet je wat Oekraïne moet doen? Oekraïne moet gewoon het hele land of het halve land of de hele Donbas meteen opgeven.\" Ja, weet je, als dat de enige manier is om met Poetin aan tafel te komen, als dat de definitie van \"investeren in vrede\" is van mevrouw Dobbe, dan is dat niet mijn definitie. Volgens mij doet Oekraïne alles om tot een onmiddellijk staakt-het-vuren te komen. Wij bieden daarbij ondersteuning, maar we hebben te maken met een agressieve dictator die niet aan tafel wil zitten. Dat is de realiteit.",
+      "typologie": "factual",
+      "stance": "pro",
+      "spreker": "Ruben Brekelmans",
+      "partij": "VVD",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Anekdotisch",
+        "Context-Vragenuur",
+        "Debatzet-Gevoelens-Verwoorden",
+        "Debatzet-Herformuleren",
+        "Debatzet-Keuze-Aanscherpen",
+        "Frame-Conflict",
+        "Frame-Menselijk-Belang",
+        "Frame-Thematisch",
+        "Frame-Verantwoordelijkheid",
+        "Ideologie-TAN",
+        "Moraliteit-Vrijheid",
+        "Moraliteit-Zorg",
+        "Stijl-Herhaling",
+        "Stijl-Retorische-Vraag",
+        "Walton-Causaal"
+      ],
+      "claims": [
+        {
+          "claim_text": "Oekraïne heeft gezegd: wij willen om tafel met Rusland",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "Rusland gaat dagelijks door met alleen maar meer aanvallen en agressie",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "Europa en de Verenigde Staten steunen dat en zijn bereid om mee te denken over hoe dat kan",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "Rusland beantwoordt dat met alleen maar meer raketten, alleen maar meer verwoesting, alleen maar meer leed",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "Oekraïne doet alles om tot een onmiddellijk staakt-het-vuren te komen",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "We hebben te maken met een agressieve dictator die niet aan tafel wil zitten",
+          "attributed_source_text": null
+        }
+      ],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2025A06444",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-09-30/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-09-30T14%3A01%3A18%2B0200&end=2025-09-30T15%3A05%3A13%2B0200",
+      "start_seconds": 3219.821,
+      "gist": "Oekraïne militair bijstaan",
+      "samenvatting": "Militaire steun aan Oekraïne is noodzakelijk om Russische vernietigingsaanvallen af te slaan en een dictator te stoppen."
+    },
+    "11843": {
+      "id": 11843,
+      "citaat": "Gemeenten luiden de noodklok en spreken van een zeer kritieke situatie. De oproep aan het kabinet is: kom in actie! Gemeenten hebben namelijk hun verantwoordelijkheid genomen. Zij hebben geleverd en ik verwacht dan ook van de minister dat zij nu ook gaat leveren, want tot nu toe staan gemeenten in de kou.",
+      "typologie": "factual",
+      "stance": "pro",
+      "spreker": "Don Ceder",
+      "partij": "ChristenUnie",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Context-Vragenuur",
+        "Frame-Conflict",
+        "Frame-Thematisch",
+        "Frame-Verantwoordelijkheid",
+        "Ideologie-Links-Economisch",
+        "Meta-Bevoegdheid",
+        "Moraliteit-Proportionaliteit",
+        "Moraliteit-Zorg",
+        "Stijl-Herhaling",
+        "Walton-Regel"
+      ],
+      "claims": [
+        {
+          "claim_text": "Gemeenten luiden de noodklok en spreken van een zeer kritieke situatie.",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "Gemeenten hebben hun verantwoordelijkheid genomen en hebben geleverd.",
+          "attributed_source_text": null
+        }
+      ],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2025A05954",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-09-09/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-09-09T14%3A02%3A16%2B0200&end=2025-09-09T15%3A06%3A02%2B0200",
+      "start_seconds": 46.83899999999994,
+      "gist": "Gemeenten acute nood",
+      "samenvatting": null
+    },
+    "11847": {
+      "id": 11847,
+      "citaat": "Gemeenten moeten duidelijkheid krijgen over afdoende financiering, omdat ze het nu gewoon niet rond krijgen. Alleen op die manier is het mogelijk om goede en barmhartige opvang te bieden aan de Oekraïense vluchtelingen, vrouwen en kinderen.",
+      "typologie": "economic",
+      "stance": "pro",
+      "spreker": "Don Ceder",
+      "partij": "ChristenUnie",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Causaal",
+        "Context-Vragenuur",
+        "Frame-Economisch",
+        "Frame-Menselijk-Belang",
+        "Frame-Moraliteit",
+        "Frame-Thematisch",
+        "Ideologie-Links-Economisch",
+        "Moraliteit-Zorg",
+        "Walton-Causaal"
+      ],
+      "claims": [
+        {
+          "claim_text": "Gemeenten krijgen het nu niet rond met de huidige financiering.",
+          "attributed_source_text": null
+        }
+      ],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2025A05954",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-09-09/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-09-09T14%3A02%3A16%2B0200&end=2025-09-09T15%3A06%3A02%2B0200",
+      "start_seconds": 110.86000000000058,
+      "gist": "Structurele opvangfinanciering gemeenten",
+      "samenvatting": "Het Rijk moet gemeenten afdoende en continue financiële middelen bieden om goede en barmhartige opvang aan vluchtelingen te garanderen."
+    },
+    "11858": {
+      "id": 11858,
+      "citaat": "In het vragenuur ging het ook al even over de spanningen aan de grenzen van Europa. De EU zou samen met landen als Brazilië of India het initiatief kunnen nemen tot in ieder geval gesprekken om tot vrede te komen, tot onderhandelingen. Ik snap dat dat moeilijk is, maar als we geen pogingen wagen en geen inzet plegen, dan komen die gesprekken er niet. Die gesprekken zijn wel nodig om tot een einde van die vreselijke oorlog te komen. Is de minister-president bereid om dat initiatief in Europa te nemen?",
+      "typologie": "other",
+      "stance": "contra",
+      "spreker": "Sarah Dobbe",
+      "partij": "SP",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Context-Plenair",
+        "Debatzet-Keuze-Aanscherpen",
+        "Frame-Thematisch",
+        "Frame-Verantwoordelijkheid",
+        "Ideologie-GAL",
+        "Moraliteit-Zorg",
+        "Stijl-Retorische-Vraag",
+        "Walton-Consequentie"
+      ],
+      "claims": [],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2025A06444",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-09-30/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-09-30T18%3A49%3A27%2B0200&end=2025-09-30T23%3A55%3A54%2B0200",
+      "start_seconds": 649.2010000000009,
+      "gist": "Mondiaal diplomatiek initiatief",
+      "samenvatting": null
+    },
+    "11862": {
+      "id": 11862,
+      "citaat": "Het is juist zo dat Oekraïne vaak als springplank wordt gebruikt om tot grotere investeringen te komen voor die radarsystemen en die bedrijven. Laat ik even een voorbeeld noemen dat vaak in het nieuws is: Robin Radar. Dat is een veelbelovend bedrijf in Nederland. Zij hebben ook grote batches aan Oukraïne geleverd. Dat stelt hen weer in staat om verder te innoveren en investeren. Als ze weer een stap verder zijn, kan Defensie diezelfde radarsystemen aanschaffen. Er is geen sprake van de tegenstelling die de heer Van Hijum lijkt te schetsen, namelijk dat wij door het leveren van zaken aan Oekraïne of het investeren in Oekraïne zelf minder verdediging zouden hebben. Integendeel, het is vaak een springplank om daar zelf ook meer in te investeren.",
+      "typologie": "economic",
+      "stance": "pro",
+      "spreker": "Ruben Brekelmans",
+      "partij": "VVD",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Anekdotisch",
+        "Bewijs-Causaal",
+        "Context-Vragenuur",
+        "Debatzet-Herformuleren",
+        "Frame-Economisch",
+        "Frame-Episodisch",
+        "Ideologie-Rechts-Economisch",
+        "Walton-Causaal"
+      ],
+      "claims": [
+        {
+          "claim_text": "Oekraïne wordt vaak als springplank gebruikt om tot grotere investeringen te komen voor radarsystemen en bedrijven.",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "Robin Radar is een veelbelovend bedrijf in Nederland.",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "Robin Radar heeft grote batches aan Oekraïne geleverd.",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "Het leveren aan Oekraïne stelt bedrijven in staat om verder te innoveren en investeren.",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "Defensie kan diezelfde radarsystemen aanschaffen als bedrijven een stap verder zijn.",
+          "attributed_source_text": null
+        }
+      ],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/commissievergaderingen/details?id=2025A06444",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-09-30/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-09-30T14%3A01%3A18%2B0200&end=2025-09-30T15%3A05%3A13%2B0200",
+      "start_seconds": 2309.0,
+      "gist": "Wapenleveranties stimuleren innovatie",
+      "samenvatting": null
+    },
+    "11892": {
+      "id": 11892,
+      "citaat": "Nederland heeft opnieuw wapensteun aan Oekraïne toegezegd: een half miljard euro, waarvan 250 miljoen naar kruisraketten die worden gebouwd in Hengelo. Dat is Nederlands belastinggeld, toegezegd door de Nederlandse regering en uitgegeven aan Nederlands fabricaat, met een helder doel: het raken van doelen diep in Russisch grondgebied. Dat is een fundamenteel andere categorie dan de hulp die dit kabinet ons altijd heeft voorgehouden: verdedigingswapens houden een front overeind, maar dat doen deze wapens niet. Dit is een nog verdere escalatie namens Nederland.",
+      "typologie": "factual",
+      "stance": "contra",
+      "spreker": "Ralf Dekker",
+      "partij": "FVD",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Statistisch",
+        "Context-Plenair",
+        "Debatzet-Keuze-Aanscherpen",
+        "Frame-Economisch",
+        "Frame-Episodisch",
+        "Frame-Verantwoordelijkheid",
+        "Ideologie-TAN",
+        "Moraliteit-Loyaliteit",
+        "Stijl-Herhaling",
+        "Walton-Consequentie"
+      ],
+      "claims": [
+        {
+          "claim_text": "Nederland heeft opnieuw wapensteun aan Oekraïne toegezegd: een half miljard euro, waarvan 250 miljoen naar kruisraketten die worden gebouwd in Hengelo.",
+          "attributed_source_text": null
+        }
+      ],
+      "tweedekamer_activiteit_url": null,
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2026-07-02/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2026-07-02T11%3A17%3A59%2B0200&end=2026-07-02T11%3A49%3A52%2B0200",
+      "start_seconds": 558.1809999999987,
+      "gist": "Kruisraketten escaleren conflict",
+      "samenvatting": null
+    },
+    "11895": {
+      "id": 11895,
+      "citaat": "Wij hebben eerder gezegd dat wij vinden dat Oekraïne op basis van zelfverdediging volgens artikel 51 van het VN-Handvest het recht heeft om ook legitieme doelen in Rusland te raken. Daarbij maakt het niet uit hoe diep die doelen liggen.",
+      "typologie": "factual",
+      "stance": "pro",
+      "spreker": "David van Weel",
+      "partij": "VVD",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Context-Plenair",
+        "Frame-Moraliteit",
+        "Frame-Thematisch",
+        "Frame-Verantwoordelijkheid",
+        "Moraliteit-Autoriteit",
+        "Walton-Regel"
+      ],
+      "claims": [],
+      "tweedekamer_activiteit_url": "https://www.tweedekamer.nl/debat_en_vergadering/plenaire_vergaderingen/details/activiteit?id=2025A06036",
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-09-11/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-09-11T14%3A57%3A25%2B0200&end=2025-09-11T18%3A50%3A30%2B0200",
+      "start_seconds": 11539.798999999999,
+      "gist": "Zelfverdediging Russisch grondgebied",
+      "samenvatting": "Oekraïne heeft krachtens artikel 51 van het VN-Handvest het recht om legitieme militaire doelen diep in Rusland te treffen."
+    },
+    "11911": {
+      "id": 11911,
+      "citaat": "Je wilt 2 miljard euro extra uitgeven in een tijd waarin we zien dat er ook wordt bezuinigd op de zorg en op sociale zekerheid. We hebben hier van tevoren met een meerderheid van de Kamer garanties gevraagd dat bijvoorbeeld defensie-uitgaven niet ten koste van de zorg zouden gaan, maar dat gebeurt wel. Dan lijkt het mij een hele relevante vraag aan u: wie moet die 2 miljard euro extra betalen? Dat is geen magisch geld. Dat betalen we op dezelfde manier als we die 3,5 miljard euro betalen, maar dat moet wel door iemand betaald worden. Waar komt die rekening terecht?",
+      "typologie": "economic",
+      "stance": "contra",
+      "spreker": "Sarah Dobbe",
+      "partij": "SP",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Statistisch",
+        "Context-Plenair",
+        "Frame-Economisch",
+        "Frame-Thematisch",
+        "Frame-Verantwoordelijkheid",
+        "Ideologie-Links-Economisch",
+        "Moraliteit-Zorg",
+        "Stijl-Retorische-Vraag",
+        "Walton-Consequentie"
+      ],
+      "claims": [
+        {
+          "claim_text": "Er wordt bezuinigd op de zorg en op sociale zekerheid",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "Met een meerderheid van de Kamer zijn garanties gevraagd dat defensie-uitgaven niet ten koste van de zorg zouden gaan",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "De garantie dat defensie-uitgaven niet ten koste van de zorg zouden gaan, wordt niet nagekomen",
+          "attributed_source_text": null
+        }
+      ],
+      "tweedekamer_activiteit_url": null,
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-11-27/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-11-27T16%3A34%3A23%2B0100&end=2025-11-27T21%3A24%3A46%2B0100",
+      "start_seconds": 402.33899999999994,
+      "gist": "Bezuinigingen publieke diensten",
+      "samenvatting": null
+    },
+    "11967": {
+      "id": 11967,
+      "citaat": "We zien dat de extra miljarden aan defensie-uitgaven ten koste gaan van de zorg. Dit is niet uit te leggen aan zorgverleners, die nu al op hun tandvlees lopen om goede zorg te leveren. Nu wordt op een namiddag besloten 2 miljard euro uit te geven, gesteund door formerende partijen, waarvan we in de campagne hebben gehoord dat die plannen verder zullen leiden tot nog meer bezuinigingen op de zorg. \"In het saldo laten lopen\" betekent ook dat de rekening nog een keer komt. Deze miljarden extra naar Oekraïne mogen niet weer de zorg, het onderwijs en de sociale zekerheid raken.",
+      "typologie": "economic",
+      "stance": "contra",
+      "spreker": "Sarah Dobbe",
+      "partij": "SP",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Causaal",
+        "Context-Plenair",
+        "Debatzet-Gevoelens-Verwoorden",
+        "Frame-Economisch",
+        "Frame-Menselijk-Belang",
+        "Frame-Thematisch",
+        "Ideologie-Links-Economisch",
+        "Moraliteit-Zorg",
+        "Stijl-Herhaling",
+        "Walton-Consequentie"
+      ],
+      "claims": [
+        {
+          "claim_text": "De extra miljarden aan defensie-uitgaven gaan ten koste van de zorg.",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "Formerende partijen hebben in de campagne gezegd dat hun plannen leiden tot nog meer bezuinigingen op de zorg.",
+          "attributed_source_text": null
+        }
+      ],
+      "tweedekamer_activiteit_url": null,
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-11-27/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-11-27T16%3A34%3A23%2B0100&end=2025-11-27T21%3A24%3A46%2B0100",
+      "start_seconds": 1147.2799999999988,
+      "gist": "Zorg en onderwijs ontzien",
+      "samenvatting": "Extra miljarden naar defensie en steun aan Oekraïne mogen niet leiden tot bezuinigingen op zorg, onderwijs en sociale zekerheid."
+    },
+    "11968": {
+      "id": 11968,
+      "citaat": "De SP heeft altijd gezegd: Oekraïne steunen betekent ook een pad naar vrede. Er komt pas een einde aan deze oorlog met vredesbesprekingen, en niet met een verdere wapenwedloop. Op vredesbesprekingen lijkt in deze Kamer een taboe te rusten, tenzij Trump het doet. Want dan wil ineens iedereen aansluiten. Nu wordt er onderhandeld, en dat is goed, maar het initiatief voor deze onderhandelingen is overgelaten aan Trump. En de voorstellen die de SP eerder heeft gedaan om in Europa zelf het initiatief te nemen tot onderhandelingen, daar wilde deze Kamer niet aan, ze wilde het niet eens proberen. Nu kijkt iedereen naar de voorstellen van Trump, waar toch vooral het Amerikaanse bedrijfsleven van profiteert. We hopen dat de onderhandelingen leiden tot een akkoord en tot vrede. Het is aan Oekraïne zelf onder welke voorwaarden het overgaat tot een vredesakkoord. Nederland zou in Europa zelf het initiatief moeten blijven nemen om diplomatie te steunen en te zorgen dat er vredesbesprekingen zijn, totdat er een vredesakkoord is.",
+      "typologie": "factual",
+      "stance": "contra",
+      "spreker": "Sarah Dobbe",
+      "partij": "SP",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Causaal",
+        "Context-Plenair",
+        "Debatzet-Keuze-Aanscherpen",
+        "Frame-Thematisch",
+        "Frame-Verantwoordelijkheid",
+        "Ideologie-GAL",
+        "Moraliteit-Vrijheid",
+        "Moraliteit-Zorg",
+        "Stijl-Antithese",
+        "Stijl-Herhaling",
+        "Walton-Causaal"
+      ],
+      "claims": [
+        {
+          "claim_text": "Er komt pas een einde aan deze oorlog met vredesbesprekingen, en niet met een verdere wapenwedloop.",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "Het initiatief voor de huidige onderhandelingen is overgelaten aan Trump.",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "De Kamer wilde niet aan de voorstellen van de SP voor Europees initiatief tot onderhandelingen.",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "Bij de voorstellen van Trump profiteert vooral het Amerikaanse bedrijfsleven.",
+          "attributed_source_text": null
+        }
+      ],
+      "tweedekamer_activiteit_url": null,
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-11-27/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-11-27T16%3A34%3A23%2B0100&end=2025-11-27T21%3A24%3A46%2B0100",
+      "start_seconds": 1211.900999999998,
+      "gist": "Diplomatie boven wapenwedloop",
+      "samenvatting": null
+    },
+    "12191": {
+      "id": 12191,
+      "citaat": "Rusland blijft vasthouden aan Poetins absoluut absurde doelstellingen. De onderhandelingen zitten daardoor muurvast. Ook mogen we van Oekraïne niet verwachten dat het gedwongen territoriale concessies doet. Dat zouden wij ook niet accepteren als het over Nederlands grondgebied zou gaan. Dan zouden wij ook als leeuwen vechten voor elke vierkante meter en dat niet willen opgeven. De PVV wil dus ook hierover geen appeasementpolitiek. De druk die er hier en daar ontstaat om concessies te doen, ook territoriaal, om tot vrede te komen, moet vooral op Poetins bord worden geschoven.",
+      "typologie": "moral",
+      "stance": "pro",
+      "spreker": "Raymond de Roon",
+      "partij": "PVV",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Context-Plenair",
+        "Frame-Moraliteit",
+        "Frame-Thematisch",
+        "Frame-Verantwoordelijkheid",
+        "Ideologie-TAN",
+        "Moraliteit-Loyaliteit",
+        "Moraliteit-Vrijheid",
+        "Stijl-Herhaling",
+        "Walton-Analogie"
+      ],
+      "claims": [
+        {
+          "claim_text": "Rusland blijft vasthouden aan Poetins absoluut absurde doelstellingen.",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "De onderhandelingen zitten daardoor muurvast.",
+          "attributed_source_text": null
+        }
+      ],
+      "tweedekamer_activiteit_url": null,
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2026-03-24/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2026-03-24T17%3A52%3A02%2B0100&end=2026-03-24T22%3A44%3A21%2B0100",
+      "start_seconds": 5395.040000000001,
+      "gist": "Geen territoriale concessies",
+      "samenvatting": "Oekraïne mag niet gedwongen worden tot gebiedsafstand; appeasement werkt niet en de druk moet volledig op Rusland blijven."
+    },
+    "12308": {
+      "id": 12308,
+      "citaat": "Denk ook aan de succesvolle aanvallen met langeafstandsraketten diep in Rusland, tegen de Russische militairen en energie-infrastructuur. Kortom, de situatie is kritiek. Oekraïne heeft alle steun nodig die het kan krijgen. Wij zullen dat natuurlijk blijven doen vanuit onze rol.",
+      "typologie": "factual",
+      "stance": "pro",
+      "spreker": "Dilan Yeşilgöz-Zegerius",
+      "partij": "VVD",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Anekdotisch",
+        "Context-Plenair",
+        "Frame-Conflict",
+        "Frame-Episodisch",
+        "Frame-Verantwoordelijkheid",
+        "Ideologie-TAN",
+        "Moraliteit-Loyaliteit",
+        "Moraliteit-Vrijheid",
+        "Walton-Causaal"
+      ],
+      "claims": [
+        {
+          "claim_text": "Oekraïne voert succesvolle aanvallen met langeafstandsraketten diep in Rusland uit",
+          "attributed_source_text": null
+        }
+      ],
+      "tweedekamer_activiteit_url": null,
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2026-03-24/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2026-03-24T17%3A52%3A02%2B0100&end=2026-03-24T22%3A44%3A21%2B0100",
+      "start_seconds": 14722.0,
+      "gist": "Langeafstandsaanvallen verzwakken Rusland",
+      "samenvatting": null
+    },
+    "12341": {
+      "id": 12341,
+      "citaat": "We hebben altijd gezegd dat ons standpunt inzake steun aan Oekraïne is dat Oekraïne zichzelf moet kunnen verdedigen en dat wij niet willen dat wapens en vliegtuigen diep en ver reiken tot in Rusland, omdat dat een te groot escalerend effect kan hebben.",
+      "typologie": "factual",
+      "stance": "contra",
+      "spreker": "Jimmy Dijk",
+      "partij": "SP",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Causaal",
+        "Context-Plenair",
+        "Frame-Thematisch",
+        "Frame-Verantwoordelijkheid",
+        "Ideologie-TAN",
+        "Moraliteit-Zorg",
+        "Walton-Consequentie"
+      ],
+      "claims": [],
+      "tweedekamer_activiteit_url": null,
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-06-17/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-06-17T16%3A59%3A16%2B0200&end=2025-06-17T23%3A42%3A07%2B0200",
+      "start_seconds": 1771.0,
+      "gist": "Uitsluitend defensieve steun",
+      "samenvatting": null
+    },
+    "12448": {
+      "id": 12448,
+      "citaat": "Wij willen als DENK ook gewoon niet instemmen met een blanco cheque. Wij willen niet dat deze regering 2 miljard tot 4 miljard per jaar extra voor defensie gaat beloven terwijl er geen garantie is dat dat niet ten koste zal gaan van onze verzorgingsstaat, van ons onderwijs en van nog veel meer. Hoe kunnen we het aan al die kinderen in armoede in Nederland uitleggen dat er voor 15 miljard tot 19 miljard gecommitteerd wordt aan defensie, terwijl de bestaanszekerheid in Nederland zo onder druk staat? Hoe kunnen we dat uitleggen aan al die mensen die onderbetaald worden in de zorg, die geen woning kunnen vinden? Wat DENK betreft gaat er een hele dikke streep door die NAVO-norm.",
+      "typologie": "economic",
+      "stance": "contra",
+      "spreker": "Stephan van Baarle",
+      "partij": "DENK",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Statistisch",
+        "Context-Plenair",
+        "Debatzet-Gevoelens-Verwoorden",
+        "Frame-Economisch",
+        "Frame-Menselijk-Belang",
+        "Frame-Thematisch",
+        "Ideologie-Links-Economisch",
+        "Moraliteit-Eerlijkheid",
+        "Moraliteit-Zorg",
+        "Stijl-Antithese",
+        "Stijl-Retorische-Vraag",
+        "Walton-Consequentie"
+      ],
+      "claims": [
+        {
+          "claim_text": "Er is geen garantie dat extra defensie-uitgaven niet ten koste gaan van de verzorgingsstaat, onderwijs en andere sectoren.",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "De bestaanszekerheid in Nederland staat onder druk.",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "Mensen worden onderbetaald in de zorg en kunnen geen woning vinden.",
+          "attributed_source_text": null
+        }
+      ],
+      "tweedekamer_activiteit_url": null,
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-06-17/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-06-17T16%3A59%3A16%2B0200&end=2025-06-17T23%3A42%3A07%2B0200",
+      "start_seconds": 7814.0,
+      "gist": "Geen blanco defensiecheque",
+      "samenvatting": null
+    },
+    "12501": {
+      "id": 12501,
+      "citaat": "Er wordt heel duidelijk ingezet op militair treffen met Rusland. Er wordt heel duidelijk niet ingezet op een diplomatieke oplossing. Rusland wil dat wel. Ik heb het gewoon over een deling van Oekraïne: de helft gaat naar Rusland en de andere helft wordt neutraal gebied of zo. Dat zou prima zijn.",
+      "typologie": "factual",
+      "stance": "contra",
+      "spreker": "Thierry Baudet",
+      "partij": "FVD",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Context-Plenair",
+        "Debatzet-Keuze-Aanscherpen",
+        "Frame-Conflict",
+        "Frame-Thematisch",
+        "Ideologie-TAN",
+        "Moraliteit-Vrijheid",
+        "Moraliteit-Zorg",
+        "Stijl-Herhaling",
+        "Walton-Consequentie"
+      ],
+      "claims": [
+        {
+          "claim_text": "Rusland wil een diplomatieke oplossing",
+          "attributed_source_text": null
+        }
+      ],
+      "tweedekamer_activiteit_url": null,
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-06-17/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-06-17T16%3A59%3A16%2B0200&end=2025-06-17T23%3A42%3A07%2B0200",
+      "start_seconds": 10195.900999999998,
+      "gist": "Onderhandelen over gebiedsdeling",
+      "samenvatting": null
+    },
+    "12558": {
+      "id": 12558,
+      "citaat": "Er gaan zo meteen miljarden naar de wapenindustrie, miljarden naar de aandeelhouders, en dan volgen er bezuinigingen op de zorg, het onderwijs en de sociale zekerheid. Constant als hier wordt aangegeven dat de zorg het niet meer aankan, komt er geen commitment van het kabinet. Dan komen er extra bezuinigingen. Als het onderwijs aangeeft dat de bezuinigingen niet meer kunnen, komt er hier nog een extra bezuiniging op het onderwijs. Als het om de sociale zekerheid gaat, is het exact hetzelfde verhaal. Er zit iets zeer hypocriets in het commitment dat hier wordt gegeven, in twee vormen, twee keer 16 miljard tot 19 miljard: eerst naar 3,5% en dan naar 5%. Daar zit iets heel hypocriets in; ik heb dat in mijn bijdrage ook gezegd. Nooit is er geld voor die andere zaken. In het allereerste debat met u, toen het ging over het oplossen van kinderarmoede, vroeg ik u waarom daar het geld niet aan uitgegeven wordt. Toen zei u: die keuze maken we gewoon, want dat geld is er niet. Nu blijkt dat geld er wel te zijn. Waar is het commitment op die andere vlakken, is mijn vraag aan de minister-president. Anders verliest u inderdaad, zoals meerdere andere partijen ook aangeven, enorm veel draagvlak om überhaupt iets te gaan doen aan veiligheid.",
+      "typologie": "economic",
+      "stance": "contra",
+      "spreker": "Jimmy Dijk",
+      "partij": "SP",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Statistisch",
+        "Context-Plenair",
+        "Debatzet-Keuze-Aanscherpen",
+        "Debatzet-Persoon-Aanspreken",
+        "Frame-Conflict",
+        "Frame-Economisch",
+        "Frame-Thematisch",
+        "Frame-Verantwoordelijkheid",
+        "Ideologie-Links-Economisch",
+        "Moraliteit-Eerlijkheid",
+        "Moraliteit-Zorg",
+        "Stijl-Herhaling",
+        "Stijl-Retorische-Vraag",
+        "Walton-Consequentie"
+      ],
+      "claims": [
+        {
+          "claim_text": "Er gaan zo meteen miljarden naar de wapenindustrie, miljarden naar de aandeelhouders, en dan volgen er bezuinigingen op de zorg, het onderwijs en de sociale zekerheid.",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "Er zit iets zeer hypocriets in het commitment dat hier wordt gegeven, in twee vormen, twee keer 16 miljard tot 19 miljard: eerst naar 3,5% en dan naar 5%.",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "Toen zei u: die keuze maken we gewoon, want dat geld is er niet. Nu blijkt dat geld er wel te zijn.",
+          "attributed_source_text": null
+        }
+      ],
+      "tweedekamer_activiteit_url": null,
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-06-17/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-06-17T16%3A59%3A16%2B0200&end=2025-06-17T23%3A42%3A07%2B0200",
+      "start_seconds": 18158.301,
+      "gist": "Geen miljarden defensie-industrie",
+      "samenvatting": null
+    },
+    "12620": {
+      "id": 12620,
+      "citaat": "Hij kan dan dus dit nu steunen en dan kunnen we straks die 3%, 4%, 5% of wat er ook maar nodig is — wat de VVD betreft staan we voor wat nodig is voor onze veiligheid — neerleggen in een aangepast wetsvoorstel.",
+      "typologie": "factual",
+      "stance": "pro",
+      "spreker": "Dilan Yeşilgöz-Zegerius",
+      "partij": "VVD",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Statistisch",
+        "Context-Plenair",
+        "Frame-Economisch",
+        "Frame-Thematisch",
+        "Ideologie-TAN",
+        "Moraliteit-Loyaliteit",
+        "Walton-Consequentie"
+      ],
+      "claims": [],
+      "tweedekamer_activiteit_url": null,
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-02-18/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-02-18T16%3A35%3A29%2B0100&end=2025-02-18T23%3A41%3A48%2B0100",
+      "start_seconds": 1381.798999999999,
+      "gist": "Investeren wat nodig is",
+      "samenvatting": null
+    },
+    "12721": {
+      "id": 12721,
+      "citaat": "D66 roept het kabinet op: kom direct met een extra pakket aan noodsteun voor Oekraïne. We roepen dus niet op tot het voortzetten van die steun, maar tot het intensiveren van die steun. Laat Poetin daar zelf voor betalen, met zijn eigen bevroren tegoeden. Elke vierkante kilometer die Oekraïne nu kan terugveroveren, maakt het namelijk sterker aan de onderhandelingstafel.",
+      "typologie": "factual",
+      "stance": "pro",
+      "spreker": "Rob Jetten",
+      "partij": "D66",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Causaal",
+        "Context-Plenair",
+        "Frame-Economisch",
+        "Frame-Thematisch",
+        "Frame-Verantwoordelijkheid",
+        "Ideologie-GAL",
+        "Moraliteit-Proportionaliteit",
+        "Moraliteit-Vrijheid",
+        "Stijl-Antithese",
+        "Stijl-Herhaling",
+        "Walton-Causaal",
+        "Walton-Consequentie"
+      ],
+      "claims": [],
+      "tweedekamer_activiteit_url": null,
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-02-18/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-02-18T16%3A35%3A29%2B0100&end=2025-02-18T23%3A41%3A48%2B0100",
+      "start_seconds": 7692.598999999995,
+      "gist": "Terreinwinst versterkt positie",
+      "samenvatting": null
+    },
+    "12827": {
+      "id": 12827,
+      "citaat": "Bronnen om de Verenigde Staten heen zeggen eigenlijk nu al dat er helemaal geen aanwijzingen voor zijn. Sterker nog, er zijn aanwijzingen dat Poetin denkt: oké, ik ga nu rustig mee, zodat ik op een gegeven moment gewoon lekker door kan pakken. Dat is wel een zorg waar we met elkaar voor moeten waken. Want in deze discussie die we vandaag met elkaar voeren, gaat het er al heel erg over dat er daadwerkelijk vredesonderhandelingen en vredesmachten komen en hoe we daarmee omgaan. De kritische vraag die we volgens mij wel moeten blijven stellen, is: is Rusland wel bereid om ooit tot vrede te komen? Of gaan we straks weer gewoon een situatie krijgen waarbij er een bestand is en Rusland gewoon weer doorstoomt of bij de Baltische staten gaat prikken? We zijn namelijk al continu onderhevig aan cyberaanvallen.",
+      "typologie": "factual",
+      "stance": "pro",
+      "spreker": "Laurens Dassen",
+      "partij": "Volt",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Expert",
+        "Context-Plenair",
+        "Debatzet-Gevoelens-Verwoorden",
+        "Frame-Thematisch",
+        "Frame-Verantwoordelijkheid",
+        "Ideologie-GAL",
+        "Ideologie-TAN",
+        "Moraliteit-Zorg",
+        "Stijl-Retorische-Vraag",
+        "Walton-Consequentie"
+      ],
+      "claims": [
+        {
+          "claim_text": "Er zijn geen aanwijzingen dat Rusland bereid is om duurzame vrede te sluiten",
+          "attributed_source_text": "Bronnen om de Verenigde Staten heen"
+        },
+        {
+          "claim_text": "Poetin denkt dat hij rustig mee kan gaan om later door te pakken",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "Nederland is continu onderhevig aan cyberaanvallen",
+          "attributed_source_text": null
+        }
+      ],
+      "tweedekamer_activiteit_url": null,
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-02-18/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-02-18T16%3A35%3A29%2B0100&end=2025-02-18T23%3A41%3A48%2B0100",
+      "start_seconds": 16926.200999999994,
+      "gist": "Bestand biedt hergroepering",
+      "samenvatting": null
+    },
+    "12982": {
+      "id": 12982,
+      "citaat": "En er is natuurlijk die 20 miljard extra op basis van de NAVO-norm, waarvoor onder andere de sociale zekerheid en onze zorg worden gesloopt. Dat is wat er gebeurt en dan vraag je je natuurlijk af waarom. Waarom toch? En dan lees je in de Defensienota dat Rusland een hele grote dreiging is. Daarover gaat mijn eerste vraag. Generaal Grynkewich, de opperbevelhebber van de Amerikanen in Europa, heeft onlangs in een panel van de Berlin Airshow gezegd: \"I've watched the intelligence very closely, Russia is not looking for a conflict.\" Hij zegt, net als overigens de Russen zelf, dat Rusland helemaal niet van plan is om Europa, laat staan Nederland, te veroveren. Dat is wat hij zegt. Tulsi Gabbard, tot voor kort de directeur van de Amerikaanse inlichtingendiensten, stelt op haar beurt heel duidelijk dat volgens haar de Russische militaire capaciteit niet voldoende is om Oekraïne helemaal te veroveren, laat staan heel Europa. Dus de Amerikanen, de Amerikaanse regering, zeggen heel duidelijk: Rusland kan en wil Europa, laat staat Nederland, niet veroveren. De Nederlandse regering heeft echter een heel ander standpunt en daarom is mijn eerste vraag: waarom weten wij het beter dan de Amerikanen? Waar maken wij ons zorgen over? Wij maken ons niet zozeer zorgen over Rusland of China, maar vooral over de oorlogszucht van dit kabinet. Ik kan het toch echt niet anders noemen. We maken ons zorgen over de escalatie, die steeds maar verder toeneemt.",
+      "typologie": "factual",
+      "stance": "contra",
+      "spreker": "Pepijn van Houwelingen",
+      "partij": "FVD",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Expert",
+        "Context-Commissie",
+        "Debatzet-Gevoelens-Verwoorden",
+        "Frame-Conflict",
+        "Frame-Economisch",
+        "Frame-Thematisch",
+        "Ideologie-Rechts-Economisch",
+        "Ideologie-TAN",
+        "Moraliteit-Vrijheid",
+        "Moraliteit-Zorg",
+        "Stijl-Herhaling",
+        "Stijl-Retorische-Vraag",
+        "Walton-Expertise"
+      ],
+      "claims": [
+        {
+          "claim_text": "Generaal Grynkewich heeft gezegd: \"I've watched the intelligence very closely, Russia is not looking for a conflict.\"",
+          "attributed_source_text": "Generaal Grynkewich, de opperbevelhebber van de Amerikanen in Europa, heeft onlangs in een panel van de Berlin Airshow gezegd"
+        },
+        {
+          "claim_text": "Tulsi Gabbard stelt dat de Russische militaire capaciteit niet voldoende is om Oekraïne helemaal te veroveren, laat staan heel Europa.",
+          "attributed_source_text": "Tulsi Gabbard, tot voor kort de directeur van de Amerikaanse inlichtingendiensten"
+        }
+      ],
+      "tweedekamer_activiteit_url": null,
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2026-07-01/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2026-07-01T16%3A03%3A34%2B0200&end=2026-07-01T18%3A33%3A54%2B0200",
+      "start_seconds": 802.9799999999996,
+      "gist": "Afbraak sociale zekerheid",
+      "samenvatting": null
+    },
+    "13174": {
+      "id": 13174,
+      "citaat": "De PVV heeft de minister herhaaldelijk opgeroepen om een voorstel naar de Kamer te sturen om via een dwangbevel de niet-betaalde eigen bijdrage van Oekraïners te innen. Waarom wordt dit niet geregeld? Hoeveel Oekraïense wanbetalers zijn hierdoor buiten schot gebleven? Om welk totaalbedrag aan openstaande vorderingen gaat het inmiddels? Waarom weigert de minister te regelen dat Oekraïners meebetalen in de zorgkosten, terwijl Nederlanders dat wel moeten doen?",
+      "typologie": "economic",
+      "stance": "contra",
+      "spreker": "Marina Vondeling",
+      "partij": "PVV",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Context-Commissie",
+        "Debatzet-Keuze-Aanscherpen",
+        "Frame-Economisch",
+        "Frame-Thematisch",
+        "Frame-Verantwoordelijkheid",
+        "Ideologie-Rechts-Economisch",
+        "Ideologie-TAN",
+        "Moraliteit-Eerlijkheid",
+        "Moraliteit-Proportionaliteit",
+        "Stijl-Herhaling",
+        "Stijl-Retorische-Vraag",
+        "Walton-Regel"
+      ],
+      "claims": [],
+      "tweedekamer_activiteit_url": null,
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2026-07-02/troelstrazaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2026-07-02T10%3A03%3A13%2B0200&end=2026-07-02T12%3A41%3A55%2B0200",
+      "start_seconds": 183.07999999999993,
+      "gist": "Verplichte eigen bijdrage",
+      "samenvatting": "Oekraïense ontheemden die werken moeten, net als andere inwoners en asielzoekers, verplicht meebetalen aan hun verblijfs- en zorgkosten."
+    },
+    "13304": {
+      "id": 13304,
+      "citaat": "Een van de voorstellen die ik net deed aan de staatssecretaris is: waarom geef je de gemeenten niet de zekerheid dat ze voor de komende drie tot vijf jaar locaties kunnen omvormen? Dat kan eventueel voor de opvang van Oekraïners, maar dat geldt natuurlijk net zo goed voor andere situaties. Denk aan flexwoningen voor mensen die in scheiding liggen en opeens geen accommodatie hebben of de groepen die mevrouw Keijzer net noemde. Er zijn ontzettend veel groepen in Nederland op zoek naar een tijdelijk onderkomen. Laten we ervoor zorgen dat we de financiering van het Rijk meer lange termijn doen, want als je dat elke keer maar voor een jaar verzekert, gaan die opvangplekken er niet komen.",
+      "typologie": "economic",
+      "stance": "pro",
+      "spreker": "Kati Piri",
+      "partij": "GroenLinks-PvdA",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Causaal",
+        "Context-Plenair",
+        "Frame-Economisch",
+        "Frame-Thematisch",
+        "Frame-Verantwoordelijkheid",
+        "Ideologie-Links-Economisch",
+        "Moraliteit-Zorg",
+        "Stijl-Retorische-Vraag",
+        "Walton-Causaal"
+      ],
+      "claims": [],
+      "tweedekamer_activiteit_url": null,
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-02-28/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-02-28T13%3A51%3A51%2B0100&end=2024-02-28T19%3A11%3A58%2B0100",
+      "start_seconds": 2286.8189999999995,
+      "gist": "Langetermijnzekerheid voor locaties",
+      "samenvatting": null
+    },
+    "13311": {
+      "id": 13311,
+      "citaat": "Een reguliere asielzoeker die werkt, moet 75% van zijn inkomen afstaan als bijdrage voor de opvang in een azc en voor eten en onderdak. Een persoon die opgenomen is in een Wlz-instelling, moet ook het grootste deel van zijn inkomen als eigen bijdrage afstaan en houdt slechts enkele honderden euro's per maand over. Zelfs voor een verblijf in de maatschappelijke opvang zoals daklozenopvang is een eigen bijdrage verschuldigd. Voor Oekraïners die werken en een inkomen genieten, is er nog geen eigenbijdrageregeling. Dat wringt natuurlijk. Dat is niet fair tegenover al die andere inwoners van Nederland die wél betalen voor hun eigen onderdak.",
+      "typologie": "factual",
+      "stance": "contra",
+      "spreker": "Caspar Veldkamp",
+      "partij": "NSC",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Statistisch",
+        "Context-Plenair",
+        "Frame-Economisch",
+        "Frame-Moraliteit",
+        "Frame-Thematisch",
+        "Ideologie-Rechts-Economisch",
+        "Moraliteit-Eerlijkheid",
+        "Moraliteit-Proportionaliteit",
+        "Walton-Analogie"
+      ],
+      "claims": [
+        {
+          "claim_text": "Een reguliere asielzoeker die werkt, moet 75% van zijn inkomen afstaan als bijdrage voor de opvang in een azc en voor eten en onderdak.",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "Een persoon die opgenomen is in een Wlz-instelling, moet ook het grootste deel van zijn inkomen als eigen bijdrage afstaan en houdt slechts enkele honderden euro's per maand over.",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "Zelfs voor een verblijf in de maatschappelijke opvang zoals daklozenopvang is een eigen bijdrage verschuldigd.",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "Voor Oekraïners die werken en een inkomen genieten, is er nog geen eigenbijdrageregeling.",
+          "attributed_source_text": null
+        }
+      ],
+      "tweedekamer_activiteit_url": null,
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-02-28/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-02-28T13%3A51%3A51%2B0100&end=2024-02-28T19%3A11%3A58%2B0100",
+      "start_seconds": 3565.3009999999995,
+      "gist": "Gelijkheid met asielzoekers",
+      "samenvatting": null
+    },
+    "13322": {
+      "id": 13322,
+      "citaat": "Dit zal ook het herstel en de wederopbouw straks vergemakkelijken. Dus als er delen van Oekraïne zijn waar vluchtelingen naar terug willen keren — ik noemde de westelijke delen, de westelijke oblast, bijvoorbeeld Lviv — dan zou ik zeggen dat dat ook helpt in de economie van het land.",
+      "typologie": "economic",
+      "stance": "contra",
+      "spreker": "Caspar Veldkamp",
+      "partij": "NSC",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Causaal",
+        "Context-Plenair",
+        "Frame-Economisch",
+        "Frame-Thematisch",
+        "Ideologie-Rechts-Economisch",
+        "Walton-Consequentie"
+      ],
+      "claims": [
+        {
+          "claim_text": "Terugkeer van vluchtelingen helpt in de economie van het land en vergemakkelijkt herstel en wederopbouw.",
+          "attributed_source_text": null
+        }
+      ],
+      "tweedekamer_activiteit_url": null,
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-02-28/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-02-28T13%3A51%3A51%2B0100&end=2024-02-28T19%3A11%3A58%2B0100",
+      "start_seconds": 4743.720000000001,
+      "gist": "Terugkeer bevordert wederopbouw",
+      "samenvatting": null
+    },
+    "13336": {
+      "id": 13336,
+      "citaat": "Ik vraag me alleen af je er met het oog op de toekomst niet naar moet kijken dat het in Lviv daadwerkelijk veel veiliger is dan in Zaporizja of Mykolajiv, laat staan in Cherson of Charkiv. Je kunt wel kijken naar dat soort elementen voor de toekomst, in termen van \"kun je mensen ook stimuleren om naar een land terug te keren?\", waar de Oekraïense regering dat bij monde van president Zelensky en bij monde van de Oekraïense ambassadeur ook publiekelijk zo opmerkt?",
+      "typologie": "factual",
+      "stance": "contra",
+      "spreker": "Caspar Veldkamp",
+      "partij": "NSC",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Expert",
+        "Context-Plenair",
+        "Frame-Thematisch",
+        "Frame-Verantwoordelijkheid",
+        "Moraliteit-Zorg",
+        "Stijl-Retorische-Vraag",
+        "Walton-Consequentie"
+      ],
+      "claims": [
+        {
+          "claim_text": "Het is in Lviv daadwerkelijk veel veiliger dan in Zaporizja of Mykolajiv, laat staan in Cherson of Charkiv.",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "De Oekraïense regering (bij monde van president Zelensky en de Oekraïense ambassadeur) merkt publiekelijk op dat mensen gestimuleerd kunnen worden om terug te keren.",
+          "attributed_source_text": "president Zelensky en de Oekraïense ambassadeur"
+        }
+      ],
+      "tweedekamer_activiteit_url": null,
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-02-28/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-02-28T13%3A51%3A51%2B0100&end=2024-02-28T19%3A11%3A58%2B0100",
+      "start_seconds": 5323.5610000000015,
+      "gist": "Opvang in West-Oekraïne",
+      "samenvatting": null
+    },
+    "13448": {
+      "id": 13448,
+      "citaat": "Mij is toen duidelijk geworden dat Oekraïense ontheemden die werken, gratis woning en zorg krijgen. Soms krijgen zij zelfs gratis eten. Als je modale gezinnen hiermee vergelijkt, dan leidt dat tot een verschil van duizenden euro's besteedbaar inkomen per jaar. Het is dus niet zo dat werkende Oekraïners het leefgeld niet krijgen. Sterker nog, er zijn nu een paar gemeentes die eigen bijdrages gaan vragen. Het amendement dat aangenomen is, gaat regelen dat het verplicht wordt om dan te stoppen met leefgeld en dat het verplicht wordt om een eigen bijdrage in rekening te brengen. Ik ben nog niet enthousiast over de mate waarin het erop leek dat de staatssecretaris dat gaat doen. En dan kom je nu ook nog in een situatie waarin kinderopvangtoeslag verstrekt gaat worden. Het houdt toch een keertje op? Wanneer is het moment dat mevrouw Maatoug het niet meer uit kan leggen aan Nederlanders die hard werken en zelf alles moeten betalen?",
+      "typologie": "factual",
+      "stance": "contra",
+      "spreker": "Mona Keijzer",
+      "partij": "BBB",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Statistisch",
+        "Context-Plenair",
+        "Debatzet-Gevoelens-Verwoorden",
+        "Frame-Economisch",
+        "Frame-Thematisch",
+        "Frame-Verantwoordelijkheid",
+        "Ideologie-Rechts-Economisch",
+        "Moraliteit-Eerlijkheid",
+        "Moraliteit-Proportionaliteit",
+        "Stijl-Retorische-Vraag",
+        "Walton-Analogie"
+      ],
+      "claims": [
+        {
+          "claim_text": "Oekraïense ontheemden die werken, krijgen gratis woning en zorg, en soms gratis eten.",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "De vergelijking met modale gezinnen leidt tot een verschil van duizenden euro's besteedbaar inkomen per jaar.",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "Er zijn nu een paar gemeentes die eigen bijdrages gaan vragen.",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "Het aangenomen amendement regelt dat het verplicht wordt om te stoppen met leefgeld en een eigen bijdrage in rekening te brengen.",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "Kinderopvangtoeslag gaat worden verstrekt aan Oekraïense ontheemden.",
+          "attributed_source_text": null
+        }
+      ],
+      "tweedekamer_activiteit_url": null,
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-03-20/plenairezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-03-20T16%3A39%3A18%2B0100&end=2024-03-20T20%3A40%3A51%2B0100",
+      "start_seconds": 4572.320999999996,
+      "gist": "Intrekken van leefgeld",
+      "samenvatting": null
+    },
+    "13560": {
+      "id": 13560,
+      "citaat": "Om niet alleen Oekraïne te steunen, maar ook onze krijgsmacht voldoende op sterkte te brengen tegen de relevante veiligheidsdreigingen, moeten lidstaten minimaal 2% uitgeven. We kiezen niet meer welke militaire missies we ver weg in de wereld doen; het is pure noodzaak ter zelfverdediging. Toch blijven sommige lidstaten substantieel onder de 2%, ook als je kijkt naar de planning voor de komende jaren. Mijn vraag aan de minister is hoe zij de druk wil opvoeren samen met andere NAVO-bondgenoten die wel aan de verplichtingen voldoen, om ervoor te zorgen dat iedereen aan deze NAVO-norm van 2% voldoet.",
+      "typologie": "factual",
+      "stance": "pro",
+      "spreker": "Ruben Brekelmans",
+      "partij": "VVD",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Statistisch",
+        "Context-Commissie",
+        "Frame-Economisch",
+        "Frame-Thematisch",
+        "Frame-Verantwoordelijkheid",
+        "Ideologie-TAN",
+        "Moraliteit-Autoriteit",
+        "Moraliteit-Loyaliteit",
+        "Stijl-Herhaling",
+        "Walton-Regel"
+      ],
+      "claims": [
+        {
+          "claim_text": "Lidstaten moeten minimaal 2% uitgeven.",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "Sommige lidstaten blijven substantieel onder de 2%, ook in de planning voor de komende jaren.",
+          "attributed_source_text": null
+        }
+      ],
+      "tweedekamer_activiteit_url": null,
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-03-27/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-03-27T10%3A01%3A29%2B0100&end=2024-03-27T12%3A02%3A05%2B0100",
+      "start_seconds": 1150.821,
+      "gist": "Krijgsmacht op sterkte",
+      "samenvatting": null
+    },
+    "13605": {
+      "id": 13605,
+      "citaat": "Het is dus aan de Oekraïners om te bepalen dat zij strijden. Zij zijn degenen die uiteindelijk ook kunnen zeggen: en nú gaan we onderhandelen voor vrede. Maar dat moment is er nu niet. Dat moment ís er nu niet, want nu vechten ze gewoon voor hun leven en vechten ze ervoor om ervoor te zorgen dat Poetin niet verder Oekraïne binnentrekt.",
+      "typologie": "factual",
+      "stance": "pro",
+      "spreker": "Hanke Bruins Slot",
+      "partij": "CDA",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Context-Commissie",
+        "Frame-Conflict",
+        "Frame-Thematisch",
+        "Frame-Verantwoordelijkheid",
+        "Ideologie-TAN",
+        "Meta-Agenda-Tijdigheid",
+        "Moraliteit-Loyaliteit",
+        "Moraliteit-Vrijheid",
+        "Moraliteit-Zorg",
+        "Stijl-Herhaling",
+        "Walton-Causaal"
+      ],
+      "claims": [
+        {
+          "claim_text": "Het is aan de Oekraïners om te bepalen dat zij strijden",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "Het moment voor onderhandelingen is er nu niet omdat Oekraïners vechten voor hun leven en om te voorkomen dat Poetin verder Oekraïne binnentrekt",
+          "attributed_source_text": null
+        }
+      ],
+      "tweedekamer_activiteit_url": null,
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-03-27/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-03-27T10%3A01%3A29%2B0100&end=2024-03-27T12%3A02%3A05%2B0100",
+      "start_seconds": 6629.300000000001,
+      "gist": "Oekraïne beslist onderhandelingen",
+      "samenvatting": null
+    },
+    "13674": {
+      "id": 13674,
+      "citaat": "Een week geleden gaf Rusland nog een speciale waarschuwing af voor kleine, dichtbevolkte landen in Europa die wapens willen leveren aan Oekraïne om doelen in Rusland aan te vallen. Onder leiding van dit kabinet dreigt Nederland nu letterlijk te worden vernietigd in een proxyoorlog tussen de Verenigde Staten en Rusland, een oorlog die volgens de Nederlandse bevolking niet, maar volgens onze overheersers wel, onze oorlog is.",
+      "typologie": "factual",
+      "stance": "contra",
+      "spreker": "Pepijn van Houwelingen",
+      "partij": "FVD",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Anekdotisch",
+        "Context-Commissie",
+        "Debatzet-Gevoelens-Verwoorden",
+        "Frame-Conflict",
+        "Frame-Thematisch",
+        "Frame-Verantwoordelijkheid",
+        "Ideologie-TAN",
+        "Moraliteit-Loyaliteit",
+        "Moraliteit-Vrijheid",
+        "Stijl-Antithese",
+        "Walton-Consequentie"
+      ],
+      "claims": [
+        {
+          "claim_text": "Rusland gaf een week geleden een speciale waarschuwing af voor kleine, dichtbevolkte Europese landen die wapens leveren aan Oekraïne om doelen in Rusland aan te vallen.",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "Nederland dreigt te worden vernietigd in een proxyoorlog tussen de VS en Rusland.",
+          "attributed_source_text": null
+        }
+      ],
+      "tweedekamer_activiteit_url": null,
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-06-04/troelstrazaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-06-04T16%3A30%3A17%2B0200&end=2024-06-04T18%3A51%3A04%2B0200",
+      "start_seconds": 696.1399999999994,
+      "gist": "Nederland doelwit proxyoorlog",
+      "samenvatting": null
+    },
+    "13739": {
+      "id": 13739,
+      "citaat": "Wat D66 betreft is het ongelofelijk belangrijk dat we dit steunpakket, voor het grootste deel bestaande uit die lening, verstrekken. Dat is belangrijk voor onze veiligheid, want hiermee houden we Oekraïne overeind. Die staat functioneert op dit moment in de verdediging dankzij onze wapensteun, en in financiële zin omdat wij steun verlenen. De economie daar is totaal ingestort. Het is logisch dat dat gebeurt als een vijandige macht een groot deel van je land bezet, steden terugbombardeert naar de steentijd, mensen in gijzeling neemt in Rusland en je je daartegen moet verdedigen.",
+      "typologie": "factual",
+      "stance": "pro",
+      "spreker": "Jan Paternotte",
+      "partij": "D66",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Causaal",
+        "Context-Commissie",
+        "Frame-Economisch",
+        "Frame-Thematisch",
+        "Frame-Verantwoordelijkheid",
+        "Ideologie-GAL",
+        "Moraliteit-Vrijheid",
+        "Moraliteit-Zorg",
+        "Stijl-Antithese",
+        "Stijl-Herhaling",
+        "Walton-Causaal"
+      ],
+      "claims": [
+        {
+          "claim_text": "De economie in Oekraïne is totaal ingestort.",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "Een vijandige macht bezet een groot deel van het land, bombardeert steden en neemt mensen in gijzeling.",
+          "attributed_source_text": null
+        }
+      ],
+      "tweedekamer_activiteit_url": null,
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-02-14/troelstrazaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-02-14T18%3A24%3A07%2B0100&end=2024-02-14T19%3A51%3A17%2B0100",
+      "start_seconds": 732.9389999999994,
+      "gist": "Straaljagers cruciaal luchtverdediging",
+      "samenvatting": null
+    },
+    "13774": {
+      "id": 13774,
+      "citaat": "De Kamer heeft onlangs twee keer bij grote meerderheid uitgesproken dat Oekraïne de ruimte moet hebben om legitieme doelen op Russisch grondgebied aan te vallen. De Amerikanen beperken dat nu tot 100 kilometer vanaf de grens. Hoe wil het kabinet de Kamermotie op de top in Washington gaan uitvoeren?",
+      "typologie": "factual",
+      "stance": "pro",
+      "spreker": "Jan Paternotte",
+      "partij": "D66",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Anekdotisch",
+        "Context-Commissie",
+        "Frame-Conflict",
+        "Frame-Episodisch",
+        "Frame-Thematisch",
+        "Frame-Verantwoordelijkheid",
+        "Ideologie-GAL",
+        "Moraliteit-Vrijheid",
+        "Stijl-Retorische-Vraag",
+        "Walton-Regel"
+      ],
+      "claims": [
+        {
+          "claim_text": "De Kamer heeft twee keer bij grote meerderheid uitgesproken dat Oekraïne de ruimte moet hebben om legitieme doelen op Russisch grondgebied aan te vallen.",
+          "attributed_source_text": "De Kamer heeft onlangs twee keer bij grote meerderheid uitgesproken dat Oekraïne de ruimte moet hebben om legitieme doelen op Russisch grondgebied aan te vallen."
+        },
+        {
+          "claim_text": "De Amerikanen beperken de aanvallen op Russisch grondgebied tot 100 kilometer vanaf de grens.",
+          "attributed_source_text": "De Amerikanen beperken dat nu tot 100 kilometer vanaf de grens."
+        }
+      ],
+      "tweedekamer_activiteit_url": null,
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-07-03/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-07-03T19%3A03%3A43%2B0200&end=2024-07-03T21%3A03%3A34%2B0200",
+      "start_seconds": 414.701,
+      "gist": "Afschaffen afstandsbeperkingen",
+      "samenvatting": null
+    },
+    "14124": {
+      "id": 14124,
+      "citaat": "Het kabinet heeft begin dit jaar het normbedrag voor de opvang van Oekraïners verlaagd van €61 naar €44 per dag, ondanks alle signalen die er toen al waren van gemeenten dat dit bedrag onvoldoende is. Ook hebben de coalitiepartijen tegen mijn motie gestemd om die verlaging niet door te voeren. En wat blijkt nu? Dit bedrag is inderdaad onvoldoende. 67% van de gemeenten kan de daadwerkelijke kosten niet dekken van dit bedrag. [...] Is zij van plan om het normbedrag weer in lijn te brengen met de gemiddelde daadwerkelijke kosten die gemeenten maken?",
+      "typologie": "economic",
+      "stance": "pro",
+      "spreker": "Kati Piri",
+      "partij": "GroenLinks-PvdA",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Statistisch",
+        "Context-Commissie",
+        "Frame-Economisch",
+        "Frame-Thematisch",
+        "Frame-Verantwoordelijkheid",
+        "Ideologie-Links-Economisch",
+        "Moraliteit-Eerlijkheid",
+        "Stijl-Retorische-Vraag",
+        "Walton-Consequentie"
+      ],
+      "claims": [
+        {
+          "claim_text": "Het normbedrag voor de opvang van Oekraïners is verlaagd van €61 naar €44 per dag.",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "67% van de gemeenten kan de daadwerkelijke kosten niet dekken van dit bedrag.",
+          "attributed_source_text": null
+        }
+      ],
+      "tweedekamer_activiteit_url": null,
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-03-20/troelstrazaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-03-20T14%3A02%3A25%2B0100&end=2025-03-20T16%3A29%3A25%2B0100",
+      "start_seconds": 1781.0,
+      "gist": "Korting veroorzaakt tekorten",
+      "samenvatting": null
+    },
+    "14146": {
+      "id": 14146,
+      "citaat": "Het is geen geheim, en dat was hier aan tafel ook al duidelijk, dat de PVV tegen het toetreden van Oekraïne tot de NAVO is. Al was het maar omdat dit land nu in oorlog is met Rusland en als Oekraïne nú zou toetreden, dit ons via artikel 5 in oorlog kan brengen met Rusland. Wij willen geen oorlog.",
+      "typologie": "factual",
+      "stance": "contra",
+      "spreker": "Joeri Pool",
+      "partij": "PVV",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Causaal",
+        "Context-Commissie",
+        "Frame-Conflict",
+        "Frame-Thematisch",
+        "Ideologie-TAN",
+        "Moraliteit-Zorg",
+        "Walton-Consequentie"
+      ],
+      "claims": [
+        {
+          "claim_text": "Oekraïne is nu in oorlog met Rusland",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "Toetreding van Oekraïne tot de NAVO kan Nederland via artikel 5 in oorlog brengen met Rusland",
+          "attributed_source_text": null
+        }
+      ],
+      "tweedekamer_activiteit_url": null,
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-10-08/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-10-08T19%3A00%3A07%2B0200&end=2024-10-08T20%3A55%3A54%2B0200",
+      "start_seconds": 630.619999999999,
+      "gist": "Wapenleveranties vergroten escalatiegevaar",
+      "samenvatting": "Het leveren van zware wapens zoals F-16's vergroot het gevaar dat een NAVO-lidstaat in een directe confrontatie met kernmacht Rusland raakt."
+    },
+    "14150": {
+      "id": 14150,
+      "citaat": "We geven massaal steun, 10 miljard euro, met dat risico op oorlog met Rusland als gevolg. Maar we geven die steun ook aan een land, dat mogelijk — en dat vind ik ook een belangrijk punt — betrokken is bij een aanval op ons, namelijk op de Nord Stream. Het kan dus zijn dat we — ik zou bijna zeggen — het verkeerde land steunen.",
+      "typologie": "factual",
+      "stance": "contra",
+      "spreker": "Pepijn van Houwelingen",
+      "partij": "FVD",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Anekdotisch",
+        "Bewijs-Statistisch",
+        "Context-Commissie",
+        "Frame-Economisch",
+        "Frame-Episodisch",
+        "Frame-Verantwoordelijkheid",
+        "Ideologie-TAN",
+        "Moraliteit-Loyaliteit",
+        "Walton-Consequentie"
+      ],
+      "claims": [
+        {
+          "claim_text": "Nederland geeft massaal steun van 10 miljard euro aan Oekraïne",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "Oekraïne is mogelijk betrokken bij een aanval op de Nord Stream",
+          "attributed_source_text": null
+        }
+      ],
+      "tweedekamer_activiteit_url": null,
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-10-08/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-10-08T19%3A00%3A07%2B0200&end=2024-10-08T20%3A55%3A54%2B0200",
+      "start_seconds": 892.5,
+      "gist": "Steun heroverwegen sabotage",
+      "samenvatting": "Nederland mag geen ongebreidelde miljardensteun verlenen aan een land dat mogelijk betrokken is bij de aanslag op Nord Stream."
+    },
+    "14151": {
+      "id": 14151,
+      "citaat": "Wat het probleem hier is, is dat Rusland heel duidelijk heeft gezegd dat het opgeven van die ambitie van Oekraïne om toe te treden tot de NAVO, een cruciaal punt is in de vredesbesprekingen. Dat betekent dat als heel duidelijk is dat wanneer er vrede komt Oekraïne gelijk toe zal treden tot de NAVO, die vrede er waarschijnlijk niet gaat komen. Dat is de crux. Want als je dus zegt \"we willen Oekraïne sowieso bij de NAVO\", dan zullen de Russen die oorlog nog heel lang gaan voeren. De vraag is hoelang die oorlog dan nog gaat duren. Dat is dus het punt. We zeggen: Oekraïne kan nu niet bij de NAVO; ze zijn in oorlog.",
+      "typologie": "factual",
+      "stance": "contra",
+      "spreker": "Joeri Pool",
+      "partij": "PVV",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Causaal",
+        "Context-Commissie",
+        "Debatzet-Keuze-Aanscherpen",
+        "Frame-Conflict",
+        "Frame-Thematisch",
+        "Ideologie-TAN",
+        "Moraliteit-Vrijheid",
+        "Moraliteit-Zorg",
+        "Stijl-Herhaling",
+        "Stijl-Retorische-Vraag",
+        "Walton-Causaal"
+      ],
+      "claims": [
+        {
+          "claim_text": "Rusland heeft gezegd dat het opgeven van de NAVO-ambitie van Oekraïne cruciaal is voor vredesbesprekingen",
+          "attributed_source_text": "Rusland"
+        }
+      ],
+      "tweedekamer_activiteit_url": null,
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-10-08/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-10-08T19%3A00%3A07%2B0200&end=2024-10-08T20%3A55%3A54%2B0200",
+      "start_seconds": 733.0,
+      "gist": "Gevaar offensieve wapens",
+      "samenvatting": null
+    },
+    "14170": {
+      "id": 14170,
+      "citaat": "Naast de zorgen over de NAVO zijn er ook toekomst bouwende initiatieven. We committeren ons nu immers aan de norm om minimaal 2% van het bbp te besteden aan defensie en investeren daarmee in slagkracht, gereedheid, uitrusting en oefeningen. Het is ook goed om te zien dat steeds meer bondgenoten zich aan deze belofte houden.",
+      "typologie": "factual",
+      "stance": "pro",
+      "spreker": "Isa Kahraman",
+      "partij": "NSC",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Statistisch",
+        "Context-Commissie",
+        "Frame-Economisch",
+        "Frame-Thematisch",
+        "Ideologie-TAN",
+        "Moraliteit-Loyaliteit",
+        "Walton-Consequentie"
+      ],
+      "claims": [
+        {
+          "claim_text": "Steeds meer bondgenoten houden zich aan de belofte van de 2%-norm.",
+          "attributed_source_text": null
+        }
+      ],
+      "tweedekamer_activiteit_url": null,
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-10-08/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-10-08T19%3A00%3A07%2B0200&end=2024-10-08T20%3A55%3A54%2B0200",
+      "start_seconds": 2326.400999999998,
+      "gist": "Minimaal twee procent",
+      "samenvatting": null
+    },
+    "14178": {
+      "id": 14178,
+      "citaat": "Als het doel van Rusland is om Oekraïne uit de NAVO te houden en er staat NAVO-lidmaatschap klaar op het moment dat de oorlog voorbij is, dan is dat eigenlijk een aansporing om de oorlog zo lang mogelijk te laten voortduren.",
+      "typologie": "factual",
+      "stance": "contra",
+      "spreker": "Joeri Pool",
+      "partij": "PVV",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Causaal",
+        "Context-Commissie",
+        "Frame-Thematisch",
+        "Frame-Verantwoordelijkheid",
+        "Ideologie-TAN",
+        "Moraliteit-Vrijheid",
+        "Walton-Causaal"
+      ],
+      "claims": [
+        {
+          "claim_text": "Het doel van Rusland is om Oekraïne uit de NAVO te houden",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "NAVO-lidmaatschap staat klaar op het moment dat de oorlog voorbij is",
+          "attributed_source_text": null
+        }
+      ],
+      "tweedekamer_activiteit_url": null,
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-10-08/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-10-08T19%3A00%3A07%2B0200&end=2024-10-08T20%3A55%3A54%2B0200",
+      "start_seconds": 5402.5,
+      "gist": "Dreiging Derde Wereldoorlog",
+      "samenvatting": null
+    },
+    "14204": {
+      "id": 14204,
+      "citaat": "Mijn vijfde vraag: is het opblazen van de Nord Streampijpleiding een daad van agressie gericht tegen Nederland? Zo nee, waarom niet? In het Wall Street Journal werd, onder andere verwijzend naar nota bene een rapport van de MIVD, op 14 augustus verwezen naar Oekraïne als de mogelijke dader achter deze aanslag.",
+      "typologie": "factual",
+      "stance": "contra",
+      "spreker": "Pepijn van Houwelingen",
+      "partij": "FVD",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Expert",
+        "Context-Commissie",
+        "Debatzet-Bewijs-Vragen",
+        "Frame-Episodisch",
+        "Frame-Verantwoordelijkheid",
+        "Ideologie-TAN",
+        "Moraliteit-Loyaliteit",
+        "Stijl-Retorische-Vraag",
+        "Walton-Expertise"
+      ],
+      "claims": [
+        {
+          "claim_text": "In het Wall Street Journal werd op 14 augustus verwezen naar Oekraïne als de mogelijke dader achter de aanslag op de Nord Streampijpleiding",
+          "attributed_source_text": "Wall Street Journal, rapport van de MIVD"
+        }
+      ],
+      "tweedekamer_activiteit_url": null,
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-10-08/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-10-08T19%3A00%3A07%2B0200&end=2024-10-08T20%3A55%3A54%2B0200",
+      "start_seconds": 1333.321,
+      "gist": "Aanslag vitale infrastructuur",
+      "samenvatting": null
+    },
+    "14238": {
+      "id": 14238,
+      "citaat": "Dat is de reden waarom wij hebben gezegd dat Oekraïne moet worden toegestaan om zichzelf ook boven of op Russisch grondgebied te verdedigen en dat wij ook bereid zijn om de middelen te leveren die daarvoor nodig zijn, waaronder F-16's. Landen die niet bereid zijn om die restrictie op te heffen — een vraag van D66 — spreek ik daar persoonlijk op aan. Ook plenair doe ik oproepen om de bestaande restricties op te heffen.",
+      "typologie": "factual",
+      "stance": "pro",
+      "spreker": "Ruben Brekelmans",
+      "partij": "VVD",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Context-Commissie",
+        "Frame-Thematisch",
+        "Frame-Verantwoordelijkheid",
+        "Ideologie-GAL",
+        "Ideologie-TAN",
+        "Moraliteit-Loyaliteit",
+        "Moraliteit-Vrijheid",
+        "Walton-Consequentie"
+      ],
+      "claims": [
+        {
+          "claim_text": "Nederland is bereid middelen te leveren voor verdediging boven/op Russisch grondgebied, waaronder F-16's",
+          "attributed_source_text": null
+        }
+      ],
+      "tweedekamer_activiteit_url": null,
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-10-08/thorbeckezaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-10-08T19%3A00%3A07%2B0200&end=2024-10-08T20%3A55%3A54%2B0200",
+      "start_seconds": 4495.459999999999,
+      "gist": "Opheffen inzetrestricties",
+      "samenvatting": null
+    },
+    "14272": {
+      "id": 14272,
+      "citaat": "Inmiddels worden er met steun van de NAVO ook aanvallen uitgevoerd op Russisch grondgebied. De laatste bewegingen behelzen het beschieten van Russisch grondgebied met geleide raketten van westerse makelij, waarbij bediening door westerse specialisten aan de orde is. Met andere woorden, onomstreden Russisch grondgebied wordt op dit moment direct met raketten beschoten door Amerikanen, Engelsen en Fransen. Rusland heeft het \"een rode lijn\" genoemd en voelt zich gerechtigd om direct terug te slaan naar NAVO-landen.",
+      "typologie": "factual",
+      "stance": "contra",
+      "spreker": "Ralf Dekker",
+      "partij": "FVD",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Anekdotisch",
+        "Context-Commissie",
+        "Frame-Conflict",
+        "Frame-Episodisch",
+        "Frame-Verantwoordelijkheid",
+        "Ideologie-TAN",
+        "Moraliteit-Autoriteit",
+        "Stijl-Herhaling",
+        "Walton-Causaal"
+      ],
+      "claims": [
+        {
+          "claim_text": "Inmiddels worden er met steun van de NAVO ook aanvallen uitgevoerd op Russisch grondgebied",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "De laatste bewegingen behelzen het beschieten van Russisch grondgebied met geleide raketten van westerse makelij, waarbij bediening door westerse specialisten aan de orde is",
+          "attributed_source_text": null
+        },
+        {
+          "claim_text": "Rusland heeft het \"een rode lijn\" genoemd en voelt zich gerechtigd om direct terug te slaan naar NAVO-landen",
+          "attributed_source_text": null
+        }
+      ],
+      "tweedekamer_activiteit_url": null,
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-11-27/troelstrazaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-11-27T10%3A33%3A08%2B0100&end=2024-11-27T13%3A06%3A43%2B0100",
+      "start_seconds": 274.24000000000024,
+      "gist": "Aanvallen overschrijden grens",
+      "samenvatting": "Aanvallen met westerse precisieraketten op Russisch grondgebied overschrijden rode lijnen en lokken vergelding tegen NAVO-landen uit."
+    },
+    "14274": {
+      "id": 14274,
+      "citaat": "Deze verpletterende Russische actie, duidelijk bedoeld als afschrikking, heeft de NAVO er niet van weerhouden om wederom aanvallen op Russisch grondgebied uit te voeren, in de afgelopen week in de regio Koersk met Storm Shadow en met ATACMS-raketten. Is de minister het met mij eens dat deze aanvallen als speldenprikken moeten worden beschouwd in vergelijking met de vernietigende kracht van de Oresjnik?",
+      "typologie": "factual",
+      "stance": "contra",
+      "spreker": "Ralf Dekker",
+      "partij": "FVD",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Anekdotisch",
+        "Context-Commissie",
+        "Debatzet-Gevoelens-Verwoorden",
+        "Frame-Conflict",
+        "Frame-Episodisch",
+        "Ideologie-TAN",
+        "Moraliteit-Autoriteit",
+        "Stijl-Antithese",
+        "Stijl-Retorische-Vraag",
+        "Walton-Analogie"
+      ],
+      "claims": [
+        {
+          "claim_text": "de NAVO heeft wederom aanvallen op Russisch grondgebied uitgevoerd, in de afgelopen week in de regio Koersk met Storm Shadow en met ATACMS-raketten",
+          "attributed_source_text": null
+        }
+      ],
+      "tweedekamer_activiteit_url": null,
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-11-27/troelstrazaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-11-27T10%3A33%3A08%2B0100&end=2024-11-27T13%3A06%3A43%2B0100",
+      "start_seconds": 325.69900000000007,
+      "gist": "Risico zware vergeldingswapens",
+      "samenvatting": null
+    },
+    "14336": {
+      "id": 14336,
+      "citaat": "Cyber, hybride, spionage, sabotage, fysieke sabotageacties: het hoort tegenwoordig kennelijk allemaal bij het arsenaal dat sommige landen gebruiken. Het is duidelijk dat sommige van die activiteiten, zoals eerder dit jaar in Frankrijk, tot Rusland te herleiden waren.",
+      "typologie": "factual",
+      "stance": "pro",
+      "spreker": "Caspar Veldkamp",
+      "partij": "Nieuw Sociaal Contract",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Anekdotisch",
+        "Context-Commissie",
+        "Frame-Thematisch",
+        "Frame-Verantwoordelijkheid",
+        "Ideologie-TAN",
+        "Moraliteit-Loyaliteit",
+        "Stijl-Herhaling",
+        "Walton-Analogie"
+      ],
+      "claims": [
+        {
+          "claim_text": "Sommige activiteiten, zoals eerder dit jaar in Frankrijk, waren tot Rusland te herleiden.",
+          "attributed_source_text": null
+        }
+      ],
+      "tweedekamer_activiteit_url": null,
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2024-11-27/troelstrazaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2024-11-27T10%3A33%3A08%2B0100&end=2024-11-27T13%3A06%3A43%2B0100",
+      "start_seconds": 8269.300000000001,
+      "gist": "Russische hybride dreiging",
+      "samenvatting": null
+    },
+    "14627": {
+      "id": 14627,
+      "citaat": "Ze zeggen namelijk: die 2%, that's it; we doen niks meer dan dat. Maar we weten dat die 2% de bodem is en dat we meer moeten gaan doen als we onze eigen veiligheid serieus nemen.",
+      "typologie": "factual",
+      "stance": "pro",
+      "spreker": "Derk Boswijk",
+      "partij": "CDA",
+      "tags": [
+        "Actor-Politicus",
+        "Arena-Parlement",
+        "Bewijs-Statistisch",
+        "Context-Commissie",
+        "Debatzet-Keuze-Aanscherpen",
+        "Frame-Conflict",
+        "Frame-Economisch",
+        "Frame-Thematisch",
+        "Frame-Verantwoordelijkheid",
+        "Ideologie-TAN",
+        "Moraliteit-Loyaliteit",
+        "Stijl-Herhaling",
+        "Walton-Consequentie"
+      ],
+      "claims": [
+        {
+          "claim_text": "De 2% is de bodem voor defensie-uitgaven",
+          "attributed_source_text": null
+        }
+      ],
+      "tweedekamer_activiteit_url": null,
+      "raw_video_url": "https://livestreaming.b67v2.tweedekamer.nl/2025-02-05/wttewaallvanstoetwegenzaal/index.m3u8?hd=1&subtitles=vod&keyframes=1&start=2025-02-05T11%3A00%3A18%2B0100&end=2025-02-05T14%3A08%3A42%2B0100",
+      "start_seconds": 7858.540000000001,
+      "gist": "Defensie-uitgaven boven norm",
+      "samenvatting": "De NAVO-norm van twee procent is de ondergrens; Nederland moet structureel meer investeren om de eigen veiligheid zelfstandig te kunnen waarborgen."
+    }
+  },
+  "bands": [
+    {
+      "nummer": 1,
+      "thema": "Leiden zware wapenleveranties tot escalatie met Rusland?",
+      "pro": {
+        "type": "node",
+        "id": 11840,
+        "kids": [
+          {
+            "id": 11837,
+            "scheme": null,
+            "reden": "De premisse ('luchtaanvallen tonen noodzaak') noemt expliciet de actuele aanvallen als concrete aanleiding/bewijs voor de noodzaak van militaire steun om vernietigingsaanvallen af te slaan.",
+            "sterkte": 0.85
+          }
+        ]
+      },
+      "contra": {
+        "type": "node",
+        "id": 14146,
+        "kids": []
+      },
+      "oppositie": {
+        "argument_a_id": 14146,
+        "argument_b_id": 11840,
+        "scheme": null,
+        "reden": "Target stelt dat militaire steun noodzakelijk is om Rusland te stoppen, terwijl premise een zelfstandig tegenargument levert dat wapenleveranties het risico op een directe confrontatie met kernmacht Rusland vergroten.",
+        "sterkte": 0.75
+      }
+    },
+    {
+      "nummer": 2,
+      "thema": "Mogen westerse wapens in Rusland ingezet worden?",
+      "pro": {
+        "type": "node",
+        "id": 11895,
+        "kids": []
+      },
+      "contra": {
+        "type": "node",
+        "id": 14272,
+        "kids": [
+          {
+            "id": 11892,
+            "scheme": null,
+            "reden": "Het argument dat kruisraketten het conflict escaleren sluit inhoudelijk aan op de stelling dat raketaanvallen rode lijnen overschrijden en vergelding uitlokken, al blijft de premisse beknopt en noemt het geen specifieke context zoals NAVO of Russisch grondgebied.",
+            "sterkte": 0.65
+          }
+        ]
+      },
+      "oppositie": {
+        "argument_a_id": 14272,
+        "argument_b_id": 11895,
+        "scheme": null,
+        "reden": "Target verdedigt het recht om doelen diep in Rusland te treffen, terwijl premise zelfstandig beargumenteert dat aanvallen op Russisch grondgebied rode lijnen overschrijden en gevaarlijke escalatie uitlokken.",
+        "sterkte": 0.8
+      }
+    },
+    {
+      "nummer": 3,
+      "thema": "Moet er nu onderhandeld worden over vrede?",
+      "pro": {
+        "type": "node",
+        "id": 12191,
+        "kids": [
+          {
+            "id": 12827,
+            "scheme": null,
+            "reden": "Het argument dat een bestand gelegenheid biedt tot hergroepering sluit als causaal risico direct aan bij de stelling dat appeasement niet werkt en de druk op Rusland behouden moet blijven.",
+            "sterkte": 0.7
+          }
+        ]
+      },
+      "contra": {
+        "type": "node",
+        "id": 11838,
+        "kids": []
+      },
+      "oppositie": {
+        "argument_a_id": 11838,
+        "argument_b_id": 12191,
+        "scheme": null,
+        "reden": "De argumenten botsen over de te volgen strategie (nu diplomatiek vredesoverleg starten versus de druk op Rusland maximaal houden zonder concessies), maar sluiten elkaar niet direct uit omdat onderhandelen niet noodzakelijk gebiedsafstand inhoudt.",
+        "sterkte": 0.5
+      }
+    }
+  ],
+  "losse_groepen": [
+    {
+      "kind": "group",
+      "label": "binnenlandse bezwaren tegen defensieverhoging",
+      "samenvatting": "Hogere defensie-uitgaven gaan ten koste van de verzorgingsstaat, terwijl burgers gebukt gaan onder armoede en bezuinigingen.",
+      "member_ids": [
+        11967,
+        12448,
+        12982,
+        11911
+      ]
+    },
+    {
+      "kind": "group",
+      "label": "opvang in veilige Oekraïense regio",
+      "samenvatting": "Opvang van ontheemden kan plaatsvinden in veilige westelijke gebieden van Oekraïne om de wederopbouw te stimuleren.",
+      "member_ids": [
+        13336,
+        13322
+      ]
+    },
+    {
+      "kind": "group",
+      "label": "eigen bijdrage en stopzetten leefgeld",
+      "samenvatting": "Werkende ontheemden moeten een eigen bijdrage betalen en leefgeld verliezen om rechtsongelijkheid met asielzoekers en Nederlanders op te heffen.",
+      "member_ids": [
+        13174,
+        13448
+      ]
+    }
+  ],
+  "losse_argumenten": [
+    14627,
+    13560,
+    12620,
+    14170,
+    12558,
+    13739,
+    11862,
+    14151,
+    14238,
+    13774,
+    12308,
+    12721,
+    13605,
+    11858,
+    11847,
+    14124,
+    13304,
+    14336,
+    14150
+  ],
+  "twijfelachtige_classificaties": [
+    {
+      "argument_id": 12650,
+      "huidige_stance": "contra",
+      "reden": "citaat waarschuwt tegen een staakt-het-vuren en noemt Poetin een permanente dreiging voor Europa, wat conform de dimensie pro is"
+    },
+    {
+      "argument_id": 12003,
+      "huidige_stance": "contra",
+      "reden": "citaat bekritiseert Trumps vredesplan als een overgaveplan dat de agressor beloont, wat conform de dimensie een pro-stelling is"
+    },
+    {
+      "argument_id": 14301,
+      "huidige_stance": "contra",
+      "reden": "citaat verdedigt en benadrukt de omvang van de Nederlandse militaire steun van meer dan 10 miljard euro aan Oekraïne"
+    },
+    {
+      "argument_id": 14646,
+      "huidige_stance": "contra",
+      "reden": "citaat pleit expliciet voor forser investeren in de defensie-industrie, passend bij de pro-dimensie voor hogere defensie-uitgaven"
+    },
+    {
+      "argument_id": 12946,
+      "huidige_stance": "pro",
+      "reden": "citaat bekritiseert het kabinet over de Nord Stream-sabotage en suggereert mogelijke Oekraïense betrokkenheid, wat contra is"
+    }
+  ]
+}

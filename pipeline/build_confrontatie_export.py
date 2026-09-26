@@ -4,7 +4,7 @@ Confrontatie-as-export: combineert de argumentenboom-pipeline-output
 pipeline/prompts/argument_tree_gemini.md +
 pipeline/prompts/boomredactie_rebuttal_detection.md/boomredactie_support_check.md
 + pipeline/confrontatie_tree.py -- samen "de redactiestap", zie
-scripts/agy_run_confrontatie_tree.py) met de volledige argumentgegevens uit
+scripts/argument_tree/agy_run_confrontatie_tree.py) met de volledige argumentgegevens uit
 de database, tot de JSON die de nieuwe ArgumentTree.vue (pro links, contra
 rechts, gestapeld in confrontatie-"banden") nodig heeft.
 
@@ -68,6 +68,7 @@ def _build_registry(tree, stance_by_id):
                 "id": premise_id,
                 "scheme": relation.get("scheme"),
                 "reden": relation.get("reden", ""),
+                "sterkte": relation.get("sterkte"),
             })
             registry[premise_id]["parent_id"] = target_id
 
@@ -125,6 +126,7 @@ def build_bands_and_losse(tree, stance_by_id):
                     "argument_b_id": b_id,
                     "scheme": relation.get("scheme"),
                     "reden": relation.get("reden", ""),
+                    "sterkte": relation.get("sterkte"),
                 },
             }
         )

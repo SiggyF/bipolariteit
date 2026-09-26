@@ -31,7 +31,8 @@ def call_llm(base_url, model, prompt, reasoning_effort, timeout, max_tokens, api
     headers = {"Authorization": f"Bearer {api_key}"} if api_key else None
 
     resp = requests.post(f"{base_url}/chat/completions", json=payload, headers=headers, timeout=timeout)
-    resp.raise_for_status()
+    if not resp.ok:
+        raise requests.exceptions.HTTPError(f"{resp.status_code} {resp.reason} voor {base_url}/chat/completions: {resp.text[:2000]}", response=resp)
     data = resp.json()
     choice = data["choices"][0]
     content = choice["message"].get("content", "")

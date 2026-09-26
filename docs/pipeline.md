@@ -48,6 +48,22 @@ bouwen van de boom zelf. Twee stappen, via Docker agy/Gemini:
    ("engageert dit argument aantoonbaar met de kern van het andere?"), nooit
    een geldigheidsoordeel. Een relatie die "nee" krijgt vervalt.
 
+Elke afgeronde stap wordt direct weggeschreven naar
+`data/export/argument-docs/checkpoints/<slug>/` (structureer-output +
+één regel per relatiecheck). Faalt een call halverwege, dan hervat
+`make redactie TOPIC=<slug> RESUME=1` vanaf daar zonder de dure
+structureer-call of de al gedane checks opnieuw te betalen. Met
+`CANONICAL=1` worden bijna-duplicaten eerst samengevoegd tot canonieke
+stellingen (issue #254, lokale LM Studio-call, geen agy-credits).
+
+De redactiecheck geeft per relatie een `sterkte` tussen 0.0 en 1.0 (niet
+meer een geforceerde ja/nee) -- een relatie blijft in de boom als
+`sterkte >= ENGAGEMENT_THRESHOLD` (default 0.5). Omdat elke score al in
+`checks.jsonl` staat, is de drempel een zuivere lokale nabewerking: met
+`make redactie TOPIC=<slug> RESUME=1 ENGAGEMENT_THRESHOLD=0.3` probeer je
+een andere drempel uit op dezelfde al opgehaalde scores, zonder nieuwe
+agy-calls.
+
 `pipeline/confrontatie_tree.py` voegt de uitkomsten samen (geen LLM), en
 `pipeline/build_confrontatie_export.py` exporteert het resultaat naar
 `data/export/argument-trees/<slug>.json`. Zie de module-docstring van
