@@ -81,7 +81,7 @@ def assign_tiles_for_zoom(points: list, tms, zoom: int) -> dict[int, list]:
 def point_priority(point_id: int) -> float:
     """Vaste, deterministische pseudo-random rangorde per punt (0..1), zelfde
     voor elk zoomniveau/elke tile -- hash-gebaseerd i.p.v. Python's `random`,
-    dus reproduceerbaar zonder seed-beheer. Cruciaal voor `thin_tile_points()`:
+    dus reproduceerbaar zonder seed-beheer. Cruciaal voor `thin_zoom_points_globally()`:
     omdat elk punt op elk niveau dezelfde prioriteit heeft, kan een child-tile
     (striktere geometrische deelverzameling van zijn parent-tile op het vorige
     zoomniveau) nooit een lagere afkapgrens krijgen dan zijn parent -- een punt
@@ -92,17 +92,38 @@ def point_priority(point_id: int) -> float:
     return int.from_bytes(digest, "big") / (2**64 - 1)
 
 
-def thin_tile_points(points: list, max_points_per_tile: int) -> list:
-    """Cap het aantal punten in één tile op de `max_points_per_tile` punten met
-    de laagste `point_priority()` -- zie die functie voor waarom dit
-    zoom-consistent is. Zonder deze cap groeit een tile ongeveer lineair met
-    het totale puntenaantal op lage zoomniveaus (bv. de hele dataset in de ene
-    zoom-0-tile), wat een pmtiles-archief onbruikbaar groot maakt (live
-    gemeten: 1,2GB/9 zoomniveaus voor de volledige dataset, zie issue #259)."""
-    if len(points) <= max_points_per_tile:
-        return points
-    ranked = sorted(points, key=lambda p: point_priority(p[0]))
-    return ranked[:max_points_per_tile]
+def compute_global_point_ranks(points: list) -> dict[int, int]:
+    """Rangnummer per punt-id (0 = laagste `point_priority()`), één keer over
+    de volledige dataset berekend en hergebruikt voor elk zoomniveau in
+    `thin_zoom_points_globally()` -- zie die functie voor waarom een globale
+    rangorde nodig is i.p.v. een per-tile cap."""
+    ranked_ids = sorted((point[0] for point in points), key=point_priority)
+    return {point_id: rank for rank, point_id in enumerate(ranked_ids)}
+
+
+def thin_zoom_points_globally(
+    grouped: dict[int, list], ranks: dict[int, int], max_points_per_tile: int
+) -> dict[int, list]:
+    """Cap het totale aantal punten op één zoomniveau op
+    `len(grouped) * max_points_per_tile` (hetzelfde totaalbudget als een
+    vlakke per-tile-cap zou geven), maar afgekapt op de globale
+    prioriteitsrangorde (`ranks`, zelfde voor elk zoomniveau/elke tile)
+    i.p.v. per tile apart. Effect: een dichte tile houdt evenredig meer
+    punten dan een dunne tile, in plaats van dat beide plat worden afgekapt
+    op dezelfde absolute grens -- dat laatste gaf juist het omgekeerde beeld
+    van de werkelijke dichtheid (issue #259: kleine, van nature al onder een
+    vlakke cap zittende randclusters oogden na thinning drukker dan het
+    zwaar uitgedunde centrum). Omdat `ranks` positie-/zoomniveau-onafhankelijk
+    is, groeit het budget mee met het aantal tiles per zoomniveau (elk
+    zoomniveau kwadrant-splitst tiles, dus het budget groeit ongeveer 4x per
+    stap) -- de bewaarde set op een fijner niveau is dus altijd een superset
+    van die op het grovere niveau: geen "pop in/out" van punten meer bij
+    zoomen."""
+    budget = len(grouped) * max_points_per_tile
+    return {
+        tile_id: [point for point in tile_points if ranks[point[0]] < budget]
+        for tile_id, tile_points in grouped.items()
+    }
 
 
 def encode_one_tile(tile_id: int, points: list, lookups: dict, tms) -> tuple[int, bytes]:
@@ -158,10 +179,13 @@ def build(
             *[dask.delayed(assign_tiles_for_zoom)(points_d, tms_d, zoom) for zoom in range(0, maxzoom + 1)]
         )
 
+        logger.info("Bereken globale prioriteitsrangorde (%d punten)", len(points))
+        ranks = compute_global_point_ranks(points)
+
         encode_tasks = []
         for grouped in per_zoom_assignments:
-            for tile_id, tile_points in grouped.items():
-                tile_points = thin_tile_points(tile_points, max_points_per_tile)
+            thinned = thin_zoom_points_globally(grouped, ranks, max_points_per_tile)
+            for tile_id, tile_points in thinned.items():
                 encode_tasks.append(dask.delayed(encode_one_tile)(tile_id, tile_points, lookups_d, tms_d))
         logger.info("%d tiles te encoderen (dask-taak per tile)", len(encode_tasks))
 
@@ -220,7 +244,9 @@ def main() -> None:
     parser.add_argument("--maxzoom", type=int, default=DEFAULT_MAXZOOM)
     parser.add_argument(
         "--max-points-per-tile", type=int, default=DEFAULT_MAX_POINTS_PER_TILE,
-        help="cap op punten per tile (per zoomniveau apart toegepast) -- zie thin_tile_points()",
+        help="richtgetal voor het totaalbudget per zoomniveau (aantal populated tiles * "
+        "deze waarde), globaal verdeeld naar prioriteitsrangorde i.p.v. per tile apart "
+        "afgekapt -- zie thin_zoom_points_globally()",
     )
     parser.add_argument("--no-dashboard", dest="dashboard", action="store_false", help="Draai zonder dask-distributed-dashboard (synchronous scheduler)")
     parser.add_argument(
