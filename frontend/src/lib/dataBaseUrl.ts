@@ -20,8 +20,7 @@ export function resolveDataBaseUrl(): string {
 // /data-fallback in dev (zoals resolveDataBaseUrl hierboven): er is geen
 // publiceerstap die de tegelpyramide ooit in data/export/gepubliceerd/ (de
 // lokale checkout van die /data-mirror) zet, dus die sirv-route heeft er
-// nooit iets liggen -- altijd rechtstreeks tegen Hugging Face, zoals
-// plenair-map-viewer-hf.html ook al doet.
+// nooit iets liggen -- altijd rechtstreeks tegen Hugging Face.
 //
 // /plenair-map is de submap waar scripts/publish_huggingface.py
 // (--repo-subdir, default "plenair-map") naartoe publiceert -- één submap
