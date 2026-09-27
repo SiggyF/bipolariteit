@@ -1,8 +1,9 @@
 """
 Bouwt de vector-tile-pyramide voor de plenaire kaart: leest de bestaande
-`data/export/plenair-map.json` (dezelfde brondata als `PlenairMap.vue`,
-gegenereerd door `scripts/experiment_umap_documents.py --export-frontend`) en
-schrijft `data/export/plenair-map.pmtiles` -- een MVT-tile-pyramide over een
+`data/export/plenair-map/plenair-map.json` (dezelfde brondata als
+`PlenairMap.vue`, gegenereerd door `pipeline/plenary_map/cluster.py
+--export-frontend`) en schrijft `data/export/plenair-map/plenair-map.pmtiles`
+-- een MVT-tile-pyramide over een
 custom morecantile-grid (`pipeline.tiling.grid`), met tile-encodering
 (`pipeline.tiling.encode`) verdeeld over dask-taken per `(z, x, y)`-tile.
 
@@ -29,11 +30,11 @@ import time
 from pathlib import Path
 
 import dask
-from dask.distributed import Client
 from morecantile.commons import Tile
 from pmtiles.tile import Compression, TileType, tileid_to_zxy, zxy_to_tileid
 from pmtiles.writer import write
 
+from pipeline.dask_client import make_client
 from pipeline.paths import REPO_ROOT
 from pipeline.tiling.encode import encode_tile, field_types
 from pipeline.tiling.grid import (
@@ -49,15 +50,14 @@ from pipeline.tiling.grid import (
 
 logger = logging.getLogger(__name__)
 
-# Vast adres, zodat `make dev`-achtige devcontainer-opstart al een `dask
-# scheduler`/`dask worker` (built-in dask-CLI, zie `dask --help`) op deze
-# poorten kan klaarzetten -- build_pyramid hoeft dan zelf geen cluster meer
-# op te tuigen (zie .devcontainer/devcontainer.json postStartCommand).
-SCHEDULER_ADDRESS = "tcp://127.0.0.1:8786"
-
-DEFAULT_INPUT = REPO_ROOT / "data" / "export" / "plenair-map.json"
-DEFAULT_OUTPUT = REPO_ROOT / "data" / "export" / "plenair-map.pmtiles"
-DEFAULT_GRID_OUTPUT = REPO_ROOT / "data" / "export" / "plenair-map-grid.json"
+# data/export/plenair-map/ bundelt alle plenair-map-exportbestanden bij
+# elkaar (issue #316), zelfde map als pipeline/plenary_map/cluster.py's
+# EXPORT_DIR.
+DEFAULT_INPUT = REPO_ROOT / "data" / "export" / "plenair-map" / "plenair-map.json"
+DEFAULT_OUTPUT = REPO_ROOT / "data" / "export" / "plenair-map" / "plenair-map.pmtiles"
+# Geen los DEFAULT_GRID_OUTPUT meer: --grid-out wordt afgeleid van --out
+# (<stem>-grid.json), zie main() -- voor DEFAULT_OUTPUT komt dat nog steeds
+# uit op plenair-map-grid.json.
 
 LOOKUP_KEYS = ["topics", "actors", "parties", "debates", "soorten"]
 
@@ -110,28 +110,6 @@ def encode_one_tile(tile_id: int, points: list, lookups: dict, tms) -> tuple[int
     bounds = tile_bounds(tms, Tile(x=x, y=y, z=z))
     data = encode_tile(points, lookups, bounds)
     return tile_id, data
-
-
-def make_client(dashboard: bool) -> Client | None:
-    """Verbind bij voorkeur met een al draaiende `dask scheduler` (built-in
-    dask-CLI, zie `dask --help` -- geen eigen wrapper eromheen), die in de
-    devcontainer al vanaf postStartCommand draait samen met een `dask worker`
-    (.devcontainer/devcontainer.json). Dashboard blijft zo staan onafhankelijk
-    van welke pipeline-stap er net draait. Geen scheduler bereikbaar (bv.
-    buiten de devcontainer, of los uitgevoerd)? Val terug op een eigen,
-    kortstondige lokale cluster -- zelfde dashboard-poort, maar verdwijnt met
-    dit proces.
-    """
-    if not dashboard:
-        return None
-    try:
-        client = Client(SCHEDULER_ADDRESS, timeout="2s")
-        logger.info("Verbonden met bestaande dask-scheduler %s (dashboard: %s)", SCHEDULER_ADDRESS, client.dashboard_link)
-        return client
-    except OSError:
-        client = Client(processes=False, dashboard_address=":8787")
-        logger.info("Geen bestaande scheduler gevonden, eigen lokale cluster gestart (dashboard: %s)", client.dashboard_link)
-        return client
 
 
 def build(
@@ -230,7 +208,15 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--input", type=str, default=str(DEFAULT_INPUT))
     parser.add_argument("--out", type=str, default=str(DEFAULT_OUTPUT))
-    parser.add_argument("--grid-out", type=str, default=str(DEFAULT_GRID_OUTPUT))
+    parser.add_argument(
+        "--grid-out",
+        type=str,
+        default=None,
+        help="standaard afgeleid van --out als '<stem-van---out>-grid.json' (zelfde map, "
+        "consistente naamvolgorde <naam>-grid.json) -- alleen expliciet zetten voor een "
+        "afwijkend pad. Los getypte grid-paden hebben eerder tot inconsistente naamvolgorde "
+        "geleid (plenair-map-full-grid.json vs. plenair-map-grid-full.json, issue #316).",
+    )
     parser.add_argument("--maxzoom", type=int, default=DEFAULT_MAXZOOM)
     parser.add_argument(
         "--max-points-per-tile", type=int, default=DEFAULT_MAX_POINTS_PER_TILE,
@@ -245,10 +231,13 @@ def main() -> None:
     )
     args = parser.parse_args()
 
+    out_path = Path(args.out)
+    grid_out_path = Path(args.grid_out) if args.grid_out else out_path.with_name(f"{out_path.stem}-grid.json")
+
     build(
         Path(args.input),
-        Path(args.out),
-        Path(args.grid_out),
+        out_path,
+        grid_out_path,
         args.maxzoom,
         max_points_per_tile=args.max_points_per_tile,
         dashboard=args.dashboard,

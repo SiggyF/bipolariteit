@@ -1,5 +1,5 @@
 """
-Bouwt data/export/plenair-map-videos.json vanuit documents.video_url --
+Bouwt data/export/plenair-map/plenair-map-videos.json vanuit documents.video_url --
 vult "overig plenair"-documenten (topic_id IS NULL) aan die nog ontbraken
 (zie issue #198-vervolg): er bestond geen generator-script voor dit bestand
 in de repo, het origineel is verloren gegaan zonder ooit gecommit te zijn.
@@ -32,12 +32,15 @@ from pipeline.db import db
 logging.basicConfig(level=logging.INFO, format="%(message)s")
 logger = logging.getLogger(__name__)
 
-EXPORT_PATH = Path(__file__).parent.parent / "data" / "export" / "plenair-map-videos.json"
-# data/export/plenair-map.json (niet frontend/public/data, dat mirrort de
-# bipolariteit-data-submodule/gepubliceerd en loopt achter tot de volgende
-# publicatie -- bv. PR #196's abortus-datumrangefix, 13->197 punten, staat
-# hier al wel in maar is nog niet gepubliceerd).
-POINTS_PATH = Path(__file__).parent.parent / "data" / "export" / "plenair-map.json"
+# data/export/plenair-map/ bundelt alle plenair-map-exportbestanden bij
+# elkaar (issue #316) i.p.v. los tussen de rest van data/export/.
+EXPORT_DIR = Path(__file__).parent.parent / "data" / "export" / "plenair-map"
+EXPORT_PATH = EXPORT_DIR / "plenair-map-videos.json"
+# data/export/plenair-map/plenair-map.json (niet frontend/public/data, dat
+# mirrort de bipolariteit-data-submodule/gepubliceerd en loopt achter tot de
+# volgende publicatie -- bv. PR #196's abortus-datumrangefix, 13->197
+# punten, staat hier al wel in maar is nog niet gepubliceerd).
+POINTS_PATH = EXPORT_DIR / "plenair-map.json"
 
 
 def load_point_ids(points_path):
@@ -49,7 +52,7 @@ def build_entries(conn, point_ids):
     """point_ids: de document-id's die daadwerkelijk als punt in
     plenair-map.json voorkomen. Zonder deze filter zou dit bestand alle
     ~187k documenten met video_url bevatten i.p.v. de ~39k die de kaart
-    ooit opvraagt (documenten die door experiment_umap_documents.py's
+    ooit opvraagt (documenten die door pipeline/plenary_map/cluster.py's
     percentiel-trimming/sampling nooit een punt worden, zijn hier
     onnodige bagage) -- op schaal het verschil tussen een 3 MB en een
     50+ MB bestand."""

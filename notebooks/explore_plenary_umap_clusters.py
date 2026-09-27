@@ -23,7 +23,7 @@ Wat dit script doet, in volgorde:
   2. De bijbehorende bge-m3-embeddings laden -- bij voorkeur uit de bestaande
      cache (`data/embeddings/text-embedding-bge-m3_plenair-combined/`,
      ~98.9k spreekbeurten, geproduceerd door
-     scripts/experiment_umap_documents.py), zodat je zonder LM Studio te
+     pipeline/plenary_map/cluster.py), zodat je zonder LM Studio te
      starten meteen kunt experimenteren. Ontbrekende ids worden zo nodig
      alsnog live geëmbed.
   3. UMAP op die steekproef draaien -> 2D-coördinaten.
@@ -38,9 +38,9 @@ Wat dit script doet, in volgorde:
   6. Eén tabel (pandas DataFrame) met beide labelsoorten naast elkaar, zodat
      je ze visueel kunt vergelijken.
 
-Waarom een los script i.p.v. rechtstreeks scripts/experiment_umap_documents.py
+Waarom een los script i.p.v. rechtstreeks pipeline/plenary_map/cluster.py
 aanpassen: dat script draait de volle ~99k-punten-dataset en schrijft naar de
-productie-export (data/export/plenair-map*.json, frontend-input). Dit script
+productie-export (data/export/plenair-map/plenair-map*.json, frontend-input). Dit script
 hergebruikt zijn kernfuncties (fetch_documents, strip_speaker_prefix,
 run_clustering, label_multilevel_clusters, ...) maar werkt op een kleine,
 snel te herhalen steekproef en schrijft nergens naar productie-output.
@@ -106,7 +106,7 @@ from pipeline.db import db
 from pipeline.embed.documents import load_embedding_cache
 from pipeline.tag_arguments import call_llm
 from scripts.experiment_umap_arguments import detect_base_url, embed_texts, run_umap
-from scripts.experiment_umap_documents import (
+from pipeline.plenary_map.cluster import (
     CACHE_DIR,
     DUTCH_PRONOUNS_AND_NUMERALS,
     MODEL,
@@ -123,7 +123,7 @@ from scripts.experiment_umap_documents import (
 logging.basicConfig(level=logging.INFO, format="%(message)s")
 logger = logging.getLogger(__name__)
 
-# Tijdvak: zelfde brede plenaire dataset als scripts/experiment_umap_documents.py
+# Tijdvak: zelfde brede plenaire dataset als pipeline/plenary_map/cluster.py
 # (zie dat script's docstring voor hoe die data is geïngest).
 START_DATE = "2025-11-12"
 END_DATE = "2026-08-22"
@@ -134,7 +134,7 @@ MIN_CONTENT_LEN = 30
 
 # Clustering op de steekproef: geen vaste coarse/fine-tweedeling (ook
 # geprobeerd -- HDBSCAN_MIN_CLUSTER_SIZE_COARSE=200/FINE=15, zoals
-# scripts/experiment_umap_documents.py -- maar op deze schaal (~40k punten)
+# pipeline/plenary_map/cluster.py -- maar op deze schaal (~40k punten)
 # collapst coarse=200 zelf ook weer naar één dominant domein van 94% van de
 # punten, live gemeten). In plaats daarvan: wandel de volledige HDBSCAN-
 # hiërarchie (de condensed tree) top-down af. Die boom is één lange
@@ -168,7 +168,7 @@ LLM_CHAT_MODEL = "qwen/qwen3.6-27b"  # zelfde default als pipeline/tag_arguments
 # volledige toelichting.
 LLM_REASONING_EFFORT = "none"
 
-# Bestaande volledige embeddingcache (scripts/experiment_umap_documents.py
+# Bestaande volledige embeddingcache (pipeline/plenary_map/cluster.py
 # --label combined) -- als de steekproef-ids hierin zitten, is embedden
 # overbodig. Val terug op live embedden voor wat ontbreekt.
 FULL_CACHE_PATH = CACHE_DIR / f"{MODEL}_plenair-combined"
@@ -190,7 +190,7 @@ logger.info("steekproef: %d spreekbeurten", len(sample_rows))
 
 # Sprekersprefix eraf (issue #156: anders clustert het model deels op wie
 # iets zei i.p.v. waar het over ging) en nogmaals filteren op lengte, zie
-# scripts/experiment_umap_documents.py::main() voor de toelichting.
+# pipeline/plenary_map/cluster.py::main() voor de toelichting.
 stripped = [strip_speaker_prefix(r["content"], r["actor_name"]) for r in sample_rows]
 keep = [i for i, t in enumerate(stripped) if len(t) >= MIN_CONTENT_LEN]
 sample_rows = [sample_rows[i] for i in keep]
@@ -209,7 +209,7 @@ texts[:5]
 
 def load_embeddings_for_sample(ids, texts):
     """Probeert embeddings uit de bestaande volledige cache te hergebruiken
-    (ID-subset lookup, zie scripts/experiment_umap_documents.py::main() voor
+    (ID-subset lookup, zie pipeline/plenary_map/cluster.py::main() voor
     het origineel van dit patroon); embedt live wat ontbreekt."""
     id_to_vector = load_embedding_cache(FULL_CACHE_PATH)
     if id_to_vector:
@@ -357,7 +357,7 @@ all_stopwords = (
 # Eén schaalniveau (de genoemde clusters uit de boomwandeling hierboven):
 # een lijst van precies 1 level_ids-array geeft platte (niet-hiërarchische)
 # TF-IDF-labels terug (issue #281: build_hierarchical_clusters/
-# label_hierarchical_clusters zijn uitgefaseerd in scripts/experiment_umap_documents.py,
+# label_hierarchical_clusters zijn uitgefaseerd in pipeline/plenary_map/cluster.py,
 # label_multilevel_clusters is nu het enige clusteringpad). Geen topic_labels
 # meer (issue #288: topic is geen eigenschap van de embed-/clusterworkflow).
 level_lists, _ = label_multilevel_clusters(
@@ -411,7 +411,7 @@ for cluster_id in sorted(set(cluster_ids) - {-1}):
     member_idx = np.where(cluster_ids == cluster_id)[0]
     # Representatieve punten: dichtst bij het clustercentroïde in de
     # UMAP-ruimte, zelfde idee als rank_hull_anchored_terms() in
-    # scripts/experiment_umap_documents.py maar dan voor tekstvoorbeelden
+    # pipeline/plenary_map/cluster.py maar dan voor tekstvoorbeelden
     # i.p.v. TF-IDF-termen.
     centroid = coords[member_idx].mean(axis=0)
     dists = np.linalg.norm(coords[member_idx] - centroid, axis=1)

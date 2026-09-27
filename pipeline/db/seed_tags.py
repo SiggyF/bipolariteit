@@ -1,5 +1,5 @@
 """
-Laadt de argument-taxonomie uit data/tags.toml in de labelgroepen- en
+Laadt de argument-taxonomie uit config/tags.toml in de labelgroepen- en
 tags-tabellen. Idempotent en veilig om te herhalen na een edit door de
 onderzoeker aan tags.toml: elke run zet eerst alles inactief en activeert
 vervolgens alles wat nog in het bestand staat (zie schema.sql-commentaar bij
@@ -18,7 +18,7 @@ from pathlib import Path
 from pipeline.db import db
 from pipeline.taxonomy import selectie_for
 
-TAGS_TOML_PATH = Path(__file__).parent.parent.parent / "data" / "tags.toml"
+TAGS_TOML_PATH = Path(__file__).parent.parent.parent / "config" / "tags.toml"
 
 
 def load_taxonomy(path: Path = TAGS_TOML_PATH) -> dict:

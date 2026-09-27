@@ -36,7 +36,7 @@ OVERRIDES_PATH = REPO_ROOT / "config" / "cluster_label_overrides.toml"
 CLUSTERS_FULL_PATH = REPO_ROOT / "data" / "export" / "a0-map" / "maps" / "plenair-map-clusters-full.json"
 POINTS_FULL_PATH = REPO_ROOT / "data" / "export" / "a0-map" / "maps" / "plenair-map-full.json"
 EMBEDDINGS_PATH = REPO_ROOT / "data" / "embeddings" / "text-embedding-bge-m3_plenair-full.npz"
-OUTPUT_PATH = REPO_ROOT / "data" / "cluster-label-anchors.parquet"
+OUTPUT_PATH = REPO_ROOT / "data" / "plenair-map" / "cluster-label-anchors.parquet"
 
 # Parquet i.p.v. JSON (issue #281): JSON schreef de 199x1024 mean_vector-floats
 # als volledige-precisie tekst, plus alle veldnamen letterlijk herhaald per

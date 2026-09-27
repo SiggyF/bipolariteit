@@ -1,7 +1,7 @@
 """
 Validatie-experiment voor issue #67: kan het taggingmodel de 5 kandidaat-
 stijlmiddelen (Slogan, Herhaling, Drieledige Opsomming, Antithese, Retorische
-Vraag) herkennen, vóórdat we ze daadwerkelijk in data/tags.toml opnemen?
+Vraag) herkennen, vóórdat we ze daadwerkelijk in config/tags.toml opnemen?
 
 Puur leesactie: schrijft niets naar de database, wijzigt geen
 tags.toml/schema/prompts. Draait tegen het lokale eval-model (LM Studio),
@@ -50,7 +50,7 @@ TOPIC_DESCRIPTION = (
 ACTOR_NAME = "Spreker A"
 
 # Kandidaat-stijlmiddelen (definities uit docs/Taxonomie Stijlmiddelen Politieke
-# Debatten.md), hier hardcoded voor het experiment -- NIET in data/tags.toml,
+# Debatten.md), hier hardcoded voor het experiment -- NIET in config/tags.toml,
 # dus geen DB/schema-wijziging nodig om dit te testen.
 STIJLMIDDEL_DEFINITIES = [
     ("stijlmiddel-slogan", "Beknopte, pakkende frase."),

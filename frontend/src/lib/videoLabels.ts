@@ -47,8 +47,7 @@ export function prevArgumentBefore(args: Argument[], beforeSeconds: number): Arg
  *
  * Bewust geen categorie-voorrang (bv. drogredenen/stijlmiddelen altijd
  * eerst): dat zou de selectie laten oordelen over wat "belangrijker" is
- * i.p.v. gewoon te laten zien wat opvalt binnen dit specifieke debat -- zie
- * de site-motto "We listen and we don't judge" op de homepage. */
+ * i.p.v. gewoon te laten zien wat opvalt binnen dit specifieke debat. */
 export function selectBadgeTags(
 	argument: Argument,
 	argsInThisDebate: Argument[],

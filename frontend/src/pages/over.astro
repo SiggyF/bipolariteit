@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import status from "../../../data/export/status.json";
 import topicsIndex from "../../../data/export/topics-index.json";
 import { deriveTagUsage, type TagUsageRow } from "../lib/aggregate";
 import { analyseTable, canonicalSigns } from "../lib/correspondence";
@@ -40,7 +41,7 @@ for (const argument of allArguments) {
 }
 
 // Labelgroep-volgorde per perspectief herleiden uit de taxonomie-volgorde in
-// tagIcons.generated.ts (zelf gegenereerd uit data/tags.toml) i.p.v. die
+// tagIcons.generated.ts (zelf gegenereerd uit config/tags.toml) i.p.v. die
 // groepering nog een keer los te dupliceren -- de frontend leest tags.toml
 // bewust niet rechtstreeks (zie lib/types.ts). Tags zonder toekenning in de
 // huidige data blijven buiten beeld: dit overzicht toont de taxonomie zoals
@@ -124,13 +125,25 @@ const CA_ROW_LABEL_OFFSET: Record<string, CaLabelOffset> = {
 	D66: { dx: 0, dy: 20, anchor: "middle" },
 	SGP: { dx: 0, dy: -12, anchor: "middle" },
 };
+
+// Ruwe CO2-schatting (pipeline/co2_estimate.py), afgerond voor leesbaarheid
+// -- de exacte cijfers staan in data/export/status.json, hier alleen de
+// weergave-afronding.
+const co2 = status.co2_estimate;
+const co2Kg = co2.total_co2_kg.toLocaleString("nl-NL", { maximumFractionDigits: 1 });
+const energyKwh = Math.round(co2.total_energy_kwh).toLocaleString("nl-NL");
+const totalCalls = co2.total_calls.toLocaleString("nl-NL");
+const remoteShare = Math.round((co2.by_source.remote.total_tokens / co2.total_tokens) * 100);
+const localKwh = co2.by_source.local.energy_kwh.toLocaleString("nl-NL", { maximumFractionDigits: 1 });
+const remoteKwh = co2.by_source.remote.energy_kwh.toLocaleString("nl-NL", { maximumFractionDigits: 1 });
+const remoteCo2Kg = (co2.by_source.remote.co2_g / 1000).toLocaleString("nl-NL", { maximumFractionDigits: 1 });
 ---
 
 <BaseLayout title="Over dit platform - Bipolariteit" class="about">
 			<a href="/onderwerpen/" class="back-link">&larr; alle onderwerpen</a>
 			<h1>Over dit platform</h1>
 
-			<p class="motto">"We listen and we don't judge."</p>
+			<p class="motto">Wie zegt wat.</p>
 
 			<p>
 				Deze site ontleedt Nederlandse politieke debatten op argumenten: wie zegt wat, en waarom.
@@ -909,12 +922,26 @@ const CA_ROW_LABEL_OFFSET: Record<string, CaLabelOffset> = {
 				</li>
 				<li>
 					<strong>Modellen &amp; promptversies.</strong> Argumenten-extractie en tagging draaien lokaal
-					via een open-source model (momenteel <code>qwen/qwen3.6-27b</code>); het bouwen van de
+					via een open-source model (momenteel <code>qwen/qwen3.8-27b</code>); het bouwen van de
 					argumentenboom (stap 5) gebruikt Gemini, vanwege het grotere contextvenster dat nodig is
 					om de volledige argumentenset van een onderwerp in één keer te doorzoeken.
 					Validatiesteekproeven gebruiken daarnaast Gemini als tweede beoordelaar. Van elk argument wordt
 					bijgehouden met welke promptversie het gemaakt is, zodat een prompt- of modelwijziging altijd
 					traceerbaar is.
+				</li>
+				<li>
+					<strong>Energieverbruik &amp; CO2 (ruwe schatting).</strong> Over de volledige geschiedenis van
+					extractie- en tag-calls (ca. {totalCalls} LLM-aanroepen) schatten we het energieverbruik op
+					ca. {energyKwh} kWh (ca. {localKwh} kWh lokaal, ca. {remoteKwh} kWh op afstand) en de uitstoot
+					op ca. {co2Kg} kg CO2. Dit is een grove indicatie, geen meting: gebaseerd op een gepubliceerde
+					vuistregel van ~0,3 Wh per 1000 tokens voor een vergelijkbaar (grotere) model, toegepast op het
+					totaal aantal prompt- + completion-tokens uit onze eigen logging. De lokale calls (via LM
+					Studio) draaien op groene stroom en tellen hier daarom als CO2-vrij mee; de uitstoot (ca. {remoteCo2Kg} kg)
+					komt dus volledig van de {remoteShare}% van de tokens die op afstand verwerkt zijn (OVHcloud
+					via de Hugging Face-router), gerekend met OVHclouds eigen 2024-cijfer van 0,16 kg CO2 per kWh.
+					De redactie-stap (het bouwen van de argumentenboom,
+					via Gemini) logt geen tokens en zit dus niet in dit cijfer — in verhouding tot het totaal
+					aantal extractie-/tag-calls is dat een klein deel van het werk.
 				</li>
 				<li>
 					<strong>Validatie-rapportage.</strong> Vóór elke publicatieronde wordt een representatieve

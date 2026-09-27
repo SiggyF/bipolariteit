@@ -1,6 +1,6 @@
 """
 Plaatst een documentdatum in een kamerperiode en een regeringsperiode
-(data/politieke-periodes.toml), zodat de frontend daarop kan filteren zonder
+(config/politieke-periodes.toml), zodat de frontend daarop kan filteren zonder
 zelf datumrekenwerk te doen.
 
 Bewust hard falend: een datum die buiten elke periode valt is een gat in de
@@ -15,7 +15,7 @@ from pathlib import Path
 
 logger = logging.getLogger(__name__)
 
-PERIODES_PATH = Path(__file__).parent.parent / "data" / "politieke-periodes.toml"
+PERIODES_PATH = Path(__file__).parent.parent / "config" / "politieke-periodes.toml"
 
 # Ver in de toekomst i.p.v. None, zodat lopende periodes in dezelfde
 # vergelijking meekunnen als afgesloten periodes.

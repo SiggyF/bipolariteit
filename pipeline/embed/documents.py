@@ -3,7 +3,7 @@ Documenten ophalen uit de database en embedden met bge-m3, met een
 incrementele cache op schijf (data/embeddings/). Dit is de eerste stage van
 de plenaire-kaart-pijplijn: embedden -> UMAP -> clusteren -> labelen ->
 exporteren. Alleen deze eerste stage staat hier; de rest blijft in
-scripts/experiment_umap_documents.py (dat fetch_and_embed() hieruit aanroept
+pipeline/plenary_map/cluster.py (dat fetch_and_embed() hieruit aanroept
 in plaats van deze logica zelf te herhalen).
 
 Bron van de dataset: `documents.content` (ruwe sprekerbeurttekst), topic-

@@ -1,6 +1,6 @@
 """
 Topologische validatie van een N-laagse `plenair-map-clusters*.json`
-(zie `scripts/experiment_umap_documents.py`'s `label_multilevel_clusters()`).
+(zie `pipeline/plenary_map/cluster.py`'s `label_multilevel_clusters()`).
 
 Twee regels, beide bedoeld om de "hoofdtak overheerst het hele niveau"-bug
 te detecteren die live in QGIS zichtbaar werd (zie ook build_multilevel_clusters'
@@ -19,7 +19,7 @@ hangen, is in feite geen zinvolle subdivisie van dat niveau.
 
 Gebruik:
     uv run python scripts/validate_cluster_hierarchy.py \
-        data/export/plenair-map-clusters-full.json
+        data/export/plenair-map/plenair-map-clusters-full.json
 """
 
 import argparse

@@ -6,7 +6,7 @@ issue: "Betere compacte samenvatting". Het bouwt voort op de bestaande
 export-prompt-build-workflow uit PR #48 (zie ook de moduledocstring van
 `pipeline/build_confrontatie_export.py`): dezelfde Gemini-sessie levert nu
 ook twee extra outputvelden (`thema`, `samenvatting`), via één
-niet-interactieve `agy`-call (`scripts/agy_run_confrontatie_tree.py`).
+niet-interactieve `agy`-call (`scripts/argument_tree/agy_run_confrontatie_tree.py`).
 
 ## Wat dit oplost
 

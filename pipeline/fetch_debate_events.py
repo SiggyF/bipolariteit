@@ -18,7 +18,7 @@ uit fetch_subtitles.py, niet voor dit JSON-endpoint) -- kopieer die logica dus
 niet naar dit script. Wel een korte, eigen sleep tussen requests uit
 hoffelijkheid richting de API.
 
-Cachet naar data/debate_events/<debatdirect_id>.json (niet ingecheckt, zie
+Cachet naar data/debate-events/<debatdirect_id>.json (niet ingecheckt, zie
 .gitignore) en slaat een debat over waarvoor die file al bestaat -- geen
 database-boekhouding nodig, het bestand zelf is de idempotentie-vlag.
 
@@ -39,7 +39,7 @@ from pipeline.paths import REPO_ROOT
 
 logger = logging.getLogger(__name__)
 
-DEBATE_EVENTS_DIR = REPO_ROOT / "data" / "debate_events"
+DEBATE_EVENTS_DIR = REPO_ROOT / "data" / "debate-events"
 
 # Lichte hoffelijkheids-pauze tussen opeenvolgende requests -- geen bekende
 # cache-bug op dit endpoint (zie moduledocstring), dus geen throttle-logica

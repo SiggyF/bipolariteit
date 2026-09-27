@@ -71,7 +71,7 @@ const tagRows = computed(() => {
 	return props.mode === "persoon" ? bucketSmallCounts(rows, PERSON_TAG_THRESHOLD) : rows;
 });
 
-// Groepeer op perspectief (in de volgorde van de taxonomie, data/tags.toml)
+// Groepeer op perspectief (in de volgorde van de taxonomie, config/tags.toml)
 // i.p.v. kaal op aantal -- zo staan gelijkgekleurde tags bij elkaar en oogt de
 // grafiek als vier blokken in plaats van willekeurig door elkaar gehusselde
 // kleuren. Binnen een perspectief blijft aantal-aflopend de sortering.

@@ -27,7 +27,7 @@
 //   filterArgumentsByTag deed in pages/tags/[sleutel].astro), met topicSlug/
 //   topicName toegevoegd -- TagDetail.vue toont argumenten uit meerdere
 //   onderwerpen door elkaar en heeft die annotatie per argument nodig.
-// - een kopie van data/export/plenair-map.json en -clusters.json (samen
+// - een kopie van data/export/plenair-map/plenair-map.json en -clusters.json (samen
 //   ~6 MB) naar data/export/gepubliceerd/. Die gingen als Astro-prop mee in
 //   onderwerpen/index.astro, PlenairMap.vue fetcht ze nu client-side.
 //
@@ -119,7 +119,7 @@ function main(): void {
 	mkdirSync(publicDataDir, { recursive: true });
 
 	for (const bestand of ["plenair-map.json", "plenair-map-clusters.json", "plenair-map-videos.json"]) {
-		const bron = resolve(hier, "../../data/export", bestand);
+		const bron = resolve(hier, "../../data/export/plenair-map", bestand);
 		if (existsSync(bron)) {
 			const doel = resolve(UIT_DIR, bestand);
 			copyFileSync(bron, doel);

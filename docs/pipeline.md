@@ -3,7 +3,9 @@
 Elke stap tussen "een debat vindt plaats" en "de argumenten staan op de site"
 heeft een eigen Makefile-target. Dit document geeft de volgorde en waar elk
 target in die volgorde hoort. Voor de deploy zelf (Cloudflare, DNS,
-wrangler), zie [release.md](release.md).
+wrangler), zie [release.md](release.md). Voor een overzicht van wélke
+databestanden waar horen en via welk kanaal ze gepubliceerd worden, zie
+[data-layout.md](data-layout.md).
 
 ## De kernketen
 
@@ -46,6 +48,22 @@ bouwen van de boom zelf. Twee stappen, via Docker agy/Gemini:
    ("engageert dit argument aantoonbaar met de kern van het andere?"), nooit
    een geldigheidsoordeel. Een relatie die "nee" krijgt vervalt.
 
+Elke afgeronde stap wordt direct weggeschreven naar
+`data/export/argument-docs/checkpoints/<slug>/` (structureer-output +
+één regel per relatiecheck). Faalt een call halverwege, dan hervat
+`make redactie TOPIC=<slug> RESUME=1` vanaf daar zonder de dure
+structureer-call of de al gedane checks opnieuw te betalen. Met
+`CANONICAL=1` worden bijna-duplicaten eerst samengevoegd tot canonieke
+stellingen (issue #254, lokale LM Studio-call, geen agy-credits).
+
+De redactiecheck geeft per relatie een `sterkte` tussen 0.0 en 1.0 (niet
+meer een geforceerde ja/nee) -- een relatie blijft in de boom als
+`sterkte >= ENGAGEMENT_THRESHOLD` (default 0.5). Omdat elke score al in
+`checks.jsonl` staat, is de drempel een zuivere lokale nabewerking: met
+`make redactie TOPIC=<slug> RESUME=1 ENGAGEMENT_THRESHOLD=0.3` probeer je
+een andere drempel uit op dezelfde al opgehaalde scores, zonder nieuwe
+agy-calls.
+
 `pipeline/confrontatie_tree.py` voegt de uitkomsten samen (geen LLM), en
 `pipeline/build_confrontatie_export.py` exporteert het resultaat naar
 `data/export/argument-trees/<slug>.json`. Zie de module-docstring van
@@ -71,7 +89,7 @@ tijdlijn):
 
 1. `enrich-video` — vult `documents.video_url`/`debatdirect_id` via Debat
    Direct.
-2. `fetch-debate-events` — cachet per-beurt-ankers naar `data/debate_events/`.
+2. `fetch-debate-events` — cachet per-beurt-ankers naar `data/debate-events/`.
 3. `fetch-subtitles` — cachet NL-ondertitel-VTT naar `data/subtitles/`.
 4. `match-video-spans` — matcht `quote_text` tegen de ondertitels, gekalibreerd
    op de events-ankers, en vult `arguments.start_seconds`/`end_seconds`.
@@ -88,7 +106,7 @@ en die worden **niet automatisch** aan `make pipeline` geknoopt:
 
 | Target | Doet |
 | --- | --- |
-| `tags-taxonomy` | `data/tags.toml` -> `frontend/src/lib/tagsTaxonomy.generated.ts` |
+| `tags-taxonomy` | `config/tags.toml` -> `frontend/src/lib/tagsTaxonomy.generated.ts` |
 | `export-public-data` | `data/export/topics/*.json` -> `data/export/gepubliceerd/` (lean, per perspectief/onderwerp/tag, issue #163) |
 | `publish-data` | Commit + push van die submodule naar de publieke data-repo, via jsDelivr opgehaald door de live site |
 
@@ -125,7 +143,7 @@ vaste schakel:
 ```
 make probe KEYWORDS="..."          # optioneel, vooraf peilen
 make pipeline TOPIC=<slug>         # crawl -> ingest -> extract -> tag -> export
-make tags-taxonomy                 # als data/tags.toml gewijzigd is
+make tags-taxonomy                 # als config/tags.toml gewijzigd is
 make export-public-data
 make publish-data                  # bewuste, losse publicatiestap
 make build && make release TAG=... # of make release-www voor main

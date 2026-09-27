@@ -11,14 +11,27 @@
       "items": {
         "type": "object",
         "properties": {
-          "argument_id": { "type": "integer", "description": "id of the argument, must exist in the source database." },
-          "gist": { "type": "string", "description": "Very short (3-4 words) summary for the tree display. Never a paraphrase that adds facts not in the quote itself." },
+          "argument_id": {
+            "type": "integer",
+            "description": "id of the argument, must exist in the source database."
+          },
+          "gist": {
+            "type": "string",
+            "description": "Very short (3-4 words) summary for the tree display. Never a paraphrase that adds facts not in the quote itself."
+          },
           "samenvatting": {
-            "type": ["string", "null"],
+            "type": [
+              "string",
+              "null"
+            ],
             "description": "1-2 sentence readable summary of this node together with everything that supports it, or null for a leaf node whose quote is already short enough."
           }
         },
-        "required": ["argument_id", "gist", "samenvatting"],
+        "required": [
+          "argument_id",
+          "gist",
+          "samenvatting"
+        ],
         "additionalProperties": false
       }
     },
@@ -31,7 +44,10 @@
         "properties": {
           "relation_type": {
             "type": "string",
-            "enum": ["support", "conflict"],
+            "enum": [
+              "support",
+              "conflict"
+            ],
             "description": "support = RA-node (premises logically back up the target). conflict = CA-node (premises rebut or undermine the target)."
           },
           "target_argument_id": {
@@ -40,24 +56,45 @@
           },
           "premise_argument_ids": {
             "type": "array",
-            "items": { "type": "integer" },
+            "items": {
+              "type": "integer"
+            },
             "minItems": 1,
             "description": "ids of the arguments that feed the relation. More than 1 item = a coordinative group: the premises only carry the target jointly, not individually."
           },
           "thema": {
-            "type": ["string", "null"],
+            "type": [
+              "string",
+              "null"
+            ],
             "description": "Short (max ~8 words), neutral title naming the actual point of contention -- only set on conflict relations, becomes the band title. Never a fact/number/judgement, and never just the two gists glued together."
           },
           "scheme": {
-            "type": ["string", "null"],
+            "type": [
+              "string",
+              "null"
+            ],
             "description": "Refinement of relation_type. For conflict: 'direct_rebuttal' (explicitly rebuts the same point), 'thematic' (touches the same sub-topic, no direct rebuttal), or 'frame_shift' (shifts the discussion to a different value/framing instead of rebutting the point itself). For support: a Walton argumentation-scheme name if one clearly applies, otherwise null."
           },
           "reden": {
             "type": "string",
             "description": "One short, case-specific sentence from the redactie pass justifying why this relation passed its neutral engagement check (see the schema-level description) -- never a generic restatement of the relation_type, always grounded in what the two arguments actually say."
+          },
+          "sterkte": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1,
+            "description": "Score (0.0-1.0) van de redactiecheck voor hoe sterk premise en target elkaar raken -- de relatie is alleen opgenomen omdat deze een gekozen drempel haalde (default 0.5, zie merge_engagement_checks). Ontbreekt bij bomen die zijn gebouwd vóór de invoering van deze score (issue #254 vervolg), toen de check nog een booleaanse ja/nee gaf."
           }
         },
-        "required": ["relation_type", "target_argument_id", "premise_argument_ids", "thema", "scheme", "reden"],
+        "required": [
+          "relation_type",
+          "target_argument_id",
+          "premise_argument_ids",
+          "thema",
+          "scheme",
+          "reden"
+        ],
         "additionalProperties": false
       }
     },
@@ -67,11 +104,29 @@
       "items": {
         "type": "object",
         "properties": {
-          "label": { "type": "string", "description": "Short (max ~6 words), neutral summary of the shared point." },
-          "samenvatting": { "type": ["string", "null"] },
-          "argument_ids": { "type": "array", "items": { "type": "integer" }, "minItems": 2 }
+          "label": {
+            "type": "string",
+            "description": "Short (max ~6 words), neutral summary of the shared point."
+          },
+          "samenvatting": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "argument_ids": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            },
+            "minItems": 2
+          }
         },
-        "required": ["label", "samenvatting", "argument_ids"],
+        "required": [
+          "label",
+          "samenvatting",
+          "argument_ids"
+        ],
         "additionalProperties": false
       }
     },
@@ -81,15 +136,30 @@
       "items": {
         "type": "object",
         "properties": {
-          "argument_id": { "type": "integer" },
-          "huidige_stance": { "type": "string" },
-          "reden": { "type": "string" }
+          "argument_id": {
+            "type": "integer"
+          },
+          "huidige_stance": {
+            "type": "string"
+          },
+          "reden": {
+            "type": "string"
+          }
         },
-        "required": ["argument_id", "huidige_stance", "reden"],
+        "required": [
+          "argument_id",
+          "huidige_stance",
+          "reden"
+        ],
         "additionalProperties": false
       }
     }
   },
-  "required": ["nodes", "relations", "coordinatieve_groepen", "twijfelachtige_classificaties"],
+  "required": [
+    "nodes",
+    "relations",
+    "coordinatieve_groepen",
+    "twijfelachtige_classificaties"
+  ],
   "additionalProperties": false
 }

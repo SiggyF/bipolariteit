@@ -1,9 +1,10 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import TiledPlenairMap from "../../components/TiledPlenairMap.vue";
-import { resolveDataBaseUrl } from "../../lib/dataBaseUrl";
+import { resolveDataBaseUrl, resolveTilesBaseUrl } from "../../lib/dataBaseUrl";
 
 const dataBaseUrl = resolveDataBaseUrl();
+const tilesBaseUrl = resolveTilesBaseUrl();
 ---
 
 <BaseLayout title="Tiled Plenaire Kaart (experimenteel) - Bipolariteit">
@@ -12,5 +13,5 @@ const dataBaseUrl = resolveDataBaseUrl();
 		vector-tile-pyramide (.pmtiles) i.p.v. de platte plenair-map.json. Zie <code>PlenairMap.vue</code>
 		voor de bestaande, ongewijzigde kaart.
 	</p>
-	<TiledPlenairMap dataBaseUrl={dataBaseUrl} client:only="vue" />
+	<TiledPlenairMap dataBaseUrl={dataBaseUrl} tilesBaseUrl={tilesBaseUrl} client:only="vue" />
 </BaseLayout>

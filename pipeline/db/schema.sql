@@ -47,7 +47,37 @@ CREATE TABLE documents (
     speaker_person_id TEXT, -- VLOS <spreker objectid="...">: TK-Persoon-GUID van de spreker in déze beurt. Byte-identiek aan debatdirect's events[].objectId (zie pipeline/fetch_debate_events.py, docs/tk-data-sources-overview.md 5f) -- koppelt een VLOS-sprekerbeurt aan het bijbehorende debatdirect-event voor exacte video-kalibratie. NULL voor documenten van vóór dit veld bestond.
     turn_type TEXT CHECK (turn_type IN ('woordvoerder', 'interrumpant')), -- lokale VLOS-tagnaam van het sprekerbeurt-element (zie find_speaking_turns()). Samen met is_voorzitter_turn bepaalt dit welk debatdirect-eventType bij deze beurt hoort: 'interrumpant' -> 'interrupter', 'woordvoerder' -> 'chairman' als is_voorzitter_turn=1 anders 'speaker' (voorzitterbeurten blijken in de events-API uitsluitend als 'chairman' voor te komen, nooit 'speaker' -- geverifieerd op c1663929-...). NULL voor documenten van vóór dit veld bestond.
     speaker_event_anchor_at TEXT, -- Tier-1-anker uit de debatdirect events-API (pipeline/match_argument_spans.py calibrate_debate) als absolute wall-clock ISO8601-tijd, i.p.v. published_at (VLOS-markeertijd). Gebruikt door _speaker_event_url (build_static_data.py e.a.) voor de externe "video op dit moment"-deep-link naar Debat Direct -- published_at bleek voor sommige beurten uren te kunnen afwijken van de werkelijke spreektijd (issue #148-vervolg), waardoor die link naar het begin van het debat sprong. NULL voor beurten zonder Tier-1-anker (geen events-cache, of geen matchend event binnen het venster) -- daar valt de deep-link terug op published_at.
-    text_stats TEXT -- JSON-blob met ruwe tekststatistieken van content (issue #155), bv. {"word_count":123,"sentence_count":8,"syllable_count":210,"long_word_count":19,"unique_word_count":95,"token_count":180}, berekend door pipeline/text_stats.py. Alleen ruwe tellingen, niet de afgeleide leesbaarheidsindices zelf (Flesch-Douma/LIX/TTR blijven pure functies over deze tellingen, zodat een latere formulewijziging nooit een her-backfill vergt). Eén JSON-kolom i.p.v. een losse kolom per metriek, zodat een nieuwe metriek nooit een schemawijziging vergt. Gevuld door ingest_tk.py bij nieuwe imports en met terugwerkende kracht via scripts/backfill_document_tekststatistieken.py. NULL voor documenten van vóór dit veld bestond, of voor voorzitterbeurten/lege content (zie backfill-filter).
+    text_stats TEXT, -- JSON-blob met ruwe tekststatistieken van content (issue #155), bv. {"word_count":123,"sentence_count":8,"syllable_count":210,"long_word_count":19,"unique_word_count":95,"token_count":180}, berekend door pipeline/text_stats.py. Alleen ruwe tellingen, niet de afgeleide leesbaarheidsindices zelf (Flesch-Douma/LIX/TTR blijven pure functies over deze tellingen, zodat een latere formulewijziging nooit een her-backfill vergt). Eén JSON-kolom i.p.v. een losse kolom per metriek, zodat een nieuwe metriek nooit een schemawijziging vergt. Gevuld door ingest_tk.py bij nieuwe imports en met terugwerkende kracht via scripts/backfill_document_tekststatistieken.py. NULL voor documenten van vóór dit veld bestond, of voor voorzitterbeurten/lege content (zie backfill-filter).
+    activiteit_nummer TEXT, -- VLOS <activiteit><parlisid> (bv. "2026A02765"), TK's eigen Activiteit-Nummer -- dezelfde waarde als besloten in tweedekamer_activiteit_url, maar direct bruikbaar als join-sleutel naar activiteit_dossiernummers zonder de URL te hoeven parsen (zie #183/#348). NULL voor documenten van vóór dit veld bestond.
+    motie_dossiernummer TEXT -- Kamerstukdossier-nummer van de motie die in déze spreekbeurt wordt ingediend/aangehouden/ingetrokken/gewijzigd (VLOS <draadboekfragment soort="Motie ..."> direct kind van deze beurt, met <zaken><zaak><dossiernummer>). Tekst, geen integer -- kan een toevoeging dragen (bv. "36800-B"). Het enige dossier-signaal dat echt op spreekbeurt-niveau zit i.p.v. activiteit-breed -- maar dus alleen gevuld voor de kleine subset spreekbeurten die zelf een motie-actie zijn (zie granulariteits-analyse in #348); NULL voor de rest.
+);
+
+-- Kamerstukdossiers die ergens in een hele Activiteit (het hele debat) aan de
+-- orde zijn (VLOS <activiteit>/.../<zaken><zaak><dossiernummer>, of de TK
+-- OData Agendapunt->Zaak->Kamerstukdossier-route) -- many-to-many, want één
+-- activiteit kan over meerdere dossiers gaan. Dekt de hele activiteit, niet
+-- een losse spreekbeurt; documents.motie_dossiernummer hierboven is het enige
+-- signaal dat wél op spreekbeurt-niveau zit, maar alleen voor motie-acties.
+-- Zie #183/#348 voor de volledige granulariteits-analyse.
+CREATE TABLE activiteit_dossiernummers (
+    activiteit_nummer TEXT NOT NULL,
+    dossiernummer TEXT NOT NULL, -- geen integer -- kan een toevoeging dragen (bv. "36800-B")
+    PRIMARY KEY (activiteit_nummer, dossiernummer)
+);
+
+-- Eenmalige, volledige kopie van de TK OData Kamerstukdossier-collectie
+-- (7825 records in totaal op 2026-09-27, dus in zijn geheel op te halen in
+-- ~32 gepagineerde calls -- zie scripts/db/fetch_kamerstukdossiers.py -- i.p.v.
+-- losse lookups per dossiernummer). dossiernummer is dezelfde tekstvorm als
+-- hierboven ("{Nummer}" of "{Nummer}-{Toevoeging}", bv. "36800-B"), zodat
+-- documents.motie_dossiernummer en activiteit_dossiernummers.dossiernummer er
+-- direct op kunnen joinen. Zie #183/#348.
+CREATE TABLE kamerstukdossiers (
+    dossiernummer TEXT PRIMARY KEY,
+    nummer INTEGER NOT NULL,
+    toevoeging TEXT,
+    titel TEXT,
+    afgesloten INTEGER
 );
 
 CREATE TABLE actors (
@@ -102,7 +132,7 @@ CREATE INDEX idx_arguments_topic_stance ON arguments(topic_id, stance);
 CREATE INDEX idx_arguments_document ON arguments(document_id);
 CREATE INDEX idx_claims_argument ON claims(argument_id);
 
--- Argument-taxonomie van een argumentatie-onderzoeker (data/tags.toml), geladen
+-- Argument-taxonomie van een argumentatie-onderzoeker (config/tags.toml), geladen
 -- via pipeline/db/seed_tags.py. `active` is een soft-delete-vlag: elke seed-run
 -- zet eerst alles inactief en activeert vervolgens alles wat nog in tags.toml
 -- staat, zodat verwijderde/hernoemde tags stil worden zonder argument_tags-
@@ -132,6 +162,10 @@ CREATE TABLE IF NOT EXISTS argument_tags (
     created_by TEXT NOT NULL CHECK (created_by IN ('llm', 'derived', 'manual')),
     confidence REAL,
     reden TEXT, -- korte, argument-specifieke onderbouwing waarom deze tag hier toegekend is (niet de generieke tag-beschrijving); NULL voor tags toegekend vóór dit veld bestond
+    quote_fragment TEXT, -- verbatim, aaneengesloten stukje van arguments.quote_text waarop DEZE tag specifiek slaat (door het LLM zelf gekozen, zie pipeline/prompts/tag_argument.md). NULL heeft drie mogelijke betekenissen -- zie quote_fragment_status hieronder om ze te onderscheiden.
+    quote_fragment_status TEXT CHECK (quote_fragment_status IN ('fragment', 'hele_quote', 'niet_herbeoordeeld')), -- onderscheidt drie betekenissen van quote_fragment IS NULL: 'hele_quote' = het LLM heeft déze tag in déze pass expliciet beoordeeld en de tag slaat op de hele quote (geen fragment van toepassing); 'niet_herbeoordeeld' = de tag bestond al vóór een latere --backfill-quote-fragment-pass over dit argument, maar die pass stelde deze specifieke tag_sleutel niet opnieuw voor (bv. het model koos ditmaal een andere sleutel binnen dezelfde labelgroep) -- er is dus geen fragmentoordeel over déze rij, in tegenstelling tot 'hele_quote'; NULL = nooit door enige quote_fragment-bewuste pass aangeraakt, meestal omdat de tag toegekend is vóór quote_fragment bestond (issue #109). 'fragment' betekent quote_fragment is gevuld (redundant met "quote_fragment IS NOT NULL", maar expliciet zodat een query niet zelf hoeft te herleiden welke van de betekenissen van NULL bedoeld is). Alleen relevant voor created_by='llm' (derived/manual-tags hebben geen quote_fragment-concept).
+    start_seconds REAL, -- seconden sinds videobegin waarop quote_fragment start (zie pipeline/match_tag_spans.py), analoog aan arguments.start_seconds maar een niveau dieper. Nooit door het LLM gezet, alleen door die matching-pass. NULL als quote_fragment ontbreekt of niet matchte binnen de argument-spanne.
+    end_seconds REAL, -- idem, einde van quote_fragment. Samen met start_seconds altijd als paar gevuld (nooit één van de twee NULL).
     assigned_at TEXT NOT NULL,
     UNIQUE (argument_id, tag_sleutel)
 );
@@ -165,3 +199,7 @@ CREATE TABLE IF NOT EXISTS llm_calls (
 );
 CREATE INDEX IF NOT EXISTS idx_llm_calls_topic_model ON llm_calls(topic_id, model);
 CREATE INDEX IF NOT EXISTS idx_llm_calls_stage ON llm_calls(stage);
+-- Voor de "is dit argument al gecheckt?"-lookup in pipeline/tag_single.py
+-- (NOT EXISTS tegen argument_id+stage+prompt_version+status) -- zonder deze
+-- index is dat een correlated subquery-scan van heel llm_calls per kandidaat.
+CREATE INDEX IF NOT EXISTS idx_llm_calls_argument_prompt ON llm_calls(argument_id, stage, prompt_version, status);

@@ -12,6 +12,7 @@ Belangrijk:
 - Bij een labelgroep die "kies precies één" zegt: kies er ook echt maar één, of `null` als geen enkele optie past.
 - Bij een labelgroep die "kies nul of meer" zegt: een lege lijst `[]` mag als niets van toepassing is.
 - Elke toegekende tag krijgt een `reden`: één korte zin die uitlegt waarom DEZE tag op DIT specifieke argument van toepassing is (bv. citeer of parafraseer het deel van de tekst dat het patroon laat zien). Herhaal niet de generieke tag-beschrijving uit de taxonomie hieronder -- die kent de lezer al.
+- Elke toegekende tag krijgt ook een `quote_fragment`: een kort, aaneengesloten stukje tekst, LETTERLIJK overgenomen uit de quote hierboven (geen parafrase, geen samenvatting), dat precies aanwijst waar in de quote deze tag op slaat. Gebruik `null` als de tag op de hele quote slaat en niet op één specifiek zinsdeel.
 
 Taxonomie:
 {tag_catalogue}

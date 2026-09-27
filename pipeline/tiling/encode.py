@@ -3,15 +3,15 @@ Codering van plenair-map-punten naar MVT-tilebytes (mapbox_vector_tile), per
 `(z, x, y)`-tile uit het grid in `pipeline.tiling.grid`. Zie module-docstring
 van `pipeline.tiling.build_pyramid` voor de volledige pijplijn.
 
-Puntvolgorde in de brondata (`data/export/plenair-map.json`, geschreven door
-`scripts/experiment_umap_documents.py:write_frontend_export`): `id, x, y,
+Puntvolgorde in de brondata (`data/export/plenair-map/plenair-map.json`, geschreven door
+`pipeline/plenary_map/cluster.py:write_frontend_export`): `id, x, y,
 topic_idx, actor_idx, party_idx, debate_idx, soort_idx, published_at, text,
 cluster[, cluster_levels]`. De lookup-tabellen (`topics`, `actors`, `parties`,
 `debates`, `soorten`) worden hier al opgelost naar strings, zodat een tile op
 zichzelf leesbaar is zonder de losse lookup-arrays erbij nodig te hebben
 (issue #253: zo blijft `cluster` gewoon een van de properties, machine-
 leesbaar per punt). Het optionele 12e element (alleen aanwezig bij N-laagse
-clustering, zie experiment_umap_documents.py's `--cluster-level-sizes`) is
+clustering, zie pipeline/plenary_map/cluster.py's `--cluster-level-sizes`) is
 een lijst cluster-ids per niveau (grofste eerst) -- MVT-properties moeten
 scalair zijn, dus die wordt hier uitgepakt naar losse `cluster_l0`,
 `cluster_l1`, ... properties i.p.v. één geneste lijst.

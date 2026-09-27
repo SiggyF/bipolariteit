@@ -13,7 +13,7 @@ kolom uit de pas kan laten lopen.
 extractieprompt een argument opleverde -- de DB bevat nu een mix van vóór-
 en na-Gemini-review-fix geëxtraheerde argumenten.
 
-Exporteert alleen vanaf [verwerking].vanaf in data/politieke-periodes.toml
+Exporteert alleen vanaf [verwerking].vanaf in config/politieke-periodes.toml
 (de huidige en vorige kamerperiode); oudere argumenten blijven in de database
 maar komen niet in de JSON en dus niet op de site.
 
@@ -34,6 +34,7 @@ import pandas as pd
 import prince
 
 from pipeline.build_confrontatie_export import TREE_EXPORT_DIR
+from pipeline.co2_estimate import fetch_co2_estimate
 from pipeline.db import db
 from pipeline.extract_arguments import PROMPT_VERSION as EXTRACT_PROMPT_VERSION
 from pipeline.extract_arguments import _build_prompt as _build_extraction_prompt
@@ -207,7 +208,7 @@ def fetch_arguments(conn, topic_id, periode_index):
                 },
                 # Kamer- en regeringsperiode van de publicatiedatum: staats-
                 # rechtelijke context waarop de frontend kan filteren zonder
-                # zelf datumgrenzen te kennen (data/politieke-periodes.toml).
+                # zelf datumgrenzen te kennen (config/politieke-periodes.toml).
                 "periode": periode_index.voor(row["published_at"]),
                 "claims": claims_by_argument.get(row["id"], []),
                 "tags": tags_by_argument.get(row["id"], []),
@@ -523,11 +524,15 @@ def main():
 
     topics_dir = EXPORT_DIR / "topics"
     topics_dir.mkdir(parents=True, exist_ok=True)
-    llm_calls_dir = EXPORT_DIR / "llm_calls"
+    llm_calls_dir = EXPORT_DIR / "llm-calls"
     llm_calls_dir.mkdir(parents=True, exist_ok=True)
 
     index = []
-    status = {"generated_at": datetime.now(_AMSTERDAM).isoformat(timespec="seconds"), "topics": []}
+    status = {
+        "generated_at": datetime.now(_AMSTERDAM).isoformat(timespec="seconds"),
+        "co2_estimate": fetch_co2_estimate(conn),
+        "topics": [],
+    }
     for topic_row in all_topic_rows:
         export = build_topic_export(conn, topic_row, periode_index)
         out_path = topics_dir / f"{topic_row['slug']}.json"

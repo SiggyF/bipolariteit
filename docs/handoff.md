@@ -2,6 +2,216 @@
 
 Status per 2026-07-27. Zie `docs/plan.md` voor het volledige, goedgekeurde architectuurplan. Dit document is voor het vervolg: wat staat er al, wat is er onderweg ontdekt, en wat is de volgende concrete stap.
 
+## Stand bij einde sessie (2026-09-13, volle ElecDeb60to20-validatiesteekproef bekeken, issue #313) — begin hier bij een nieuwe sessie
+
+Vervolg op de sessie hieronder: de volle 318/318-`make validate`-run
+(`Qwen/Qwen3.8-27B:ovhcloud`, commit `fd62c31`) is nu daadwerkelijk bekeken
+op `/validatie-rapportage/elecdebate60to16` en in
+`data/export/eval/elecdebate60to16.json`, niet alleen gedraaid.
+
+**Samenvatting**: argumentherkenning precision 0.254 / recall 0.655 / f1
+0.366 (tekenniveau, 318 records); drogreden-tags precision 0.737 / recall
+0.504 / f1 0.598 (143 correct, 9 fout-positief, 141 fout-negatief, per
+citaat). Drogreden-tag-F1 is een duidelijke sprong t.o.v. de eerdere
+10-record-steekproef (F1 0.00 → 0.40, zie sessie 2026-08-10 hieronder).
+
+**Terminologiefix, tijdens het bekijken van de resultaten**: de
+uitkomst-labels `hallucinatie` en `onterecht` op `/validatie-rapportage/
+<dataset>` bleken misleidend -- ze impliceren een oordeel ("dit is fout")
+terwijl juist een deel van deze categorie geen pipeline-fout is maar een
+gat in de referentiedataset (zie "Beperkingen van de referentiedataset"
+hieronder). Vervangen door de neutrale, symmetrische termen
+`fout-positief`/`fout-negatief` (vgl. [Wikipedia: Foutpositief en
+foutnegatief](https://nl.wikipedia.org/wiki/Foutpositief_en_foutnegatief)),
+in `pipeline/eval/benchmark_elecdebate.py` (outcome-waarden),
+`frontend/src/pages/validatie-rapportage/[dataset].astro` +
+`frontend/src/styles/main.css` (labels/CSS-classes), `docs/eval-elecdebate.md`,
+en met terugwerkende kracht in de al gegenereerde
+`data/export/eval/elecdebate60to16.json` (alleen de outcome-strings herschreven,
+geen herrun nodig).
+
+**Concrete voorbeelden, uit de rapportagepagina**:
+
+- **Argumentherkenning, fout-negatief (echte mis)**: CLINTON — *"we have to
+  build an economy that works for everyone, not just those at the top. That
+  means we need new jobs, good jobs, with rising incomes. I want us…"* — een
+  helder standpunt+onderbouwing die onze extractie niet oppikte. Dit soort
+  missers (213 in totaal) lijkt niet gedomineerd door één patroon in de
+  steekproef die bekeken is; nader onderzoek zou moeten uitwijzen of dit
+  clustert op zinslengte, spreker, of onderwerp.
+- **Argumentherkenning, fout-positief maar géén pipeline-fout**: Trump's
+  NAFTA-uitspraak en de stop-and-frisk-dubbele-spangrenzen, beide al
+  gedocumenteerd in `docs/eval-elecdebate.md` ("Bekende beperkingen van de
+  referentiedataset") — de referentiedataset zelf mist hier annotaties of
+  is inconsistent, niet onze extractie.
+- **Drogreden-tags, duidelijke asymmetrie tussen de twee getagde
+  drogredenen**: `Debatzet-Gevoelens-Verwoorden` (Appeal to Emotion) scoort
+  precision 0.837 / recall 0.389 (82 tp, 16 fp, 129 fn) — het model is hier
+  conservatief en mist systematisch korte/losse citaten zoals *"stolen"*,
+  *"tremendously"*, *"trumped-up trickle-down"*, *"a beautiful thing to
+  watch"* (allemaal "Loaded Language"-stijl eenwoord-annotaties uit de
+  brondataset, zie ook punt 3 in de 2026-08-10-sessie hieronder over
+  context-window). `Debatzet-Persoon-Aanspreken` (Ad Hominem) doet het
+  spiegelbeeld: precision 0.635 / recall 0.836 (61 tp, 35 fp, 12 fn) — het
+  model tagt hier juist té gretig, bv. bij directe aanvallen op de
+  tegenstander die inhoudelijk dichter bij een feitelijke beschuldiging dan
+  bij een drogreden liggen ("I am going to instruct my attorney general to
+  get a special prosecutor to look into your situation, because there has
+  never been so many lies, so much deception"). Waard om bij een
+  prompt-iteratie op te pakken: de twee drogredenen hebben tegengestelde
+  precision/recall-profielen, één gedeelde tagprompt-aanscherping zal
+  waarschijnlijk niet voor beide werken.
+
+**Vervolgexperiment, zelfde sessie: definitie- vs. modelbeperking.** Bij het
+doorlopen van de fout-negatieven bleek een terugkerend patroon: drie citaten
+(Pence "I'm pro-life. I don't apologize for it.", Trump "It was locker room
+talk, as I told you. That was locker room talk", Pence "Joe Biden says
+democracy's on the ballot. Make no mistake about it") staan in de gouden
+data als Claim+Support, maar de "onderbouwing" is telkens een bijna-
+letterlijke herhaling van de claim zelf -- opgezocht in de daadwerkelijke
+brondata (`final_relation_graph.csv`) en teruggeleid tot een specifieke,
+niet-triviale annotatieconventie in de echte richtlijn (Haddadan, Cabrio &
+Villata 2019, `ElectDeb60To16_Guidelines.pdf`, sectie 4.2.2: een kort na
+elkaar herhaalde claim telt met het ertussen liggende stuk als
+claim+premise). Om te testen hoeveel van onze F1-kloof dit definitieverschil
+verklaart t.o.v. een echte modelbeperking, is een tweede, **eval-only**
+extractieprompt gebouwd (`pipeline/prompts/extract_argument_guideline_eval.md`,
+`--extraction-prompt guideline` op `benchmark_elecdebate.py`/`make validate`,
+nooit gebruikt door de productiepipeline) die deze richtlijn zelf volgt
+i.p.v. onze eigen "geen onderbouwing = geen argument"-regel. Volledig
+uitgeschreven met methodologie in `docs/eval-elecdebate.md` ("Experiment:
+definitie- vs. modelbeperking").
+
+Volle 318-record-run (zelfde model, `Qwen/Qwen3.8-27B:ovhcloud`,
+`data/export/eval/elecdebate60to16-guideline.json`, tagging bewust
+overgeslagen via `--skip-tagging` -- onafhankelijk van extractiestijl):
+recall steeg van 0.655 naar 0.829, F1 van 0.366 naar 0.399, precision bleef
+nagenoeg gelijk (0.254 → 0.263). Alle drie de aanleiding-citaten werden nu
+wél gevonden. Dus: een substantieel deel van de kloof (~17 recall-punten)
+is inderdaad definitieverschil, niet modelbeperking -- maar de resterende
+17% gemiste recall en de vlakke precision (~0.26) wijzen op een echt,
+resterend plafond dat een lossere definitie niet oplost.
+
+Twee aanvullende voorbeelden uit de 144 herstelde fout-negatieven, naast de
+drie hierboven (die allemaal het "herhaalde claim"-patroon volgen) --
+deze twee tonen dat de guideline-prompt ook gewoon-goedgevormde
+claim+premise-argumenten terugvond, zonder enige herhaling:
+
+- CLINTON: *"it matters because he has not told the truth about that
+  position"* -- een claim met een expliciete `because`-onderbouwing, geen
+  spoor van herhaling. Waarom de strict-prompt dit miste is niet verder
+  gediagnosticeerd (geen scope-/onderwerpprobleem: beide prompts kregen
+  dezelfde `TOPIC_DESCRIPTION`); vermoedelijk ging deze tekst op in een
+  andere, groter samengevoegde `quote_text` bij de strict-extractie
+  (regel "Eén punt = één argument" voegt immers agressief samen) waarvan de
+  grenzen net niet met dit specifieke gouden fragment overlapten.
+- CLINTON: *"you continue to get help from him, because he has a very clear
+  favorite in this race"* -- zelfde patroon: een compacte, met "because"
+  onderbouwde claim die de strict-prompt niet als losstaand argument
+  terugvond.
+
+**Zelfde definitieverschil-vraag ook voor de drogreden-tags gesteld.**
+Tot nu toe was nooit gecheckt of `config/tags.toml`'s eigen omschrijving van
+`Debatzet-Persoon-Aanspreken`/`Debatzet-Gevoelens-Verwoorden` overeenkomt met
+hoe de brondataset Ad Hominem/Appeal to Emotion afbakent -- alsnog opgezocht
+in `paper-goffredo-2023.pdf` (had de definities al lokaal staan, citeert Da
+San Martino et al. 2019a/Walton 1987). Concreet gat gevonden: onze
+`Debatzet-Gevoelens-Verwoorden`-omschrijving noemt specifiek "angst, woede
+of medelijden", de bron laat elke emotionele taal toe. Een steekproef van de
+129 gemiste citaten op deze tag bevestigt het beeld: vooral enthousiaste taal
+("tremendous", "a beautiful thing to watch") en misprijzing buiten die drie
+emoties ("pigs, slobs and dogs", "xenophobic") -- precies het soort taal dat
+buiten onze eigen, engere omschrijving valt. Volledig uitgeschreven in
+`docs/eval-elecdebate.md` ("Definitieverschil drogredenen").
+
+**Ook getest, zelfde sessie**: `--tag-prompt guideline` toegevoegd aan
+`benchmark_elecdebate.py`/`make validate` (`build_tag_catalogue_guideline()`
+-- vervangt alleen de 2 relevante beschrijvingsregels in de gegenereerde
+tag_catalogue-tekst, geen nieuwe prompt-template nodig). Volle 318-record-run
+(`data/export/eval/elecdebate60to16-tag-guideline.json`, extractie bewust op
+`strict` gehouden zodat alleen de tag-as varieert): recall van 0.50 naar
+0.64, F1 van 0.60 naar 0.68, precision nagenoeg gelijk (0.74 → 0.72) --
+zelfde patroon als de extractie-kant. Herstelde citaten bevestigen de
+hypothese direct: "tremendously", "stolen", "ripped off". Prijs vooraf
+gecheckt: nog steeds $0/$0 (zie kanttekening hieronder over de
+betrouwbaarheid daarvan).
+
+**Prijsbewaking, met een belangrijke kanttekening.** Prijs vooraf en tijdens
+de run gecheckt: nog steeds $0/$0 (`fetch_provider_pricing`). Maar dat $0
+is GEEN betrouwbaar signaal om op te bouwen: zoals eerder al vastgesteld
+(`project_hf_router_ovhcloud_not_free`-memory, met archiefbewijs in
+`reference_ovhcloud_pricing_archive`) staat `Qwen/Qwen3.8-27B:ovhcloud`
+vermoedelijk abusievelijk op $0 bij de provider (`is_free: false` in de
+API zelf) -- dit kan elk moment weer normaal gaan rekenen, net als eerder
+al eens kortstondig gebeurde. De prijsbewaking in `pipeline/hf_pricing.py`
+detecteert een stijging tijdens een lopende batch, maar "kosten waren $0"
+is geen garantie voor een volgende sessie en mag niet als basis dienen voor
+toekomstige planning van vergelijkbare batches.
+
+**Issue #313 hiermee afgerond.** Het laatste actiepunt (kosten terugkoppelen
+uit het HF-billing-dashboard) wordt niet verder uitgezocht -- gezien de
+kanttekening hierboven zou dat toch alleen bevestigen dat er deze specifieke
+keer niets is afgeschreven, niet dat de $0-pricing-aanname klopt. Geen
+losse controlestap meer nodig.
+
+**Rapportagepagina achteraf vereenvoudigd.** Na feedback bleek de aparte
+per-dataset-pagina (`/validatie-rapportage/<dataset>`, met alle
+honderden ruwe extractie-/tag-voorbeelden per dataset) overbodig en
+verwarrend naast de nieuwe vergelijkingstabellen op de indexpagina --
+verwijderd (`frontend/src/pages/validatie-rapportage/[dataset].astro`).
+`/validatie-rapportage` (de index) bevat nu alles: per basisdataset een
+tabel voor argumentherkenning én een voor drogreden-tags (elk zijn eigen
+definitie-as, apart getest), met per foutsoort een steekproef van 5
+voorbeelden. Elk voorbeeld toont drie losse labels (`studie`, `AI, onze
+definitie`, `AI, brondataset-definitie`) i.p.v. één dubbelzinnige
+tag-badge, zodat meteen duidelijk is wat de gouden data zegt en wat elk van
+de twee AI-runs voorspelde.
+
+## Stand bij einde sessie (2026-09-12/13, gratis HF-router-batches + nieuw topic oekraine + plenaire-kaart-pijplijn gepromoveerd) — begin hier bij een nieuwe sessie
+
+**Aanleiding**: de Hugging Face-router bleek `Qwen/Qwen3.8-27B` via OVHcloud tijdelijk voor $0/M tokens aan te bieden (bevestigd via `/v1/models`-API én de gebruiker's eigen billing-dashboard; `is_free: false` in de API, dus vermoedelijk een niet-afgemaakte pricing-entry van de provider, geen bewuste actie — archiefbewijs in `reference_ovhcloud_pricing_archive`-memory). Dat is de rode draad van de hele sessie: zoveel mogelijk achterstallig LLM-werk erdoorheen jagen zolang het gratis is, met een prijsstijging-vangnet zodat een onopgemerkte wijziging niet alsnog kosten oplevert.
+
+### Parallelle extractie/tagging + prijsbewaking (PR #297, gemerged)
+
+- `pipeline/extract_arguments.py`/`pipeline/tag_arguments.py` kregen `--parallel` (verdeelt LLM-calls over de dask-scheduler, zie `pipeline/dask_client.py`) en `--api-key` (nodig voor de HF-router, i.t.t. lokale LM Studio).
+- `pipeline/hf_pricing.py` (nieuw): `get_baseline_pricing()`/`price_still_matches()` -- checkt elke 100 items of de prijs niet gestegen is t.o.v. de start van de batch; bij een stijging worden de resterende dask-taken geannuleerd. Alleen actief tegen `router.huggingface.co`, no-op voor lokale backends.
+- Resultaatverwerking is nu incrementeel (`process_result()`-closure, aangeroepen per binnenkomend dask-future via `as_completed()`), niet meer "verzamel alles, verwerk pas aan het eind".
+- Dask-worker-threads verhoogd van 8 (= aantal cores) naar 10 (`.devcontainer/devcontainer.json`, PR #307, gemerged): deze workload is netwerk-IO-bound, niet CPU-bound. 12 threads gaf HTTP 429 (rate limit) bij de HF-router, 10 niet.
+- In losse batches (steeds handmatig gestart, geen doorlopende achtergrondtaak) zijn zo alle vier bestaande topics verder ge-extraheerd/getagd: stikstof, abortus, asiel en energietransitie staan alle vier op 0 openstaande extractie en (op een paar losse fouten na) 0 openstaande tagging.
+
+### Nieuw curated topic: oekraine (PR #302, #306 gemerged)
+
+- Description onderhandeld op basis van twee steekproeven van gecrawlde NAVO/Oekraïne/Rusland-argumenten, 7 assen (defensie-uitgaven, wapenleveranties, opvang, Rusland-houding, NAVO-aanwezigheid, inkoopstrategie, geografische reikwijdte) -- zie `data/topic-descriptions/oekraine.md`.
+- **Databug gevonden en gefixed**: de eerste documentkoppeling (678 documenten) bleek voor 674 daarvan titel "Vragenuur" te zijn -- inhoudelijk grotendeels niets met Oekraïne te maken, puur toeval-treffers. `scripts/db/relink_oekraine_by_title.py` (nieuw, PR #306) koppelt in plaats daarvan op de daadwerkelijke debattitel (`oekra`/`navo`/`rusland`/`poetin`, met een `irak`/`iran`/`isra`-uitsluiting voor NAVO-missiebegrotingen) -- resultaat: 1290 documenten ontkoppeld, 14.727 (echte) documenten gekoppeld. Extractie daarna: 46 → 778 argumenten in de eerste volle batch, ratio steeg van 6,8% naar 77,8% (in lijn met de andere topics).
+- Nog niet afgemaakt: verdere extractie/tagging van oekraine (13.7k documenten in totaal, meerdere batches nodig) -- laatst bekende stand: alle documenten binnen de huidige `[verwerking].vanaf`-drempel zijn ge-extraheerd, tagging loopt nog achter.
+- Losse issues aangemaakt voor later: #303 (Makefile `extract`/`tag`-targets missen `MODEL`/`API_KEY`/`PARALLEL`-vars, moest daardoor de Python-module rechtstreeks aanroepen), #309 (er is geen manier om argumenten met een verouderde prompt-versie gericht te hertaggen -- `--ids-file` respecteert altijd `tagged_at IS NULL`), #308 (Mona Keijzer: partij-veld/logo, klein, losstaand).
+
+### Plenaire-kaart-pijplijn gepromoveerd uit experiment-status (PR #310, **nog niet gemerged** -- gebruiker reviewt hem morgen)
+
+`scripts/experiment_umap_documents.py` was allang geen experiment meer (13 andere bestanden verwezen er al naar). Nu verplaatst naar `pipeline/plenary_map/`, en opgesplitst in vier losse stages/modules/Makefile-targets (was: alles in één script):
+
+1. **`make embed`** (bestond al) -- documenten embedden, `data/embeddings/`.
+2. **`make umap`** (`pipeline/plenary_map/umap.py`) -- UMAP-fit, host-only qua geheugengebruik (NN-descent op ~732k x 1024-dim gaf herhaaldelijk OOM, ook bij 32GB in de devcontainer -- alleen de host, 64GB, trekt 'm). Schrijft alleen `data/plenary-map/coords-<label>.json` weg (`{doc_id: [x, y]}`). Praat NIET met LM Studio bij een volledige embeddingscache-hit.
+3. **`make cluster-plenary-map`** (`pipeline/plenary_map/cluster.py`) -- leest die coördinaten (`--coords-path`, verplicht, geen UMAP meer hier), HDBSCAN-clustering (`--cluster-level-sizes`, bv. `4000,1200,350,100,30`) + TF-IDF-labels. **Bleek zelf óók geheugenzwaar** op de volle dataset (TF-IDF over alle ~732k documentteksten + een ruimtelijke-dispersie-stopwoordanalyse) -- gaf Error 137 in de devcontainer, moest alsnog naar de host. De aanname "clustering is licht, overal draaibaar" klopte dus niet voor de volledige-dataset-schaal.
+4. **`make label-clusters`** (`pipeline/plenary_map/label_export.py`) -- LLM-naamgeving, met `--parallel` (dask) + dezelfde prijsbewaking als extract/tag hierboven. Werkt op de door stap 3 weggeschreven `cluster-label-input-<label>.json` (representatieve voorbeeldteksten per cluster, vooraf berekend zodat deze stap geen UMAP-coördinaten nodig heeft) -- dus overal draaibaar, en hervatbaar (`duiding` al gevuld = overslaan, `LIMIT_CLUSTERS` voor porties).
+
+**Resultaat van een volledige run**: 3636 clusters over 5 niveaus, allemaal LLM-benoemd (Qwen3.8-27B via de HF-router, dask-parallel, ~10 min i.p.v. de geschatte uren sequentieel). Kleinste cluster op het fijnste niveau: exact 30 (de ingestelde ondergrens) -- er zit dus nog ruimte voor een 6e, fijner niveau (bv. drempel 15, de `--hdbscan-min-cluster-size`-bodem) als dat gewenst is, niet gedaan in deze sessie.
+
+**Output verplaatst**: `docs/poc/umap-documenten/` → `data/plenary-map/` (nu dit geen experiment meer is, hoort de output niet meer in `docs/poc/` thuis). Kleine/demo-bestanden (`clusters-*.json`, `hierarchy-*.json`, kleinere `plot-*.html`'s) blijven ingecheckt zoals voorheen; de nieuwe, op-de-volle-dataset grote tussenproducten (`coords-*.json`, `cluster-label-input-*.json`) zijn nu ook gitignored, zelfde redenering als de al bestaande `plot-full.html`-uitzondering.
+
+**Losstaande observatie, niet uitgezocht**: gebruiker merkte op dat sommige clusters lijken te worden bepaald door wie er wordt aangesproken (een persoon) i.p.v. het inhoudelijke onderwerp -- geen concreet voorbeeld nog gevonden/genoteerd, wel de moeite waard om bij een volgende clustering-sessie op te letten (mogelijk een gat in `fetch_actor_and_party_stopwords()`'s dekking, of een echt clustering-artefact).
+
+**Backup**: alle output van deze run (coords, cluster-label-input, clusters, hierarchy, plus de frontend-`-full-v2`-exports) staat als Zenodo-draft (concept-record 22181704, deposition [22730827](https://zenodo.org/deposit/22730827)) -- nog niet gepubliceerd, puur archief-backup.
+
+**Issue #311** (SVD-voorreductie 1024→~100 dims om UMAP's geheugengebruik te verlagen): getest en de hoop bleek niet te kloppen -- voor 95% verklaarde variantie zijn ~400 componenten nodig (2,6x kleiner dan 1024, niet de gehoopte 10x). Resultaat als comment op het issue gezet, geen verdere actie ondernomen (business case te zwak).
+
+**Nog te doen, volgende sessie**:
+- **PR #310 reviewen en mergen** (gebruiker doet dit morgen) -- daarna pas is de bovenstaande refactor definitief.
+- De nieuwe clustering/labeling (`data/export/plenair-map-{,clusters-,hierarchy-}full-v2.json`) staat nog NIET live -- `make tiles-full` (tegelpyramide) + `make publish-zenodo`/`make publish-huggingface` + de site-deploy moeten nog gedraaid worden om 'm daadwerkelijk te publiceren. Tot die tijd blijft de oude `-full`-export (zonder de gefixte hiërarchie) live.
+- Oekraine verder extraheren/taggen (zie hierboven).
+- Issues #299 (topic_id single-value → many-to-many), #300 (crawler multi-topic), #301 (offsite DB-backup), #303, #308, #309, #311 (zie boven) staan nog open, geen van alle opgepakt.
+- Prijs op de HF-router in de gaten houden -- kan elk moment weer normaal gaan rekenen (zoals eerder ook al eens kortstondig gebeurde).
+
 ## Stand bij einde sessie (2026-09-12, zoom-afhankelijke puntreductie tile-pyramide, issue #259) — begin hier bij een nieuwe sessie
 
 **Context**: PR #296 (`feature/259-tiled-map-point-reduction`, open, nog niet gemerged). Startpunt was de vraag om `TiledPlenairMap.vue`/de HF-gepubliceerde pmtiles te testen; bleek dat `pipeline/tiling/build_pyramid.py` nooit puntreductie per zoomniveau deed -- elk van de 731.985 punten zat op elk van de 9 zoomniveaus in zijn tile (live gemeten: 1,22GB, zoom-0-tile alleen al 134MB).
@@ -16,6 +226,8 @@ Status per 2026-07-27. Zie `docs/plan.md` voor het volledige, goedgekeurde archi
 **Voorgestelde fix (nog te implementeren)**: budget niet per tile vastzetten, maar **per zoomniveau globaal** verdelen naar rato van de werkelijke verdeling. Omdat elke tile-groepering per zoom toch al alle punten bevat (`assign_tiles_for_zoom()` dekt de volledige dataset), volstaat: (1) één keer alle punten sorteren op `point_priority()`, (2) per zoomniveau een budget = `aantal_tiles(zoom) * max_points_per_tile`, (3) de eerste `budget` punten uit de gesorteerde lijst behouden, ongeacht in welke tile ze vallen, en dat filter toepassen per tile vóór het encoderen. Omdat priority positie-onafhankelijk is, is de "kept"-set dan een representatieve steekproef van de ruimtelijke verdeling (drukke tiles houden proportioneel meer, dunne tiles proportioneel minder) -- en de zoom-monotonie-garantie blijft intact, want budget groeit met het aantal tiles per zoom (elk zoomniveau kwadrant-splitst, dus budget verviervoudigt ongeveer per stap), dus "top-budget(z)" blijft een subset van "top-budget(z+1)" bij dezelfde globale rangorde.
 
 **Volgende stap**: dit implementeren in `pipeline/tiling/build_pyramid.py` (in plaats van/naast het huidige `thin_tile_points()`), opnieuw bouwen op de host, opnieuw publiceren naar HF, en visueel controleren dat rand- en centrumtiles nu een consistente dichtheidsindruk geven.
+
+## Stand bij einde sessie (2026-09-12, video-shorts vereenvoudigd naar landscape, issue #268) — begin hier bij een nieuwe sessie
 
 Vervolg op de sessie hieronder: op verzoek van de gebruiker is de verticale
 9:16-crop (en daarmee de hele OpenCV-gezichtsdetectie) losgelaten. De 4

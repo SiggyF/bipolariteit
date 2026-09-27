@@ -9,7 +9,7 @@ argument scoort hoger naarmate het meer van deze tags heeft --
 Debatzet-Gevoelens-Verwoorden (expliciet emotioneel beroep) en
 Frame-Menselijk-Belang (human interest) wegen het zwaarst, Frame-Conflict
 en Frame-Moraliteit lichter -- plus een bonus als er rond hetzelfde moment
-een interrupter-event (data/debate_events/<debatdirect_id>.json) plaatsvond:
+een interrupter-event (data/debate-events/<debatdirect_id>.json) plaatsvond:
 een proxy voor "reuring in de zaal", niet zelf een sentimentsignaal.
 
 Bewust GEEN nieuwe LLM-pass: dit hergebruikt tags die tag_arguments.py al

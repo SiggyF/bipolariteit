@@ -5,7 +5,7 @@ puur lezend -- geen DB-writes, zelfde patroon als scripts/compare_models.py.
 
 Scope (zie docs/eval-elecdebate.md voor de motivatie): alleen argument-
 herkenning (span-overlap) en de 2 drogreden-tags met een echte tegenhanger
-in data/tags.toml (label_mapping.FALLACY_TAG_MAP) worden gescoord. Stance,
+in config/tags.toml (label_mapping.FALLACY_TAG_MAP) worden gescoord. Stance,
 typology en de overige 4 ELECDEBATE-fallacy-typen worden bewust niet
 vergeleken.
 
@@ -45,14 +45,20 @@ Gebruik (of via `make validate`, zie root-Makefile):
     uv run python -m pipeline.eval.benchmark_elecdebate <pad-naar-jsonl> <model>
     uv run python -m pipeline.eval.benchmark_elecdebate <pad-naar-jsonl> <model> --limit 20 --base-url http://localhost:1234/v1
     uv run python -m pipeline.eval.benchmark_elecdebate <pad-naar-jsonl> <model> --fresh
+    uv run python -m pipeline.eval.benchmark_elecdebate <pad-naar-jsonl> "Qwen/Qwen3.8-27B:ovhcloud" \\
+        --base-url https://router.huggingface.co/v1 --api-key "$HUGGINGFACE_INFERENCE_TOKEN" --parallel
 """
 
 import argparse
 import json
 import logging
+import re
 from datetime import datetime, timezone
 from pathlib import Path
 
+from dask.distributed import as_completed
+
+from pipeline.dask_client import make_client
 from pipeline.db import db
 from pipeline.eval.label_mapping import FALLACY_TAG_MAP
 from pipeline.eval.load_elecdebate import load_jsonl
@@ -61,6 +67,7 @@ from pipeline.eval.schema import EvalRecord, Span
 from pipeline.extract_arguments import _build_prompt as build_extract_prompt
 from pipeline.extract_arguments import _extract_arguments, _extract_json as extract_json, _validate_argument
 from pipeline.extract_arguments import call_llm as call_extract_llm
+from pipeline.hf_pricing import get_baseline_pricing, price_still_matches
 from pipeline.tag_arguments import _build_prompt as build_tag_prompt
 from pipeline.tag_arguments import _extract_json as extract_tag_json, _validate_tags
 from pipeline.tag_arguments import build_tag_catalogue, call_llm as call_tag_llm, load_valid_tags
@@ -68,6 +75,66 @@ from pipeline.tag_arguments import build_tag_catalogue, call_llm as call_tag_llm
 logger = logging.getLogger(__name__)
 
 EXPORT_DIR = Path(__file__).parent.parent.parent / "data" / "export" / "eval"
+
+# Eval-only prompt-variant die i.p.v. de productie-extractieprompt (die
+# hierboven ONGEWIJZIGD wordt hergebruikt, zie moduledocstring) de
+# argumentdefinitie van de brondataset zelf volgt (Haddadan et al. 2019,
+# ElectDeb60To16_Guidelines.pdf) -- bare claims tellen mee, en herhaalde
+# claims worden herkend als claim+premise. Puur om te meten hoeveel van de
+# argumentherkenning-F1 een definitieverschil is t.o.v. onze eigen
+# strengere "geen onderbouwing = geen argument"-regel, en hoeveel een
+# echte modelbeperking (zie docs/eval-elecdebate.md). Nooit gebruikt door
+# de productiepipeline.
+GUIDELINE_PROMPT_TEMPLATE = (Path(__file__).parent.parent / "prompts" / "extract_argument_guideline_eval.md").read_text()
+
+
+def build_extract_prompt_guideline(topic_name, topic_description, actor_name, actor_party, content, debate_context):
+    actor_party_suffix = f" ({actor_party})" if actor_party else ""
+    return GUIDELINE_PROMPT_TEMPLATE.format(
+        topic=topic_name,
+        topic_description=topic_description or topic_name,
+        actor_name=actor_name,
+        actor_party_suffix=actor_party_suffix,
+        content=content,
+        debate_context=debate_context,
+    )
+
+
+# Zelfde soort eval-only variant als hierboven, maar dan voor de twee
+# gescoorde drogreden-tags (zie docs/eval-elecdebate.md, "Definitieverschil
+# drogredenen"): onze eigen omschrijving in config/tags.toml beperkt
+# Debatzet-Gevoelens-Verwoorden tot "angst, woede of medelijden", terwijl de
+# brondataset (Goffredo et al. 2023, citeert Da San Martino et al. 2019a/
+# Walton 1987) elke emotionele taal toelaat. i.p.v. een hele nieuwe
+# tag-prompt-template te schrijven, wordt hier alleen de beschrijvingsregel
+# van de 2 relevante tags in de al gegenereerde tag_catalogue-tekst vervangen
+# -- de rest van de taxonomie (overige labelgroepen/tags) blijft ongewijzigd,
+# nooit gebruikt door de productiepipeline.
+_GUIDELINE_TAG_DESCRIPTIONS = {
+    "Debatzet-Persoon-Aanspreken": "Een buitensporige aanval op het standpunt van de spreker zelf (Walton, 1987).",
+    "Debatzet-Gevoelens-Verwoorden": "Het onnodig beladen van het argument met emotionele taal (elke emotie, niet beperkt tot angst/woede/medelijden) om het emotionele instinct van het publiek te bespelen.",
+}
+
+
+def build_tag_catalogue_guideline(tag_catalogue: str) -> str:
+    result = tag_catalogue
+    for sleutel, beschrijving in _GUIDELINE_TAG_DESCRIPTIONS.items():
+        pattern = re.compile(rf"^- {re.escape(sleutel)}: .*$", re.MULTILINE)
+        result, n = pattern.subn(f"- {sleutel}: {beschrijving}", result)
+        if n != 1:
+            raise ValueError(f"verwachtte precies 1 match voor tag {sleutel!r} in tag_catalogue, kreeg {n}")
+    return result
+
+# Zelfde default als tag_arguments.py's --max-tokens: het evalharnas
+# hergebruikt de productie-tagprompt ongewijzigd, dus dezelfde ruimte nodig
+# voor een volle taglijst-respons.
+_TAG_MAX_TOKENS = 2000
+_EXTRACT_MAX_TOKENS = 4000
+# Elke PRICE_CHECK_INTERVAL records de HF-router-prijs herchecken (zelfde
+# patroon als extract_arguments.py/tag_arguments.py) -- een provider kan
+# halverwege een batch stilletjes gaan rekenen (zie de OVHcloud/Qwen-
+# observatie in docs/handoff.md).
+PRICE_CHECK_INTERVAL = 20
 
 # extract_argument.md verwachtte tot voor kort altijd "Tweede Kamer-debat"
 # (hardcoded) -- feitelijk onjuist voor deze dataset (Amerikaanse
@@ -135,15 +202,20 @@ def _context_window(text: str, start: int, end: int, radius: int = 200) -> str:
     return context
 
 
-def evaluate_extraction(record: EvalRecord, model, base_url, timeout):
+def evaluate_extraction(record: EvalRecord, model, base_url, timeout, api_key=None, extraction_prompt="strict"):
     """Draait alleen de extractiestap. Retourneert (span_prf, items) --
-    items is een simpele per-span classificatie (gevonden/gemist/
-    hallucinatie) voor menselijke inspectie, los van de tekenniveau-PRF die
-    de samenvatting voedt."""
-    prompt = build_extract_prompt(
+    items is een simpele per-span classificatie (gevonden/fout-negatief/
+    fout-positief) voor menselijke inspectie, los van de tekenniveau-PRF
+    die de samenvatting voedt.
+
+    extraction_prompt: "strict" (default) = ongewijzigde productieprompt;
+    "guideline" = de brondataset-eigen definitie, zie
+    GUIDELINE_PROMPT_TEMPLATE hierboven."""
+    prompt_fn = build_extract_prompt_guideline if extraction_prompt == "guideline" else build_extract_prompt
+    prompt = prompt_fn(
         TOPIC_NAME, TOPIC_DESCRIPTION, record.speaker or "onbekend", None, record.text, debate_context=DEBATE_CONTEXT,
     )
-    response = call_extract_llm(base_url, model, prompt, "none", timeout, 4000)
+    response = call_extract_llm(base_url, model, prompt, "none", timeout, _EXTRACT_MAX_TOKENS, api_key=api_key)
     parsed = extract_json(response.content)
     arguments = _extract_arguments(parsed)
 
@@ -170,7 +242,7 @@ def evaluate_extraction(record: EvalRecord, model, base_url, timeout):
             "text": record.text[gold.start:gold.end],
             "start": gold.start,
             "end": gold.end,
-            "outcome": "gevonden" if found else "gemist",
+            "outcome": "gevonden" if found else "fout-negatief",
         })
     for pred in predicted_spans:
         if not any(_overlaps(pred, gold) for gold in record.spans):
@@ -179,20 +251,27 @@ def evaluate_extraction(record: EvalRecord, model, base_url, timeout):
                 "text": record.text[pred.start:pred.end],
                 "start": pred.start,
                 "end": pred.end,
-                "outcome": "hallucinatie",
+                "outcome": "fout-positief",
             })
 
     return span_prf, items
 
 
-def evaluate_tagging(record: EvalRecord, model, base_url, timeout, tag_catalogue, tag_skeleton, valid_tags):
+def evaluate_tagging(record: EvalRecord, model, base_url, timeout, tag_catalogue, tag_skeleton, valid_tags,
+                      api_key=None, tag_prompt="strict"):
     """Tagt de GOUDEN drogreden-citaten van de dataset zelf (niet onze eigen
     extractie) -- zo blijft deze score onafhankelijk van extractiefouten:
     een gemiste extractie mag de tag-score niet laten meezakken (en
     omgekeerd). Elk citaat wordt als geheel geclassificeerd, precies zoals
     de productie-tagprompt met een compleet argument-citaat werkt -- geen
     eigen spandetectie hier. Retourneert (lijst van per-citaat
-    label_set_prf, items, n_tag_errors)."""
+    label_set_prf, items, n_tag_errors).
+
+    tag_prompt: "strict" (default) = ongewijzigde config/tags.toml-omschrijving;
+    "guideline" = eval-only variant met de brondataset-eigen omschrijving voor
+    de 2 relevante tags, zie build_tag_catalogue_guideline hierboven."""
+    if tag_prompt == "guideline":
+        tag_catalogue = build_tag_catalogue_guideline(tag_catalogue)
     results = []
     items = []
     n_errors = 0
@@ -212,8 +291,8 @@ def evaluate_tagging(record: EvalRecord, model, base_url, timeout, tag_catalogue
                 _PLACEHOLDER_STANCE, _PLACEHOLDER_TYPOLOGY, quote_text, quote_context,
                 tag_catalogue, tag_skeleton,
             )
-            tag_content, _usage = call_tag_llm(base_url, model, tag_prompt, "none", timeout)
-            tag_parsed = extract_tag_json(tag_content)
+            tag_response = call_tag_llm(base_url, model, tag_prompt, "none", timeout, _TAG_MAX_TOKENS, api_key=api_key)
+            tag_parsed = extract_tag_json(tag_response.content)
             accepted = _validate_tags(tag_parsed, valid_tags)
             predicted = {sleutel for sleutel, _reden in accepted if sleutel in FALLACY_TAG_MAP.values()}
         except Exception as exc:
@@ -225,9 +304,9 @@ def evaluate_tagging(record: EvalRecord, model, base_url, timeout, tag_catalogue
         if expected and expected <= predicted:
             outcome = "correct"
         elif expected:
-            outcome = "gemist"
+            outcome = "fout-negatief"
         elif predicted:
-            outcome = "onterecht"
+            outcome = "fout-positief"
         else:
             continue  # noch verwacht, noch voorspeld -- geen toegevoegde waarde om te tonen
         items.append({
@@ -268,9 +347,51 @@ def select_unevaluated(records: list[EvalRecord], evaluated_indices: set[int], l
     return selected
 
 
-def run(indexed_records: list[tuple[int, EvalRecord]], model, base_url, timeout=120.0):
+def _evaluate_one(i: int, record: EvalRecord, model, base_url, timeout, tag_catalogue, tag_skeleton, valid_tags,
+                   api_key=None, extraction_prompt="strict", skip_tagging=False, tag_prompt="strict"):
+    """Eén record volledig evalueren (extractie + tagging), zonder gedeelde
+    state te muteren -- puur zodat dit veilig via dask over meerdere
+    workers/threads kan lopen (--parallel), zelfde patroon als
+    extract_arguments._extract_one/tag_arguments._tag_one."""
+    extraction_items = []
+    span_prf = None
+    extract_error = None
+    try:
+        span_prf, extraction_items = evaluate_extraction(
+            record, model, base_url, timeout, api_key=api_key, extraction_prompt=extraction_prompt,
+        )
+    except Exception as exc:
+        extract_error = str(exc)
+
+    if skip_tagging:
+        # Tagging is onafhankelijk van de extractiestijl (zelfde gouden
+        # drogreden-citaten, zelfde tagprompt) -- bij een --extraction-prompt
+        # guideline-run heeft opnieuw taggen dus geen toegevoegde waarde,
+        # kost alleen extra LLM-calls. Zie ook evaluate_tagging's docstring.
+        fallacy_results, tagging_items, n_tag_errors = [], [], 0
+    else:
+        fallacy_results, tagging_items, n_tag_errors = evaluate_tagging(
+            record, model, base_url, timeout, tag_catalogue, tag_skeleton, valid_tags, api_key=api_key,
+            tag_prompt=tag_prompt,
+        )
+        # Geen extra LLM-calls: hergebruikt gewoon wat evaluate_tagging al
+        # berekende voor de gouden drogreden-citaten van dit record, om de
+        # argumentherkenning-voorbeelden ook met tag-info te tonen.
+        _attach_tags_to_extraction_items(extraction_items, tagging_items)
+
+    return {
+        "i": i, "span_prf": span_prf, "extract_error": extract_error,
+        "fallacy_results": fallacy_results, "n_tag_errors": n_tag_errors,
+        "extraction_items": extraction_items, "tagging_items": tagging_items,
+    }
+
+
+def run(indexed_records: list[tuple[int, EvalRecord]], model, base_url, timeout=120.0, api_key=None, parallel=False,
+        extraction_prompt="strict", skip_tagging=False, tag_prompt="strict"):
     """Scoort precies de meegegeven (index, record)-paren -- de aanroeper
-    bepaalt via select_unevaluated welke dat zijn."""
+    bepaalt via select_unevaluated welke dat zijn. Met --parallel worden de
+    records via dask over de devcontainer's persistente scheduler verdeeld
+    (zie pipeline/dask_client.py) i.p.v. sequentieel."""
     conn = db.connect()
     tag_catalogue, tag_skeleton = build_tag_catalogue(conn)
     valid_tags = load_valid_tags(conn)
@@ -283,31 +404,56 @@ def run(indexed_records: list[tuple[int, EvalRecord]], model, base_url, timeout=
     n_tag_errors = 0
     new_indices = []
 
-    for n, (i, record) in enumerate(indexed_records):
+    # Prijs vooraf vastleggen (alleen zinvol tegen de HF-router, zie
+    # pipeline/hf_pricing.py) en tijdens de run periodiek herchecken -- een
+    # provider kan halverwege een lange batch stilletjes gaan rekenen (zie
+    # de OVHcloud/Qwen-observatie in docs/handoff.md).
+    price_baseline = get_baseline_pricing(model, base_url)
+
+    def process(result):
+        nonlocal n_extract_errors, n_tag_errors
+        i = result["i"]
         new_indices.append(i)
-        record_extraction_items = []
-        try:
-            span_prf, record_extraction_items = evaluate_extraction(record, model, base_url, timeout)
-            span_results.append(span_prf)
-        except Exception as exc:
-            logger.warning("[record %d] extractie mislukt: %s", i, exc)
+        if result["extract_error"] is not None:
+            logger.warning("[record %d] extractie mislukt: %s", i, result["extract_error"])
             n_extract_errors += 1
-
-        record_fallacy_results, record_tagging_items, record_tag_errors = evaluate_tagging(
-            record, model, base_url, timeout, tag_catalogue, tag_skeleton, valid_tags
-        )
-        fallacy_results.extend(record_fallacy_results)
-        n_tag_errors += record_tag_errors
-
-        # Geen extra LLM-calls: hergebruikt gewoon wat evaluate_tagging al
-        # berekende voor de gouden drogreden-citaten van dit record, om de
-        # argumentherkenning-voorbeelden ook met tag-info te tonen.
-        _attach_tags_to_extraction_items(record_extraction_items, record_tagging_items)
-        extraction_items.extend(record_extraction_items)
-        tagging_items.extend(record_tagging_items)
-
+        elif result["span_prf"] is not None:
+            span_results.append(result["span_prf"])
+        fallacy_results.extend(result["fallacy_results"])
+        n_tag_errors += result["n_tag_errors"]
+        extraction_items.extend(result["extraction_items"])
+        tagging_items.extend(result["tagging_items"])
         logger.info("[record %d/%d, index %d] klaar (%d gouden drogreden-citaten getagd)",
-                    n + 1, len(indexed_records), i, len(record_fallacy_results))
+                    len(new_indices), len(indexed_records), i, len(result["fallacy_results"]))
+
+    if parallel:
+        client = make_client(dashboard=True)
+        logger.info("Parallelle modus: %d records verdeeld over dask (dashboard: %s)", len(indexed_records), client.dashboard_link)
+        futures = client.map(
+            _evaluate_one, [i for i, _ in indexed_records], [record for _, record in indexed_records],
+            model=model, base_url=base_url, timeout=timeout,
+            tag_catalogue=tag_catalogue, tag_skeleton=tag_skeleton, valid_tags=valid_tags, api_key=api_key,
+            extraction_prompt=extraction_prompt, skip_tagging=skip_tagging, tag_prompt=tag_prompt,
+        )
+        for n, future in enumerate(as_completed(futures), 1):
+            process(future.result())
+            if n % PRICE_CHECK_INTERVAL == 0 and not price_still_matches(model, base_url, price_baseline):
+                remaining = [f for f in futures if not f.done()]
+                logger.error(
+                    "Batch afgebroken na %d/%d records wegens prijsstijging (%d resterende taken geannuleerd).",
+                    n, len(indexed_records), len(remaining),
+                )
+                client.cancel(remaining)
+                break
+        client.close()
+    else:
+        for n, (i, record) in enumerate(indexed_records, 1):
+            process(_evaluate_one(i, record, model, base_url, timeout, tag_catalogue, tag_skeleton, valid_tags,
+                                   api_key=api_key, extraction_prompt=extraction_prompt, skip_tagging=skip_tagging,
+                                   tag_prompt=tag_prompt))
+            if n % PRICE_CHECK_INTERVAL == 0 and not price_still_matches(model, base_url, price_baseline):
+                logger.error("Batch afgebroken na %d/%d records wegens prijsstijging.", n, len(indexed_records))
+                break
 
     return {
         "new_indices": new_indices,
@@ -394,7 +540,8 @@ def merge(previous: dict, new: dict) -> dict:
     }
 
 
-def write_export(dataset: str, model: str, merged: dict, total_records: int) -> Path:
+def write_export(dataset: str, model: str, merged: dict, total_records: int, extraction_prompt: str = "strict",
+                  tag_prompt: str = "strict") -> Path:
     """Schrijft data/export/eval/<dataset>.json -- vast pad, overschreven per
     run maar met CUMULATIEVE inhoud (zie module-docstring): bevat
     evaluated_indices zodat een volgende run weet welke records al gedaan
@@ -403,6 +550,8 @@ def write_export(dataset: str, model: str, merged: dict, total_records: int) -> 
     export = {
         "dataset": dataset,
         "model": model,
+        "extraction_prompt": extraction_prompt,
+        "tag_prompt": tag_prompt,
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "n_records": len(merged["evaluated_indices"]),
         "total_records": total_records,
@@ -429,7 +578,39 @@ def main():
     parser.add_argument("--limit", type=int, default=15, help="max aantal NIEUWE records deze run (default 15)")
     parser.add_argument("--fresh", action="store_true", help="negeer eerder geaccumuleerde voortgang en begin opnieuw")
     parser.add_argument("--base-url", default="http://localhost:1234/v1")
+    parser.add_argument(
+        "--api-key", default=None,
+        help="Bearer-token voor de --base-url-backend, indien vereist (bv. een HF-router-token; "
+             "lokale LM Studio heeft dit niet nodig, dan gewoon weglaten)",
+    )
     parser.add_argument("--timeout", type=float, default=120.0)
+    parser.add_argument(
+        "--parallel", action="store_true",
+        help="verdeel LLM-calls over dask (de devcontainer's persistente scheduler, zie pipeline/dask_client.py) "
+             "i.p.v. sequentieel -- alleen zinvol tegen een remote provider die concurrency aankan (bv. de "
+             "HF-router); lokale LM Studio verwerkt toch maar één request tegelijk",
+    )
+    parser.add_argument(
+        "--extraction-prompt", choices=["strict", "guideline"], default="strict",
+        help="'strict' (default) = ongewijzigde productie-extractieprompt (pipeline/prompts/extract_argument.md). "
+             "'guideline' = eval-only variant die i.p.v. onze eigen 'geen onderbouwing = geen argument'-regel de "
+             "argumentdefinitie van de brondataset zelf volgt (Haddadan et al. 2019, zie "
+             "pipeline/prompts/extract_argument_guideline_eval.md) -- gebruik hiervoor een apart --dataset "
+             "(bv. elecdebate60to16-guideline) zodat dit niet door elkaar loopt met de strict-run.",
+    )
+    parser.add_argument(
+        "--skip-tagging", action="store_true",
+        help="sla de drogreden-tag-as over (tagging is onafhankelijk van --extraction-prompt, dus bij een "
+             "guideline-run levert opnieuw taggen geen nieuwe info op, alleen extra LLM-calls)",
+    )
+    parser.add_argument(
+        "--tag-prompt", choices=["strict", "guideline"], default="strict",
+        help="'strict' (default) = ongewijzigde config/tags.toml-omschrijving voor de 2 gescoorde drogreden-tags. "
+             "'guideline' = eval-only variant met de brondataset-eigen omschrijving (Goffredo et al. 2023, citeert "
+             "Da San Martino et al. 2019a/Walton 1987) -- vooral relevant voor Debatzet-Gevoelens-Verwoorden, dat "
+             "bij ons beperkt is tot angst/woede/medelijden terwijl de bron elke emotionele taal toelaat. Gebruik "
+             "hiervoor een apart --dataset (bv. elecdebate60to16-tag-guideline).",
+    )
     args = parser.parse_args()
 
     logging.basicConfig(level=logging.INFO, format="%(message)s")
@@ -448,10 +629,12 @@ def main():
         print_report(args.model, merged, len(records))
         return
 
-    new = run(indexed_records, args.model, args.base_url, args.timeout)
+    new = run(indexed_records, args.model, args.base_url, args.timeout, api_key=args.api_key, parallel=args.parallel,
+              extraction_prompt=args.extraction_prompt, skip_tagging=args.skip_tagging, tag_prompt=args.tag_prompt)
     merged = merge(previous, new)
     print_report(args.model, merged, len(records))
-    out_path = write_export(args.dataset, args.model, merged, len(records))
+    out_path = write_export(args.dataset, args.model, merged, len(records),
+                             extraction_prompt=args.extraction_prompt, tag_prompt=args.tag_prompt)
     print(f"\nExport geschreven naar {out_path} ({len(merged['evaluated_indices'])}/{len(records)} records ooit gescoord)")
 
 

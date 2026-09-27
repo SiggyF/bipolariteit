@@ -9,7 +9,7 @@
 // zelf koppelt identiteit direct aan het aandeel, zonder extra vloeroppervlak
 // onder de balk. TOP_N=4 (dataviz-skill: "<=4 direct-labeled"), de rest
 // samengevoegd tot "overig" -- een perspectief bevat al gauw 15-20 tags
-// (data/tags.toml), te veel voor een leesbare balk op kaartbreedte.
+// (config/tags.toml), te veel voor een leesbare balk op kaartbreedte.
 //
 // Vlakke, uniforme segmentkleur (i.p.v. rangorde-alpha zoals de vorige
 // versie): het icoon draagt nu de identiteit, dus kleur hoeft geen rangorde

@@ -44,7 +44,7 @@ export interface Argument {
 		raw_video_url: string | null;
 	};
 	// Staatsrechtelijke context van de publicatiedatum, afgeleid in de pipeline
-	// uit data/politieke-periodes.toml. Null als het document geen datum heeft.
+	// uit config/politieke-periodes.toml. Null als het document geen datum heeft.
 	periode: { kamer: string | null; regering: string | null };
 	claims: Claim[];
 	tags: Tag[];
@@ -74,7 +74,7 @@ export const NO_PARTY = "Onbekend";
 
 // Weergavenamen voor de drie stance-waarden uit pipeline/db/schema.sql
 // (CHECK stance IN ('pro','contra','unclear')). De taxonomie uit
-// data/tags.toml staat hier bewust *niet* in: tag/labelgroep/perspectief zijn
+// config/tags.toml staat hier bewust *niet* in: tag/labelgroep/perspectief zijn
 // gewone strings en de filterfacetten worden uit de data afgeleid, zodat
 // tags.toml bewerkt kan worden zonder de frontend aan te raken.
 // Wat "pro" en "contra" concreet betekenen wordt per onderwerp apart

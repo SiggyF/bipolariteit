@@ -1,5 +1,5 @@
 """
-Matcht de vastgelegde clusterlabel-anchors (data/cluster-label-anchors.parquet,
+Matcht de vastgelegde clusterlabel-anchors (data/plenair-map/cluster-label-anchors.parquet,
 zie scripts/build_cluster_label_anchors.py) terug op een nieuwe clustering-run.
 
 Aanleiding (issue #281): de 199 handmatige labels in
@@ -47,7 +47,7 @@ import pyarrow.parquet as pq
 
 from pipeline.paths import REPO_ROOT
 
-ANCHORS_PATH = REPO_ROOT / "data" / "cluster-label-anchors.parquet"
+ANCHORS_PATH = REPO_ROOT / "data" / "plenair-map" / "cluster-label-anchors.parquet"
 CLUSTERS_FULL_PATH = REPO_ROOT / "data" / "export" / "a0-map" / "maps" / "plenair-map-clusters-full.json"
 POINTS_FULL_PATH = REPO_ROOT / "data" / "export" / "a0-map" / "maps" / "plenair-map-full.json"
 EMBEDDINGS_PATH = REPO_ROOT / "data" / "embeddings" / "text-embedding-bge-m3_plenair-full.npz"

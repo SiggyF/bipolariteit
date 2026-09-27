@@ -1,5 +1,5 @@
 """
-Bewaakt de vorm van data/tags.toml (de door de argumentatie-onderzoeker
+Bewaakt de vorm van config/tags.toml (de door de argumentatie-onderzoeker
 aangeleverde taxonomie): moet parsen, geen dubbele sleutels, en elke tag
 moet een sleutel + beschrijving hebben.
 """
@@ -7,7 +7,7 @@ moet een sleutel + beschrijving hebben.
 import tomllib
 from pathlib import Path
 
-TAGS_TOML_PATH = Path(__file__).parent.parent / "data" / "tags.toml"
+TAGS_TOML_PATH = Path(__file__).parent.parent / "config" / "tags.toml"
 
 
 def _load():
