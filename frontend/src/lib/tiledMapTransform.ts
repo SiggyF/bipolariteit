@@ -1,131 +1,119 @@
-// Wereld<->tile<->scherm-transform voor TiledPlenairMap.vue, gespiegeld tegen
-// de Python-kant (pipeline/tiling/grid.py + pipeline/tiling/encode.py) zodat
-// dezelfde `(z, x, y)`-tile-indexering en dezelfde MVT-quantisatie hier exact
-// worden teruggerekend. Bewust los van PlenairMap.vue's worldToScreen: die is
-// canvas-aspect-ratio-afhankelijk (bakt canvasbreedte/-hoogte in de
-// puntcoördinaten zelf), wat niet samengaat met een tile-grid met vaste
-// CRS-bounds (zie issue #215-verkenning).
+// UMAP<->Mercator-hulpfuncties voor TiledPlenairMap.vue: de vector-tiles zelf
+// hebben al standaard EPSG:3857-coördinaten (zie pipeline/tiling/grid.py's
+// moduledocstring). MapLibre tekent achtergrond/cluster-hullen/-labels
+// (GeoJSON-bronnen, dus zelf al in lng/lat, geen eigen tile<->scherm-wiskunde
+// nodig). De puntenlaag zelf gaat via deck.gl (issue #259, echte
+// GL-blendmodes -- zie TiledPlenairMap.vue) en decodeert de vector-tiles zelf
+// (`tileBoundsMeters`/`tileLocalToLngLat` hieronder), want deck.gl's
+// TileLayer kent geen pmtiles-protocol. Cluster-hullen/-centroids
+// (plenair-map-clusters(-full).json) staan los, in ruwe UMAP-ruimte, en
+// moeten voor een GeoJSON-source naar lng/lat omgerekend worden.
 
 export type GridMetadata = {
 	tile_size: number;
 	minzoom: number;
 	maxzoom: number;
-	extent: [number, number, number, number]; // [minx, miny, maxx, maxy], altijd de volle Web-Mercator-extent
 	umap_scale: number;
 	umap_center: [number, number];
 };
 
-// UMAP-coördinaten (bv. cluster-hull-polygonen/-centroids uit
-// plenair-map-clusters(-full).json, die los van de tile-pyramide staan en
-// dus niet zelf al naar Mercator-meters herschaald zijn) omrekenen naar
-// dezelfde ruimte als de punten die uit de tiles gedecodeerd worden -- zie
-// pipeline/tiling/grid.py's `umap_to_mercator()`, exacte spiegeling hiervan.
+// Exacte spiegeling van pipeline/tiling/grid.py's umap_to_mercator(): UMAP-
+// coördinaat -> EPSG:3857-meters.
 export function umapToMercator(x: number, y: number, grid: GridMetadata): [number, number] {
 	const [cx, cy] = grid.umap_center;
 	return [(x - cx) * grid.umap_scale, (y - cy) * grid.umap_scale];
 }
 
-export type WorldBounds = { minx: number; miny: number; maxx: number; maxy: number };
+// Standaard sferische Web-Mercator-inverse (EPSG:3857 -> EPSG:4326), zelfde
+// radius als pyproj's CRS.from_epsg(3857) hanteert -- nodig omdat een
+// MapLibre GeoJSON-source lng/lat verwacht, in tegenstelling tot een
+// vector-tile-source (die zijn eigen Mercator-tegelbounds al kent).
+const WEB_MERCATOR_RADIUS = 6378137;
 
-export type TileKey = { z: number; x: number; y: number };
-
-// morecantile's `custom()` maakt de bounding box vierkant (breedte == hoogte)
-// voordat de tile-matrix erover gelegd wordt (zie grid.py-docstring) -- dus
-// hier volstaat simpele 2^z-verdeling i.p.v. een volledige morecantile-poort.
-export function tileBounds(grid: GridMetadata, tile: TileKey): WorldBounds {
-	const [left, bottom, right, top] = grid.extent;
-	const span = right - left;
-	const n = 2 ** tile.z;
-	const tileSpan = span / n;
-	const minx = left + tile.x * tileSpan;
-	const maxx = left + (tile.x + 1) * tileSpan;
-	const maxy = top - tile.y * tileSpan;
-	const miny = top - (tile.y + 1) * tileSpan;
-	return { minx, miny, maxx, maxy };
+export function mercatorMetersToLngLat(mx: number, my: number): [number, number] {
+	const lng = (mx / WEB_MERCATOR_RADIUS) * (180 / Math.PI);
+	const lat = (2 * Math.atan(Math.exp(my / WEB_MERCATOR_RADIUS)) - Math.PI / 2) * (180 / Math.PI);
+	return [lng, lat];
 }
 
-// Welke tiles overlappen een wereld-rechthoek op een gegeven zoomniveau
-// (geclampt aan grid.extent en grid.minzoom/maxzoom).
-export function tilesForWorldRect(grid: GridMetadata, zoom: number, rect: WorldBounds): TileKey[] {
-	const z = Math.max(grid.minzoom, Math.min(grid.maxzoom, Math.round(zoom)));
-	const [left, bottom, right, top] = grid.extent;
-	const span = right - left;
-	const n = 2 ** z;
-	const tileSpan = span / n;
+export type TileIndex = { x: number; y: number; z: number };
 
-	const clampedMinX = Math.max(rect.minx, left);
-	const clampedMaxX = Math.min(rect.maxx, right);
-	const clampedMinY = Math.max(rect.miny, bottom);
-	const clampedMaxY = Math.min(rect.maxy, top);
-	if (clampedMinX > clampedMaxX || clampedMinY > clampedMaxY) return [];
+// Standaard WebMercatorQuad-tegelbounds (in EPSG:3857-meters) voor een
+// (z, x, y) -- dezelfde standaard schaal die pipeline/tiling/grid.py altijd
+// gebruikt (STANDARD_TMS = morecantile's WebMercatorQuad-preset), dus geen
+// grid.json-extent nodig: die is per definitie altijd deze vaste halve-
+// wereldextent.
+const WEB_MERCATOR_HALF_EXTENT = Math.PI * WEB_MERCATOR_RADIUS;
 
-	const xMin = Math.max(0, Math.floor((clampedMinX - left) / tileSpan));
-	const xMax = Math.min(n - 1, Math.floor((clampedMaxX - left) / tileSpan - 1e-9));
-	// y=0 is bovenaan (corner_of_origin="topLeft" in grid.py), dus y loopt van top naar bottom.
-	const yMin = Math.max(0, Math.floor((top - clampedMaxY) / tileSpan));
-	const yMax = Math.min(n - 1, Math.floor((top - clampedMinY) / tileSpan - 1e-9));
-
-	const tiles: TileKey[] = [];
-	for (let x = xMin; x <= xMax; x++) {
-		for (let y = yMin; y <= yMax; y++) {
-			tiles.push({ z, x, y });
-		}
-	}
-	return tiles;
+export function tileBoundsMeters(tile: TileIndex): { minx: number; miny: number; maxx: number; maxy: number } {
+	const n = 2 ** tile.z;
+	const span = (2 * WEB_MERCATOR_HALF_EXTENT) / n;
+	const minx = -WEB_MERCATOR_HALF_EXTENT + tile.x * span;
+	// y=0 is bovenaan (corner_of_origin="topLeft"), dus y loopt van top naar bottom.
+	const maxy = WEB_MERCATOR_HALF_EXTENT - tile.y * span;
+	return { minx, miny: maxy - span, maxx: minx + span, maxy };
 }
 
 // MVT-quantisatie (mapbox_vector_tile.encode, default y_coord_down=False)
 // slaat y gespiegeld op: `y_tile = extent - round((wereld_y - miny)/(maxy-miny) * extent)`.
-// Hier de exacte inverse, zodat gedecodeerde punten weer in dezelfde
-// wereld-coördinaten staan als de brondata (UMAP-x/y, "y omhoog").
-export function tileLocalToWorld(tx: number, ty: number, extent: number, bounds: WorldBounds): [number, number] {
+// Hier de exacte inverse, direct doorgerekend naar lng/lat (voor deck.gl's
+// getTileData, dat geografische coördinaten verwacht).
+export function tileLocalToLngLat(tx: number, ty: number, extent: number, bounds: ReturnType<typeof tileBoundsMeters>): [number, number] {
 	const worldX = bounds.minx + (tx / extent) * (bounds.maxx - bounds.minx);
 	const quantizedY = extent - ty;
 	const worldY = bounds.miny + (quantizedY / extent) * (bounds.maxy - bounds.miny);
-	return [worldX, worldY];
+	return mercatorMetersToLngLat(worldX, worldY);
 }
 
-// Zelfde opzet als PlenairMap.vue's worldToScreen: een vaste wereld-bounding-box
-// (hier: grid.extent i.p.v. per-canvasgrootte herberekende rawBounds) genormaliseerd
-// naar canvaspixels bij zoom=1, met de d3-zoomtransform er bovenop toegepast.
-export function makeWorldToScreen(
-	grid: GridMetadata,
-	canvasWidth: number,
-	canvasHeight: number,
-	transform: { x: number; y: number; k: number },
-) {
-	const [left, bottom, right, top] = grid.extent;
-	const cx = (left + right) / 2;
-	const cy = (bottom + top) / 2;
-	const spanX = right - left;
-	const spanY = top - bottom;
+// Ronde, "vloeiende" cluster-hullen i.p.v. de hoekige oorspronkelijke
+// concave-hull-polygonen -- zelfde motivatie als scripts/a0_map's
+// export_clusters_geojson.py's smooth_hull() (periodieke cubic B-spline via
+// scipy), maar hier als een centripetale Catmull-Rom-spline door de originele
+// hoekpunten (geen scipy-afhankelijkheid nodig in de frontend). Centripetaal
+// (alpha=0.5) i.p.v. de klassieke uniforme Catmull-Rom, want uniform kan bij
+// ongelijk verdeelde hoekpunten (typisch voor een concave hull) lussen/self-
+// intersecties geven; centripetaal niet.
+function catmullRomPoint(
+	p0: [number, number],
+	p1: [number, number],
+	p2: [number, number],
+	p3: [number, number],
+	t: number,
+): [number, number] {
+	// Centripetale parametrisatie: elk segment krijgt een "tijd"-interval
+	// evenredig aan sqrt(afstand) i.p.v. altijd 1.
+	const alpha = 0.5;
+	const dist = (a: [number, number], b: [number, number]) => Math.hypot(b[0] - a[0], b[1] - a[1]) ** alpha || 1e-9;
+	const t0 = 0;
+	const t1 = t0 + dist(p0, p1);
+	const t2 = t1 + dist(p1, p2);
+	const t3 = t2 + dist(p2, p3);
+	const tt = t1 + t * (t2 - t1);
 
-	return function worldToScreen(wx: number, wy: number): [number, number] {
-		const nx = (wx - cx) / (spanX / 2);
-		const ny = (wy - cy) / (spanY / 2);
-		const baseX = canvasWidth / 2 + nx * (canvasWidth / 2);
-		const baseY = canvasHeight / 2 - ny * (canvasHeight / 2);
-		return [transform.x + transform.k * baseX, transform.y + transform.k * baseY];
-	};
+	function interp(pa: [number, number], pb: [number, number], ta: number, tb: number): [number, number] {
+		const f = ta === tb ? 0 : (tt - ta) / (tb - ta);
+		return [pa[0] + (pb[0] - pa[0]) * f, pa[1] + (pb[1] - pa[1]) * f];
+	}
+	const a1 = interp(p0, p1, t0, t1);
+	const a2 = interp(p1, p2, t1, t2);
+	const a3 = interp(p2, p3, t2, t3);
+	const b1 = interp(a1, a2, t0, t2);
+	const b2 = interp(a2, a3, t1, t3);
+	return interp(b1, b2, t1, t2);
 }
 
-export function makeScreenToWorld(
-	grid: GridMetadata,
-	canvasWidth: number,
-	canvasHeight: number,
-	transform: { x: number; y: number; k: number },
-) {
-	const [left, bottom, right, top] = grid.extent;
-	const cx = (left + right) / 2;
-	const cy = (bottom + top) / 2;
-	const spanX = right - left;
-	const spanY = top - bottom;
-
-	return function screenToWorld(sx: number, sy: number): [number, number] {
-		const baseX = (sx - transform.x) / transform.k;
-		const baseY = (sy - transform.y) / transform.k;
-		const nx = (baseX - canvasWidth / 2) / (canvasWidth / 2);
-		const ny = (canvasHeight / 2 - baseY) / (canvasHeight / 2);
-		return [cx + nx * (spanX / 2), cy + ny * (spanY / 2)];
-	};
+export function smoothClosedRing(points: [number, number][], samplesPerSegment = 8): [number, number][] {
+	const n = points.length;
+	if (n < 4) return points;
+	const smoothed: [number, number][] = [];
+	for (let i = 0; i < n; i++) {
+		const p0 = points[(i - 1 + n) % n];
+		const p1 = points[i];
+		const p2 = points[(i + 1) % n];
+		const p3 = points[(i + 2) % n];
+		for (let s = 0; s < samplesPerSegment; s++) {
+			smoothed.push(catmullRomPoint(p0, p1, p2, p3, s / samplesPerSegment));
+		}
+	}
+	return smoothed;
 }
