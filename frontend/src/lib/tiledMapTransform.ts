@@ -64,3 +64,56 @@ export function tileLocalToLngLat(tx: number, ty: number, extent: number, bounds
 	const worldY = bounds.miny + (quantizedY / extent) * (bounds.maxy - bounds.miny);
 	return mercatorMetersToLngLat(worldX, worldY);
 }
+
+// Ronde, "vloeiende" cluster-hullen i.p.v. de hoekige oorspronkelijke
+// concave-hull-polygonen -- zelfde motivatie als scripts/a0_map's
+// export_clusters_geojson.py's smooth_hull() (periodieke cubic B-spline via
+// scipy), maar hier als een centripetale Catmull-Rom-spline door de originele
+// hoekpunten (geen scipy-afhankelijkheid nodig in de frontend). Centripetaal
+// (alpha=0.5) i.p.v. de klassieke uniforme Catmull-Rom, want uniform kan bij
+// ongelijk verdeelde hoekpunten (typisch voor een concave hull) lussen/self-
+// intersecties geven; centripetaal niet.
+function catmullRomPoint(
+	p0: [number, number],
+	p1: [number, number],
+	p2: [number, number],
+	p3: [number, number],
+	t: number,
+): [number, number] {
+	// Centripetale parametrisatie: elk segment krijgt een "tijd"-interval
+	// evenredig aan sqrt(afstand) i.p.v. altijd 1.
+	const alpha = 0.5;
+	const dist = (a: [number, number], b: [number, number]) => Math.hypot(b[0] - a[0], b[1] - a[1]) ** alpha || 1e-9;
+	const t0 = 0;
+	const t1 = t0 + dist(p0, p1);
+	const t2 = t1 + dist(p1, p2);
+	const t3 = t2 + dist(p2, p3);
+	const tt = t1 + t * (t2 - t1);
+
+	function interp(pa: [number, number], pb: [number, number], ta: number, tb: number): [number, number] {
+		const f = ta === tb ? 0 : (tt - ta) / (tb - ta);
+		return [pa[0] + (pb[0] - pa[0]) * f, pa[1] + (pb[1] - pa[1]) * f];
+	}
+	const a1 = interp(p0, p1, t0, t1);
+	const a2 = interp(p1, p2, t1, t2);
+	const a3 = interp(p2, p3, t2, t3);
+	const b1 = interp(a1, a2, t0, t2);
+	const b2 = interp(a2, a3, t1, t3);
+	return interp(b1, b2, t1, t2);
+}
+
+export function smoothClosedRing(points: [number, number][], samplesPerSegment = 8): [number, number][] {
+	const n = points.length;
+	if (n < 4) return points;
+	const smoothed: [number, number][] = [];
+	for (let i = 0; i < n; i++) {
+		const p0 = points[(i - 1 + n) % n];
+		const p1 = points[i];
+		const p2 = points[(i + 1) % n];
+		const p3 = points[(i + 2) % n];
+		for (let s = 0; s < samplesPerSegment; s++) {
+			smoothed.push(catmullRomPoint(p0, p1, p2, p3, s / samplesPerSegment));
+		}
+	}
+	return smoothed;
+}
