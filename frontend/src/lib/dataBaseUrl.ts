@@ -16,10 +16,12 @@ export function resolveDataBaseUrl(): string {
 // Hugging Face, niet bij de compacte jsDelivr-hosting hierboven (zie
 // docs/data-layout.md, issue #316) -- ook de kleine variant, ondanks dat
 // jsDelivr's 20 MB-limiet er nog onder zou blijven, om niet twee
-// publicatiepaden voor hetzelfde bestandstype te laten bestaan. In dev
-// dezelfde /data-fallback als hierboven: sirv serveert ook .pmtiles-
-// bestanden, dus een lokale data/export/gepubliceerd/-checkout met de
-// tegelpyramide erin werkt zonder aparte publiceerstap.
+// publicatiepaden voor hetzelfde bestandstype te laten bestaan. Geen aparte
+// /data-fallback in dev (zoals resolveDataBaseUrl hierboven): er is geen
+// publiceerstap die de tegelpyramide ooit in data/export/gepubliceerd/ (de
+// lokale checkout van die /data-mirror) zet, dus die sirv-route heeft er
+// nooit iets liggen -- altijd rechtstreeks tegen Hugging Face, zoals
+// plenair-map-viewer-hf.html ook al doet.
 //
 // /plenair-map is de submap waar scripts/publish_huggingface.py
 // (--repo-subdir, default "plenair-map") naartoe publiceert -- één submap
@@ -28,5 +30,5 @@ export function resolveDataBaseUrl(): string {
 const TILES_CDN_BASE_URL = "https://huggingface.co/datasets/SiggyF/bipolariteit-pmtiles/resolve/main/plenair-map";
 
 export function resolveTilesBaseUrl(): string {
-	return import.meta.env.PUBLIC_TILES_BASE_URL ?? (import.meta.env.DEV ? "/data" : TILES_CDN_BASE_URL);
+	return import.meta.env.PUBLIC_TILES_BASE_URL ?? TILES_CDN_BASE_URL;
 }
