@@ -4,20 +4,37 @@
 // als een vector-tile-pyramide (.pmtiles, gebouwd door
 // `pipeline.tiling.build_pyramid`) op de volle dataset (issue #293/#259).
 //
-// MapLibre GL i.p.v. een eigen Canvas2D-renderer (v2, zie git-historie voor
-// de eerdere eigen d3-zoom/@mapbox-vector-tile-opzet): die had geen
-// zoom-debounce (een doorlopend zoomgebaar deed elk tussenliggend
-// zoomniveau een eigen volledige tegelronde ophalen) en geen "toon het
-// vorige niveau tot het nieuwe geladen is"-gedrag (leeg canvas tijdens het
-// laden). MapLibre lost beide al standaard op, plus WebGL-rendering i.p.v.
-// canvas-arcs per punt.
+// MapLibre GL voor achtergrond/cluster-hullen/-labels/basiskaart (v2, zie
+// git-historie voor de eerdere eigen d3-zoom/@mapbox-vector-tile-opzet: die
+// had geen zoom-debounce en geen "toon het vorige niveau tot het nieuwe
+// geladen is"-gedrag). De puntenlaag zelf (v3) draait op deck.gl
+// (`@deck.gl/mapbox`'s MapboxOverlay bovenop dezelfde MapLibre-kaart), want
+// MapLibre's circle-layer ondersteunt geen echte GL-blendmode
+// (screen/multiply) -- deck.gl's layers wel, via `parameters.blendFunc`.
+// deck.gl's TileLayer kent geen pmtiles-protocol, dus de puntenlaag decodeert
+// zijn tiles zelf via `pmtiles.getZxy()` + `@mapbox/vector-tile` (dezelfde
+// aanpak als de vroegere v1-canvasrenderer, nu alleen gebruikt om deck.gl van
+// data te voorzien, niet om zelf te tekenen/zoomen/cachen -- dat blijft
+// TileLayer's eigen taak).
 import { onMounted, onUnmounted, ref, watch } from "vue";
-import maplibregl, { type CircleLayerSpecification, type MapGeoJSONFeature } from "maplibre-gl";
+import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
-import { Protocol } from "pmtiles";
+import { PMTiles, Protocol } from "pmtiles";
+import { VectorTile } from "@mapbox/vector-tile";
+import { PbfReader } from "pbf";
+import { TileLayer } from "@deck.gl/geo-layers";
+import { ScatterplotLayer } from "@deck.gl/layers";
+import { MapboxOverlay } from "@deck.gl/mapbox";
 import { useTheme } from "../lib/useTheme";
 import { DEFAULT_TOPIC_COLOR, TOPIC_COLOR } from "../lib/plenairMapColors";
-import { mercatorMetersToLngLat, umapToMercator, type GridMetadata } from "../lib/tiledMapTransform";
+import {
+	mercatorMetersToLngLat,
+	tileBoundsMeters,
+	tileLocalToLngLat,
+	umapToMercator,
+	type GridMetadata,
+	type TileIndex,
+} from "../lib/tiledMapTransform";
 
 const props = defineProps<{
 	// pmtiles + grid-metadata + cluster-hulls komen van Hugging Face (volle
@@ -33,18 +50,24 @@ type ClusterHullItem = {
 	hull: [number, number][] | null;
 };
 
-type HoveredPoint = {
+type DeckPoint = {
+	position: [number, number];
+	topic: string;
 	actor: string;
 	party: string;
 	debate: string;
 	text: string;
 };
 
+type HoveredPoint = Pick<DeckPoint, "actor" | "party" | "debate" | "text">;
+
 type FetchStatus = "loading" | "ready" | "error";
 const status = ref<FetchStatus>("loading");
 const hoveredPoint = ref<HoveredPoint | null>(null);
 const mapEl = ref<HTMLDivElement | null>(null);
 let map: maplibregl.Map | null = null;
+let deckOverlay: MapboxOverlay | null = null;
+let pmtiles: PMTiles | null = null;
 
 const isDark = useTheme();
 
@@ -55,29 +78,43 @@ const isDark = useTheme();
 let protocolRegistered = false;
 function ensurePmtilesProtocol() {
 	if (protocolRegistered) return;
-	const protocol = new Protocol();
-	maplibregl.addProtocol("pmtiles", protocol.tile);
+	maplibregl.addProtocol("pmtiles", new Protocol().tile);
 	protocolRegistered = true;
-}
-
-function circlePaint(dark: boolean): CircleLayerSpecification["paint"] {
-	return {
-		"circle-radius": ["interpolate", ["linear"], ["zoom"], 0, 1.2, 8, 3.5],
-		"circle-color": ["match", ["get", "topic"], ...Object.entries(TOPIC_COLOR).flat(), DEFAULT_TOPIC_COLOR],
-		// MapLibre's circle-layer ondersteunt geen echte GL-blendmode
-		// (screen/multiply) -- benaderd met opaciteit + blur, zelfde truc als
-		// het overwogen debugvoorbeeld: donker thema iets lager/wazig (licht
-		// laten "oplichten" bij overlap), licht thema steviger/scherp (een
-		// "inkt"-indruk van overlappende stippen).
-		"circle-opacity": dark ? 0.55 : 0.8,
-		"circle-blur": dark ? 0.35 : 0,
-	};
 }
 
 const THEME_COLOR = {
 	light: { bg: "#f7f3ea", muted: "#6f6558" },
 	dark: { bg: "#221f1b", muted: "#a89e8c" },
 };
+
+// WebGL-blendFunc/-equation-constanten (hardgecodeerd i.p.v. een
+// @luma.gl/constants-dependency erbij voor een paar nummers): ZERO=0, ONE=1,
+// SRC_ALPHA=0x0302, DST_COLOR=0x0306, FUNC_ADD=0x8006, MAX=0x8008.
+const BLEND_PARAMETERS = {
+	// "Inkt"-indruk op een lichte achtergrond: result = src * dst (vermenigvuldigen)
+	// -- overlappende stippen worden donkerder, niet lichter.
+	light: { blend: true, blendFunc: [0x0306, 0] as [number, number], blendEquation: 0x8006 },
+	// Benadering van "screen"-blending op een donkere achtergrond (echte screen-
+	// formule (1-(1-src)(1-dst)) kent geen simpele blendFunc-vorm). Eerst
+	// geprobeerd met additive blending (FUNC_ADD, SRC_ALPHA/ONE) -- bleek bij
+	// deze puntdichtheid meteen naar egaal wit te verzadigen (elke overlap
+	// telt op, geen bovengrens). MAX i.p.v. FUNC_ADD als blend-equation neemt
+	// per pixel gewoon het lichtste punt, geen optelling -- geeft wel een
+	// gloei-indruk bij overlap, zonder ooit uit te slaan naar wit.
+	dark: { blend: true, blendFunc: [1, 1] as [number, number], blendEquation: 0x8008 },
+};
+
+function hexToRgba(hex: string, alpha: number): [number, number, number, number] {
+	const r = parseInt(hex.slice(1, 3), 16);
+	const g = parseInt(hex.slice(3, 5), 16);
+	const b = parseInt(hex.slice(5, 7), 16);
+	return [r, g, b, Math.round(alpha * 255)];
+}
+
+function topicColorRgba(topic: string): [number, number, number, number] {
+	const hex = TOPIC_COLOR[topic] ?? DEFAULT_TOPIC_COLOR;
+	return hexToRgba(hex, 0.85);
+}
 
 function buildClusterGeoJSON(clusters: ClusterHullItem[], grid: GridMetadata) {
 	const hullFeatures: GeoJSON.Feature[] = [];
@@ -104,14 +141,61 @@ function buildClusterGeoJSON(clusters: ClusterHullItem[], grid: GridMetadata) {
 	};
 }
 
-function toHoveredPoint(feature: MapGeoJSONFeature): HoveredPoint {
-	const p = feature.properties as Record<string, unknown>;
-	return {
-		actor: String(p.actor ?? ""),
-		party: String(p.party ?? ""),
-		debate: String(p.debate ?? ""),
-		text: String(p.text ?? ""),
-	};
+// deck.gl's TileLayer kent geen pmtiles-protocol (dat is puur een MapLibre-
+// plugin) -- per opgevraagde (z,x,y) zelf de tegelbytes ophalen uit de al
+// open PMTiles-instantie en decoderen, zelfde aanpak als de vroegere
+// v1-canvasrenderer's `loadTile()`.
+async function getTileData({ index }: { index: TileIndex }): Promise<DeckPoint[]> {
+	if (!pmtiles) return [];
+	const result = await pmtiles.getZxy(index.z, index.x, index.y);
+	if (!result) return [];
+	const vt = new VectorTile(new PbfReader(new Uint8Array(result.data)));
+	const layer = vt.layers.points;
+	if (!layer) return [];
+	const bounds = tileBoundsMeters(index);
+	const points: DeckPoint[] = [];
+	for (let i = 0; i < layer.length; i++) {
+		const feature = layer.feature(i);
+		const [[pt]] = feature.loadGeometry();
+		const position = tileLocalToLngLat(pt.x, pt.y, feature.extent, bounds);
+		const p = feature.properties as Record<string, unknown>;
+		points.push({
+			position,
+			topic: String(p.topic ?? ""),
+			actor: String(p.actor ?? ""),
+			party: String(p.party ?? ""),
+			debate: String(p.debate ?? ""),
+			text: String(p.text ?? ""),
+		});
+	}
+	return points;
+}
+
+function buildPointsLayer(grid: GridMetadata): TileLayer {
+	return new TileLayer<DeckPoint[]>({
+		id: "plenair-points",
+		getTileData,
+		minZoom: grid.minzoom,
+		maxZoom: grid.maxzoom,
+		tileSize: grid.tile_size,
+		renderSubLayers: (subProps) => {
+			const zoom = subProps.tile.index.z;
+			// Zelfde interpolatie als de eerdere MapLibre-circle-radius (1.2px op
+			// het grofste niveau, 3.5px op het fijnste).
+			const t = grid.maxzoom > grid.minzoom ? (zoom - grid.minzoom) / (grid.maxzoom - grid.minzoom) : 0;
+			const radius = 1.2 + t * (3.5 - 1.2);
+			return new ScatterplotLayer<DeckPoint>({
+				id: `${subProps.id}-scatter`,
+				data: subProps.data,
+				getPosition: (d) => d.position,
+				getFillColor: (d) => topicColorRgba(d.topic),
+				getRadius: radius,
+				radiusUnits: "pixels",
+				pickable: true,
+				parameters: isDark.value ? BLEND_PARAMETERS.dark : BLEND_PARAMETERS.light,
+			});
+		},
+	});
 }
 
 onMounted(async () => {
@@ -141,6 +225,8 @@ onMounted(async () => {
 		}
 
 		if (!mapEl.value) return;
+		pmtiles = new PMTiles(`${props.tilesBaseUrl}/plenair-map-full.pmtiles`);
+
 		const theme = isDark.value ? THEME_COLOR.dark : THEME_COLOR.light;
 		map = new maplibregl.Map({
 			container: mapEl.value,
@@ -152,18 +238,12 @@ onMounted(async () => {
 				// Latijnse labels.
 				glyphs: "https://demotiles.maplibre.org/font/{fontstack}/{range}.pbf",
 				sources: {
-					points: {
-						type: "vector",
-						url: `pmtiles://${props.tilesBaseUrl}/plenair-map-full.pmtiles`,
-						maxzoom: grid.maxzoom,
-					},
 					hulls: { type: "geojson", data: hulls },
 					labels: { type: "geojson", data: labels },
 				},
 				layers: [
 					{ id: "bg", type: "background", paint: { "background-color": theme.bg } },
 					{ id: "hulls", type: "line", source: "hulls", paint: { "line-color": theme.muted, "line-width": 1 } },
-					{ id: "points", type: "circle", source: "points", "source-layer": "points", paint: circlePaint(isDark.value) },
 					{
 						id: "labels",
 						type: "symbol",
@@ -187,22 +267,32 @@ onMounted(async () => {
 		});
 		map.addControl(new maplibregl.NavigationControl({ showCompass: false }), "bottom-right");
 
+		deckOverlay = new MapboxOverlay({
+			interleaved: false,
+			layers: [buildPointsLayer(grid)],
+			getTooltip: () => null,
+			onHover: (info) => {
+				hoveredPoint.value = (info.object as DeckPoint | undefined) ?? null;
+				if (map) map.getCanvas().style.cursor = info.object ? "pointer" : "";
+			},
+		});
+		map.addControl(deckOverlay);
+
 		map.on("load", () => {
 			status.value = "ready";
 		});
-		map.on("error", (e) => {
+		map.on("error", (e: maplibregl.ErrorEvent) => {
 			console.error("TiledPlenairMap MapLibre error", e.error);
 			status.value = "error";
 		});
-		map.on("mousemove", "points", (e) => {
-			const feature = e.features?.[0];
-			if (!feature) return;
-			hoveredPoint.value = toHoveredPoint(feature);
-			map!.getCanvas().style.cursor = "pointer";
-		});
-		map.on("mouseleave", "points", () => {
-			hoveredPoint.value = null;
-			map!.getCanvas().style.cursor = "";
+
+		watch(isDark, (dark) => {
+			if (!map || !deckOverlay) return;
+			const t = dark ? THEME_COLOR.dark : THEME_COLOR.light;
+			map.setPaintProperty("bg", "background-color", t.bg);
+			map.setPaintProperty("hulls", "line-color", t.muted);
+			map.setPaintProperty("labels", "text-color", t.muted);
+			deckOverlay.setProps({ layers: [buildPointsLayer(grid)] });
 		});
 	} catch (err) {
 		console.error("TiledPlenairMap init failed", err);
@@ -213,17 +303,7 @@ onMounted(async () => {
 onUnmounted(() => {
 	map?.remove();
 	map = null;
-});
-
-watch(isDark, (dark) => {
-	if (!map) return;
-	const theme = dark ? THEME_COLOR.dark : THEME_COLOR.light;
-	map.setPaintProperty("bg", "background-color", theme.bg);
-	map.setPaintProperty("hulls", "line-color", theme.muted);
-	map.setPaintProperty("labels", "text-color", theme.muted);
-	const paint = circlePaint(dark)!;
-	map.setPaintProperty("points", "circle-opacity", paint["circle-opacity"]);
-	map.setPaintProperty("points", "circle-blur", paint["circle-blur"]);
+	deckOverlay = null;
 });
 </script>
 
