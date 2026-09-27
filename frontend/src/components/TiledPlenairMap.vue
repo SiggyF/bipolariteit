@@ -87,21 +87,29 @@ const THEME_COLOR = {
 	dark: { bg: "#221f1b", muted: "#a89e8c" },
 };
 
-// WebGL-blendFunc/-equation-constanten (hardgecodeerd i.p.v. een
-// @luma.gl/constants-dependency erbij voor een paar nummers): ZERO=0, ONE=1,
-// SRC_ALPHA=0x0302, DST_COLOR=0x0306, FUNC_ADD=0x8006, MAX=0x8008.
+// luma.gl v9's Parameters-vorm (WebGPU-stijl, losse src/dst/operation per
+// kanaalgroep) i.p.v. het oude WebGL1 blendFunc()/blendEquation()-paar --
+// zie node_modules/@luma.gl/core/dist/adapter/types/parameters.d.ts.
+// Cruciaal: alleen blendColor* overschrijven, blendAlpha* met rust laten op
+// deck.gl's eigen default (normale over-compositing). Een eerdere versie
+// hiervan zette ook het alpha-kanaal op "dst * 0" (multiply-i.p.v.-optellen)
+// -- op deck.gl's eigen, aanvankelijk volledig transparante canvas (alpha=0)
+// blijft alles-maal-nul voor altijd nul, dus er verscheen structureel nooit
+// een zichtbaar punt (alpha=0 op het samengestelde beeld). Puur de
+// kleurkanalen vermenigvuldigen/max'en, alpha gewoon normaal laten opbouwen,
+// lost dat op.
 const BLEND_PARAMETERS = {
 	// "Inkt"-indruk op een lichte achtergrond: result = src * dst (vermenigvuldigen)
 	// -- overlappende stippen worden donkerder, niet lichter.
-	light: { blend: true, blendFunc: [0x0306, 0] as [number, number], blendEquation: 0x8006 },
+	light: { blend: true, blendColorOperation: "add", blendColorSrcFactor: "dst", blendColorDstFactor: "zero" },
 	// Benadering van "screen"-blending op een donkere achtergrond (echte screen-
 	// formule (1-(1-src)(1-dst)) kent geen simpele blendFunc-vorm). Eerst
-	// geprobeerd met additive blending (FUNC_ADD, SRC_ALPHA/ONE) -- bleek bij
-	// deze puntdichtheid meteen naar egaal wit te verzadigen (elke overlap
-	// telt op, geen bovengrens). MAX i.p.v. FUNC_ADD als blend-equation neemt
+	// geprobeerd met additive blending (operation "add", src/dst "src-alpha"/"one")
+	// -- bleek bij deze puntdichtheid meteen naar egaal wit te verzadigen (elke
+	// overlap telt op, geen bovengrens). "max" i.p.v. "add" als operation neemt
 	// per pixel gewoon het lichtste punt, geen optelling -- geeft wel een
 	// gloei-indruk bij overlap, zonder ooit uit te slaan naar wit.
-	dark: { blend: true, blendFunc: [1, 1] as [number, number], blendEquation: 0x8008 },
+	dark: { blend: true, blendColorOperation: "max", blendColorSrcFactor: "one", blendColorDstFactor: "one" },
 };
 
 function hexToRgba(hex: string, alpha: number): [number, number, number, number] {
