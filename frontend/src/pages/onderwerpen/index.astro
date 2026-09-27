@@ -1,14 +1,20 @@
 ---
 import topicsIndex from "../../../../data/export/topics-index.json";
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import PlenairMap from "../../components/PlenairMap.vue";
+import TiledPlenairMap from "../../components/TiledPlenairMap.vue";
 import { TEGENSTELLING } from "../../lib/topics";
-import { resolveDataBaseUrl } from "../../lib/dataBaseUrl";
+import { resolveDataBaseUrl, resolveTilesBaseUrl } from "../../lib/dataBaseUrl";
 
 // De plenaire-kaart data (~6 MB) gaat niet meer als Astro-prop mee -- die
-// duwde deze indexpagina op ~9 MB. PlenairMap.vue fetcht 'm client-side
+// duwde deze indexpagina op ~9 MB. TiledPlenairMap.vue fetcht 'm client-side
 // vanaf scripts/export_public_data.ts's output (issue #163).
+//
+// Vervangt hier de oude PlenairMap.vue (canvas/ECharts) door de tiled
+// MapLibre+deck.gl-variant (issue #259) -- PlenairMap.vue zelf blijft
+// bestaan als losstaand component, alleen niet langer op deze pagina
+// ingezet.
 const dataBaseUrl = resolveDataBaseUrl();
+const tilesBaseUrl = resolveTilesBaseUrl();
 ---
 
 <BaseLayout title="Onderwerpen - Bipolariteit">
@@ -34,8 +40,9 @@ const dataBaseUrl = resolveDataBaseUrl();
 		<a href="/debatten/">Alle geanalyseerde debatten &rarr;</a>
 	</p>
 
-	<PlenairMap
+	<TiledPlenairMap
 		dataBaseUrl={dataBaseUrl}
+		tilesBaseUrl={tilesBaseUrl}
 		client:only="vue"
 	/>
 </BaseLayout>
