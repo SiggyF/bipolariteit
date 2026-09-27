@@ -388,12 +388,17 @@ staan meteen live op
 zodra het script klaar is (`<submap>` = `--repo-subdir`, default
 `plenair-map` — één submap per dataset in deze repo, niet alles plat naast
 elkaar), zelfde "overschrijf de huidige data"-flow als `publish-data`'s
-jsDelivr-route. Sinds issue #316 fetcht `TiledPlenairMap.vue` de kleine
-`plenair-map.pmtiles`/`-grid.json` daadwerkelijk tegen deze URL
-(`resolveTilesBaseUrl()`, zie `frontend/src/lib/dataBaseUrl.ts`) -- de
-volle-dataset-bundel (`plenair-map-full.*`) blijft archief-/downloaddata,
-nog niet door een frontend-workflow gefetcht (welke dat gaat worden is een
-bewust nog niet genomen besluit, zie issue #293).
+jsDelivr-route.
+
+**Besluit issue #293 (2026-09-27)**: `TiledPlenairMap.vue` fetcht de
+**volle** dataset (`plenair-map-full.pmtiles`/`-grid.json`/`-clusters-full.json`,
+~385 MiB), niet de kleine steekproef -- elke bezoeker downloadt dus de volle
+tegelpyramide. De kleine variant (`plenair-map.pmtiles`, `make tiles`/
+`make publish-tiles`) blijft bestaan voor snelle iteratie tijdens
+ontwikkelen, maar is geen frontend-pad meer. Publicatie van de volle
+variant gaat sindsdien ook via `--repo-subdir plenair-map` (consistent met
+de kleine variant), niet meer los op de repo-root zoals de eerdere ad-hoc
+publish uit issue #259.
 
 ## Data publiceren
 
