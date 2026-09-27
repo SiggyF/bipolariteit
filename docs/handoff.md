@@ -2,6 +2,16 @@
 
 Status per 2026-07-27. Zie `docs/plan.md` voor het volledige, goedgekeurde architectuurplan. Dit document is voor het vervolg: wat staat er al, wat is er onderweg ontdekt, en wat is de volgende concrete stap.
 
+## Stand bij einde sessie (2026-09-27, dichtheidsvertekening tile-pyramide gefixt + dev-tegel-URL, issue #259) — begin hier bij een nieuwe sessie
+
+Vervolg op PR #296 hieronder ("zoom-afhankelijke puntreductie tile-pyramide"): die PR is up-to-date gebracht met main en de twee resterende gaten zijn deze sessie gefixt.
+
+- **`/tests/tiled-plenair-map` gaf een 404** op `plenair-map-grid.json`: `resolveTilesBaseUrl()` viel in dev terug op `/data` (de jsDelivr/`gepubliceerd`-submodule-mirror), maar er is geen publiceerstap die de tegelpyramide daar ooit neerzet -- pmtiles horen sinds #316 bij Hugging Face. Gefixt door de dev-fallback te laten vervallen: altijd naar de HF-CDN (`frontend/src/lib/dataBaseUrl.ts`).
+- **Flat-cap-dichtheidsbug** (hieronder beschreven, "openstaand, nog NIET gefixt") alsnog geïmplementeerd: `thin_tile_points()` (vlakke cap per tile) vervangen door `thin_zoom_points_globally()` -- het totaalbudget per zoomniveau (`aantal_tiles * max_points_per_tile`) wordt nu verdeeld naar rato over de volledige, positie-onafhankelijke prioriteitsrangorde i.p.v. per tile apart afgekapt. Effect: dichte tiles houden evenredig meer punten, dunne tiles evenredig minder -- geen vertekende dichtheidsindruk meer. Lokaal herbouwd (`make tiles`), gepubliceerd (`make publish-tiles`) en visueel bevestigd op `/tests/tiled-plenair-map`: ingezoomd is de puntdichtheid nu gelijkmatig over dichte en dunne clusters, met zichtbare interne structuur i.p.v. egale zwarte vlekken. Nieuwe tests in `tests/test_build_pyramid.py`.
+- **Besluit (comment op #259/#186)**: zodra deze tiled kaart een werkend alternatief is, vervangt hij `PlenairMap.vue` op `/onderwerpen/` -- beantwoordt de open vraag die #259 zelf stelde.
+
+**Nog open op #259** (zie issue zelf): alleen niveau-0-clusterhulls getoond (geen zoom-afhankelijke wissel tussen niveaus), geen labels op de kaart zelf, nog niet gekoppeld aan een productiepagina. En zoals hieronder al gemeld: styling (`TiledPlenairMap.vue`) heeft nog geen zoom-afhankelijke puntgrootte/-opacity en geen "screen"-blendmode-variant voor een donkere achtergrond (nu altijd `multiply`, bedoeld voor een lichte achtergrond).
+
 ## Stand bij einde sessie (2026-09-13, volle ElecDeb60to20-validatiesteekproef bekeken, issue #313) — begin hier bij een nieuwe sessie
 
 Vervolg op de sessie hieronder: de volle 318/318-`make validate`-run
