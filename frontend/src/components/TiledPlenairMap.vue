@@ -31,9 +31,9 @@ import {
 } from "../lib/tiledMapTransform";
 
 const props = defineProps<{
-	dataBaseUrl: string;
-	// pmtiles + grid-metadata komen van Hugging Face, niet van de
-	// jsDelivr-databasis hierboven (zie lib/dataBaseUrl.ts, issue #316).
+	// pmtiles + grid-metadata + cluster-hulls komen van Hugging Face (volle
+	// dataset, zie lib/dataBaseUrl.ts, issue #316/#293) -- deze component
+	// gebruikt geen jsDelivr-databasis.
 	tilesBaseUrl: string;
 }>();
 
@@ -132,9 +132,13 @@ async function loadTile(grid: GridMetadata, tile: TileKey): Promise<void> {
 
 onMounted(async () => {
 	try {
+		// -full-bestanden (issue #293/#259: de volle dataset is nu de
+		// standaard, niet de kleine steekproef) -- clusters.levels/hierarchy
+		// hoort bij die volle run, staat niet in de kleine dataBaseUrl-
+		// submodule, dus ook die fetch gaat via tilesBaseUrl (HF).
 		const [gridResponse, clustersResponse] = await Promise.all([
-			fetch(`${props.tilesBaseUrl}/plenair-map-grid.json`),
-			fetch(`${props.dataBaseUrl}/plenair-map-clusters.json`).catch(() => null),
+			fetch(`${props.tilesBaseUrl}/plenair-map-full-grid.json`),
+			fetch(`${props.tilesBaseUrl}/plenair-map-clusters-full.json`).catch(() => null),
 		]);
 		if (!gridResponse.ok) throw new Error(`Status ${gridResponse.status}`);
 		gridMeta.value = await gridResponse.json();
@@ -156,7 +160,7 @@ onMounted(async () => {
 				hull: cluster.hull ? cluster.hull.map(([hx, hy]) => umapToMercator(hx, hy, grid)) : null,
 			}));
 		}
-		pmtiles = new PMTiles(`${props.tilesBaseUrl}/plenair-map.pmtiles`);
+		pmtiles = new PMTiles(`${props.tilesBaseUrl}/plenair-map-full.pmtiles`);
 		await pmtiles.getHeader();
 		status.value = "ready";
 		updateCanvasDimensions();

@@ -1,17 +1,18 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import TiledPlenairMap from "../../components/TiledPlenairMap.vue";
-import { resolveDataBaseUrl, resolveTilesBaseUrl } from "../../lib/dataBaseUrl";
+import { resolveTilesBaseUrl } from "../../lib/dataBaseUrl";
 
-const dataBaseUrl = resolveDataBaseUrl();
 const tilesBaseUrl = resolveTilesBaseUrl();
 ---
 
 <BaseLayout title="Tiled Plenaire Kaart (experimenteel) - Bipolariteit">
 	<p>
 		Experimenteel alternatief renderpad voor de plenaire kaart (issue #215/#253): leest een
-		vector-tile-pyramide (.pmtiles) i.p.v. de platte plenair-map.json. Zie <code>PlenairMap.vue</code>
+		vector-tile-pyramide (.pmtiles) op de volle dataset i.p.v. de platte plenair-map.json. Zie <code
+			>PlenairMap.vue</code
+		>
 		voor de bestaande, ongewijzigde kaart.
 	</p>
-	<TiledPlenairMap dataBaseUrl={dataBaseUrl} tilesBaseUrl={tilesBaseUrl} client:only="vue" />
+	<TiledPlenairMap tilesBaseUrl={tilesBaseUrl} client:only="vue" />
 </BaseLayout>
