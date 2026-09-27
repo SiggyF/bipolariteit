@@ -311,6 +311,52 @@ def find_speaking_turns(activiteit):
     return turns
 
 
+def _zaak_dossiernummers(el):
+    """Verzamelt alle dossiernummers uit <zaken><zaak><dossiernummer>-elementen
+    binnen el, op elke diepte -- de gestructureerde route (zie #348), i.t.t.
+    losse <dossiernummer>-vermeldingen in vrije tekst (<nadruk> e.d.), die hier
+    bewust niet meegenomen worden (minder betrouwbaar te parsen, en in de
+    praktijk grotendeels dezelfde nummers als de structurele route)."""
+    nummers = set()
+    for zaak in el.iter(NS + "zaak"):
+        dn = zaak.findtext(NS + "dossiernummer")
+        if dn and dn.strip():
+            nummers.add(dn.strip())
+    return nummers
+
+
+def _turn_motie_dossiernummer(turn_el):
+    """Dossiernummer van de motie die in déze spreekbeurt wordt ingediend/
+    aangehouden/ingetrokken/gewijzigd, via een <draadboekfragment soort="Motie
+    ..."> dat een direct kind is van turn_el. Tekstwaarde, geen integer -- een
+    dossiernummer kan een toevoeging dragen (bv. "36800-B", vergelijkbaar met
+    Kamerstukdossier.Toevoeging in de TK OData-API). Zie #348: over een
+    steekproef van 100 bestanden had 563 van de 564 turns met zo'n fragment
+    precies 1 dossiernummer; bij de ene uitzondering (2) wordt hier de eerste
+    (alfabetisch) genomen -- geen bekend geval waarbij dat de verkeerde keuze is."""
+    for frag in turn_el.findall(NS + "draadboekfragment"):
+        if not frag.attrib.get("soort", "").startswith("Motie"):
+            continue
+        nummers = _zaak_dossiernummers(frag)
+        if nummers:
+            return sorted(nummers)[0]
+    return None
+
+
+def upsert_activiteit_dossiernummers(conn, activiteit_nummer, activiteit):
+    """Slaat de dossiers op waar deze hele Activiteit over gaat (#183/#348) --
+    many-to-many, want één activiteit kan over meerdere dossiers gaan. Geen
+    effect als de activiteit geen <parlisid> heeft (zou niet moeten voorkomen
+    in praktijk-XML, maar geen harde aanname)."""
+    if not activiteit_nummer:
+        return
+    for dossiernummer in _zaak_dossiernummers(activiteit):
+        conn.execute(
+            "INSERT OR IGNORE INTO activiteit_dossiernummers (activiteit_nummer, dossiernummer) VALUES (?, ?)",
+            (activiteit_nummer, dossiernummer),
+        )
+
+
 def build_parent_map(root):
     """xml.etree geeft geen ouder-toegang -- nodig om vanaf een sprekerbeurt
     omhoog te zoeken naar de omsluitende <activiteitdeel> (zie is_voorzitter_turn)."""
@@ -413,6 +459,8 @@ def ingest_file(conn, xml_path, meta_path, topic_keyword, also_keywords=()):
         activiteit_soort = activiteit.attrib.get("soort")
         activiteit_aanvangstijd = activiteit.findtext(NS + "aanvangstijd") or metadata.get("activiteit_datum")
         activiteit_eindtijd = activiteit.findtext(NS + "eindtijd")
+        activiteit_nummer = activiteit.findtext(NS + "parlisid")
+        upsert_activiteit_dossiernummers(conn, activiteit_nummer, activiteit)
         for turn_el, spreker_el, tekst_el in find_speaking_turns(activiteit):
             content = _text_of(tekst_el)
             if not content:
@@ -443,12 +491,13 @@ def ingest_file(conn, xml_path, meta_path, topic_keyword, also_keywords=()):
             # filter als scripts/backfill_document_tekststatistieken.py --
             # dit zijn procedurele beurten, geen inhoudelijke bijdragen.
             text_stats = None if voorzitter_turn else json.dumps(compute_document_stats(content))
+            motie_dossiernummer = _turn_motie_dossiernummer(turn_el)
 
             conn.execute(
                 """
                 INSERT INTO documents
-                    (source_id, topic_id, actor_id, external_id, title, content, published_at, raw_ref, url, activiteit_soort, activiteit_aanvangstijd, activiteit_eindtijd, tweedekamer_activiteit_url, is_voorzitter_turn, speaker_role_title, speaker_person_id, turn_type, text_stats)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    (source_id, topic_id, actor_id, external_id, title, content, published_at, raw_ref, url, activiteit_soort, activiteit_aanvangstijd, activiteit_eindtijd, tweedekamer_activiteit_url, is_voorzitter_turn, speaker_role_title, speaker_person_id, turn_type, text_stats, activiteit_nummer, motie_dossiernummer)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                 (
                     source_id,
@@ -469,6 +518,8 @@ def ingest_file(conn, xml_path, meta_path, topic_keyword, also_keywords=()):
                     speaker_person_id,
                     turn_type,
                     text_stats,
+                    activiteit_nummer,
+                    motie_dossiernummer,
                 ),
             )
             inserted += 1
@@ -497,6 +548,8 @@ def ingest_plenair_file(conn, xml_path, meta_path):
         activiteit_soort = activiteit.attrib.get("soort")
         activiteit_aanvangstijd = activiteit.findtext(NS + "aanvangstijd") or metadata.get("activiteit_datum")
         activiteit_eindtijd = activiteit.findtext(NS + "eindtijd")
+        activiteit_nummer = activiteit.findtext(NS + "parlisid")
+        upsert_activiteit_dossiernummers(conn, activiteit_nummer, activiteit)
         for turn_el, spreker_el, tekst_el in find_speaking_turns(activiteit):
             content = _text_of(tekst_el)
             if not content:
@@ -521,12 +574,13 @@ def ingest_plenair_file(conn, xml_path, meta_path):
             # filter als scripts/backfill_document_tekststatistieken.py --
             # dit zijn procedurele beurten, geen inhoudelijke bijdragen.
             text_stats = None if voorzitter_turn else json.dumps(compute_document_stats(content))
+            motie_dossiernummer = _turn_motie_dossiernummer(turn_el)
 
             conn.execute(
                 """
                 INSERT INTO documents
-                    (source_id, topic_id, actor_id, external_id, title, content, published_at, raw_ref, url, activiteit_soort, activiteit_aanvangstijd, activiteit_eindtijd, tweedekamer_activiteit_url, is_voorzitter_turn, speaker_role_title, speaker_person_id, turn_type, text_stats)
-                VALUES (?, NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    (source_id, topic_id, actor_id, external_id, title, content, published_at, raw_ref, url, activiteit_soort, activiteit_aanvangstijd, activiteit_eindtijd, tweedekamer_activiteit_url, is_voorzitter_turn, speaker_role_title, speaker_person_id, turn_type, text_stats, activiteit_nummer, motie_dossiernummer)
+                VALUES (?, NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                 (
                     source_id,
@@ -546,6 +600,8 @@ def ingest_plenair_file(conn, xml_path, meta_path):
                     speaker_person_id,
                     turn_type,
                     text_stats,
+                    activiteit_nummer,
+                    motie_dossiernummer,
                 ),
             )
             inserted += 1

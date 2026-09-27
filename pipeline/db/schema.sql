@@ -47,7 +47,37 @@ CREATE TABLE documents (
     speaker_person_id TEXT, -- VLOS <spreker objectid="...">: TK-Persoon-GUID van de spreker in déze beurt. Byte-identiek aan debatdirect's events[].objectId (zie pipeline/fetch_debate_events.py, docs/tk-data-sources-overview.md 5f) -- koppelt een VLOS-sprekerbeurt aan het bijbehorende debatdirect-event voor exacte video-kalibratie. NULL voor documenten van vóór dit veld bestond.
     turn_type TEXT CHECK (turn_type IN ('woordvoerder', 'interrumpant')), -- lokale VLOS-tagnaam van het sprekerbeurt-element (zie find_speaking_turns()). Samen met is_voorzitter_turn bepaalt dit welk debatdirect-eventType bij deze beurt hoort: 'interrumpant' -> 'interrupter', 'woordvoerder' -> 'chairman' als is_voorzitter_turn=1 anders 'speaker' (voorzitterbeurten blijken in de events-API uitsluitend als 'chairman' voor te komen, nooit 'speaker' -- geverifieerd op c1663929-...). NULL voor documenten van vóór dit veld bestond.
     speaker_event_anchor_at TEXT, -- Tier-1-anker uit de debatdirect events-API (pipeline/match_argument_spans.py calibrate_debate) als absolute wall-clock ISO8601-tijd, i.p.v. published_at (VLOS-markeertijd). Gebruikt door _speaker_event_url (build_static_data.py e.a.) voor de externe "video op dit moment"-deep-link naar Debat Direct -- published_at bleek voor sommige beurten uren te kunnen afwijken van de werkelijke spreektijd (issue #148-vervolg), waardoor die link naar het begin van het debat sprong. NULL voor beurten zonder Tier-1-anker (geen events-cache, of geen matchend event binnen het venster) -- daar valt de deep-link terug op published_at.
-    text_stats TEXT -- JSON-blob met ruwe tekststatistieken van content (issue #155), bv. {"word_count":123,"sentence_count":8,"syllable_count":210,"long_word_count":19,"unique_word_count":95,"token_count":180}, berekend door pipeline/text_stats.py. Alleen ruwe tellingen, niet de afgeleide leesbaarheidsindices zelf (Flesch-Douma/LIX/TTR blijven pure functies over deze tellingen, zodat een latere formulewijziging nooit een her-backfill vergt). Eén JSON-kolom i.p.v. een losse kolom per metriek, zodat een nieuwe metriek nooit een schemawijziging vergt. Gevuld door ingest_tk.py bij nieuwe imports en met terugwerkende kracht via scripts/backfill_document_tekststatistieken.py. NULL voor documenten van vóór dit veld bestond, of voor voorzitterbeurten/lege content (zie backfill-filter).
+    text_stats TEXT, -- JSON-blob met ruwe tekststatistieken van content (issue #155), bv. {"word_count":123,"sentence_count":8,"syllable_count":210,"long_word_count":19,"unique_word_count":95,"token_count":180}, berekend door pipeline/text_stats.py. Alleen ruwe tellingen, niet de afgeleide leesbaarheidsindices zelf (Flesch-Douma/LIX/TTR blijven pure functies over deze tellingen, zodat een latere formulewijziging nooit een her-backfill vergt). Eén JSON-kolom i.p.v. een losse kolom per metriek, zodat een nieuwe metriek nooit een schemawijziging vergt. Gevuld door ingest_tk.py bij nieuwe imports en met terugwerkende kracht via scripts/backfill_document_tekststatistieken.py. NULL voor documenten van vóór dit veld bestond, of voor voorzitterbeurten/lege content (zie backfill-filter).
+    activiteit_nummer TEXT, -- VLOS <activiteit><parlisid> (bv. "2026A02765"), TK's eigen Activiteit-Nummer -- dezelfde waarde als besloten in tweedekamer_activiteit_url, maar direct bruikbaar als join-sleutel naar activiteit_dossiernummers zonder de URL te hoeven parsen (zie #183/#348). NULL voor documenten van vóór dit veld bestond.
+    motie_dossiernummer TEXT -- Kamerstukdossier-nummer van de motie die in déze spreekbeurt wordt ingediend/aangehouden/ingetrokken/gewijzigd (VLOS <draadboekfragment soort="Motie ..."> direct kind van deze beurt, met <zaken><zaak><dossiernummer>). Tekst, geen integer -- kan een toevoeging dragen (bv. "36800-B"). Het enige dossier-signaal dat echt op spreekbeurt-niveau zit i.p.v. activiteit-breed -- maar dus alleen gevuld voor de kleine subset spreekbeurten die zelf een motie-actie zijn (zie granulariteits-analyse in #348); NULL voor de rest.
+);
+
+-- Kamerstukdossiers die ergens in een hele Activiteit (het hele debat) aan de
+-- orde zijn (VLOS <activiteit>/.../<zaken><zaak><dossiernummer>, of de TK
+-- OData Agendapunt->Zaak->Kamerstukdossier-route) -- many-to-many, want één
+-- activiteit kan over meerdere dossiers gaan. Dekt de hele activiteit, niet
+-- een losse spreekbeurt; documents.motie_dossiernummer hierboven is het enige
+-- signaal dat wél op spreekbeurt-niveau zit, maar alleen voor motie-acties.
+-- Zie #183/#348 voor de volledige granulariteits-analyse.
+CREATE TABLE activiteit_dossiernummers (
+    activiteit_nummer TEXT NOT NULL,
+    dossiernummer TEXT NOT NULL, -- geen integer -- kan een toevoeging dragen (bv. "36800-B")
+    PRIMARY KEY (activiteit_nummer, dossiernummer)
+);
+
+-- Eenmalige, volledige kopie van de TK OData Kamerstukdossier-collectie
+-- (7825 records in totaal op 2026-09-27, dus in zijn geheel op te halen in
+-- ~32 gepagineerde calls -- zie scripts/db/fetch_kamerstukdossiers.py -- i.p.v.
+-- losse lookups per dossiernummer). dossiernummer is dezelfde tekstvorm als
+-- hierboven ("{Nummer}" of "{Nummer}-{Toevoeging}", bv. "36800-B"), zodat
+-- documents.motie_dossiernummer en activiteit_dossiernummers.dossiernummer er
+-- direct op kunnen joinen. Zie #183/#348.
+CREATE TABLE kamerstukdossiers (
+    dossiernummer TEXT PRIMARY KEY,
+    nummer INTEGER NOT NULL,
+    toevoeging TEXT,
+    titel TEXT,
+    afgesloten INTEGER
 );
 
 CREATE TABLE actors (
