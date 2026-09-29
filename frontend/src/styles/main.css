@@ -1776,10 +1776,16 @@ h3 {
 	padding: 0 var(--ruimte-3) var(--ruimte-3);
 }
 
+/* Titel en telling naast elkaar (zoals bij pro/contra) breken lelijk af in
+   deze smalle kolom -- gestapeld i.p.v. justify-content: center op een rij. */
 .vl-vouw-kolom.is-onduidelijk > header {
 	color: var(--onduidelijk);
 	font-size: 18px;
+	flex-direction: column;
+	align-items: center;
 	justify-content: center;
+	gap: 2px;
+	text-align: center;
 	margin-bottom: var(--ruimte-2);
 }
 
