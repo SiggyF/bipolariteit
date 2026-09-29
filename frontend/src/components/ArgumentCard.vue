@@ -8,6 +8,7 @@ import { scrollTarget } from "../lib/scrollTarget";
 import { markProgrammaticScroll, userScroll } from "../lib/userScroll";
 import { slugify } from "../lib/slug";
 import { typologyLabel, typologyDescription, type Argument, type Tag } from "../lib/types";
+import { standpuntModifier } from "../lib/standpunt";
 import { formatClock } from "../lib/videoTime";
 import { selectBadgeTags } from "../lib/videoLabels";
 import PartyLogo from "./PartyLogo.vue";
@@ -183,13 +184,13 @@ watch(
 <template>
 	<article
 		ref="cardEl"
-		class="argument-card"
+		class="vl-kaart"
 		:class="[
-			`stance-${argument.stance}`,
+			`is-${standpuntModifier(argument.stance)}`,
 			{
-				'is-highlighted': justHighlighted,
-				'is-seekable': isSeekable,
-				'is-playing': playing,
+				'is-gemarkeerd': justHighlighted,
+				'is-klikbaar': isSeekable,
+				'is-speelt': playing,
 			},
 		]"
 		:tabindex="isSeekable ? 0 : undefined"
@@ -201,7 +202,7 @@ watch(
 		<div class="argument-meta">
 			<!-- Altijd zichtbaar, niet alleen <900px: op pagina's zonder
 			     kolomkop-per-standpunt (bv. de argumentenlijst naast de video op
-			     DebateVideoView.vue) was kleur (de randkleur van .argument-card)
+			     DebateVideoView.vue) was kleur (de inkttab, .vl-kaart::before)
 			     daar tot nu toe de enige drager. -->
 			<StandpuntGlyph :stance="argument.stance" />
 			<span class="typology-badge" :title="typologyDescription(argument.typology)">{{ typologyLabel(argument.typology) }}</span>
