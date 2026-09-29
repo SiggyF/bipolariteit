@@ -2,7 +2,8 @@
 import { ref, computed, watch, onMounted, onBeforeUnmount } from "vue";
 import ArgumentCard from "./ArgumentCard.vue";
 import { scrollTarget } from "../lib/scrollTarget";
-import type { Argument } from "../lib/types";
+import { standpuntModifier } from "../lib/standpunt";
+import { stanceLabel, type Argument, type Stance } from "../lib/types";
 
 const PAGE_SIZE = 50;
 
@@ -16,10 +17,11 @@ const PAGE_SIZE = 50;
 // Krijgt een al gefilterde lijst binnen: TopicView past het filter één keer
 // toe voor de hele pagina, zodat kolommen en grafieken niet elk hun eigen
 // interpretatie kunnen hebben.
-// label ontbreekt voor de samengevoegde mobiele lijst (issue #136): daar is
-// er geen aparte titel per stance meer, de stance staat per kaart zelf
-// (ArgumentCard's StandpuntGlyph, glyph + woord, altijd zichtbaar).
-const props = defineProps<{ argumentList: Argument[]; topicSlug: string; label?: string; stanceClass?: string }>();
+// stance ontbreekt voor de samengevoegde mobiele lijst (issue #136): daar is
+// er geen aparte kolomkop per stance meer, de stance staat per kaart zelf
+// (ArgumentCard's StandpuntGlyph, glyph + woord, altijd zichtbaar) -- de kop
+// valt dan terug op de neutrale .vl-vouw-kolom.is-los-stijl.
+const props = defineProps<{ argumentList: Argument[]; topicSlug: string; label?: string; stance?: Stance }>();
 
 const visibleCount = ref(Math.min(PAGE_SIZE, props.argumentList.length));
 const visible = computed(() => props.argumentList.slice(0, visibleCount.value));
@@ -67,11 +69,14 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-	<section class="column" :class="stanceClass">
-		<h2 v-if="label">
-			{{ label }} ({{ argumentList.length }})
-			<a href="/over/#argumenttypen" class="info-link" title="Wat betekenen stance en typologie?" aria-label="Uitleg: wat betekenen stance en typologie?">?</a>
-		</h2>
+	<section class="vl-vouw-kolom" :class="stance ? `is-${standpuntModifier(stance)}` : 'is-los'">
+		<header v-if="stance || label">
+			<span class="vl-vouw-kolom-titel">
+				{{ stance ? stanceLabel(stance) : label }}
+				<a href="/over/#argumenttypen" class="info-link" title="Wat betekenen stance en typologie?" aria-label="Uitleg: wat betekenen stance en typologie?">?</a>
+			</span>
+			<span class="vl-data">{{ argumentList.length }} {{ argumentList.length === 1 ? "argument" : "argumenten" }}</span>
+		</header>
 		<ArgumentCard v-for="argument in visible" :key="argument.id" :argument="argument" :topicSlug="topicSlug" />
 		<div v-if="hasMore" ref="sentinel" class="column-load-more">
 			<button type="button" @click="visibleCount = Math.min(visibleCount + PAGE_SIZE, argumentList.length)">

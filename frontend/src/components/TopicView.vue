@@ -8,7 +8,7 @@ import TypologyStanceBars from "./TypologyStanceBars.vue";
 import TagsPerParty from "./TagsPerParty.vue";
 import TagCorrespondenceMap from "./TagCorrespondenceMap.vue";
 import ArgumentColumn from "./ArgumentColumn.vue";
-import { STANCES, stanceLabel, type Argument } from "../lib/types";
+import { type Argument, type Stance } from "../lib/types";
 import { filters, initFiltersFromUrl, matches } from "../lib/filters";
 
 // Alles wat op het filter reageert zit bewust in dit ene island: de grafieken
@@ -41,12 +41,16 @@ onMounted(async () => {
 
 const filtered = computed(() => argumentList.value.filter(matches));
 
+// Weergavevolgorde van de vouw (issue #220): pro | onduidelijk | contra,
+// niet de STANCES-volgorde uit lib/types.ts (die is voor filters/DB, en
+// blijft pro/contra/unclear).
+const VOUW_VOLGORDE: Stance[] = ["pro", "unclear", "contra"];
+
 // Kolommen tonen alleen de posities die het filter overlaat; filter je op
 // Pro, dan verdwijnen de andere twee kolommen in plaats van leeg te blijven.
 const columns = computed(() =>
-	STANCES.filter((stance) => !filters.values.stance.length || filters.values.stance.includes(stance)).map((stance) => ({
+	VOUW_VOLGORDE.filter((stance) => !filters.values.stance.length || filters.values.stance.includes(stance)).map((stance) => ({
 		stance,
-		label: stanceLabel(stance),
 		argumentList: filtered.value.filter((a) => a.stance === stance),
 	})),
 );
@@ -88,16 +92,15 @@ onBeforeUnmount(() => mobileQuery.removeEventListener("change", onMobileQueryCha
 			Geen argumenten voldoen aan dit filter. Verwijder een filter hierboven om er meer te zien.
 		</p>
 
-		<ArgumentColumn v-else-if="isMobile" :argumentList="filtered" :topicSlug="topicSlug" label="Argumenten" stanceClass="column-single" />
+		<ArgumentColumn v-else-if="isMobile" :argumentList="filtered" :topicSlug="topicSlug" label="Argumenten" />
 
-		<div v-else class="columns">
+		<div v-else class="vl-vouw">
 			<ArgumentColumn
 				v-for="column in columns"
 				:key="column.stance"
 				:argumentList="column.argumentList"
 				:topicSlug="topicSlug"
-				:label="column.label"
-				:stanceClass="`column-${column.stance}`"
+				:stance="column.stance"
 			/>
 		</div>
 	</template>
