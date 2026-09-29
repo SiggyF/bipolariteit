@@ -89,40 +89,84 @@
 	src: url("/fonts/ibm-plex-mono-600.woff2") format("woff2");
 }
 
+/* Vloei (issue #220): Archivo (koppen, labels, data -- via de breedte-as,
+   wdth 62-125) en Literata (leestekst). Beide variabel en OFL, zelf gehost.
+   Vervangen de Caslon/Work Sans/Plex-suite; die blijven nog staan tot de
+   laatste module is overgezet (zie docs/design/vloei/invoering.md stap 3). */
+@font-face {
+	font-family: "Archivo";
+	font-style: normal;
+	font-weight: 100 900;
+	font-stretch: 62% 125%;
+	font-display: swap;
+	src: url("/fonts/archivo-var.woff2") format("woff2-variations");
+}
+
+@font-face {
+	font-family: "Literata";
+	font-style: normal;
+	font-weight: 200 900;
+	font-display: swap;
+	src: url("/fonts/literata-var.woff2") format("woff2-variations");
+}
+
+@font-face {
+	font-family: "Literata";
+	font-style: italic;
+	font-weight: 200 900;
+	font-display: swap;
+	src: url("/fonts/literata-var-italic.woff2") format("woff2-variations");
+}
+
 :root {
-	/* Newsprint neutrals: muted warm paper, not stationery-cream or cool stone-gray. */
-	--color-bg: #f2efe7;
-	--color-text: #221f1b;
-	--color-muted: #6f6558;
-	--color-border: #ddd5c4;
-	--color-card-bg: #fbf9f4;
+	/* Vloei-tokens (issue #220): inkt op vloeipapier i.p.v. drukpers-newsprint.
+	   Koel vloeigrijs en blauwzwarte galnoteninkt vervangen de warme papiergrond
+	   en bijna-zwarte bruine inkt. Zie docs/design/vloei/invoering.md. */
+	--vloei: #eceef0;
+	--blad: #fbfbfc;
+	--was: #dde1e8;
+	--lijn: #c3c8d2;
+	--rand: #737b8e;
+	--galnoot: #1a2031;
+	--galnoot-zacht: #4b5366;
+	--op-inkt: #fbfbfc;
 
-	/* "Ink & Rust" diverging pair for pro/contra/unclear — replaces the generic
-	   blue/red default. Deep ink teal vs. oxblood keeps a blue-channel/red-channel
-	   split (same colorblind-safety property as blue/red) without the screen-native
-	   saturation, and stays clear of the cliché cream+terracotta combination. */
-	--color-pro: #1f6f66;
-	--color-contra: #9c3b32;
-	--color-unclear: #948a79;
+	/* Standpuntpaar pro/contra: ongewijzigd overgenomen uit het oude recept.
+	   "onduidelijk" is nieuw (verdunde inkt) -- het oude --color-unclear
+	   (#948a79) haalde als tekst geen 4.5:1. */
+	--pro: #1f6f66;
+	--pro-was: #d6e8e4;
+	--contra: #9c3b32;
+	--contra-was: #f1dcd8;
+	--onduidelijk: #5d6475;
+	--onduidelijk-was: #e3e5ea;
 
-	/* Distinct accent hue for links/interactive chrome — kept separate from
-	   --color-pro so hyperlinks don't implicitly read as "pro"-colored. */
-	--color-accent: #33456e;
-	/* Actieve staat van interactieve chrome (bv. de open deelknop) -- 12%
-	   donkerder dan --color-accent, uit het ontwerppakket bij issue #172. */
-	--color-accent-active: #22304e;
+	/* Donkerder dan het oude #a6742c zodat "onderbouwing" ook als tekst
+	   ≥4.5:1 haalt op vloei en blad (about-pagina, issue #89). */
+	--onderbouwing: #8a5f22;
 
-	/* Warme, van --color-text/--color-accent goed te onderscheiden kleur voor
-	   "onderbouwing" in de argumentdefinitie (about-pagina, issue #89) --
-	   --color-accent (navy) en --color-text (bijna zwart) liggen te dicht bij
-	   elkaar in lichtheid om als los kleurenpaar te lezen, zeker op een dunne
-	   onderstreping. */
-	--color-onderbouwing: #a6742c;
+	--font-kop: "Archivo", "Arial Narrow", system-ui, sans-serif;
+	--font-tekst: "Literata", Georgia, serif;
 
-	--font-display: "Libre Caslon Display", "Libre Caslon Text", Georgia, serif;
-	--font-heading: "Libre Caslon Text", Georgia, serif;
-	--font-body: "Work Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
-	--font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+	/* Aliassen naar de oude namen, zodat componenten in stap 1 ongewijzigd
+	   blijven -- zie docs/design/vloei/invoering.md. Vervallen in stap 3
+	   zodra alle modules rechtstreeks op de Vloei-tokens staan. */
+	--color-bg: var(--vloei);
+	--color-card-bg: var(--blad);
+	--color-text: var(--galnoot);
+	--color-muted: var(--galnoot-zacht);
+	--color-border: var(--lijn);
+	--color-pro: var(--pro);
+	--color-contra: var(--contra);
+	--color-unclear: var(--onduidelijk);
+	--color-accent: var(--galnoot);
+	--color-accent-active: var(--galnoot-zacht);
+	--color-onderbouwing: var(--onderbouwing);
+
+	--font-display: var(--font-kop);
+	--font-heading: var(--font-kop);
+	--font-body: var(--font-tekst);
+	--font-mono: var(--font-kop);
 
 	/* Type scale, 1.25 ratio on a 1rem base. */
 	--step--1: 0.85rem;
@@ -150,7 +194,9 @@ body {
 	margin: 0;
 	background: var(--color-bg);
 	color: var(--color-text);
-	font-weight: 300;
+	/* Literata (--font-body) leest bij 400 goed; het oude Work Sans 300 was
+	   te licht voor lange stukken (Vloei, issue #220). */
+	font-weight: 400;
 	line-height: 1.6;
 }
 
@@ -3105,15 +3151,23 @@ a.card-item:hover {
    Dark mode is opt-in only, toggled explicitly via SiteNav's theme button,
    which sets data-theme on <html> and persists the choice in localStorage. */
 :root[data-theme="dark"] {
-	--color-bg: #1c1815;
-	--color-text: #f2ede3;
-	--color-muted: #a89e8c;
-	--color-border: #453f36;
-	--color-card-bg: #242019;
-	--color-pro: #4fa89b;
-	--color-contra: #cf6b5f;
-	--color-unclear: #a89e8c;
-	--color-accent: #7d97c4;
-	--color-accent-active: #9db3d9;
-	--color-onderbouwing: #d1a44f;
+	/* Inktpot (Vloei donker, issue #220). De --color-*-aliassen in :root
+	   verwijzen naar deze tokens, dus die volgen automatisch mee. */
+	--vloei: #121622;
+	--blad: #1a1f2d;
+	--was: #262c3c;
+	--lijn: #353c4e;
+	--rand: #727c96;
+	--galnoot: #e6e8ee;
+	--galnoot-zacht: #a9b0c0;
+	--op-inkt: #0f1420;
+
+	--pro: #6fc2b4;
+	--pro-was: #173a36;
+	--contra: #ec9387;
+	--contra-was: #43211d;
+	--onduidelijk: #a3a9b8;
+	--onduidelijk-was: #2a2f3b;
+
+	--onderbouwing: #d1a44f;
 }
