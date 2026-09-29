@@ -2,6 +2,16 @@
 
 Bronmateriaal voor de visuele kant van de site.
 
+## `vloei/`
+
+Nieuwe visuele identiteit (issue #220): inkt op vloeipapier i.p.v. de oude
+krant-esthetiek, met de vouw (pro/contra-spiegeling) als organiserend idee.
+`README.md` is het volledige ontwerp (kleur, typografie, ruimte, de vouw als
+paginapatroon), `invoering.md` het stappenplan per module,
+`richting-b-stempel.md` de vergeleken maar niet gekozen richting. Stap 1
+(tokenaliassen in `frontend/src/styles/main.css`) is gedaan; de modules
+volgen één voor één.
+
 ## `tag-iconografie/`
 
 Iconografie- en kleurschema voor de 50 tags en hun vier perspectieven.
