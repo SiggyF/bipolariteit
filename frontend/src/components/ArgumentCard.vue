@@ -7,10 +7,11 @@ import { filters, toggleValue } from "../lib/filters";
 import { scrollTarget } from "../lib/scrollTarget";
 import { markProgrammaticScroll, userScroll } from "../lib/userScroll";
 import { slugify } from "../lib/slug";
-import { stanceDescription, stanceLabel, typologyLabel, typologyDescription, type Argument, type Tag } from "../lib/types";
+import { typologyLabel, typologyDescription, type Argument, type Tag } from "../lib/types";
 import { formatClock } from "../lib/videoTime";
 import { selectBadgeTags } from "../lib/videoLabels";
 import PartyLogo from "./PartyLogo.vue";
+import StandpuntGlyph from "./StandpuntGlyph.vue";
 
 function tagTooltip(tag: Tag): string {
 	const base = `${tag.labelgroep}: ${tag.beschrijving}`;
@@ -198,18 +199,14 @@ watch(
 		@keydown="onCardKeydown"
 	>
 		<div class="argument-meta">
-			<span v-if="compact" class="stance-dot" :class="`stance-${argument.stance}`" :title="stanceLabel(argument.stance)"></span>
+			<StandpuntGlyph v-if="compact" :stance="argument.stance" />
 			<!-- Alleen zichtbaar onder de 900px-breakpoint (zie main.css): op
 			     desktop staat de stance al in de kolomkop + randkleur, in de
 			     samengevoegde mobiele lijst (issue #136) is dat de enige plek
 			     waar pro/contra/onduidelijk nog te zien is. -->
-			<span
-				v-if="!compact"
-				class="stance-badge"
-				:class="`stance-${argument.stance}`"
-				:title="stanceDescription(argument.stance)"
-				>{{ stanceLabel(argument.stance) }}</span
-			>
+			<span v-if="!compact" class="stance-badge">
+				<StandpuntGlyph :stance="argument.stance" />
+			</span>
 			<span class="typology-badge" :title="typologyDescription(argument.typology)">{{ typologyLabel(argument.typology) }}</span>
 			<template v-if="compact">
 				<span v-for="tag in compactTags" :key="tag.sleutel" class="tag-item">

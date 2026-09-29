@@ -5,6 +5,7 @@ import { useDebateArguments } from "../lib/debateArguments";
 import { requestScrollTo } from "../lib/scrollTarget";
 import { requestSeek } from "../lib/videoSeek";
 import type { Argument, Claim } from "../lib/types";
+import StandpuntGlyph from "./StandpuntGlyph.vue";
 
 const TARGET_COUNT = 6;
 
@@ -114,7 +115,7 @@ function displayClaimText(text: string): string {
 						bron: {{ candidate.claim.attributed_source_text }}
 					</p>
 					<p class="claim-highlight-meta">
-						<span class="stance-dot" :class="`stance-${candidate.argument.stance}`"></span>
+						<StandpuntGlyph :stance="candidate.argument.stance" />
 						{{ candidate.argument.actor.name }}<span v-if="candidate.argument.actor.party"> ({{ displayPartyName(candidate.argument.actor.party) }})</span>
 					</p>
 				</component>

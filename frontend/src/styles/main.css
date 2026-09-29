@@ -148,6 +148,20 @@
 	--font-kop: "Archivo", "Arial Narrow", system-ui, sans-serif;
 	--font-tekst: "Literata", Georgia, serif;
 
+	/* Ruimte in stappen van 4px en hoekradii voor Vloei-componenten
+	   (.vl-*, prefix vl- zodat ze module voor module naast de bestaande
+	   klassen kunnen landen). */
+	--ruimte-1: 4px;
+	--ruimte-2: 8px;
+	--ruimte-3: 12px;
+	--ruimte-4: 16px;
+	--ruimte-6: 24px;
+	--ruimte-8: 32px;
+	--ruimte-12: 48px;
+	--hoek-s: 3px;
+	--hoek-m: 10px;
+	--hoek-rond: 999px;
+
 	/* Aliassen naar de oude namen, zodat componenten in stap 1 ongewijzigd
 	   blijven -- zie docs/design/vloei/invoering.md. Vervallen in stap 3
 	   zodra alle modules rechtstreeks op de Vloei-tokens staan. */
@@ -1139,26 +1153,6 @@ h3 {
 	margin: 0.2rem 0 0;
 }
 
-.stance-dot {
-	display: inline-block;
-	width: 8px;
-	height: 8px;
-	border-radius: 50%;
-	margin-right: 0.3rem;
-}
-
-.stance-dot.stance-pro {
-	background: var(--color-pro);
-}
-
-.stance-dot.stance-contra {
-	background: var(--color-contra);
-}
-
-.stance-dot.stance-unclear {
-	background: var(--color-unclear);
-}
-
 .chart-legend {
 	list-style: none;
 	display: flex;
@@ -1866,35 +1860,15 @@ h3 {
 
 /* Standaard verborgen: op desktop staat de stance al in de kolomkop en de
    randkleur van .argument-card. Alleen nodig zodra kaarten niet meer per
-   stance gegroepeerd staan (samengevoegde mobiele lijst, issue #136). */
+   stance gegroepeerd staan (samengevoegde mobiele lijst, issue #136). De
+   glyph zelf (.vl-standpunt, StandpuntGlyph.vue) draagt zijn eigen stijl. */
 .stance-badge {
 	display: none;
-	font-family: var(--font-mono);
-	font-size: 0.7rem;
-	text-transform: uppercase;
-	letter-spacing: 0.04em;
-	font-weight: 600;
-	padding: 0.1rem 0.6rem;
-}
-
-.stance-badge.stance-pro {
-	color: var(--color-pro);
-	border: 1px solid var(--color-pro);
-}
-
-.stance-badge.stance-contra {
-	color: var(--color-contra);
-	border: 1px solid var(--color-contra);
-}
-
-.stance-badge.stance-unclear {
-	color: var(--color-unclear);
-	border: 1px solid var(--color-unclear);
 }
 
 @media (max-width: 900px) {
 	.stance-badge {
-		display: inline-block;
+		display: inline-flex;
 	}
 }
 
@@ -3145,6 +3119,72 @@ a.card-item:hover {
 	flex-wrap: wrap;
 	align-items: baseline;
 	gap: var(--space-2);
+}
+
+/* ---------- Vloei: standpunt (glyph + woord) -------------------------- */
+/* Enige toegestane manier om een standpunt te tonen (issue #220,
+   docs/design/vloei/README.md): vervangt .stance-dot/.stance-badge, die
+   standpunten alleen met kleur onderscheidden. Gerenderd door
+   StandpuntGlyph.vue. De vorm (welke lob gevuld is) draagt de betekenis ook
+   zonder kleur; onduidelijk krijgt bovendien een stip. */
+.vl-standpunt {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--ruimte-1);
+	font-family: var(--font-kop);
+	font-size: 13px;
+	line-height: 16px;
+	font-weight: 650;
+	font-variation-settings: "wdth" 85;
+	color: var(--onduidelijk);
+	white-space: nowrap;
+}
+
+.vl-standpunt svg {
+	width: 24px;
+	height: 15px;
+	flex: none;
+	overflow: visible;
+}
+
+.vl-standpunt svg ellipse {
+	fill: none;
+	stroke: currentColor;
+	stroke-width: 1.8;
+}
+
+.vl-standpunt svg circle {
+	fill: currentColor;
+	display: none;
+}
+
+.vl-standpunt.is-pro {
+	color: var(--pro);
+}
+
+.vl-standpunt.is-pro svg .l {
+	fill: currentColor;
+}
+
+.vl-standpunt.is-contra {
+	color: var(--contra);
+}
+
+.vl-standpunt.is-contra svg .r {
+	fill: currentColor;
+}
+
+.vl-standpunt.is-onduidelijk svg circle {
+	display: inline;
+}
+
+.vl-standpunt.is-groot {
+	font-size: 15px;
+}
+
+.vl-standpunt.is-groot svg {
+	width: 32px;
+	height: 20px;
 }
 
 /* Dark-on-light is the default -- no automatic prefers-color-scheme switch.
