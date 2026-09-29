@@ -1858,20 +1858,6 @@ h3 {
 	padding: 0.1rem 0.6rem;
 }
 
-/* Standaard verborgen: op desktop staat de stance al in de kolomkop en de
-   randkleur van .argument-card. Alleen nodig zodra kaarten niet meer per
-   stance gegroepeerd staan (samengevoegde mobiele lijst, issue #136). De
-   glyph zelf (.vl-standpunt, StandpuntGlyph.vue) draagt zijn eigen stijl. */
-.stance-badge {
-	display: none;
-}
-
-@media (max-width: 900px) {
-	.stance-badge {
-		display: inline-flex;
-	}
-}
-
 /* Videospanne van dit argument (alleen op de debat-videopagina) --
    bedoeld om te kunnen checken of start_seconds/end_seconds klopt met wat
    er daadwerkelijk in beeld speelt. */

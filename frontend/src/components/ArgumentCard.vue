@@ -199,14 +199,11 @@ watch(
 		@keydown="onCardKeydown"
 	>
 		<div class="argument-meta">
-			<StandpuntGlyph v-if="compact" :stance="argument.stance" />
-			<!-- Alleen zichtbaar onder de 900px-breakpoint (zie main.css): op
-			     desktop staat de stance al in de kolomkop + randkleur, in de
-			     samengevoegde mobiele lijst (issue #136) is dat de enige plek
-			     waar pro/contra/onduidelijk nog te zien is. -->
-			<span v-if="!compact" class="stance-badge">
-				<StandpuntGlyph :stance="argument.stance" />
-			</span>
+			<!-- Altijd zichtbaar, niet alleen <900px: op pagina's zonder
+			     kolomkop-per-standpunt (bv. de argumentenlijst naast de video op
+			     DebateVideoView.vue) was kleur (de randkleur van .argument-card)
+			     daar tot nu toe de enige drager. -->
+			<StandpuntGlyph :stance="argument.stance" />
 			<span class="typology-badge" :title="typologyDescription(argument.typology)">{{ typologyLabel(argument.typology) }}</span>
 			<template v-if="compact">
 				<span v-for="tag in compactTags" :key="tag.sleutel" class="tag-item">
