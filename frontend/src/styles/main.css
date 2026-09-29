@@ -1622,9 +1622,12 @@ h3 {
    volwaardige derde positie). Vervangt .columns/.column: geen kolomrand meer
    (was de enige scheiding), de vl-vouw-kolom-koppen en -inkttabs (zie
    .vl-kaart in main.css) dragen die scheiding nu. */
+/* Gelijke kolombreedtes: het ontwerp ging uit van een smallere vouwkolom
+   (.55fr), maar met echte argumentteksten (volle citaten, niet de korte
+   ontwerpvoorbeelden) breekt die te compact af. */
 .vl-vouw {
 	display: grid;
-	grid-template-columns: 1fr minmax(180px, 0.55fr) 1fr;
+	grid-template-columns: repeat(3, 1fr);
 	gap: 0 var(--ruimte-6);
 	align-items: start;
 	margin-top: var(--ruimte-6);
