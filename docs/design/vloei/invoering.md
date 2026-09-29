@@ -30,7 +30,7 @@ staan tot stap 3.
 ## Stap 2: module voor module
 
 1. **Standpunt** — gedaan: `.stance-dot`/`.stance-badge` zijn vervangen door `StandpuntGlyph.vue` (`.vl-standpunt` in `main.css`), gebruikt in `ArgumentCard.vue` en `ClaimsHighlights.vue`. Altijd zichtbaar, niet meer alleen <900px: op `DebateVideoView.vue`'s argumentenlijst naast de video (geen kolomkop-per-standpunt) was de randkleur van `.argument-card` anders de enige drager.
-2. **ArgumentCard**: `vl-kaart is-{stance}`, `border-left` eruit, en de toestanden hernoemen.
+2. **ArgumentCard** — gedaan: `.argument-card` is vervangen door `.vl-kaart is-{pro|contra|onduidelijk}` (`../lib/standpunt.ts`), de linkerrand-per-stance door de inkttab (`::before`), en de toestanden hernoemd (`is-speelt`/`is-gemarkeerd`/`is-klikbaar`). Zijstap: `.quote` gebruikte `--font-heading` (Archivo) i.p.v. `--font-tekst` cursief (Literata) voor het citaat -- rechtgezet, want dat was een citaat-op-verkeerd-lettertype-regressie uit stap 1. De kolomvolgorde (nu pro/contra/onduidelijk i.p.v. pro/onduidelijk/contra) en dus de kant waar de inkttab naar wijst t.o.v. de vouw, komt in de volgende module (TopicView) goed te staan.
 3. **TopicView**: kolommen in `.vl-vouw` (pro | onduidelijk | contra). `.topic-pro-contra-item` verliest zijn linkerrand en krijgt een `*-was`-grond.
 4. **FilterBar**: `.vl-filterbalk` en `.vl-chip`.
 5. **SiteNav**: `.vl-kopbalk`, niet meer sticky, zonder onderlijn.

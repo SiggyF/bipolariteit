@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { stanceLabel, stanceDescription, type Stance } from "../lib/types";
+import { standpuntModifier } from "../lib/standpunt";
 
 // Glyph + woord voor pro/contra/onduidelijk (issue #220, Vloei): de enige
 // toegestane manier om een standpunt te tonen. Vervangt .stance-dot en
@@ -9,9 +10,7 @@ import { stanceLabel, stanceDescription, type Stance } from "../lib/types";
 // (.vl-standpunt.is-groot in main.css).
 const props = withDefaults(defineProps<{ stance: Stance; groot?: boolean }>(), { groot: false });
 
-// De CSS-modifier is Dutch (is-pro/is-contra/is-onduidelijk, main.css), de
-// Stance-waarde is Engels op één uitzondering na (schema.sql: 'unclear').
-const modifier = computed(() => (props.stance === "unclear" ? "onduidelijk" : props.stance));
+const modifier = computed(() => standpuntModifier(props.stance));
 </script>
 
 <template>
