@@ -536,34 +536,36 @@ h3 {
 	margin: var(--space-2) 0;
 }
 
+/* Gewassen grond i.p.v. linkerrand (issue #220, docs/design/vloei/
+   invoering.md): kleur als enige drager, plus zinsopbouw i.p.v. een
+   hoofdletterlabel voor "Pro"/"Contra". */
 .topic-pro-contra-item {
-	background: var(--color-bg);
-	border-left: 4px solid var(--color-unclear);
-	padding: var(--space-2);
+	background: var(--onduidelijk-was);
+	border-radius: var(--hoek-m);
+	padding: var(--ruimte-4);
 }
 
 .topic-pro-contra-item.is-pro {
-	border-left-color: var(--color-pro);
+	background: var(--pro-was);
 }
 
 .topic-pro-contra-item.is-contra {
-	border-left-color: var(--color-contra);
+	background: var(--contra-was);
 }
 
 .topic-pro-contra-item dt {
-	margin-bottom: var(--space-1);
+	margin-bottom: var(--ruimte-1);
+	font-family: var(--font-kop);
 	font-weight: 700;
-	text-transform: uppercase;
-	font-size: var(--step--1);
-	letter-spacing: 0.04em;
+	font-size: var(--step-0);
 }
 
 .topic-pro-contra-item.is-pro dt {
-	color: var(--color-pro);
+	color: var(--pro);
 }
 
 .topic-pro-contra-item.is-contra dt {
-	color: var(--color-contra);
+	color: var(--contra);
 }
 
 .topic-pro-contra-item dd {
@@ -1615,25 +1617,27 @@ h3 {
 	white-space: nowrap;
 }
 
-.columns {
+/* De vouw (issue #220, docs/design/vloei/README.md): pro | onduidelijk |
+   contra, met de onduidelijke kolom smaller (het is de vouw zelf, geen
+   volwaardige derde positie). Vervangt .columns/.column: geen kolomrand meer
+   (was de enige scheiding), de vl-vouw-kolom-koppen en -inkttabs (zie
+   .vl-kaart in main.css) dragen die scheiding nu. */
+.vl-vouw {
 	display: grid;
-	grid-template-columns: repeat(3, 1fr);
-	gap: 0;
-	margin-top: var(--space-3);
+	grid-template-columns: 1fr minmax(180px, 0.55fr) 1fr;
+	gap: 0 var(--ruimte-6);
 	align-items: start;
-}
-
-.column {
-	padding: 0 var(--space-3);
-	border-left: 1px solid var(--color-border);
-}
-
-.column:first-child {
-	padding-left: 0;
-	border-left: none;
+	margin-top: var(--ruimte-6);
 }
 
 @media (max-width: 900px) {
+	/* De samengevoegde mobiele lijst (issue #136) heeft geen vouw om naar te
+	   wijzen -- pro-kaarten krijgen daarom net als contra hun inkttab links. */
+	.vl-kaart.is-pro::before {
+		right: auto;
+		left: -3px;
+	}
+
 	/* Tabbalk vervangt de tekstlinks (SiteNav blijft voor brand + theme-
 	   toggle): anders staat de navigatie dubbel. body-padding voorkomt dat de
 	   laatste kaart op een pagina onder de vaste tabbalk uitkomt. */
@@ -1654,15 +1658,6 @@ h3 {
 		background: color-mix(in srgb, var(--color-bg) 88%, transparent);
 		backdrop-filter: blur(8px);
 		border-top: 1px solid var(--color-border);
-	}
-
-	/* Onder 900px vervangt TopicView.vue de drie gegroepeerde kolommen door
-	   één samengevoegde ArgumentColumn (issue #136) -- .columns/.column
-	   komen dan niet meer in de DOM voor. .column-single is de kop-loze
-	   variant daarvan: geen kolomrand/-opvulling, want er is nog maar één. */
-	.column-single {
-		padding: 0;
-		border-left: none;
 	}
 
 	.filter-mobile-toggle {
@@ -1745,21 +1740,65 @@ h3 {
 	}
 }
 
-.column h2 {
+.vl-vouw-kolom > header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: var(--ruimte-2);
+	padding: var(--ruimte-3) var(--ruimte-4);
+	margin-bottom: var(--ruimte-4);
+	border-radius: var(--hoek-m);
+	font-family: var(--font-kop);
+	font-size: 24px;
+	line-height: 30px;
+	font-weight: 700;
+}
+
+.vl-vouw-kolom.is-pro > header {
+	background: var(--pro-was);
+	color: var(--pro);
+}
+
+/* Spiegelt de kop: telling links, woord rechts -- zelfde titel/telling-markup
+   als de pro-kop, alleen de leesvolgorde (dus ook voor schermlezers) blijft
+   overal woord-dan-telling; flex-direction draait alleen het zicht om. */
+.vl-vouw-kolom.is-contra > header {
+	background: var(--contra-was);
+	color: var(--contra);
+	flex-direction: row-reverse;
+}
+
+/* De onduidelijke kolom is de vouw zelf: smaller, een gewassen grond over de
+   hele kolom (niet alleen de kop), en een stillere kop. */
+.vl-vouw-kolom.is-onduidelijk {
+	background: var(--onduidelijk-was);
+	border-radius: var(--hoek-m);
+	padding: 0 var(--ruimte-3) var(--ruimte-3);
+}
+
+.vl-vouw-kolom.is-onduidelijk > header {
+	color: var(--onduidelijk);
+	font-size: 18px;
+	justify-content: center;
+	margin-bottom: var(--ruimte-2);
+}
+
+.vl-vouw-kolom.is-onduidelijk .vl-kaart {
+	padding: var(--ruimte-3) var(--ruimte-4);
+}
+
+.vl-vouw-kolom.is-onduidelijk .vl-kaart-citaat {
+	font-size: 16px;
+	line-height: 25px;
+}
+
+/* De samengevoegde mobiele lijst (issue #136, geen aparte kolom per stance)
+   en eventuele andere neutrale kolomkoppen krijgen geen standpuntkleur. */
+.vl-vouw-kolom.is-los > header {
 	font-size: var(--step-1);
+	font-family: var(--font-kop);
+	font-weight: 700;
 	margin-bottom: var(--space-2);
-}
-
-.column-pro h2 {
-	color: var(--color-pro);
-}
-
-.column-contra h2 {
-	color: var(--color-contra);
-}
-
-.column-unclear h2 {
-	color: var(--color-unclear);
 }
 
 .column-load-more {
@@ -3128,6 +3167,17 @@ a.card-item:hover {
 	flex-wrap: wrap;
 	align-items: baseline;
 	gap: var(--space-2);
+}
+
+/* ---------- Vloei: data-tekst (tellingen, tijdcodes, as-labels) -------- */
+.vl-data {
+	font-family: var(--font-kop);
+	font-size: 13px;
+	line-height: 18px;
+	font-weight: 500;
+	font-variation-settings: "wdth" 85;
+	font-variant-numeric: tabular-nums;
+	color: var(--galnoot-zacht);
 }
 
 /* ---------- Vloei: standpunt (glyph + woord) -------------------------- */
