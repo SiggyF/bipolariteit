@@ -18,7 +18,7 @@ const PAGE_SIZE = 50;
 // interpretatie kunnen hebben.
 // label ontbreekt voor de samengevoegde mobiele lijst (issue #136): daar is
 // er geen aparte titel per stance meer, de stance staat per kaart zelf
-// (ArgumentCard's .stance-badge, alleen zichtbaar onder de 900px-breakpoint).
+// (ArgumentCard's StandpuntGlyph, glyph + woord, altijd zichtbaar).
 const props = defineProps<{ argumentList: Argument[]; topicSlug: string; label?: string; stanceClass?: string }>();
 
 const visibleCount = ref(Math.min(PAGE_SIZE, props.argumentList.length));

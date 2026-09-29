@@ -29,7 +29,7 @@ staan tot stap 3.
 
 ## Stap 2: module voor module
 
-1. **Standpunt**: vervang `.stance-dot` en `.stance-badge` door `.vl-standpunt`. Dat is het grootste winstpunt voor kleurblinden.
+1. **Standpunt** — gedaan: `.stance-dot`/`.stance-badge` zijn vervangen door `StandpuntGlyph.vue` (`.vl-standpunt` in `main.css`), gebruikt in `ArgumentCard.vue` en `ClaimsHighlights.vue`. Altijd zichtbaar, niet meer alleen <900px: op `DebateVideoView.vue`'s argumentenlijst naast de video (geen kolomkop-per-standpunt) was de randkleur van `.argument-card` anders de enige drager.
 2. **ArgumentCard**: `vl-kaart is-{stance}`, `border-left` eruit, en de toestanden hernoemen.
 3. **TopicView**: kolommen in `.vl-vouw` (pro | onduidelijk | contra). `.topic-pro-contra-item` verliest zijn linkerrand en krijgt een `*-was`-grond.
 4. **FilterBar**: `.vl-filterbalk` en `.vl-chip`.
