@@ -654,7 +654,7 @@ h3 {
 }
 
 .back-link {
-	display: block;
+	display: inline-block;
 	margin-bottom: var(--space-2);
 	color: var(--color-muted);
 	text-decoration: none;
