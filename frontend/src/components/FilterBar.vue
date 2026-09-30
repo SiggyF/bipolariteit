@@ -89,20 +89,18 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-	<div ref="bar" class="filter-bar" :class="{ 'is-active': isActive() }">
-		<div class="filter-search-row">
+	<div ref="bar">
+		<div class="vl-filterbalk">
 			<input
 				type="search"
-				class="filter-search"
+				class="vl-zoek"
 				placeholder="Zoek in citaten…"
 				aria-label="Zoek in citaten"
 				:value="filters.q"
 				@input="setQuery(($event.target as HTMLInputElement).value)"
 			/>
-		</div>
 
-		<div class="filter-bar-row">
-			<span class="filter-count">
+			<span class="vl-data">
 				<strong>{{ matchCount }}</strong> van {{ argumentList.length }} argumenten
 			</span>
 
@@ -117,12 +115,12 @@ onBeforeUnmount(() => {
 				<span v-if="activeCount()" class="facet-badge">{{ activeCount() }}</span>
 			</button>
 
-			<button v-if="isActive()" type="button" class="filter-clear" @click="clearAll()">alles wissen</button>
+			<button v-if="isActive()" type="button" class="vl-knop-tekst" @click="clearAll()">alles wissen</button>
 		</div>
 
-		<ul v-if="chips.length || filters.van || filters.tot" class="filter-chips">
-			<li v-for="chip in chips" :key="`${chip.dimension}:${chip.value}`" class="filter-chip">
-				<span class="chip-dimension">{{ chip.dimensionLabel }}</span>
+		<ul v-if="chips.length || filters.van || filters.tot" class="vl-chips">
+			<li v-for="chip in chips" :key="`${chip.dimension}:${chip.value}`" class="vl-chip">
+				<span class="dim">{{ chip.dimensionLabel }}</span>
 				{{ chip.label }}
 				<button
 					type="button"
@@ -132,8 +130,8 @@ onBeforeUnmount(() => {
 					×
 				</button>
 			</li>
-			<li v-if="filters.van || filters.tot" class="filter-chip">
-				<span class="chip-dimension">Datum</span>
+			<li v-if="filters.van || filters.tot" class="vl-chip">
+				<span class="dim">Datum</span>
 				{{ filters.van || "begin" }} t/m {{ filters.tot || "eind" }}
 				<button type="button" aria-label="datumfilter verwijderen" @click="setDateRange(null, null)">×</button>
 			</li>
