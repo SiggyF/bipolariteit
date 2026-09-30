@@ -1212,7 +1212,7 @@ h3 {
 	padding: var(--ruimte-2);
 	border-radius: var(--hoek-rond);
 	background: var(--was);
-	margin-bottom: var(--ruimte-3);
+	margin-bottom: var(--ruimte-4);
 }
 
 /* Het zoekveld is het enige omrande element van de balk. */
