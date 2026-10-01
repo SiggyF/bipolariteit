@@ -4,15 +4,16 @@ import { useTheme } from "../lib/useTheme";
 import { displayPartyName, partyInitial } from "../lib/parties";
 import { logoSprite } from "../lib/partyLogoSprite";
 import { slugify } from "../lib/slug";
-import { PERSPECTIEVEN } from "../lib/tagIcons.generated";
 import { filters, isActive, matches, toggleValue } from "../lib/filters";
 import { NO_PARTY, type Argument } from "../lib/types";
 import { alignSigns, buildCorrespondence, type Correspondence, type RowUnit } from "../lib/correspondence";
 import VChart from "vue-echarts";
 import { use } from "echarts/core";
+import "../lib/echartsSetup";
 import { CanvasRenderer } from "echarts/renderers";
 import { LineChart, ScatterChart } from "echarts/charts";
 import { TooltipComponent, GridComponent, LegendComponent, DataZoomInsideComponent } from "echarts/components";
+import { perspectiefKleur, themaNaam, VLOEI } from "../lib/vloeiChart";
 
 use([CanvasRenderer, ScatterChart, LineChart, TooltipComponent, GridComponent, LegendComponent, DataZoomInsideComponent]);
 
@@ -134,10 +135,11 @@ const display = computed<Correspondence | null>(() => {
 
 const hasThirdAxis = computed(() => (reference.value?.nComponents ?? 0) >= 3);
 
-// Kleur per perspectief komt uit het ontwerpsysteem in
-// docs/design/tag-iconografie/ -- één bron, en niet nog een keer overgetypt in
-// deze component. `scripts/build_tag_icons.mjs` maakt daar
-// lib/tagIcons.generated.ts van.
+// Kleur per perspectief komt uit het Vloei-grafiekthema (grafiek.md,
+// `perspectiefKleur` in lib/vloeiChart.ts) i.p.v. tag-styles.json: die
+// kleuren liggen all-pairs gevalideerd (ook voor scatter, CVD inbegrepen) en
+// vervangen de oude perspectiefkleuren uit het ontwerpsysteem in grafieken --
+// zie grafiek.md onder "Categorisch".
 //
 // Tagpunten zijn effen, halftransparante cirkels: de perspectieficonen (brein,
 // weegschaal, ...) lazen op kaartschaal niet als teken maar als ruis, zeker
@@ -146,15 +148,6 @@ const hasThirdAxis = computed(() => (reference.value?.nComponents ?? 0) >= 3);
 // per perspectief (`marker` in tag-styles.json: circle/triangle/diamond/
 // square) voor precies dit soort gevallen, mocht kleur alleen ooit weer te
 // weinig onderscheid geven.
-//
-// Eén palet voor beide modes: aardetinten van deze verzadiging houden op zowel
-// #f2efe7 als #1c1815 genoeg contrast, dus een aparte donkere variant zou hier
-// alleen maar uit elkaar gaan lopen.
-const PERSPECTIEF_COLOR: Record<string, string> = Object.fromEntries(PERSPECTIEVEN.map((p) => [p.naam, p.kleur]));
-const UNKNOWN_COLOR = "#6f6558";
-
-// Achtergrondkleuren uit main.css; ECharts kan de CSS-variabelen niet lezen.
-const BACKGROUND = { light: "#f2efe7", dark: "#1c1815" };
 
 function toRgb(hex: string): [number, number, number] {
 	const h = hex.replace("#", "");
@@ -168,7 +161,7 @@ function toRgb(hex: string): [number, number, number] {
  * aantal argumenten. `nabijheid` loopt van 0 (achterin) tot 1 (vooraan). */
 function fog(color: string, proximity: number): string {
 	if (!threeDimensional.value) return color;
-	const target = toRgb(isDark.value ? BACKGROUND.dark : BACKGROUND.light);
+	const target = toRgb(VLOEI[modus.value].blad);
 	const source = toRgb(color);
 	// Niet helemaal tot de achtergrond: het verste punt moet zichtbaar blijven.
 	// Op 0,55 gemengd met de daaronder óók al aflopende opacity (zie tagSeries/
@@ -181,11 +174,12 @@ function fog(color: string, proximity: number): string {
 }
 
 const isDark = useTheme();
+const modus = computed(() => (isDark.value ? "dark" : "light"));
 // Partijen zijn geen categorische serie maar een andere soort entiteit; inkt
 // houdt de vier kleurslots vrij voor de perspectieven.
-const ink = computed(() => (isDark.value ? "#f2ede3" : "#221f1b"));
-const muted = computed(() => (isDark.value ? "#a89e8c" : "#6f6558"));
-const gridLine = computed(() => (isDark.value ? "#453f36" : "#ddd5c4"));
+const ink = computed(() => VLOEI[modus.value].galnoot);
+const muted = computed(() => VLOEI[modus.value].galnootZacht);
+const gridLine = computed(() => VLOEI[modus.value].lijn);
 
 // Kleurlogo's zijn direct herkenbaar, maar ze brengen vijftien extra kleuren de
 // kaart in en concurreren daarmee met de vier perspectiefkleuren, die hier de
@@ -204,7 +198,7 @@ const LOGO_SATURATION = 0.2;
 function initialSprite(letter: string, color: string): string {
 	const svg =
 		`<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">` +
-		`<rect x="1.5" y="1.5" width="21" height="21" rx="4" fill="#fff" stroke="${color}" stroke-width="1.5"/>` +
+		`<rect x="1.5" y="1.5" width="21" height="21" rx="4" fill="${VLOEI[modus.value].blad}" stroke="${color}" stroke-width="1.5"/>` +
 		`<text x="12" y="12.5" text-anchor="middle" dominant-baseline="central" font-family="sans-serif" ` +
 		`font-size="13" font-weight="700" fill="${color}">${letter}</text>` +
 		`</svg>`;
@@ -212,7 +206,7 @@ function initialSprite(letter: string, color: string): string {
 }
 
 function styleFor(perspectief: string) {
-	return PERSPECTIEF_COLOR[perspectief] ?? UNKNOWN_COLOR;
+	return perspectiefKleur(perspectief, modus.value);
 }
 
 const perspectieven = computed(() => {
@@ -747,7 +741,7 @@ const chartOption = computed(() => {
 			symbol: "circle",
 			cursor: "pointer",
 			z: 2,
-			itemStyle: { color, opacity: 0.5 },
+			itemStyle: { color, opacity: 0.85, borderColor: VLOEI[modus.value].blad, borderWidth: 1 },
 			labelLayout: LABEL_LAYOUT,
 			data: projected.tags
 				.filter(({ point }) => point.perspectief === perspectief)
@@ -765,18 +759,17 @@ const chartOption = computed(() => {
 						symbolSize: sizeFor(point.n, maxTagN, TAG_SIZE) * scale * 0.6,
 						// Effen cirkel: iconen per tag (vijftig) en zelfs per perspectief
 						// (vier) lazen op kaartschaal niet als teken, zeker in een dichte
-						// cluster -- alleen kleur nog. Niet lager dan 0,75 opacity: op deze
-						// lichte achtergrond mengt een halftransparant vlak zichtbaar naar de
-						// achtergrondkleur (het perspectiefpalet is al gedempt "aardetinten",
-						// dus op 50% wordt het nauwelijks meer dan grijs), en dat was precies
-						// de klacht. 0,75 laat nog genoeg doorschijnen om overlappende punten
-						// niet helemaal dicht te slibben.
+						// cluster -- alleen kleur nog. 0,85 plus een 1px blad-ring
+						// (grafiek.md): de ring scheidt overlappende punten ook als de
+						// kleuren zelf bijna gelijk vallen.
 						itemStyle: {
 							color: fog(color, prox),
+							borderColor: VLOEI[modus.value].blad,
+							borderWidth: 1,
 							// Vloer op 0,7 i.p.v. 0,5: in 3D telde deze opacity-afname vroeger op
 							// bij de kleurmist hierboven, en samen maakten ze de hele wolk vager
 							// dan in 2D -- ook punten die niet eens ver weg lagen.
-							opacity: (inSelection ? 0.75 : DIM) * (0.7 + 0.3 * prox),
+							opacity: (inSelection ? 0.85 : DIM) * (0.7 + 0.3 * prox),
 						},
 						label: {
 							show:
@@ -892,8 +885,6 @@ const chartOption = computed(() => {
 	}
 
 	return {
-		backgroundColor: "transparent",
-		textStyle: { fontFamily: "inherit" },
 		// Uit, in beide weergaven. In 3D wordt de kaart per muisbeweging opnieuw
 		// opgebouwd en wisselt de tekenvolgorde van de punten (diepte-sortering);
 		// ECharts koppelt zijn overgangsanimatie aan de index in de data-array en
@@ -1111,7 +1102,7 @@ const filterActive = computed(isActive);
 		<div
 			v-if="display"
 			ref="wrapperEl"
-			class="correspondence-wrapper"
+			class="vl-grafiek correspondence-wrapper"
 			:class="{ 'is-3d': threeDimensional }"
 			@pointerdown="startDrag"
 			@pointermove="drag"
@@ -1123,6 +1114,7 @@ const filterActive = computed(isActive);
 				ref="chartRef"
 				class="party-chart correspondence-chart"
 				:option="chartOption"
+				:theme="themaNaam(isDark)"
 				:update-options="{ replaceMerge: ['series', 'dataZoom'] }"
 				autoresize
 				@click="onChartClick"

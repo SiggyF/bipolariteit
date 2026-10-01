@@ -2,6 +2,7 @@
 import { computed } from "vue";
 import VChart from "vue-echarts";
 import { use } from "echarts/core";
+import "../lib/echartsSetup";
 import { CanvasRenderer } from "echarts/renderers";
 import { BarChart, CustomChart } from "echarts/charts";
 import { TooltipComponent, GridComponent } from "echarts/components";
@@ -11,6 +12,7 @@ import { deriveTagUsage, bucketSmallCounts } from "../lib/aggregate";
 import { slugify } from "../lib/slug";
 import { PERSPECTIEVEN } from "../lib/tagIcons.generated";
 import { tagIconPath, tagIconDataUri } from "../lib/tagIcon";
+import { perspectiefKleur, themaNaam, VLOEI } from "../lib/vloeiChart";
 import PartyLogo from "./PartyLogo.vue";
 import ArgumentCard from "./ArgumentCard.vue";
 import FilterBar from "./FilterBar.vue";
@@ -90,13 +92,14 @@ const gegroepeerdeRows = computed(() => {
 const chartRows = computed(() => [...gegroepeerdeRows.value].reverse());
 
 const isDark = useTheme();
+const modus = computed(() => (isDark.value ? "dark" : "light"));
 
-// Kleur per perspectief i.p.v. één vaste kleur -- zelfde bron als de
-// correspondentiekaart (TagCorrespondenceMap.vue), zodat een perspectief
-// overal op de site dezelfde kleur draagt. De "overig"-rij (bucketSmallCounts)
-// heeft geen perspectief en valt terug op de gedempte kleur.
-const PERSPECTIEF_KLEUR = new Map(PERSPECTIEVEN.map((p) => [p.naam, p.kleur]));
-const ONBEKENDE_KLEUR = "#6f6558";
+// Kleur per perspectief uit het Vloei-grafiekthema (grafiek.md) i.p.v. de
+// tag-styles.json-kleuren: die lagen met #4C7C7A en #B15E4A te dicht op
+// pro/contra, en standpuntkleuren zijn voorbehouden aan standpunten. Dezelfde
+// bron als de correspondentiekaart (TagCorrespondenceMap.vue), zodat een
+// perspectief overal op de site dezelfde kleur draagt. De "overig"-rij
+// (bucketSmallCounts) heeft geen perspectief en valt terug op `rand`.
 
 // Mediaan-tik per tag (issue #202): mediaan van het gebruik van díe tag over
 // alle personen/partijen heen, bovenop de eigen balk -- zo zie je per tag of
@@ -114,8 +117,12 @@ const medianRows = computed(() => {
 		.filter((row): row is number[] => row !== null);
 });
 
-const MEDIAAN_KLEUR = { light: "#221f1b", dark: "#f2ede3" };
-const MEDIAAN_RGB = { light: "34, 31, 27", dark: "242, 237, 227" };
+// Mediaan-streep in galnoot (de tekstkleur): de enige donkere lijn in de
+// grafiek, zoals de middenas in de gespiegelde standpuntbalk (grafiek.md).
+function hexNaarRgb(hex: string): string {
+	const n = parseInt(hex.slice(1), 16);
+	return `${(n >> 16) & 255}, ${(n >> 8) & 255}, ${n & 255}`;
+}
 
 // Zelfde plafond als de balken zelf (barMaxWidth hieronder) -- op smalle
 // balken (weinig rijen, dus brede category-band) mag de tik/het icoontje niet
@@ -134,8 +141,8 @@ function renderMedianTik(_params: any, api: any) {
 	const y = api.coord([0, idx])[1];
 	const xMed = api.coord([med, idx])[0];
 	const capHalf = barHalfHoogte(api);
-	const color = isDark.value ? MEDIAAN_KLEUR.dark : MEDIAAN_KLEUR.light;
-	const rgb = isDark.value ? MEDIAAN_RGB.dark : MEDIAAN_RGB.light;
+	const color = VLOEI[modus.value].galnoot;
+	const rgb = hexNaarRgb(color);
 
 	// Zachte gloed achter de streep i.p.v. een harde lijn -- zelfde
 	// "radiotuner-naald"-idee als de video-afspeelkop (VideoTimeline.vue),
@@ -232,7 +239,7 @@ function richKeyFor(sleutel: string): string {
 
 const yAxisRich = computed(() => {
 	const rich: Record<string, any> = {};
-	const color = isDark.value ? "#f2ede3" : "#221f1b";
+	const color = VLOEI[modus.value].galnoot;
 	for (const r of chartRows.value) {
 		const key = richKeyFor(r.sleutel);
 		if (rich[key]) continue;
@@ -243,23 +250,16 @@ const yAxisRich = computed(() => {
 });
 
 const chartOption = computed(() => ({
-	backgroundColor: "transparent",
-	textStyle: { fontFamily: "inherit" },
 	tooltip: { trigger: "item" },
 	grid: { left: 90, right: 24, top: 8, bottom: 16 },
 	xAxis: {
 		type: "value",
-		axisLabel: {
-			color: isDark.value ? "#a89e8c" : "#6f6558",
-			formatter: (waarde: number) => `${Math.round(waarde * 100)}%`,
-		},
-		splitLine: { lineStyle: { color: isDark.value ? "#453f36" : "#ddd5c4" } },
+		axisLabel: { formatter: (waarde: number) => `${Math.round(waarde * 100)}%` },
 	},
 	yAxis: {
 		type: "category",
 		data: chartRows.value.map((r) => r.sleutel),
 		axisLabel: {
-			color: isDark.value ? "#f2ede3" : "#221f1b",
 			formatter: (sleutel: string) => (tagIconPath(sleutel) ? `{${richKeyFor(sleutel)}|}  ${sleutel}` : sleutel),
 			rich: yAxisRich.value,
 		},
@@ -270,7 +270,7 @@ const chartOption = computed(() => ({
 			data: chartRows.value.map((r) => ({
 				value: taggedArgumentCount.value ? r.count / taggedArgumentCount.value : 0,
 				count: r.count,
-				itemStyle: { color: PERSPECTIEF_KLEUR.get(r.perspectief) ?? ONBEKENDE_KLEUR },
+				itemStyle: { color: perspectiefKleur(r.perspectief, modus.value) },
 			})),
 			barMaxWidth: BAR_MAX_WIDTH,
 			tooltip: {
@@ -435,11 +435,13 @@ const ICOON_STER = "M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 
 						volumes zegt een enkele toekenning weinig.
 					</template>
 				</p>
-				<ul v-if="medianRows.length || partyMedianRows.length" class="chart-legend">
+				<ul class="vl-legenda">
+					<li v-for="perspectief in PERSPECTIEVEN" :key="perspectief.key">
+						<span class="vl-swatch" :style="{ '--kleur': perspectiefKleur(perspectief.naam, modus) }" />
+						{{ perspectief.naam }}
+					</li>
 					<li v-if="medianRows.length">
-						<svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true">
-							<line x1="6" y1="1" x2="6" y2="11" stroke="currentColor" stroke-width="2" />
-						</svg>
+						<span class="vl-swatch is-lijn" :style="{ '--kleur': VLOEI[modus].galnoot }" />
 						mediaan over {{ mode === "persoon" ? "alle sprekers" : "alle partijen" }}
 					</li>
 					<li v-if="partyMedianRows.length">
@@ -448,7 +450,15 @@ const ICOON_STER = "M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 
 					</li>
 				</ul>
 				<p v-if="!tagRows.length" class="panel-note">Geen getagde argumenten.</p>
-				<VChart v-else class="tag-usage-chart" :option="chartOption" :style="{ height: chartHeight }" autoresize />
+				<div v-else class="vl-grafiek">
+					<VChart
+						class="tag-usage-chart"
+						:option="chartOption"
+						:theme="themaNaam(isDark)"
+						:style="{ height: chartHeight }"
+						autoresize
+					/>
+				</div>
 			</section>
 
 			<section class="stats-panel">
