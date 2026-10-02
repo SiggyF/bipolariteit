@@ -184,14 +184,30 @@ def thin_zoom_points_globally(
     return result
 
 
-def load_video_hrefs(point_ids: set[int]) -> dict[int, str]:
-    """id->Debat Direct-deep-link voor de gegeven document-id's, rechtstreeks
-    uit `documents` -- zelfde `_speaker_event_url()`-logica als
-    scripts/export_plenair_map_videos.py, maar hier per tile meegecodeerd
-    i.p.v. als los plenair-map-videos.json-bestand (dat bestand dekte maar
-    de kleine steekproef en zou voor de volle dataset tot ~190MB groeien,
-    zie issue #356-vervolg). Bewust alleen externe Debat Direct-links, zelfde
-    scope-keuze als dat script."""
+def load_video_hrefs(point_ids: set[int], videos_json_path: Path | None = None) -> dict[int, str]:
+    """id->video-deep-link voor de gegeven document-id's, hier per tile
+    meegecodeerd i.p.v. als los plenair-map-videos.json-bestand (dat bestand
+    dekte maar de kleine steekproef en zou voor de volle dataset tot ~190MB
+    groeien, zie issue #356-vervolg).
+
+    Eerst `videos_json_path` geraadpleegd (standaard plenair-map-videos.json
+    naast de input, zie scripts/export_plenair_map_videos.py): die bevat voor
+    ~5300 document-id's een gecureerde `is_internal=true`-link naar onze
+    eigen /debatten/{id}/-pagina i.p.v. Debat Direct (handmatig/uit de
+    verloren originele generator afkomstig, niet in Python te reconstrueren
+    zonder frontend/src/lib/debateId.ts' debateId()-matching hier te
+    dupliceren -- expliciet afgeraden in dat script's eigen docstring).
+    Alleen voor id's die daar ontbreken (de rest van de volle dataset) wordt
+    hier zelf, rechtstreeks uit `documents`, de externe Debat Direct-link
+    berekend via dezelfde `_speaker_event_url()`-logica."""
+    hrefs: dict[int, str] = {}
+    if videos_json_path is not None and videos_json_path.exists():
+        curated = json.loads(videos_json_path.read_text())
+        for doc_id, entry in curated.items():
+            point_id = int(doc_id)
+            if point_id in point_ids:
+                hrefs[point_id] = entry["href"]
+
     conn = db.connect()
     try:
         rows = conn.execute(
@@ -202,9 +218,8 @@ def load_video_hrefs(point_ids: set[int]) -> dict[int, str]:
     finally:
         conn.close()
 
-    hrefs: dict[int, str] = {}
     for row in rows:
-        if row["id"] not in point_ids:
+        if row["id"] not in point_ids or row["id"] in hrefs:
             continue
         href = _speaker_event_url(
             row["video_url"],
@@ -233,6 +248,7 @@ def build(
     max_points_per_tile: int = DEFAULT_MAX_POINTS_PER_TILE,
     dashboard: bool = True,
     dashboard_hold_seconds: int = 0,
+    videos_json_path: Path | None = None,
     density_cog_output_path: Path | None = None,
     density_width: int = DEFAULT_DENSITY_WIDTH,
     density_height: int = DEFAULT_DENSITY_HEIGHT,
@@ -249,7 +265,9 @@ def build(
         logger.info("%d punten geladen", len(points))
 
         logger.info("Haal video-links op voor deze punten")
-        video_by_id = load_video_hrefs({p[0] for p in points})
+        if videos_json_path is None:
+            videos_json_path = input_path.with_name("plenair-map-videos.json")
+        video_by_id = load_video_hrefs({p[0] for p in points}, videos_json_path)
         logger.info("%d punten met video-link", len(video_by_id))
 
         # video_href als vast veld tussen `cluster` (index 10) en het optionele
@@ -428,6 +446,15 @@ def main() -> None:
         help="Blijf na afloop nog N seconden draaien zodat het dashboard bereikbaar blijft",
     )
     parser.add_argument(
+        "--videos-json",
+        type=str,
+        default=None,
+        help="pad naar de gecureerde plenair-map-videos.json (standaard: naast --input, "
+        "zie scripts/export_plenair_map_videos.py) -- levert de interne /debatten/{id}/-"
+        "links voor de document-id's die daar in staan; voor de rest wordt de externe "
+        "Debat Direct-link berekend.",
+    )
+    parser.add_argument(
         "--density-cog-out",
         type=str,
         default=None,
@@ -457,6 +484,7 @@ def main() -> None:
         max_points_per_tile=args.max_points_per_tile,
         dashboard=args.dashboard,
         dashboard_hold_seconds=args.dashboard_hold_seconds,
+        videos_json_path=Path(args.videos_json) if args.videos_json else None,
         density_cog_output_path=density_cog_out_path,
         density_width=args.density_width,
         density_height=args.density_height,

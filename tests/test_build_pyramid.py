@@ -1,4 +1,8 @@
-from pipeline.tiling.build_pyramid import compute_global_point_ranks, thin_zoom_points_globally
+import json
+import sqlite3
+
+from pipeline.tiling import build_pyramid
+from pipeline.tiling.build_pyramid import compute_global_point_ranks, load_video_hrefs, thin_zoom_points_globally
 
 
 def _points(ids):
@@ -56,3 +60,63 @@ def test_thin_zoom_points_globally_no_thinning_when_under_budget():
     thinned = thin_zoom_points_globally(grouped, ranks, max_points_per_tile=100)
 
     assert len(thinned[1]) == 50
+
+
+def _connect_with_row_factory(db_path):
+    conn = sqlite3.connect(db_path)
+    conn.row_factory = sqlite3.Row
+    return conn
+
+
+def _fake_documents_db(tmp_path, rows):
+    db_path = tmp_path / "fake.sqlite"
+    conn = sqlite3.connect(db_path)
+    conn.execute(
+        """CREATE TABLE documents (
+            id INTEGER PRIMARY KEY, video_url TEXT, published_at TEXT,
+            speaker_event_anchor_at TEXT, turn_type TEXT, is_voorzitter_turn INTEGER
+        )"""
+    )
+    conn.executemany(
+        "INSERT INTO documents VALUES (?, ?, ?, ?, ?, ?)",
+        [(r["id"], r["video_url"], r["published_at"], None, "spreker", 0) for r in rows],
+    )
+    conn.commit()
+    conn.close()
+    return db_path
+
+
+def test_load_video_hrefs_prefers_curated_internal_link_over_computed_external(tmp_path, monkeypatch):
+    # issue: na de overstap op MVT-meegecodeerde video-links (#356-vervolg)
+    # gingen alle links naar Debat Direct, ook voor de ~5300 document-id's
+    # waarvoor plenair-map-videos.json een gecureerde interne
+    # /debatten/{id}/-link had. load_video_hrefs() moet die curated-entry
+    # laten winnen en alleen voor de rest zelf de externe link berekenen.
+    db_path = _fake_documents_db(
+        tmp_path,
+        rows=[
+            {"id": 1, "video_url": "https://stream.example/abc/video", "published_at": "2026-01-01T10:00:00"},
+            {"id": 2, "video_url": "https://stream.example/def/video", "published_at": "2026-01-01T10:00:00"},
+        ],
+    )
+    monkeypatch.setattr(build_pyramid.db, "connect", lambda: _connect_with_row_factory(db_path))
+
+    videos_json_path = tmp_path / "plenair-map-videos.json"
+    videos_json_path.write_text(json.dumps({"1": {"href": "/debatten/abc123/", "is_internal": True}}))
+
+    hrefs = load_video_hrefs({1, 2}, videos_json_path)
+
+    assert hrefs[1] == "/debatten/abc123/"  # curated interne link, niet herberekend
+    assert hrefs[2].startswith("https://stream.example/")  # geen curated entry -> externe link berekend
+
+
+def test_load_video_hrefs_without_videos_json_falls_back_to_computed_links(tmp_path, monkeypatch):
+    db_path = _fake_documents_db(
+        tmp_path,
+        rows=[{"id": 1, "video_url": "https://stream.example/abc/video", "published_at": "2026-01-01T10:00:00"}],
+    )
+    monkeypatch.setattr(build_pyramid.db, "connect", lambda: _connect_with_row_factory(db_path))
+
+    hrefs = load_video_hrefs({1}, tmp_path / "ontbreekt.json")
+
+    assert hrefs[1].startswith("https://stream.example/")

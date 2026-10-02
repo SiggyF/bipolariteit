@@ -71,11 +71,15 @@ type DeckPoint = {
 	publishedAt: string;
 	cluster: number | null;
 	year: number | null;
-	// Debat Direct-deep-link, als MVT-eigenschap meegecodeerd per punt
-	// (pipeline/tiling/encode.py) i.p.v. via een los plenair-map-videos.json
-	// -- dat bestand dekte voor de volle dataset maar ~5,5% en zou bij
-	// volledige dekking tot ~190MB ongecomprimeerd groeien (issue
-	// #356-vervolg). Altijd extern (Debat Direct), nooit intern.
+	// Video-deep-link, als MVT-eigenschap meegecodeerd per punt
+	// (pipeline/tiling/build_pyramid.py::load_video_hrefs()) i.p.v. via een
+	// los plenair-map-videos.json -- dat bestand dekte voor de volle dataset
+	// maar ~5,5% en zou bij volledige dekking tot ~190MB ongecomprimeerd
+	// groeien (issue #356-vervolg). Twee vormen, te onderscheiden aan het
+	// pad (zie activePointVideo hieronder): een site-relatief pad
+	// ("/debatten/{id}/") naar onze eigen interne videospeler-pagina (de
+	// ~5300 gecureerde entries uit plenair-map-videos.json), of anders een
+	// absolute externe Debat Direct-URL.
 	video: string | null;
 };
 
@@ -225,10 +229,12 @@ const pinnedItem = ref<DisplayItem | null>(null);
 const activeDisplayItem = computed<DisplayItem | null>(() => pinnedItem.value ?? hoveredItem.value);
 const isPinned = computed(() => pinnedItem.value != null);
 
-const activePointVideo = computed<{ href: string } | null>(() => {
+const activePointVideo = computed<{ href: string; isInternal: boolean } | null>(() => {
 	if (activeDisplayItem.value?.type !== "point") return null;
 	const { video } = activeDisplayItem.value.data;
-	return video ? { href: video } : null;
+	// Site-relatief ("/debatten/{id}/", onze eigen videospeler-pagina) i.p.v.
+	// absoluut (externe Debat Direct-URL) -- zie DeckPoint.video hierboven.
+	return video ? { href: video, isInternal: video.startsWith("/") } : null;
 });
 
 // Topics zonder live telling (i.t.t. PlenairMap.vue's topicCounts): die telt
@@ -923,12 +929,12 @@ onUnmounted(() => {
 							<a
 								v-if="activePointVideo"
 								:href="activePointVideo.href"
-								target="_blank"
+								:target="activePointVideo.isInternal ? '_self' : '_blank'"
 								rel="noopener noreferrer"
 								class="video-link-btn"
-								title="Bekijk spreekbeurt op Debat Direct"
+								:title="activePointVideo.isInternal ? 'Bekijk in interne videospeler' : 'Bekijk spreekbeurt op Debat Direct'"
 							>
-								<span>Bekijk video</span>
+								<span>{{ activePointVideo.isInternal ? "Bekijk in videospeler" : "Bekijk video" }}</span>
 							</a>
 							<span v-if="isPinned" class="pinned-indicator">Vastgezet</span>
 							<button v-if="isPinned" class="close-info-btn" @click="pinnedItem = null" title="Sluit vastzetting" aria-label="Sluit">&times;</button>
