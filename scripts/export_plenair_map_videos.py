@@ -113,8 +113,16 @@ def export(dry_run=False, points_path=POINTS_PATH):
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--dry-run", action="store_true")
+    parser.add_argument(
+        "--points-path",
+        type=Path,
+        default=POINTS_PATH,
+        help="Puntenbestand om tegen te filteren (default: de kleine steekproef, "
+        "plenair-map.json; voor de volle TiledPlenairMap.vue-dataset is dat "
+        "plenair-map-full.json).",
+    )
     args = parser.parse_args()
-    export(dry_run=args.dry_run)
+    export(dry_run=args.dry_run, points_path=args.points_path)
 
 
 if __name__ == "__main__":

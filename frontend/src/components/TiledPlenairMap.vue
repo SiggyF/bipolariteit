@@ -40,12 +40,10 @@ import {
 const props = defineProps<{
 	// pmtiles + grid-metadata + cluster-hulls komen van Hugging Face (volle
 	// dataset, zie lib/dataBaseUrl.ts, issue #316/#293) -- deze component
-	// gebruikt geen jsDelivr-databasis.
+	// gebruikt geen jsDelivr-databasis. video-links zitten als MVT-eigenschap
+	// in de tiles zelf (pipeline/tiling/encode.py), dus ook geen losse
+	// dataBaseUrl meer nodig zoals PlenairMap.vue die wel heeft.
 	tilesBaseUrl: string;
-	// plenair-map-videos.json wordt (net als bij PlenairMap.vue) via de
-	// jsDelivr-databasis gepubliceerd, niet meegenomen in de HF-pmtiles-bundel
-	// -- vandaar deze losse basis-URL naast tilesBaseUrl.
-	dataBaseUrl: string;
 }>();
 
 const emit = defineEmits<{
@@ -73,9 +71,13 @@ type DeckPoint = {
 	publishedAt: string;
 	cluster: number | null;
 	year: number | null;
+	// Debat Direct-deep-link, als MVT-eigenschap meegecodeerd per punt
+	// (pipeline/tiling/encode.py) i.p.v. via een los plenair-map-videos.json
+	// -- dat bestand dekte voor de volle dataset maar ~5,5% en zou bij
+	// volledige dekking tot ~190MB ongecomprimeerd groeien (issue
+	// #356-vervolg). Altijd extern (Debat Direct), nooit intern.
+	video: string | null;
 };
-
-type VideoLinkInfo = { href: string; label: string; is_internal: boolean };
 
 // Zelfde "pin wint van hover, klik op leegte unpint" model als PlenairMap.vue
 // (activeDisplayItem/pinnedItem/hoveredItem daar) -- alleen is hit-testing
@@ -223,10 +225,10 @@ const pinnedItem = ref<DisplayItem | null>(null);
 const activeDisplayItem = computed<DisplayItem | null>(() => pinnedItem.value ?? hoveredItem.value);
 const isPinned = computed(() => pinnedItem.value != null);
 
-const videosData = ref<Record<number, VideoLinkInfo>>({});
-const activePointVideo = computed<VideoLinkInfo | null>(() => {
+const activePointVideo = computed<{ href: string } | null>(() => {
 	if (activeDisplayItem.value?.type !== "point") return null;
-	return videosData.value[activeDisplayItem.value.data.id] ?? null;
+	const { video } = activeDisplayItem.value.data;
+	return video ? { href: video } : null;
 });
 
 // Topics zonder live telling (i.t.t. PlenairMap.vue's topicCounts): die telt
@@ -534,6 +536,7 @@ async function getTileData({ index }: { index: TileIndex }): Promise<DeckPoint[]
 			publishedAt: String(p.published_at ?? ""),
 			cluster: typeof p.cluster === "number" ? p.cluster : null,
 			year: parseYear(p.published_at),
+			video: typeof p.video === "string" && p.video ? p.video : null,
 		});
 	}
 	return points;
@@ -641,18 +644,13 @@ onMounted(async () => {
 		// -full-bestanden (issue #293/#259: de volle dataset is nu de
 		// standaard, niet de kleine steekproef) -- clusters.levels hoort bij
 		// die volle run, staat niet in de kleine jsDelivr-databasis, dus ook
-		// die fetch gaat via tilesBaseUrl (HF). plenair-map-videos.json is wél
-		// via de jsDelivr-databasis gepubliceerd (dataBaseUrl), niet de HF-bundel.
-		const [gridResponse, clustersResponse, videosResponse] = await Promise.all([
+		// die fetch gaat via tilesBaseUrl (HF).
+		const [gridResponse, clustersResponse] = await Promise.all([
 			fetch(`${props.tilesBaseUrl}/plenair-map-full-grid.json`),
 			fetch(`${props.tilesBaseUrl}/plenair-map-clusters-full.json`).catch(() => null),
-			fetch(`${props.dataBaseUrl}/plenair-map-videos.json`).catch(() => null),
 		]);
 		if (!gridResponse.ok) throw new Error(`Status ${gridResponse.status}`);
 		const grid: GridMetadata = await gridResponse.json();
-		if (videosResponse && videosResponse.ok) {
-			videosData.value = await videosResponse.json();
-		}
 
 		let hulls: GeoJSON.FeatureCollection = { type: "FeatureCollection", features: [] };
 		let labels: GeoJSON.FeatureCollection = { type: "FeatureCollection", features: [] };
@@ -727,8 +725,17 @@ onMounted(async () => {
 						// vlak (createLabelBackgroundImage()), dus zwarte tekst blijft in
 						// beide thema's leesbaar -- de vroegere thema-afhankelijke
 						// gedempte tekstkleur (theme.muted) had op die lichte achtergrond
-						// te weinig contrast.
-						paint: { "text-color": "#000000", "icon-opacity": 0.55 },
+						// te weinig contrast. Ondoorzichtig (icon-opacity 1) i.p.v. 0,55:
+						// bij die lagere opacity scheen de kleurrijke puntenwolk erdoorheen
+						// en werd het vlak op de donkere achtergrond een grijzige waas --
+						// precies het "onleesbaar"-effect. text-halo als vangnet voor het
+						// geval de sprite een lang label niet volledig dekt.
+						paint: {
+							"text-color": "#000000",
+							"text-halo-color": "#ffffff",
+							"text-halo-width": 1.5,
+							"icon-opacity": 1,
+						},
 					},
 				],
 			},
@@ -916,12 +923,12 @@ onUnmounted(() => {
 							<a
 								v-if="activePointVideo"
 								:href="activePointVideo.href"
-								:target="activePointVideo.is_internal ? '_self' : '_blank'"
+								target="_blank"
 								rel="noopener noreferrer"
 								class="video-link-btn"
-								:title="activePointVideo.label"
+								title="Bekijk spreekbeurt op Debat Direct"
 							>
-								<span>{{ activePointVideo.is_internal ? "Bekijk in videospeler" : "Bekijk video" }}</span>
+								<span>Bekijk video</span>
 							</a>
 							<span v-if="isPinned" class="pinned-indicator">Vastgezet</span>
 							<button v-if="isPinned" class="close-info-btn" @click="pinnedItem = null" title="Sluit vastzetting" aria-label="Sluit">&times;</button>

@@ -6,11 +6,18 @@ def _points(ids):
     return [(i, 0.0, 0.0) for i in ids]
 
 
+def _flat_weights(points):
+    # Gewicht 1.0 overal == dezelfde rangorde als de oude puur-hash-gebaseerde
+    # versie (zie `point_priority()`'s docstring in build_pyramid.py).
+    return {point[0]: 1.0 for point in points}
+
+
 def test_thin_zoom_points_globally_keeps_more_from_dense_tile_than_sparse():
     dense = _points(range(0, 4000))
     sparse = _points(range(4000, 4400))
     grouped = {1: dense, 2: sparse}
-    ranks = compute_global_point_ranks(dense + sparse)
+    all_points = dense + sparse
+    ranks = compute_global_point_ranks(all_points, _flat_weights(all_points))
 
     thinned = thin_zoom_points_globally(grouped, ranks, max_points_per_tile=100)
 
@@ -28,7 +35,7 @@ def test_thin_zoom_points_globally_keeps_more_from_dense_tile_than_sparse():
 
 def test_thin_zoom_points_globally_is_zoom_monotone():
     all_points = _points(range(0, 5000))
-    ranks = compute_global_point_ranks(all_points)
+    ranks = compute_global_point_ranks(all_points, _flat_weights(all_points))
 
     # Grof niveau: alles in 1 tile. Fijn niveau: dezelfde punten over 8 tiles
     # verdeeld (elk 625 punten) -- budget schaalt dus mee met het aantal tiles.
@@ -44,7 +51,7 @@ def test_thin_zoom_points_globally_is_zoom_monotone():
 def test_thin_zoom_points_globally_no_thinning_when_under_budget():
     points = _points(range(0, 50))
     grouped = {1: points}
-    ranks = compute_global_point_ranks(points)
+    ranks = compute_global_point_ranks(points, _flat_weights(points))
 
     thinned = thin_zoom_points_globally(grouped, ranks, max_points_per_tile=100)
 

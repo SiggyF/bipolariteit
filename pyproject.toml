@@ -64,6 +64,8 @@ tiling = [
     "pmtiles>=3.7.0",
     "datashader>=0.19.1",
     "colorspacious>=1.1.2",
+    "rasterio>=1.5.2",
+    "rio-cogeo>=7.0.3",
 ]
 
 [tool.pytest.ini_options]
