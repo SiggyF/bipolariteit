@@ -149,5 +149,5 @@ Alle vijf: vervang de hard-gecodeerde `isDark ? "#…" : "#…"`-paren door `:th
 
 ## Wat nog niet vastligt
 
-- De tag-heatmap (`.tag-heatmap`) is HTML, geen ECharts. Die gebruikt dezelfde sequentiële en divergerende stappen als CSS-variabelen. Dat hoort bij een latere module.
-- Of `tag-styles.json` zelf ook de nieuwe perspectiefkleuren krijgt (iconen buiten grafieken), is een aparte keuze. Deze spec vervangt ze alleen in grafieken.
+- De tag-heatmap (`.tag-heatmap`) is HTML, geen ECharts. Die gebruikt dezelfde sequentiële en divergerende stappen als CSS-variabelen. Dat hoort bij module 8 (zie `invoering.md`).
+- Of `tag-styles.json` zelf ook de nieuwe perspectiefkleuren krijgt (iconen buiten grafieken), is een aparte keuze. Deze spec vervangt ze alleen in grafieken; module 8 behandelt de tags-pagina.

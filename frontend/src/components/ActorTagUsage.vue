@@ -119,10 +119,6 @@ const medianRows = computed(() => {
 
 // Mediaan-streep in galnoot (de tekstkleur): de enige donkere lijn in de
 // grafiek, zoals de middenas in de gespiegelde standpuntbalk (grafiek.md).
-function hexNaarRgb(hex: string): string {
-	const n = parseInt(hex.slice(1), 16);
-	return `${(n >> 16) & 255}, ${(n >> 8) & 255}, ${n & 255}`;
-}
 
 // Zelfde plafond als de balken zelf (barMaxWidth hieronder) -- op smalle
 // balken (weinig rijen, dus brede category-band) mag de tik/het icoontje niet
@@ -138,43 +134,27 @@ function renderMedianTik(_params: any, api: any) {
 	const idx = api.value(0) as number;
 	const med = api.value(1) as number;
 
-	const y = api.coord([0, idx])[1];
-	const xMed = api.coord([med, idx])[0];
-	const capHalf = barHalfHoogte(api);
+	// Afgerond op de pixelgrid: bij een even lineWidth (2px) moet het midden
+	// op een heel pixel liggen, anders valt de rand tussen twee pixels en
+	// anti-aliast canvas 'm wazig in plaats van scherp.
+	const y = Math.round(api.coord([0, idx])[1]);
+	const xMed = Math.round(api.coord([med, idx])[0]);
+	const capHalf = Math.round(barHalfHoogte(api));
 	const color = VLOEI[modus.value].galnoot;
-	const rgb = hexNaarRgb(color);
 
-	// Zachte gloed achter de streep i.p.v. een harde lijn -- zelfde
-	// "radiotuner-naald"-idee als de video-afspeelkop (VideoTimeline.vue),
-	// maar dan met de vervaging alleen links-rechts, niet omhoog-omlaag (op
-	// verzoek). `shadowBlur` blurt altijd rondom (isotroop), dus i.p.v.
-	// daarvan een losse band achter de streep met een horizontale
-	// kleur-naar-transparant gradient -- exact zo hoog als de streep zelf,
-	// dus geen verticale vervaging.
-	const glowHalfWidth = 4;
+	// Mediaan-tik als "I": een verticale streep met korte dwarsstreepjes aan
+	// de uiteinden, zoals een foutbalk/mediaanmarkering in statistiekgrafieken
+	// -- geen gloed meer. Die hoorde bij de rode radiotuner-naald
+	// (VideoTimeline.vue) tegen een "plastic glas"-achtergrond; in vlakke
+	// inkt oogde diezelfde vorm alleen nog als een onverklaarde wazige balk.
+	const capWidth = 4;
+	const line = { stroke: color, lineWidth: 2, opacity: 0.75 };
 	return {
 		type: "group",
 		children: [
-			{
-				type: "rect",
-				shape: { x: xMed - glowHalfWidth, y: y - capHalf, width: glowHalfWidth * 2, height: capHalf * 2 },
-				style: {
-					fill: {
-						type: "linear",
-						x: 0,
-						y: 0,
-						x2: 1,
-						y2: 0,
-						colorStops: [
-							{ offset: 0, color: `rgba(${rgb}, 0)` },
-							{ offset: 0.5, color: `rgba(${rgb}, 0.55)` },
-							{ offset: 1, color: `rgba(${rgb}, 0)` },
-						],
-					},
-				},
-				silent: true,
-			},
-			{ type: "line", shape: { x1: xMed, y1: y - capHalf, x2: xMed, y2: y + capHalf }, style: { stroke: color, lineWidth: 2 } },
+			{ type: "line", shape: { x1: xMed, y1: y - capHalf, x2: xMed, y2: y + capHalf }, style: line },
+			{ type: "line", shape: { x1: xMed - capWidth / 2, y1: y - capHalf, x2: xMed + capWidth / 2, y2: y - capHalf }, style: line },
+			{ type: "line", shape: { x1: xMed - capWidth / 2, y1: y + capHalf, x2: xMed + capWidth / 2, y2: y + capHalf }, style: line },
 		],
 	};
 }
