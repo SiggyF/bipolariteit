@@ -140,6 +140,10 @@
 	--contra-was: #f1dcd8;
 	--onduidelijk: #5d6475;
 	--onduidelijk-was: #e3e5ea;
+	/* Apart van --onduidelijk: als vlak in grafieken valt het teksttoken bij
+	   deuteranopie bijna samen met pro. Lichter vlak + arcering (zie
+	   docs/design/vloei/grafiek.md) scheidt ze op lichtheid én textuur. */
+	--onduidelijk-vlak: #aab0bd;
 
 	/* Donkerder dan het oude #a6742c zodat "onderbouwing" ook als tekst
 	   ≥4.5:1 haalt op vloei en blad (about-pagina, issue #89). */
@@ -161,6 +165,10 @@
 	--hoek-s: 3px;
 	--hoek-m: 10px;
 	--hoek-rond: 999px;
+
+	/* Schaduw voor zwevende lagen (deelmenu, facet-sheet, tooltip) -- de enige
+	   plek waar Vloei schaduw gebruikt, kaarten zelf hebben er geen. */
+	--uitloop: 0 8px 24px rgba(26, 32, 49, 0.18);
 
 	/* Aliassen naar de oude namen, zodat componenten in stap 1 ongewijzigd
 	   blijven -- zie docs/design/vloei/invoering.md. Vervallen in stap 3
@@ -3294,6 +3302,156 @@ a.card-item:hover {
 	--contra-was: #43211d;
 	--onduidelijk: #a3a9b8;
 	--onduidelijk-was: #2a2f3b;
+	--onduidelijk-vlak: #525869;
+	--uitloop: 0 8px 24px rgba(0, 0, 0, 0.45);
 
 	--onderbouwing: #d1a44f;
+}
+
+/* ---------- Vloei: grafiek-chrome (legenda, tooltip, font) ------------
+   Canvas-grafieken zelf gebruiken het ECharts-thema in lib/vloeiChart.ts;
+   dit is de HTML eromheen. Zie docs/design/vloei/grafiek.md. */
+
+/* Vaste smalle instantie van Archivo (wdth 85) voor canvas-grafieken: canvas
+   kan geen font-variation-settings lezen. */
+@font-face {
+	font-family: "Archivo Smal";
+	src: url("/fonts/archivo-smal.woff2") format("woff2");
+	font-weight: 100 900;
+	font-style: normal;
+	font-display: swap;
+}
+
+.vl-grafiek {
+	background: var(--blad);
+	border-radius: var(--hoek-m);
+	padding: var(--ruimte-4) var(--ruimte-6) var(--ruimte-6);
+}
+.vl-grafiek > h3 {
+	margin: 0 0 var(--ruimte-3);
+} /* class="kop-2" */
+
+/* ---------- legenda (HTML, boven de grafiek) ---------- */
+.vl-legenda {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: var(--ruimte-2) var(--ruimte-4);
+	list-style: none;
+	margin: 0 0 var(--ruimte-3);
+	padding: 0;
+	font-family: var(--font-kop);
+	font-size: 13px;
+	line-height: 16px;
+	font-weight: 600;
+	font-variation-settings: "wdth" 85;
+	color: var(--galnoot);
+}
+.vl-legenda li,
+.vl-legenda button {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+}
+.vl-legenda button {
+	border: 0;
+	background: none;
+	font: inherit;
+	color: inherit;
+	padding: 2px var(--ruimte-2) 2px 4px;
+	border-radius: var(--hoek-rond);
+	cursor: pointer;
+}
+.vl-legenda button:hover {
+	background: var(--was);
+}
+.vl-legenda button[aria-pressed="false"] {
+	color: var(--galnoot-zacht);
+	text-decoration: line-through;
+}
+.vl-legenda .aantal {
+	color: var(--galnoot-zacht);
+	font-weight: 500;
+	font-variant-numeric: tabular-nums;
+}
+/* Gespiegelde legenda: pro links, onduidelijk midden, contra rechts, net als de balken. */
+.vl-legenda.is-gespiegeld {
+	justify-content: space-between;
+}
+
+/* Kleurvakje voor categorische reeksen (10x10, hoek-s). Kleur via style="--kleur: …". */
+.vl-swatch {
+	width: 10px;
+	height: 10px;
+	border-radius: var(--hoek-s);
+	background: var(--kleur, var(--rand));
+	flex: none;
+}
+.vl-swatch.is-rond {
+	border-radius: 50%;
+} /* scatter-punten */
+.vl-swatch.is-lijn {
+	width: 14px;
+	height: 2px;
+	border-radius: 1px;
+} /* lijnreeks, mediaan */
+/* Gearceerd vakje = onduidelijk in grafieken (zelfde arcering als de ECharts-decal). */
+.vl-swatch.is-arcering {
+	background: repeating-linear-gradient(-45deg, var(--kleur) 0 3px, var(--blad) 3px 5px);
+}
+
+/* ---------- tooltip (ECharts tooltip.className = "vl-tooltip") ---------- */
+.vl-tooltip {
+	background: var(--blad) !important;
+	color: var(--galnoot) !important;
+	border: 0 !important;
+	border-radius: var(--hoek-m) !important;
+	box-shadow: var(--uitloop) !important;
+	padding: 10px 12px !important;
+	min-width: 180px;
+	max-width: 260px;
+	white-space: normal !important;
+	font-family: var(--font-kop);
+	font-size: 13px;
+	line-height: 18px;
+	font-weight: 500;
+	font-variation-settings: "wdth" 85;
+}
+/* ECharts maakt de tooltip-div leeg aan vóór de eerste hover: niet tonen. */
+.vl-tooltip:empty {
+	display: none !important;
+}
+.vl-tooltip-kop {
+	display: flex;
+	justify-content: space-between;
+	gap: var(--ruimte-3);
+	margin-bottom: 6px;
+	font-weight: 700;
+	font-size: 14px;
+}
+.vl-tooltip-rij {
+	display: grid;
+	grid-template-columns: 1fr auto auto;
+	align-items: center;
+	gap: var(--ruimte-2);
+	padding: 2px 0;
+}
+.vl-tooltip-waarde {
+	text-align: right;
+	font-weight: 700;
+	font-variant-numeric: tabular-nums;
+}
+.vl-tooltip-extra {
+	text-align: right;
+	color: var(--galnoot-zacht);
+	font-weight: 500;
+	font-variant-numeric: tabular-nums;
+}
+.vl-tooltip-citaat {
+	margin-top: 6px;
+	font-family: var(--font-tekst);
+	font-style: italic;
+	font-size: 14px;
+	line-height: 21px;
+	font-variation-settings: normal;
 }

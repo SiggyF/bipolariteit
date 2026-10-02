@@ -4,8 +4,10 @@ import { scaleThreshold } from "d3-scale";
 import { select } from "d3-selection";
 import { zoom as d3zoom, zoomIdentity, type D3ZoomEvent } from "d3-zoom";
 import { useTheme } from "../lib/useTheme";
+import { CATEGORISCH, VLOEI, themaNaam } from "../lib/vloeiChart";
 import VChart from "vue-echarts";
 import { use } from "echarts/core";
+import "../lib/echartsSetup";
 import { CanvasRenderer } from "echarts/renderers";
 import { ScatterChart, CustomChart } from "echarts/charts";
 import { TooltipComponent, GridComponent, DataZoomInsideComponent } from "echarts/components";
@@ -70,28 +72,32 @@ const status = ref<"loading" | "ready" | "error">("loading");
 const pointsData = ref<RawExport>({ topics: [], actors: [], parties: [], debates: [], soorten: [], points: [] });
 const clustersData = ref<ClustersExport | null>(null);
 
-const TOPIC_COLOR: Record<string, string> = {
-	stikstof: "#4a7a4a",
-	abortus: "#a64d5f",
-	asiel: "#c07a2e",
-	energietransitie: "#3d6e8f",
-	plenair: "#a89e8c",
-};
+// Onderwerpen op de vier vaste categorische slots (grafiek.md: slot 1 stikstof,
+// 2 abortus, 3 asiel, 4 energietransitie); "plenair" op `rand`, zoals elke
+// vijfde-of-verdere reeks in dat schema.
+const TOPIC_SLOT: Record<string, number> = { stikstof: 0, abortus: 1, asiel: 2, energietransitie: 3 };
 
-const TOPIC_RGB: Record<string, [number, number, number]> = {
-	stikstof: [74 / 255, 122 / 255, 74 / 255],
-	abortus: [166 / 255, 77 / 255, 95 / 255],
-	asiel: [192 / 255, 122 / 255, 46 / 255],
-	energietransitie: [61 / 255, 110 / 255, 143 / 255],
-	plenair: [168 / 255, 158 / 255, 140 / 255],
-};
+function topicColor(topic: string, modus: "light" | "dark"): string {
+	const slot = TOPIC_SLOT[topic];
+	return slot === undefined ? VLOEI[modus].rand : CATEGORISCH[modus][slot];
+}
+
+function hexToUnitRgb(hex: string): [number, number, number] {
+	const n = parseInt(hex.slice(1), 16);
+	return [((n >> 16) & 255) / 255, ((n >> 8) & 255) / 255, (n & 255) / 255];
+}
+
+function topicRgb(topic: string, modus: "light" | "dark"): [number, number, number] {
+	return hexToUnitRgb(topicColor(topic, modus));
+}
 
 const pointLimit = ref<number>(40000);
 const hullMode = ref<"none" | "coarse" | "fine" | "semantic">("semantic");
 const showLabels = ref(true);
 
 const isDark = useTheme();
-const ink = computed(() => (isDark.value ? "#f2ede3" : "#221f1b"));
+const modus = computed<"light" | "dark">(() => (isDark.value ? "dark" : "light"));
+const ink = computed(() => VLOEI[modus.value].galnoot);
 
 // Canvas Viewport State (Zoom & Pan)
 const zoom = ref(1);
@@ -372,7 +378,7 @@ function updateWebGLData(gl: WebGLRenderingContext, prog: WebGLProgram, buf: Web
 		// Normalize to [-1, 1] relative to center
 		const nx = (p.x - b.cx) / (b.spanX / 2);
 		const ny = (p.y - b.cy) / (b.spanY / 2);
-		const rgb = TOPIC_RGB[p.topic] || TOPIC_RGB.plenair;
+		const rgb = topicRgb(p.topic, modus.value);
 		const sz = p.topic === "plenair" ? 4.5 : 8.5;
 
 		const idx = i * stride;
@@ -468,7 +474,7 @@ function renderCanvas2D(canvas: HTMLCanvasElement) {
 	for (const [topic, topicPts] of Object.entries(groups)) {
 		if (topicPts.length === 0) continue;
 		const isPlenair = topic === "plenair";
-		ctx.fillStyle = TOPIC_COLOR[topic] || TOPIC_COLOR.plenair;
+		ctx.fillStyle = topicColor(topic, modus.value);
 		ctx.globalAlpha = isPlenair ? (isDark.value ? 0.35 : 0.25) : 0.75;
 		const r = isPlenair ? basePlenairRadius : baseTopicRadius;
 
@@ -908,7 +914,6 @@ const echartsOption = computed(() => {
 	const b = rawBounds.value;
 
 	return {
-		backgroundColor: "transparent",
 		animation: false,
 		grid: { top: 16, left: 16, right: 16, bottom: 16, containLabel: false },
 		dataZoom: [
@@ -924,14 +929,14 @@ const echartsOption = computed(() => {
 				symbolSize: 4,
 				large: true,
 				largeThreshold: 1000,
-				itemStyle: { color: TOPIC_COLOR.plenair, opacity: 0.25 },
+				itemStyle: { color: VLOEI[modus.value].rand, opacity: 0.25 },
 				data: echartsPlenairPts.value,
 			},
 			{
 				name: "topics",
 				type: "scatter",
 				symbolSize: 7,
-				itemStyle: { color: "#3d6e8f", opacity: 0.8 },
+				itemStyle: { color: CATEGORISCH[modus.value][0], opacity: 0.8 },
 				data: echartsTopicPts.value,
 			},
 		],
@@ -1140,6 +1145,7 @@ const showFineInOverlay = computed(() => {
 				ref="chartRef"
 				class="echarts-view"
 				:option="echartsOption"
+				:theme="themaNaam(isDark)"
 				autoresize
 			/>
 
@@ -1203,7 +1209,7 @@ const showFineInOverlay = computed(() => {
 						:cx="worldToScreen(p.x, p.y)[0]"
 						:cy="worldToScreen(p.x, p.y)[1]"
 						:r="Math.max(3, Math.min(8, 3.5 * Math.sqrt(zoom)))"
-						:fill="TOPIC_COLOR[p.topic] || TOPIC_COLOR.plenair"
+						:fill="topicColor(p.topic, modus)"
 						opacity="0.85"
 					/>
 				</g>
