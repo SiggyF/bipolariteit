@@ -2398,9 +2398,13 @@ h3 {
 	line-height: 1.5;
 }
 
-/* Gegolfde underline (Word-grammar-stijl) i.p.v. een rechte border-bottom:
-   leest meteen als aantekening op de tekst, niet als linkonderstreping of
-   -doorhaling. */
+/* Gegolfde underline (Word-grammar-stijl) i.p.v. een border-bottom: leest
+   meteen als aantekening op de tekst, niet als linkonderstreping of
+   -doorhaling. --onderbouwing zelf is op deze dunne lijn te donker/te weinig
+   verzadigd om van --galnoot te onderscheiden (beide lezen als "donker") --
+   hier daarom lokaal opgelicht naar een duidelijk goud, puur voor deze twee
+   underlines, los van het --onderbouwing-token zoals dat elders (randen,
+   argumentschema) gebruikt wordt. */
 .arg-standpunt {
 	text-decoration-line: underline;
 	text-decoration-style: wavy;
@@ -2412,8 +2416,8 @@ h3 {
 .arg-onderbouwing {
 	text-decoration-line: underline;
 	text-decoration-style: wavy;
-	text-decoration-color: var(--onderbouwing);
-	text-decoration-thickness: 1px;
+	text-decoration-color: color-mix(in srgb, var(--onderbouwing) 65%, #ffcc33 35%);
+	text-decoration-thickness: 1.5px;
 	text-underline-offset: 3px;
 }
 
@@ -2439,12 +2443,18 @@ h3 {
 	color: var(--galnoot-zacht);
 }
 
-.argument-legend {
+/* ul.argument-legend (niet .argument-legend) i.p.v. de kortere selector:
+   .about ul (klasse+tag, specificiteit 0-1-1) overschreef anders deze
+   padding/margin ondanks dat deze regel later in het bestand staat -- gelijke
+   specificiteit is hier nodig om daadwerkelijk te winnen op brondvolgorde. */
+ul.argument-legend {
 	display: flex;
 	flex-wrap: wrap;
-	gap: var(--space-2);
+	gap: var(--space-3);
 	margin: var(--space-2) 0 var(--space-3);
-	padding: 0;
+	padding: var(--ruimte-4) var(--ruimte-6);
+	border-radius: var(--hoek-m);
+	background: var(--blad);
 	list-style: none;
 	font-size: var(--step--1);
 	color: var(--galnoot-zacht);
