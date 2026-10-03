@@ -79,7 +79,7 @@ export const PERSPECTIEVEN: PerspectiefStijl[] = [
 	{
 		"key": "filosofisch-argumentatietheoretisch",
 		"naam": "Filosofisch & Argumentatietheoretisch",
-		"kleur": "#B68235",
+		"kleur": "#B97515",
 		"icoon": "library",
 		"tags": {
 			"Walton-Causaal": "workflow",
@@ -107,7 +107,7 @@ export const PERSPECTIEVEN: PerspectiefStijl[] = [
 	{
 		"key": "communicatiewetenschappelijk-media",
 		"naam": "Communicatiewetenschappelijk & Media",
-		"kleur": "#4C7C7A",
+		"kleur": "#2692BA",
 		"icoon": "radio",
 		"tags": {
 			"Frame-Episodisch": "camera",
@@ -131,7 +131,7 @@ export const PERSPECTIEVEN: PerspectiefStijl[] = [
 	{
 		"key": "politicologisch-sociaal-psychologisch",
 		"naam": "Politicologisch & Sociaal-Psychologisch",
-		"kleur": "#B15E4A",
+		"kleur": "#AB437B",
 		"icoon": "brain",
 		"tags": {
 			"Ideologie-GAL": "leaf",
@@ -150,7 +150,7 @@ export const PERSPECTIEVEN: PerspectiefStijl[] = [
 	{
 		"key": "methodologisch-contextueel",
 		"naam": "Methodologisch & Contextueel",
-		"kleur": "#6B8558",
+		"kleur": "#434BAA",
 		"icoon": "ruler",
 		"tags": {
 			"Bewijs-Statistisch": "pie-chart",
