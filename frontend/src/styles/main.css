@@ -149,6 +149,17 @@
 	   ≥4.5:1 haalt op vloei en blad (about-pagina, issue #89). */
 	--onderbouwing: #8a5f22;
 
+	/* Categorisch (identiteit, vier vaste slots): vervangt de perspectiefkleuren
+	   uit tag-styles.json, die te dicht op pro/contra lagen. Zie grafiek.md en
+	   PERSPECTIEF_SLOT in lib/vloeiChart.ts -- daar dezelfde waarden, als spiegel
+	   voor canvas. Gebruik --vl-overig voor "plenair"/onbekend, nooit een vijfde
+	   kleur genereren. */
+	--vl-indigo: #434baa;
+	--vl-oker: #b97515;
+	--vl-pruim: #ab437b;
+	--vl-hemel: #2692ba;
+	--vl-overig: var(--rand);
+
 	--font-kop: "Archivo", "Arial Narrow", system-ui, sans-serif;
 	--font-tekst: "Literata", Georgia, serif;
 
@@ -3322,6 +3333,11 @@ a.card-item:hover {
 	--uitloop: 0 8px 24px rgba(0, 0, 0, 0.45);
 
 	--onderbouwing: #d1a44f;
+
+	--vl-indigo: #5763c4;
+	--vl-oker: #986116;
+	--vl-pruim: #b94f87;
+	--vl-hemel: #379fc7;
 }
 
 /* ---------- Vloei: grafiek-chrome (legenda, tooltip, font) ------------

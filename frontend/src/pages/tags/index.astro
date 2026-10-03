@@ -3,7 +3,7 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import EntityTabs from "../../components/EntityTabs.astro";
 import { TAXONOMIE } from "../../lib/taxonomy";
 import { PERSPECTIEVEN, ICOON_PAD } from "../../lib/tagIcons.generated";
-import { tagIconPath, perspectiefWeergaveNaam } from "../../lib/tagIcon";
+import { tagIconPath, perspectiefWeergaveNaam, perspectiefKleurVar } from "../../lib/tagIcon";
 import { slugify } from "../../lib/slug";
 import { canonicalParty } from "../../lib/parties";
 
@@ -27,7 +27,9 @@ for (const mod of Object.values(topicModules)) {
 	}
 }
 
-const kleurPerPerspectief = new Map(PERSPECTIEVEN.map((p) => [p.naam, p.kleur]));
+// Vloei-categorische kleur (issue #220, module 8) i.p.v. tag-styles.json's
+// kleur: die lag te dicht op pro/contra (zie grafiek.md).
+const kleurPerPerspectief = new Map(PERSPECTIEVEN.map((p) => [p.naam, perspectiefKleurVar(p.naam)]));
 const icoonPerPerspectief = new Map(PERSPECTIEVEN.map((p) => [p.naam, p.icoon]));
 
 const totaalTags = TAXONOMIE.reduce((n, p) => n + p.labelgroepen.reduce((m, lg) => m + lg.tags.length, 0), 0);

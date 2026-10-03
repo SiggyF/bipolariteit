@@ -1,4 +1,5 @@
 import { ICOON_PAD, PERSPECTIEVEN } from "./tagIcons.generated";
+import { PERSPECTIEF_SLOT } from "./vloeiChart";
 
 // tagsleutel -> icoonpad/perspectiefkleur, over alle perspectieven heen. Eén
 // lookup i.p.v. dit in elke component die een tagicoon/-kleur toont opnieuw
@@ -46,4 +47,17 @@ const PERSPECTIEF_KORTE_NAAM: Record<string, string> = {
 /** Verkorte weergavenaam voor een perspectief, voor gebruik in koppen/kaarten. */
 export function perspectiefWeergaveNaam(naam: string): string {
 	return PERSPECTIEF_KORTE_NAAM[naam] ?? naam;
+}
+
+const PERSPECTIEF_SLOT_VAR = ["var(--vl-indigo)", "var(--vl-oker)", "var(--vl-pruim)", "var(--vl-hemel)"];
+
+/** Vloei-categorische kleur voor een perspectief, als CSS custom property --
+ * voor gewone HTML/Astro-markup (geen canvas, dus geen hex per modus nodig
+ * zoals `perspectiefKleur()` in vloeiChart.ts; de dark-variant volgt via
+ * `:root[data-theme="dark"]` in main.css). Zelfde slotvolgorde als
+ * `PERSPECTIEF_SLOT`, zodat eenzelfde perspectief overal dezelfde kleur
+ * draagt, in grafieken en daarbuiten. */
+export function perspectiefKleurVar(naam: string): string {
+	const slot = PERSPECTIEF_SLOT[naam];
+	return slot === undefined ? "var(--vl-overig)" : PERSPECTIEF_SLOT_VAR[slot];
 }
