@@ -149,5 +149,5 @@ Alle vijf: vervang de hard-gecodeerde `isDark ? "#…" : "#…"`-paren door `:th
 
 ## Wat nog niet vastligt
 
-- De tag-heatmap (`.tag-heatmap`) is HTML, geen ECharts. Die gebruikt dezelfde sequentiële en divergerende stappen als CSS-variabelen. Dat hoort bij module 8 (zie `invoering.md`).
-- Of `tag-styles.json` zelf ook de nieuwe perspectiefkleuren krijgt (iconen buiten grafieken), is een aparte keuze. Deze spec vervangt ze alleen in grafieken; module 8 behandelt de tags-pagina.
+- De tag-heatmap (`.tag-heatmap`, `PerspectiefTagHeatmap.vue`) is HTML, geen ECharts. Die gebruikt dezelfde sequentiële en divergerende stappen als CSS-variabelen. Staat niet op `/tags/` maar op `/perspectieven/[naam]/` (via `PerspectiefView.vue`) -- buiten module 8 (die ging over `/tags/`, zie `invoering.md`), nog open.
+- Of `tag-styles.json` zelf ook de nieuwe perspectiefkleuren krijgt (iconen buiten grafieken), is een aparte keuze. Module 8 (`/tags/`) heeft dit al opgelost via `perspectiefKleurVar()` (`lib/tagIcon.ts`, CSS-custom-property-variant van `perspectiefKleur()`); `/personen/`, `/partijen/` en `/perspectieven/` staan nog op `tag-styles.json`.
