@@ -2372,28 +2372,53 @@ h3 {
 	gap: var(--space-2);
 }
 
+/* Vloei-kaart i.p.v. de oude krantenstijl (.about li::before-streepje +
+   onderlijn-scheiding, zie commentaar bij .about hierboven) -- deze
+   voorbeelden staan inhoudelijk los van elkaar, een kaart maakt dat ook
+   visueel duidelijk. padding-left/position resetten, anders blijft .about
+   li's ruimte voor het (hier verwijderde) streepje staan. */
 .argument-voorbeelden li {
-	padding-bottom: var(--space-2);
-	border-bottom: 1px solid var(--lijn);
+	padding: var(--ruimte-4) var(--ruimte-6);
+	position: static;
+	border-radius: var(--hoek-m);
+	background: var(--blad);
 }
 
-.argument-voorbeelden li:last-child {
-	border-bottom: none;
+.argument-voorbeelden li::before {
+	content: none;
 }
 
+/* Een aanhaling is lopende tekst, geen koptitel -- zelfde citaat-typestijl
+   (font-tekst cursief) als .quote in ArgumentCard.vue. */
 .argument-quote {
 	margin: 0;
-	font-family: var(--font-kop);
+	font-family: var(--font-tekst);
+	font-style: italic;
 	font-size: var(--step-0);
 	line-height: 1.5;
 }
 
+/* Gegolfde underline (Word-grammar-stijl) i.p.v. een border-bottom: leest
+   meteen als aantekening op de tekst, niet als linkonderstreping of
+   -doorhaling. --onderbouwing zelf is op deze dunne lijn te donker/te weinig
+   verzadigd om van --galnoot te onderscheiden (beide lezen als "donker") --
+   hier daarom lokaal opgelicht naar een duidelijk goud, puur voor deze twee
+   underlines, los van het --onderbouwing-token zoals dat elders (randen,
+   argumentschema) gebruikt wordt. */
 .arg-standpunt {
-	border-bottom: 2px solid var(--galnoot);
+	text-decoration-line: underline;
+	text-decoration-style: wavy;
+	text-decoration-color: var(--galnoot);
+	text-decoration-thickness: 1px;
+	text-underline-offset: 3px;
 }
 
 .arg-onderbouwing {
-	border-bottom: 2px solid var(--onderbouwing);
+	text-decoration-line: underline;
+	text-decoration-style: wavy;
+	text-decoration-color: color-mix(in srgb, var(--onderbouwing) 65%, #ffcc33 35%);
+	text-decoration-thickness: 1.5px;
+	text-underline-offset: 3px;
 }
 
 .argument-ontbreekt {
@@ -2412,18 +2437,24 @@ h3 {
 	border-bottom: 2px dashed var(--lijn);
 }
 
-.argument-meta {
+.argument-voorbeeld-meta {
 	margin: 0.35rem 0 0;
 	font-size: var(--step--1);
 	color: var(--galnoot-zacht);
 }
 
-.argument-legend {
+/* ul.argument-legend (niet .argument-legend) i.p.v. de kortere selector:
+   .about ul (klasse+tag, specificiteit 0-1-1) overschreef anders deze
+   padding/margin ondanks dat deze regel later in het bestand staat -- gelijke
+   specificiteit is hier nodig om daadwerkelijk te winnen op brondvolgorde. */
+ul.argument-legend {
 	display: flex;
 	flex-wrap: wrap;
-	gap: var(--space-2);
+	gap: var(--space-3);
 	margin: var(--space-2) 0 var(--space-3);
-	padding: 0;
+	padding: var(--ruimte-4) var(--ruimte-6);
+	border-radius: var(--hoek-m);
+	background: var(--blad);
 	list-style: none;
 	font-size: var(--step--1);
 	color: var(--galnoot-zacht);
@@ -2433,6 +2464,12 @@ h3 {
 	display: flex;
 	align-items: center;
 	gap: 0.4rem;
+	position: static;
+	padding-left: 0;
+}
+
+.argument-legend li::before {
+	content: none;
 }
 
 .argument-legend-streep {
@@ -2441,14 +2478,14 @@ h3 {
 	border-bottom: 2px solid var(--lijn);
 }
 
-.arg-standpunt-streep {
-	border-bottom-color: var(--galnoot);
-	border-bottom-style: solid;
-}
-
-.arg-onderbouwing-streep {
-	border-bottom-color: var(--onderbouwing);
-	border-bottom-style: solid;
+/* Specifieker dan .argument-legend-streep, anders wint die z'n eigen
+   (vlakke, smallere) border-bottom van de gestippelde/bredere stijl van
+   .argument-ontbreekt-streep (main.css-brede klasse, elders ook los
+   gebruikt) -- hier moet de legend-rij er precies zo uitzien als het
+   streepje in de voorbeelden zelf. */
+.argument-legend .argument-ontbreekt-streep {
+	width: 2.5rem;
+	border-bottom: 2px dashed var(--lijn);
 }
 
 /* Kleine cijfervoorbeeld-tabel bij de CA-uitleg -- zelfde tabelstijl als
@@ -2477,10 +2514,23 @@ h3 {
 }
 
 .card-group-item {
+	position: relative;
 	padding: var(--space-3);
-	border: 1px solid var(--lijn);
-	border-top: 4px solid var(--card-group-item-accent, var(--galnoot));
+	border-radius: var(--hoek-m);
 	background: var(--blad);
+}
+
+/* Inkttab i.p.v. de oude 4px-rand (zie .vl-kaart): een horizontale balk
+   boven de kop, in de accentkleur. */
+.card-group-item::before {
+	content: "";
+	position: absolute;
+	top: -3px;
+	left: var(--space-3);
+	width: 40px;
+	height: 6px;
+	border-radius: var(--hoek-rond);
+	background: var(--card-group-item-accent, var(--galnoot));
 }
 
 .card-group-item-header {
@@ -2529,8 +2579,8 @@ h3 {
 	display: flex;
 	gap: 0.5rem;
 	padding: 0.5rem 0.65rem;
-	border: 1px solid var(--lijn);
-	background: var(--vloei);
+	border-radius: var(--hoek-s);
+	background: var(--was);
 }
 
 /* .card-item is soms een <div> (about.astro, alleen-lezen legenda) en soms
@@ -2542,9 +2592,13 @@ a.card-item {
 }
 
 a.card-item:hover {
-	border-color: var(--galnoot);
+	background: var(--lijn);
 }
 
+/* Inkttab-achtige accent i.p.v. een harde 1px-rand + vlakke 4px-kleurrand
+   (oude krantenrecept): de kleur zelf blijft een rechte linkerrand -- bij
+   border-radius volgt die netjes de afgeronde hoek -- maar zonder de
+   bijkomende grijze buitenrand. */
 .card-item--accent {
 	border-left: 4px solid var(--card-item-accent, var(--lijn));
 }

@@ -2,7 +2,7 @@
 import { scaleLinear } from "d3-scale";
 import { select } from "d3-selection";
 import { zoom as d3zoom, zoomIdentity, type ZoomTransform } from "d3-zoom";
-import { computed, onMounted, ref, useId, useTemplateRef } from "vue";
+import { computed, onMounted, ref, useTemplateRef } from "vue";
 import { PERSPECTIEVEN } from "../lib/tagIcons.generated";
 import { perspectiefKleurVar } from "../lib/tagIcon";
 import type { Argument } from "../lib/types";
@@ -149,9 +149,6 @@ const segments = computed(() => {
 });
 
 const playheadX = computed(() => X(props.currentTime));
-// Uniek per instance, anders botsen meerdere tijdlijnen op dezelfde pagina
-// op hetzelfde filter-id.
-const glowFilterId = `playhead-glow-${useId()}`;
 
 // Klikken (geen sleep -- dat vangt d3-zoom als pan af) springt naar dat
 // moment; de klik landt op viewBox-coördinaten via de bounding box, want de
@@ -255,22 +252,11 @@ function onKeydown(event: KeyboardEvent) {
 				</title>
 			</rect>
 
-			<!-- Naald in de stijl van een jaren 60/70-radiotuner: een dun rood
-			     lijntje met een zachte, vervagende "plastic" gloed erachter,
-			     i.p.v. een harde lijn+cirkel. -->
-			<defs>
-				<filter :id="glowFilterId" x="-200%" y="-20%" width="400%" height="140%">
-					<feGaussianBlur stdDeviation="3" />
-				</filter>
-			</defs>
-			<rect
-				:x="playheadX - 7"
-				:y="0"
-				width="14"
-				:height="height"
-				class="playhead-glow"
-				:filter="`url(#${glowFilterId})`"
-			/>
+			<!-- Speelkop: 2px galnoot, dezelfde inktlijn-conventie als de
+			     middenas in gespiegeldeStandpuntBalk() (zie grafiek.md) i.p.v.
+			     een gloed/schaduw -- Vloei kent geen gloed-effecten buiten
+			     zwevende lagen (--uitloop), en rood is voorbehouden aan
+			     standpunten. -->
 			<line :x1="playheadX" :x2="playheadX" :y1="1" :y2="height - 1" class="playhead" />
 		</svg>
 	</div>
@@ -382,16 +368,8 @@ function onKeydown(event: KeyboardEvent) {
 	-webkit-tap-highlight-color: transparent;
 }
 
-/* --contra (warm rood) puur om de kleur -- geen inhoudelijke link met
-   "contra" hier, het is de enige rode tint in het palet en past bij het
-   radiotuner-referentiebeeld. */
-.playhead-glow {
-	fill: var(--contra);
-	opacity: 0.35;
-}
-
 .playhead {
-	stroke: var(--contra);
-	stroke-width: 1.25;
+	stroke: var(--galnoot);
+	stroke-width: 2;
 }
 </style>

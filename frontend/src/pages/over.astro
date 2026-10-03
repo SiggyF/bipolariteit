@@ -241,6 +241,11 @@ const remoteCo2Kg = (co2.by_source.remote.co2_g / 1000).toLocaleString("nl-NL", 
 			</div>
 
 			<p>Dit zijn <strong>geen</strong> argumenten, met echte citaten uit de database — het aanwezige deel is onderstreept, het ontbrekende deel is de gestippelde streep:</p>
+			<ul class="argument-legend" role="list">
+				<li><span class="arg-standpunt">standpunt</span></li>
+				<li><span class="arg-onderbouwing">onderbouwing</span></li>
+				<li><span class="argument-legend-streep argument-ontbreekt-streep"></span>ontbrekend deel</li>
+			</ul>
 			<ul class="argument-voorbeelden">
 				{
 					[
@@ -295,7 +300,7 @@ const remoteCo2Kg = (co2.by_source.remote.co2_g / 1000).toLocaleString("nl-NL", 
 							<p class="argument-ontbreekt">
 								<span class="argument-ontbreekt-streep" aria-hidden="true"></span>{voorbeeld.ontbreekt} ontbreekt
 							</p>
-							<p class="argument-meta">
+							<p class="argument-voorbeeld-meta">
 								<strong>{voorbeeld.label}</strong>: {voorbeeld.bron} — {voorbeeld.toelichting}
 							</p>
 						</li>
@@ -331,19 +336,14 @@ const remoteCo2Kg = (co2.by_source.remote.co2_g / 1000).toLocaleString("nl-NL", 
 							<p class="argument-quote">
 								"{voorbeeld.parts.map((part) => <span class={`arg-${part.type}`}>{part.text}</span>)}."
 							</p>
-							<p class="argument-meta">
+							<p class="argument-voorbeeld-meta">
 								{voorbeeld.bron}. <strong>Wel een argument</strong>: {voorbeeld.toelichting}
 							</p>
 						</li>
 					))
 				}
 			</ul>
-			<ul class="argument-legend" role="list">
-				<li><span class="argument-legend-streep arg-standpunt-streep"></span>standpunt</li>
-				<li><span class="argument-legend-streep arg-onderbouwing-streep"></span>onderbouwing</li>
-				<li><span class="argument-legend-streep argument-ontbreekt-streep"></span>ontbrekend deel</li>
-			</ul>
-			<p>
+						<p>
 				Ook zuiver procedurele tekst (orde van de vergadering, spreektijd-afspraken, "ik geef het woord
 				aan...") levert nooit een argument op. Een uitspraak over de legitimiteit of spelregels van het
 				debat zelf telt wél mee als argument, mits onderbouwd, zie de <a href="#argumenttypen">typologie
@@ -757,7 +757,7 @@ const remoteCo2Kg = (co2.by_source.remote.co2_g / 1000).toLocaleString("nl-NL", 
 							const label = CA_TAG_LABEL_OFFSET[tag.sleutel] ?? { dx: 0, dy: -11, anchor: "middle" as const };
 							return (
 								<g>
-									<rect x={p.x - 5} y={p.y - 5} width="10" height="10" transform={`rotate(45 ${p.x} ${p.y})`} fill={caExampleKleur} />
+									<circle cx={p.x} cy={p.y} r="5" fill={caExampleKleur} />
 									<text x={p.x + label.dx} y={p.y + label.dy} class="ca-example-point-label ca-example-tag-label" text-anchor={label.anchor}>
 										{tag.sleutel}
 									</text>
