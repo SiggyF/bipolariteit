@@ -1197,7 +1197,8 @@ const links = computed<LinkPath[]>(() => {
 }
 
 .confrontatie-detail-quote {
-	font-family: var(--confrontatie-font-heading);
+	font-family: var(--confrontatie-font-body);
+	font-style: italic;
 	font-size: 1.02rem;
 	line-height: 1.5;
 	margin: 1rem 0 0.25rem;

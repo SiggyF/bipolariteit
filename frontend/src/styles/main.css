@@ -113,6 +113,17 @@
 	box-sizing: border-box;
 }
 
+/* Form- en knopelementen erven hun font NIET via de normale cascade (browser-
+   default-stylesheet geeft ze de OS-UI-font) -- zonder deze reset viel een
+   deel van de knoppen terug op Arial i.p.v. Archivo/Literata, ook al had
+   elke losse knop-klasse zelf wel de juiste achtergrond/randkleur. */
+button,
+input,
+select,
+textarea {
+	font: inherit;
+}
+
 body {
 	margin: 0;
 	background: var(--vloei);

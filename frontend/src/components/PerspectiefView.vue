@@ -5,7 +5,6 @@ import DebateList from "./DebateList.vue";
 import TagCorrespondenceMap from "./TagCorrespondenceMap.vue";
 import PerspectiefTagHeatmap from "./PerspectiefTagHeatmap.vue";
 import TopPersonsPerTag, { type TagMeta } from "./TopPersonsPerTag.vue";
-import { PERSPECTIEVEN } from "../lib/tagIcons.generated";
 import {
 	deserializePartyTagIndex,
 	deserializePersonTagIndex,
@@ -13,6 +12,8 @@ import {
 	type SerializedPersonTagIndexEntry,
 } from "../lib/aggregate";
 import { perspectiefWeergaveNaam } from "../lib/tagIcon";
+import { perspectiefKleur } from "../lib/vloeiChart";
+import { useTheme } from "../lib/useTheme";
 import { slugify } from "../lib/slug";
 import type { Argument } from "../lib/types";
 
@@ -29,7 +30,13 @@ const props = defineProps<{
 	dataBaseUrl: string;
 }>();
 
-const kleur = computed(() => PERSPECTIEVEN.find((p) => p.naam === props.perspectief)?.kleur ?? "#6f6558");
+// perspectiefKleur() i.p.v. tag-styles.json's kleur (issue #220): die lag te
+// dicht op pro/contra (zie grafiek.md). Hex i.p.v. een CSS custom property,
+// want downstream (DebateCardTagBar.vue, PerspectiefTagHeatmap.vue) wordt er
+// met mixWithBase()/withAlpha() op gerekend.
+const isDark = useTheme();
+const modus = computed(() => (isDark.value ? "dark" : "light"));
+const kleur = computed(() => perspectiefKleur(props.perspectief, modus.value));
 
 type FetchStatus = "loading" | "ready" | "error";
 const status = ref<FetchStatus>("loading");

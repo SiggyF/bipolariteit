@@ -5,6 +5,7 @@ import { displayPartyName, canonicalParty } from "../../lib/parties";
 import { slugify } from "../../lib/slug";
 import { NO_PARTY } from "../../lib/types";
 import { PERSPECTIEVEN } from "../../lib/tagIcons.generated";
+import { perspectiefKleurVar } from "../../lib/tagIcon";
 import { berekenTagSignalen, signaalTitle, signaalDetail } from "../../lib/tagSignalen";
 import { deriveVerbositeitStats, deriveVerbositeitMedians, median } from "../../lib/aggregate";
 import { partyIconMonoSvgRaw } from "../../lib/partyIconMono";
@@ -47,12 +48,14 @@ const argumentList = allArgs.filter((a: any) => a.actor.name === name);
 const party = argumentList.find((a: any) => a.actor.party)?.actor.party ?? null;
 const canonicalPartyNaam = party ? canonicalParty(party) : null;
 
-const PERSPECTIEF_KLEUR = new Map(PERSPECTIEVEN.map((p) => [p.naam, p.kleur]));
+// Vloei-categorische kleur (issue #220) i.p.v. tag-styles.json's kleur: die
+// lag te dicht op pro/contra (zie grafiek.md).
+const PERSPECTIEF_KLEUR = new Map(PERSPECTIEVEN.map((p) => [p.naam, perspectiefKleurVar(p.naam)]));
 const TAG_PERSPECTIEF = new Map<string, string>();
 for (const perspectief of PERSPECTIEVEN) {
 	for (const sleutel of Object.keys(perspectief.tags)) TAG_PERSPECTIEF.set(sleutel, perspectief.naam);
 }
-const ONBEKENDE_KLEUR = "#6f6558";
+const ONBEKENDE_KLEUR = "var(--vl-overig)";
 
 // Zelfde basis als de personenlijst (/persoon/): alleen LLM-toegekende tags,
 // dit keer over alle argumenten (allArgs) als globale noemer i.p.v. een

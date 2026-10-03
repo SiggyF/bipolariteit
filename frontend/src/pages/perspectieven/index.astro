@@ -3,7 +3,7 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import EntityTabs from "../../components/EntityTabs.astro";
 import { PERSPECTIEVEN } from "../../lib/tagIcons.generated";
 import { slugify } from "../../lib/slug";
-import { perspectiefWeergaveNaam } from "../../lib/tagIcon";
+import { perspectiefWeergaveNaam, perspectiefKleurVar } from "../../lib/tagIcon";
 
 const topicModules = import.meta.glob("../../../../data/export/topics/*.json", { eager: true });
 

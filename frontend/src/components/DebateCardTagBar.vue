@@ -24,8 +24,8 @@
 // gelijk.
 import { computed } from "vue";
 import { mixWithBase } from "../lib/colorShades";
-
-const PAGE_BG = "#f2efe7";
+import { VLOEI } from "../lib/vloeiChart";
+import { useTheme } from "../lib/useTheme";
 import { tagIconPath } from "../lib/tagIcon";
 import type { DebateTagCount } from "../lib/groupByDebate";
 
@@ -34,6 +34,12 @@ const props = defineProps<{
 	color: string;
 	density: "uitgelicht" | "uitgebreid" | "compact";
 }>();
+
+// mixWithBase() rekent met echte hex-waarden, dus de pre-Vloei vaste
+// "#f2efe7" (oude papiergrond) kan niet zomaar een CSS custom property
+// worden -- de mengbasis moet per modus mee (issue #220).
+const isDark = useTheme();
+const pageBg = computed(() => (isDark.value ? VLOEI.dark.vloei : VLOEI.light.vloei));
 
 const TOP_N = 4;
 // Onder deze aandeel-fractie past een 14px-icoon niet meer fatsoenlijk in het
@@ -54,12 +60,13 @@ const segments = computed(() => {
 			label: `${tag.sleutel}: ${tag.count}`,
 			width: `${fractie * 100}%`,
 			icon: fractie >= MIN_ICON_FRACTIE ? tagIconPath(tag.sleutel) : null,
-			background: mixWithBase(props.color, PAGE_BG, 0.15),
-			border: mixWithBase(props.color, PAGE_BG, 0.5),
+			background: mixWithBase(props.color, pageBg.value, 0.15),
+			border: mixWithBase(props.color, pageBg.value, 0.5),
 			iconStroke: props.color,
 		};
 	});
 	if (restCount > 0) {
+		const rand = isDark.value ? VLOEI.dark.rand : VLOEI.light.rand;
 		result.push({
 			key: "__overig",
 			label: `Overig: ${restCount}`,
@@ -67,7 +74,7 @@ const segments = computed(() => {
 			icon: null,
 			// Zelfde lichte-vulling-principe als de tag-segmenten -- anders oogt
 			// "overig" bij een groot aandeel als een lege ruimte i.p.v. een segment.
-			background: mixWithBase("#6f6558", PAGE_BG, 0.2),
+			background: mixWithBase(rand, pageBg.value, 0.2),
 			border: "var(--lijn)",
 			iconStroke: props.color,
 		});

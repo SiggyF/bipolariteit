@@ -321,6 +321,7 @@ function toggleMuted(entry: ShortsManifestEntry, event: MouseEvent) {
 
 .preview-quote {
 	margin: 0;
+	font-style: italic;
 	font-size: var(--step--1);
 	line-height: 1.3;
 	display: -webkit-box;
