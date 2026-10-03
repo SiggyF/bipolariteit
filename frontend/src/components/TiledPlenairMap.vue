@@ -268,9 +268,13 @@ function ensurePmtilesProtocol() {
 	protocolRegistered = true;
 }
 
+// Dezelfde Vloei-tokens als frontend/src/styles/main.css (--vloei/--galnoot-zacht,
+// zie ook docs/design/vloei/) -- hier als losse hex-waarden omdat dit JS is
+// (MapLibre's style-JSON leest geen CSS custom properties), zelfde aanpak als
+// THEME in lib/vloeiChart.ts.
 const THEME_COLOR = {
-	light: { bg: "#f7f3ea", muted: "#6f6558" },
-	dark: { bg: "#221f1b", muted: "#a89e8c" },
+	light: { bg: "#eceef0", muted: "#4b5366" },
+	dark: { bg: "#121622", muted: "#a9b0c0" },
 };
 
 // Rechthoekig, wit vlak achter elke clusterlabel, met een zachte
@@ -686,10 +690,12 @@ onMounted(async () => {
 			style: {
 				version: 8,
 				// Nodig voor de cluster-naam-labels hieronder (symbol-layer met
-				// text-field vereist een glyphs-bron) -- MapLibre's eigen publieke
-				// demo-fontendpoint, geen eigen fontserver nodig voor deze paar
-				// Latijnse labels.
-				glyphs: "https://demotiles.maplibre.org/font/{fontstack}/{range}.pbf",
+				// text-field vereist een glyphs-bron). Zelf gehost (frontend/public/fonts/glyphs/,
+				// gegenereerd met maplibre/font-maker uit een losse statische Archivo-instance
+				// op wdth 85/wght 600 -- dezelfde "smal"-as als .vl-data/.vl-chip elders, zie
+				// docs/design/vloei/) i.p.v. MapLibre's publieke demo-fontendpoint (Noto Sans),
+				// voor consistente typografie met de rest van de Vloei-stijl (issue #220).
+				glyphs: "/fonts/glyphs/{fontstack}/{range}.pbf",
 				sources: {
 					hulls: { type: "geojson", data: hulls },
 					labels: { type: "geojson", data: labels },
@@ -708,7 +714,7 @@ onMounted(async () => {
 						filter: ["<=", ["get", "minzoom"], ["zoom"]],
 						layout: {
 							"text-field": ["get", "name"],
-							"text-font": ["Noto Sans Regular"],
+							"text-font": ["Archivo SemiBold Regular"],
 							"text-size": 13,
 							"text-anchor": "top",
 							"text-allow-overlap": false,
@@ -731,16 +737,19 @@ onMounted(async () => {
 						// vlak (createLabelBackgroundImage()), dus zwarte tekst blijft in
 						// beide thema's leesbaar -- de vroegere thema-afhankelijke
 						// gedempte tekstkleur (theme.muted) had op die lichte achtergrond
-						// te weinig contrast. Ondoorzichtig (icon-opacity 1) i.p.v. 0,55:
-						// bij die lagere opacity scheen de kleurrijke puntenwolk erdoorheen
-						// en werd het vlak op de donkere achtergrond een grijzige waas --
-						// precies het "onleesbaar"-effect. text-halo als vangnet voor het
-						// geval de sprite een lang label niet volledig dekt.
+						// te weinig contrast. icon-opacity 0,85 i.p.v. het eerder geteste
+						// 0,55: bij 0,55 scheen de kleurrijke puntenwolk er nog te veel
+						// doorheen (de "onleesbaar"-vage-waas uit de git-historie); 0,85
+						// laat nog een subtiel vermoeden van de kaart erdoorheen zonder
+						// dat probleem. Een echte vervaagde rand/backdrop-blur is losgetrokken
+						// naar issue #370 (apart van module 7/#220: hier alleen de opacity).
+						// text-halo als vangnet voor het geval de sprite een lang label niet
+						// volledig dekt.
 						paint: {
 							"text-color": "#000000",
 							"text-halo-color": "#ffffff",
 							"text-halo-width": 1.5,
-							"icon-opacity": 1,
+							"icon-opacity": 0.85,
 						},
 					},
 				],
@@ -986,11 +995,17 @@ onUnmounted(() => {
 .tiled-plenair-map {
 	position: relative;
 	width: 100%;
+	box-sizing: border-box;
+	background: var(--blad);
+	border-radius: var(--hoek-m);
+	padding: var(--ruimte-6);
 }
 .map-el {
 	width: 100%;
 	aspect-ratio: 1.618;
 	min-height: 320px;
+	border-radius: var(--hoek-s);
+	overflow: hidden;
 }
 /* ColorByControl's DOM wordt door MapLibre zelf in de kaart geïnjecteerd
    (buiten Vue's render tree, al wel binnen deze scoped root) -- vandaar
@@ -1013,7 +1028,10 @@ onUnmounted(() => {
 	all: unset;
 	box-sizing: border-box;
 	padding: 0.4rem 0.7rem;
+	font-family: var(--font-kop);
+	font-variation-settings: "wdth" 85;
 	font-size: 0.75rem;
+	font-weight: 600;
 	line-height: 1;
 	white-space: nowrap;
 	cursor: pointer;
@@ -1040,7 +1058,10 @@ onUnmounted(() => {
 	border: 1px solid color-mix(in srgb, currentColor 20%, transparent);
 	border-radius: 999px;
 	background: transparent;
+	font-family: var(--font-kop);
+	font-variation-settings: "wdth" 85;
 	font-size: 0.75rem;
+	font-weight: 500;
 	color: inherit;
 	cursor: pointer;
 }
@@ -1079,9 +1100,16 @@ onUnmounted(() => {
 	gap: 0.5rem;
 	flex-wrap: wrap;
 }
+.info-speaker,
+.info-cluster-name {
+	font-family: var(--font-kop);
+	font-variation-settings: "wdth" 85;
+}
 .party-tag,
 .date-tag,
 .cluster-size-badge {
+	font-family: var(--font-kop);
+	font-variation-settings: "wdth" 85;
 	font-size: 0.75rem;
 	color: color-mix(in srgb, currentColor 65%, transparent);
 }
@@ -1091,10 +1119,14 @@ onUnmounted(() => {
 	gap: 0.5rem;
 }
 .video-link-btn {
+	font-family: var(--font-kop);
+	font-variation-settings: "wdth" 85;
 	font-size: 0.75rem;
 	text-decoration: underline;
 }
 .pinned-indicator {
+	font-family: var(--font-kop);
+	font-variation-settings: "wdth" 85;
 	font-size: 0.7rem;
 	color: color-mix(in srgb, currentColor 65%, transparent);
 }
@@ -1113,6 +1145,8 @@ onUnmounted(() => {
 	font-size: 0.75rem;
 }
 .cluster-context-badge {
+	font-family: var(--font-kop);
+	font-variation-settings: "wdth" 85;
 	color: color-mix(in srgb, currentColor 75%, transparent);
 }
 .debate-title-text {
@@ -1120,9 +1154,12 @@ onUnmounted(() => {
 }
 .info-quote-text {
 	margin: 0.5rem 0 0;
+	font-family: var(--font-tekst);
 	font-style: italic;
 }
 .cluster-breadcrumb {
+	font-family: var(--font-kop);
+	font-variation-settings: "wdth" 85;
 	font-size: 0.75rem;
 	color: color-mix(in srgb, currentColor 55%, transparent);
 }
@@ -1134,16 +1171,22 @@ onUnmounted(() => {
 	align-items: center;
 }
 .terms-heading {
+	font-family: var(--font-kop);
+	font-variation-settings: "wdth" 85;
 	font-size: 0.75rem;
 	color: color-mix(in srgb, currentColor 55%, transparent);
 }
 .term-pill {
+	font-family: var(--font-kop);
+	font-variation-settings: "wdth" 85;
 	font-size: 0.7rem;
 	padding: 0.1rem 0.5rem;
 	border-radius: 999px;
 	background: color-mix(in srgb, currentColor 10%, transparent);
 }
 .info-panel-idle .idle-text {
+	font-family: var(--font-kop);
+	font-variation-settings: "wdth" 85;
 	color: color-mix(in srgb, currentColor 55%, transparent);
 	font-size: 0.8rem;
 }
