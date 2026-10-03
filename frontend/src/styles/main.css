@@ -906,7 +906,7 @@ h3 {
 	box-sizing: border-box;
 	gap: var(--space-1);
 	padding: var(--space-2);
-	border: 1px solid var(--color-border);
+	border-radius: var(--hoek-m);
 	background: var(--color-card-bg);
 	text-decoration: none;
 	color: inherit;
@@ -914,7 +914,12 @@ h3 {
 }
 
 .card-tile:hover {
-	border-color: var(--color-accent);
+	background: var(--was);
+}
+
+.card-tile:focus-visible {
+	outline: 2px solid var(--galnoot);
+	outline-offset: 2px;
 }
 
 /* Bij hover iets minder gedempt, als subtiele hover-feedback op zowel de
@@ -976,15 +981,16 @@ h3 {
 	justify-content: center;
 	width: 40px;
 	height: 40px;
-	border: 1px solid var(--color-border);
-	border-radius: 4px;
-	background: var(--color-bg);
-	font-family: var(--font-heading);
+	border-radius: var(--hoek-s);
+	background: var(--was);
+	font-family: var(--font-kop);
+	font-variation-settings: "wdth" 85;
 	font-weight: 700;
 }
 
 .card-tile-name {
-	font-family: var(--font-heading);
+	font-family: var(--font-kop);
+	font-variation-settings: "wdth" 85;
 	font-weight: 700;
 	font-size: var(--step--1);
 }
@@ -998,7 +1004,8 @@ h3 {
 .card-tile-count {
 	margin-top: auto;
 	color: var(--color-muted);
-	font-family: var(--font-mono);
+	font-family: var(--font-kop);
+	font-variation-settings: "wdth" 85;
 	font-size: var(--step--1);
 	font-variant-numeric: tabular-nums;
 }
@@ -1089,9 +1096,6 @@ h3 {
 
 .claims-highlights {
 	margin-top: var(--space-4);
-	padding: var(--space-3);
-	border: 1px solid var(--color-border);
-	background: var(--color-card-bg);
 }
 
 /* Zelfde fade-idioom als DebateVideoView.vue/VideoOverlay.vue's transities:
@@ -1133,8 +1137,9 @@ h3 {
 	width: 100%;
 	height: 100%;
 	text-align: left;
-	background: var(--color-bg);
-	border: 1px solid var(--color-border);
+	background: var(--color-card-bg);
+	border: 0;
+	border-radius: var(--hoek-m);
 	padding: var(--space-2);
 	font-family: inherit;
 	color: inherit;
@@ -1143,11 +1148,17 @@ h3 {
 }
 
 .claim-highlight-card:hover {
-	border-color: var(--color-accent);
+	background: var(--was);
+}
+
+.claim-highlight-card:focus-visible {
+	outline: 2px solid var(--galnoot);
+	outline-offset: 2px;
 }
 
 .claim-highlight-text {
-	font-family: var(--font-heading);
+	font-family: var(--font-tekst);
+	font-style: italic;
 	font-size: var(--step-0);
 	margin: 0 0 0.4rem;
 	line-height: 1.4;
@@ -3223,7 +3234,8 @@ a.card-item:hover {
    zonder kleur; onduidelijk krijgt bovendien een stip. */
 .vl-standpunt {
 	display: inline-flex;
-	align-items: center;
+	align-items: flex-end;
+	vertical-align: baseline;
 	gap: var(--ruimte-1);
 	font-family: var(--font-kop);
 	font-size: 13px;
@@ -3234,9 +3246,13 @@ a.card-item:hover {
 	white-space: nowrap;
 }
 
+/* Breedte/hoogte volgen het viewBox-aspect (32:13.4, zie StandpuntGlyph.vue)
+   zodat de svg-box net zo strak om de vorm sluit als het viewBox zelf --
+   anders komt er alsnog verticale lege ruimte terug en klopt vertical-align:
+   baseline hierboven niet meer. */
 .vl-standpunt svg {
 	width: 24px;
-	height: 15px;
+	height: 10.05px;
 	flex: none;
 	overflow: visible;
 }
@@ -3278,7 +3294,7 @@ a.card-item:hover {
 
 .vl-standpunt.is-groot svg {
 	width: 32px;
-	height: 20px;
+	height: 13.4px;
 }
 
 /* Dark-on-light is the default -- no automatic prefers-color-scheme switch.
