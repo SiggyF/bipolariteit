@@ -6,7 +6,7 @@ import VideoPlayer from "./VideoPlayer.vue";
 import VideoTimeline from "./VideoTimeline.vue";
 import { useDebateArguments } from "../lib/debateArguments";
 import { PERSPECTIEVEN } from "../lib/tagIcons.generated";
-import { perspectiefWeergaveNaam } from "../lib/tagIcon";
+import { perspectiefKleurVar, perspectiefWeergaveNaam } from "../lib/tagIcon";
 import { activeArguments } from "../lib/videoLabels";
 import { requestSeek, videoSeek } from "../lib/videoSeek";
 import { notifyUserScroll, userScroll } from "../lib/userScroll";
@@ -445,7 +445,7 @@ function dismissFloating() {
 					type="button"
 					class="perspective-toggle"
 					:class="{ 'is-off': off[p.naam] }"
-					:style="{ '--perspective-color': p.kleur }"
+					:style="{ '--perspective-color': perspectiefKleurVar(p.naam) }"
 					:aria-pressed="!off[p.naam]"
 					:title="off[p.naam] ? `${perspectiefWeergaveNaam(p.naam)} weer tonen in badges en tijdlijn` : `${perspectiefWeergaveNaam(p.naam)} verbergen uit badges en tijdlijn`"
 					@click="togglePerspective(p.naam)"

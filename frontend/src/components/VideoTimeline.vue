@@ -4,6 +4,7 @@ import { select } from "d3-selection";
 import { zoom as d3zoom, zoomIdentity, type ZoomTransform } from "d3-zoom";
 import { computed, onMounted, ref, useId, useTemplateRef } from "vue";
 import { PERSPECTIEVEN } from "../lib/tagIcons.generated";
+import { perspectiefKleurVar } from "../lib/tagIcon";
 import type { Argument } from "../lib/types";
 import { selectBadgeTags } from "../lib/videoLabels";
 import { requestSeek } from "../lib/videoSeek";
@@ -29,7 +30,7 @@ const props = defineProps<{
 	off: Record<string, boolean>;
 }>();
 
-const colorByPerspective = new Map(PERSPECTIEVEN.map((p) => [p.naam, p.kleur]));
+const colorByPerspective = new Map(PERSPECTIEVEN.map((p) => [p.naam, perspectiefKleurVar(p.naam)]));
 
 function isVisible(tag: { perspectief: string }) {
 	return !props.off[tag.perspectief];

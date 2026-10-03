@@ -24,7 +24,7 @@ for (const mod of Object.values(topicModules) as any[]) {
 
 const perspectieven = PERSPECTIEVEN.map((p) => ({
 	naam: p.naam,
-	kleur: p.kleur,
+	kleur: perspectiefKleurVar(p.naam),
 	count: counts.get(p.naam) ?? 0,
 }));
 ---
