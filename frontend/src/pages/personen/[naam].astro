@@ -304,22 +304,21 @@ const verbositeitBadges =
 		box-sizing: border-box;
 		gap: 0.25rem;
 		padding: var(--space-2);
-		border: 1px solid var(--color-border);
-		background: var(--color-bg);
+		border: 1px solid var(--lijn);
+		background: var(--vloei);
 	}
 
-	/* Twee lettertypes in dit hele blok: --font-body voor alle tekst,
-	   --font-mono uitsluitend voor de twee getallen (waarde/mediaan) --
+	/* Twee lettertypes in dit hele blok: --font-tekst voor alle tekst,
+	   --font-kop uitsluitend voor de twee getallen (waarde/mediaan) --
 	   verder alleen gewicht/kleur/grootte als onderscheid, geen extra
 	   font-family's of cursief erbij. */
 	.verbositeit-categorie,
 	.verbositeit-richting {
 		font-size: 0.7rem;
-		color: var(--color-muted);
+		color: var(--galnoot-zacht);
 	}
 
 	.verbositeit-categorie {
-		text-transform: uppercase;
 		letter-spacing: 0.04em;
 	}
 
@@ -334,7 +333,7 @@ const verbositeitBadges =
 	}
 
 	.verbositeit-waarde {
-		font-family: var(--font-mono);
+		font-family: var(--font-kop);
 		font-size: var(--step-0);
 		font-weight: 600;
 		font-variant-numeric: tabular-nums;
@@ -343,14 +342,14 @@ const verbositeitBadges =
 	.verbositeit-eenheid {
 		margin-left: 0.3em;
 		font-size: var(--step--1);
-		color: var(--color-muted);
+		color: var(--galnoot-zacht);
 	}
 
 	.verbositeit-mediaan {
 		margin-top: auto;
-		font-family: var(--font-mono);
+		font-family: var(--font-kop);
 		font-size: var(--step--1);
-		color: var(--color-muted);
+		color: var(--galnoot-zacht);
 		font-variant-numeric: tabular-nums;
 	}
 

@@ -18,9 +18,9 @@
 //
 // mixWithBase (ondoorzichtig) i.p.v. withAlpha (rgba-transparantie): een
 // compacte kaartrij heeft geen eigen kaartachtergrond (staat direct op
-// --color-bg), een uitgelichte/uitgebreide kaart wél (--color-card-bg,
+// --vloei), een uitgelichte/uitgebreide kaart wél (--blad,
 // een net iets andere tint) -- dezelfde rgba() zou dus per kaarttype een
-// andere kleur opleveren. --color-bg als vaste mengbasis houdt 'm overal
+// andere kleur opleveren. --vloei als vaste mengbasis houdt 'm overal
 // gelijk.
 import { computed } from "vue";
 import { mixWithBase } from "../lib/colorShades";
@@ -68,7 +68,7 @@ const segments = computed(() => {
 			// Zelfde lichte-vulling-principe als de tag-segmenten -- anders oogt
 			// "overig" bij een groot aandeel als een lege ruimte i.p.v. een segment.
 			background: mixWithBase("#6f6558", PAGE_BG, 0.2),
-			border: "var(--color-border)",
+			border: "var(--lijn)",
 			iconStroke: props.color,
 		});
 	}
@@ -161,6 +161,6 @@ const segments = computed(() => {
 .tag-bar-legend {
 	display: block;
 	font-size: var(--step--1);
-	color: var(--color-muted);
+	color: var(--galnoot-zacht);
 }
 </style>

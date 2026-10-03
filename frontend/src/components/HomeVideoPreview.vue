@@ -162,7 +162,7 @@ function toggleMuted(entry: ShortsManifestEntry, event: MouseEvent) {
 								:key="tagSleutel"
 								class="fragment-tag-icon"
 								:title="tagSleutel"
-								:style="{ '--tag-color': tagKleur(tagSleutel) ?? 'var(--color-muted)' }"
+								:style="{ '--tag-color': tagKleur(tagSleutel) ?? 'var(--galnoot-zacht)' }"
 							>
 								<svg v-if="tagIconPath(tagSleutel)" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
 									<path :d="tagIconPath(tagSleutel)!" />
@@ -294,7 +294,7 @@ function toggleMuted(entry: ShortsManifestEntry, event: MouseEvent) {
 	border-radius: 3px;
 	background: rgba(0, 0, 0, 0.7);
 	color: #fff;
-	font-family: var(--font-mono);
+	font-family: var(--font-kop);
 	font-size: var(--step--1);
 	font-variant-numeric: tabular-nums;
 }

@@ -140,7 +140,7 @@ const segments = computed(() => {
 			argument,
 			x0,
 			x1,
-			color: colorByPerspective.get(leading.perspectief) ?? "var(--color-muted)",
+			color: colorByPerspective.get(leading.perspectief) ?? "var(--galnoot-zacht)",
 			active: props.currentTime >= argument.start_seconds && props.currentTime <= argument.end_seconds,
 		});
 	}
@@ -287,20 +287,20 @@ function onKeydown(event: KeyboardEvent) {
 	align-items: center;
 	gap: 6px;
 	font-size: var(--step--1);
-	color: var(--color-muted);
+	color: var(--galnoot-zacht);
 }
 
 .zoom-controls button {
 	background: none;
 	border: none;
-	color: var(--color-muted);
+	color: var(--galnoot-zacht);
 	cursor: pointer;
 	font-size: 1em;
 	padding: 2px 4px;
 }
 
 .zoom-controls button:hover:not(:disabled) {
-	color: var(--color-accent);
+	color: var(--galnoot);
 }
 
 .zoom-controls button:disabled {
@@ -322,8 +322,8 @@ function onKeydown(event: KeyboardEvent) {
 	height: 58px;
 	cursor: pointer;
 	touch-action: none;
-	border-top: 1px solid var(--color-border);
-	border-bottom: 1px solid var(--color-border);
+	border-top: 1px solid var(--lijn);
+	border-bottom: 1px solid var(--lijn);
 	/* Zonder dit geeft WebKit/Chrome een blauwe tik-flits bij elke klik --
 	   niet de bedoelde focus-styling hieronder, gewoon de standaard
 	   tap-highlight voor klikbare elementen. */
@@ -332,43 +332,43 @@ function onKeydown(event: KeyboardEvent) {
 }
 
 .scrubber:focus-visible {
-	outline: 2px solid var(--color-accent);
+	outline: 2px solid var(--galnoot);
 }
 
 .axis {
-	stroke: var(--color-border);
+	stroke: var(--lijn);
 	stroke-width: 1;
 }
 
 .axis-progress {
-	stroke: var(--color-accent);
+	stroke: var(--galnoot);
 	stroke-width: 1.5;
 }
 
 .tick {
-	stroke: var(--color-border);
+	stroke: var(--lijn);
 }
 
 .tick-label {
 	font-size: 9.5px;
-	fill: var(--color-text);
+	fill: var(--galnoot);
 	opacity: 0.45;
-	font-family: var(--font-body);
+	font-family: var(--font-tekst);
 }
 
 .turn-tick {
-	stroke: var(--color-border);
+	stroke: var(--lijn);
 }
 
 .turn-tick.is-active {
-	stroke: var(--color-accent);
+	stroke: var(--galnoot);
 }
 
 .turn-label {
 	font-size: 9.5px;
-	fill: var(--color-text);
+	fill: var(--galnoot);
 	opacity: 0.4;
-	font-family: var(--font-body);
+	font-family: var(--font-tekst);
 }
 
 .turn-label.is-active {
@@ -381,16 +381,16 @@ function onKeydown(event: KeyboardEvent) {
 	-webkit-tap-highlight-color: transparent;
 }
 
-/* --color-contra (warm rood) puur om de kleur -- geen inhoudelijke link met
+/* --contra (warm rood) puur om de kleur -- geen inhoudelijke link met
    "contra" hier, het is de enige rode tint in het palet en past bij het
    radiotuner-referentiebeeld. */
 .playhead-glow {
-	fill: var(--color-contra);
+	fill: var(--contra);
 	opacity: 0.35;
 }
 
 .playhead {
-	stroke: var(--color-contra);
+	stroke: var(--contra);
 	stroke-width: 1.25;
 }
 </style>

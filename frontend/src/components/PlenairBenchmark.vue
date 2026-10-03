@@ -1321,14 +1321,14 @@ const showFineInOverlay = computed(() => {
 .benchmark-subtitle {
 	margin: 0.35rem 0 0;
 	font-size: 0.95rem;
-	color: var(--color-muted, #736b5e);
+	color: var(--galnoot-zacht);
 }
 
 .perf-stats-card {
 	display: flex;
 	gap: 0.75rem;
-	background: var(--color-surface, #f9f8f6);
-	border: 1px solid var(--color-border, #e5e0d8);
+	background: var(--color-surface);
+	border: 1px solid var(--lijn);
 	border-radius: 8px;
 	padding: 0.5rem 0.85rem;
 }
@@ -1342,9 +1342,8 @@ const showFineInOverlay = computed(() => {
 
 .stat-label {
 	font-size: 0.7rem;
-	text-transform: uppercase;
 	font-weight: 600;
-	color: var(--color-muted, #736b5e);
+	color: var(--galnoot-zacht);
 }
 
 .stat-value {
@@ -1369,8 +1368,8 @@ const showFineInOverlay = computed(() => {
 	align-items: center;
 	justify-content: space-between;
 	gap: 1rem;
-	background: var(--color-surface, #f9f8f6);
-	border: 1px solid var(--color-border, #e5e0d8);
+	background: var(--color-surface);
+	border: 1px solid var(--lijn);
 	border-radius: 8px;
 	padding: 0.75rem 1rem;
 }
@@ -1388,15 +1387,15 @@ const showFineInOverlay = computed(() => {
 
 .button-group {
 	display: inline-flex;
-	border: 1px solid var(--color-border, #e5e0d8);
+	border: 1px solid var(--lijn);
 	border-radius: 6px;
 	overflow: hidden;
 }
 
 .button-group button {
-	background: var(--color-bg, #ffffff);
+	background: var(--vloei);
 	border: none;
-	border-right: 1px solid var(--color-border, #e5e0d8);
+	border-right: 1px solid var(--lijn);
 	padding: 0.4rem 0.75rem;
 	font-size: 0.82rem;
 	cursor: pointer;
@@ -1408,8 +1407,8 @@ const showFineInOverlay = computed(() => {
 }
 
 .button-group button.active {
-	background: var(--color-ink, #221f1b);
-	color: var(--color-bg, #ffffff);
+	background: var(--color-ink);
+	color: var(--vloei);
 	font-weight: 600;
 }
 
@@ -1419,7 +1418,7 @@ const showFineInOverlay = computed(() => {
 }
 
 .action-btn {
-	background: var(--color-accent, #2563eb);
+	background: var(--galnoot);
 	color: #fff;
 	border: none;
 	border-radius: 6px;
@@ -1440,8 +1439,8 @@ const showFineInOverlay = computed(() => {
 }
 
 .action-btn.secondary {
-	background: var(--color-surface, #e5e0d8);
-	color: var(--color-ink, #221f1b);
+	background: var(--color-surface);
+	color: var(--color-ink);
 }
 
 .stress-report-banner {
@@ -1458,8 +1457,8 @@ const showFineInOverlay = computed(() => {
 	position: relative;
 	width: 100%;
 	height: 540px;
-	background: var(--color-surface, #f9f8f6);
-	border: 1px solid var(--color-border, #e5e0d8);
+	background: var(--color-surface);
+	border: 1px solid var(--lijn);
 	border-radius: 8px;
 	overflow: hidden;
 	user-select: none;
@@ -1503,7 +1502,7 @@ const showFineInOverlay = computed(() => {
 	font-family: system-ui, sans-serif;
 	font-size: 13px;
 	font-weight: bold;
-	fill: var(--color-ink, #221f1b);
+	fill: var(--color-ink);
 	paint-order: stroke fill;
 	stroke: rgba(255, 255, 255, 0.85);
 	stroke-width: 3px;
@@ -1513,7 +1512,7 @@ const showFineInOverlay = computed(() => {
 	font-family: system-ui, sans-serif;
 	font-size: 11px;
 	font-weight: 600;
-	fill: var(--color-ink, #221f1b);
+	fill: var(--color-ink);
 	paint-order: stroke fill;
 	stroke: rgba(255, 255, 255, 0.85);
 	stroke-width: 2px;
@@ -1525,12 +1524,12 @@ const showFineInOverlay = computed(() => {
 	left: 50%;
 	transform: translate(-50%, -50%);
 	font-size: 0.95rem;
-	color: var(--color-muted, #736b5e);
+	color: var(--galnoot-zacht);
 }
 
 .benchmark-results-box {
-	background: var(--color-surface, #f9f8f6);
-	border: 2px solid var(--color-accent, #2563eb);
+	background: var(--color-surface);
+	border: 2px solid var(--galnoot);
 	border-radius: 8px;
 	padding: 1.25rem;
 	display: flex;
@@ -1569,7 +1568,7 @@ const showFineInOverlay = computed(() => {
 .results-table th,
 .results-table td {
 	padding: 0.5rem 0.65rem;
-	border-bottom: 1px solid var(--color-border, #e5e0d8);
+	border-bottom: 1px solid var(--lijn);
 }
 
 .results-table th {
@@ -1586,7 +1585,7 @@ const showFineInOverlay = computed(() => {
 .block-label {
 	font-size: 0.78rem;
 	font-weight: 600;
-	color: var(--color-muted, #736b5e);
+	color: var(--galnoot-zacht);
 }
 
 .markdown-textarea {
@@ -1594,16 +1593,16 @@ const showFineInOverlay = computed(() => {
 	font-family: monospace;
 	font-size: 0.8rem;
 	padding: 0.6rem;
-	border: 1px solid var(--color-border, #e5e0d8);
+	border: 1px solid var(--lijn);
 	border-radius: 6px;
-	background: var(--color-bg, #ffffff);
-	color: var(--color-ink, #221f1b);
+	background: var(--vloei);
+	color: var(--color-ink);
 	resize: vertical;
 }
 
 .benchmark-info-card {
-	background: var(--color-surface, #f9f8f6);
-	border: 1px solid var(--color-border, #e5e0d8);
+	background: var(--color-surface);
+	border: 1px solid var(--lijn);
 	border-radius: 8px;
 	padding: 1.25rem;
 }
@@ -1632,7 +1631,7 @@ const showFineInOverlay = computed(() => {
 
 .info-item p {
 	margin: 0;
-	color: var(--color-muted, #736b5e);
+	color: var(--galnoot-zacht);
 }
 </style>
 

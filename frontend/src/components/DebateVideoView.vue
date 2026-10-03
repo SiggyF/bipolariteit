@@ -606,8 +606,8 @@ function dismissFloating() {
 	right: var(--space-3);
 	width: min(320px, calc(100vw - 2 * var(--space-3)));
 	z-index: 40;
-	background: var(--color-bg);
-	border: 1px solid var(--color-border);
+	background: var(--vloei);
+	border: 1px solid var(--lijn);
 	border-radius: 6px;
 	box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
 	overflow: hidden;
@@ -662,10 +662,10 @@ function dismissFloating() {
 }
 
 .no-video {
-	color: var(--color-muted);
+	color: var(--galnoot-zacht);
 	padding: var(--space-3);
-	background: var(--color-card-bg);
-	border: 1px solid var(--color-border);
+	background: var(--blad);
+	border: 1px solid var(--lijn);
 	border-radius: 4px;
 }
 
@@ -684,7 +684,7 @@ function dismissFloating() {
 }
 
 .status-hint {
-	color: var(--color-muted);
+	color: var(--galnoot-zacht);
 	padding: var(--space-2) 0;
 	margin: 0;
 }
@@ -695,7 +695,7 @@ function dismissFloating() {
 .timeline-skeleton {
 	height: 28px;
 	border-radius: 4px;
-	background: var(--color-card-bg);
+	background: var(--blad);
 	margin-top: var(--space-2);
 }
 
@@ -714,8 +714,7 @@ function dismissFloating() {
 .perspective-filters-label {
 	font-size: var(--step--1);
 	letter-spacing: 0.08em;
-	text-transform: uppercase;
-	color: var(--color-muted);
+	color: var(--galnoot-zacht);
 }
 
 .perspective-toggle {
@@ -723,17 +722,17 @@ function dismissFloating() {
 	align-items: center;
 	gap: 6px;
 	padding: 5px 10px;
-	border: 1px solid color-mix(in srgb, var(--perspective-color) 45%, var(--color-border));
-	background: color-mix(in srgb, var(--perspective-color) 8%, var(--color-bg));
+	border: 1px solid color-mix(in srgb, var(--perspective-color) 45%, var(--lijn));
+	background: color-mix(in srgb, var(--perspective-color) 8%, var(--vloei));
 	border-radius: 3px;
 	font-size: var(--step--1);
-	color: var(--color-text);
+	color: var(--galnoot);
 	cursor: pointer;
 }
 
 .perspective-toggle.is-off {
 	opacity: 0.45;
-	border-color: var(--color-border);
+	border-color: var(--lijn);
 	background: transparent;
 }
 
@@ -766,20 +765,20 @@ function dismissFloating() {
 	align-items: center;
 	justify-content: center;
 	background: transparent;
-	border: 1px solid var(--color-border);
+	border: 1px solid var(--lijn);
 	border-radius: 4px;
-	color: var(--color-text);
+	color: var(--galnoot);
 	cursor: pointer;
 	padding: 0;
 }
 
 .argument-toggle-inline:hover {
-	background: color-mix(in srgb, var(--color-text) 7%, transparent);
+	background: color-mix(in srgb, var(--galnoot) 7%, transparent);
 }
 
 .argument-toggle-inline[aria-pressed="true"] {
-	color: var(--color-accent);
-	border-color: var(--color-accent);
+	color: var(--galnoot);
+	border-color: var(--galnoot);
 }
 
 .argument-toggle-inline:disabled {

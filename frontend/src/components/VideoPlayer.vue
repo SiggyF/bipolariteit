@@ -327,7 +327,7 @@ video {
 
 .video-fallback {
 	padding: var(--space-3);
-	color: var(--color-bg);
+	color: var(--vloei);
 	text-align: center;
 }
 
@@ -355,24 +355,24 @@ video {
 	align-items: center;
 	justify-content: center;
 	background: transparent;
-	border: 1px solid var(--color-border);
+	border: 1px solid var(--lijn);
 	border-radius: 4px;
-	color: var(--color-text);
+	color: var(--galnoot);
 	cursor: pointer;
 	padding: 0;
 }
 
 .control-button:hover {
-	background: color-mix(in srgb, var(--color-text) 7%, transparent);
+	background: color-mix(in srgb, var(--galnoot) 7%, transparent);
 }
 
 .control-button.is-primary {
-	color: var(--color-accent);
-	border-color: var(--color-accent);
+	color: var(--galnoot);
+	border-color: var(--galnoot);
 }
 
 .control-button.is-primary:hover {
-	background: color-mix(in srgb, var(--color-accent) 12%, transparent);
+	background: color-mix(in srgb, var(--galnoot) 12%, transparent);
 }
 
 /* De -30s/+10s-knoppen (vergelijkbaar met YouTube's skip-knoppen) hebben
@@ -386,14 +386,14 @@ video {
 }
 
 .skip-label {
-	font-family: var(--font-mono);
+	font-family: var(--font-kop);
 	font-size: 0.65rem;
 }
 
 .time-label {
-	font-family: var(--font-mono);
+	font-family: var(--font-kop);
 	font-size: var(--step--1);
-	color: var(--color-muted);
+	color: var(--galnoot-zacht);
 }
 
 /* Geen margin-left: auto hier -- staat nu ná de controls-extra-slot (zie

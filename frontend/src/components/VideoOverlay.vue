@@ -128,7 +128,7 @@ const badges = computed(() =>
 			label: tag.sleutel,
 			shortLabel: shortTagLabel(tag.sleutel),
 			iconPad: tagIconPath(tag.sleutel),
-			color: colorByPerspective.get(tag.perspectief) ?? "var(--color-muted)",
+			color: colorByPerspective.get(tag.perspectief) ?? "var(--galnoot-zacht)",
 			tooltip: tag.reden
 				? `${tag.labelgroep} · ${perspectiefWeergaveNaam(tag.perspectief)}\n\n${tag.reden}`
 				: `${tag.labelgroep} · ${perspectiefWeergaveNaam(tag.perspectief)}`,
@@ -285,7 +285,7 @@ defineExpose({ rootEl });
    desktop-viewport en liep daar ver over -- cqw volgt de werkelijke breedte
    van het videovak zelf, ongeacht of dat de volle speler of de mini-player is. */
 .title-card-name {
-	font-family: var(--font-heading);
+	font-family: var(--font-kop);
 	font-size: clamp(0.6rem, 3.2cqw, var(--step-1));
 	overflow-wrap: break-word;
 	/* Harde ondergrens naast het schalende lettertype: een lange
@@ -300,7 +300,7 @@ defineExpose({ rootEl });
 }
 
 .title-card-date {
-	font-family: var(--font-mono);
+	font-family: var(--font-kop);
 	font-size: clamp(0.6rem, 3cqw, var(--step--1));
 	color: rgba(255, 255, 255, 0.7);
 }
@@ -311,7 +311,7 @@ defineExpose({ rootEl });
 	color: rgba(255, 255, 255, 0.85);
 	padding: 0.3em 0.7em;
 	border-radius: 3px;
-	font-family: var(--font-mono);
+	font-family: var(--font-kop);
 	font-size: var(--step--1);
 	letter-spacing: 0.02em;
 }
@@ -329,7 +329,7 @@ defineExpose({ rootEl });
    (vaste --step-1) net zo groot bleef als op de volle speler en over de
    rand van de kaart heen liep. */
 .nameplate-name {
-	font-family: var(--font-heading);
+	font-family: var(--font-kop);
 	font-style: italic;
 	font-size: clamp(0.65rem, 4.5cqw, var(--step-1));
 }
@@ -347,11 +347,10 @@ defineExpose({ rootEl });
 }
 
 .nameplate-party {
-	font-family: var(--font-mono);
+	font-family: var(--font-kop);
 	font-size: clamp(0.55rem, 2.8cqw, var(--step--1));
 	letter-spacing: 0.08em;
 	color: rgba(255, 255, 255, 0.7);
-	text-transform: uppercase;
 }
 
 .clock-group {
@@ -368,7 +367,7 @@ defineExpose({ rootEl });
 }
 
 .clock-indicator {
-	font-family: var(--font-mono);
+	font-family: var(--font-kop);
 	font-size: clamp(0.55rem, 2.8cqw, var(--step--1));
 	color: rgba(255, 255, 255, 0.55);
 	background: none;
@@ -397,7 +396,7 @@ defineExpose({ rootEl });
    in .video-overlay) bij elke toggle een regel op/neer. */
 .follow-paused-hint {
 	margin: 0.2em 0 0;
-	font-family: var(--font-mono);
+	font-family: var(--font-kop);
 	font-size: 0.65rem;
 	color: rgba(255, 255, 255, 0.4);
 	text-align: right;
@@ -466,7 +465,7 @@ defineExpose({ rootEl });
 }
 
 .badge-label {
-	font-family: var(--font-heading);
+	font-family: var(--font-kop);
 	white-space: nowrap;
 }
 

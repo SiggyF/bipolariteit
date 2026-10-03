@@ -101,11 +101,11 @@ defineExpose({ rootEl });
 }
 
 .ack-hoofd.ack-pro {
-	border-top-color: var(--color-pro);
+	border-top-color: var(--pro);
 }
 
 .ack-hoofd.ack-contra {
-	border-top-color: var(--color-contra);
+	border-top-color: var(--contra);
 }
 
 .ack-kid {
@@ -124,7 +124,6 @@ defineExpose({ rootEl });
 	gap: 0.6rem;
 	font-size: 0.65rem;
 	letter-spacing: 0.1em;
-	text-transform: uppercase;
 	color: var(--confrontatie-muted);
 	font-feature-settings: "tnum";
 	margin-bottom: 0.35rem;

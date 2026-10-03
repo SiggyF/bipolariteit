@@ -30,8 +30,8 @@ function widthPct(n: number): number {
 		<h2>Argumenttypes <span class="panel-scope">(pro/contra per typologie)</span></h2>
 
 		<ul class="chart-legend">
-			<li><span class="legend-swatch" style="background: var(--color-pro)"></span>Pro</li>
-			<li><span class="legend-swatch" style="background: var(--color-contra)"></span>Contra</li>
+			<li><span class="legend-swatch" style="background: var(--pro)"></span>Pro</li>
+			<li><span class="legend-swatch" style="background: var(--contra)"></span>Contra</li>
 		</ul>
 
 		<ul class="typology-bars">

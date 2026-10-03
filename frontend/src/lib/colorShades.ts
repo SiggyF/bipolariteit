@@ -19,7 +19,7 @@ export function withAlpha(hex: string, alpha: number): string {
  * contexten met een verschillende achtergrond voorkomt (bv.
  * DebateCardTagBar.vue: een compacte kaartrij heeft geen eigen
  * kaartachtergrond, dus dezelfde rgba() oogt daar anders dan op een kaart
- * mét --color-card-bg). */
+ * mét --blad). */
 export function mixWithBase(hex: string, baseHex: string, ratio: number): string {
 	const [r1, g1, b1] = hexToRgb(hex);
 	const [r2, g2, b2] = hexToRgb(baseHex);

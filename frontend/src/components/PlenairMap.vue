@@ -1342,13 +1342,13 @@ function onCanvasClick(e: MouseEvent) {
 	display: inline-block;
 	margin-left: 0.5rem;
 	font-size: 0.88em;
-	color: var(--color-accent, #2563eb);
+	color: var(--galnoot);
 	text-decoration: underline;
 	text-underline-offset: 2px;
 }
 
 .panel-error {
-	color: var(--kleur-fout, #b3261e);
+	color: var(--kleur-fout);
 }
 
 .map-toolbar-row {
@@ -1370,24 +1370,24 @@ function onCanvasClick(e: MouseEvent) {
 	display: inline-flex;
 	align-items: center;
 	gap: 6px;
-	background: var(--color-surface, #f9f8f6);
-	border: 1px solid var(--color-border, #e5e0d8);
+	background: var(--color-surface);
+	border: 1px solid var(--lijn);
 	border-radius: 6px;
 	padding: 0.3rem 0.6rem;
 	font-size: 0.82rem;
 	cursor: pointer;
-	color: var(--color-ink, #221f1b);
+	color: var(--color-ink);
 	transition: background 0.15s, border-color 0.15s;
 }
 
 .legend-item:hover {
-	background: var(--color-surface-hover, #ede9e1);
+	background: var(--color-surface-hover);
 }
 
 .legend-item.active {
-	border-color: var(--color-ink, #221f1b);
+	border-color: var(--color-ink);
 	font-weight: 600;
-	background: var(--color-surface-hover, #ede9e1);
+	background: var(--color-surface-hover);
 }
 
 .legend-dot {
@@ -1412,7 +1412,7 @@ function onCanvasClick(e: MouseEvent) {
 
 .control-hint {
 	font-size: 0.76rem;
-	color: var(--color-muted, #736b5e);
+	color: var(--galnoot-zacht);
 }
 
 /* Canvas Viewport */
@@ -1420,8 +1420,8 @@ function onCanvasClick(e: MouseEvent) {
 	position: relative;
 	width: 100%;
 	height: 540px;
-	background: var(--color-surface, #f9f8f6);
-	border: 1px solid var(--color-border, #e5e0d8);
+	background: var(--color-surface);
+	border: 1px solid var(--lijn);
 	border-radius: 8px 8px 0 0;
 	overflow: hidden;
 	user-select: none;
@@ -1446,8 +1446,8 @@ function onCanvasClick(e: MouseEvent) {
 .map-zoom-btn {
 	width: 32px;
 	height: 32px;
-	background: var(--color-bg, #ffffff);
-	border: 1px solid var(--color-border, #e5e0d8);
+	background: var(--vloei);
+	border: 1px solid var(--lijn);
 	border-radius: 6px;
 	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
 	display: flex;
@@ -1456,13 +1456,13 @@ function onCanvasClick(e: MouseEvent) {
 	font-size: 1.15rem;
 	font-weight: 600;
 	cursor: pointer;
-	color: var(--color-ink, #221f1b);
+	color: var(--color-ink);
 	user-select: none;
 	transition: background 0.15s, transform 0.1s;
 }
 
 .map-zoom-btn:hover {
-	background: var(--color-surface, #f9f8f6);
+	background: var(--color-surface);
 }
 
 .map-zoom-btn:active {
@@ -1482,8 +1482,8 @@ function onCanvasClick(e: MouseEvent) {
 
 /* Dedicated Fixed Information Panel */
 .map-info-panel {
-	background: var(--color-bg, #ffffff);
-	border: 1px solid var(--color-border, #e5e0d8);
+	background: var(--vloei);
+	border: 1px solid var(--lijn);
 	border-top: none;
 	border-radius: 0 0 8px 8px;
 	padding: 0.75rem 1rem;
@@ -1499,15 +1499,15 @@ function onCanvasClick(e: MouseEvent) {
 }
 
 .map-info-panel.is-pinned {
-	border-color: var(--color-ink, #221f1b);
-	background: var(--color-surface, #f9f8f6);
+	border-color: var(--color-ink);
+	background: var(--color-surface);
 }
 
 .info-panel-idle {
 	display: flex;
 	align-items: center;
 	height: 100%;
-	color: var(--color-muted, #736b5e);
+	color: var(--galnoot-zacht);
 	font-size: 0.84rem;
 	font-style: italic;
 }
@@ -1531,7 +1531,7 @@ function onCanvasClick(e: MouseEvent) {
 
 .info-speaker,
 .info-cluster-name {
-	color: var(--color-ink, #221f1b);
+	color: var(--color-ink);
 	font-size: 1rem;
 }
 
@@ -1545,7 +1545,7 @@ function onCanvasClick(e: MouseEvent) {
 
 .activity-tag,
 .date-tag {
-	color: var(--color-muted, #736b5e);
+	color: var(--galnoot-zacht);
 	font-size: 0.82rem;
 }
 
@@ -1560,9 +1560,9 @@ function onCanvasClick(e: MouseEvent) {
 	display: inline-flex;
 	align-items: center;
 	gap: 4px;
-	background: var(--color-surface, #ede9e1);
-	border: 1px solid var(--color-border, #e5e0d8);
-	color: var(--color-ink, #221f1b) !important;
+	background: var(--color-surface);
+	border: 1px solid var(--lijn);
+	color: var(--color-ink) !important;
 	border-radius: 4px;
 	padding: 2px 7px;
 	font-size: 0.76rem;
@@ -1572,8 +1572,8 @@ function onCanvasClick(e: MouseEvent) {
 }
 
 .video-link-btn:hover {
-	background: var(--color-surface-hover, #dfdad0);
-	border-color: var(--color-ink, #221f1b);
+	background: var(--color-surface-hover);
+	border-color: var(--color-ink);
 	transform: translateY(-1px);
 }
 
@@ -1599,10 +1599,9 @@ function onCanvasClick(e: MouseEvent) {
 .pinned-indicator {
 	font-size: 0.72rem;
 	font-weight: 600;
-	text-transform: uppercase;
 	letter-spacing: 0.04em;
-	background: var(--color-ink, #221f1b);
-	color: var(--color-bg, #ffffff);
+	background: var(--color-ink);
+	color: var(--vloei);
 	padding: 1px 6px;
 	border-radius: 3px;
 }
@@ -1613,7 +1612,7 @@ function onCanvasClick(e: MouseEvent) {
 	font-size: 1.3rem;
 	line-height: 1;
 	cursor: pointer;
-	color: var(--color-muted, #736b5e);
+	color: var(--galnoot-zacht);
 	padding: 0 4px;
 }
 
@@ -1632,16 +1631,16 @@ function onCanvasClick(e: MouseEvent) {
 }
 
 .debate-title-text {
-	color: var(--color-muted, #736b5e);
+	color: var(--galnoot-zacht);
 }
 
 .debate-link-badge {
 	display: inline-flex;
 	align-items: center;
 	gap: 4px;
-	color: var(--color-ink, #221f1b);
+	color: var(--color-ink);
 	text-decoration: underline;
-	text-decoration-color: var(--color-border, #d5d0c8);
+	text-decoration-color: var(--lijn);
 	text-underline-offset: 3px;
 	-webkit-line-clamp: 3;
 	-webkit-box-orient: vertical;
@@ -1664,7 +1663,7 @@ function onCanvasClick(e: MouseEvent) {
 	margin: 0.2rem 0 0.3rem;
 	font-size: 0.85rem;
 	line-height: 1.4;
-	color: var(--color-ink, #221f1b);
+	color: var(--color-ink);
 	display: -webkit-box;
 	-webkit-line-clamp: 3;
 	-webkit-box-orient: vertical;
@@ -1685,9 +1684,9 @@ function onCanvasClick(e: MouseEvent) {
 	display: inline-flex;
 	align-items: center;
 	gap: 4px;
-	background: var(--color-surface, #ede9e1);
-	border: 1px solid var(--color-border, #e5e0d8);
-	color: var(--color-ink, #221f1b) !important;
+	background: var(--color-surface);
+	border: 1px solid var(--lijn);
+	color: var(--color-ink) !important;
 	padding: 2px 7px;
 	border-radius: 4px;
 	text-decoration: none;
@@ -1696,8 +1695,8 @@ function onCanvasClick(e: MouseEvent) {
 }
 
 .cluster-debate-link-badge:hover {
-	background: var(--color-surface-hover, #dfdad0);
-	border-color: var(--color-ink, #221f1b);
+	background: var(--color-surface-hover);
+	border-color: var(--color-ink);
 }
 
 .cluster-debate-count {
@@ -1714,13 +1713,13 @@ function onCanvasClick(e: MouseEvent) {
 
 .terms-heading {
 	font-weight: 600;
-	color: var(--color-muted, #736b5e);
+	color: var(--galnoot-zacht);
 	margin-right: 4px;
 }
 
 .term-pill {
-	background: var(--color-bg, #ffffff);
-	border: 1px solid var(--color-border, #e5e0d8);
+	background: var(--vloei);
+	border: 1px solid var(--lijn);
 	border-radius: 4px;
 	padding: 1px 6px;
 }
