@@ -2398,12 +2398,23 @@ h3 {
 	line-height: 1.5;
 }
 
+/* Gegolfde underline (Word-grammar-stijl) i.p.v. een rechte border-bottom:
+   leest meteen als aantekening op de tekst, niet als linkonderstreping of
+   -doorhaling. */
 .arg-standpunt {
-	border-bottom: 2px solid var(--galnoot);
+	text-decoration-line: underline;
+	text-decoration-style: wavy;
+	text-decoration-color: color-mix(in srgb, var(--galnoot) 55%, transparent);
+	text-decoration-thickness: 1px;
+	text-underline-offset: 3px;
 }
 
 .arg-onderbouwing {
-	border-bottom: 2px solid var(--onderbouwing);
+	text-decoration-line: underline;
+	text-decoration-style: wavy;
+	text-decoration-color: color-mix(in srgb, var(--onderbouwing) 55%, transparent);
+	text-decoration-thickness: 1px;
+	text-underline-offset: 3px;
 }
 
 .argument-ontbreekt {
@@ -2443,6 +2454,12 @@ h3 {
 	display: flex;
 	align-items: center;
 	gap: 0.4rem;
+	position: static;
+	padding-left: 0;
+}
+
+.argument-legend li::before {
+	content: none;
 }
 
 .argument-legend-streep {
@@ -2451,14 +2468,14 @@ h3 {
 	border-bottom: 2px solid var(--lijn);
 }
 
-.arg-standpunt-streep {
-	border-bottom-color: var(--galnoot);
-	border-bottom-style: solid;
-}
-
-.arg-onderbouwing-streep {
-	border-bottom-color: var(--onderbouwing);
-	border-bottom-style: solid;
+/* Specifieker dan .argument-legend-streep, anders wint die z'n eigen
+   (vlakke, smallere) border-bottom van de gestippelde/bredere stijl van
+   .argument-ontbreekt-streep (main.css-brede klasse, elders ook los
+   gebruikt) -- hier moet de legend-rij er precies zo uitzien als het
+   streepje in de voorbeelden zelf. */
+.argument-legend .argument-ontbreekt-streep {
+	width: 2.5rem;
+	border-bottom: 2px dashed var(--lijn);
 }
 
 /* Kleine cijfervoorbeeld-tabel bij de CA-uitleg -- zelfde tabelstijl als
