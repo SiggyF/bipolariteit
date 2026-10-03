@@ -4,7 +4,7 @@
     {
       "key": "filosofisch-argumentatietheoretisch",
       "naam": "Filosofisch & Argumentatietheoretisch",
-      "color": "#B68235",
+      "color": "#B97515",
       "marker": "circle",
       "icon": "library",
       "groepen": [
@@ -53,7 +53,7 @@
     {
       "key": "communicatiewetenschappelijk-media",
       "naam": "Communicatiewetenschappelijk & Media",
-      "color": "#4C7C7A",
+      "color": "#2692BA",
       "marker": "triangle",
       "icon": "radio",
       "groepen": [
@@ -98,7 +98,7 @@
     {
       "key": "politicologisch-sociaal-psychologisch",
       "naam": "Politicologisch & Sociaal-Psychologisch",
-      "color": "#B15E4A",
+      "color": "#AB437B",
       "marker": "diamond",
       "icon": "brain",
       "groepen": [
@@ -128,7 +128,7 @@
     {
       "key": "methodologisch-contextueel",
       "naam": "Methodologisch & Contextueel",
-      "color": "#6B8558",
+      "color": "#434BAA",
       "marker": "square",
       "icon": "ruler",
       "groepen": [
