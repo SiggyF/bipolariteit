@@ -295,7 +295,7 @@ const remoteCo2Kg = (co2.by_source.remote.co2_g / 1000).toLocaleString("nl-NL", 
 							<p class="argument-ontbreekt">
 								<span class="argument-ontbreekt-streep" aria-hidden="true"></span>{voorbeeld.ontbreekt} ontbreekt
 							</p>
-							<p class="argument-meta">
+							<p class="argument-voorbeeld-meta">
 								<strong>{voorbeeld.label}</strong>: {voorbeeld.bron} — {voorbeeld.toelichting}
 							</p>
 						</li>
@@ -331,7 +331,7 @@ const remoteCo2Kg = (co2.by_source.remote.co2_g / 1000).toLocaleString("nl-NL", 
 							<p class="argument-quote">
 								"{voorbeeld.parts.map((part) => <span class={`arg-${part.type}`}>{part.text}</span>)}."
 							</p>
-							<p class="argument-meta">
+							<p class="argument-voorbeeld-meta">
 								{voorbeeld.bron}. <strong>Wel een argument</strong>: {voorbeeld.toelichting}
 							</p>
 						</li>
@@ -757,7 +757,7 @@ const remoteCo2Kg = (co2.by_source.remote.co2_g / 1000).toLocaleString("nl-NL", 
 							const label = CA_TAG_LABEL_OFFSET[tag.sleutel] ?? { dx: 0, dy: -11, anchor: "middle" as const };
 							return (
 								<g>
-									<rect x={p.x - 5} y={p.y - 5} width="10" height="10" transform={`rotate(45 ${p.x} ${p.y})`} fill={caExampleKleur} />
+									<circle cx={p.x} cy={p.y} r="5" fill={caExampleKleur} />
 									<text x={p.x + label.dx} y={p.y + label.dy} class="ca-example-point-label ca-example-tag-label" text-anchor={label.anchor}>
 										{tag.sleutel}
 									</text>
