@@ -2404,7 +2404,7 @@ h3 {
 .arg-standpunt {
 	text-decoration-line: underline;
 	text-decoration-style: wavy;
-	text-decoration-color: color-mix(in srgb, var(--galnoot) 55%, transparent);
+	text-decoration-color: var(--galnoot);
 	text-decoration-thickness: 1px;
 	text-underline-offset: 3px;
 }
@@ -2412,7 +2412,7 @@ h3 {
 .arg-onderbouwing {
 	text-decoration-line: underline;
 	text-decoration-style: wavy;
-	text-decoration-color: color-mix(in srgb, var(--onderbouwing) 55%, transparent);
+	text-decoration-color: var(--onderbouwing);
 	text-decoration-thickness: 1px;
 	text-underline-offset: 3px;
 }
