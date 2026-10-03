@@ -5,7 +5,7 @@ import topicsIndex from "../../../data/export/topics-index.json";
 import { deriveTagUsage, type TagUsageRow } from "../lib/aggregate";
 import { analyseTable, canonicalSigns } from "../lib/correspondence";
 import { ICOON_PAD, PERSPECTIEVEN } from "../lib/tagIcons.generated";
-import { tagIconPath, perspectiefWeergaveNaam } from "../lib/tagIcon";
+import { tagIconPath, perspectiefWeergaveNaam, perspectiefKleurVar } from "../lib/tagIcon";
 import { STANCES, stanceLabel, stanceDescription, TYPOLOGIES, typologyLabel, typologyDescription, type Argument } from "../lib/types";
 import { TYPOLOGY_COLORS } from "../lib/typologyColors";
 
@@ -60,7 +60,7 @@ const taxonomie = PERSPECTIEVEN.map((perspectief) => {
 	}
 	return {
 		naam: perspectief.naam,
-		kleur: perspectief.kleur,
+		kleur: perspectiefKleurVar(perspectief.naam),
 		icoon: perspectief.icoon,
 		labelgroepen: labelgroepOrder.map((naam) => ({ naam, tags: labelgroepTags.get(naam)! })),
 	};
@@ -77,8 +77,8 @@ const caExampleCounts = [
 	[166, 0, 42],
 	[1, 85, 19],
 ];
-const caExampleKleur =
-	PERSPECTIEVEN.find((p) => caExampleTags.every((t) => t in p.tags))?.kleur ?? "#B15E4A";
+const caExamplePerspectief = PERSPECTIEVEN.find((p) => caExampleTags.every((t) => t in p.tags));
+const caExampleKleur = caExamplePerspectief ? perspectiefKleurVar(caExamplePerspectief.naam) : "var(--vl-overig)";
 
 const caExampleResult = analyseTable(caExampleCounts, 2)!;
 const caExample = canonicalSigns({
@@ -442,7 +442,7 @@ const remoteCo2Kg = (co2.by_source.remote.co2_g / 1000).toLocaleString("nl-NL", 
 					<div class="card-grid">
 						{
 							STANCES.map((stance) => (
-								<div class="card-item card-item--accent" style={`--card-item-accent: var(--color-${stance === "unclear" ? "unclear" : stance})`}>
+								<div class="card-item card-item--accent" style={`--card-item-accent: var(--${stance === "unclear" ? "onduidelijk" : stance})`}>
 									<div class="card-item-body">
 										<div class="card-item-head">
 											<span class="card-item-title">{stanceLabel(stance)}</span>

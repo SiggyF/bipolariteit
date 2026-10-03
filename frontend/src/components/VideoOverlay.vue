@@ -2,7 +2,7 @@
 import { computed, onMounted, ref } from "vue";
 import { debateName } from "../lib/debateName";
 import { formatDate } from "../lib/formatDate";
-import { perspectiefWeergaveNaam, tagIconPath } from "../lib/tagIcon";
+import { perspectiefKleurVar, perspectiefWeergaveNaam, tagIconPath } from "../lib/tagIcon";
 import { PERSPECTIEVEN } from "../lib/tagIcons.generated";
 import { stanceLabel, typologyLabel, type Argument } from "../lib/types";
 import { activeArguments, nextArgumentAfter, prevArgumentBefore, selectBadgeTags } from "../lib/videoLabels";
@@ -36,7 +36,7 @@ const props = defineProps<{
 }>();
 const emit = defineEmits<{ seek: [seconds: number] }>();
 
-const colorByPerspective = new Map(PERSPECTIEVEN.map((p) => [p.naam, p.kleur]));
+const colorByPerspective = new Map(PERSPECTIEVEN.map((p) => [p.naam, perspectiefKleurVar(p.naam)]));
 
 function isVisible(tag: { perspectief: string }) {
 	return !props.off[tag.perspectief];

@@ -1,6 +1,19 @@
 import { ICOON_PAD, PERSPECTIEVEN } from "./tagIcons.generated";
 import { PERSPECTIEF_SLOT } from "./vloeiChart";
 
+const PERSPECTIEF_SLOT_VAR = ["var(--vl-indigo)", "var(--vl-oker)", "var(--vl-pruim)", "var(--vl-hemel)"];
+
+/** Vloei-categorische kleur voor een perspectief, als CSS custom property --
+ * voor gewone HTML/Astro-markup (geen canvas, dus geen hex per modus nodig
+ * zoals `perspectiefKleur()` in vloeiChart.ts; de dark-variant volgt via
+ * `:root[data-theme="dark"]` in main.css). Zelfde slotvolgorde als
+ * `PERSPECTIEF_SLOT`, zodat eenzelfde perspectief overal dezelfde kleur
+ * draagt, in grafieken en daarbuiten. */
+export function perspectiefKleurVar(naam: string): string {
+	const slot = PERSPECTIEF_SLOT[naam];
+	return slot === undefined ? "var(--vl-overig)" : PERSPECTIEF_SLOT_VAR[slot];
+}
+
 // tagsleutel -> icoonpad/perspectiefkleur, over alle perspectieven heen. Eén
 // lookup i.p.v. dit in elke component die een tagicoon/-kleur toont opnieuw
 // te doorzoeken.
@@ -10,7 +23,7 @@ for (const perspectief of PERSPECTIEVEN) {
 	for (const [sleutel, icoon] of Object.entries(perspectief.tags)) {
 		const pad = ICOON_PAD[icoon];
 		if (pad) TAG_ICOON_PAD.set(sleutel, pad);
-		TAG_KLEUR.set(sleutel, perspectief.kleur);
+		TAG_KLEUR.set(sleutel, perspectiefKleurVar(perspectief.naam));
 	}
 }
 
@@ -47,17 +60,4 @@ const PERSPECTIEF_KORTE_NAAM: Record<string, string> = {
 /** Verkorte weergavenaam voor een perspectief, voor gebruik in koppen/kaarten. */
 export function perspectiefWeergaveNaam(naam: string): string {
 	return PERSPECTIEF_KORTE_NAAM[naam] ?? naam;
-}
-
-const PERSPECTIEF_SLOT_VAR = ["var(--vl-indigo)", "var(--vl-oker)", "var(--vl-pruim)", "var(--vl-hemel)"];
-
-/** Vloei-categorische kleur voor een perspectief, als CSS custom property --
- * voor gewone HTML/Astro-markup (geen canvas, dus geen hex per modus nodig
- * zoals `perspectiefKleur()` in vloeiChart.ts; de dark-variant volgt via
- * `:root[data-theme="dark"]` in main.css). Zelfde slotvolgorde als
- * `PERSPECTIEF_SLOT`, zodat eenzelfde perspectief overal dezelfde kleur
- * draagt, in grafieken en daarbuiten. */
-export function perspectiefKleurVar(naam: string): string {
-	const slot = PERSPECTIEF_SLOT[naam];
-	return slot === undefined ? "var(--vl-overig)" : PERSPECTIEF_SLOT_VAR[slot];
 }
