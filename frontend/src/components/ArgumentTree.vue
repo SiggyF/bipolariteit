@@ -702,7 +702,7 @@ const links = computed<LinkPath[]>(() => {
    geen los kleuren-/font-systeem naast de rest van bipolariteit.nl. Deze
    laag van namen blijft alleen bestaan zodat de regels hieronder leesbaar
    verwijzen naar een rol (`--confrontatie-accent-text`) i.p.v. steeds
-   `var(--color-accent)` te herhalen; de dark-mode-variant komt vanzelf mee
+   `var(--galnoot)` te herhalen; de dark-mode-variant komt vanzelf mee
    omdat --color-* zelf al omslaat via :root[data-theme="dark"] in main.css
    -- geen aparte donkere-thema-override hier nodig. Zie
    docs/design/argumentenboom/ voor de (niet meer gebruikte) Classical-
@@ -710,17 +710,17 @@ const links = computed<LinkPath[]>(() => {
    `.confrontatie` heeft bewust geen eigen achtergrond/padding: die komt al
    van de omringende `.argument-tree-section` in topics/[slug].astro. */
 .confrontatie {
-	--confrontatie-text: var(--color-text);
-	--confrontatie-muted: var(--color-muted);
-	--confrontatie-muted-2: var(--color-muted);
-	--confrontatie-divider: var(--color-border);
-	--confrontatie-surface: var(--color-bg);
-	--confrontatie-accent: var(--color-accent);
-	--confrontatie-accent-text: var(--color-accent);
-	--confrontatie-accent-soft: var(--color-border);
-	--confrontatie-accent-strong: var(--color-accent);
-	--confrontatie-font-heading: var(--font-heading);
-	--confrontatie-font-body: var(--font-body);
+	--confrontatie-text: var(--galnoot);
+	--confrontatie-muted: var(--galnoot-zacht);
+	--confrontatie-muted-2: var(--galnoot-zacht);
+	--confrontatie-divider: var(--lijn);
+	--confrontatie-surface: var(--vloei);
+	--confrontatie-accent: var(--galnoot);
+	--confrontatie-accent-text: var(--galnoot);
+	--confrontatie-accent-soft: var(--lijn);
+	--confrontatie-accent-strong: var(--galnoot);
+	--confrontatie-font-heading: var(--font-kop);
+	--confrontatie-font-body: var(--font-tekst);
 
 	/* Geen vaste sidebar-kolom meer -- die nam altijd ruimte in, ook zonder
 	   selectie, en drukte het diagram onnodig smal. Het detailpaneel is nu
@@ -752,7 +752,6 @@ const links = computed<LinkPath[]>(() => {
 .confrontatie-kicker {
 	font-size: 0.7rem;
 	letter-spacing: 0.18em;
-	text-transform: uppercase;
 	color: var(--confrontatie-muted);
 	margin-bottom: 0.9rem;
 }
@@ -800,11 +799,11 @@ const links = computed<LinkPath[]>(() => {
 }
 
 .confrontatie-swatch-pro {
-	background: var(--color-pro);
+	background: var(--pro);
 }
 
 .confrontatie-swatch-contra {
-	background: var(--color-contra);
+	background: var(--contra);
 }
 
 .confrontatie-legend-dash {
@@ -863,18 +862,17 @@ const links = computed<LinkPath[]>(() => {
 
 .confrontatie-colheader-pro {
 	text-align: right;
-	color: var(--color-pro);
+	color: var(--pro);
 }
 
 .confrontatie-colheader-contra {
-	color: var(--color-contra);
+	color: var(--contra);
 }
 
 .confrontatie-colheader-mid {
 	text-align: center;
 	font-size: 0.65rem;
 	letter-spacing: 0.16em;
-	text-transform: uppercase;
 	color: var(--confrontatie-muted-2);
 }
 
@@ -891,10 +889,10 @@ const links = computed<LinkPath[]>(() => {
 }
 
 .confrontatie-medallion-bg {
-	/* Moet de daadwerkelijke achtergrond erachter matchen (--color-card-bg
+	/* Moet de daadwerkelijke achtergrond erachter matchen (--blad
 	   van .argument-tree-section in topics/[slug].astro, niet de losse
 	   paginategel) zodat de gestippelde lijn er zichtbaar "achter" loopt. */
-	fill: var(--color-card-bg);
+	fill: var(--blad);
 }
 
 .confrontatie-medallion-glyph {
@@ -974,7 +972,6 @@ const links = computed<LinkPath[]>(() => {
 	font-family: var(--confrontatie-font-heading);
 	font-size: 0.7rem;
 	letter-spacing: 0.14em;
-	text-transform: uppercase;
 	color: var(--confrontatie-accent-text);
 	font-feature-settings: "tnum";
 }
@@ -1098,7 +1095,6 @@ const links = computed<LinkPath[]>(() => {
 	gap: 0.75rem;
 	font-size: 0.65rem;
 	letter-spacing: 0.1em;
-	text-transform: uppercase;
 	color: var(--confrontatie-muted);
 	font-feature-settings: "tnum";
 	margin-bottom: 0.45rem;
@@ -1169,7 +1165,6 @@ const links = computed<LinkPath[]>(() => {
 .confrontatie-detail-kicker {
 	font-size: 0.65rem;
 	letter-spacing: 0.14em;
-	text-transform: uppercase;
 	color: var(--confrontatie-muted-2);
 	font-feature-settings: "tnum";
 }
@@ -1202,7 +1197,8 @@ const links = computed<LinkPath[]>(() => {
 }
 
 .confrontatie-detail-quote {
-	font-family: var(--confrontatie-font-heading);
+	font-family: var(--confrontatie-font-body);
+	font-style: italic;
 	font-size: 1.02rem;
 	line-height: 1.5;
 	margin: 1rem 0 0.25rem;
@@ -1219,7 +1215,6 @@ const links = computed<LinkPath[]>(() => {
 .confrontatie-detail-label {
 	font-size: 0.65rem;
 	letter-spacing: 0.14em;
-	text-transform: uppercase;
 	color: var(--confrontatie-muted-2);
 	margin-bottom: 0.55rem;
 }

@@ -76,8 +76,8 @@ const unclearWidth = computed(() => scaleWidth(props.debate.stance.unclear, prop
 	display: block;
 	text-decoration: none;
 	color: inherit;
-	border: 1px solid var(--color-border);
-	background: var(--color-card-bg);
+	border: 1px solid var(--lijn);
+	background: var(--blad);
 	border-radius: 4px;
 }
 
@@ -102,9 +102,9 @@ const unclearWidth = computed(() => scaleWidth(props.debate.stance.unclear, prop
 	display: block;
 	width: 140px;
 	aspect-ratio: 1;
-	border: 1px solid var(--color-border);
+	border: 1px solid var(--lijn);
 	border-radius: 2px;
-	background: var(--color-bg);
+	background: var(--vloei);
 	overflow: hidden;
 }
 
@@ -129,21 +129,21 @@ const unclearWidth = computed(() => scaleWidth(props.debate.stance.unclear, prop
 }
 
 .debate-card--uitgelicht .debate-card-title {
-	font: 400 19px/1.25 var(--font-heading);
+	font: 400 19px/1.25 var(--font-kop);
 }
 
 .debate-card--uitgebreid .debate-card-title {
-	font: 400 17px/1.25 var(--font-heading);
+	font: 400 17px/1.25 var(--font-kop);
 }
 
 .debate-card--compact .debate-card-title {
-	font: 400 15px/1.35 var(--font-heading);
+	font: 400 15px/1.35 var(--font-kop);
 }
 
 .debate-card-date {
 	font-size: var(--step--1);
 	font-weight: 500;
-	color: var(--color-muted);
+	color: var(--galnoot-zacht);
 	white-space: nowrap;
 }
 
@@ -154,7 +154,7 @@ const unclearWidth = computed(() => scaleWidth(props.debate.stance.unclear, prop
 	margin-top: 0.4rem;
 	font-size: var(--step--1);
 	font-weight: 500;
-	color: var(--color-muted);
+	color: var(--galnoot-zacht);
 	flex-wrap: wrap;
 }
 
@@ -170,7 +170,7 @@ const unclearWidth = computed(() => scaleWidth(props.debate.stance.unclear, prop
 	justify-content: flex-end;
 	align-items: center;
 	gap: 0.4rem;
-	border-right: 1px solid var(--color-text);
+	border-right: 1px solid var(--galnoot);
 	padding-right: 0.5rem;
 }
 
@@ -195,15 +195,15 @@ const unclearWidth = computed(() => scaleWidth(props.debate.stance.unclear, prop
 }
 
 .debate-card-axis-bar--pro {
-	background: var(--color-pro);
+	background: var(--pro);
 }
 
 .debate-card-axis-bar--contra {
-	background: var(--color-contra);
+	background: var(--contra);
 }
 
 .debate-card-axis-bar--unclear {
-	background: var(--color-unclear);
+	background: var(--onduidelijk);
 }
 
 .debate-card-axis-count {
@@ -212,18 +212,18 @@ const unclearWidth = computed(() => scaleWidth(props.debate.stance.unclear, prop
 }
 
 .debate-card-axis-pro .debate-card-axis-count {
-	color: var(--color-pro);
+	color: var(--pro);
 }
 
 .debate-card-axis-contra .debate-card-axis-count {
-	color: var(--color-contra);
+	color: var(--contra);
 }
 
 .debate-card-unclear {
 	display: block;
 	margin-top: 0.6rem;
 	font-size: var(--step--1);
-	color: var(--color-muted);
+	color: var(--galnoot-zacht);
 }
 
 /* Compacte rij: geen kaartrand, gewoon een regel met titel + as. */
@@ -231,7 +231,7 @@ const unclearWidth = computed(() => scaleWidth(props.debate.stance.unclear, prop
 	border: none;
 	background: none;
 	border-radius: 0;
-	border-bottom: 1px solid var(--color-border);
+	border-bottom: 1px solid var(--lijn);
 	display: grid;
 	grid-template-columns: 1fr 96px 96px;
 	gap: 0.6rem;

@@ -1,98 +1,8 @@
-/* Typefaces: Libre Caslon (headlines, newspaper-masthead register) +
-   Work Sans (body, thin/modern) + IBM Plex Mono (tags/data, agate-type register).
-   Self-hosted, Latin-only subsets — no external font CDN request. */
-@font-face {
-	font-family: "Libre Caslon Text";
-	font-style: normal;
-	font-weight: 400;
-	font-display: swap;
-	src: url("/fonts/libre-caslon-text-400.woff2") format("woff2");
-}
-
-@font-face {
-	font-family: "Libre Caslon Text";
-	font-style: italic;
-	font-weight: 400;
-	font-display: swap;
-	src: url("/fonts/libre-caslon-text-400i.woff2") format("woff2");
-}
-
-@font-face {
-	font-family: "Libre Caslon Text";
-	font-style: normal;
-	font-weight: 700;
-	font-display: swap;
-	src: url("/fonts/libre-caslon-text-700.woff2") format("woff2");
-}
-
-@font-face {
-	font-family: "Libre Caslon Display";
-	font-style: normal;
-	font-weight: 400;
-	font-display: swap;
-	src: url("/fonts/libre-caslon-display-400.woff2") format("woff2");
-}
-
-@font-face {
-	font-family: "Work Sans";
-	font-style: normal;
-	font-weight: 300;
-	font-display: swap;
-	src: url("/fonts/work-sans-300.woff2") format("woff2");
-}
-
-@font-face {
-	font-family: "Work Sans";
-	font-style: normal;
-	font-weight: 400;
-	font-display: swap;
-	src: url("/fonts/work-sans-400.woff2") format("woff2");
-}
-
-@font-face {
-	font-family: "Work Sans";
-	font-style: italic;
-	font-weight: 400;
-	font-display: swap;
-	src: url("/fonts/work-sans-400i.woff2") format("woff2");
-}
-
-@font-face {
-	font-family: "Work Sans";
-	font-style: normal;
-	font-weight: 500;
-	font-display: swap;
-	src: url("/fonts/work-sans-500.woff2") format("woff2");
-}
-
-@font-face {
-	font-family: "Work Sans";
-	font-style: normal;
-	font-weight: 600;
-	font-display: swap;
-	src: url("/fonts/work-sans-600.woff2") format("woff2");
-}
-
-@font-face {
-	font-family: "IBM Plex Mono";
-	font-style: normal;
-	font-weight: 400;
-	font-display: swap;
-	src: url("/fonts/ibm-plex-mono-400.woff2") format("woff2");
-}
-
-@font-face {
-	font-family: "IBM Plex Mono";
-	font-style: normal;
-	font-weight: 600;
-	font-display: swap;
-	src: url("/fonts/ibm-plex-mono-600.woff2") format("woff2");
-}
-
 /* Vloei (issue #220): Archivo (koppen, labels, data -- via de breedte-as,
-   wdth 62-125) en Literata (leestekst). Beide variabel en OFL, zelf gehost.
-   Vervangen de Caslon/Work Sans/Plex-suite; die blijven nog staan tot de
-   laatste module is overgezet (zie docs/design/vloei/invoering.md stap 3). */
+   wdth 62-125) en Literata (leestekst). Beide variabel en OFL, zelf gehost,
+   Latin-only subsets -- geen externe font-CDN-request. Vervangen de oude
+   Caslon/Work Sans/Plex-suite, verwijderd in stap 3 (zie
+   docs/design/vloei/invoering.md) zodra geen module ze meer gebruikte. */
 @font-face {
 	font-family: "Archivo";
 	font-style: normal;
@@ -132,7 +42,7 @@
 	--op-inkt: #fbfbfc;
 
 	/* Standpuntpaar pro/contra: ongewijzigd overgenomen uit het oude recept.
-	   "onduidelijk" is nieuw (verdunde inkt) -- het oude --color-unclear
+	   "onduidelijk" is nieuw (verdunde inkt) -- het oude --onduidelijk
 	   (#948a79) haalde als tekst geen 4.5:1. */
 	--pro: #1f6f66;
 	--pro-was: #d6e8e4;
@@ -181,26 +91,6 @@
 	   plek waar Vloei schaduw gebruikt, kaarten zelf hebben er geen. */
 	--uitloop: 0 8px 24px rgba(26, 32, 49, 0.18);
 
-	/* Aliassen naar de oude namen, zodat componenten in stap 1 ongewijzigd
-	   blijven -- zie docs/design/vloei/invoering.md. Vervallen in stap 3
-	   zodra alle modules rechtstreeks op de Vloei-tokens staan. */
-	--color-bg: var(--vloei);
-	--color-card-bg: var(--blad);
-	--color-text: var(--galnoot);
-	--color-muted: var(--galnoot-zacht);
-	--color-border: var(--lijn);
-	--color-pro: var(--pro);
-	--color-contra: var(--contra);
-	--color-unclear: var(--onduidelijk);
-	--color-accent: var(--galnoot);
-	--color-accent-active: var(--galnoot-zacht);
-	--color-onderbouwing: var(--onderbouwing);
-
-	--font-display: var(--font-kop);
-	--font-heading: var(--font-kop);
-	--font-body: var(--font-tekst);
-	--font-mono: var(--font-kop);
-
 	/* Type scale, 1.25 ratio on a 1rem base. */
 	--step--1: 0.85rem;
 	--step-0: 1rem;
@@ -216,18 +106,29 @@
 	--space-4: 2rem;
 	--space-5: 3rem;
 
-	font-family: var(--font-body);
+	font-family: var(--font-tekst);
 }
 
 * {
 	box-sizing: border-box;
 }
 
+/* Form- en knopelementen erven hun font NIET via de normale cascade (browser-
+   default-stylesheet geeft ze de OS-UI-font) -- zonder deze reset viel een
+   deel van de knoppen terug op Arial i.p.v. Archivo/Literata, ook al had
+   elke losse knop-klasse zelf wel de juiste achtergrond/randkleur. */
+button,
+input,
+select,
+textarea {
+	font: inherit;
+}
+
 body {
 	margin: 0;
-	background: var(--color-bg);
-	color: var(--color-text);
-	/* Literata (--font-body) leest bij 400 goed; het oude Work Sans 300 was
+	background: var(--vloei);
+	color: var(--galnoot);
+	/* Literata (--font-tekst) leest bij 400 goed; het oude Work Sans 300 was
 	   te licht voor lange stukken (Vloei, issue #220). */
 	font-weight: 400;
 	line-height: 1.6;
@@ -244,14 +145,14 @@ main {
    `color: inherit` overheen -- dit is alleen de vangnet-stijl tegen het
    browserstandaard blauw/paars, dat niet bij de krant-esthetiek past. */
 a {
-	color: var(--color-accent);
-	text-decoration-color: var(--color-border);
+	color: var(--galnoot);
+	text-decoration-color: var(--lijn);
 }
 
 /* Duidelijk onderscheiden van onbezocht: anders is er geen visuele
    navigatie-oriëntatie meer (welke pagina's al bekeken zijn). */
 a:visited {
-	color: var(--color-muted);
+	color: var(--galnoot-zacht);
 }
 
 a:hover {
@@ -263,18 +164,17 @@ a:hover {
 .dev-balk {
 	margin: 0;
 	padding: var(--space-1) var(--space-3);
-	background: var(--color-card-bg);
-	border-bottom: 2px solid var(--color-contra);
-	color: var(--color-muted);
-	font-family: var(--font-mono);
+	background: var(--blad);
+	border-bottom: 2px solid var(--contra);
+	color: var(--galnoot-zacht);
+	font-family: var(--font-kop);
 	font-size: var(--step--1);
 	line-height: 1.5;
 	text-align: center;
 }
 
 .dev-balk strong {
-	color: var(--color-contra);
-	text-transform: uppercase;
+	color: var(--contra);
 	letter-spacing: 0.04em;
 }
 
@@ -298,7 +198,7 @@ a:hover {
 	display: flex;
 	align-items: center;
 	gap: 0.6rem;
-	color: var(--color-text);
+	color: var(--galnoot);
 	text-decoration: none;
 	font-weight: 700;
 	font-size: var(--step-1);
@@ -333,20 +233,20 @@ a:hover {
 }
 
 .site-nav-link {
-	color: var(--color-muted);
+	color: var(--galnoot-zacht);
 	text-decoration: none;
 	font-size: var(--step--1);
 }
 
 .site-nav-link:hover {
-	color: var(--color-accent);
+	color: var(--galnoot);
 	text-decoration: underline;
 }
 
 .theme-toggle {
 	background: none;
-	border: 1px solid var(--color-border);
-	color: var(--color-text);
+	border: 1px solid var(--lijn);
+	color: var(--galnoot);
 	width: 1.75rem;
 	height: 1.75rem;
 	line-height: 1;
@@ -355,7 +255,7 @@ a:hover {
 }
 
 .theme-toggle:hover {
-	border-color: var(--color-accent);
+	border-color: var(--galnoot);
 }
 
 /* Deelknop + dropdown (ShareMenu.astro, issue #172). Positie/maten uit het
@@ -371,26 +271,26 @@ a:hover {
 	height: 1.75rem;
 	padding: 0 12px 0 10px;
 	background: none;
-	border: 1px solid var(--color-accent);
+	border: 1px solid var(--galnoot);
 	border-radius: 3px;
-	color: var(--color-accent);
-	font-family: var(--font-body);
+	color: var(--galnoot);
+	font-family: var(--font-tekst);
 	font-size: var(--step--1);
 	cursor: pointer;
 }
 
 .share-menu-trigger:hover {
-	background: var(--color-card-bg);
+	background: var(--blad);
 }
 
 .share-menu-trigger[aria-expanded="true"] {
-	border-color: var(--color-accent-active);
-	color: var(--color-accent-active);
+	border-color: var(--galnoot-zacht);
+	color: var(--galnoot-zacht);
 }
 
 .share-menu-trigger:focus-visible,
 .share-menu-item:focus-visible {
-	outline: 2px solid var(--color-accent);
+	outline: 2px solid var(--galnoot);
 	outline-offset: 2px;
 }
 
@@ -400,8 +300,8 @@ a:hover {
 	top: calc(100% + 6px);
 	width: 340px;
 	max-width: calc(100vw - 2 * var(--space-3));
-	background: var(--color-card-bg);
-	border: 1px solid var(--color-border);
+	background: var(--blad);
+	border: 1px solid var(--lijn);
 	border-radius: 4px;
 	box-shadow: 0 8px 20px rgba(34, 31, 27, 0.15);
 	padding: 18px 18px 14px;
@@ -416,11 +316,10 @@ a:hover {
 }
 
 .share-menu-label {
-	font-family: var(--font-mono);
+	font-family: var(--font-kop);
 	font-size: 0.7rem;
 	letter-spacing: 0.09em;
-	text-transform: uppercase;
-	color: var(--color-muted);
+	color: var(--galnoot-zacht);
 }
 
 .share-menu-grid {
@@ -437,8 +336,8 @@ a:hover {
 	border: none;
 	border-radius: 3px;
 	background: none;
-	color: var(--color-text);
-	font-family: var(--font-body);
+	color: var(--galnoot);
+	font-family: var(--font-tekst);
 	font-size: var(--step--1);
 	text-decoration: none;
 	cursor: pointer;
@@ -446,17 +345,17 @@ a:hover {
 }
 
 .share-menu-item svg {
-	color: var(--color-accent);
+	color: var(--galnoot);
 	flex-shrink: 0;
 }
 
 .share-menu-item:hover {
-	background: var(--color-bg);
+	background: var(--vloei);
 }
 
 .share-menu-divider {
 	height: 1px;
-	background: var(--color-border);
+	background: var(--lijn);
 }
 
 .share-menu-copy {
@@ -464,7 +363,7 @@ a:hover {
 }
 
 .share-menu-copy.is-copied span {
-	color: var(--color-pro);
+	color: var(--pro);
 }
 
 /* Mobiele tabbalk (SiteTabBar.astro, issue #133): onzichtbaar boven het
@@ -479,12 +378,12 @@ a:hover {
 	align-items: center;
 	gap: 2px;
 	padding: var(--space-1) 0;
-	color: var(--color-muted);
+	color: var(--galnoot-zacht);
 	text-decoration: none;
 }
 
 .site-tabbar-item.is-active {
-	color: var(--color-accent);
+	color: var(--galnoot);
 }
 
 .site-tabbar-label {
@@ -492,7 +391,7 @@ a:hover {
 }
 
 h1 {
-	font-family: var(--font-display);
+	font-family: var(--font-kop);
 	font-weight: 400;
 	font-size: var(--step-4);
 	line-height: 1.1;
@@ -502,7 +401,7 @@ h1 {
 }
 
 h2 {
-	font-family: var(--font-heading);
+	font-family: var(--font-kop);
 	font-weight: 700;
 	font-size: var(--step-2);
 	line-height: 1.2;
@@ -510,7 +409,7 @@ h2 {
 }
 
 h3 {
-	font-family: var(--font-heading);
+	font-family: var(--font-kop);
 	font-weight: 700;
 	font-size: var(--step-1);
 	line-height: 1.3;
@@ -519,19 +418,19 @@ h3 {
 }
 
 .intro {
-	color: var(--color-muted);
+	color: var(--galnoot-zacht);
 	font-size: var(--step-1);
 	max-width: 60ch;
 	padding-bottom: var(--space-3);
-	border-bottom: 1px solid var(--color-border);
+	border-bottom: 1px solid var(--lijn);
 }
 
 .topic-header {
 	max-width: 70ch;
 	margin: 0 0 var(--space-4);
 	padding: var(--space-3);
-	background: var(--color-card-bg);
-	border: 1px solid var(--color-border);
+	background: var(--blad);
+	border: 1px solid var(--lijn);
 }
 
 .topic-header h1 {
@@ -539,7 +438,7 @@ h3 {
 }
 
 .topic-description {
-	color: var(--color-text);
+	color: var(--galnoot);
 	font-size: var(--step-0);
 }
 
@@ -596,7 +495,7 @@ h3 {
 .topic-description-note {
 	margin-top: var(--space-2);
 	font-size: var(--step--1);
-	color: var(--color-muted);
+	color: var(--galnoot-zacht);
 	font-style: italic;
 }
 
@@ -604,12 +503,12 @@ h3 {
 	max-width: 100%;
 	margin: 0 0 var(--space-4);
 	padding: var(--space-3);
-	background: var(--color-card-bg);
-	border: 1px solid var(--color-border);
+	background: var(--blad);
+	border: 1px solid var(--lijn);
 }
 
 .argument-tree-note {
-	color: var(--color-text);
+	color: var(--galnoot);
 	font-size: var(--step-0);
 	margin: 0 0 var(--space-2);
 }
@@ -626,7 +525,7 @@ h3 {
 .about h2 {
 	margin-top: var(--space-4);
 	padding-top: var(--space-2);
-	border-top: 1px solid var(--color-border);
+	border-top: 1px solid var(--lijn);
 }
 
 .about ul {
@@ -647,7 +546,7 @@ h3 {
 	content: "\2014";
 	position: absolute;
 	left: 0;
-	color: var(--color-muted);
+	color: var(--galnoot-zacht);
 }
 
 .about strong {
@@ -655,33 +554,33 @@ h3 {
 }
 
 .about code {
-	font-family: var(--font-mono);
+	font-family: var(--font-kop);
 	font-size: 0.85em;
-	background: var(--color-border);
+	background: var(--lijn);
 	padding: 0.05em 0.35em;
 }
 
 .motto {
-	font-family: var(--font-heading);
+	font-family: var(--font-kop);
 	font-style: italic;
 	font-size: var(--step-1);
 	max-width: 65ch;
 	margin: var(--space-3) 0;
 	padding: var(--space-2) 0;
-	border-top: 1px solid var(--color-border);
-	border-bottom: 1px solid var(--color-border);
+	border-top: 1px solid var(--lijn);
+	border-bottom: 1px solid var(--lijn);
 }
 
 .back-link {
 	display: inline-block;
 	margin-bottom: var(--space-2);
-	color: var(--color-muted);
+	color: var(--galnoot-zacht);
 	text-decoration: none;
 	font-size: var(--step--1);
 }
 
 .back-link:hover {
-	color: var(--color-accent);
+	color: var(--galnoot);
 	text-decoration: underline;
 }
 
@@ -697,25 +596,25 @@ h3 {
 	display: flex;
 	justify-content: space-between;
 	padding: var(--space-2) var(--space-3);
-	border: 1px solid var(--color-border);
-	background: var(--color-card-bg);
+	border: 1px solid var(--lijn);
+	background: var(--blad);
 	text-decoration: none;
 	color: inherit;
 }
 
 .topic-list a:hover {
-	border-color: var(--color-accent);
+	border-color: var(--galnoot);
 }
 
 .topic-name {
-	font-family: var(--font-heading);
+	font-family: var(--font-kop);
 	font-weight: 700;
 	text-transform: capitalize;
 }
 
 .topic-count {
-	color: var(--color-muted);
-	font-family: var(--font-mono);
+	color: var(--galnoot-zacht);
+	font-family: var(--font-kop);
 	font-size: var(--step--1);
 	font-variant-numeric: tabular-nums;
 }
@@ -736,9 +635,8 @@ h3 {
 	grid-template-columns: minmax(200px, 1fr) minmax(260px, 2fr) auto;
 	gap: var(--space-2);
 	padding: 0 var(--space-3);
-	color: var(--color-muted);
+	color: var(--galnoot-zacht);
 	font-size: var(--step--1);
-	text-transform: uppercase;
 	letter-spacing: 0.03em;
 }
 
@@ -783,7 +681,7 @@ h3 {
 	display: flex;
 	align-items: center;
 	gap: 0.35rem;
-	color: var(--color-muted);
+	color: var(--galnoot-zacht);
 	font-size: var(--step--1);
 }
 
@@ -816,7 +714,7 @@ h3 {
 	border-radius: 999px;
 	font-size: var(--step--1);
 	white-space: nowrap;
-	border: 1px solid var(--color-border);
+	border: 1px solid var(--lijn);
 }
 
 .tag-signaal-icoon {
@@ -824,19 +722,19 @@ h3 {
 }
 
 .tag-signaal-sleutel {
-	font-family: var(--font-mono);
-	color: var(--color-text);
+	font-family: var(--font-kop);
+	color: var(--galnoot);
 }
 
 .tag-signaal-leeg {
-	color: var(--color-muted);
+	color: var(--galnoot-zacht);
 }
 
 /* "Favoriet": gevulde badge in de kleur van het perspectief van de tag. */
 .tag-signaal-favoriet {
-	color: var(--tag-signaal-accent, var(--color-text));
-	border-color: var(--tag-signaal-accent, var(--color-border));
-	background: color-mix(in srgb, var(--tag-signaal-accent, var(--color-border)) 12%, var(--color-card-bg));
+	color: var(--tag-signaal-accent, var(--galnoot));
+	border-color: var(--tag-signaal-accent, var(--lijn));
+	background: color-mix(in srgb, var(--tag-signaal-accent, var(--lijn)) 12%, var(--blad));
 	font-weight: 600;
 }
 
@@ -848,11 +746,11 @@ h3 {
 /* "Minst favoriet": subtieler, neutraal -- dit is een afwezigheid, geen
    kenmerk om uit te lichten zoals de favoriet-badge. */
 .tag-signaal-minst-favoriet {
-	color: var(--color-muted);
+	color: var(--galnoot-zacht);
 }
 
 .tag-signaal-minst-favoriet .tag-signaal-sleutel {
-	color: var(--color-muted);
+	color: var(--galnoot-zacht);
 }
 
 .tag-signalen-kolommen {
@@ -883,12 +781,12 @@ h3 {
 }
 
 .tag-signalen-lijst-beschrijving {
-	color: var(--color-muted);
+	color: var(--galnoot-zacht);
 	font-size: var(--step--1);
 }
 
 .tag-signalen-lijst-detail {
-	color: var(--color-muted);
+	color: var(--galnoot-zacht);
 	font-size: var(--step--1);
 	opacity: 0.75;
 }
@@ -918,7 +816,7 @@ h3 {
 	gap: var(--space-1);
 	padding: var(--space-2);
 	border-radius: var(--hoek-m);
-	background: var(--color-card-bg);
+	background: var(--blad);
 	text-decoration: none;
 	color: inherit;
 	text-align: center;
@@ -1007,14 +905,14 @@ h3 {
 }
 
 .card-tile-subtitle {
-	color: var(--color-muted);
+	color: var(--galnoot-zacht);
 	font-size: var(--step--1);
 	line-height: 1.3;
 }
 
 .card-tile-count {
 	margin-top: auto;
-	color: var(--color-muted);
+	color: var(--galnoot-zacht);
 	font-family: var(--font-kop);
 	font-variation-settings: "wdth" 85;
 	font-size: var(--step--1);
@@ -1043,8 +941,8 @@ h3 {
 .stats-panel {
 	margin-top: var(--space-4);
 	padding: var(--space-3);
-	border: 1px solid var(--color-border);
-	background: var(--color-card-bg);
+	border: 1px solid var(--lijn);
+	background: var(--blad);
 }
 
 .actor-header {
@@ -1072,7 +970,7 @@ h3 {
 }
 
 .topic-breakdown .topic-count {
-	color: var(--color-muted);
+	color: var(--galnoot-zacht);
 	font-size: var(--step--1);
 }
 
@@ -1090,10 +988,10 @@ h3 {
 	width: 1.1rem;
 	height: 1.1rem;
 	margin-left: 0.3rem;
-	border: 1px solid var(--color-border);
+	border: 1px solid var(--lijn);
 	border-radius: 50%;
-	color: var(--color-muted);
-	font-family: var(--font-body);
+	color: var(--galnoot-zacht);
+	font-family: var(--font-tekst);
 	font-size: 0.7rem;
 	font-weight: 700;
 	text-decoration: none;
@@ -1101,8 +999,8 @@ h3 {
 }
 
 .info-link:hover {
-	border-color: var(--color-accent);
-	color: var(--color-accent);
+	border-color: var(--galnoot);
+	color: var(--galnoot);
 }
 
 .claims-highlights {
@@ -1129,7 +1027,7 @@ h3 {
 }
 
 .claims-highlights .panel-note {
-	color: var(--color-muted);
+	color: var(--galnoot-zacht);
 	font-size: var(--step--1);
 	margin: 0;
 }
@@ -1148,7 +1046,7 @@ h3 {
 	width: 100%;
 	height: 100%;
 	text-align: left;
-	background: var(--color-card-bg);
+	background: var(--blad);
 	border: 0;
 	border-radius: var(--hoek-m);
 	padding: var(--space-2);
@@ -1183,7 +1081,7 @@ h3 {
 .claim-highlight-source,
 .claim-highlight-meta {
 	font-size: var(--step--1);
-	color: var(--color-muted);
+	color: var(--galnoot-zacht);
 	margin: 0.2rem 0 0;
 }
 
@@ -1195,7 +1093,7 @@ h3 {
 	padding: 0;
 	margin: 0 0 var(--space-1);
 	font-size: var(--step--1);
-	color: var(--color-muted);
+	color: var(--galnoot-zacht);
 }
 
 .chart-legend li {
@@ -1212,7 +1110,7 @@ h3 {
 }
 
 .panel-note {
-	color: var(--color-muted);
+	color: var(--galnoot-zacht);
 	font-size: var(--step--1);
 	margin: 0 0 var(--space-2);
 }
@@ -1220,7 +1118,7 @@ h3 {
 .panel-scope {
 	font-weight: 400;
 	font-size: var(--step--1);
-	color: var(--color-muted);
+	color: var(--galnoot-zacht);
 }
 
 .clickable-chart {
@@ -1297,26 +1195,26 @@ h3 {
 .facet-button {
 	font-size: var(--step--1);
 	padding: 0.2rem 0.7rem;
-	border: 1px solid var(--color-border);
+	border: 1px solid var(--lijn);
 	border-radius: 999px;
-	background: var(--color-card-bg);
+	background: var(--blad);
 	color: inherit;
 	cursor: pointer;
 }
 
 .facet-button:hover,
 .facet-button.is-open {
-	border-color: var(--color-accent);
+	border-color: var(--galnoot);
 }
 
 .facet-button.has-selection {
-	border-color: var(--color-accent);
-	color: var(--color-accent);
+	border-color: var(--galnoot);
+	color: var(--galnoot);
 	font-weight: 500;
 }
 
 .facet-badge {
-	font-family: var(--font-mono);
+	font-family: var(--font-kop);
 	font-size: var(--step--2);
 	margin-left: 0.3rem;
 }
@@ -1386,8 +1284,8 @@ h3 {
 .facet-panel {
 	margin-top: var(--space-2);
 	padding: var(--space-2);
-	border: 1px solid var(--color-border);
-	background: var(--color-card-bg);
+	border: 1px solid var(--lijn);
+	background: var(--blad);
 	display: flex;
 	flex-direction: column;
 	gap: var(--space-2);
@@ -1396,13 +1294,13 @@ h3 {
 .facet-hint {
 	margin: 0;
 	font-size: var(--step--2);
-	color: var(--color-muted);
+	color: var(--galnoot-zacht);
 }
 
 .facet-search {
 	padding: 0.3rem 0.5rem;
-	border: 1px solid var(--color-border);
-	background: var(--color-bg);
+	border: 1px solid var(--lijn);
+	background: var(--vloei);
 	color: inherit;
 	font: inherit;
 	font-size: var(--step--1);
@@ -1436,14 +1334,14 @@ h3 {
 }
 
 .facet-option-count {
-	font-family: var(--font-mono);
+	font-family: var(--font-kop);
 	font-size: var(--step--2);
-	color: var(--color-muted);
+	color: var(--galnoot-zacht);
 }
 
 .facet-empty {
 	font-size: var(--step--1);
-	color: var(--color-muted);
+	color: var(--galnoot-zacht);
 }
 
 /* Mobiele filterknop en -paneel: op desktop verborgen/inline, zie media query
@@ -1454,16 +1352,16 @@ h3 {
 	gap: 0.3rem;
 	font-size: var(--step--1);
 	padding: 0.2rem 0.7rem;
-	border: 1px solid var(--color-border);
+	border: 1px solid var(--lijn);
 	border-radius: 999px;
-	background: var(--color-card-bg);
+	background: var(--blad);
 	color: inherit;
 	cursor: pointer;
 }
 
 .filter-mobile-toggle.has-selection {
-	border-color: var(--color-accent);
-	color: var(--color-accent);
+	border-color: var(--galnoot);
+	color: var(--galnoot);
 	font-weight: 500;
 }
 
@@ -1478,7 +1376,7 @@ h3 {
 .no-results {
 	padding: var(--space-4) 0;
 	text-align: center;
-	color: var(--color-muted);
+	color: var(--galnoot-zacht);
 }
 
 .party-chart {
@@ -1497,8 +1395,8 @@ h3 {
 	gap: var(--space-3);
 	margin-bottom: var(--space-2);
 	padding: var(--space-2) 0;
-	border-top: 1px solid var(--color-border);
-	border-bottom: 1px solid var(--color-border);
+	border-top: 1px solid var(--lijn);
+	border-bottom: 1px solid var(--lijn);
 	font-size: var(--step--1);
 }
 
@@ -1509,16 +1407,15 @@ h3 {
 }
 
 .chart-controls-label {
-	font-family: var(--font-mono);
+	font-family: var(--font-kop);
 	font-size: var(--step--2);
-	text-transform: uppercase;
 	letter-spacing: 0.04em;
-	color: var(--color-muted);
+	color: var(--galnoot-zacht);
 }
 
 .toggle-group {
 	display: inline-flex;
-	border: 1px solid var(--color-border);
+	border: 1px solid var(--lijn);
 }
 
 .toggle-btn {
@@ -1526,9 +1423,9 @@ h3 {
 	font-size: var(--step--1);
 	padding: 0.2rem 0.65rem;
 	border: none;
-	border-right: 1px solid var(--color-border);
-	background: var(--color-bg);
-	color: var(--color-muted);
+	border-right: 1px solid var(--lijn);
+	background: var(--vloei);
+	color: var(--galnoot-zacht);
 	cursor: pointer;
 }
 
@@ -1537,17 +1434,17 @@ h3 {
 }
 
 .toggle-btn.is-active {
-	background: var(--color-card-bg);
-	color: var(--color-accent);
+	background: var(--blad);
+	color: var(--galnoot);
 	font-weight: 500;
 }
 
 .toggle-btn:not(:disabled):hover {
-	color: var(--color-text);
+	color: var(--galnoot);
 }
 
 .toggle-btn:disabled {
-	color: var(--color-border);
+	color: var(--lijn);
 	cursor: not-allowed;
 }
 
@@ -1555,18 +1452,18 @@ h3 {
 	font: inherit;
 	font-size: var(--step--1);
 	padding: 0.2rem 0.65rem;
-	border: 1px solid var(--color-border);
-	background: var(--color-bg);
+	border: 1px solid var(--lijn);
+	background: var(--vloei);
 	color: inherit;
 	cursor: pointer;
 }
 
 .control-knop:hover {
-	border-color: var(--color-accent);
+	border-color: var(--galnoot);
 }
 
 .control-hint {
-	color: var(--color-muted);
+	color: var(--galnoot-zacht);
 	font-size: var(--step--2);
 	margin-left: auto;
 }
@@ -1611,16 +1508,16 @@ h3 {
 .party-table td {
 	text-align: left;
 	padding: 0.4rem 0.75rem 0.4rem 0;
-	border-bottom: 1px solid var(--color-border);
+	border-bottom: 1px solid var(--lijn);
 }
 
 .party-table th {
-	color: var(--color-muted);
+	color: var(--galnoot-zacht);
 	font-weight: 600;
 }
 
 .party-table td:not(.party-cell) {
-	font-family: var(--font-mono);
+	font-family: var(--font-kop);
 	font-variant-numeric: tabular-nums;
 }
 
@@ -1705,9 +1602,9 @@ h3 {
 		z-index: 15;
 		display: grid;
 		grid-template-columns: repeat(4, 1fr);
-		background: color-mix(in srgb, var(--color-bg) 88%, transparent);
+		background: color-mix(in srgb, var(--vloei) 88%, transparent);
 		backdrop-filter: blur(8px);
-		border-top: 1px solid var(--color-border);
+		border-top: 1px solid var(--lijn);
 	}
 
 	.filter-mobile-toggle {
@@ -1740,8 +1637,8 @@ h3 {
 		z-index: 20;
 		max-height: 80vh;
 		overflow-y: auto;
-		background: var(--color-bg);
-		border-top: 1px solid var(--color-border);
+		background: var(--vloei);
+		border-top: 1px solid var(--lijn);
 		padding: var(--space-3);
 		margin-bottom: 0;
 		display: flex;
@@ -1865,17 +1762,17 @@ h3 {
 }
 
 .column-load-more button {
-	background: var(--color-card-bg);
-	border: 1px solid var(--color-border);
+	background: var(--blad);
+	border: 1px solid var(--lijn);
 	padding: 0.5rem 1rem;
-	color: var(--color-text);
-	font-family: var(--font-body);
+	color: var(--galnoot);
+	font-family: var(--font-tekst);
 	cursor: pointer;
 	font-size: var(--step--1);
 }
 
 .column-load-more button:hover {
-	border-color: var(--color-accent);
+	border-color: var(--galnoot);
 }
 
 /* Vloei-argumentkaart (issue #220, module Argumentkaart): grond blad op
@@ -1964,12 +1861,11 @@ h3 {
 
 .typology-badge {
 	display: inline-block;
-	font-family: var(--font-mono);
+	font-family: var(--font-kop);
 	font-size: 0.7rem;
-	text-transform: uppercase;
 	letter-spacing: 0.04em;
-	color: var(--color-muted);
-	border: 1px solid var(--color-border);
+	color: var(--galnoot-zacht);
+	border: 1px solid var(--lijn);
 	padding: 0.1rem 0.6rem;
 }
 
@@ -1977,9 +1873,9 @@ h3 {
    bedoeld om te kunnen checken of start_seconds/end_seconds klopt met wat
    er daadwerkelijk in beeld speelt. */
 .argument-span {
-	font-family: var(--font-mono);
+	font-family: var(--font-kop);
 	font-size: 0.7rem;
-	color: var(--color-muted);
+	color: var(--galnoot-zacht);
 }
 
 /* Het citaat (tokens.json: type-stijl "citaat", Lopende tekst-groep) --
@@ -1994,20 +1890,20 @@ h3 {
 }
 
 .quote-context {
-	color: var(--color-muted);
+	color: var(--galnoot-zacht);
 	font-size: 0.85rem;
 	margin: 0.3rem 0;
 }
 
 .attribution {
 	font-size: 0.85rem;
-	color: var(--color-muted);
+	color: var(--galnoot-zacht);
 	margin: 0.5rem 0;
 }
 
 .claims {
 	font-size: 0.8rem;
-	color: var(--color-muted);
+	color: var(--galnoot-zacht);
 	padding-left: 1.1rem;
 	margin: 0.5rem 0;
 }
@@ -2021,13 +1917,13 @@ h3 {
 	padding: 0;
 	margin: 0.4rem 0;
 	font-size: 0.8rem;
-	color: var(--color-muted);
+	color: var(--galnoot-zacht);
 	display: grid;
 	gap: 0.3rem;
 }
 
 .compact-tag-details strong {
-	color: var(--color-text);
+	color: var(--galnoot);
 	font-weight: 600;
 }
 
@@ -2047,26 +1943,26 @@ h3 {
 /* Klikbaar: filtert op deze tag. Was eerder een <li> met alleen een tooltip --
    de meest voor de hand liggende filterknop van de pagina deed niets. */
 .tag-badge {
-	font-family: var(--font-mono);
+	font-family: var(--font-kop);
 	font-size: 0.65rem;
-	color: var(--color-muted);
+	color: var(--galnoot-zacht);
 	background: transparent;
-	border: 1px solid var(--color-border);
+	border: 1px solid var(--lijn);
 	padding: 0.1rem 0.5rem;
 	cursor: pointer;
 	text-decoration: underline dotted;
-	text-decoration-color: var(--color-border);
+	text-decoration-color: var(--lijn);
 	text-underline-offset: 2px;
 }
 
 .tag-badge:hover {
-	border-color: var(--color-accent);
-	color: var(--color-accent);
+	border-color: var(--galnoot);
+	color: var(--galnoot);
 }
 
 .tag-badge.is-active {
-	border-color: var(--color-accent);
-	color: var(--color-accent);
+	border-color: var(--galnoot);
+	color: var(--galnoot);
 	font-weight: 600;
 	text-decoration: none;
 }
@@ -2079,13 +1975,13 @@ h3 {
 
 .tag-link {
 	font-size: 0.65rem;
-	color: var(--color-muted);
+	color: var(--galnoot-zacht);
 	text-decoration: none;
 	line-height: 1;
 }
 
 .tag-link:hover {
-	color: var(--color-accent);
+	color: var(--galnoot);
 }
 
 .argument-links {
@@ -2106,7 +2002,7 @@ h3 {
 }
 
 .argument-links a {
-	color: var(--color-accent);
+	color: var(--galnoot);
 }
 
 /* Tweede Kamer-icoontje voor externe tweedekamer.nl-links (issue #173,
@@ -2130,9 +2026,9 @@ h3 {
 	border: none;
 	padding: 0;
 	font: inherit;
-	color: var(--color-accent);
+	color: var(--galnoot);
 	text-decoration: underline;
-	text-decoration-color: var(--color-border);
+	text-decoration-color: var(--lijn);
 	cursor: pointer;
 }
 
@@ -2141,15 +2037,15 @@ h3 {
 }
 
 .debug-version {
-	font-family: var(--font-mono);
+	font-family: var(--font-kop);
 	font-size: 0.65rem;
-	color: var(--color-border);
+	color: var(--lijn);
 	margin: 0.5rem 0 0;
 }
 
 .feedback {
 	margin-top: 0.75rem;
-	border-top: 1px dashed var(--color-border);
+	border-top: 1px dashed var(--lijn);
 	padding-top: 0.5rem;
 }
 
@@ -2158,7 +2054,7 @@ h3 {
 	border: none;
 	padding: 0;
 	font-size: 0.75rem;
-	color: var(--color-muted);
+	color: var(--galnoot-zacht);
 	cursor: pointer;
 	text-decoration: underline;
 }
@@ -2178,22 +2074,22 @@ h3 {
 }
 
 .feedback-panel textarea {
-	font-family: var(--font-body);
+	font-family: var(--font-tekst);
 	font-size: 0.8rem;
 	padding: 0.4rem;
-	border: 1px solid var(--color-border);
-	background: var(--color-bg);
-	color: var(--color-text);
+	border: 1px solid var(--lijn);
+	background: var(--vloei);
+	color: var(--galnoot);
 	resize: vertical;
 }
 
 .feedback-submit {
 	align-self: flex-start;
-	font-family: var(--font-body);
+	font-family: var(--font-tekst);
 	font-size: 0.8rem;
 	padding: 0.3rem 0.8rem;
-	border: 1px solid var(--color-accent);
-	color: var(--color-accent);
+	border: 1px solid var(--galnoot);
+	color: var(--galnoot);
 	background: none;
 	cursor: pointer;
 }
@@ -2209,12 +2105,12 @@ h3 {
 }
 
 .feedback-export button {
-	font-family: var(--font-body);
+	font-family: var(--font-tekst);
 	font-size: 0.85rem;
 	padding: 0.5rem 1rem;
-	border: 1px solid var(--color-border);
-	background: var(--color-card-bg);
-	color: var(--color-text);
+	border: 1px solid var(--lijn);
+	background: var(--blad);
+	color: var(--galnoot);
 	cursor: pointer;
 }
 
@@ -2259,8 +2155,8 @@ h3 {
 	max-width: 65ch;
 	margin: var(--space-3) 0;
 	padding: var(--space-2);
-	border: 1px solid var(--color-border);
-	background: var(--color-card-bg);
+	border: 1px solid var(--lijn);
+	background: var(--blad);
 }
 
 .ca-example-chart svg {
@@ -2270,44 +2166,44 @@ h3 {
 }
 
 .ca-example-axis {
-	stroke: var(--color-border);
+	stroke: var(--lijn);
 	stroke-width: 1;
 }
 
 .ca-example-axis-label {
-	fill: var(--color-muted);
-	font-family: var(--font-mono);
+	fill: var(--galnoot-zacht);
+	font-family: var(--font-kop);
 	font-size: 10px;
 }
 
 .ca-example-row-point {
-	fill: var(--color-accent);
+	fill: var(--galnoot);
 }
 
 .ca-example-point-label {
-	fill: var(--color-text);
-	font-family: var(--font-body);
+	fill: var(--galnoot);
+	font-family: var(--font-tekst);
 	font-size: 12px;
 	font-weight: 600;
 }
 
 .ca-example-tag-label {
-	font-family: var(--font-mono);
+	font-family: var(--font-kop);
 	font-size: 10px;
 	font-weight: 400;
 }
 
 .about .ca-example-chart-caption {
 	margin: var(--space-1) 0 0;
-	color: var(--color-muted);
+	color: var(--galnoot-zacht);
 	font-size: var(--step--1);
 }
 
 .workflow-step {
 	padding: var(--space-2) var(--space-3);
-	border: 1px solid var(--color-border);
-	border-left: 4px solid var(--color-accent);
-	background: var(--color-card-bg);
+	border: 1px solid var(--lijn);
+	border-left: 4px solid var(--galnoot);
+	background: var(--blad);
 }
 
 .workflow-step-title {
@@ -2315,14 +2211,14 @@ h3 {
 	align-items: baseline;
 	gap: var(--space-1);
 	margin: 0 0 0.3rem;
-	font-family: var(--font-heading);
+	font-family: var(--font-kop);
 	font-weight: 700;
 }
 
 .workflow-step-index {
-	font-family: var(--font-mono);
+	font-family: var(--font-kop);
 	font-weight: 400;
-	color: var(--color-muted);
+	color: var(--galnoot-zacht);
 	font-size: var(--step--1);
 }
 
@@ -2333,39 +2229,38 @@ h3 {
 }
 
 .workflow-step-detail code {
-	font-family: var(--font-mono);
+	font-family: var(--font-kop);
 	font-size: 0.9em;
-	background: var(--color-border);
+	background: var(--lijn);
 	padding: 0.05em 0.35em;
 }
 
 .workflow-arrow {
 	align-self: center;
-	color: var(--color-muted);
+	color: var(--galnoot-zacht);
 	font-size: var(--step-1);
 	line-height: 1.4;
 }
 
 /* Argumentdefinitie-schema + geannoteerde citaten (about-pagina, issue #89).
    Ontwerp in docs/design/argumenten-uitleg/: standpunt in ink, onderbouwing in
-   --color-onderbouwing, een ontbrekend deel als losse gestippelde streep. Een
-   losse kleur i.p.v. --color-accent (navy) -- die ligt te dicht bij
-   --color-text in lichtheid om als duidelijk te onderscheiden paar te lezen. */
+   --onderbouwing, een ontbrekend deel als losse gestippelde streep. Een
+   losse kleur i.p.v. --galnoot (navy) -- die ligt te dicht bij
+   --galnoot in lichtheid om als duidelijk te onderscheiden paar te lezen. */
 .argument-schema {
 	max-width: 65ch;
 	margin: var(--space-3) 0;
 	padding: var(--space-3);
-	border: 1px solid var(--color-border);
-	background: var(--color-card-bg);
+	border: 1px solid var(--lijn);
+	background: var(--blad);
 }
 
 .argument-schema-kicker {
 	margin: 0 0 var(--space-2);
-	font-family: var(--font-mono);
+	font-family: var(--font-kop);
 	font-size: var(--step--1);
 	letter-spacing: 0.08em;
-	text-transform: uppercase;
-	color: var(--color-muted);
+	color: var(--galnoot-zacht);
 }
 
 .argument-schema-grid {
@@ -2380,23 +2275,22 @@ h3 {
 	flex-direction: column;
 	gap: var(--space-1);
 	padding: var(--space-2);
-	border: 1px solid var(--color-text);
+	border: 1px solid var(--galnoot);
 }
 
 .argument-schema-deel-onderbouwing {
-	border-color: var(--color-onderbouwing);
+	border-color: var(--onderbouwing);
 }
 
 .argument-schema-label {
 	margin: 0;
-	font-family: var(--font-mono);
+	font-family: var(--font-kop);
 	font-size: var(--step--1);
 	letter-spacing: 0.08em;
-	text-transform: uppercase;
 }
 
 .argument-schema-deel-onderbouwing .argument-schema-label {
-	color: var(--color-onderbouwing);
+	color: var(--onderbouwing);
 }
 
 .argument-schema-vraag {
@@ -2422,14 +2316,13 @@ h3 {
 	align-items: center;
 	padding: 0.15rem 0.6rem;
 	border-radius: 999px;
-	font-family: var(--font-mono);
+	font-family: var(--font-kop);
 	font-size: 0.65rem;
 	letter-spacing: 0.05em;
-	text-transform: uppercase;
 	white-space: nowrap;
-	border: 1px solid var(--color-text);
-	color: var(--color-text);
-	background: color-mix(in srgb, var(--color-text) 8%, var(--color-card-bg));
+	border: 1px solid var(--galnoot);
+	color: var(--galnoot);
+	background: color-mix(in srgb, var(--galnoot) 8%, var(--blad));
 }
 
 .argument-schema-variant-contra {
@@ -2438,9 +2331,9 @@ h3 {
 
 .argument-schema-variant-onduidelijk {
 	border-style: dotted;
-	border-color: var(--color-muted);
-	color: var(--color-muted);
-	background: color-mix(in srgb, var(--color-muted) 8%, var(--color-card-bg));
+	border-color: var(--galnoot-zacht);
+	color: var(--galnoot-zacht);
+	background: color-mix(in srgb, var(--galnoot-zacht) 8%, var(--blad));
 }
 
 /* Typologievarianten bij Onderbouwing -- zelfde vorm als de standpuntpills,
@@ -2449,7 +2342,7 @@ h3 {
 .argument-schema-variant--kleur {
 	border-color: var(--variant-color);
 	color: var(--variant-color);
-	background: color-mix(in srgb, var(--variant-color) 10%, var(--color-card-bg));
+	background: color-mix(in srgb, var(--variant-color) 10%, var(--blad));
 }
 
 .argument-schema-omdat {
@@ -2460,13 +2353,13 @@ h3 {
 	gap: 0.4rem;
 	padding: 0 var(--space-1);
 	font-style: italic;
-	color: var(--color-onderbouwing);
+	color: var(--onderbouwing);
 }
 
 .argument-schema-omdat span {
 	width: 100%;
 	height: 1px;
-	background: var(--color-onderbouwing);
+	background: var(--onderbouwing);
 }
 
 .argument-voorbeelden {
@@ -2481,7 +2374,7 @@ h3 {
 
 .argument-voorbeelden li {
 	padding-bottom: var(--space-2);
-	border-bottom: 1px solid var(--color-border);
+	border-bottom: 1px solid var(--lijn);
 }
 
 .argument-voorbeelden li:last-child {
@@ -2490,17 +2383,17 @@ h3 {
 
 .argument-quote {
 	margin: 0;
-	font-family: var(--font-heading);
+	font-family: var(--font-kop);
 	font-size: var(--step-0);
 	line-height: 1.5;
 }
 
 .arg-standpunt {
-	border-bottom: 2px solid var(--color-text);
+	border-bottom: 2px solid var(--galnoot);
 }
 
 .arg-onderbouwing {
-	border-bottom: 2px solid var(--color-onderbouwing);
+	border-bottom: 2px solid var(--onderbouwing);
 }
 
 .argument-ontbreekt {
@@ -2508,22 +2401,21 @@ h3 {
 	align-items: center;
 	gap: 0.6rem;
 	margin: 0.35rem 0 0;
-	font-family: var(--font-mono);
+	font-family: var(--font-kop);
 	font-size: var(--step--1);
 	letter-spacing: 0.06em;
-	text-transform: uppercase;
-	color: var(--color-muted);
+	color: var(--galnoot-zacht);
 }
 
 .argument-ontbreekt-streep {
 	width: 2.5rem;
-	border-bottom: 2px dashed var(--color-border);
+	border-bottom: 2px dashed var(--lijn);
 }
 
 .argument-meta {
 	margin: 0.35rem 0 0;
 	font-size: var(--step--1);
-	color: var(--color-muted);
+	color: var(--galnoot-zacht);
 }
 
 .argument-legend {
@@ -2534,7 +2426,7 @@ h3 {
 	padding: 0;
 	list-style: none;
 	font-size: var(--step--1);
-	color: var(--color-muted);
+	color: var(--galnoot-zacht);
 }
 
 .argument-legend li {
@@ -2546,16 +2438,16 @@ h3 {
 .argument-legend-streep {
 	width: 1.6rem;
 	height: 0;
-	border-bottom: 2px solid var(--color-border);
+	border-bottom: 2px solid var(--lijn);
 }
 
 .arg-standpunt-streep {
-	border-bottom-color: var(--color-text);
+	border-bottom-color: var(--galnoot);
 	border-bottom-style: solid;
 }
 
 .arg-onderbouwing-streep {
-	border-bottom-color: var(--color-onderbouwing);
+	border-bottom-color: var(--onderbouwing);
 	border-bottom-style: solid;
 }
 
@@ -2568,7 +2460,7 @@ h3 {
 
 .ca-example-table td:not(:first-child),
 .ca-example-table th:not(:first-child) {
-	font-family: var(--font-mono);
+	font-family: var(--font-kop);
 	text-align: right;
 }
 
@@ -2586,9 +2478,9 @@ h3 {
 
 .card-group-item {
 	padding: var(--space-3);
-	border: 1px solid var(--color-border);
-	border-top: 4px solid var(--card-group-item-accent, var(--color-accent));
-	background: var(--color-card-bg);
+	border: 1px solid var(--lijn);
+	border-top: 4px solid var(--card-group-item-accent, var(--galnoot));
+	background: var(--blad);
 }
 
 .card-group-item-header {
@@ -2600,7 +2492,7 @@ h3 {
 
 .card-group-item-header h3 {
 	margin: 0;
-	font-family: var(--font-heading);
+	font-family: var(--font-kop);
 	font-size: var(--step-0);
 }
 
@@ -2615,7 +2507,7 @@ h3 {
 .card-section-title {
 	display: block;
 	margin-bottom: 0.4rem;
-	color: var(--color-muted);
+	color: var(--galnoot-zacht);
 	font-size: var(--step--1);
 	font-weight: 600;
 }
@@ -2637,8 +2529,8 @@ h3 {
 	display: flex;
 	gap: 0.5rem;
 	padding: 0.5rem 0.65rem;
-	border: 1px solid var(--color-border);
-	background: var(--color-bg);
+	border: 1px solid var(--lijn);
+	background: var(--vloei);
 }
 
 /* .card-item is soms een <div> (about.astro, alleen-lezen legenda) en soms
@@ -2650,11 +2542,11 @@ a.card-item {
 }
 
 a.card-item:hover {
-	border-color: var(--color-accent);
+	border-color: var(--galnoot);
 }
 
 .card-item--accent {
-	border-left: 4px solid var(--card-item-accent, var(--color-border));
+	border-left: 4px solid var(--card-item-accent, var(--lijn));
 }
 
 .card-item-icon {
@@ -2673,7 +2565,7 @@ a.card-item:hover {
 }
 
 .card-item-title {
-	font-family: var(--font-mono);
+	font-family: var(--font-kop);
 	font-weight: 600;
 	font-size: var(--step--1);
 }
@@ -2681,8 +2573,8 @@ a.card-item:hover {
 .card-item-meta {
 	margin-left: auto;
 	flex: none;
-	color: var(--color-muted);
-	font-family: var(--font-mono);
+	color: var(--galnoot-zacht);
+	font-family: var(--font-kop);
 	font-size: 0.75rem;
 	white-space: nowrap;
 }
@@ -2700,7 +2592,7 @@ a.card-item:hover {
 .card-item-description {
 	display: block;
 	margin-top: 0.15rem;
-	color: var(--color-muted);
+	color: var(--galnoot-zacht);
 	font-size: 0.8rem;
 	line-height: 1.4;
 }
@@ -2731,15 +2623,15 @@ a.card-item:hover {
 }
 
 .status-bar-count {
-	font-family: var(--font-mono);
+	font-family: var(--font-kop);
 	font-variant-numeric: tabular-nums;
-	color: var(--color-muted);
+	color: var(--galnoot-zacht);
 	flex-shrink: 0;
 }
 
 .status-bar-track {
-	background: var(--color-card-bg);
-	border: 1px solid var(--color-border);
+	background: var(--blad);
+	border: 1px solid var(--lijn);
 	border-radius: 4px;
 	height: 10px;
 	overflow: hidden;
@@ -2747,12 +2639,12 @@ a.card-item:hover {
 
 .status-bar-fill {
 	height: 100%;
-	background: var(--color-accent);
+	background: var(--galnoot);
 	border-radius: 3px;
 }
 
 .status-total {
-	color: var(--color-muted);
+	color: var(--galnoot-zacht);
 	font-size: var(--step--1);
 	margin-top: var(--space-1);
 }
@@ -2765,7 +2657,7 @@ a.card-item:hover {
    scheef"). Nu een CSS grid met vaste kolombreedtes (ook het middenlabel):
    die zijn voor elke rij identiek, ongeacht de inhoud van andere rijen, dus
    alle balken beginnen/eindigen precies op dezelfde x-positie. Zelfde
-   rand+color-mix-vulling als .status-bar-fill, maar in --color-pro/-contra. */
+   rand+color-mix-vulling als .status-bar-fill, maar in --pro/-contra. */
 .typology-bars {
 	list-style: none;
 	margin: 0;
@@ -2804,10 +2696,10 @@ a.card-item:hover {
 }
 
 .typology-bar-value {
-	font-family: var(--font-mono);
+	font-family: var(--font-kop);
 	font-variant-numeric: tabular-nums;
 	font-size: var(--step--2);
-	color: var(--color-muted);
+	color: var(--galnoot-zacht);
 	white-space: nowrap;
 	flex-shrink: 0;
 }
@@ -2819,13 +2711,13 @@ a.card-item:hover {
 }
 
 .typology-bar-fill-pro {
-	background: color-mix(in srgb, var(--color-pro) 25%, var(--color-card-bg));
-	border: 1px solid var(--color-pro);
+	background: color-mix(in srgb, var(--pro) 25%, var(--blad));
+	border: 1px solid var(--pro);
 }
 
 .typology-bar-fill-contra {
-	background: color-mix(in srgb, var(--color-contra) 25%, var(--color-card-bg));
-	border: 1px solid var(--color-contra);
+	background: color-mix(in srgb, var(--contra) 25%, var(--blad));
+	border: 1px solid var(--contra);
 }
 
 /* --- argumententijdlijn (issue #54) ------------------------------------ */
@@ -2844,7 +2736,7 @@ a.card-item:hover {
 
 .timeline-track {
 	position: relative;
-	border-bottom: 1px solid var(--color-border);
+	border-bottom: 1px solid var(--lijn);
 }
 
 .timeline-bar {
@@ -2880,7 +2772,7 @@ a.card-item:hover {
 }
 
 .timeline-segment:not(.timeline-segment-top) {
-	border-bottom: 2px solid var(--color-card-bg);
+	border-bottom: 2px solid var(--blad);
 }
 
 /* Eén label per staaf i.p.v. een paar jaartallen -- te veel om horizontaal
@@ -2901,8 +2793,8 @@ a.card-item:hover {
 	transform: rotate(45deg);
 	white-space: nowrap;
 	font-size: var(--step--1);
-	color: var(--color-muted);
-	font-family: var(--font-mono);
+	color: var(--galnoot-zacht);
+	font-family: var(--font-kop);
 }
 
 .legend-swatch-btn {
@@ -2931,8 +2823,8 @@ a.card-item:hover {
 }
 
 .llm-call-item {
-	border: 1px solid var(--color-border);
-	background: var(--color-card-bg);
+	border: 1px solid var(--lijn);
+	background: var(--blad);
 	padding: 0.6rem 0.8rem;
 }
 
@@ -2942,37 +2834,35 @@ a.card-item:hover {
 	align-items: center;
 	gap: 0.6rem;
 	font-size: var(--step--1);
-	color: var(--color-muted);
-	font-family: var(--font-mono);
+	color: var(--galnoot-zacht);
+	font-family: var(--font-kop);
 }
 
 .llm-call-stage {
-	text-transform: uppercase;
 	font-size: 0.7rem;
 	letter-spacing: 0.03em;
-	color: var(--color-text);
+	color: var(--galnoot);
 }
 
 .llm-call-status {
 	margin-left: auto;
-	text-transform: uppercase;
 	font-size: 0.7rem;
 }
 
 .llm-call-status--ok {
-	color: var(--color-pro);
+	color: var(--pro);
 }
 
 .llm-call-status--error {
-	color: var(--color-contra);
+	color: var(--contra);
 }
 
 .llm-call-outdated {
-	color: var(--color-contra);
+	color: var(--contra);
 }
 
 .llm-call-error {
-	color: var(--color-contra);
+	color: var(--contra);
 	font-size: var(--step--1);
 	margin: 0.4rem 0 0;
 }
@@ -2980,11 +2870,11 @@ a.card-item:hover {
 .llm-call-text {
 	white-space: pre-wrap;
 	word-break: break-word;
-	font-family: var(--font-mono);
+	font-family: var(--font-kop);
 	font-size: 0.75rem;
 	line-height: 1.5;
-	background: var(--color-bg);
-	border: 1px solid var(--color-border);
+	background: var(--vloei);
+	border: 1px solid var(--lijn);
 	padding: 0.6rem;
 	margin: 0.4rem 0 0;
 	max-height: 400px;
@@ -3015,14 +2905,14 @@ a.card-item:hover {
 
 .validation-comparison-table th,
 .validation-comparison-table td {
-	border: 1px solid var(--color-border);
+	border: 1px solid var(--lijn);
 	padding: 0.5rem 0.7rem;
 	text-align: left;
 	font-size: var(--step--1);
 }
 
 .validation-comparison-table thead th {
-	color: var(--color-muted);
+	color: var(--galnoot-zacht);
 	font-weight: 600;
 }
 
@@ -3031,13 +2921,13 @@ a.card-item:hover {
 }
 
 .validation-comparison-table tbody th a {
-	color: var(--color-accent);
+	color: var(--galnoot);
 }
 
 .validation-summary-card {
 	flex: 1 1 240px;
-	border: 1px solid var(--color-border);
-	background: var(--color-card-bg);
+	border: 1px solid var(--lijn);
+	background: var(--blad);
 	padding: 0.8rem 1rem;
 }
 
@@ -3049,18 +2939,18 @@ a.card-item:hover {
 }
 
 .validation-summary-card dt {
-	color: var(--color-muted);
+	color: var(--galnoot-zacht);
 }
 
 .validation-summary-card dd {
 	margin: 0;
-	font-family: var(--font-mono);
+	font-family: var(--font-kop);
 	text-align: right;
 }
 
 .validation-summary-caption {
 	font-size: var(--step--1);
-	color: var(--color-muted);
+	color: var(--galnoot-zacht);
 	margin: 0.6rem 0 0;
 }
 
@@ -3074,8 +2964,8 @@ a.card-item:hover {
 }
 
 .validation-item {
-	border: 1px solid var(--color-border);
-	background: var(--color-card-bg);
+	border: 1px solid var(--lijn);
+	background: var(--blad);
 	padding: 0.7rem 0.9rem;
 }
 
@@ -3098,11 +2988,11 @@ a.card-item:hover {
 }
 
 .validation-pill {
-	font-family: var(--font-mono);
+	font-family: var(--font-kop);
 	font-size: 0.65rem;
 	padding: 0.1rem 0.5rem;
-	border: 1px solid var(--color-border);
-	color: var(--color-muted);
+	border: 1px solid var(--lijn);
+	color: var(--galnoot-zacht);
 }
 
 .validation-quote {
@@ -3111,7 +3001,7 @@ a.card-item:hover {
 	line-height: 1.5;
 	margin: 0.5rem 0 0;
 	padding-left: 0.8rem;
-	border-left: 2px solid var(--color-border);
+	border-left: 2px solid var(--lijn);
 }
 
 .perspectief-swatch {
@@ -3136,15 +3026,15 @@ a.card-item:hover {
 .tag-heatmap th,
 .tag-heatmap td {
 	padding: 0;
-	border: 1px solid var(--color-border);
+	border: 1px solid var(--lijn);
 }
 
 .tag-heatmap-group {
 	padding: 0.3rem 0.4rem;
-	font-family: var(--font-heading);
+	font-family: var(--font-kop);
 	font-weight: 700;
 	font-size: var(--step--1);
-	color: var(--color-muted);
+	color: var(--galnoot-zacht);
 	white-space: nowrap;
 }
 
@@ -3170,13 +3060,13 @@ a.card-item:hover {
 
 .tag-heatmap-head-btn:hover,
 .tag-heatmap-party-btn:hover {
-	background: var(--color-card-bg);
+	background: var(--blad);
 }
 
 .tag-heatmap-head-fallback {
-	font-family: var(--font-mono);
+	font-family: var(--font-kop);
 	font-size: 0.65rem;
-	color: var(--color-muted);
+	color: var(--galnoot-zacht);
 }
 
 .tag-heatmap-party {
@@ -3191,22 +3081,22 @@ a.card-item:hover {
 .tag-heatmap-cell {
 	min-width: 44px;
 	text-align: center;
-	font-family: var(--font-mono);
+	font-family: var(--font-kop);
 	font-variant-numeric: tabular-nums;
-	color: var(--color-text);
+	color: var(--galnoot);
 }
 
 .tag-persons-block {
 	margin-top: var(--space-3);
 	padding-top: var(--space-3);
-	border-top: 1px solid var(--color-border);
+	border-top: 1px solid var(--lijn);
 }
 
 .tag-persons-heading {
 	display: flex;
 	align-items: center;
 	gap: var(--space-2);
-	font-family: var(--font-mono);
+	font-family: var(--font-kop);
 	font-size: var(--step-0);
 	margin: 0;
 }
