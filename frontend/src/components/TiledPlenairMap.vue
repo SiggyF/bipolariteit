@@ -40,12 +40,10 @@ import {
 const props = defineProps<{
 	// pmtiles + grid-metadata + cluster-hulls komen van Hugging Face (volle
 	// dataset, zie lib/dataBaseUrl.ts, issue #316/#293) -- deze component
-	// gebruikt geen jsDelivr-databasis.
+	// gebruikt geen jsDelivr-databasis. video-links zitten als MVT-eigenschap
+	// in de tiles zelf (pipeline/tiling/encode.py), dus ook geen losse
+	// dataBaseUrl meer nodig zoals PlenairMap.vue die wel heeft.
 	tilesBaseUrl: string;
-	// plenair-map-videos.json wordt (net als bij PlenairMap.vue) via de
-	// jsDelivr-databasis gepubliceerd, niet meegenomen in de HF-pmtiles-bundel
-	// -- vandaar deze losse basis-URL naast tilesBaseUrl.
-	dataBaseUrl: string;
 }>();
 
 const emit = defineEmits<{
@@ -73,9 +71,17 @@ type DeckPoint = {
 	publishedAt: string;
 	cluster: number | null;
 	year: number | null;
+	// Video-deep-link, als MVT-eigenschap meegecodeerd per punt
+	// (pipeline/tiling/build_pyramid.py::load_video_hrefs()) i.p.v. via een
+	// los plenair-map-videos.json -- dat bestand dekte voor de volle dataset
+	// maar ~5,5% en zou bij volledige dekking tot ~190MB ongecomprimeerd
+	// groeien (issue #356-vervolg). Twee vormen, te onderscheiden aan het
+	// pad (zie activePointVideo hieronder): een site-relatief pad
+	// ("/debatten/{id}/") naar onze eigen interne videospeler-pagina (de
+	// ~5300 gecureerde entries uit plenair-map-videos.json), of anders een
+	// absolute externe Debat Direct-URL.
+	video: string | null;
 };
-
-type VideoLinkInfo = { href: string; label: string; is_internal: boolean };
 
 // Zelfde "pin wint van hover, klik op leegte unpint" model als PlenairMap.vue
 // (activeDisplayItem/pinnedItem/hoveredItem daar) -- alleen is hit-testing
@@ -223,10 +229,12 @@ const pinnedItem = ref<DisplayItem | null>(null);
 const activeDisplayItem = computed<DisplayItem | null>(() => pinnedItem.value ?? hoveredItem.value);
 const isPinned = computed(() => pinnedItem.value != null);
 
-const videosData = ref<Record<number, VideoLinkInfo>>({});
-const activePointVideo = computed<VideoLinkInfo | null>(() => {
+const activePointVideo = computed<{ href: string; isInternal: boolean } | null>(() => {
 	if (activeDisplayItem.value?.type !== "point") return null;
-	return videosData.value[activeDisplayItem.value.data.id] ?? null;
+	const { video } = activeDisplayItem.value.data;
+	// Site-relatief ("/debatten/{id}/", onze eigen videospeler-pagina) i.p.v.
+	// absoluut (externe Debat Direct-URL) -- zie DeckPoint.video hierboven.
+	return video ? { href: video, isInternal: video.startsWith("/") } : null;
 });
 
 // Topics zonder live telling (i.t.t. PlenairMap.vue's topicCounts): die telt
@@ -260,9 +268,13 @@ function ensurePmtilesProtocol() {
 	protocolRegistered = true;
 }
 
+// Dezelfde Vloei-tokens als frontend/src/styles/main.css (--vloei/--galnoot-zacht,
+// zie ook docs/design/vloei/) -- hier als losse hex-waarden omdat dit JS is
+// (MapLibre's style-JSON leest geen CSS custom properties), zelfde aanpak als
+// THEME in lib/vloeiChart.ts.
 const THEME_COLOR = {
-	light: { bg: "#f7f3ea", muted: "#6f6558" },
-	dark: { bg: "#221f1b", muted: "#a89e8c" },
+	light: { bg: "#eceef0", muted: "#4b5366" },
+	dark: { bg: "#121622", muted: "#a9b0c0" },
 };
 
 // Rechthoekig, wit vlak achter elke clusterlabel, met een zachte
@@ -534,6 +546,7 @@ async function getTileData({ index }: { index: TileIndex }): Promise<DeckPoint[]
 			publishedAt: String(p.published_at ?? ""),
 			cluster: typeof p.cluster === "number" ? p.cluster : null,
 			year: parseYear(p.published_at),
+			video: typeof p.video === "string" && p.video ? p.video : null,
 		});
 	}
 	return points;
@@ -641,18 +654,13 @@ onMounted(async () => {
 		// -full-bestanden (issue #293/#259: de volle dataset is nu de
 		// standaard, niet de kleine steekproef) -- clusters.levels hoort bij
 		// die volle run, staat niet in de kleine jsDelivr-databasis, dus ook
-		// die fetch gaat via tilesBaseUrl (HF). plenair-map-videos.json is wél
-		// via de jsDelivr-databasis gepubliceerd (dataBaseUrl), niet de HF-bundel.
-		const [gridResponse, clustersResponse, videosResponse] = await Promise.all([
+		// die fetch gaat via tilesBaseUrl (HF).
+		const [gridResponse, clustersResponse] = await Promise.all([
 			fetch(`${props.tilesBaseUrl}/plenair-map-full-grid.json`),
 			fetch(`${props.tilesBaseUrl}/plenair-map-clusters-full.json`).catch(() => null),
-			fetch(`${props.dataBaseUrl}/plenair-map-videos.json`).catch(() => null),
 		]);
 		if (!gridResponse.ok) throw new Error(`Status ${gridResponse.status}`);
 		const grid: GridMetadata = await gridResponse.json();
-		if (videosResponse && videosResponse.ok) {
-			videosData.value = await videosResponse.json();
-		}
 
 		let hulls: GeoJSON.FeatureCollection = { type: "FeatureCollection", features: [] };
 		let labels: GeoJSON.FeatureCollection = { type: "FeatureCollection", features: [] };
@@ -682,10 +690,12 @@ onMounted(async () => {
 			style: {
 				version: 8,
 				// Nodig voor de cluster-naam-labels hieronder (symbol-layer met
-				// text-field vereist een glyphs-bron) -- MapLibre's eigen publieke
-				// demo-fontendpoint, geen eigen fontserver nodig voor deze paar
-				// Latijnse labels.
-				glyphs: "https://demotiles.maplibre.org/font/{fontstack}/{range}.pbf",
+				// text-field vereist een glyphs-bron). Zelf gehost (frontend/public/fonts/glyphs/,
+				// gegenereerd met maplibre/font-maker uit een losse statische Archivo-instance
+				// op wdth 85/wght 600 -- dezelfde "smal"-as als .vl-data/.vl-chip elders, zie
+				// docs/design/vloei/) i.p.v. MapLibre's publieke demo-fontendpoint (Noto Sans),
+				// voor consistente typografie met de rest van de Vloei-stijl (issue #220).
+				glyphs: "/fonts/glyphs/{fontstack}/{range}.pbf",
 				sources: {
 					hulls: { type: "geojson", data: hulls },
 					labels: { type: "geojson", data: labels },
@@ -704,7 +714,7 @@ onMounted(async () => {
 						filter: ["<=", ["get", "minzoom"], ["zoom"]],
 						layout: {
 							"text-field": ["get", "name"],
-							"text-font": ["Noto Sans Regular"],
+							"text-font": ["Archivo SemiBold Regular"],
 							"text-size": 13,
 							"text-anchor": "top",
 							"text-allow-overlap": false,
@@ -727,8 +737,20 @@ onMounted(async () => {
 						// vlak (createLabelBackgroundImage()), dus zwarte tekst blijft in
 						// beide thema's leesbaar -- de vroegere thema-afhankelijke
 						// gedempte tekstkleur (theme.muted) had op die lichte achtergrond
-						// te weinig contrast.
-						paint: { "text-color": "#000000", "icon-opacity": 0.55 },
+						// te weinig contrast. icon-opacity 0,85 i.p.v. het eerder geteste
+						// 0,55: bij 0,55 scheen de kleurrijke puntenwolk er nog te veel
+						// doorheen (de "onleesbaar"-vage-waas uit de git-historie); 0,85
+						// laat nog een subtiel vermoeden van de kaart erdoorheen zonder
+						// dat probleem. Een echte vervaagde rand/backdrop-blur is losgetrokken
+						// naar issue #370 (apart van module 7/#220: hier alleen de opacity).
+						// text-halo als vangnet voor het geval de sprite een lang label niet
+						// volledig dekt.
+						paint: {
+							"text-color": "#000000",
+							"text-halo-color": "#ffffff",
+							"text-halo-width": 1.5,
+							"icon-opacity": 0.85,
+						},
 					},
 				],
 			},
@@ -916,12 +938,12 @@ onUnmounted(() => {
 							<a
 								v-if="activePointVideo"
 								:href="activePointVideo.href"
-								:target="activePointVideo.is_internal ? '_self' : '_blank'"
+								:target="activePointVideo.isInternal ? '_self' : '_blank'"
 								rel="noopener noreferrer"
 								class="video-link-btn"
-								:title="activePointVideo.label"
+								:title="activePointVideo.isInternal ? 'Bekijk in interne videospeler' : 'Bekijk spreekbeurt op Debat Direct'"
 							>
-								<span>{{ activePointVideo.is_internal ? "Bekijk in videospeler" : "Bekijk video" }}</span>
+								<span>{{ activePointVideo.isInternal ? "Bekijk in videospeler" : "Bekijk video" }}</span>
 							</a>
 							<span v-if="isPinned" class="pinned-indicator">Vastgezet</span>
 							<button v-if="isPinned" class="close-info-btn" @click="pinnedItem = null" title="Sluit vastzetting" aria-label="Sluit">&times;</button>
@@ -973,11 +995,17 @@ onUnmounted(() => {
 .tiled-plenair-map {
 	position: relative;
 	width: 100%;
+	box-sizing: border-box;
+	background: var(--blad);
+	border-radius: var(--hoek-m);
+	padding: var(--ruimte-6);
 }
 .map-el {
 	width: 100%;
 	aspect-ratio: 1.618;
 	min-height: 320px;
+	border-radius: var(--hoek-s);
+	overflow: hidden;
 }
 /* ColorByControl's DOM wordt door MapLibre zelf in de kaart geïnjecteerd
    (buiten Vue's render tree, al wel binnen deze scoped root) -- vandaar
@@ -1000,7 +1028,10 @@ onUnmounted(() => {
 	all: unset;
 	box-sizing: border-box;
 	padding: 0.4rem 0.7rem;
+	font-family: var(--font-kop);
+	font-variation-settings: "wdth" 85;
 	font-size: 0.75rem;
+	font-weight: 600;
 	line-height: 1;
 	white-space: nowrap;
 	cursor: pointer;
@@ -1027,7 +1058,10 @@ onUnmounted(() => {
 	border: 1px solid color-mix(in srgb, currentColor 20%, transparent);
 	border-radius: 999px;
 	background: transparent;
+	font-family: var(--font-kop);
+	font-variation-settings: "wdth" 85;
 	font-size: 0.75rem;
+	font-weight: 500;
 	color: inherit;
 	cursor: pointer;
 }
@@ -1066,9 +1100,16 @@ onUnmounted(() => {
 	gap: 0.5rem;
 	flex-wrap: wrap;
 }
+.info-speaker,
+.info-cluster-name {
+	font-family: var(--font-kop);
+	font-variation-settings: "wdth" 85;
+}
 .party-tag,
 .date-tag,
 .cluster-size-badge {
+	font-family: var(--font-kop);
+	font-variation-settings: "wdth" 85;
 	font-size: 0.75rem;
 	color: color-mix(in srgb, currentColor 65%, transparent);
 }
@@ -1078,10 +1119,14 @@ onUnmounted(() => {
 	gap: 0.5rem;
 }
 .video-link-btn {
+	font-family: var(--font-kop);
+	font-variation-settings: "wdth" 85;
 	font-size: 0.75rem;
 	text-decoration: underline;
 }
 .pinned-indicator {
+	font-family: var(--font-kop);
+	font-variation-settings: "wdth" 85;
 	font-size: 0.7rem;
 	color: color-mix(in srgb, currentColor 65%, transparent);
 }
@@ -1100,6 +1145,8 @@ onUnmounted(() => {
 	font-size: 0.75rem;
 }
 .cluster-context-badge {
+	font-family: var(--font-kop);
+	font-variation-settings: "wdth" 85;
 	color: color-mix(in srgb, currentColor 75%, transparent);
 }
 .debate-title-text {
@@ -1107,9 +1154,12 @@ onUnmounted(() => {
 }
 .info-quote-text {
 	margin: 0.5rem 0 0;
+	font-family: var(--font-tekst);
 	font-style: italic;
 }
 .cluster-breadcrumb {
+	font-family: var(--font-kop);
+	font-variation-settings: "wdth" 85;
 	font-size: 0.75rem;
 	color: color-mix(in srgb, currentColor 55%, transparent);
 }
@@ -1121,16 +1171,22 @@ onUnmounted(() => {
 	align-items: center;
 }
 .terms-heading {
+	font-family: var(--font-kop);
+	font-variation-settings: "wdth" 85;
 	font-size: 0.75rem;
 	color: color-mix(in srgb, currentColor 55%, transparent);
 }
 .term-pill {
+	font-family: var(--font-kop);
+	font-variation-settings: "wdth" 85;
 	font-size: 0.7rem;
 	padding: 0.1rem 0.5rem;
 	border-radius: 999px;
 	background: color-mix(in srgb, currentColor 10%, transparent);
 }
 .info-panel-idle .idle-text {
+	font-family: var(--font-kop);
+	font-variation-settings: "wdth" 85;
 	color: color-mix(in srgb, currentColor 55%, transparent);
 	font-size: 0.8rem;
 }

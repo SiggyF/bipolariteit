@@ -1,10 +1,9 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import TiledPlenairMap from "../../components/TiledPlenairMap.vue";
-import { resolveDataBaseUrl, resolveTilesBaseUrl } from "../../lib/dataBaseUrl";
+import { resolveTilesBaseUrl } from "../../lib/dataBaseUrl";
 
 const tilesBaseUrl = resolveTilesBaseUrl();
-const dataBaseUrl = resolveDataBaseUrl();
 ---
 
 <BaseLayout title="Tiled Plenaire Kaart (experimenteel) - Bipolariteit">
@@ -15,5 +14,5 @@ const dataBaseUrl = resolveDataBaseUrl();
 		>
 		voor de bestaande, ongewijzigde kaart.
 	</p>
-	<TiledPlenairMap tilesBaseUrl={tilesBaseUrl} dataBaseUrl={dataBaseUrl} client:only="vue" />
+	<TiledPlenairMap tilesBaseUrl={tilesBaseUrl} client:only="vue" />
 </BaseLayout>

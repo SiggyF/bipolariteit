@@ -178,7 +178,7 @@ export-public-data: ## data/export/topics/*.json -> data/export/gepubliceerd/ (l
 tiles: ## data/export/plenair-map/plenair-map.json -> plenair-map.pmtiles (vector-tile-pyramide, morecantile-grid + dask, zie issue #215/#253) -- experimenteel alternatief renderpad, los van `export`
 	uv run python -m pipeline.tiling.build_pyramid
 
-tiles-full: ## Zelfde als `tiles`, maar op de volle-dataset-export (plenair-map-full.json -> data/export/plenair-map/bundel/plenair-map-full.pmtiles, zie issue #281) -- verwacht dat pipeline/plenary_map/cluster.py --export-suffix=-full al gedraaid is. Bundelt meteen de companion-bestanden (incl. de UMAP-reducer, indien aanwezig) voor `make publish-zenodo` in dezelfde map (zie docs/release.md)
+tiles-full: ## Zelfde als `tiles`, maar op de volle-dataset-export (plenair-map-full.json -> data/export/plenair-map/bundel/plenair-map-full.pmtiles, zie issue #281) -- verwacht dat pipeline/plenary_map/cluster.py --export-suffix=-full al gedraaid is. Bundelt meteen de companion-bestanden (incl. de UMAP-reducer, indien aanwezig) voor `make publish-zenodo` in dezelfde map (zie docs/release.md). Schrijft ook plenair-map-full-density.tif (Cloud-Optimized GeoTIFF, dichtheidsraster + dichtheidsbewuste thinning + point_count per punt, issue #367) rechtstreeks in dezelfde map -- geen aparte cp nodig, build_pyramid.py leidt dat pad af van --out
 	mkdir -p data/export/plenair-map/bundel
 	uv run python -m pipeline.tiling.build_pyramid \
 		--input data/export/plenair-map/plenair-map-full.json \

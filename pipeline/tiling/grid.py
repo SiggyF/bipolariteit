@@ -23,9 +23,12 @@ grid-metadata en had dat probleem niet, maar QGIS (het primaire
 inspectie-/renderpad voor de A0-poster, issue #215 -- Illustrator loopt vast
 op dit aantal punten) wél.
 
-`TileMatrixSet.tile(x, y, zoom, geographic_crs=CRS)` behandelt (x, y) hierdoor
-als coördinaten in de eigen CRS i.p.v. lengte-/breedtegraad te reprojecteren
-(reden: `geographic_crs` gelijk aan de native CRS geeft een identity-transform).
+`tile_for_point()` gebruikt `TileMatrixSet._tile(x, y, zoom)` (privé-API) om
+(x, y) rechtstreeks als coördinaten in de eigen CRS te behandelen i.p.v. via
+de publieke `tile(..., geographic_crs=CRS)` een (voor ons altijd identity-)
+pyproj-transform te laten lopen -- zie die functie's docstring voor waarom:
+op schaal (miljoenen aanroepen) was de `lru_cache`/CRS-hash-overhead van die
+publieke route zelf de bottleneck, niet de tegel-rekenkunde.
 
 Gebruik:
     from pipeline.tiling.grid import build_grid, umap_to_mercator_affine, umap_to_mercator, tile_for_point
@@ -121,8 +124,23 @@ def build_grid() -> morecantile.TileMatrixSet:
 
 
 def tile_for_point(tms: morecantile.TileMatrixSet, x: float, y: float, zoom: int) -> Tile:
-    """Zoek de tile-index voor een al naar Mercator-meters getransformeerd punt (x, y)."""
-    return tms.tile(x, y, zoom, geographic_crs=CRS)
+    """Zoek de tile-index voor een al naar Mercator-meters getransformeerd punt (x, y).
+
+    Gebruikt bewust `tms._tile()` (privé-API) i.p.v. de publieke `tms.tile(...,
+    geographic_crs=CRS)`: die laatste bouwt via `morecantile`'s
+    `TransformerFromCRS` (een `lru_cache` om `pyproj.Transformer.from_crs`)
+    voor élke aanroep een from/to-pyproj-transformer op -- een no-op omdat
+    `geographic_crs` hier al gelijk is aan de TMS's eigen CRS (identity-
+    transform, zie moduledocstring), maar `lru_cache` moet de CRS-objecten
+    dan nog steeds hashen/vergelijken om de cache-hit te vinden, en
+    `pyproj.CRS`-hashing is zelf traag. Op schaal (731985 punten x 9
+    zoomniveaus = ~6,6 miljoen aanroepen in `assign_tiles_for_zoom()`) was
+    dat de daadwerkelijke bottleneck (issue #356-vervolg, zichtbaar in een
+    host-profiel als tijd in `crs.py`'s hash-pad), niet de eigenlijke
+    tegel-rekenkunde. `_tile(x, y, zoom)` doet exact die rekenkunde (floor-
+    deling op cel-grootte) rechtstreeks in de TMS-CRS, zonder pyproj erbij --
+    precies wat hier nodig is, want x/y staan al in die CRS."""
+    return tms._tile(x, y, zoom)  # noqa: SLF001 -- zie docstring
 
 
 def tile_bounds(tms: morecantile.TileMatrixSet, tile: Tile) -> tuple[float, float, float, float]:
