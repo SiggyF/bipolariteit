@@ -28,7 +28,7 @@ Vloei is richting A voor de visuele identiteit van bipolariteit.org (issue #220)
 
 Het behouden paar verschilt in lichtheid nauwelijks (contrast 1,14:1). Bij deuteranopie wordt `pro` blauwgrijs (#5e6067) en `contra` olijf (#6d632f). Die blijven van elkaar te onderscheiden, maar `pro` valt dan vrijwel samen met `onduidelijk` (#5d6375). Kleur mag daarom **nooit** de enige drager zijn:
 
-1. Het woord ("pro", "contra", "onduidelijk") of een telling staat altijd bij de kleur.
+1. Het woord ("pro", "contra", "onduidelijk") of een telling staat altijd bij de kleur -- in `StandpuntGlyph.vue` zit het woord zelf in de DOM (title-attribuut + een visueel verborgen span voor screenreaders), zichtbaar draagt de vormcodering (punt 2) het in plaats daarvan.
 2. De standpuntglyph codeert met vorm: pro heeft de linkerlob gevuld, contra de rechter, onduidelijk heeft beide lobben open met een stip.
 3. De positie codeert ook: pro links van de vouw, contra rechts, onduidelijk erin.
 4. In de plenaire kaart is pro een rondje, contra een vierkantje en onduidelijk een ring.
