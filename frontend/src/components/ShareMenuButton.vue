@@ -5,7 +5,7 @@
 // in de controlsrij van de video staan. Hergebruikt dezelfde platformlijst/
 // URL-opbouw (lib/shareMenu.ts) en dezelfde globale .share-menu-* CSS uit
 // main.css, zodat het paneel er identiek uitziet.
-import { computed, onMounted, onUnmounted, ref } from "vue";
+import { computed, onMounted, onUnmounted, ref, watch } from "vue";
 import { buildEmbedSnippet, SHARE_PLATFORMS } from "../lib/shareMenu";
 
 const props = defineProps<{
@@ -16,9 +16,40 @@ const props = defineProps<{
 }>();
 
 const root = ref<HTMLElement | null>(null);
+const triggerEl = ref<HTMLButtonElement | null>(null);
 const open = ref(false);
 const copyLabel = ref("Link kopiëren");
 const embedLabel = ref("Insluitcode kopiëren");
+const panelPos = ref({ top: 0, left: 0 });
+
+// VideoPlayer.vue's .controls-row (de ouder van deze knop) heeft
+// `overflow-x: auto` i.v.m. smalle schermen -- CSS dwingt dan óók
+// overflow-y op auto af (één as non-visible maakt de andere niet langer
+// visible), wat een position:absolute-paneel daarbinnen gewoon afsnijdt.
+// Daarom hier getelepeerd naar <body> met position:fixed, positie berekend
+// uit de knop zelf i.p.v. relatief aan een (geclipte) ouder.
+const PANEL_WIDTH = 340;
+const PANEL_MARGIN = 16;
+
+function updatePosition() {
+	if (!triggerEl.value) return;
+	const rect = triggerEl.value.getBoundingClientRect();
+	panelPos.value = {
+		top: rect.bottom + 6,
+		left: Math.min(rect.left, window.innerWidth - PANEL_WIDTH - PANEL_MARGIN),
+	};
+}
+
+watch(open, (isOpen) => {
+	if (isOpen) {
+		updatePosition();
+		window.addEventListener("scroll", updatePosition, true);
+		window.addEventListener("resize", updatePosition);
+	} else {
+		window.removeEventListener("scroll", updatePosition, true);
+		window.removeEventListener("resize", updatePosition);
+	}
+});
 
 const isTouchPrimary = computed(() => typeof window !== "undefined" && window.matchMedia?.("(pointer: coarse)").matches);
 
@@ -79,12 +110,15 @@ onMounted(() => {
 onUnmounted(() => {
 	document.removeEventListener("keydown", onKeydown);
 	document.removeEventListener("click", onClickOutside);
+	window.removeEventListener("scroll", updatePosition, true);
+	window.removeEventListener("resize", updatePosition);
 });
 </script>
 
 <template>
 	<div ref="root" class="share-menu video-share-menu">
 		<button
+			ref="triggerEl"
 			type="button"
 			class="control-button argument-toggle-inline"
 			:aria-expanded="open"
@@ -98,7 +132,8 @@ onUnmounted(() => {
 				<line x1="8.6" y1="10.5" x2="15.4" y2="6.5" /><line x1="8.6" y1="13.5" x2="15.4" y2="17.5" />
 			</svg>
 		</button>
-		<div v-if="open" class="share-menu-panel" role="menu">
+		<Teleport to="body">
+		<div v-if="open" class="share-menu-panel" role="menu" :style="{ position: 'fixed', top: `${panelPos.top}px`, left: `${panelPos.left}px`, right: 'auto' }">
 			<div class="share-menu-label">Deel deze pagina</div>
 			<div class="share-menu-grid">
 				<a
@@ -134,22 +169,19 @@ onUnmounted(() => {
 				<span>{{ embedLabel }}</span>
 			</button>
 		</div>
+		</Teleport>
 	</div>
 </template>
 
 <style scoped>
-/* .share-menu (incl. position: relative)/.share-menu-panel/.share-menu-item
-   etc. komen uit main.css (global, gedeeld met ShareMenu.astro) -- hier
-   alleen de afwijkende uitlijning t.o.v. SiteNav's rechts-uitgelijnde
-   trigger: deze knop zit standaard ergens midden in de controlsrij, dus het
-   paneel moet links uitlijnen i.p.v. rechts om niet buiten de videobreedte
-   te vallen. */
-.video-share-menu .share-menu-panel {
-	left: 0;
-	right: auto;
-}
+/* .share-menu/.share-menu-panel/.share-menu-item etc. komen uit main.css
+   (global, gedeeld met ShareMenu.astro). Positie van het paneel zelf (fixed,
+   links uitgelijnd onder de knop) komt uit panelPos/:style hierboven, niet
+   uit CSS -- het paneel wordt naar <body> geteleporteerd (VideoPlayer.vue's
+   .controls-row heeft overflow-x: auto, wat ook overflow-y impliciet clipt,
+   dus een position:absolute-paneel daarbinnen was onzichtbaar).
 
-/* Vue's scoped CSS reikt alleen tot het root-element van een kindcomponent,
+   Vue's scoped CSS reikt alleen tot het root-element van een kindcomponent,
    niet dieper -- DebateVideoView.vue's eigen `.argument-toggle-inline`-regel
    (andere scope-attribute) bereikt de knop hieronder dus niet, net zoals die
    regel zelf al niet bij VideoPlayer.vue's `.control-button` kan. Zelfde
