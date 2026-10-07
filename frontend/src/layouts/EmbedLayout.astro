@@ -1,0 +1,59 @@
+---
+import DevBalk from "../components/DevBalk.astro";
+import "../styles/main.css";
+
+// Minimale chrome voor <iframe>-embeds (issue #244): geen SiteNav/SiteTabBar,
+// wel de dev-balk (anders oogt een ontwikkelversie als officiële publicatie
+// op een site die 'm embedt) en een attributieregel terug naar de bronpagina.
+interface Props {
+	title?: string;
+	sourceHref: string;
+}
+
+const { title = "Bipolariteit", sourceHref } = Astro.props;
+---
+
+<html lang="nl">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="robots" content="noindex" />
+		<title>{title}</title>
+	</head>
+	<body>
+		<DevBalk />
+		<main class="embed-main">
+			<slot />
+		</main>
+		<p class="embed-attributie">
+			<a href={sourceHref} target="_blank" rel="noopener">Bekijk op bipolariteit.org &rarr;</a>
+		</p>
+
+		<script>
+			// Host-pagina's weten de hoogte van een <iframe> niet vanzelf -- stuur
+			// 'm door via postMessage (zelfde patroon als YouTube/Twitter-embeds),
+			// zodat een embed-script op de host de iframe-hoogte live kan
+			// bijwerken i.p.v. vaste/afgekapte hoogte of eigen scrollbar.
+			if (window.parent !== window) {
+				const send = () => {
+					window.parent.postMessage({ type: "bipolariteit-embed-resize", height: document.documentElement.scrollHeight }, "*");
+				};
+				new ResizeObserver(send).observe(document.documentElement);
+				window.addEventListener("load", send);
+			}
+		</script>
+	</body>
+</html>
+
+<style>
+	.embed-main {
+		padding: var(--space-2);
+	}
+
+	.embed-attributie {
+		margin: 0;
+		padding: var(--space-1) var(--space-2);
+		text-align: right;
+		font-size: var(--step--1);
+	}
+</style>

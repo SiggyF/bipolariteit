@@ -1,63 +1,17 @@
 ---
 import DebateVideoView from "../../components/DebateVideoView.vue";
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import { debateId } from "../../lib/debateId";
 import { debateName } from "../../lib/debateName";
-import { debateThumbnailUrl } from "../../lib/debateThumbnail";
 import { resolveDataBaseUrl } from "../../lib/dataBaseUrl";
+import { getDebateStaticPaths } from "../../lib/debateStaticPaths";
 import { formatDate } from "../../lib/formatDate";
 
 // Route puur op debateId(raw_video_url), niet genest onder een topic-slug:
 // welke links (persoon/topic-pagina's) hier precies naartoe gaan verwijzen
-// staat nog niet vast, dus deze route mag topic-onafhankelijk zijn. Groeperen
-// op raw_video_url, niet op document.id: één debat bestaat uit veel
-// document-rijen (één per spreekbeurt) die allemaal dezelfde raw_video_url
-// delen -- op document.id groeperen zou één "debat" per spreekbeurt opleveren.
+// staat nog niet vast, dus deze route mag topic-onafhankelijk zijn.
 
 export function getStaticPaths() {
-	const topicModules = import.meta.glob("../../../../data/export/topics/*.json", { eager: true });
-
-	const byDebateId = new Map<string, { arguments: any[]; topicSlug: string }>();
-	for (const mod of Object.values(topicModules) as any[]) {
-		for (const argument of mod.default.arguments) {
-			const rawVideoUrl = argument.document.raw_video_url;
-			if (!rawVideoUrl) continue;
-			const id = debateId(rawVideoUrl);
-			let entry = byDebateId.get(id);
-			if (!entry) {
-				entry = { arguments: [], topicSlug: mod.default.slug };
-				byDebateId.set(id, entry);
-			}
-			entry.arguments.push(argument);
-		}
-	}
-
-	// De volledige argumentenlijst als Astro-prop naar een client:only-island
-	// serialiseerde vroeger de hele array in de pagina-HTML (issue #119, ~2.5
-	// MB per debat) -- DebateVideoView haalt 'm voortaan zelf client-side op
-	// (frontend/src/lib/onderwerpArguments.ts) en heeft hier alleen `id` +
-	// `topicSlug` nodig. `videoUrl`/`rawVideoUrl`/`posterUrl` blijven wel klein,
-	// server-side bepaalde props: de video moet meteen kunnen laden, zonder op
-	// die fetch te wachten.
-	return [...byDebateId.entries()].map(([id, entry]) => {
-		let videoUrl: string | null = null;
-		let rawVideoUrl: string | null = null;
-		let posterUrl: string | null = null;
-		// Vroegste published_at van alle spreekbeurten in dit debat -- zelfde
-		// aanpak als DebateList.vue's earliestPublishedAt, want een debat kan
-		// over middernacht heen lopen en de eerste spreekbeurt is dan de
-		// betrouwbaarste datum-indicator.
-		let publishedAt: string | null = null;
-		for (const argument of entry.arguments) {
-			videoUrl ??= argument.document.video_url ?? null;
-			rawVideoUrl ??= argument.document.raw_video_url ?? null;
-			posterUrl ??= debateThumbnailUrl(argument.document.video_url, argument.document.published_at, argument.start_seconds);
-			if (argument.document.published_at && (!publishedAt || argument.document.published_at < publishedAt)) {
-				publishedAt = argument.document.published_at;
-			}
-		}
-		return { params: { id }, props: { topicSlug: entry.topicSlug, videoUrl, rawVideoUrl, posterUrl, publishedAt } };
-	});
+	return getDebateStaticPaths();
 }
 
 const { topicSlug, videoUrl, rawVideoUrl, posterUrl, publishedAt } = Astro.props;
