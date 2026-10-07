@@ -328,6 +328,10 @@ a:hover {
 	gap: 6px;
 }
 
+.share-menu-item[hidden] {
+	display: none;
+}
+
 .share-menu-item {
 	display: flex;
 	align-items: center;
@@ -358,11 +362,13 @@ a:hover {
 	background: var(--lijn);
 }
 
-.share-menu-copy {
+.share-menu-copy,
+.share-menu-embed {
 	width: 100%;
 }
 
-.share-menu-copy.is-copied span {
+.share-menu-copy.is-copied span,
+.share-menu-embed.is-copied span {
 	color: var(--pro);
 }
 

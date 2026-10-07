@@ -1,23 +1,9 @@
 ---
+import DevBalk from "./DevBalk.astro";
 import ShareMenu from "./ShareMenu.astro";
-
-// Ontwikkelbalk. Bewust fail-open: hij verschijnt tenzij een build zichzelf
-// expliciet als officieel bestempelt. Vergeet je de vlag, dan staat de melding
-// er ten onrechte -- en dat is de goede kant om fout te gaan, want andersom
-// zou een ontwikkelversie zich als officiële publicatie voordoen.
-const officieel = import.meta.env.PUBLIC_RELEASE_OFFICIEEL === "true";
-const versie = import.meta.env.PUBLIC_RELEASE_TAG;
 ---
 
-{
-	!officieel && (
-		<p class="dev-balk">
-			<strong>Ontwikkelversie{versie ? ` ${versie}` : ""}</strong>, geen officiële
-			publicatie. Cijfers en teksten kunnen nog wijzigen.{" "}
-			<a href="/over/">Over dit platform</a>
-		</p>
-	)
-}
+<DevBalk />
 
 <nav class="vl-kopbalk">
 	<a href="/" class="site-nav-brand" aria-label="Bipolariteit Home">

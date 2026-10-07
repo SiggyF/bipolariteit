@@ -1,0 +1,27 @@
+---
+import DebateVideoView from "../../../components/DebateVideoView.vue";
+import EmbedLayout from "../../../layouts/EmbedLayout.astro";
+import { debateName } from "../../../lib/debateName";
+import { resolveDataBaseUrl } from "../../../lib/dataBaseUrl";
+import { getDebateStaticPaths } from "../../../lib/debateStaticPaths";
+
+export function getStaticPaths() {
+	return getDebateStaticPaths();
+}
+
+const { topicSlug, videoUrl, rawVideoUrl, posterUrl } = Astro.props;
+const { id } = Astro.params;
+const name = debateName(videoUrl);
+const title = `${name ?? "Debat"} - Bipolariteit`;
+---
+
+<EmbedLayout title={title} sourceHref={`/debatten/${id}/`}>
+	<DebateVideoView
+		debateId={id}
+		topicSlug={topicSlug}
+		dataBaseUrl={resolveDataBaseUrl()}
+		rawVideoUrl={rawVideoUrl}
+		posterUrl={posterUrl}
+		client:only="vue"
+	/>
+</EmbedLayout>

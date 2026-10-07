@@ -8,39 +8,11 @@
 // overal server-side beschikbaar zijn (zie onderwerp-pagina's, die de
 // argumentenlijst client-side fetchen, issue #163). document.title volstaat
 // als titel: die is al per pagina uniek gezet via BaseLayout.
-
-const PLATFORMS: Array<{ key: string; label: string; icon: string }> = [
-	{
-		key: "x",
-		label: "X",
-		icon: `<path d="M4 4l16 16M20 4L4 20"/>`,
-	},
-	{
-		key: "linkedin",
-		label: "LinkedIn",
-		icon: `<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7.5 10.5v6M7.5 7.6v.1M11.5 16.5v-6M11.5 13c0-1.4 1-2.5 2.4-2.5s2.6 1 2.6 2.6v3.4"/>`,
-	},
-	{
-		key: "bluesky",
-		label: "Bluesky",
-		icon: `<path d="M3 5c0 6 4.5 10 9 14 4.5-4 9-8 9-14 0-2-1.6-3-3-2.2C16.5 3.9 13.5 7 12 10 10.5 7 7.5 3.9 6 2.8 4.6 2 3 3 3 5z"/>`,
-	},
-	{
-		key: "whatsapp",
-		label: "WhatsApp",
-		icon: `<path d="M21 11.5a8.4 8.4 0 01-12.5 7.3L3 20.5l1.8-5.3A8.4 8.4 0 1121 11.5z"/><path d="M8.8 9c.3 2.6 3.6 5.9 6.2 6.2l1.2-1.5 2 1c-.4 1.3-1.7 1.9-3 1.6-3-.7-6-3.7-6.7-6.7-.3-1.3.3-2.6 1.6-3l1 2z"/>`,
-	},
-	{
-		key: "facebook",
-		label: "Facebook",
-		icon: `<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M14.5 8h-1.2c-.9 0-1.3.5-1.3 1.4V21M9.8 12.5h4.6"/>`,
-	},
-	{
-		key: "email",
-		label: "E-mail",
-		icon: `<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3.5 6.5L12 13l8.5-6.5"/>`,
-	},
-];
+//
+// Platformlijst/URL-opbouw/insluitcode-snippet gedeeld met ShareMenuButton.vue
+// (issue #244, hetzelfde paneel maar dan als klein icoonknopje in de
+// videospeler-controlsrij) via lib/shareMenu.ts.
+import { SHARE_PLATFORMS } from "../lib/shareMenu";
 ---
 
 <div class="share-menu" id="share-menu">
@@ -61,7 +33,7 @@ const PLATFORMS: Array<{ key: string; label: string; icon: string }> = [
 	<div class="share-menu-panel" id="share-menu-list" role="menu" hidden>
 		<div class="share-menu-label">Deel deze pagina</div>
 		<div class="share-menu-grid">
-			{PLATFORMS.map((platform) => (
+			{SHARE_PLATFORMS.map((platform) => (
 				<a href="#" class="share-menu-item" role="menuitem" data-platform={platform.key}>
 					<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={platform.icon} />
 					<span>{platform.label}</span>
@@ -74,6 +46,18 @@ const PLATFORMS: Array<{ key: string; label: string; icon: string }> = [
 				<path d="M10 13.5a4 4 0 006 .5l2.5-2.5a4 4 0 00-5.7-5.7L11.5 7"/><path d="M14 10.5a4 4 0 00-6-.5L5.5 12.5a4 4 0 005.7 5.7L12.5 17"/>
 			</svg>
 			<span data-copy-label>Link kopiëren</span>
+		</button>
+		<!--
+			Alleen zinvol op /debatten/[id]/ (issue #244): er bestaat enkel een
+			/embed/debatten/[id]/-tegenhanger, geen embed-route voor andere
+			paginatypes. Standaard verborgen, het script hieronder toont 'm pas
+			als location.pathname matcht.
+		-->
+		<button type="button" class="share-menu-item share-menu-embed" role="menuitem" id="share-menu-embed" hidden>
+			<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+				<polyline points="8 6 3 12 8 18"/><polyline points="16 6 21 12 16 18"/>
+			</svg>
+			<span data-embed-label>Insluitcode kopiëren</span>
 		</button>
 	</div>
 </div>
@@ -178,6 +162,26 @@ const PLATFORMS: Array<{ key: string; label: string; icon: string }> = [
 					}, 2000);
 				});
 			});
+
+			var embedButton = document.getElementById("share-menu-embed");
+			var embedMatch = /^\/debatten\/([^/]+)\/?$/.exec(location.pathname);
+			if (embedMatch) {
+				embedButton.hidden = false;
+				var embedLabel = embedButton.querySelector("[data-embed-label]");
+				embedButton.addEventListener("click", function () {
+					var embedUrl = location.origin + "/embed/debatten/" + embedMatch[1] + "/";
+					var snippet = '<iframe src="' + embedUrl + '" width="100%" height="600" style="border:0" loading="lazy" allowfullscreen></iframe>';
+					navigator.clipboard.writeText(snippet).then(function () {
+						embedLabel.textContent = "Gekopieerd";
+						embedButton.classList.add("is-copied");
+						setTimeout(function () {
+							embedLabel.textContent = "Insluitcode kopiëren";
+							embedButton.classList.remove("is-copied");
+							closePanel();
+						}, 2000);
+					});
+				});
+			}
 		});
 	})();
 </script>
