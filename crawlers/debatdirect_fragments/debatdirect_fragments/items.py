@@ -2,18 +2,12 @@ import scrapy
 
 
 class VideoFragmentItem(scrapy.Item):
-    terms = scrapy.Field()
-    debate_id = scrapy.Field()
-    debate_title = scrapy.Field()
-    debate_date = scrapy.Field()
-    video_url = scrapy.Field()
-    deep_link_url = scrapy.Field()
-    event_type = scrapy.Field()
-    event_start = scrapy.Field()
-    object_id = scrapy.Field()
-    speaker = scrapy.Field()
-    party = scrapy.Field()
-    highlight = scrapy.Field()
-    manifest_url = scrapy.Field()
-    clip_start_seconds = scrapy.Field()
-    clip_duration_seconds = scrapy.Field()
+    """Dynamisch item (zie Scrapy-docs "Supporting a dynamic item type"):
+    nieuwe velden hoeven niet vooraf als Field() gedeclareerd te worden,
+    spiders/fragments.py kan gewoon een nieuwe key toekennen. Scheelt dit
+    bestand hoeven aan te passen bij elk veld dat de spider later toevoegt."""
+
+    def __setitem__(self, key, value):
+        if key not in self.fields:
+            self.fields[key] = scrapy.Field()
+        super().__setitem__(key, value)

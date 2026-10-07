@@ -52,26 +52,12 @@ class VideoFragmentPipeline:
             spider.logger.error(f"ffmpeg mislukt voor {video_path.name}: {result.stderr[-2000:]}")
             return item
 
-        meta_path.write_text(
-            json.dumps(
-                {
-                    "terms": item["terms"],
-                    "debate_id": item["debate_id"],
-                    "debate_title": item["debate_title"],
-                    "debate_date": item["debate_date"],
-                    "video_url": item["video_url"],
-                    "deep_link_url": item["deep_link_url"],
-                    "event_type": item["event_type"],
-                    "event_start": item["event_start"],
-                    "speaker": item["speaker"],
-                    "party": item["party"],
-                    "highlight": item["highlight"],
-                    "clip_start_seconds": item["clip_start_seconds"],
-                    "clip_duration_seconds": item["clip_duration_seconds"],
-                },
-                indent=2,
-                ensure_ascii=False,
-            )
-        )
+        # dict(item) i.p.v. elk veld hier nog een keer opnoemen -- VideoFragmentItem
+        # is dynamisch (items.py), dus dit blijft vanzelf kloppen als de spider
+        # een veld toevoegt. manifest_url/object_id zijn implementatiedetails
+        # (het ruwe HLS-manifest resp. Debat Direct's interne event-id), niet
+        # relevant voor wie dit sidecar-bestand leest.
+        metadata = {k: v for k, v in dict(item).items() if k not in ("manifest_url", "object_id")}
+        meta_path.write_text(json.dumps(metadata, indent=2, ensure_ascii=False))
         spider.logger.info(f"gedownload: {video_path.name} ({item['clip_duration_seconds']:.0f}s vanaf {item['clip_start_seconds']:.0f}s)")
         return item
