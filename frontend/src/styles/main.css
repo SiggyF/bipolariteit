@@ -328,6 +328,10 @@ a:hover {
 	gap: 6px;
 }
 
+.share-menu-item[hidden] {
+	display: none;
+}
+
 .share-menu-item {
 	display: flex;
 	align-items: center;

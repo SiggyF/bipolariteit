@@ -1,5 +1,6 @@
 ---
 import DebateVideoView from "../../components/DebateVideoView.vue";
+import ShareMenu from "../../components/ShareMenu.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { debateName } from "../../lib/debateName";
 import { resolveDataBaseUrl } from "../../lib/dataBaseUrl";
@@ -23,7 +24,16 @@ const title = `${name ?? "Debat"} - Bipolariteit`;
 <BaseLayout title={title}>
 	<a href={`/onderwerpen/${topicSlug}/`} class="back-link">&larr; terug naar {topicSlug}</a>
 	<h1 class="debate-title">{name ?? "Debat"}</h1>
-	<p class="debate-date mono">{formatDate(publishedAt)}</p>
+	<div class="debate-meta-row">
+		<p class="debate-date mono">{formatDate(publishedAt)}</p>
+		{
+			rawVideoUrl && (
+				<div class="video-share">
+					<ShareMenu />
+				</div>
+			)
+		}
+	</div>
 	<DebateVideoView
 		debateId={id}
 		topicSlug={topicSlug}
@@ -45,5 +55,12 @@ const title = `${name ?? "Debat"} - Bipolariteit`;
 		font-weight: 500;
 		color: var(--galnoot-zacht);
 		margin-top: 0;
+	}
+
+	.debate-meta-row {
+		display: flex;
+		align-items: flex-start;
+		justify-content: space-between;
+		gap: var(--space-2);
 	}
 </style>
