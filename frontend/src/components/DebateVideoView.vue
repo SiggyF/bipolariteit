@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, reactive, ref, watch } from "vue";
 import ArgumentCard from "./ArgumentCard.vue";
+import ShareMenuButton from "./ShareMenuButton.vue";
 import VideoOverlay from "./VideoOverlay.vue";
 import VideoPlayer from "./VideoPlayer.vue";
 import VideoTimeline from "./VideoTimeline.vue";
@@ -27,6 +28,12 @@ const props = withDefaults(
 		// Link naar de volledige /debat/[id]/-pagina; alleen zinvol op plekken
 		// die zelf niet al die pagina zijn (bv. de homepage-teaser).
 		debateHref?: string | null;
+		// URL van de /embed/debatten/[id]/-tegenhanger (issue #244). Alleen
+		// meegegeven vanaf /debatten/[id]/ zelf -- niet vanaf de
+		// homepage-teaser (debateHref is daar al gezet) en niet vanaf de
+		// embed-pagina zelf (een insluitknop ín de embed zou rechtstreeks naar
+		// zichzelf verwijzen).
+		embedUrl?: string | null;
 	}>(),
 	// Expliciet via withDefaults, niet `props.defaultExpanded ?? true`: Vue
 	// cast een afwezige Boolean-prop zelf al naar `false` (vóórdat `??` iets
@@ -412,6 +419,7 @@ function dismissFloating() {
 									/>
 								</svg>
 							</button>
+							<ShareMenuButton v-if="!props.debateHref" :embed-url="props.embedUrl" />
 							<button
 								v-if="!props.debateHref"
 								type="button"
