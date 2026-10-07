@@ -16,6 +16,11 @@ Gebruik:
     uv run python -m pipeline.tag_arguments --topic stikstof --limit 15 --dry-run
     uv run python -m pipeline.tag_arguments --topic stikstof --ids 101,204,309
     uv run python -m pipeline.tag_arguments --topic stikstof --ids-file gefaald.txt
+
+Zonder --topic: alle topics in één queue, altijd gesorteerd op de meest
+recente documentdatum (recent_first staat dan impliciet aan), zodat de
+nieuwste debatten als eerste aan de beurt komen, ongeacht topic (issue #391):
+    uv run python -m pipeline.tag_arguments --limit 15
 """
 
 import argparse
@@ -404,48 +409,62 @@ def fetch_untagged_arguments(conn, topic_id, limit, min_id=0, vanaf=None, ids=No
     geen argumenten taggen uit een periode die we verder buiten beschouwing
     laten. De data blijft staan, alleen deze query ziet 'm niet.
 
+    `topic_id=None` betekent alle topics: de queue wordt dan gewoon
+    globaal gesorteerd (zie `recent_first`) i.p.v. per topic (issue #391).
+
     `ids`, indien gegeven, beperkt de selectie tot precies die argument-id's
     (bv. een gerichte hertag-batch na een gefaalde eerdere poging) -- min_id/
     vanaf worden dan genegeerd, `tagged_at IS NULL` blijft wel gelden zodat
-    dit nooit per ongeluk een al goed getagd argument overschrijft.
+    dit nooit per ongeluk een al goed getagd argument overschrijft. `topic_id`
+    is dan puur een extra veiligheidsfilter, zelf al optioneel.
 
     `recent_first`: sorteer op documentdatum aflopend i.p.v. op argument-id
     oplopend, om bij een beperkte `limit` het meest recente parlementaire
-    jaar voorrang te geven boven oudere achterstand."""
+    jaar voorrang te geven boven oudere achterstand -- i.p.v. opnieuw een
+    topic_name moeten opzoeken, wordt die hier meteen meegegeven (tp.name)."""
     if ids is not None:
         if not ids:
             return []
         placeholders = ",".join("?" for _ in ids)
+        topic_clause = "AND ar.topic_id = ?" if topic_id is not None else ""
+        params = list(ids) + ([topic_id] if topic_id is not None else [])
         return conn.execute(
             f"""SELECT ar.id, ar.document_id, ar.actor_id, ar.stance, ar.typology,
-                      ar.quote_text, ar.quote_context,
+                      ar.quote_text, ar.quote_context, ar.topic_id, tp.name AS topic_name,
                       act.name AS actor_name, act.party AS actor_party
                FROM arguments ar
                JOIN actors act ON act.id = ar.actor_id
-               WHERE ar.topic_id = ?
-                 AND ar.id IN ({placeholders})
+               JOIN topics tp ON tp.id = ar.topic_id
+               WHERE ar.id IN ({placeholders})
                  AND ar.tagged_at IS NULL
+                 {topic_clause}
                ORDER BY ar.id""",
-            (topic_id, *ids),
+            params,
         ).fetchall()
 
     if vanaf is None:
         vanaf = PeriodeIndex().drempel
     order_by = "d.published_at DESC, ar.id" if recent_first else "ar.id"
+    topic_clause = "AND ar.topic_id = ?" if topic_id is not None else ""
+    params = [min_id, vanaf]
+    if topic_id is not None:
+        params.append(topic_id)
+    params.append(limit)
     return conn.execute(
         f"""SELECT ar.id, ar.document_id, ar.actor_id, ar.stance, ar.typology,
-                  ar.quote_text, ar.quote_context,
+                  ar.quote_text, ar.quote_context, ar.topic_id, tp.name AS topic_name,
                   act.name AS actor_name, act.party AS actor_party
            FROM arguments ar
            JOIN actors act ON act.id = ar.actor_id
+           JOIN topics tp ON tp.id = ar.topic_id
            JOIN documents d ON d.id = ar.document_id
-           WHERE ar.topic_id = ?
-             AND ar.id >= ?
+           WHERE ar.id >= ?
              AND d.published_at >= ?
              AND ar.tagged_at IS NULL
+             {topic_clause}
            ORDER BY {order_by}
            LIMIT ?""",
-        (topic_id, min_id, vanaf, limit),
+        params,
     ).fetchall()
 
 
@@ -469,7 +488,9 @@ def fetch_quote_fragment_backfill_arguments(conn, topic_id, limit, min_id=0, ids
     kandidaat -- zonder dit onderscheid zou een argument met een hele_quote-
     of niet_herbeoordeeld-tag voor altijd "kandidaat" blijven, ook na een
     geslaagde herrun, en zou een volgende run het onnodig blijven hertaggen
-    zonder ooit te convergeren."""
+    zonder ooit te convergeren.
+
+    `topic_id=None` betekent alle topics (issue #391), zie fetch_untagged_arguments()."""
     exists_clause = """EXISTS (
         SELECT 1 FROM argument_tags at
         WHERE at.argument_id = ar.id AND at.created_by = 'llm' AND at.quote_fragment_status IS NULL
@@ -478,43 +499,55 @@ def fetch_quote_fragment_backfill_arguments(conn, topic_id, limit, min_id=0, ids
         if not ids:
             return []
         placeholders = ",".join("?" for _ in ids)
+        topic_clause = "AND ar.topic_id = ?" if topic_id is not None else ""
+        params = list(ids) + ([topic_id] if topic_id is not None else [])
         query = f"""SELECT ar.id, ar.document_id, ar.actor_id, ar.stance, ar.typology,
-                      ar.quote_text, ar.quote_context,
+                      ar.quote_text, ar.quote_context, ar.topic_id, tp.name AS topic_name,
                       act.name AS actor_name, act.party AS actor_party
                FROM arguments ar
                JOIN actors act ON act.id = ar.actor_id
-               WHERE ar.topic_id = ?
-                 AND ar.id IN ({placeholders})
+               JOIN topics tp ON tp.id = ar.topic_id
+               WHERE ar.id IN ({placeholders})
                  AND ar.tagged_at IS NOT NULL
                  AND {exists_clause}
+                 {topic_clause}
                ORDER BY ar.id"""
-        rows = conn.execute(query, (topic_id, *ids)).fetchall()
+        rows = conn.execute(query, params).fetchall()
         return rows
 
     order_by = "d.published_at DESC, ar.id" if recent_first else "ar.id"
+    topic_clause = "AND ar.topic_id = ?" if topic_id is not None else ""
+    params = [min_id]
+    if topic_id is not None:
+        params.append(topic_id)
     query = f"""SELECT ar.id, ar.document_id, ar.actor_id, ar.stance, ar.typology,
-                  ar.quote_text, ar.quote_context,
+                  ar.quote_text, ar.quote_context, ar.topic_id, tp.name AS topic_name,
                   act.name AS actor_name, act.party AS actor_party
            FROM arguments ar
            JOIN actors act ON act.id = ar.actor_id
+           JOIN topics tp ON tp.id = ar.topic_id
            JOIN documents d ON d.id = ar.document_id
-           WHERE ar.topic_id = ?
-             AND ar.id >= ?
+           WHERE ar.id >= ?
              AND ar.tagged_at IS NOT NULL
              AND {exists_clause}
+             {topic_clause}
            ORDER BY {order_by}
            LIMIT ?"""
-    rows = conn.execute(query, (topic_id, min_id, limit)).fetchall()
+    params.append(limit)
+    rows = conn.execute(query, params).fetchall()
     return rows
 
 
-def _tag_one(arg, topic_name, tag_catalogue, tag_json_skeleton, valid_tags, model, base_url, reasoning_effort, timeout, max_tokens, api_key):
+def _tag_one(arg, tag_catalogue, tag_json_skeleton, valid_tags, model, base_url, reasoning_effort, timeout, max_tokens, api_key):
     """Eén argument door de LLM halen, zonder DB-writes -- puur zodat dit
     veilig via dask over meerdere workers/threads kan lopen (--parallel).
     sqlite3-writes (incl. assign_derived_tags) blijven altijd in het
-    hoofdproces, in `main()`."""
+    hoofdproces, in `main()`. topic_name komt uit `arg` zelf (zie
+    fetch_untagged_arguments) i.p.v. uit een los argument -- nodig omdat
+    zonder --topic de argumenten in één batch uit verschillende topics
+    kunnen komen (issue #391)."""
     prompt = _build_prompt(
-        topic_name, arg["actor_name"], arg["actor_party"], arg["stance"], arg["typology"],
+        arg["topic_name"], arg["actor_name"], arg["actor_party"], arg["stance"], arg["typology"],
         arg["quote_text"], arg["quote_context"], tag_catalogue, tag_json_skeleton,
     )
     start = time.monotonic()
@@ -544,7 +577,10 @@ def _tag_one(arg, topic_name, tag_catalogue, tag_json_skeleton, valid_tags, mode
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("--topic", required=True, help="topic-slug, bv. stikstof")
+    parser.add_argument(
+        "--topic", default=None,
+        help="topic-slug, bv. stikstof (default: alle topics, nieuwste debatten eerst, issue #391)",
+    )
     parser.add_argument("--limit", type=int, default=15, help="max aantal arguments deze run (default 15)")
     parser.add_argument("--min-id", type=int, default=0, help="alleen arguments met id >= deze waarde")
     parser.add_argument(
@@ -578,7 +614,8 @@ def main():
     )
     parser.add_argument(
         "--recent-first", action="store_true",
-        help="prioriteer argumenten met de meest recente documentdatum (i.p.v. de default, oplopend op id)",
+        help="prioriteer argumenten met de meest recente documentdatum (i.p.v. de default, oplopend op id) -- "
+             "staat altijd aan zonder --topic (issue #391), ongeacht deze vlag",
     )
     parser.add_argument("--dry-run", action="store_true", help="niets naar de database schrijven, alleen printen")
     parser.add_argument(
@@ -596,10 +633,13 @@ def main():
     args = parser.parse_args()
 
     conn = db.connect()
-    topic_row = conn.execute("SELECT id, name FROM topics WHERE slug = ?", (args.topic,)).fetchone()
-    if topic_row is None:
-        raise SystemExit(f"onbekende topic-slug: {args.topic}")
-    topic_id, topic_name = topic_row["id"], topic_row["name"]
+    topic_id = None
+    if args.topic:
+        topic_row = conn.execute("SELECT id FROM topics WHERE slug = ?", (args.topic,)).fetchone()
+        if topic_row is None:
+            raise SystemExit(f"onbekende topic-slug: {args.topic}")
+        topic_id = topic_row["id"]
+    recent_first = args.recent_first or topic_id is None
 
     valid_tags = load_valid_tags(conn)
     tag_catalogue, tag_json_skeleton = build_tag_catalogue(conn)
@@ -618,14 +658,14 @@ def main():
 
     if args.backfill_quote_fragment:
         arguments = fetch_quote_fragment_backfill_arguments(
-            conn, topic_id, args.limit, args.min_id, ids=ids, recent_first=args.recent_first
+            conn, topic_id, args.limit, args.min_id, ids=ids, recent_first=recent_first
         )
         if not arguments:
             logger.info("Geen argumenten met ontbrekend quote_fragment (al aangevuld, of geen achterstand).")
             return
     else:
         arguments = fetch_untagged_arguments(
-            conn, topic_id, args.limit, args.min_id, args.vanaf, ids=ids, recent_first=args.recent_first
+            conn, topic_id, args.limit, args.min_id, args.vanaf, ids=ids, recent_first=recent_first
         )
         if not arguments:
             logger.info("Geen ongetagde argumenten (al verwerkt, of geen argumenten voor deze topic).")
@@ -673,7 +713,7 @@ def main():
             total_errors += 1
             if not args.dry_run:
                 record_llm_call(
-                    conn, stage="tagging", topic_id=topic_id, document_id=arg["document_id"], argument_id=arg["id"],
+                    conn, stage="tagging", topic_id=arg["topic_id"], document_id=arg["document_id"], argument_id=arg["id"],
                     model=args.model, prompt_version=PROMPT_VERSION, started_at=started_at, duration_s=elapsed,
                     response=r["raw_content"], status="error", error_message=r["error"],
                 )
@@ -682,7 +722,7 @@ def main():
         raw_content, usage, llm_tags = r["raw_content"], r["usage"], r["llm_tags"]
         if not args.dry_run:
             record_llm_call(
-                conn, stage="tagging", topic_id=topic_id, document_id=arg["document_id"], argument_id=arg["id"],
+                conn, stage="tagging", topic_id=arg["topic_id"], document_id=arg["document_id"], argument_id=arg["id"],
                 model=args.model, prompt_version=PROMPT_VERSION, started_at=started_at, duration_s=elapsed,
                 response=raw_content, status="ok", usage=usage,
             )
@@ -708,7 +748,7 @@ def main():
         logger.info("Parallelle modus: %d LLM-calls verdeeld over dask (dashboard: %s)", len(arguments), client.dashboard_link)
         futures = client.map(
             _tag_one, arguments,
-            topic_name=topic_name, tag_catalogue=tag_catalogue, tag_json_skeleton=tag_json_skeleton,
+            tag_catalogue=tag_catalogue, tag_json_skeleton=tag_json_skeleton,
             valid_tags=valid_tags, model=args.model, base_url=args.base_url, reasoning_effort=args.reasoning_effort,
             timeout=args.timeout, max_tokens=args.max_tokens, api_key=args.api_key,
         )
@@ -726,7 +766,7 @@ def main():
     else:
         for i, arg in enumerate(arguments, 1):
             process_result(_tag_one(
-                arg, topic_name, tag_catalogue, tag_json_skeleton, valid_tags, args.model, args.base_url,
+                arg, tag_catalogue, tag_json_skeleton, valid_tags, args.model, args.base_url,
                 args.reasoning_effort, args.timeout, args.max_tokens, args.api_key,
             ))
             if i % PRICE_CHECK_INTERVAL == 0 and not price_still_matches(args.model, args.base_url, price_baseline):
