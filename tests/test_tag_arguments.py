@@ -259,6 +259,33 @@ def _seed_argument(conn, argument_id=1, tagged_at=None):
     return conn
 
 
+def _seed_untagged_argument(conn, argument_id, topic_id, topic_slug, published_at):
+    """Minimale rij-keten voor één ongetagd argument in een gegeven topic --
+    gebruikt door de multi-topic (topic_id=None, issue #391) tests, die
+    meerdere topics/documenten met verschillende published_at nodig hebben."""
+    conn.execute(
+        "INSERT OR IGNORE INTO topics (id, slug, name) VALUES (?, ?, ?)",
+        (topic_id, topic_slug, topic_slug.capitalize()),
+    )
+    conn.execute(
+        "INSERT OR IGNORE INTO sources (id, type, name, retrieved_at) VALUES (1, 'tweede_kamer', 'TK', '2026-01-01T00:00:00Z')"
+    )
+    conn.execute(
+        "INSERT OR IGNORE INTO actors (id, name, type, party) VALUES (1, 'Actor Een', 'person', 'Partij X')"
+    )
+    conn.execute(
+        """INSERT INTO documents (id, source_id, topic_id, published_at)
+           VALUES (?, 1, ?, ?)""",
+        (argument_id, topic_id, published_at),
+    )
+    conn.execute(
+        """INSERT INTO arguments
+               (id, document_id, topic_id, actor_id, stance, typology, quote_text, extracted_at)
+           VALUES (?, ?, ?, 1, 'pro', 'factual', ?, '2026-01-01T00:00:00Z')""",
+        (argument_id, argument_id, topic_id, QUOTE_TEXT),
+    )
+
+
 def test_insert_llm_tags_fills_missing_quote_fragment_without_touching_other_rows():
     conn = _seed_argument(_fresh_conn(), tagged_at="2026-01-01T00:00:00Z")
     # Simuleert een argument getagd vóór issue #109: quote_fragment_status
@@ -408,3 +435,38 @@ def test_fetch_untagged_arguments_unaffected_by_backfill_state():
            VALUES (1, 'Stijl-Herhaling', 'llm', 'r', NULL, '2025-01-01T00:00:00Z')"""
     )
     assert fetch_untagged_arguments(conn, topic_id=1, limit=10, vanaf="2000-01-01") == []
+
+
+def test_fetch_untagged_arguments_without_topic_merges_all_topics_newest_first():
+    """issue #391: zonder topic_id (None) moet de queue over alle topics
+    heen lopen, met het meest recente documents.published_at eerst --
+    ongeacht topic."""
+    conn = _fresh_conn()
+    _seed_untagged_argument(conn, argument_id=1, topic_id=1, topic_slug="stikstof", published_at="2026-01-01T00:00:00Z")
+    _seed_untagged_argument(conn, argument_id=2, topic_id=2, topic_slug="asiel", published_at="2026-06-01T00:00:00Z")
+    _seed_untagged_argument(conn, argument_id=3, topic_id=1, topic_slug="stikstof", published_at="2026-03-01T00:00:00Z")
+
+    rows = fetch_untagged_arguments(conn, topic_id=None, limit=10, vanaf="2000-01-01", recent_first=True)
+
+    assert [row["id"] for row in rows] == [2, 3, 1]
+    assert [row["topic_name"] for row in rows] == ["Asiel", "Stikstof", "Stikstof"]
+
+
+def test_fetch_untagged_arguments_without_topic_respects_limit_across_topics():
+    conn = _fresh_conn()
+    _seed_untagged_argument(conn, argument_id=1, topic_id=1, topic_slug="stikstof", published_at="2026-01-01T00:00:00Z")
+    _seed_untagged_argument(conn, argument_id=2, topic_id=2, topic_slug="asiel", published_at="2026-06-01T00:00:00Z")
+
+    rows = fetch_untagged_arguments(conn, topic_id=None, limit=1, vanaf="2000-01-01", recent_first=True)
+
+    assert [row["id"] for row in rows] == [2]
+
+
+def test_fetch_untagged_arguments_ids_without_topic_ignores_topic_restriction():
+    conn = _fresh_conn()
+    _seed_untagged_argument(conn, argument_id=1, topic_id=1, topic_slug="stikstof", published_at="2026-01-01T00:00:00Z")
+    _seed_untagged_argument(conn, argument_id=2, topic_id=2, topic_slug="asiel", published_at="2026-06-01T00:00:00Z")
+
+    rows = fetch_untagged_arguments(conn, topic_id=None, limit=10, ids=[1, 2])
+
+    assert sorted(row["id"] for row in rows) == [1, 2]

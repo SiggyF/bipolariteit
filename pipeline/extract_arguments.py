@@ -9,6 +9,11 @@ docs/handoff.md):
     uv run python -m pipeline.extract_arguments --topic stikstof --limit 15 --model google/gemma-4-e4b
     uv run python -m pipeline.extract_arguments --topic stikstof --limit 15 --dry-run
 
+Zonder --topic: alle topics (met description) in één queue, gesorteerd op
+documents.published_at aflopend, zodat de nieuwste debatten als eerste aan de
+beurt komen, ongeacht topic (issue #391):
+    uv run python -m pipeline.extract_arguments --limit 15
+
 Ook bruikbaar tegen een remote OpenAI-compatibele provider i.p.v. lokale LM
 Studio (zie pipeline/llm_client.py) -- met --parallel lopen de LLM-calls dan
 via dask (pipeline/dask_client.py) over de devcontainer's persistente
@@ -192,43 +197,73 @@ def fetch_pending_documents(conn, topic_slug, limit, min_id=0, vanaf=None):
     """`vanaf` is een ISO-datum; oudere documenten blijven in de database maar
     komen hier niet uit. Default is [verwerking].vanaf uit
     config/politieke-periodes.toml -- we analyseren de huidige en de vorige
-    Kamer, en dat scheelt aanzienlijk LLM-werk."""
+    Kamer, en dat scheelt aanzienlijk LLM-werk.
+
+    `topic_slug=None` betekent alle topics (zonder description blijven
+    overgeslagen, zie het SystemExit-equivalent voor één topic in main()):
+    de queue wordt dan op d.published_at aflopend gesorteerd i.p.v. op
+    d.id, zodat de nieuwste debatten als eerste aan de beurt komen,
+    ongeacht topic (issue #391). Per-topic hoort daar TOPIC_TITLE_KEYWORDS
+    nog steeds bij -- topics zonder eigen keywords-filter blijven
+    ongefilterd op titel."""
     if vanaf is None:
         vanaf = PeriodeIndex().drempel
 
     conditions = [
-        "t.slug = ?",
         "d.id >= ?",
         "d.published_at >= ?",
         "d.extraction_attempted_at IS NULL",
         "d.is_voorzitter_turn = 0",
         f"d.activiteit_soort NOT IN ({','.join('?' * len(EXCLUDED_ACTIVITEIT_SOORTEN))})",
     ]
-    params = [topic_slug, min_id, vanaf, *EXCLUDED_ACTIVITEIT_SOORTEN]
+    params = [min_id, vanaf, *EXCLUDED_ACTIVITEIT_SOORTEN]
 
-    title_keywords = TOPIC_TITLE_KEYWORDS.get(topic_slug, [])
-    if title_keywords:
-        conditions.append("(" + " OR ".join("LOWER(d.title) LIKE ?" for _ in title_keywords) + ")")
-        params.extend(f"%{keyword.lower()}%" for keyword in title_keywords)
+    if topic_slug is not None:
+        conditions.insert(0, "t.slug = ?")
+        params.insert(0, topic_slug)
+        title_keywords = TOPIC_TITLE_KEYWORDS.get(topic_slug, [])
+        if title_keywords:
+            conditions.append("(" + " OR ".join("LOWER(d.title) LIKE ?" for _ in title_keywords) + ")")
+            params.extend(f"%{keyword.lower()}%" for keyword in title_keywords)
+        order_by = "d.id"
+    else:
+        conditions.append("t.description IS NOT NULL AND t.description != ''")
+        or_parts = []
+        or_params = []
+        for slug, keywords in TOPIC_TITLE_KEYWORDS.items():
+            kw_clause = " OR ".join("LOWER(d.title) LIKE ?" for _ in keywords)
+            or_parts.append(f"(t.slug = ? AND ({kw_clause}))")
+            or_params.append(slug)
+            or_params.extend(f"%{keyword.lower()}%" for keyword in keywords)
+        or_parts.append(f"t.slug NOT IN ({','.join('?' * len(TOPIC_TITLE_KEYWORDS))})")
+        or_params.extend(TOPIC_TITLE_KEYWORDS.keys())
+        conditions.append("(" + " OR ".join(or_parts) + ")")
+        params.extend(or_params)
+        order_by = "d.published_at DESC, d.id"
 
     params.append(limit)
     return conn.execute(
-        f"""SELECT d.id, d.content, d.actor_id, a.name AS actor_name, a.party AS actor_party
+        f"""SELECT d.id, d.content, d.actor_id, d.published_at,
+                   a.name AS actor_name, a.party AS actor_party,
+                   t.id AS topic_id, t.slug AS topic_slug, t.name AS topic_name, t.description AS topic_description
             FROM documents d
             JOIN actors a ON a.id = d.actor_id
             JOIN topics t ON t.id = d.topic_id
             WHERE {' AND '.join(conditions)}
-            ORDER BY d.id
+            ORDER BY {order_by}
             LIMIT ?""",
         params,
     ).fetchall()
 
 
-def _extract_one(doc, topic_name, topic_description, model, base_url, reasoning_effort, timeout, max_tokens, api_key):
+def _extract_one(doc, model, base_url, reasoning_effort, timeout, max_tokens, api_key):
     """Eén document door de LLM halen, zonder DB-writes -- puur zodat dit
     veilig via dask over meerdere workers/threads kan lopen (--parallel).
-    sqlite3-writes blijven altijd in het hoofdproces, in `main()`."""
-    prompt = _build_prompt(topic_name, topic_description, doc["actor_name"], doc["actor_party"], doc["content"])
+    sqlite3-writes blijven altijd in het hoofdproces, in `main()`. topic_name/
+    topic_description komen uit `doc` zelf (zie fetch_pending_documents) i.p.v.
+    uit een los argument -- nodig omdat zonder --topic de documenten in één
+    batch uit verschillende topics kunnen komen (issue #391)."""
+    prompt = _build_prompt(doc["topic_name"], doc["topic_description"], doc["actor_name"], doc["actor_party"], doc["content"])
     start = time.monotonic()
     started_at = datetime.now(timezone.utc).isoformat()
     try:
@@ -248,7 +283,10 @@ def _extract_one(doc, topic_name, topic_description, model, base_url, reasoning_
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("--topic", required=True, help="topic-slug, bv. stikstof")
+    parser.add_argument(
+        "--topic", default=None,
+        help="topic-slug, bv. stikstof (default: alle topics, nieuwste debatten eerst, issue #391)",
+    )
     parser.add_argument("--limit", type=int, default=15, help="max aantal documenten deze run (default 15)")
     parser.add_argument("--min-id", type=int, default=0, help="alleen documenten met id >= deze waarde")
     parser.add_argument("--model", default="qwen/qwen3.8-27b")
@@ -292,15 +330,25 @@ def main():
     args = parser.parse_args()
 
     conn = db.connect()
-    topic_row = conn.execute("SELECT id, name, description FROM topics WHERE slug = ?", (args.topic,)).fetchone()
-    if topic_row is None:
-        raise SystemExit(f"onbekende topic-slug: {args.topic}")
-    topic_id, topic_name, topic_description = topic_row["id"], topic_row["name"], topic_row["description"]
-    if not topic_description:
-        raise SystemExit(
-            f"topic '{args.topic}' heeft geen description (pro/contra-narratief) -- "
-            "zet dit eerst via UPDATE topics SET description = ... (zie docs/handoff.md)"
-        )
+    if args.topic:
+        topic_row = conn.execute("SELECT description FROM topics WHERE slug = ?", (args.topic,)).fetchone()
+        if topic_row is None:
+            raise SystemExit(f"onbekende topic-slug: {args.topic}")
+        if not topic_row["description"]:
+            raise SystemExit(
+                f"topic '{args.topic}' heeft geen description (pro/contra-narratief) -- "
+                "zet dit eerst via UPDATE topics SET description = ... (zie docs/handoff.md)"
+            )
+    else:
+        zonder_description = [
+            row["slug"] for row in
+            conn.execute("SELECT slug FROM topics WHERE description IS NULL OR description = ''").fetchall()
+        ]
+        if zonder_description:
+            logger.warning(
+                "Topics zonder description (overgeslagen, geen pro/contra-narratief): %s",
+                ", ".join(zonder_description),
+            )
 
     documents = fetch_pending_documents(conn, args.topic, args.limit, args.min_id, args.vanaf)
     if not documents:
@@ -342,7 +390,7 @@ def main():
             total_errors += 1
             if not args.dry_run:
                 record_llm_call(
-                    conn, stage="extraction", topic_id=topic_id, document_id=doc["id"], model=args.model,
+                    conn, stage="extraction", topic_id=doc["topic_id"], document_id=doc["id"], model=args.model,
                     prompt_version=PROMPT_VERSION, started_at=started_at, duration_s=elapsed,
                     status="error", error_message=r["error"],
                 )
@@ -351,7 +399,7 @@ def main():
         raw_content, usage, arguments = r["raw_content"], r["usage"], r["arguments"]
         if not args.dry_run:
             record_llm_call(
-                conn, stage="extraction", topic_id=topic_id, document_id=doc["id"], model=args.model,
+                conn, stage="extraction", topic_id=doc["topic_id"], document_id=doc["id"], model=args.model,
                 prompt_version=PROMPT_VERSION, started_at=started_at, duration_s=elapsed,
                 response=raw_content, status="ok", usage=usage,
             )
@@ -368,7 +416,7 @@ def main():
                         logger.warning("[doc %5d]   overgeslagen argument: %s", doc["id"], exc)
                         continue
                     n_claims += len(arg.get("claims") or [])
-                    insert_argument(conn, doc["id"], topic_id, doc["actor_id"], arg, args.model)
+                    insert_argument(conn, doc["id"], doc["topic_id"], doc["actor_id"], arg, args.model)
                     n_valid += 1
 
                 conn.execute(
@@ -399,7 +447,7 @@ def main():
         logger.info("Parallelle modus: %d LLM-calls verdeeld over dask (dashboard: %s)", len(documents), client.dashboard_link)
         futures = client.map(
             _extract_one, documents,
-            topic_name=topic_name, topic_description=topic_description, model=args.model, base_url=args.base_url,
+            model=args.model, base_url=args.base_url,
             reasoning_effort=args.reasoning_effort, timeout=args.timeout, max_tokens=args.max_tokens,
             api_key=args.api_key,
         )
@@ -417,7 +465,7 @@ def main():
     else:
         for i, doc in enumerate(documents, 1):
             process_result(_extract_one(
-                doc, topic_name, topic_description, args.model, args.base_url, args.reasoning_effort,
+                doc, args.model, args.base_url, args.reasoning_effort,
                 args.timeout, args.max_tokens, args.api_key,
             ))
             if i % PRICE_CHECK_INTERVAL == 0 and not price_still_matches(args.model, args.base_url, price_baseline):

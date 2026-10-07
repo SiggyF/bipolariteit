@@ -1,5 +1,10 @@
 .DEFAULT_GOAL := help
 
+# Default topic voor de meeste TOPIC-targets. `extract`/`tag` wijken hiervan af
+# (issue #391): die lezen $(origin TOPIC) om "geen TOPIC opgegeven" te
+# onderscheiden van "TOPIC=stikstof expliciet opgegeven", en draaien zonder
+# expliciete TOPIC=... over alle topics (nieuwste debatten eerst) i.p.v. over
+# deze default.
 TOPIC ?= stikstof
 LIMIT ?= 15
 DATASET ?= elecdebate60to16
@@ -118,16 +123,16 @@ backup-db: ## Kopieer data/bipolariteit.db naar ~/data/bipolariteit/ (sync die m
 	mkdir -p ~/data/bipolariteit
 	cp data/bipolariteit.db ~/data/bipolariteit/bipolariteit-$$(date +%Y%m%d-%H%M%S).db
 
-extract: ## Stage 1 -- argumenten extraheren (LLM, alleen op netstroom). Vars: TOPIC, LIMIT, BASE_URL, MODEL, API_KEY, PARALLEL (bv. voor de HF-router, zie issue #303)
+extract: ## Stage 1 -- argumenten extraheren (LLM, alleen op netstroom). Vars: TOPIC (optioneel -- zonder expliciete TOPIC=... op de command line: alle topics, nieuwste debatten eerst, issue #391), LIMIT, BASE_URL, MODEL, API_KEY, PARALLEL (bv. voor de HF-router, zie issue #303)
 	@url=$$($(RESOLVE_BASE_URL)) || exit 1; \
-	uv run python -m pipeline.extract_arguments --topic $(TOPIC) --limit $(LIMIT) --base-url $$url --model $(MODEL) $(if $(API_KEY),--api-key $(API_KEY),) $(if $(PARALLEL),--parallel,)
+	uv run python -m pipeline.extract_arguments $(if $(filter command line,$(origin TOPIC)),--topic $(TOPIC),) --limit $(LIMIT) --base-url $$url --model $(MODEL) $(if $(API_KEY),--api-key $(API_KEY),) $(if $(PARALLEL),--parallel,)
 
 extract-agy: ## Stage 1 -- argumenten extraheren via Docker agy (Gemini). Vars: TOPIC, LIMIT, AGY_MODEL, MIN_ID
 	PYTHONPATH=. uv run python scripts/agy_run_extraction_batch.py --topic $(TOPIC) --limit $(LIMIT) $(if $(AGY_MODEL),--model $(AGY_MODEL),) $(if $(MIN_ID),--min-id $(MIN_ID),)
 
-tag: ## Stage 1b -- tags toekennen (LLM, alleen op netstroom). Vars: TOPIC, LIMIT, BASE_URL, IDS, IDS_FILE (gerichte hertag-batch, negeert LIMIT), MODEL, API_KEY, PARALLEL (bv. voor de HF-router, zie issue #303)
+tag: ## Stage 1b -- tags toekennen (LLM, alleen op netstroom). Vars: TOPIC (optioneel -- zonder expliciete TOPIC=... op de command line: alle topics, nieuwste debatten eerst, issue #391), LIMIT, BASE_URL, IDS, IDS_FILE (gerichte hertag-batch, negeert LIMIT), MODEL, API_KEY, PARALLEL (bv. voor de HF-router, zie issue #303)
 	@url=$$($(RESOLVE_BASE_URL)) || exit 1; \
-	uv run python -m pipeline.tag_arguments --topic $(TOPIC) --limit $(LIMIT) --base-url $$url --model $(MODEL) $(if $(API_KEY),--api-key $(API_KEY),) $(if $(PARALLEL),--parallel,) $(if $(IDS),--ids $(IDS),) $(if $(IDS_FILE),--ids-file $(IDS_FILE),)
+	uv run python -m pipeline.tag_arguments $(if $(filter command line,$(origin TOPIC)),--topic $(TOPIC),) --limit $(LIMIT) --base-url $$url --model $(MODEL) $(if $(API_KEY),--api-key $(API_KEY),) $(if $(PARALLEL),--parallel,) $(if $(IDS),--ids $(IDS),) $(if $(IDS_FILE),--ids-file $(IDS_FILE),)
 
 tag-agy: ## Stage 1b -- tags toekennen via Docker agy (Gemini). Vars: TOPIC, LIMIT, AGY_MODEL
 	PYTHONPATH=. uv run python scripts/agy_run_tagging_batch.py --topic $(TOPIC) --limit $(LIMIT) $(if $(AGY_MODEL),--model $(AGY_MODEL),)
