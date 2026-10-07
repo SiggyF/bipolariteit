@@ -14,10 +14,8 @@ Bron van de dataset: `uv run python -m pipeline.ingest.ingest_tk
 (crawlers/tweede_kamer/tweede_kamer/spiders/verslagen_periode.py).
 
 Puur leesactie op de database. Output: coords+labels als JSON in
-data/plenair-map/, voor de losse Cosmograph-HTML-pagina
-(index.html in dezelfde map) om interactief te bekijken -- zie die map's
-eigen toelichting waarom hier bewust geen matplotlib-PNG (zoals
-experiment_umap_arguments.py) of Plotly is gebruikt.
+data/plenair-map/, verder verwerkt door make label-clusters en de
+frontend-export (geen losse HTML-debugweergave meer, zie issue #356).
 
 De volle pijplijn is embedden -> UMAP -> clusteren -> labelen -> exporteren,
 verdeeld over vier los draaibare stages (elk met zijn eigen geheugen-/
@@ -400,8 +398,12 @@ def label_hierarchical_clusters(
         else:
             contrast_boost = 1.0
 
+        # coverage lineair i.p.v. sqrt(coverage) (issue #356, foutpatroon C):
+        # sqrt trok een zeldzame, scherp afgebakende term ("geitenhouderijen")
+        # dicht genoeg naar brede termen die het cluster beter dekken om
+        # alsnog te winnen -- lineaire coverage straft dat verschil harder af.
         scores = np.zeros_like(c_df, dtype=np.float32)
-        scores[valid] = global_compactness * precision * np.sqrt(coverage) * contrast_boost * (1.0 + 2.0 * rep_ratio)
+        scores[valid] = global_compactness * precision * coverage * contrast_boost * (1.0 + 2.0 * rep_ratio)
 
         top_idx = scores.argsort()[::-1][:top_terms]
         return [terms[i] for i in top_idx if scores[i] > 0]
@@ -721,8 +723,12 @@ def label_multilevel_clusters(
         else:
             contrast_boost = 1.0
 
+        # coverage lineair i.p.v. sqrt(coverage) (issue #356, foutpatroon C):
+        # sqrt trok een zeldzame, scherp afgebakende term ("geitenhouderijen")
+        # dicht genoeg naar brede termen die het cluster beter dekken om
+        # alsnog te winnen -- lineaire coverage straft dat verschil harder af.
         scores = np.zeros_like(c_df, dtype=np.float32)
-        scores[valid] = global_compactness * precision * np.sqrt(coverage) * contrast_boost * (1.0 + 2.0 * rep_ratio)
+        scores[valid] = global_compactness * precision * coverage * contrast_boost * (1.0 + 2.0 * rep_ratio)
 
         top_idx = scores.argsort()[::-1][:top_terms]
         return [terms[i] for i in top_idx if scores[i] > 0]
@@ -994,9 +1000,9 @@ def main():
     db_stopwords = fetch_actor_and_party_stopwords(conn)
     # Topic is geen eigenschap van de embed-/clusterworkflow (fetch_and_embed
     # hierboven doet geen join op topics/topic_id, zie #288) -- alleen hier,
-    # als aparte, latere stap puur t.b.v. de topic-legenda/kleuring bij het
-    # visualiseren (plot-html/frontend-export), joinen we topic terug op de
-    # al opgehaalde document-ids.
+    # als aparte, latere stap puur t.b.v. het `topic`-veld in de
+    # frontend-export, joinen we topic terug op de al opgehaalde
+    # document-ids.
     # Geen WHERE id IN (...): bij honderdduizenden document-ids overschrijdt
     # dat sqlite's parameterlimiet (live bevestigd: "too many SQL variables").
     # De hele id->slug-mapping is twee smalle kolommen -- goedkoop genoeg om
@@ -1079,7 +1085,7 @@ def main():
             # TF-IDF-naam (label_multilevel_clusters), `duiding` ontbreekt
             # tot label_export.py 'm invult.
             examples_by_level = compute_representative_examples(
-                level_ids, level_lists, texts, coords, rows, args.cluster_llm_examples_per_cluster,
+                level_ids, level_lists, texts, vectors, rows, args.cluster_llm_examples_per_cluster,
             )
             examples_path = OUTPUT_DIR / f"cluster-label-input-{args.label}.json"
             examples_path.write_text(json.dumps(examples_by_level, ensure_ascii=False), encoding="utf-8")
@@ -1164,9 +1170,6 @@ def main():
             hierarchy_export_path.parent.mkdir(parents=True, exist_ok=True)
             hierarchy_export_path.write_text(json.dumps(hierarchy, ensure_ascii=False), encoding="utf-8")
 
-    html_path = OUTPUT_DIR / f"plot-{args.label}.html"
-    write_plot_html(points, html_path, title=f"UMAP (bge-m3) -- alle plenaire debatten, {args.label}")
-    logger.info("%d punten geschreven naar %s", len(points), html_path)
     if embed_elapsed is not None:
         logger.info("timing: embeddings %.1fs (missende ids alsnog opgehaald)", embed_elapsed)
 
@@ -1247,80 +1250,6 @@ def write_frontend_export(points, export_path=EXPORT_PATH, dataset_version=None)
             "EXPORT BOVEN DE 25 MiB CLOUDFLARE WORKERS-ASSETLIMIET (%.1f MiB) -- "
             "build zal breken, verdere verkleining nodig", size_mb,
         )
-
-
-def write_plot_html(points, out_path, title):
-    """Interactieve scatter met ECharts (CDN, geen build-stap) -- zelfde
-    chartlib als de rest van de site (frontend/package.json,
-    TagCorrespondenceMap.vue), bewust niet Plotly of iets anders erbij: één
-    technologie voor hetzelfde soort punt-cloud-visualisatie. Hover toont
-    spreker/partij/tekstfragment per punt. Eén serie per topic, zodat de
-    legenda per topic aan/uit te klikken is (handig om de 4 gecureerde
-    topics visueel te isoleren binnen de bredere plenaire wolk)."""
-    topics = sorted({p["topic"] for p in points})
-    palette = ["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "#8c564b", "#e377c2", "#7f7f7f"]
-    series = []
-    for i, topic in enumerate(topics):
-        pts = [p for p in points if p["topic"] == topic]
-        series.append({
-            "name": f"{topic} (n={len(pts)})",
-            "type": "scatter",
-            "symbolSize": 5 if topic == "plenair" else 7,
-            "large": True,
-            "largeThreshold": 2000,
-            "itemStyle": {"color": palette[i % len(palette)], "opacity": 0.6},
-            "data": [
-                {
-                    "value": [p["x"], p["y"]],
-                    "actor": p["actor"],
-                    "party": p["party"],
-                    "activiteit_soort": p["activiteit_soort"] or "",
-                    "debate_title": p["debate_title"] or "",
-                    "published_at": p["published_at"],
-                    "text": p["text"],
-                }
-                for p in pts
-            ],
-        })
-
-    option = {
-        "title": {"text": title},
-        "tooltip": {
-            "trigger": "item",
-            "formatter": "__TOOLTIP_FORMATTER__",
-        },
-        "legend": {"top": 30},
-        "grid": {"top": 80},
-        "xAxis": {"scale": True},
-        "yAxis": {"scale": True},
-        "series": series,
-    }
-    option_json = json.dumps(option, ensure_ascii=False)
-    # ECharts tooltip.formatter kan geen JS-functie in JSON meesturen -- na
-    # het serialiseren de placeholder vervangen door een echte functie die
-    # bij een scatter-punt (params.data) de metadata opmaakt.
-    formatter_js = (
-        "function(params) {"
-        "  const d = params.data;"
-        "  return `${d.actor} (${d.party}) -- ${d.activiteit_soort} -- ${d.published_at}<br>"
-        "<em>${d.debate_title}</em><br>${d.text}`;"
-        "}"
-    )
-    option_json = option_json.replace('"__TOOLTIP_FORMATTER__"', formatter_js)
-
-    html = f"""<!doctype html>
-<html><head><meta charset="utf-8"><title>{title}</title>
-<script src="https://cdn.jsdelivr.net/npm/echarts@6.1.0/dist/echarts.min.js"></script>
-<style>body {{ font-family: sans-serif; margin: 0; }} #plot {{ width: 100vw; height: 100vh; }}</style>
-</head><body>
-<div id="plot"></div>
-<script>
-const chart = echarts.init(document.getElementById("plot"));
-chart.setOption({option_json});
-window.addEventListener("resize", () => chart.resize());
-</script>
-</body></html>"""
-    out_path.write_text(html, encoding="utf-8")
 
 
 if __name__ == "__main__":

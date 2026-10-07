@@ -61,6 +61,11 @@ from pyproj import Transformer
 from scipy.interpolate import splev, splprep
 
 from pipeline.tiling.grid import umap_to_mercator
+from scripts.check_cluster_label_quality import (
+    find_duplicate_labels,
+    find_overlong_labels,
+    find_parent_child_tautologies,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -106,7 +111,25 @@ def smooth_hull(hull: list[list[float]], num_samples: int = 60) -> list[list[flo
     return [[round(float(px), 4), round(float(py), 4)] for px, py in zip(x, y)]
 
 
-def cluster_to_feature(cluster: dict, level: int, rescale) -> dict:
+def compute_quality_flags(level_lists: list) -> dict:
+    """Vooraf berekende sanity-check-vlaggen (zie scripts/check_cluster_label_quality.py,
+    issue #356-plan) per (level, cluster_id), zodat ze als losse attribuutkolommen
+    in QGIS te filteren/stylen zijn naast de geometrie. Persoons-/partijnaam-check
+    bewust niet meegenomen: vereist een DB-verbinding en bleek op dit moment te
+    veel valse positieven te geven (generieke woorden als "van"/"ter" die ook in
+    achternamen voorkomen) om los van de volledige tekstrapportage nuttig te zijn."""
+    flags = {}
+    for name, locs in find_duplicate_labels(level_lists).items():
+        for level_idx, cluster_id in locs:
+            flags.setdefault((level_idx, cluster_id), {})["duplicate_label_count"] = len(locs)
+    for level_idx, cluster_id, _name, _parent_name in find_parent_child_tautologies(level_lists):
+        flags.setdefault((level_idx, cluster_id), {})["parent_child_tautology"] = True
+    for level_idx, cluster_id, _name in find_overlong_labels(level_lists):
+        flags.setdefault((level_idx, cluster_id), {})["overlong_label"] = True
+    return flags
+
+
+def cluster_to_feature(cluster: dict, level: int, rescale, quality_flags: dict | None = None) -> dict:
     hull = smooth_hull(cluster.get("hull"))
     centroid = rescale(cluster["centroid"])
     if hull and len(hull) >= 3:
@@ -122,6 +145,7 @@ def cluster_to_feature(cluster: dict, level: int, rescale) -> dict:
     # attribuutkolom, zodat 'm ook zichtbaar is in de attributentabel zonder
     # cluster_id+level zelf te hoeven combineren.
     feature_id = f"L{level}-{cluster['cluster_id']}"
+    flags = (quality_flags or {}).get((level, cluster["cluster_id"]), {})
     return {
         "type": "Feature",
         "id": feature_id,
@@ -131,6 +155,7 @@ def cluster_to_feature(cluster: dict, level: int, rescale) -> dict:
             "cluster_id": cluster["cluster_id"],
             "level": level,
             "name": cluster["name"],
+            "duiding": cluster.get("duiding"),
             "parent_id": cluster.get("parent_id"),
             "parent_feature_id": f"L{level - 1}-{cluster['parent_id']}" if cluster.get("parent_id") is not None else None,
             "parent_name": cluster.get("parent_name"),
@@ -140,6 +165,10 @@ def cluster_to_feature(cluster: dict, level: int, rescale) -> dict:
             "redundant_with_parent": cluster.get("redundant_with_parent", False),
             "overlap_with_parent": cluster.get("overlap_with_parent"),
             "max_overlap_with_parents": cluster.get("max_overlap_with_parents"),
+            # issue #356-plan sanity-check-vlaggen, zie compute_quality_flags().
+            "duplicate_label_count": flags.get("duplicate_label_count", 1),
+            "parent_child_tautology": flags.get("parent_child_tautology", False),
+            "overlong_label": flags.get("overlong_label", False),
         },
     }
 
@@ -151,6 +180,7 @@ def build_geojson(clusters_data: dict, grid: dict | None, include_redundant: boo
         levels = [clusters_data["coarse"], clusters_data["fine"]]
 
     rescale = flat_rescale if grid is None else make_rescaler(grid)
+    quality_flags = compute_quality_flags(levels)
     features = []
     n_points_fallback = 0
     n_skipped_redundant = 0
@@ -167,7 +197,7 @@ def build_geojson(clusters_data: dict, grid: dict | None, include_redundant: boo
                 continue
             if not cluster.get("hull") or len(cluster["hull"]) < 3:
                 n_points_fallback += 1
-            features.append(cluster_to_feature(cluster, level, rescale))
+            features.append(cluster_to_feature(cluster, level, rescale, quality_flags))
 
     logger.info(
         "%d clusters over %d niveaus (%d zonder hull, als punt geëxporteerd; %d overgeslagen als redundant_with_parent)",

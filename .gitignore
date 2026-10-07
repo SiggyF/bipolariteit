@@ -106,10 +106,6 @@ data/plenair-map/cluster-label-input-*.json
 # van waarheid (dat is config/full/cluster_label_overrides.toml) -- lokaal
 # regenereerbaar, hoort niet in git.
 data/plenair-map/label-rematch-resultaat.csv
-# Idem: de Cosmograph-plot-HTML voor de volle dataset is met 50+ MiB veel
-# groter dan de overige, wel ingecheckte data/plenair-map/plot-<label>.html-
-# varianten (tot 16 MiB) -- niet meenemen in git.
-data/plenair-map/plot-full.html
 # -full-varianten van de UMAP/cluster-export (data/plenair-map/ én
 # data/export/plenair-map/): bestemd voor Zenodo/Hugging Face (make
 # publish-zenodo/publish-huggingface), niet voor de website-data (make
