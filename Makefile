@@ -21,11 +21,12 @@ AGY_MODEL ?=
 # Studio (geen token nodig).
 API_KEY ?=
 # UMAP-clustering (make umap, zie pipeline/plenary_map/cluster.py) en de
-# losse LLM-naamgevingsstap erna (make label-clusters). Zonder
-# CLUSTER_LEVEL_SIZES: 2 niveaus op dezelfde drempel (zie cluster.py's
-# --cluster-level-sizes-toelichting) -- voor een echte hiërarchie altijd
-# expliciet zetten, bv. '4000,1200,350,100,30'.
-CLUSTER_LEVEL_SIZES ?=
+# losse LLM-naamgevingsstap erna (make label-clusters). Leeg zetten valt
+# terug op 2 niveaus op dezelfde drempel (zie cluster.py's
+# --cluster-level-sizes-toelichting) -- dat gaf issue #356 (geen echte
+# hiërarchie op de -full-export, "Geitenhouderijen" op topniveau), dus
+# standaard een aflopende reeks.
+CLUSTER_LEVEL_SIZES ?= 4000,1500,500,150,50
 EXPORT_SUFFIX ?=
 LIMIT_CLUSTERS ?=
 PARALLEL ?=
@@ -95,6 +96,10 @@ label-clusters: ## Plenaire-kaart-pijplijn stage 4 -- LLM-naamgeving van de clus
 		--base-url $$url --llm-chat-model $(MODEL) $(if $(API_KEY),--llm-api-key $(API_KEY),) \
 		--export-frontend $(if $(EXPORT_SUFFIX),--export-suffix=$(EXPORT_SUFFIX),) \
 		$(if $(LIMIT_CLUSTERS),--limit $(LIMIT_CLUSTERS),) $(if $(PARALLEL),--parallel,)
+
+check-cluster-label-quality: ## Niet-blokkerende sanity-check op clusterlabels na `make label-clusters` (issue #356) -- rapporteert duplicaten/ouder-kind-tautologie/persoons- of partijnamen/te lange labels, past niets automatisch toe. Vars: EXPORT_SUFFIX
+	uv run python scripts/check_cluster_label_quality.py \
+		--clusters-json data/export/plenair-map/plenair-map-clusters$(EXPORT_SUFFIX).json
 
 pipeline: ## Volledige analyse-pipeline voor één topic op rij: crawl -> ingest -> extract -> tag -> export (zie docs/pipeline.md). Vars: TOPIC, LIMIT, SOORT, BASE_URL. `redactie` draait hier bewust niet in mee -- vereist Docker agy/Gemini i.p.v. de lokale LLM van de rest van deze keten, en herstructureert de hele argumentenboom (zie #252), dus een bewuste losse stap. export regenereert ook data/export/gepubliceerd/ lokaal; publiceren naar bipolariteit-data (tags-taxonomy/publish-data) blijft een bewuste losse stap erna.
 	$(MAKE) crawl TOPIC=$(TOPIC) LIMIT=$(LIMIT)

@@ -146,12 +146,13 @@ package-/target-hernoeming heeft een eigen, grotere blast radius (import-
 paden). Zie issue #316 voor die afweging.
 
 Gevuld door `make umap` (coords) en `make cluster-plenary-map`
-(clusters/hierarchy/plot). Per `--label` (`sample10pct`, `combined`,
-`2025-09-heden`, `full`, ...) staan `clusters-<label>.json`,
-`hierarchy-<label>.json` en `plot-<label>.html` getrackt — dit zijn de
-kleine/middelgrote labels, bedoeld als "bekijk dit"-demo naast de
-frontend-export. Niet getrackt: `coords-*.json`/`cluster-label-input-*.json`
-(pure tussenproducten, tot 30 MiB) en `plot-full.html` (250+ MiB).
+(clusters/hierarchy). Per `--label` (`sample10pct`, `combined`,
+`2025-09-heden`, `full`, ...) staan `clusters-<label>.json` en
+`hierarchy-<label>.json` getrackt — dit zijn de kleine/middelgrote labels,
+bedoeld als "bekijk dit"-demo naast de frontend-export. Niet getrackt:
+`coords-*.json`/`cluster-label-input-*.json` (pure tussenproducten, tot
+30 MiB). Er is geen losse HTML-debugweergave meer (`plot-<label>.html`,
+verwijderd bij issue #356 — onnodige output, niet gebruikt).
 
 **Let op de naamconventie**: bestanden met `-full` als suffix
 (`clusters-full.geojson`, `grid-full.json`) horen bij de Zenodo/Hugging

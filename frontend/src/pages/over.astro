@@ -881,9 +881,9 @@ const remoteCo2Kg = (co2.by_source.remote.co2_g / 1000).toLocaleString("nl-NL", 
 				<li class="workflow-step">
 					<p class="workflow-step-title"><span class="workflow-step-index">3</span> Hiërarchische clustering (HDBSCAN condensed tree)</p>
 					<p class="workflow-step-detail">
-						In plaats van een vaste clusterdrempel loopt het algoritme de vertakkingsboom (condensed tree) van HDBSCAN top-down af.
-						Grote afsplitsingen worden overkoepelende <em>beleidsdomeinen</em> (coarse clusters); verdere sub-splitsingen worden
-						fijnmazige <em>deelthema's</em> (fine clusters).
+						In plaats van een vaste clusterdrempel loopt het algoritme de vertakkingsboom (condensed tree) van HDBSCAN top-down af,
+						op vijf aflopende drempels: van een handvol brede <em>beleidsdomeinen</em> tot honderden smalle <em>deelthema's</em>.
+						Elk niveau is een snede van dezelfde boom, dus een deelthema valt altijd binnen precies één beleidsdomein.
 					</p>
 				</li>
 				<li class="workflow-arrow" aria-hidden="true">↓</li>
@@ -891,16 +891,28 @@ const remoteCo2Kg = (co2.by_source.remote.co2_g / 1000).toLocaleString("nl-NL", 
 					<p class="workflow-step-title"><span class="workflow-step-index">4</span> Labeling &amp; duiding (LLM + TF-IDF)</p>
 					<p class="workflow-step-detail">
 						Per cluster worden de meest onderscheidende TF-IDF trefwoorden berekend (met uitsluiting van procedurele Kamertermen).
-						Een taalmodel voorziet elk cluster op basis van representatieve spreekbeurten van een herkenbare themanaam en een korte inhoudelijke duiding.
+						Een taalmodel voorziet elk cluster van een herkenbare themanaam en een korte inhoudelijke duiding, op basis van de
+						spreekbeurten die semantisch het dichtst bij het clustermiddelpunt liggen — en, vanaf het tweede niveau, met de naam
+						van het bovenliggende beleidsdomein als context, zodat een deelthema zich daarvan onderscheidt in plaats van die naam
+						te herhalen.
 					</p>
 				</li>
 				<li class="workflow-arrow" aria-hidden="true">↓</li>
 				<li class="workflow-step">
-					<p class="workflow-step-title"><span class="workflow-step-index">5</span> Renderen met inkt-blending (D3 Canvas)</p>
+					<p class="workflow-step-title"><span class="workflow-step-index">5</span> Correctieslag op eerdere handmatige labels</p>
 					<p class="workflow-step-detail">
-						In de browser worden de circa 40.000 punten hardware-versneld getekend via een 2D Canvas met D3 Zoom.
-						Door inkt-blending (multiply-modus) worden dichte clusterkernen vanzelf dieper van kleur, en zoomt de kaart vloeiend
-						met behoud van 60 beelden per seconde.
+						Clusters krijgen zelden in één keer een goed label: generieke termen en naamsbotsingen tussen onafhankelijk gelabelde
+						clusters worden opgespoord en, waar eerdere handmatige curatie van een vergelijkbare clustering nog aansluit, daarmee
+						gericht gecorrigeerd — nooit automatisch in bulk, altijd één voor één beoordeeld.
+					</p>
+				</li>
+				<li class="workflow-arrow" aria-hidden="true">↓</li>
+				<li class="workflow-step">
+					<p class="workflow-step-title"><span class="workflow-step-index">6</span> Renderen als vector tiles (MapLibre + deck.gl)</p>
+					<p class="workflow-step-detail">
+						Alle sprekersbeurten uit acht jaar plenaire debatten worden als vector tiles (PMTiles) geserveerd en in de browser
+						getekend met MapLibre GL en deck.gl — dezelfde schaalbare tegeltechniek als een gewone kaartviewer, met
+						dichtheidsbewuste puntreductie per zoomniveau zodat uit- en inzoomen vloeiend blijft.
 					</p>
 				</li>
 			</ol>
