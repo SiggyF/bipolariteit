@@ -33,7 +33,10 @@ class VerslagenSpider(scrapy.Spider):
             raise ValueError("--topic is verplicht, bv. scrapy crawl verslagen -a topic=stikstof")
         self.topic = topic
         self.limit = int(limit)
-        self.soort = soort
+        # Komma-gescheiden -a soort="a,b,c" wordt één or-filter (zie
+        # odata.activiteiten_url) -- één request-keten voor meerdere
+        # debatsoorten i.p.v. een losse crawl-run per soort (issue #391-vervolg).
+        self.soort = [s.strip() for s in soort.split(",") if s.strip()] if soort else None
         self.fetched = 0
 
     async def start(self):
