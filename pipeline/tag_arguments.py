@@ -603,8 +603,8 @@ def main():
     parser.add_argument("--reasoning-effort", default="none")
     parser.add_argument("--timeout", type=float, default=120.0)
     parser.add_argument(
-        "--max-tokens", type=int, default=2000,
-        help="max_tokens per argument (default 2000; 1000 kapte volle taglijsten af)",
+        "--max-tokens", type=int, default=4000,
+        help="max_tokens per argument (default 4000; 1000 en 2000 kapten volle taglijsten af, zie issue #247)",
     )
     parser.add_argument(
         "--vanaf",
