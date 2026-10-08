@@ -2,6 +2,7 @@
 import topicsIndex from "../../../../data/export/topics-index.json";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import TiledPlenairMap from "../../components/TiledPlenairMap.vue";
+import TopicPartyPositions from "../../components/TopicPartyPositions.astro";
 import { TEGENSTELLING } from "../../lib/topics";
 import { resolveTilesBaseUrl } from "../../lib/dataBaseUrl";
 
@@ -29,7 +30,7 @@ const tilesBaseUrl = resolveTilesBaseUrl();
 					)}
 					<span class="card-tile-name">{topic.name}</span>
 					{TEGENSTELLING[topic.slug] && <span class="card-tile-subtitle">{TEGENSTELLING[topic.slug]}</span>}
-					<span class="card-tile-count">{topic.argument_count} argumenten</span>
+					<TopicPartyPositions partyPositions={topic.party_positions} />
 				</a>
 			</li>
 		))}
