@@ -54,9 +54,17 @@ def resource_url(entity, entity_id):
 
 
 def activiteiten_url(topic_keyword, soort, top):
+    """`soort`: één Activiteit.Soort-string, een lijst/tuple van meerdere
+    (dan één `or`-filter, één request-keten i.p.v. één losse crawl per
+    soort -- nodig omdat actuele activiteit vaak als tweeminutendebat/
+    commissiedebat/wetgevingsoverleg op de agenda staat, niet als
+    losstaand "Plenair debat (debat)", zie issue #391-vervolg), of leeg/None
+    voor geen Soort-filter."""
     filter_expr = f"contains(Onderwerp,'{topic_keyword}') and Verwijderd eq false"
     if soort:
-        filter_expr += f" and Soort eq '{soort}'"
+        soorten = [soort] if isinstance(soort, str) else list(soort)
+        soort_clause = " or ".join(f"Soort eq '{s}'" for s in soorten)
+        filter_expr += f" and ({soort_clause})" if len(soorten) > 1 else f" and {soort_clause}"
     return build_url("Activiteit", filter=filter_expr, orderby="Datum desc", top=top)
 
 
