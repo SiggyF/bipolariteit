@@ -1,0 +1,60 @@
+---
+// Variant A uit de visuele test voor issue #250: twee gekleurde kolommen
+// (pro/contra), partijlogo's gegroepeerd op dominante stance, met een
+// "+N"-badge voor partijen die niet meer in de top-4 passen.
+import PartyIcon from "./PartyIcon.astro";
+import { groupPartyPositions, type TopicPartyCount } from "../lib/partyPositions";
+
+interface Props {
+	partyPositions: TopicPartyCount[];
+}
+const { partyPositions } = Astro.props;
+const columns = groupPartyPositions(partyPositions);
+---
+
+<div class="topic-party-positions">
+	<div class="topic-party-col is-pro">
+		{columns.pro.map((p) => <PartyIcon party={p.party} />)}
+		{columns.proRest > 0 && <span class="topic-party-rest">+{columns.proRest}</span>}
+	</div>
+	<div class="topic-party-col is-contra">
+		{columns.contra.map((p) => <PartyIcon party={p.party} />)}
+		{columns.contraRest > 0 && <span class="topic-party-rest">+{columns.contraRest}</span>}
+	</div>
+</div>
+
+<style>
+	.topic-party-positions {
+		display: flex;
+		width: 100%;
+		gap: var(--space-1);
+		margin-top: auto;
+	}
+
+	.topic-party-col {
+		flex: 1;
+		min-width: 0;
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: center;
+		gap: 3px;
+		border-radius: var(--hoek-s);
+		padding: 4px 3px;
+	}
+
+	.topic-party-col.is-pro {
+		background: var(--pro-was);
+	}
+
+	.topic-party-col.is-contra {
+		background: var(--contra-was);
+	}
+
+	.topic-party-rest {
+		font-family: var(--font-kop);
+		font-weight: 600;
+		font-size: var(--step--1);
+		color: var(--galnoot-zacht);
+	}
+</style>

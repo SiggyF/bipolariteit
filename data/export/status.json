@@ -1,21 +1,21 @@
 {
-  "generated_at": "2026-09-15T23:37:52+02:00",
+  "generated_at": "2026-10-08T23:01:54+02:00",
   "co2_estimate": {
     "energy_wh_per_1k_tokens_assumption": 0.3,
     "carbon_intensity_g_per_kwh": {
       "local": 0,
       "remote": 160
     },
-    "total_calls": 60524,
-    "total_tokens": 152489872,
-    "total_energy_kwh": 45.746961600000006,
+    "total_calls": 60655,
+    "total_tokens": 152845960,
+    "total_energy_kwh": 45.853788,
     "total_co2_kg": 5.367379584,
     "by_source": {
       "local": {
-        "n_calls": 14833,
-        "total_tokens": 40669464,
-        "n_calls_missing_tokens": 133,
-        "energy_kwh": 12.2008392,
+        "n_calls": 14964,
+        "total_tokens": 41025552,
+        "n_calls_missing_tokens": 144,
+        "energy_kwh": 12.3076656,
         "co2_g": 0.0
       },
       "remote": {
@@ -35,8 +35,8 @@
       "documents_total": 4381,
       "documents_extracted": 3889,
       "arguments_total": 1988,
-      "arguments_tagged": 1971,
-      "argumentenboom_banden": 6,
+      "arguments_tagged": 1988,
+      "argumentenboom_banden": 3,
       "arguments_ander_onderwerp": 10,
       "ander_onderwerp_top": [
         {
@@ -89,6 +89,17 @@
           "total_completion_tokens": 121338,
           "first_call_at": "2026-08-08T09:19:34.005336+00:00",
           "last_call_at": "2026-09-05T18:10:14.133008+00:00"
+        },
+        {
+          "stage": "tagging",
+          "model": "qwen/qwen3.8-27b",
+          "n_calls": 27,
+          "total_duration_s": 2160.57313635794,
+          "avg_duration_s": 80.02122727251628,
+          "n_errors": 8,
+          "total_completion_tokens": 16840,
+          "first_call_at": "2026-10-08T19:32:28.735141+00:00",
+          "last_call_at": "2026-10-08T20:26:59.894632+00:00"
         }
       ]
     },
@@ -132,11 +143,11 @@
       "slug": "asiel",
       "name": "Asiel en migratie",
       "vanaf": "2023-12-06",
-      "documents_total": 7812,
-      "documents_extracted": 4807,
-      "arguments_total": 3555,
-      "arguments_tagged": 3543,
-      "argumentenboom_banden": 3,
+      "documents_total": 8249,
+      "documents_extracted": 4872,
+      "arguments_total": 3572,
+      "arguments_tagged": 3572,
+      "argumentenboom_banden": 11,
       "arguments_ander_onderwerp": 92,
       "ander_onderwerp_top": [
         {
@@ -193,6 +204,17 @@
           "last_call_at": "2026-08-20T19:17:36.754454+00:00"
         },
         {
+          "stage": "extraction",
+          "model": "qwen/qwen3.8-27b",
+          "n_calls": 65,
+          "total_duration_s": 559.7996966728824,
+          "avg_duration_s": 8.612303025736653,
+          "n_errors": 0,
+          "total_completion_tokens": 4056,
+          "first_call_at": "2026-10-08T18:26:20.037928+00:00",
+          "last_call_at": "2026-10-08T18:38:12.282223+00:00"
+        },
+        {
           "stage": "tagging",
           "model": "Qwen/Qwen3.8-27B:ovhcloud",
           "n_calls": 9010,
@@ -213,6 +235,17 @@
           "total_completion_tokens": 1083067,
           "first_call_at": "2026-08-05T16:53:22.700983+00:00",
           "last_call_at": "2026-09-05T11:13:26.066902+00:00"
+        },
+        {
+          "stage": "tagging",
+          "model": "qwen/qwen3.8-27b",
+          "n_calls": 29,
+          "total_duration_s": 1902.964427872037,
+          "avg_duration_s": 65.61946303007025,
+          "n_errors": 0,
+          "total_completion_tokens": 22088,
+          "first_call_at": "2026-10-08T19:09:44.277297+00:00",
+          "last_call_at": "2026-10-08T20:16:20.830873+00:00"
         }
       ]
     },
@@ -220,11 +253,11 @@
       "slug": "energietransitie",
       "name": "Energietransitie",
       "vanaf": "2023-12-06",
-      "documents_total": 11717,
+      "documents_total": 13412,
       "documents_extracted": 7623,
       "arguments_total": 5782,
-      "arguments_tagged": 5779,
-      "argumentenboom_banden": 3,
+      "arguments_tagged": 5782,
+      "argumentenboom_banden": 1,
       "arguments_ander_onderwerp": 187,
       "ander_onderwerp_top": [
         {
@@ -292,6 +325,17 @@
           "last_call_at": "2026-09-12T08:42:50.833422+00:00"
         },
         {
+          "stage": "extraction",
+          "model": "qwen/qwen3.8-27b",
+          "n_calls": 1,
+          "total_duration_s": 160.40020669798832,
+          "avg_duration_s": 160.40020669798832,
+          "n_errors": 1,
+          "total_completion_tokens": 0,
+          "first_call_at": "2026-10-07T21:08:29.616571+00:00",
+          "last_call_at": "2026-10-07T21:08:29.616571+00:00"
+        },
+        {
           "stage": "tagging",
           "model": "Qwen/Qwen3.6-27B:cheapest",
           "n_calls": 15,
@@ -323,6 +367,17 @@
           "total_completion_tokens": 1073874,
           "first_call_at": "2026-08-13T10:16:21.437585+00:00",
           "last_call_at": "2026-08-29T18:05:20.431101+00:00"
+        },
+        {
+          "stage": "tagging",
+          "model": "qwen/qwen3.8-27b",
+          "n_calls": 3,
+          "total_duration_s": 211.0132020530291,
+          "avg_duration_s": 70.33773401767637,
+          "n_errors": 0,
+          "total_completion_tokens": 2242,
+          "first_call_at": "2026-10-08T19:30:10.091705+00:00",
+          "last_call_at": "2026-10-08T20:17:47.038084+00:00"
         }
       ]
     },
@@ -333,8 +388,8 @@
       "documents_total": 5716,
       "documents_extracted": 3892,
       "arguments_total": 2841,
-      "arguments_tagged": 2837,
-      "argumentenboom_banden": 0,
+      "arguments_tagged": 2841,
+      "argumentenboom_banden": 3,
       "arguments_ander_onderwerp": 93,
       "ander_onderwerp_top": [
         {
@@ -400,6 +455,17 @@
           "total_completion_tokens": 3807705,
           "first_call_at": "2026-09-12T19:00:26.722001+00:00",
           "last_call_at": "2026-09-15T21:03:00.804921+00:00"
+        },
+        {
+          "stage": "tagging",
+          "model": "qwen/qwen3.8-27b",
+          "n_calls": 6,
+          "total_duration_s": 416.42235085600987,
+          "avg_duration_s": 69.4037251426683,
+          "n_errors": 2,
+          "total_completion_tokens": 3416,
+          "first_call_at": "2026-10-08T19:28:38.050121+00:00",
+          "last_call_at": "2026-10-08T20:20:02.326072+00:00"
         }
       ]
     }

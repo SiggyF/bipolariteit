@@ -4,34 +4,566 @@
     "name": "Stikstof",
     "description": "Dit debat gaat over het Nederlandse stikstofbeleid: de mate waarin stikstofuitstoot en -depositie verplichtend worden teruggedrongen, en welke maatstaf daarbij leidend is voor natuurherstel.\n\nPRO = voorstander van verplichtende, stevige stikstofreductie, ongeacht welk kabinet dat op een gegeven moment nastreeft of welk concreet instrument daarvoor wordt ingezet. Kenmerkende onderbouwingen: de kritische depositiewaarde (KDW) en het AERIUS-rekenmodel zijn een betrouwbare/wetenschappelijk onderbouwde maatstaf; natuurherstel vergt in de eerste plaats minder stikstof; Nederland moet aan de Habitatrichtlijn/Natura 2000-verplichtingen voldoen; de economische gevolgen voor landbouw, bouw en luchtvaart wegen niet op tegen die verplichtingen; vrijwilligheid heeft tot nu toe onvoldoende resultaat opgeleverd, dus is een verplichtend instrument (uitkoop, onteigening, normering) nodig.\n\nCONTRA = voorstander van afzwakking, uitstel, vrijwilligheid in plaats van verplichting, of een wezenlijk andere aanpak van het stikstofprobleem. Kenmerkende onderbouwingen: de KDW/het AERIUS-model overschat het probleem of is wetenschappelijk omstreden; observaties/feitelijke metingen van natuurkwaliteit zijn een betere basis voor beleid dan modelberekeningen; natuurherstel kan (ook) via andere maatregelen dan stikstofreductie (bv. waterhuishouding, bestrijding van invasieve soorten, natuurbeheer); de economische gevolgen voor landbouw, bouw en luchtvaart zijn onevenredig zwaar; vrijwillige/innovatieve oplossingen verdienen de voorkeur boven dwang.",
     "argument_count": 1978,
-    "image_url": "https://livestreaming-thumb.b67buv2.tweedekamer.nl/plenaire-zaal/1080/2026-07-01/13:52:33+0200.jpg"
+    "image_url": "https://livestreaming-thumb.b67buv2.tweedekamer.nl/plenaire-zaal/1080/2026-07-01/13:52:33+0200.jpg",
+    "party_positions": [
+      {
+        "party": "BBB",
+        "pro": 90,
+        "contra": 299,
+        "unclear": 6
+      },
+      {
+        "party": "PRO",
+        "pro": 76,
+        "contra": 17,
+        "unclear": 2
+      },
+      {
+        "party": "Groep Markuszower",
+        "pro": 0,
+        "contra": 21,
+        "unclear": 0
+      },
+      {
+        "party": "FVD",
+        "pro": 0,
+        "contra": 67,
+        "unclear": 0
+      },
+      {
+        "party": "D66",
+        "pro": 170,
+        "contra": 44,
+        "unclear": 2
+      },
+      {
+        "party": "DENK",
+        "pro": 5,
+        "contra": 6,
+        "unclear": 0
+      },
+      {
+        "party": "SP",
+        "pro": 4,
+        "contra": 39,
+        "unclear": 1
+      },
+      {
+        "party": "ChristenUnie",
+        "pro": 27,
+        "contra": 138,
+        "unclear": 2
+      },
+      {
+        "party": "SGP",
+        "pro": 10,
+        "contra": 114,
+        "unclear": 0
+      },
+      {
+        "party": "JA21",
+        "pro": 3,
+        "contra": 20,
+        "unclear": 0
+      },
+      {
+        "party": "Lid Keijzer",
+        "pro": 0,
+        "contra": 43,
+        "unclear": 1
+      },
+      {
+        "party": "PvdD",
+        "pro": 60,
+        "contra": 56,
+        "unclear": 0
+      },
+      {
+        "party": "CDA",
+        "pro": 40,
+        "contra": 45,
+        "unclear": 0
+      },
+      {
+        "party": "Volt",
+        "pro": 12,
+        "contra": 34,
+        "unclear": 1
+      },
+      {
+        "party": "PVV",
+        "pro": 0,
+        "contra": 62,
+        "unclear": 1
+      },
+      {
+        "party": "VVD",
+        "pro": 103,
+        "contra": 137,
+        "unclear": 12
+      },
+      {
+        "party": "NSC",
+        "pro": 32,
+        "contra": 82,
+        "unclear": 0
+      },
+      {
+        "party": "GroenLinks-PvdA",
+        "pro": 40,
+        "contra": 34,
+        "unclear": 1
+      },
+      {
+        "party": "Onafhankelijk",
+        "pro": 19,
+        "contra": 0,
+        "unclear": 0
+      }
+    ]
   },
   {
     "slug": "abortus",
     "name": "Abortus",
     "description": "Dit debat gaat over het Nederlandse abortusbeleid. Aan de ene kant staat\nkeuzevrijheid van de vrouw, aan de andere kant bescherming van het ongeboren\nkind. De discussie omvat aspecten als decriminalisering, de 24-wekengrens, en\nde vorm van abortuszorg.\n\nPRO = pleit voor het schrappen van abortus uit het Wetboek van Strafrecht,\nvoor behoud of verruiming van de 24-wekengrens, voor afschaffing van de\nbedenktijd, en tegen actief aansturen op alternatieven -- de keuze is aan de\nvrouw zelf.\nCONTRA = pleit voor behoud van abortus als uitzondering in het strafrecht,\nvoor een kortere toegestane periode, voor behoud van de bedenktijd als\nzorgvuldigheidswaarborg, en voor actief hulp/informatie aanbieden over\nalternatieven voor abortus.",
     "argument_count": 439,
-    "image_url": "https://livestreaming-thumb.b67buv2.tweedekamer.nl/thorbeckezaal/1080/2026-02-10/18:07:03+0100.jpg"
+    "image_url": "https://livestreaming-thumb.b67buv2.tweedekamer.nl/thorbeckezaal/1080/2026-02-10/18:07:03+0100.jpg",
+    "party_positions": [
+      {
+        "party": "GroenLinks-PvdA",
+        "pro": 57,
+        "contra": 3,
+        "unclear": 1
+      },
+      {
+        "party": "VVD",
+        "pro": 48,
+        "contra": 25,
+        "unclear": 14
+      },
+      {
+        "party": "D66",
+        "pro": 93,
+        "contra": 1,
+        "unclear": 6
+      },
+      {
+        "party": "SP",
+        "pro": 18,
+        "contra": 1,
+        "unclear": 0
+      },
+      {
+        "party": "ChristenUnie",
+        "pro": 0,
+        "contra": 62,
+        "unclear": 1
+      },
+      {
+        "party": "BBB",
+        "pro": 0,
+        "contra": 9,
+        "unclear": 0
+      },
+      {
+        "party": "SGP",
+        "pro": 0,
+        "contra": 41,
+        "unclear": 0
+      },
+      {
+        "party": "FVD",
+        "pro": 0,
+        "contra": 19,
+        "unclear": 3
+      },
+      {
+        "party": "PVV",
+        "pro": 0,
+        "contra": 16,
+        "unclear": 0
+      },
+      {
+        "party": "NSC",
+        "pro": 0,
+        "contra": 21,
+        "unclear": 0
+      }
+    ]
   },
   {
     "slug": "asiel",
     "name": "Asiel en migratie",
     "description": "Dit debat gaat over het Nederlandse asiel- en migratiebeleid: de omvang van de\ninstroom, de opvang en spreiding daarvan, de asielprocedure, gezinshereniging,\nterugkeer en uitzetting, remigratie, en de ruimte die Europese en\ninternationale verplichtingen laten.\n\nPRO = bescherming van de asielzoeker. Nederland heeft een opvangprobleem: te\nweinig plekken en haperende procedures. Kenmerkende onderbouwingen: wie te laat\neen besluit krijgt houdt een rechtsmiddel, zorgvuldigheid gaat boven snelheid,\nopvang hoort kleinschalig en eerlijk verdeeld te zijn, gedwongen terugkeer kan\nalleen als het land van herkomst veilig is, en internationale en Europese\nverplichtingen worden nageleefd. Deze pool bekritiseert maatregelen vaak vanuit\nde rechtsstaat, niet vanuit een pleidooi voor meer migratie.\n\nCONTRA = beperking van de instroom. Nederland heeft te veel asielzoekers: er\nwordt te weinig afgewezen en teruggestuurd, en meer opvangcapaciteit lost dat\nniet op. Oplossingen die deze pool aandraagt: strengere toelating, sneller\nafwijzen, actief terugsturen en remigratie stimuleren, voorzieningen versoberen\nomdat ze als aanzuigende prikkel werken, gemeenten vrijlaten om niet mee te\nwerken aan opvang, en niet ruimhartiger zijn dan Europa vereist. Verder: het\ndraagvlak in de samenleving brokkelt af.",
-    "argument_count": 3463,
-    "image_url": "https://livestreaming-thumb.b67buv2.tweedekamer.nl/plenaire-zaal/1080/2024-11-12/14:40:35+0100.jpg"
+    "argument_count": 3480,
+    "image_url": "https://livestreaming-thumb.b67buv2.tweedekamer.nl/plenaire-zaal/1080/2024-11-12/14:40:35+0100.jpg",
+    "party_positions": [
+      {
+        "party": "ChristenUnie",
+        "pro": 105,
+        "contra": 69,
+        "unclear": 11
+      },
+      {
+        "party": "NSC",
+        "pro": 22,
+        "contra": 128,
+        "unclear": 6
+      },
+      {
+        "party": "PVV",
+        "pro": 7,
+        "contra": 285,
+        "unclear": 0
+      },
+      {
+        "party": "JA21",
+        "pro": 4,
+        "contra": 157,
+        "unclear": 3
+      },
+      {
+        "party": "Lid Keijzer",
+        "pro": 28,
+        "contra": 153,
+        "unclear": 13
+      },
+      {
+        "party": "VVD",
+        "pro": 76,
+        "contra": 478,
+        "unclear": 46
+      },
+      {
+        "party": "DENK",
+        "pro": 76,
+        "contra": 1,
+        "unclear": 1
+      },
+      {
+        "party": "GroenLinks-PvdA",
+        "pro": 239,
+        "contra": 33,
+        "unclear": 7
+      },
+      {
+        "party": "CDA",
+        "pro": 91,
+        "contra": 301,
+        "unclear": 42
+      },
+      {
+        "party": "SGP",
+        "pro": 18,
+        "contra": 117,
+        "unclear": 1
+      },
+      {
+        "party": "SP",
+        "pro": 180,
+        "contra": 33,
+        "unclear": 3
+      },
+      {
+        "party": "PvdD",
+        "pro": 28,
+        "contra": 8,
+        "unclear": 1
+      },
+      {
+        "party": "D66",
+        "pro": 203,
+        "contra": 53,
+        "unclear": 6
+      },
+      {
+        "party": "Volt",
+        "pro": 104,
+        "contra": 15,
+        "unclear": 4
+      },
+      {
+        "party": "BBB",
+        "pro": 3,
+        "contra": 157,
+        "unclear": 3
+      },
+      {
+        "party": "FVD",
+        "pro": 0,
+        "contra": 85,
+        "unclear": 3
+      },
+      {
+        "party": "Groep Markuszower",
+        "pro": 1,
+        "contra": 57,
+        "unclear": 0
+      },
+      {
+        "party": "50PLUS",
+        "pro": 4,
+        "contra": 4,
+        "unclear": 2
+      },
+      {
+        "party": "PRO",
+        "pro": 4,
+        "contra": 1,
+        "unclear": 0
+      }
+    ]
   },
   {
     "slug": "energietransitie",
     "name": "Energietransitie",
     "description": "Dit debat gaat over het tempo en de mate van overheidssturing bij de Nederlandse energietransitie: investeringen in kernenergie, hernieuwbare energie en waterstof, de rol van het Klimaatfonds, de aanpak van netcongestie, de afbouw van de salderingsregeling, het volgen van EU-klimaatdoelen (Fit for 55, EU-klimaatwet), en welke maatstaf daarbij leidend is voor de te kiezen energievorm.\n\nPRO = voorstander van een versnelde, overheidsgestuurde energietransitie, ongeacht kabinet of instrument. Vier aspecten spelen hierbij: (1) hoog tempo en actieve overheidssturing zijn nodig (Klimaatfonds, subsidies, normering); (2) economische groei is geen leidend principe, krimp van vervuilende sectoren mag (degrowth); (3) voorkeur voor de \"groenste\" oplossing (zon, wind, isolatie, bos), ook als minder robuust; (4) bij meerdere CO2-neutrale opties heeft de oplossing met de minste industriele groei de voorkeur. Verder geldt: de vervuiler betaalt, niet de burger (bv. overwinstbelasting); klimaatrechtvaardigheid (sterkste schouders dragen zwaarste lasten); EU-klimaatdoelen moeten gevolgd of overtroffen worden. Kritiek richt zich op onvoldoende ambitie of snelheid, niet op verzet tegen de transitie zelf.\n\nCONTRA = voorstander van een realistisch tempo en een pragmatische, beperkte rol voor de overheid bij de energietransitie. Vier aspecten spelen hierbij: (1) een haalbaar tempo, met ruimte voor markt en vrijwilligheid in plaats van dwang vanuit de overheid; (2) economische groei, industriele concurrentiekracht en werkgelegenheid wegen zwaar, krimp is onwenselijk; (3) voorkeur voor een robuuste, betrouwbare energievorm (kernenergie, gas), ook als die minder \"zuiver groen\" oogt; (4) bij meerdere opties heeft de meest betaalbare en betrouwbare de voorkeur, ook als dat minder CO2-winst oplevert. Verder geldt: betaalbaarheid en financiele druk op burgers en ondernemers wegen zwaar (energierekening, energiearmoede, netkosten); EU-klimaatverplichtingen gaan te ver of te snel; burgers die al investeerden (bv. in zonnepanelen) mogen niet de dupe worden van beleidswijzigingen; nationale soevereiniteit en energieonafhankelijkheid wegen zwaarder dan een zo snel mogelijke verduurzaming.",
     "argument_count": 5595,
-    "image_url": "https://livestreaming-thumb.b67buv2.tweedekamer.nl/thorbeckezaal/1080/2026-04-09/14:40:43+0200.jpg"
+    "image_url": "https://livestreaming-thumb.b67buv2.tweedekamer.nl/thorbeckezaal/1080/2026-04-09/14:40:43+0200.jpg",
+    "party_positions": [
+      {
+        "party": "Groep Markuszower",
+        "pro": 2,
+        "contra": 50,
+        "unclear": 0
+      },
+      {
+        "party": "D66",
+        "pro": 589,
+        "contra": 128,
+        "unclear": 14
+      },
+      {
+        "party": "JA21",
+        "pro": 12,
+        "contra": 252,
+        "unclear": 1
+      },
+      {
+        "party": "SGP",
+        "pro": 23,
+        "contra": 265,
+        "unclear": 0
+      },
+      {
+        "party": "PVV",
+        "pro": 1,
+        "contra": 206,
+        "unclear": 0
+      },
+      {
+        "party": "CDA",
+        "pro": 87,
+        "contra": 262,
+        "unclear": 4
+      },
+      {
+        "party": "SP",
+        "pro": 115,
+        "contra": 77,
+        "unclear": 0
+      },
+      {
+        "party": "Lid Keijzer",
+        "pro": 24,
+        "contra": 60,
+        "unclear": 0
+      },
+      {
+        "party": "ChristenUnie",
+        "pro": 87,
+        "contra": 167,
+        "unclear": 1
+      },
+      {
+        "party": "BBB",
+        "pro": 56,
+        "contra": 431,
+        "unclear": 1
+      },
+      {
+        "party": "FVD",
+        "pro": 0,
+        "contra": 170,
+        "unclear": 0
+      },
+      {
+        "party": "DENK",
+        "pro": 0,
+        "contra": 9,
+        "unclear": 0
+      },
+      {
+        "party": "VVD",
+        "pro": 199,
+        "contra": 1024,
+        "unclear": 8
+      },
+      {
+        "party": "GroenLinks-PvdA",
+        "pro": 492,
+        "contra": 51,
+        "unclear": 1
+      },
+      {
+        "party": "NSC",
+        "pro": 79,
+        "contra": 154,
+        "unclear": 3
+      },
+      {
+        "party": "PvdD",
+        "pro": 296,
+        "contra": 32,
+        "unclear": 0
+      },
+      {
+        "party": "Volt",
+        "pro": 81,
+        "contra": 3,
+        "unclear": 2
+      },
+      {
+        "party": "50PLUS",
+        "pro": 0,
+        "contra": 1,
+        "unclear": 0
+      },
+      {
+        "party": "PRO",
+        "pro": 18,
+        "contra": 11,
+        "unclear": 0
+      }
+    ]
   },
   {
     "slug": "oekraine",
     "name": "Oekraïne",
     "description": "Dit debat gaat over de Nederlandse en NAVO-opstelling ten aanzien van Oekraïne en Rusland: de hoogte van de defensie-uitgaven, de omvang en aard van wapenleveranties aan Oekraïne, de opvang van ontheemden uit Oekraïne, de houding tegenover Rusland (sancties, onderhandelingen, verantwoordelijkheid bij incidenten zoals de Nord Stream-sabotage), de NAVO-aanwezigheid aan de Russische grens, de inkoopstrategie voor defensiematerieel, en de geografische reikwijdte/het gewenste eindresultaat van het conflict.\n\nPRO = voorstander van een assertieve, hoge-inzet-opstelling tegenover Rusland en voor Oekraïne, ongeacht kabinet. Zeven aspecten spelen hierbij: (1) hogere, structurele defensie-uitgaven, vanuit de aanname dat er wél een sterke (directe) dreiging vanuit Rusland uitgaat; (2) ruimere wapenleveranties aan Oekraïne, ook offensief materieel; (3) ruimere opvang van ontheemden uit Oekraïne; (4) een harde lijn tegenover Rusland: sancties, geen onderhandelingen, Rusland zwart afschilderen of ontmenselijken, en bij incidenten zoals Nord Stream uitgaan van Russische verantwoordelijkheid; (5) een actieve, zichtbare NAVO-aanwezigheid aan de Russische grens en scherpe reacties op schermutselingen; (6) vrije marktkeuze bij materieelinkoop, niet beperkt tot Europese leveranciers; (7) aanvallen op Russisch grondgebied aanmoedigen of toestaan, geen genoegen nemen met het verlies van Krim/Donbas.\n\nCONTRA = voorstander van een terughoudende opstelling. Zeven aspecten spelen hierbij: (1) geen of beperkte verhoging van defensie-uitgaven, vanuit de aanname dat er geen sterke (directe) dreiging vanuit Rusland uitgaat; (2) beperktere, uitsluitend defensieve wapenleveranties aan Oekraïne; (3) beperktere opvang van ontheemden uit Oekraïne; (4) onderhandelen met Rusland, Rusland als redelijke/benaderbare partij behandelen, en bij incidenten zoals Nord Stream ruimte laten voor onderzoek of een andere verantwoordelijke (bv. Oekraïne) in plaats van meteen Rusland aan te wijzen; (5) terughoudendheid bij NAVO-aanwezigheid en het vermijden van oorlogsretoriek; (6) een inkooprestrictie richting Europese leveranciers; (7) uitsluitend verdediging binnen eigen grondgebied, bereidheid het verlies van Krim/Donbas als realiteit te accepteren.",
     "argument_count": 2748,
-    "image_url": "https://livestreaming-thumb.b67buv2.tweedekamer.nl/plenaire-zaal/1080/2025-09-02/14:25:53+0200.jpg"
+    "image_url": "https://livestreaming-thumb.b67buv2.tweedekamer.nl/plenaire-zaal/1080/2025-09-02/14:25:53+0200.jpg",
+    "party_positions": [
+      {
+        "party": "VVD",
+        "pro": 425,
+        "contra": 65,
+        "unclear": 8
+      },
+      {
+        "party": "NSC",
+        "pro": 92,
+        "contra": 36,
+        "unclear": 10
+      },
+      {
+        "party": "SP",
+        "pro": 14,
+        "contra": 134,
+        "unclear": 1
+      },
+      {
+        "party": "Lid Keijzer",
+        "pro": 1,
+        "contra": 6,
+        "unclear": 0
+      },
+      {
+        "party": "ChristenUnie",
+        "pro": 71,
+        "contra": 1,
+        "unclear": 2
+      },
+      {
+        "party": "BBB",
+        "pro": 32,
+        "contra": 95,
+        "unclear": 8
+      },
+      {
+        "party": "D66",
+        "pro": 294,
+        "contra": 8,
+        "unclear": 5
+      },
+      {
+        "party": "PvdD",
+        "pro": 23,
+        "contra": 13,
+        "unclear": 0
+      },
+      {
+        "party": "Volt",
+        "pro": 109,
+        "contra": 3,
+        "unclear": 1
+      },
+      {
+        "party": "PVV",
+        "pro": 27,
+        "contra": 128,
+        "unclear": 2
+      },
+      {
+        "party": "FVD",
+        "pro": 2,
+        "contra": 138,
+        "unclear": 0
+      },
+      {
+        "party": "CDA",
+        "pro": 249,
+        "contra": 31,
+        "unclear": 6
+      },
+      {
+        "party": "GroenLinks-PvdA",
+        "pro": 201,
+        "contra": 44,
+        "unclear": 5
+      },
+      {
+        "party": "JA21",
+        "pro": 34,
+        "contra": 25,
+        "unclear": 0
+      },
+      {
+        "party": "50PLUS",
+        "pro": 14,
+        "contra": 1,
+        "unclear": 0
+      },
+      {
+        "party": "SGP",
+        "pro": 53,
+        "contra": 12,
+        "unclear": 0
+      },
+      {
+        "party": "Onafhankelijk",
+        "pro": 115,
+        "contra": 33,
+        "unclear": 3
+      },
+      {
+        "party": "DENK",
+        "pro": 2,
+        "contra": 19,
+        "unclear": 2
+      },
+      {
+        "party": "Nieuw Sociaal Contract",
+        "pro": 106,
+        "contra": 10,
+        "unclear": 1
+      },
+      {
+        "party": "PRO",
+        "pro": 16,
+        "contra": 1,
+        "unclear": 0
+      }
+    ]
   }
 ]

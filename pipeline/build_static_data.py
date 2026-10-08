@@ -493,6 +493,22 @@ def fetch_sprekerbeurten(conn, topic_id, periode_index):
     return result
 
 
+def party_position_counts(arguments):
+    """(partij) -> aantal argumenten pro/contra/unclear, voor de partij-iconen
+    per positie op de onderwerpenindex (issue #250). Net als DebateTagCount
+    (groupByDebate.ts) blijft dit ruwe tellingen -- welke partijen "meetellen"
+    (top-N per kolom, dominante stance, +N-overflow) bepaalt de frontend-
+    component zelf, hier alleen de optelsom per partij."""
+    counts = {}
+    for arg in arguments:
+        party = arg["actor"]["party"]
+        if party is None:
+            continue
+        counts.setdefault(party, {"party": party, "pro": 0, "contra": 0, "unclear": 0})
+        counts[party][arg["stance"]] += 1
+    return list(counts.values())
+
+
 def build_topic_export(conn, topic_row, periode_index):
     """Eén platte argumentenlijst, geen voorgeaggregeerde cijfers. De frontend
     leidt statistieken, tags-per-partij en de stance-kolommen zelf af uit deze
@@ -563,6 +579,7 @@ def main():
                 "description": topic_row["description"],
                 "argument_count": export["argument_count"],
                 "image_url": export["image_url"],
+                "party_positions": party_position_counts(export["arguments"]),
             }
         )
 
