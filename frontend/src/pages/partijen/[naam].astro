@@ -1,5 +1,7 @@
 ---
 import ActorTagUsage from "../../components/ActorTagUsage.vue";
+import ContourMapToggle from "../../components/ContourMapToggle.vue";
+import { resolveTilesBaseUrl } from "../../lib/dataBaseUrl";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { NO_PARTY } from "../../lib/types";
 import { slugify } from "../../lib/slug";
@@ -85,4 +87,5 @@ for (const sleutel of globalTagCount.keys()) {
 <BaseLayout title={`${party || "Partij"} - Bipolariteit`}>
 	<a href="/onderwerpen/" class="back-link">&larr; alle onderwerpen</a>
 	{party && <ActorTagUsage name={party} mode="partij" argumentList={argumentList} tagMedian={tagMedian} client:only="vue" />}
+	{party && <ContourMapToggle tilesBaseUrl={resolveTilesBaseUrl()} kind="party" name={canonicalParty(party)} client:only="vue" />}
 </BaseLayout>
