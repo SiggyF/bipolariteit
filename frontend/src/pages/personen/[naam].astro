@@ -1,5 +1,7 @@
 ---
 import ActorTagUsage from "../../components/ActorTagUsage.vue";
+import ContourMapToggle from "../../components/ContourMapToggle.vue";
+import { resolveTilesBaseUrl } from "../../lib/dataBaseUrl";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { displayPartyName, canonicalParty } from "../../lib/parties";
 import { slugify } from "../../lib/slug";
@@ -277,6 +279,7 @@ const verbositeitBadges =
 			)}
 		</ActorTagUsage>
 	)}
+	{name && <ContourMapToggle tilesBaseUrl={resolveTilesBaseUrl()} kind="actor" name={name} client:only="vue" />}
 </BaseLayout>
 
 <style>

@@ -16,7 +16,7 @@
 // aanpak als de vroegere v1-canvasrenderer, nu alleen gebruikt om deck.gl van
 // data te voorzien, niet om zelf te tekenen/zoomen/cachen -- dat blijft
 // TileLayer's eigen taak).
-import { computed, onMounted, onUnmounted, ref, watch } from "vue";
+import { computed, onMounted, onUnmounted, ref, shallowRef, watch } from "vue";
 import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { PMTiles, Protocol } from "pmtiles";
@@ -25,7 +25,16 @@ import { PbfReader } from "pbf";
 import { TileLayer } from "@deck.gl/geo-layers";
 import { ScatterplotLayer } from "@deck.gl/layers";
 import { MapboxOverlay } from "@deck.gl/mapbox";
+import ContourCombobox from "./ContourCombobox.vue";
 import { useTheme } from "../lib/useTheme";
+import {
+	CONTOUR_THRESHOLD_LABEL,
+	contourNames,
+	fetchContours,
+	selectContours,
+	type ContourCollection,
+	type ContourKind,
+} from "../lib/contours";
 import { DEFAULT_TOPIC_COLOR, TOPIC_COLOR, clusterColorRgb, partyColorRgb, yearColorRgb } from "../lib/plenairMapColors";
 import {
 	mercatorMetersToLngLat,
@@ -44,6 +53,10 @@ const props = defineProps<{
 	// in de tiles zelf (pipeline/tiling/encode.py), dus ook geen losse
 	// dataBaseUrl meer nodig zoals PlenairMap.vue die wel heeft.
 	tilesBaseUrl: string;
+	// Persoons-/partijpagina (issue #261): de eigen contour staat vast aan, de
+	// puntenwolk is neutraal grijs en de keuzebalken (onderwerp, kleur-op,
+	// contouren) ontbreken -- alleen kaart, contour en het hover-/klikpaneel.
+	focus?: { kind: ContourKind; name: string };
 }>();
 
 const emit = defineEmits<{
@@ -257,6 +270,46 @@ let pmtiles: PMTiles | null = null;
 
 const isDark = useTheme();
 
+// Contouren (issue #261). De partijen (~0,7 MB) laden direct, de Kamerleden
+// (~7 MB) pas zodra iemand het zoekveld focust, of meteen op een persoonspagina.
+const contourData = shallowRef<Record<ContourKind, ContourCollection | null>>({ party: null, actor: null });
+const contourState = ref<Record<ContourKind, "idle" | "loading" | "ready" | "error">>({ party: "idle", actor: "idle" });
+const contourParty = ref<string | null>(props.focus?.kind === "party" ? props.focus.name : null);
+const contourActor = ref<string | null>(props.focus?.kind === "actor" ? props.focus.name : null);
+const partyNames = computed(() => (contourData.value.party ? contourNames(contourData.value.party, "party") : []));
+const actorNames = computed(() => (contourData.value.actor ? contourNames(contourData.value.actor, "actor") : []));
+
+async function loadContours(kind: ContourKind) {
+	if (contourState.value[kind] !== "idle") return;
+	contourState.value = { ...contourState.value, [kind]: "loading" };
+	try {
+		const collection = await fetchContours(props.tilesBaseUrl, kind);
+		contourData.value = { ...contourData.value, [kind]: collection };
+		contourState.value = { ...contourState.value, [kind]: "ready" };
+	} catch (err) {
+		console.error(`Contouren (${kind}) laden mislukt`, err);
+		contourState.value = { ...contourState.value, [kind]: "error" };
+	}
+}
+
+const selectedContours = computed(() =>
+	selectContours([
+		{ kind: "party", collection: contourData.value.party, name: contourParty.value },
+		{ kind: "actor", collection: contourData.value.actor, name: contourActor.value },
+	]),
+);
+const contourLegend = computed(() => {
+	const colors = new Map<string, string>();
+	for (const feature of selectedContours.value.features) {
+		const { party, actor, color } = feature.properties as { party?: string; actor?: string; color: string };
+		colors.set(actor ?? party ?? "", color);
+	}
+	return [...colors].map(([name, color]) => ({ name, color }));
+});
+const focusContourMissing = computed(
+	() => !!props.focus && contourState.value[props.focus.kind] === "ready" && selectedContours.value.features.length === 0,
+);
+
 // pmtiles://-protocol is proces-breed (maplibregl.addProtocol), niet per
 // component-instantie -- dubbel registreren bij een tweede mount (bv.
 // Astro view-transition) zou een harmloze maar overbodige herregistratie
@@ -397,6 +450,7 @@ function yearPointColorRgba(year: number | null, strength: number): [number, num
 }
 
 function pointColorRgba(point: DeckPoint, strength: number): [number, number, number, number] {
+	if (props.focus) return tintTowardsWhite(hexToRgb(DEFAULT_TOPIC_COLOR), strength);
 	switch (colorBy.value) {
 		case "cluster":
 			return clusterPointColorRgba(point.cluster, strength);
@@ -650,6 +704,8 @@ function buildPointsLayer(grid: GridMetadata): TileLayer {
 
 onMounted(async () => {
 	ensurePmtilesProtocol();
+	if (props.focus) void loadContours(props.focus.kind);
+	else void loadContours("party");
 	try {
 		// -full-bestanden (issue #293/#259: de volle dataset is nu de
 		// standaard, niet de kleine steekproef) -- clusters.levels hoort bij
@@ -697,12 +753,28 @@ onMounted(async () => {
 				// voor consistente typografie met de rest van de Vloei-stijl (issue #220).
 				glyphs: "/fonts/glyphs/{fontstack}/{range}.pbf",
 				sources: {
-					hulls: { type: "geojson", data: hulls },
+					contours: { type: "geojson", data: selectedContours.value },
+						hulls: { type: "geojson", data: hulls },
 					labels: { type: "geojson", data: labels },
 				},
 				layers: [
 					{ id: "bg", type: "background", paint: { "background-color": theme.bg } },
-					{ id: "hulls", type: "line", source: "hulls", paint: { "line-color": theme.muted, "line-width": 1 } },
+					// Contouren onder de hulls en (deck.gl interleaved) onder de punten.
+						// De 3x-laag ligt binnen de 1,5x-laag en is dekkender, zodat de
+						// kern van het gebied er donkerder uitziet.
+						{
+							id: "contour-fill",
+							type: "fill",
+							source: "contours",
+							paint: { "fill-color": ["get", "color"], "fill-opacity": ["case", [">=", ["get", "threshold"], 2], 0.5, 0.25] },
+						},
+						{
+							id: "contour-line",
+							type: "line",
+							source: "contours",
+							paint: { "line-color": ["get", "color"], "line-width": 1.5, "line-opacity": 0.9 },
+						},
+						{ id: "hulls", type: "line", source: "hulls", paint: { "line-color": theme.muted, "line-width": 1 } },
 					{
 						id: "labels",
 						type: "symbol",
@@ -762,7 +834,7 @@ onMounted(async () => {
 		});
 		map.addControl(new maplibregl.NavigationControl({ showCompass: false }), "bottom-right");
 		map.addControl(new ResetViewControl(), "bottom-right");
-		map.addControl(new ColorByControl(), "top-left");
+		if (!props.focus) map.addControl(new ColorByControl(), "top-left");
 		const labelBg = createLabelBackgroundImage();
 		map.addImage(LABEL_BG_IMAGE_ID, labelBg, { stretchX: [LABEL_BG_STRETCH], stretchY: [LABEL_BG_STRETCH], content: LABEL_BG_CONTENT });
 
@@ -882,6 +954,9 @@ onMounted(async () => {
 			if (!deckOverlay) return;
 			deckOverlay.setProps({ layers: [buildPointsLayer(grid)] });
 		});
+		watch(selectedContours, (collection) => {
+			(map?.getSource("contours") as maplibregl.GeoJSONSource | undefined)?.setData(collection);
+		});
 		watch(selectedTopicFilter, () => {
 			if (!deckOverlay) return;
 			deckOverlay.setProps({ layers: [buildPointsLayer(grid)] });
@@ -908,7 +983,32 @@ onUnmounted(() => {
 		     v-if hier zou een kip-of-ei-blokkade geven: geen mapEl zonder ready,
 		     geen ready zonder mapEl. -->
 		<div v-show="status === 'ready'">
-			<div class="topic-legend">
+			<div v-if="!focus" class="contour-picker">
+				<ContourCombobox
+					v-model="contourParty"
+					label="Partijcontour"
+					placeholder="Zoek een partij"
+					:options="partyNames"
+					:disabled="contourState.party !== 'ready'"
+				/>
+				<ContourCombobox
+					v-model="contourActor"
+					label="Kamerlidcontour"
+					placeholder="Zoek een Kamerlid"
+					:options="actorNames"
+					@open="loadContours('actor')"
+				/>
+			</div>
+			<div v-if="contourLegend.length" class="contour-legend">
+				<span v-for="item in contourLegend" :key="item.name" class="contour-legend-item">
+					<span class="legend-dot" :style="{ backgroundColor: item.color }"></span>{{ item.name }}
+				</span>
+				<span class="contour-legend-hint">Gebied waar vaker gesproken wordt dan gemiddeld: lichte vlak {{ CONTOUR_THRESHOLD_LABEL[1.5] }}, donkere kern {{ CONTOUR_THRESHOLD_LABEL[3] }}.</span>
+			</div>
+			<p v-if="contourState.party === 'error' || contourState.actor === 'error'" class="contour-note">Contouren niet beschikbaar.</p>
+			<p v-if="focusContourMissing" class="contour-note">Te weinig spreekbeurten voor een contour.</p>
+
+			<div v-if="!focus" class="topic-legend">
 				<button
 					v-for="t in TOPIC_FILTER_OPTIONS"
 					:key="t"
@@ -1043,6 +1143,35 @@ onUnmounted(() => {
 :deep(.color-by-ctrl-btn:focus-visible) {
 	outline: 2px solid rgba(128, 128, 128, 0.6);
 	outline-offset: -2px;
+}
+.contour-picker {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.6rem 1rem;
+	margin-bottom: 0.6rem;
+}
+.contour-legend {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0.3rem 1rem;
+	margin-bottom: 0.6rem;
+	font-size: 0.8rem;
+}
+.contour-legend-item {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.35rem;
+	font-weight: 600;
+}
+.contour-legend-hint,
+.contour-note {
+	opacity: 0.7;
+	margin: 0 0 0.6rem;
+	font-size: 0.8rem;
+}
+.contour-legend-hint {
+	margin: 0;
 }
 .topic-legend {
 	display: flex;
