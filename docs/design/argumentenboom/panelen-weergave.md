@@ -27,11 +27,11 @@ zichtbare boom). De ontwerpschetsen staan in het issue.
 Eén component, één toestand (`side`, `scope`, `selectedId`), twee presentaties:
 
 - **Tot en met 900px** (zelfde breekpunt als `main.css`): één niveau tegelijk.
-  De terugbalk plakt onderin. Bij een niveauwissel scrolt de pagina terug naar
+  Bovenaan staat een terugbalk (in de lijst met de Voor/Tegen-wissel). Bij een niveauwissel scrolt de pagina terug naar
   de bovenkant van de component.
 - **Vanaf 901px**: de drie niveaus staan als panelen naast elkaar op de hoogte
   van één scherm (`min(80vh, 880px)`); alleen het paneel dat te lang is scrolt.
-  De Voor/Tegen-wissel wordt een werkbalk boven de lijst. In het detailpaneel
+  De terugbalk en de wissel ontbreken: het linkerpaneel kiest kant en deelthema. In het detailpaneel
   staat het citaat van de tegenhanger meteen onder het argument, zodat de
   confrontatie van de as zichtbaar blijft.
 

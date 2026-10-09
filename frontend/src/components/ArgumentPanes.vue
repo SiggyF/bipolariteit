@@ -48,6 +48,16 @@
 
 		<!-- Niveau 2: de lijst met argumenten van één kant. -->
 		<div class="ap-pane ap-list">
+			<div class="ap-bar">
+				<button type="button" class="ap-back" @click="backToOverview">
+					<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7" /></svg>
+					Overzicht
+				</button>
+				<div class="ap-toggle" role="group" aria-label="Kant">
+					<button type="button" class="ap-toggle-pro" :aria-pressed="side === 'pro'" @click="switchSide('pro')">Voor</button>
+					<button type="button" class="ap-toggle-contra" :aria-pressed="side === 'contra'" @click="switchSide('contra')">Tegen</button>
+				</div>
+			</div>
 			<div class="ap-pane-body">
 				<header class="ap-list-head" :data-side="side">
 					<h3 class="ap-list-title">{{ SIDE_LABEL[side] }}</h3>
@@ -74,20 +84,16 @@
 					</ul>
 				</section>
 			</div>
-			<div class="ap-bar">
-				<button type="button" class="ap-back" @click="backToOverview">
-					<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7" /></svg>
-					Overzicht
-				</button>
-				<div class="ap-toggle" role="group" aria-label="Kant">
-					<button type="button" class="ap-toggle-pro" :aria-pressed="side === 'pro'" @click="switchSide('pro')">Voor</button>
-					<button type="button" class="ap-toggle-contra" :aria-pressed="side === 'contra'" @click="switchSide('contra')">Tegen</button>
-				</div>
-			</div>
 		</div>
 
 		<!-- Niveau 3: het volledige argument. -->
 		<div class="ap-pane ap-detail">
+			<div v-if="selected" class="ap-bar ap-detail-bar">
+				<button type="button" class="ap-back" @click="backToList">
+					<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7" /></svg>
+					Lijst {{ SIDE_LABEL[selected.stance].toLowerCase() }}
+				</button>
+			</div>
 			<div v-if="selected" class="ap-pane-body" :data-side="selected.stance">
 				<p class="ap-context">
 					{{ tree.name }} · {{ SIDE_LABEL[selected.stance] }}<template v-if="selectedBand"> · Deelthema {{ selectedBand.nummer }}</template>
@@ -165,12 +171,6 @@
 			</div>
 			<p v-else class="ap-hint">Kies een argument in de lijst om het volledige citaat te zien.</p>
 
-			<div v-if="selected" class="ap-bar ap-detail-bar">
-				<button type="button" class="ap-back" @click="backToList">
-					<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7" /></svg>
-					Lijst {{ SIDE_LABEL[selected.stance].toLowerCase() }}
-				</button>
-			</div>
 		</div>
 	</section>
 </template>
@@ -337,7 +337,7 @@ watch(level, async () => {
 <style scoped>
 /* Site-tokens uit main.css ("Ink & Rust"), dus het donkere thema komt vanzelf
    mee. Ontwerp: issue #251 (drie niveaus: overzicht, lijst, detail). Smal
-   scherm: één niveau tegelijk, de terugbalk plakt onderin binnen duimbereik.
+   scherm: één niveau tegelijk, met een terugbalk bovenaan.
    Breed scherm (> 900px, zelfde breekpunt als main.css): drie panelen
    naast elkaar op de hoogte van één scherm, alleen het paneel scrolt. */
 .ap {
@@ -553,17 +553,14 @@ watch(level, async () => {
 
 /* --- Terug-/navigatiebalk --- */
 .ap-bar {
-	position: sticky;
-	bottom: 0;
-	z-index: 1;
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
 	gap: var(--space-1);
-	min-height: 4rem;
+	min-height: 3.5rem;
 	padding: 0 0.75rem;
 	background: var(--blad);
-	border-top: 1px solid var(--lijn);
+	border-bottom: 1px solid var(--lijn);
 }
 
 .ap-back {
@@ -940,19 +937,9 @@ watch(level, async () => {
 		padding: var(--space-3);
 	}
 
-	/* De navigatiebalk wordt een werkbalk bovenin; terugknoppen hebben geen nut
-	   als alle niveaus al zichtbaar zijn. */
+	/* Terugknoppen en de Voor/Tegen-wissel hebben geen nut als alle niveaus al
+	   zichtbaar zijn: het linkerpaneel kiest de kant en het deelthema. */
 	.ap-bar {
-		position: static;
-		order: -1;
-		min-height: 3.25rem;
-		border-top: 0;
-		border-bottom: 1px solid var(--lijn);
-		justify-content: flex-end;
-	}
-
-	.ap-back,
-	.ap-detail-bar {
 		display: none;
 	}
 
