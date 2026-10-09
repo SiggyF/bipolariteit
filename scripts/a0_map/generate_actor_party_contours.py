@@ -69,7 +69,7 @@ PARTY_COLORS = {
     "DENK": "#00b7b2",
     "FVD": "#a81815",
     "GroenLinks-PvdA": "#d81f27",
-    "JA21": "#242b57",
+    "JA21": "#cc372a",
     "NSC": "#ffd000",
     "PRO": "#00aa00",
     "PvdD": "#00743c",
