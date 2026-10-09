@@ -44,7 +44,7 @@ else
   RESOLVE_BASE_URL = scripts/detect_llm_base_url.sh
 endif
 
-.PHONY: help probe crawl ingest embed umap label-clusters pipeline test test-js test-frontend ca-fixture status build dev dev-stop extract extract-agy tag tag-agy tag-single redactie validate export enrich-video fetch-debate-events fetch-subtitles match-video-spans check-video-urls tags-taxonomy db-init pipeline-status backup-db release release-dry release-www release-www-dry check-public-exposure argument-doc export-public-data publish-data publish-zenodo publish-huggingface publish-tiles tiles tiles-full
+.PHONY: help probe crawl ingest embed umap label-clusters pipeline test test-js test-frontend ca-fixture status build dev dev-stop extract extract-agy tag tag-agy tag-single redactie validate export enrich-video fetch-debate-events fetch-subtitles match-video-spans check-video-urls tags-taxonomy db-init pipeline-status backup-db release release-dry release-www release-www-dry check-public-exposure argument-doc export-public-data publish-data publish-zenodo publish-huggingface publish-tiles tiles tiles-full contours
 
 help: ## Toon deze lijst
 	@grep -E '^[a-zA-Z_-]+:.*## ' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*## "}; {printf "  \033[36m%-16s\033[0m %s\n", $$1, $$2}'
@@ -194,6 +194,16 @@ export-public-data: ## data/export/topics/*.json -> data/export/gepubliceerd/ (l
 
 tiles: ## data/export/plenair-map/plenair-map.json -> plenair-map.pmtiles (vector-tile-pyramide, morecantile-grid + dask, zie issue #215/#253) -- experimenteel alternatief renderpad, los van `export`
 	uv run python -m pipeline.tiling.build_pyramid
+
+contours: ## Partij- en persoonscontouren (relatief t.o.v. het totaallandschap) als GeoJSON voor QGIS, uit plenair-map-full.json -> data/export/a0-map/{party,actor}_contours.geojson (QGIS, rauwe UMAP-eenheden) en WGS84-varianten plenair-map-full-{party,actor}_contours.geojson in bundel/ voor de site (`make publish-huggingface` zet de hele bundel naast de pmtiles; `make publish-tiles` doet dat NIET -- alleen voor de twee contourbestanden: `scripts/publish_huggingface.py --files ...`; issue #261, zie docs/data-layout.md). Vars: CONTOUR_MIN_POINTS (default 1000)
+	uv run python -m scripts.a0_map.generate_actor_party_contours \
+		data/export/plenair-map/plenair-map-full.json data/export/a0-map \
+		--min-points $(or $(CONTOUR_MIN_POINTS),1000)
+	mkdir -p data/export/plenair-map/bundel
+	uv run python -m scripts.a0_map.generate_actor_party_contours \
+		data/export/plenair-map/plenair-map-full.json data/export/plenair-map/bundel \
+		--grid data/export/plenair-map/plenair-map-full-grid.json --prefix plenair-map-full- \
+		--min-points $(or $(CONTOUR_MIN_POINTS),1000)
 
 tiles-full: ## Zelfde als `tiles`, maar op de volle-dataset-export (plenair-map-full.json -> data/export/plenair-map/bundel/plenair-map-full.pmtiles, zie issue #281) -- verwacht dat pipeline/plenary_map/cluster.py --export-suffix=-full al gedraaid is. Bundelt meteen de companion-bestanden (incl. de UMAP-reducer, indien aanwezig) voor `make publish-zenodo` in dezelfde map (zie docs/release.md). Schrijft ook plenair-map-full-density.tif (Cloud-Optimized GeoTIFF, dichtheidsraster + dichtheidsbewuste thinning + point_count per punt, issue #367) rechtstreeks in dezelfde map -- geen aparte cp nodig, build_pyramid.py leidt dat pad af van --out
 	mkdir -p data/export/plenair-map/bundel

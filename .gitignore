@@ -77,6 +77,8 @@ data/export/a0-map/*
 !data/export/a0-map/clusters.qml
 !data/export/a0-map/clusters_frosted_glass.qml
 !data/export/a0-map/points.qml
+!data/export/a0-map/party_contours.qml
+!data/export/a0-map/actor_contours.qml
 !data/export/a0-map/a0-umap.qgz
 !data/export/a0-map/a0-umap-frosted-glass.qgz
 !data/export/a0-map/a0-umap-frosted-glass-rotated.qgz

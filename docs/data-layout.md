@@ -169,6 +169,20 @@ herbruikbare artefacten zijn getrackt:
   PNG-render (**niet** `colofon.tex`, dat is een dode LaTeX-voorganger).
 - `methodology_workflow.d2`/`.svg` — het methodologiediagram.
 - `clusters.qml`, `clusters_frosted_glass.qml`, `points.qml` — QGIS-stijlen.
+- `party_contours.qml`, `actor_contours.qml` — QGIS-stijlen voor de
+  contourlagen hieronder.
+- `party_contours.geojson`, `actor_contours.geojson` — **niet getrackt**
+  (~7 MB, gitignored), te regenereren met `make contours` (issue #261).
+  Per partij (≥ 1000 spreekbeurten, aliassen samengevoegd, `onbekend`
+  overgeslagen) en per Kamerlid (≥ 1000 spreekbeurten) de gebieden op de
+  plenaire kaart waar die groep vaker spreekt dan gemiddeld. Een feature per
+  drempel (`threshold` 1,5 en 3, geneste lagen), met `party`/`actor`, `n` en
+  `color`. De contour is relatief: groepsdichtheid gedeeld door de totale
+  dichtheid, omdat de absolute dichtheid voor vrijwel elke groep het algemene
+  landschap volgt en de contouren dan nauwelijks verschillen. Coördinaten
+  zijn rauwe UMAP-eenheden (zonder CRS importeren in QGIS); met `--grid` op
+  het script wordt WGS84 geschreven. Partijkleuren staan in
+  `scripts/a0_map/generate_actor_party_contours.py`.
 - `a0-umap.qgz`, `a0-umap-frosted-glass.qgz`,
   `a0-umap-frosted-glass-rotated.qgz` — QGIS-projectbestanden.
 - `cielab_legend_widget.svg` — het kleurenlegenda-widget.
