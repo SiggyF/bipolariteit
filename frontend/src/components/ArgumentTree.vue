@@ -312,74 +312,7 @@
 import { computed, nextTick, onMounted, onUnmounted, ref, watch } from "vue";
 import ArgumentConfrontatieKaart from "./ArgumentConfrontatieKaart.vue";
 import { externalArgumentLinks, internalVideoLink, type ArgumentLink } from "../lib/argumentLinks";
-
-interface ExportArgument {
-	id: number;
-	citaat: string;
-	typologie: string;
-	stance: "pro" | "contra";
-	spreker: string;
-	partij: string | null;
-	tags: string[];
-	claims: { claim_text: string; attributed_source_text: string | null }[];
-	tweedekamer_activiteit_url: string | null;
-	raw_video_url: string | null;
-	start_seconds: number | null;
-	gist: string;
-	samenvatting: string | null;
-}
-
-interface Kid {
-	id: number;
-	scheme: string | null;
-	reden: string;
-}
-
-interface BandSlot {
-	type: "node" | "ref";
-	id?: number;
-	kids?: Kid[];
-	ref_id?: number;
-	band_nummer?: number;
-}
-
-interface Band {
-	nummer: number;
-	thema: string;
-	pro: BandSlot | null;
-	contra: BandSlot | null;
-	oppositie: {
-		argument_a_id: number;
-		argument_b_id: number;
-		scheme: string | null;
-		reden: string;
-	} | null;
-}
-
-interface LosseGroep {
-	kind: "group";
-	label: string;
-	samenvatting: string | null;
-	member_ids: number[];
-}
-
-interface Twijfel {
-	argument_id: number;
-	huidige_stance: string;
-	reden: string;
-}
-
-interface ConfrontatieExport {
-	slug: string;
-	name: string;
-	topic_description: string | null;
-	stats: { totaal_argumenten: number; aantal_pro: number; aantal_contra: number; aantal_geselecteerd: number };
-	arguments: Record<string, ExportArgument>;
-	bands: Band[];
-	losse_groepen: LosseGroep[];
-	losse_argumenten: number[];
-	twijfelachtige_classificaties: Twijfel[];
-}
+import type { ConfrontatieExport, ExportArgument } from "../lib/argumentTree";
 
 const props = defineProps<{ tree: ConfrontatieExport }>();
 

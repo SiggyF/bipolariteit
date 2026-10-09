@@ -1,6 +1,6 @@
 ---
 import TopicView from "../../components/TopicView.vue";
-import ArgumentTree from "../../components/ArgumentTree.vue";
+import ArgumentViews from "../../components/ArgumentViews.vue";
 import FeedbackExport from "../../components/FeedbackExport.vue";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { parseTopicDescription } from "../../lib/parseTopicDescription";
@@ -64,7 +64,7 @@ const dataBaseUrl = resolveDataBaseUrl();
 						Experimenteel: elk knooppunt is een letterlijk argument. Klik op een node om te vouwen/ontvouwen; klik op
 						een argument-node voor het volledige citaat en eventuele weerleggingen.
 					</p>
-					<ArgumentTree tree={argumentTree} client:only="vue" />
+					<ArgumentViews tree={argumentTree} client:only="vue" />
 				</section>
 			)}
 

@@ -178,8 +178,8 @@ handelt het af met de margeroute + verwijskaart.
    banden is een deelthema-index of ankernavigatie in de kop nodig.
 3. **Breedte.** De confrontatie-as heeft een harde minimumbreedte
    (≈1360px incl. paneel); daaronder scrollt de pagina horizontaal. Voor
-   mobiel is een aparte compositie nodig — waarschijnlijk band-per-band,
-   gestapeld pro boven contra.
+   mobiel is een aparte compositie gemaakt: de panelenweergave, zie
+   [panelen-weergave.md](panelen-weergave.md) (issue #251).
 4. **Partijlogo's** zijn nog niet ingezet; de vierkante 160×160-iconen passen
    in de knoopregel naast de spreker.
 5. **Donker thema** is nog niet uitgewerkt; de twee standpuntkleuren hebben
