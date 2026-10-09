@@ -617,9 +617,9 @@ function buildPointsLayer(grid: GridMetadata): TileLayer {
 	return new TileLayer<DeckPoint[]>({
 		id: "plenair-points",
 		// Interleaved (zie MapboxOverlay hieronder): plaatst deze laag in
-		// MapLibre's eigen tekenvolgorde, vlak voor de "labels"-laag (dus na
-		// bg+hulls, onder de clusternaam-labels).
-		beforeId: "labels",
+		// MapLibre's eigen tekenvolgorde, vlak voor de "contour-fill"-laag (dus na
+		// bg+hulls, onder de contouren en de clusternaam-labels).
+		beforeId: "contour-fill",
 		getTileData,
 		minZoom: grid.minzoom,
 		maxZoom: grid.maxzoom,
@@ -766,9 +766,12 @@ onMounted(async () => {
 				},
 				layers: [
 					{ id: "bg", type: "background", paint: { "background-color": theme.bg } },
-					// Contouren onder de hulls en (deck.gl interleaved) onder de punten.
-						// De 3x-laag ligt binnen de 1,5x-laag en is dekkender, zodat de
-						// kern van het gebied er donkerder uitziet.
+						{ id: "hulls", type: "line", source: "hulls", paint: { "line-color": theme.muted, "line-width": 1 } },
+						// Volgorde: hulls, dan de punten (deck.gl, beforeId hieronder), dan de
+						// contouren, dan de labels. De contouren liggen boven de punten: de
+						// dichte puntenwolk bedekte ze anders vrijwel helemaal. De 3x-laag
+						// ligt binnen de 1,5x-laag en is dekkender, zodat de kern van het
+						// gebied er donkerder uitziet.
 						{
 							id: "contour-fill",
 							type: "fill",
@@ -781,7 +784,6 @@ onMounted(async () => {
 							source: "contours",
 							paint: { "line-color": contourColorExpression(isDark.value), "line-width": 1.5, "line-opacity": 0.9 },
 						},
-						{ id: "hulls", type: "line", source: "hulls", paint: { "line-color": theme.muted, "line-width": 1 } },
 					{
 						id: "labels",
 						type: "symbol",
