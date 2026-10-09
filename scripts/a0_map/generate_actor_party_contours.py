@@ -69,8 +69,8 @@ PARTY_COLORS = {
     "DENK": "#00b7b2",
     "FVD": "#a81815",
     "GroenLinks-PvdA": "#d81f27",
-    "JA21": "#242b57",
-    "NSC": "#13123a",
+    "JA21": "#252b53",
+    "NSC": "#171c60",
     "PRO": "#00aa00",
     "PvdD": "#00743c",
     "PVV": "#1b3962",
@@ -86,6 +86,15 @@ PARTY_COLORS = {
 }
 FALLBACK_COLOR = "#888888"
 
+# Afwijkende kleur voor het donkere thema van de kaart (#121622). De
+# logokleur van NSC en JA21 is bijna even donker als die achtergrond
+# (contrast 1,0 en 1,3); hun tweede huisstijlkleur (geel, rood) valt er wel
+# op. Op het lichte thema blijft de logokleur.
+PARTY_COLORS_DARK = {
+    "NSC": "#ffd000",
+    "JA21": "#cc372a",
+}
+
 
 def canonical_party(party: str) -> str:
     return PARTY_ALIASSEN.get(party, party)
@@ -93,6 +102,14 @@ def canonical_party(party: str) -> str:
 
 def party_color(party: str) -> str:
     return PARTY_COLORS.get(party, FALLBACK_COLOR)
+
+
+def party_colors(party: str) -> dict:
+    """`color` voor het lichte thema, plus `color_dark` als die afwijkt."""
+    colors = {"color": party_color(party)}
+    if party in PARTY_COLORS_DARK:
+        colors["color_dark"] = PARTY_COLORS_DARK[party]
+    return colors
 
 
 class DensityGrid:
@@ -188,7 +205,7 @@ def build_contours(data: dict, rescale, bins: int = 400, sigma: float = 6.0,
     for party, n in Counter(party_names).most_common():
         if n < min_points or party == "onbekend":
             continue
-        props = {"party": party, "n": n, "color": party_color(party)}
+        props = {"party": party, "n": n, **party_colors(party)}
         party_features += group_features(grid, xy[party_names == party], props, thresholds, rescale)
 
     actor_features = []
@@ -199,7 +216,7 @@ def build_contours(data: dict, rescale, bins: int = 400, sigma: float = 6.0,
         main_party = Counter(party_names[mask]).most_common(1)[0][0]
         props = {
             "actor": data["actors"][idx], "party": main_party, "n": n,
-            "color": party_color(main_party),
+            **party_colors(main_party),
         }
         actor_features += group_features(grid, xy[mask], props, thresholds, rescale)
 

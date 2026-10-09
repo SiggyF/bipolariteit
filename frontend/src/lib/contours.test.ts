@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { contourNames, selectContours, type ContourCollection } from "./contours";
+import { contourColor, contourNames, selectContours, type ContourCollection } from "./contours";
 
 function feature(props: Record<string, unknown>) {
 	return {
@@ -39,5 +39,17 @@ describe("selectContours", () => {
 			{ kind: "party", collection: null, name: "VVD" },
 		]);
 		expect(result.features).toHaveLength(0);
+	});
+});
+
+describe("contourColor", () => {
+	it("gebruikt color_dark alleen op het donkere thema", () => {
+		const props = { color: "#171c60", color_dark: "#ffd000" };
+		expect(contourColor(props, true)).toBe("#ffd000");
+		expect(contourColor(props, false)).toBe("#171c60");
+	});
+
+	it("valt terug op color als er geen donkere variant is", () => {
+		expect(contourColor({ color: "#f47d20" }, true)).toBe("#f47d20");
 	});
 });

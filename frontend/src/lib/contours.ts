@@ -10,8 +10,15 @@ export type ContourProperties = {
 	actor?: string;
 	n: number;
 	color: string;
+	// Alleen aanwezig als de kleur op het donkere thema afwijkt (logokleur te
+	// donker voor de kaartachtergrond, bv. NSC en JA21).
+	color_dark?: string;
 	threshold: number;
 };
+
+export function contourColor(properties: Pick<ContourProperties, "color" | "color_dark">, dark: boolean): string {
+	return (dark && properties.color_dark) || properties.color;
+}
 
 export type ContourCollection = GeoJSON.FeatureCollection<GeoJSON.MultiPolygon | GeoJSON.Polygon, ContourProperties>;
 
