@@ -30,6 +30,7 @@ import { useTheme } from "../lib/useTheme";
 import {
 	CONTOUR_THRESHOLD_LABEL,
 	contourNames,
+	contourColor,
 	fetchContours,
 	selectContours,
 	type ContourCollection,
@@ -292,6 +293,12 @@ async function loadContours(kind: ContourKind) {
 	}
 }
 
+// De kleur komt per feature uit de data; op het donkere thema telt `color_dark`
+// als die er is (zie lib/contours.ts).
+function contourColorExpression(dark: boolean): maplibregl.ExpressionSpecification {
+	return dark ? ["coalesce", ["get", "color_dark"], ["get", "color"]] : ["get", "color"];
+}
+
 const selectedContours = computed(() =>
 	selectContours([
 		{ kind: "party", collection: contourData.value.party, name: contourParty.value },
@@ -301,8 +308,8 @@ const selectedContours = computed(() =>
 const contourLegend = computed(() => {
 	const colors = new Map<string, string>();
 	for (const feature of selectedContours.value.features) {
-		const { party, actor, color } = feature.properties as { party?: string; actor?: string; color: string };
-		colors.set(actor ?? party ?? "", color);
+		const { party, actor, ...rest } = feature.properties as { party?: string; actor?: string; color: string; color_dark?: string };
+		colors.set(actor ?? party ?? "", contourColor(rest, isDark.value));
 	}
 	return [...colors].map(([name, color]) => ({ name, color }));
 });
@@ -766,13 +773,13 @@ onMounted(async () => {
 							id: "contour-fill",
 							type: "fill",
 							source: "contours",
-							paint: { "fill-color": ["get", "color"], "fill-opacity": ["case", [">=", ["get", "threshold"], 2], 0.5, 0.25] },
+							paint: { "fill-color": contourColorExpression(isDark.value), "fill-opacity": ["case", [">=", ["get", "threshold"], 2], 0.5, 0.25] },
 						},
 						{
 							id: "contour-line",
 							type: "line",
 							source: "contours",
-							paint: { "line-color": ["get", "color"], "line-width": 1.5, "line-opacity": 0.9 },
+							paint: { "line-color": contourColorExpression(isDark.value), "line-width": 1.5, "line-opacity": 0.9 },
 						},
 						{ id: "hulls", type: "line", source: "hulls", paint: { "line-color": theme.muted, "line-width": 1 } },
 					{
@@ -948,6 +955,8 @@ onMounted(async () => {
 			const t = dark ? THEME_COLOR.dark : THEME_COLOR.light;
 			map.setPaintProperty("bg", "background-color", t.bg);
 			map.setPaintProperty("hulls", "line-color", t.muted);
+			map.setPaintProperty("contour-fill", "fill-color", contourColorExpression(dark));
+			map.setPaintProperty("contour-line", "line-color", contourColorExpression(dark));
 			deckOverlay.setProps({ layers: [buildPointsLayer(grid)] });
 		});
 		watch(colorBy, () => {
