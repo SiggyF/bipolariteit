@@ -23,6 +23,7 @@ Gebruik:
 """
 
 import argparse
+import gzip
 import hashlib
 import json
 import logging
@@ -233,10 +234,24 @@ def load_video_hrefs(point_ids: set[int], videos_json_path: Path | None = None) 
     return hrefs
 
 
+# Tegels gaan gzip-gecomprimeerd het archief in (header `tile_compression:
+# GZIP`). Een .pmtiles op Hugging Face of een CDN wordt byte voor byte
+# geserveerd (range-requests), dus wat hier niet gecomprimeerd wordt gaat
+# onverkleind over de lijn. Gemeten op de live pyramide: ongeveer 3,5x kleiner
+# (4,8 MB naar 1,4 MB voor een tegel van 12.800 punten), issue #390/#404.
+# pmtiles-js en QGIS decomprimeren op basis van de header zelf.
+TILE_GZIP_LEVEL = 6
+
+
+def compress_tile(data: bytes) -> bytes:
+    """gzip met vaste mtime, zodat dezelfde invoer altijd dezelfde bytes geeft."""
+    return gzip.compress(data, compresslevel=TILE_GZIP_LEVEL, mtime=0)
+
+
 def encode_one_tile(tile_id: int, points: list, lookups: dict, tms) -> tuple[int, bytes]:
     z, x, y = tileid_to_zxy(tile_id)
     bounds = tile_bounds(tms, Tile(x=x, y=y, z=z))
-    data = encode_tile(points, lookups, bounds)
+    data = compress_tile(encode_tile(points, lookups, bounds))
     return tile_id, data
 
 
@@ -392,7 +407,7 @@ def build(
                 writer.write_tile(tile_id, data)
             header = {
                 "tile_type": TileType.MVT,
-                "tile_compression": Compression.NONE,
+                "tile_compression": Compression.GZIP,
                 "min_lon_e7": round(lon_min * 10_000_000),
                 "min_lat_e7": round(lat_min * 10_000_000),
                 "max_lon_e7": round(lon_max * 10_000_000),
