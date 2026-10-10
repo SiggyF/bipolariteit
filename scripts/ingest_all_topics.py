@@ -25,7 +25,13 @@ logger = logging.getLogger(__name__)
 
 def main():
     conn = db.connect()
-    slugs = [row["slug"] for row in conn.execute("SELECT slug FROM topics ORDER BY slug").fetchall()]
+    try:
+        slugs = [row["slug"] for row in conn.execute("SELECT slug FROM topics ORDER BY slug").fetchall()]
+    finally:
+        # Sluiten vóór de ingest: ingest_plenair schakelt de database naar
+        # journal_mode = DELETE, en dat lukt niet zolang er een andere
+        # verbinding open staat ("database is locked").
+        conn.close()
     if not slugs:
         logger.warning("Geen topics in de database -- niets te ingesten.")
         return
