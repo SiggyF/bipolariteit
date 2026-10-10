@@ -1,0 +1,11 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import TiledLayerBenchmark from "../../components/TiledLayerBenchmark.vue";
+import { resolveTilesBaseUrl } from "../../lib/dataBaseUrl";
+
+const tilesBaseUrl = resolveTilesBaseUrl();
+---
+
+<BaseLayout title="Tiled-laag benchmark - Bipolariteit">
+	<TiledLayerBenchmark tilesBaseUrl={tilesBaseUrl} client:only="vue" />
+</BaseLayout>

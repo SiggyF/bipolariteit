@@ -1,6 +1,12 @@
 // Topic-kleuren voor de plenaire/debattenkaart. Losgetrokken uit
 // PlenairMap.vue (die zelf ongewijzigd blijft, zie issue #215) zodat
 // TiledPlenairMap.vue dezelfde kleuren gebruikt zonder ze te dupliceren.
+// Neutrale punten (overig plenair, geen cluster/partij/jaar): een koel grijs op
+// dezelfde tint als --lijn en --galnoot-zacht (blauwgrijs), met ongeveer
+// dezelfde helderheid als het eerdere beige #a89e8c. Dat beige was een
+// overblijfsel van de oude A0-kaart-tokens en botste met het koele Vloei-palet.
+export const NEUTRAL_POINT_COLOR = "#8f96a3";
+
 export const TOPIC_COLOR: Record<string, string> = {
 	stikstof: "#4a7a4a",
 	abortus: "#a64d5f",
@@ -11,10 +17,10 @@ export const TOPIC_COLOR: Record<string, string> = {
 	// component's eigen (ongewijzigde) topic-kleurenkaart dit topic mist en dat
 	// hier geen probleem is.
 	oekraine: "#a68a3e",
-	plenair: "#a89e8c",
+	plenair: NEUTRAL_POINT_COLOR,
 };
 
-export const DEFAULT_TOPIC_COLOR = "#a89e8c";
+export const DEFAULT_TOPIC_COLOR = NEUTRAL_POINT_COLOR;
 
 // Categorische kleur per cluster-id (voor "kleur op cluster" i.p.v. topic,
 // issue #259): geen zelfgemaakte hue-formule meer (die oogde met de

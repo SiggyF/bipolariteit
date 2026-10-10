@@ -19,7 +19,7 @@
 import { computed, onMounted, onUnmounted, ref, shallowRef, watch } from "vue";
 import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
-import { PMTiles, Protocol } from "pmtiles";
+import { FetchSource, PMTiles, Protocol } from "pmtiles";
 import { VectorTile } from "@mapbox/vector-tile";
 import { PbfReader } from "pbf";
 import { TileLayer } from "@deck.gl/geo-layers";
@@ -46,6 +46,17 @@ import {
 	type GridMetadata,
 	type TileIndex,
 } from "../lib/tiledMapTransform";
+import { countVertices, type TileStat, type TraceEvent } from "../lib/tileTrace";
+import { CachedPmtilesSource, openIndexedDbStore } from "../lib/cachedPmtilesSource";
+import {
+	DEFAULT_POINT_STYLE,
+	MEASURED_INK_FALLBACK,
+	OVERZOOM_LEVELS,
+	OVERZOOM_RADIUS_MAX_PX,
+	neutralFirst,
+	resolvePointStyle,
+	type PointStyle,
+} from "../lib/pointStyle";
 
 const props = defineProps<{
 	// pmtiles + grid-metadata + cluster-hulls komen van Hugging Face (volle
@@ -58,11 +69,21 @@ const props = defineProps<{
 	// puntenwolk is neutraal grijs en de keuzebalken (onderwerp, kleur-op,
 	// contouren) ontbreken -- alleen kaart, contour en het hover-/klikpaneel.
 	focus?: { kind: ContourKind; name: string };
+	// Puntgrootte/-kleursterkte per zoomniveau; de benchmarkpagina stelt dit live
+	// bij (lib/pointStyle.ts), de productiepagina gebruikt de standaardwaarden.
+	pointStyle?: PointStyle;
 }>();
 
 const emit = defineEmits<{
 	(e: "select-cluster", clusterId: number | null): void;
+	// Meetpunten voor /tests/tiled-layer-benchmark/ (issue #390, zie lib/tileTrace.ts).
+	// Zonder luisteraar is dit een no-op, dus de productiepagina betaalt er niets voor.
+	(e: "trace", event: TraceEvent): void;
 }>();
+
+function trace(name: string, detail?: Record<string, unknown>) {
+	emit("trace", { name, t: performance.now(), detail });
+}
 
 type ClusterHullItem = {
 	cluster_id: number;
@@ -95,6 +116,12 @@ type DeckPoint = {
 	// ~5300 gecureerde entries uit plenair-map-videos.json), of anders een
 	// absolute externe Debat Direct-URL.
 	video: string | null;
+	// Aantal spreekbeurten dat dit punt op dit zoomniveau vertegenwoordigt
+	// (MVT-property `point_count`, issue #367); 1 als de tegel het niet kent.
+	pointCount: number;
+	// Lokale dichtheid 0..1 (MVT-property `density`, issue #367); null als de
+	// tegel de property niet draagt (oudere pmtiles-builds).
+	density: number | null;
 };
 
 // Zelfde "pin wint van hover, klik op leegte unpint" model als PlenairMap.vue
@@ -285,6 +312,11 @@ async function loadContours(kind: ContourKind) {
 	contourState.value = { ...contourState.value, [kind]: "loading" };
 	try {
 		const collection = await fetchContours(props.tilesBaseUrl, kind);
+		trace("data:contours-fetched", {
+			kind,
+			features: collection.features.length,
+			vertices: countVertices(collection as unknown as GeoJSON.FeatureCollection),
+		});
 		contourData.value = { ...contourData.value, [kind]: collection };
 		contourState.value = { ...contourState.value, [kind]: "ready" };
 	} catch (err) {
@@ -392,7 +424,15 @@ const BLEND_PARAMETERS = {
 	// lichter maken (richting wit mixen, zie `tintTowardsWhite()`) is wat een
 	// multiply-blend WEL hoort: één punt verkleurt de achtergrond dan nauwelijks,
 	// pas veel overlappende punten bouwen zichtbare, geleidelijke verdonkering op.
-	light: { blend: true, blendColorOperation: "add", blendColorSrcFactor: "dst", blendColorDstFactor: "zero" },
+	multiply: { blend: true, blendColorOperation: "add", blendColorSrcFactor: "dst", blendColorDstFactor: "zero" },
+	// Gewone alpha-over ("mix"): het punt krijgt zijn echte kleur met de dekking
+	// als alpha, overlap bouwt dekking op in plaats van te verdonkeren.
+	mix: {
+		blend: true,
+		blendColorOperation: "add",
+		blendColorSrcFactor: "src-alpha",
+		blendColorDstFactor: "one-minus-src-alpha",
+	},
 	// Benadering van "screen"-blending op een donkere achtergrond (echte screen-
 	// formule (1-(1-src)(1-dst)) kent geen simpele blendFunc-vorm). Eerst
 	// geprobeerd met additive blending (operation "add", src/dst "src-alpha"/"one")
@@ -400,14 +440,18 @@ const BLEND_PARAMETERS = {
 	// overlap telt op, geen bovengrens). "max" i.p.v. "add" als operation neemt
 	// per pixel gewoon het lichtste punt, geen optelling -- geeft wel een
 	// gloei-indruk bij overlap, zonder ooit uit te slaan naar wit.
-	dark: { blend: true, blendColorOperation: "max", blendColorSrcFactor: "one", blendColorDstFactor: "one" },
+	max: { blend: true, blendColorOperation: "max", blendColorSrcFactor: "one", blendColorDstFactor: "one" },
+	// Echte screen: src + dst - src*dst, dus add met src ONE en dst ONE_MINUS_SRC
+	// (colorfactor "one-minus-src"). Groeit bij overlap asymptotisch naar wit en
+	// kapt nooit af, in tegenstelling tot additive.
+	screen: { blend: true, blendColorOperation: "add", blendColorSrcFactor: "one", blendColorDstFactor: "one-minus-src" },
 };
 
 function hexToRgb(hex: string): [number, number, number] {
 	return [parseInt(hex.slice(1, 3), 16), parseInt(hex.slice(3, 5), 16), parseInt(hex.slice(5, 7), 16)];
 }
 
-// Voor de lichte-thema multiply-blend (zie BLEND_PARAMETERS.light): mixt een
+// Voor de lichte-thema multiply-blend (zie BLEND_PARAMETERS.multiply): mixt een
 // kleur naar wit met sterkte `strength` (0 = wit, dus multiply laat de
 // achtergrond ongemoeid; 1 = volledig verzadigde kleur). Voor het donkere
 // thema (max-blend) is dit niet nodig -- daar mag de kleur altijd vol
@@ -454,6 +498,22 @@ function partyPointColorRgba(party: string, strength: number): [number, number, 
 function yearPointColorRgba(year: number | null, strength: number): [number, number, number, number] {
 	if (year === null) return tintTowardsWhite(hexToRgb(DEFAULT_TOPIC_COLOR), strength);
 	return tintTowardsWhite(yearColorRgb(year), strength);
+}
+
+// Een punt zonder eigen kleur in de huidige "kleur op"-keuze (valt terug op de
+// neutrale kleur). Bepaalt samen met het topic-filter welke punten onder de
+// gekleurde getekend worden (neutralFirst()).
+function isNeutralPoint(point: DeckPoint): boolean {
+	switch (colorBy.value) {
+		case "cluster":
+			return point.cluster === null || point.cluster === -1;
+		case "party":
+			return !point.party;
+		case "year":
+			return point.year === null;
+		default:
+			return (TOPIC_COLOR[point.topic] ?? DEFAULT_TOPIC_COLOR) === DEFAULT_TOPIC_COLOR;
+	}
 }
 
 function pointColorRgba(point: DeckPoint, strength: number): [number, number, number, number] {
@@ -582,20 +642,46 @@ function parseYear(publishedAt: unknown): number | null {
 // plugin) -- per opgevraagde (z,x,y) zelf de tegelbytes ophalen uit de al
 // open PMTiles-instantie en decoderen, zelfde aanpak als de vroegere
 // v1-canvasrenderer's `loadTile()`.
+let propertyKeysTraced = false;
+
 async function getTileData({ index }: { index: TileIndex }): Promise<DeckPoint[]> {
 	if (!pmtiles) return [];
+	const fetchStart = performance.now();
 	const result = await pmtiles.getZxy(index.z, index.x, index.y);
-	if (!result) return [];
+	const fetchMs = performance.now() - fetchStart;
+	if (!result) {
+		trace("tile:empty", { z: index.z, x: index.x, y: index.y, fetchMs });
+		return [];
+	}
+	const decodeStart = performance.now();
 	const vt = new VectorTile(new PbfReader(new Uint8Array(result.data)));
 	const layer = vt.layers.points;
 	if (!layer) return [];
 	const bounds = tileBoundsMeters(index);
 	const points: DeckPoint[] = [];
+	let represented = 0;
+	let densityCount = 0;
+	let densitySum = 0;
+	let densityMin = Infinity;
+	let densityMax = -Infinity;
 	for (let i = 0; i < layer.length; i++) {
 		const feature = layer.feature(i);
 		const [[pt]] = feature.loadGeometry();
 		const position = tileLocalToLngLat(pt.x, pt.y, feature.extent, bounds);
 		const p = feature.properties as Record<string, unknown>;
+		const pointCount = typeof p.point_count === "number" && p.point_count >= 1 ? p.point_count : 1;
+		represented += pointCount;
+		const density = typeof p.density === "number" ? p.density : null;
+		if (density !== null) {
+			densityCount += 1;
+			densitySum += density;
+			densityMin = Math.min(densityMin, density);
+			densityMax = Math.max(densityMax, density);
+		}
+		if (!propertyKeysTraced) {
+			propertyKeysTraced = true;
+			trace("tile:property-keys", { keys: Object.keys(p), z: index.z });
+		}
 		points.push({
 			id: typeof p.id === "number" ? p.id : -1,
 			position,
@@ -608,10 +694,32 @@ async function getTileData({ index }: { index: TileIndex }): Promise<DeckPoint[]
 			cluster: typeof p.cluster === "number" ? p.cluster : null,
 			year: parseYear(p.published_at),
 			video: typeof p.video === "string" && p.video ? p.video : null,
+			pointCount,
+			density,
 		});
 	}
+	trace("tile:decoded", {
+		z: index.z,
+		x: index.x,
+		y: index.y,
+		bytes: result.data.byteLength,
+		points: points.length,
+		represented,
+		fetchMs,
+		decodeMs: performance.now() - decodeStart,
+		densityPoints: densityCount,
+		densityMin: densityCount ? densityMin : null,
+		densityMax: densityCount ? densityMax : null,
+		densityMean: densityCount ? densitySum / densityCount : null,
+	} satisfies TileStat);
 	return points;
 }
+
+// Weergavegrootte van een puntentegel in px (zie de toelichting bij `tileSize`
+// in buildPointsLayer()).
+const POINT_TILE_SIZE = 512;
+
+const activePointStyle = computed(() => props.pointStyle ?? DEFAULT_POINT_STYLE);
 
 function buildPointsLayer(grid: GridMetadata): TileLayer {
 	return new TileLayer<DeckPoint[]>({
@@ -621,9 +729,31 @@ function buildPointsLayer(grid: GridMetadata): TileLayer {
 		// bg+hulls, onder de contouren en de clusternaam-labels).
 		beforeId: "contour-fill",
 		getTileData,
+		// Meetpunten voor de benchmarkpagina: tile:loaded/viewport:loaded zeggen
+		// wanneer deck.gl de tegel/het hele zichtbare vlak als klaar beschouwt
+		// (tile:decoded hierboven meet alleen fetch + decodering).
+		onTileLoad: (tile) => trace("tile:loaded", { z: tile.index.z, x: tile.index.x, y: tile.index.y }),
+		onTileError: (error) => trace("tile:error", { message: String(error) }),
+		onViewportLoad: (tiles) => {
+			let points = 0;
+			let represented = 0;
+			for (const tile of tiles) {
+				const content = (tile.content as DeckPoint[] | null) ?? [];
+				points += content.length;
+				for (const point of content) represented += point.pointCount;
+			}
+			trace("viewport:loaded", { tiles: tiles.length, points, represented, zoom: map?.getZoom() ?? null });
+		},
 		minZoom: grid.minzoom,
 		maxZoom: grid.maxzoom,
-		tileSize: grid.tile_size,
+		// 512 px, niet grid.tile_size (256): de pyramide is een standaard
+		// WebMercatorQuad (tegel z heeft 2^z tegels per as), maar MapLibre rekent
+		// zijn wereld op 512 px bij zoom 0. Met 256 koos deck.gl daardoor steeds
+		// één niveau dieper dan de MapLibre-lagen (kaartzoom 3 -> z4, 4x zoveel
+		// tegels). Met 512 hoort kaartzoom z bij tegelniveau z, net als bij de
+		// hullen/contouren/labels, en wordt er geen niveau overgeslagen of
+		// uitvergroot bij maxzoom (issue #390).
+		tileSize: POINT_TILE_SIZE,
 		// TileLayer zelf vergelijkt `renderSubLayers` (een functie) niet op
 		// waarde -- alleen updateTriggers/data-wijzigingen leiden tot een
 		// updateState()-run die de per-tile sublaag-cache leegmaakt (zie
@@ -635,40 +765,56 @@ function buildPointsLayer(grid: GridMetadata): TileLayer {
 		// bleven alle al geladen tiles domweg hun oude, gecachte kleur houden
 		// zodra colorBy/isDark wijzigde -- precies de "kleur op"-knop deed
 		// niets-bug.
-		updateTriggers: { renderSubLayers: [colorBy.value, isDark.value, selectedTopicFilter.value] },
+		updateTriggers: {
+			renderSubLayers: [colorBy.value, isDark.value, selectedTopicFilter.value, ...Object.values(activePointStyle.value)],
+		},
 		renderSubLayers: (subProps) => {
 			const zoom = subProps.tile.index.z;
-			// Zoom-fractie (0 op het grofste niveau, 1 op het fijnste) -- stuurt
-			// zowel de puntgrootte als de dekking. Op het grofste niveau liggen
-			// veel meer punten per tile (zie thin_zoom_points_globally()), dus
-			// kleiner én transparanter houdt dat overzichtelijk; op het fijnste
-			// niveau, met veel minder punten per tile, mogen ze groter en
-			// dekkender.
-			const t = grid.maxzoom > grid.minzoom ? (zoom - grid.minzoom) / (grid.maxzoom - grid.minzoom) : 0;
-			const radius = 0.6 + t * (3.5 - 0.6);
-			// Lichte thema (multiply-blend, zie BLEND_PARAMETERS.light): hoe minder
-			// verzadigd (dichter naar wit) de puntkleur zelf is, hoe minder één punt
-			// de achtergrond verdonkert -- pas veel overlappende punten (hoge
-			// dichtheid) bouwen dan zichtbare verdonkering/kleur op. Op het grofste
-			// niveau liggen veel meer punten per tile (thin_zoom_points_globally()),
-			// dus daar moet een enkel punt haast onzichtbaar zijn; op het fijnste
-			// niveau, met veel minder overlap, mag de kleur bijna vol verzadigd zijn.
-			// Donkere thema (max-blend) verdonkert nooit vanzelf, dus daar altijd
-			// vol verzadigd.
-			const colorStrength = isDark.value ? 1 : 0.12 + t * (0.55 - 0.12);
+			// Straal en kleursterkte volgen uit de gemeten inktdichtheid per zoomniveau
+			// (grid.ink, zie lib/pointStyle.ts): de straal is zo gekozen dat het
+			// verwachte aantal overlappende punten per pixel op elk niveau gelijk is,
+			// dus de kleursterkte kan constant blijven. Licht thema: multiply-blend
+			// (zie BLEND_PARAMETERS.multiply), dus een lichte kleur laat pas veel
+			// overlappende punten zichtbaar verdonkeren. Donker thema (max-blend)
+			// verdonkert nooit vanzelf en tekent daarom altijd de volle kleur.
+			const { radius, strength: colorStrength, blend } = resolvePointStyle(
+				grid.ink ?? MEASURED_INK_FALLBACK,
+				zoom,
+				grid.minzoom,
+				grid.maxzoom,
+				activePointStyle.value,
+				isDark.value,
+			);
+			const atDeepestLevel = zoom >= grid.maxzoom;
 			const topicFilter = selectedTopicFilter.value;
 			// Niet-matchende punten sterk dempen i.p.v. eruit filteren (net als
 			// PlenairMap.vue's topic-legenda-filter, issue #186) -- via dimColor()
 			// i.p.v. gewoon een lagere `strength`, want de dempingsrichting moet
 			// per blend-modus omgekeerd zijn (zie dimColor()'s toelichting).
 			const colorFor = (d: DeckPoint) => {
-				const color = pointColorRgba(d, colorStrength);
+				// Per blend-modus betekent `colorStrength` iets anders: multiply mengt
+				// richting wit, mix is de dekking per punt, max/screen dempen de
+				// helderheid richting zwart (de achtergrond).
+				let color: [number, number, number, number];
+				if (blend === "multiply") {
+					color = pointColorRgba(d, colorStrength);
+				} else if (blend === "mix") {
+					const full = pointColorRgba(d, 1);
+					color = [full[0], full[1], full[2], Math.round(255 * colorStrength)];
+				} else {
+					color = dimColor(pointColorRgba(d, 1), true, 1 - colorStrength);
+				}
 				return topicFilter && d.topic !== topicFilter ? dimColor(color, isDark.value, 0.85) : color;
 			};
 			return [
 				new ScatterplotLayer<DeckPoint>({
 					id: `${subProps.id}-scatter`,
-					data: subProps.data,
+					// Neutrale (en door het filter gedempte) punten eerst, zodat de
+					// gekleurde er bovenop liggen. Zonder focus-modus: daar is elk punt
+					// neutraal en blijft de volgorde zoals ze is.
+					data: props.focus
+						? subProps.data
+						: neutralFirst(subProps.data as DeckPoint[], (d) => isNeutralPoint(d) || Boolean(topicFilter && d.topic !== topicFilter)),
 					getPosition: (d) => d.position,
 					getFillColor: colorFor,
 					// colorBy/isDark/topicFilter zijn Vue-refs buiten deck.gl's eigen
@@ -676,16 +822,24 @@ function buildPointsLayer(grid: GridMetadata): TileLayer {
 					// niet dat een eerder gegenereerde sublaag opnieuw moet kleuren (issue
 					// #259: de "Kleur op"-knoppen deden zichtbaar niets zolang er geen
 					// nieuwe tiles werden geladen).
-					updateTriggers: { getFillColor: [colorBy.value, colorStrength, topicFilter] },
-					getRadius: radius,
-					radiusUnits: "pixels",
+					updateTriggers: { getFillColor: [colorBy.value, colorStrength, topicFilter, blend] },
+					// Op het diepste tegelniveau schalen de punten voorbij dat niveau met de
+					// kaart mee: "common"-eenheden zijn 2^zoom px groot, dus de straal is
+					// `radius` px op het diepste zoomniveau en verdubbelt daarboven per
+					// niveau (radiusMinPixels houdt hem op `radius` zolang de kaart
+					// uitgezoomder staat, radiusMaxPixels begrenst de groei). Elders blijft
+					// de straal een vaste pixelwaarde per tegelniveau.
+					getRadius: atDeepestLevel ? radius / 2 ** grid.maxzoom : radius,
+					radiusUnits: atDeepestLevel ? "common" : "pixels",
+					radiusMinPixels: atDeepestLevel ? radius : 0,
+					radiusMaxPixels: atDeepestLevel ? Math.max(radius, OVERZOOM_RADIUS_MAX_PX) : Number.MAX_SAFE_INTEGER,
 					// Niet zelf pickable: de onzichtbare hit-target-laag hieronder
 					// verzorgt de picking, met een veel ruimere trefzone. Anders
 					// wisselt de cursor bij elke muisbeweging in dichte gebieden
 					// grillig tussen pointer/normaal, omdat het picking-doel dan
 					// exact zo klein is als de getekende stip (soms <1px).
 					pickable: false,
-					parameters: isDark.value ? BLEND_PARAMETERS.dark : BLEND_PARAMETERS.light,
+					parameters: BLEND_PARAMETERS[blend],
 				}),
 				new ScatterplotLayer<DeckPoint>({
 					id: `${subProps.id}-hit-target`,
@@ -695,9 +849,11 @@ function buildPointsLayer(grid: GridMetadata): TileLayer {
 					// Zelfde trefzone-gedachte als PlenairMap.vue's 12px hit-tolerance
 					// (findNearestPoint()) -- een vaste, ruimere pixelradius dan het
 					// zichtbare punt zelf, zodat hoveren/klikken niet pixel-precies moet.
-					getRadius: 6,
-					radiusUnits: "pixels",
+					// Op het diepste niveau groeit de trefzone met de zichtbare punten mee.
+					getRadius: atDeepestLevel ? Math.max(radius, 6) / 2 ** grid.maxzoom : 6,
+					radiusUnits: atDeepestLevel ? "common" : "pixels",
 					radiusMinPixels: 6,
+					radiusMaxPixels: atDeepestLevel ? Math.max(radius, OVERZOOM_RADIUS_MAX_PX) : Number.MAX_SAFE_INTEGER,
 					pickable: true,
 					// Geen custom blend-parameters: deck.gl's picking-pass gebruikt sowieso
 					// een eigen, ondoorzichtige kleurcodering los van wat hier zichtbaar
@@ -710,6 +866,7 @@ function buildPointsLayer(grid: GridMetadata): TileLayer {
 }
 
 onMounted(async () => {
+	trace("component:mounted");
 	ensurePmtilesProtocol();
 	if (props.focus) void loadContours(props.focus.kind);
 	else void loadContours("party");
@@ -724,6 +881,7 @@ onMounted(async () => {
 		]);
 		if (!gridResponse.ok) throw new Error(`Status ${gridResponse.status}`);
 		const grid: GridMetadata = await gridResponse.json();
+		trace("data:grid+clusters-fetched", { clustersOk: Boolean(clustersResponse?.ok), ink: grid.ink ? "grid" : "fallback" });
 
 		let hulls: GeoJSON.FeatureCollection = { type: "FeatureCollection", features: [] };
 		let labels: GeoJSON.FeatureCollection = { type: "FeatureCollection", features: [] };
@@ -739,13 +897,24 @@ onMounted(async () => {
 			// de pipeline daadwerkelijk verschillende granulariteiten produceert.
 			const raw: ClusterHullItem[] = Array.isArray(clusters) ? clusters : (clusters.levels?.[0] ?? clusters.coarse ?? []);
 			({ hulls, labels } = buildClusterGeoJSON(raw, grid));
+			trace("data:clusters-built", { clusters: raw.length, hullVertices: countVertices(hulls), labels: labels.features.length });
 			clustersById = new Map(raw.map((c) => [c.cluster_id, c]));
 			const [cx, cy] = weightedDataCentroid(raw);
 			initialCenter = mercatorMetersToLngLat(...umapToMercator(cx, cy, grid));
 		}
 
 		if (!mapEl.value) return;
-		pmtiles = new PMTiles(`${props.tilesBaseUrl}/plenair-map-full.pmtiles`);
+		// Eigen tegelcache (lib/cachedPmtilesSource.ts): Hugging Face geeft geen
+		// bruikbare cache-headers, dus de browser hergebruikt de range-responses
+		// anders niet tussen laadbeurten.
+		pmtiles = new PMTiles(
+			new CachedPmtilesSource(
+				new FetchSource(`${props.tilesBaseUrl}/plenair-map-full.pmtiles`),
+				openIndexedDbStore(),
+				(access) => trace("pmtiles:cache", { ...access }),
+			),
+		);
+		trace("map:creating", { tileSize: POINT_TILE_SIZE, gridTileSize: grid.tile_size });
 
 		const theme = isDark.value ? THEME_COLOR.dark : THEME_COLOR.light;
 		map = new maplibregl.Map({
@@ -838,7 +1007,10 @@ onMounted(async () => {
 			center: initialCenter,
 			zoom: 3,
 			minZoom: grid.minzoom,
-			maxZoom: grid.maxzoom,
+			// Voorbij het diepste tegelniveau mag de kaart nog OVERZOOM_LEVELS
+			// niveaus inzoomen (de TileLayer hierboven houdt maxZoom op grid.maxzoom,
+			// dus daar blijven de tegels van het diepste niveau staan).
+			maxZoom: grid.maxzoom + OVERZOOM_LEVELS,
 			attributionControl: false,
 		});
 		map.addControl(new maplibregl.NavigationControl({ showCompass: false }), "bottom-right");
@@ -852,6 +1024,7 @@ onMounted(async () => {
 		// event-bus) -- ruim genoeg venster om "was dit net al een puntklik" te
 		// onderscheiden zonder daar ook nog een cluster bovenop te pinnen.
 		let lastPointClickAt = 0;
+		trace("map:constructed");
 		deckOverlay = new MapboxOverlay({
 			// Interleaved i.p.v. overlaid: deck.gl tekent dan in MapLibre's eigen
 			// WebGL-context/framebuffer, dus de blend-`dst` in BLEND_PARAMETERS is
@@ -946,7 +1119,14 @@ onMounted(async () => {
 
 		map.on("load", () => {
 			status.value = "ready";
+			// getStyle() is pas na 'load' beschikbaar (daarvoor undefined).
+			const style = map?.getStyle();
+			trace("map:load", { layers: style?.layers.length ?? null, sources: style ? Object.keys(style.sources).length : null });
 		});
+		// Eenmalig: de eerste echte render en het eerste moment dat MapLibre
+		// helemaal stilstaat (alle bronnen geladen, geen lopende animatie).
+		map.once("render", () => trace("map:first-render"));
+		map.once("idle", () => trace("map:idle"));
 		map.on("error", (e: maplibregl.ErrorEvent) => {
 			console.error("TiledPlenairMap MapLibre error", e.error);
 			status.value = "error";
@@ -972,11 +1152,25 @@ onMounted(async () => {
 			if (!deckOverlay) return;
 			deckOverlay.setProps({ layers: [buildPointsLayer(grid)] });
 		});
+		// Getter met een kopie: de benchmarkpagina muteert het stijlobject op zijn
+		// plaats (v-model op de sliders), en een watch op de computed zelf ziet
+		// die geneste wijziging niet (dezelfde objectverwijzing).
+		watch(
+			() => ({ ...activePointStyle.value }),
+			() => {
+				if (!deckOverlay) return;
+				deckOverlay.setProps({ layers: [buildPointsLayer(grid)] });
+			},
+		);
 	} catch (err) {
 		console.error("TiledPlenairMap init failed", err);
 		status.value = "error";
 	}
 });
+
+// De benchmarkpagina (/tests/tiled-layer-benchmark/) stuurt de kaart zelf aan
+// (zoomen, panneren, debugvlaggen) en leest framestatistiek uit MapLibre.
+defineExpose({ getMap: () => map });
 
 onUnmounted(() => {
 	map?.remove();

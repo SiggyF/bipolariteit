@@ -15,6 +15,15 @@ export type GridMetadata = {
 	maxzoom: number;
 	umap_scale: number;
 	umap_center: [number, number];
+	// Punten per px² per zoomniveau (pipeline/tiling/ink.py, `make tiles-full`);
+	// ontbreekt in oudere grid.json-bestanden.
+	ink?: InkTable;
+};
+
+export type InkTable = {
+	render_tile_px: number;
+	cell_px: number;
+	zooms: { zoom: number; tiles: number; points: number; per_px2_p50: number; per_px2_p90: number; per_px2_p99: number }[];
 };
 
 // Exacte spiegeling van pipeline/tiling/grid.py's umap_to_mercator(): UMAP-
