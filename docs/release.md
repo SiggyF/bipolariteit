@@ -382,6 +382,13 @@ bestanden geüpload). Publiceren zelf (onomkeerbaar, eigen DOI per versie)
 blijft een bewuste, handmatige stap in de Zenodo-UI -- zelfde terughoudende
 patroon als hierboven bij `publish-data`.
 
+**De UMAP-reducer gaat alleen naar Zenodo.** `umap-reducer-*.joblib` (ruim
+10 GB op de volle dataset) blijft standaard buiten de Hugging Face-upload: de
+site leest hem niet, alleen `scripts/argument_tree/transform_arguments_into_umap.py`
+gebruikt hem, lokaal. `scripts/publish_huggingface.py` slaat hem over en meldt
+dat in de log; `--include-reducer` stuurt hem toch mee. `make publish-zenodo`
+neemt hem wel mee, als archief.
+
 `scripts/publish_huggingface.py` heeft dat tussenstapje niet: de bestanden
 staan meteen live op
 `https://huggingface.co/datasets/SiggyF/bipolariteit-pmtiles/resolve/main/<submap>/<bestandsnaam>`
