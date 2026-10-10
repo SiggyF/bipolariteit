@@ -1411,7 +1411,13 @@ onUnmounted(() => {
 }
 .map-info-panel {
 	margin-top: 0.6rem;
-	min-height: 4.5rem;
+	/* Vaste hoogte: een min-height liet het paneel met de inhoud (leeg, punt,
+	   cluster, korte of lange quote) meegroeien en -krimpen, waardoor alles
+	   eronder bij elke hover op en neer sprong. Lange inhoud scrolt binnen het
+	   paneel. */
+	box-sizing: border-box;
+	height: 9rem;
+	overflow-y: auto;
 	border: 1px solid color-mix(in srgb, currentColor 20%, transparent);
 	border-radius: 0.5rem;
 	padding: 0.6rem 0.8rem;
