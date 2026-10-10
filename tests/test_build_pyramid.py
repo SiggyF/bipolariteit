@@ -120,3 +120,16 @@ def test_load_video_hrefs_without_videos_json_falls_back_to_computed_links(tmp_p
     hrefs = load_video_hrefs({1}, tmp_path / "ontbreekt.json")
 
     assert hrefs[1].startswith("https://stream.example/")
+
+
+def test_compress_tile_is_gzip_en_deterministisch():
+    import gzip
+
+    from pipeline.tiling.build_pyramid import compress_tile
+
+    raw = b"abc" * 1000
+    first = compress_tile(raw)
+    assert first[:2] == b"\x1f\x8b"  # gzip-magic, zodat de header GZIP kan claimen
+    assert gzip.decompress(first) == raw
+    assert len(first) < len(raw)
+    assert compress_tile(raw) == first  # mtime=0: reproduceerbaar
