@@ -205,11 +205,14 @@ contours: ## Partij- en persoonscontouren (relatief t.o.v. het totaallandschap) 
 		--grid data/export/plenair-map/plenair-map-full-grid.json --prefix plenair-map-full- \
 		--min-points $(or $(CONTOUR_MIN_POINTS),1000)
 
-tiles-full: ## Zelfde als `tiles`, maar op de volle-dataset-export (plenair-map-full.json -> data/export/plenair-map/bundel/plenair-map-full.pmtiles, zie issue #281) -- verwacht dat pipeline/plenary_map/cluster.py --export-suffix=-full al gedraaid is. Bundelt meteen de companion-bestanden (incl. de UMAP-reducer, indien aanwezig) voor `make publish-zenodo` in dezelfde map (zie docs/release.md). Schrijft ook plenair-map-full-density.tif (Cloud-Optimized GeoTIFF, dichtheidsraster + dichtheidsbewuste thinning + point_count per punt, issue #367) rechtstreeks in dezelfde map -- geen aparte cp nodig, build_pyramid.py leidt dat pad af van --out
+tiles-full: ## Zelfde als `tiles`, maar op de volle-dataset-export (plenair-map-full.json -> data/export/plenair-map/bundel/plenair-map-full.pmtiles, zie issue #281) -- verwacht dat pipeline/plenary_map/cluster.py --export-suffix=-full al gedraaid is. Bundelt meteen de companion-bestanden (incl. de UMAP-reducer, indien aanwezig) voor `make publish-zenodo` in dezelfde map (zie docs/release.md). Schrijft ook plenair-map-full-density.tif (Cloud-Optimized GeoTIFF, dichtheidsraster + dichtheidsbewuste thinning + point_count per punt, issue #367) rechtstreeks in dezelfde map -- geen aparte cp nodig, build_pyramid.py leidt dat pad af van --out. Zet daarna het `ink`-blok (punten per px2 per zoomniveau, pipeline/tiling/ink.py, issue #390) in plenair-map-full-grid.json; de frontend leidt puntgrootte en kleursterkte daaruit af
 	mkdir -p data/export/plenair-map/bundel
 	uv run python -m pipeline.tiling.build_pyramid \
 		--input data/export/plenair-map/plenair-map-full.json \
 		--out data/export/plenair-map/bundel/plenair-map-full.pmtiles
+	uv run python -m pipeline.tiling.ink \
+		--input data/export/plenair-map/bundel/plenair-map-full.pmtiles \
+		--grid data/export/plenair-map/bundel/plenair-map-full-grid.json
 	cp data/export/plenair-map/plenair-map-full.json data/export/plenair-map/plenair-map-clusters-full.json data/export/plenair-map/plenair-map-hierarchy-full.json data/export/plenair-map/bundel/
 	@if [ -f data/plenair-map/umap-reducer-full.joblib ]; then \
 		cp data/plenair-map/umap-reducer-full.joblib data/export/plenair-map/bundel/; \
