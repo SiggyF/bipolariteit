@@ -35,6 +35,9 @@ CLUSTER_LEVEL_SIZES ?= 4000,1500,500,150,50
 EXPORT_SUFFIX ?=
 LIMIT_CLUSTERS ?=
 PARALLEL ?=
+SHORTS_LIMIT ?= 10
+SHORTS_SINCE_DAYS ?= 180
+SHORTS_DRY_RUN ?=
 # Zonder expliciete BASE_URL=... op de command line wordt scripts/detect_llm_base_url.sh
 # gebruikt: probeert localhost:1234 en host.docker.internal:1234 (devcontainer),
 # en stopt met een foutmelding als geen van beide een LM Studio-instance heeft.
@@ -44,7 +47,7 @@ else
   RESOLVE_BASE_URL = scripts/detect_llm_base_url.sh
 endif
 
-.PHONY: help probe crawl ingest embed umap label-clusters pipeline test test-js test-frontend ca-fixture status build dev dev-stop extract extract-agy tag tag-agy tag-single redactie validate export enrich-video fetch-debate-events fetch-subtitles match-video-spans check-video-urls tags-taxonomy db-init pipeline-status backup-db release release-dry release-www release-www-dry check-public-exposure argument-doc export-public-data publish-data publish-zenodo publish-huggingface publish-tiles tiles tiles-full contours
+.PHONY: help probe crawl ingest embed umap label-clusters pipeline test test-js test-frontend ca-fixture status build dev dev-stop extract extract-agy tag tag-agy tag-single redactie validate export enrich-video fetch-debate-events fetch-subtitles match-video-spans build-shorts check-video-urls tags-taxonomy db-init pipeline-status backup-db release release-dry release-www release-www-dry check-public-exposure argument-doc export-public-data publish-data publish-zenodo publish-huggingface publish-tiles tiles tiles-full contours
 
 help: ## Toon deze lijst
 	@grep -E '^[a-zA-Z_-]+:.*## ' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*## "}; {printf "  \033[36m%-16s\033[0m %s\n", $$1, $$2}'
@@ -182,6 +185,9 @@ check-video-urls: ## Controleert of opgeslagen raw_video_url-manifesten nog afsp
 
 match-video-spans: ## Vult arguments.start_seconds/end_seconds door quote_text te matchen tegen de gecachete VTT-ondertitels, gekalibreerd op de debatdirect events-anker per beurt, voor alle topics (geen LLM, vereist fetch-debate-events+fetch-subtitles vooraf, gebruik pipeline.match_argument_spans --topic direct voor één topic)
 	uv run python -m pipeline.match_argument_spans
+
+build-shorts: ## Bouwt de homepage-videoteasers (issue #268): kiest per debat het meest emotionele fragment uit de al getagde argumenten en schrijft mp4's + manifest.json naar data/export/gepubliceerd/shorts/ (geen LLM, vereist ffmpeg en match-video-spans vooraf; publiceren via make publish-data). Vars: SHORTS_LIMIT (default 10), SHORTS_SINCE_DAYS (default 180, t.o.v. het recentste debat in de DB), SHORTS_DRY_RUN=1 (alleen manifest, geen render)
+	uv run python -m scripts.build_shorts_sample --limit $(SHORTS_LIMIT) --since-days $(SHORTS_SINCE_DAYS) $(if $(SHORTS_DRY_RUN),--dry-run)
 
 argument-doc: ## Exporteert alle pro/contra-argumenten van TOPIC (met claims) als markdown -- invoer voor `make redactie`, geen LLM-call
 	uv run python -m pipeline.export_argument_doc --topic $(TOPIC)
