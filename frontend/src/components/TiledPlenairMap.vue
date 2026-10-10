@@ -1416,7 +1416,7 @@ onUnmounted(() => {
 	   eronder bij elke hover op en neer sprong. Lange inhoud scrolt binnen het
 	   paneel. */
 	box-sizing: border-box;
-	height: 9rem;
+	height: 6rem;
 	overflow-y: auto;
 	border: 1px solid color-mix(in srgb, currentColor 20%, transparent);
 	border-radius: 0.5rem;
