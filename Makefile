@@ -15,7 +15,6 @@ DATASET ?= elecdebate60to16
 EMBED_START ?= 2000-01-01
 EMBED_END ?= $(shell date +%F)
 EMBED_LABEL ?= full
-EMBED_FULL_RANGE_TOPICS ?= stikstof,abortus,asiel,energietransitie
 MODEL ?= qwen/qwen3.8-27b
 # Los van MODEL: dat is de default voor de lokale qwen-pipeline (extract/tag/
 # validate) en is geen geldig model voor agy (Docker/Gemini). Leeg = laat het
@@ -89,11 +88,11 @@ ingest: ## Stage 0b -- gecrawlde VLOS-XML importeren naar SQLite (documents/acto
 		uv run python -m pipeline.enrich_video_url; \
 	fi
 
-embed: ## Plenaire-kaart-pijplijn stage 1 -- documenten embedden met bge-m3, incrementele cache in data/embeddings/ (pipeline/embed/documents.py). Vóór UMAP/clustering (make umap). Vars: EMBED_START, EMBED_END, EMBED_LABEL, EMBED_FULL_RANGE_TOPICS, BASE_URL
+embed: ## Plenaire-kaart-pijplijn stage 1 -- documenten embedden met bge-m3, incrementele cache in data/embeddings/ (pipeline/embed/documents.py). Vóór UMAP/clustering (make umap). Vars: EMBED_START, EMBED_END, EMBED_LABEL, BASE_URL
 	@url=$$($(RESOLVE_BASE_URL)) || exit 1; \
 	uv run python -m pipeline.embed.documents \
 		--start $(EMBED_START) --end $(EMBED_END) --label $(EMBED_LABEL) \
-		$(if $(EMBED_FULL_RANGE_TOPICS),--full-range-topics $(EMBED_FULL_RANGE_TOPICS),) --base-url $$url
+		--base-url $$url
 
 umap: ## Plenaire-kaart-pijplijn stage 2 -- UMAP op de embeddings (host-only qua geheugengebruik op de volle dataset, zie docs/handoff.md). Verwacht dat `make embed` al gedraaid is (volledige cache-hit, praat zelf niet met LM Studio). Schrijft coördinaten weg voor `make cluster-plenary-map` én de gefitte reducer (joblib), zodat latere, losse punten (bv. argument-embeddings) via reducer.transform() in dezelfde ruimte geplaatst kunnen worden. Vars: EMBED_START, EMBED_END, EMBED_LABEL
 	uv run python -m pipeline.plenary_map.umap \
