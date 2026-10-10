@@ -80,11 +80,13 @@ crawl: ## Stage 0 -- TK-verslagen crawlen naar data/raw/tweede_kamer/, vóór in
 		PYTHONPATH=. uv run python scripts/crawl_all_topics.py --limit $(LIMIT) $(if $(SOORT),--soort "$(SOORT)",); \
 	fi
 
-ingest: ## Stage 0b -- gecrawlde VLOS-XML importeren naar SQLite (documents/actors), vóór extract. Vars: TOPIC (optioneel -- zonder expliciete TOPIC=... op de command line: alle topics + hun extra crawl-zoektermen als also-dir/also-keyword (issue #391), daarna de topic-onafhankelijke periodemappen met topic_id NULL (issue #270))
+ingest: ## Stage 0b -- gecrawlde VLOS-XML importeren naar SQLite (documents/actors), vóór extract. Vars: TOPIC (optioneel -- zonder expliciete TOPIC=... op de command line: alle topics + hun extra crawl-zoektermen als also-dir/also-keyword (issue #391), daarna de topic-onafhankelijke periodemappen met topic_id NULL (issue #270)). Draait daarna enrich_video_url voor de nieuwe documenten, zodat een debat meteen een video_url krijgt (rest van de video-koppeling blijft bij make export)
 	@if [ "$(origin TOPIC)" = "command line" ]; then \
-		uv run python -m pipeline.ingest.ingest_tk --topic $(TOPIC); \
+		uv run python -m pipeline.ingest.ingest_tk --topic $(TOPIC) && \
+		uv run python -m pipeline.enrich_video_url --topic $(TOPIC); \
 	else \
-		PYTHONPATH=. uv run python scripts/ingest_all_topics.py; \
+		PYTHONPATH=. uv run python scripts/ingest_all_topics.py && \
+		uv run python -m pipeline.enrich_video_url; \
 	fi
 
 embed: ## Plenaire-kaart-pijplijn stage 1 -- documenten embedden met bge-m3, incrementele cache in data/embeddings/ (pipeline/embed/documents.py). Vóór UMAP/clustering (make umap). Vars: EMBED_START, EMBED_END, EMBED_LABEL, EMBED_FULL_RANGE_TOPICS, BASE_URL
