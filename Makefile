@@ -72,14 +72,15 @@ probe: ## Tel TK-activiteiten per kandidaat-trefwoord, vóór een crawl. Vars: K
 	@test -n "$(KEYWORDS)" || { echo 'Gebruik: make probe KEYWORDS="asiel migratie"'; exit 1; }
 	PYTHONPATH=.:crawlers/tweede_kamer uv run python scripts/probe_topic_keywords.py $(KEYWORDS)
 
-crawl: ## Stage 0 -- TK-verslagen crawlen naar data/raw/tweede_kamer/, vóór ingest. Vars: TOPIC (optioneel -- zonder expliciete TOPIC=... op de command line: alle topics + hun extra crawl-zoektermen, zie TOPIC_TITLE_KEYWORDS, issue #391), LIMIT, SOORT (default "Plenair debat (debat)")
+crawl: ## Stage 0 -- TK-verslagen crawlen naar data/raw/tweede_kamer/, vóór ingest. Zonder TOPIC=... op de command line: vult bij wat mist -- eerst alle plenaire/commissiedebatten sinds de laatste ingeste datum (topic-onafhankelijk, scripts/crawl_period.py, issue #270), daarna per topic de trefwoordcrawl (zie TOPIC_TITLE_KEYWORDS, issue #391). Vars: TOPIC (één topic), START/END (alleen periodecrawl, ISO-datums), LIMIT, SOORT (default "Plenair debat (debat)" bij TOPIC)
 	@if [ "$(origin TOPIC)" = "command line" ]; then \
 		cd crawlers/tweede_kamer && uv run scrapy crawl verslagen -a topic=$(TOPIC) -a limit=$(LIMIT) $(if $(SOORT),-a soort="$(SOORT)",); \
 	else \
+		PYTHONPATH=. uv run python scripts/crawl_period.py $(if $(START),--start $(START),) $(if $(END),--end $(END),) && \
 		PYTHONPATH=. uv run python scripts/crawl_all_topics.py --limit $(LIMIT) $(if $(SOORT),--soort "$(SOORT)",); \
 	fi
 
-ingest: ## Stage 0b -- gecrawlde VLOS-XML importeren naar SQLite (documents/actors), vóór extract. Vars: TOPIC (optioneel -- zonder expliciete TOPIC=... op de command line: alle topics + hun extra crawl-zoektermen als also-dir/also-keyword, issue #391)
+ingest: ## Stage 0b -- gecrawlde VLOS-XML importeren naar SQLite (documents/actors), vóór extract. Vars: TOPIC (optioneel -- zonder expliciete TOPIC=... op de command line: alle topics + hun extra crawl-zoektermen als also-dir/also-keyword (issue #391), daarna de topic-onafhankelijke periodemappen met topic_id NULL (issue #270))
 	@if [ "$(origin TOPIC)" = "command line" ]; then \
 		uv run python -m pipeline.ingest.ingest_tk --topic $(TOPIC); \
 	else \
