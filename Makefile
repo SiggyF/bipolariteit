@@ -224,7 +224,7 @@ publish-data: export-public-data ## Commit + push data/export/gepubliceerd/ (sub
 publish-zenodo: ## Nieuwe Zenodo-versie (draft) van de volle-dataset-tegelpyramide (plenair-map-full.pmtiles e.a. -- te groot voor git/GitHub, zie docs/release.md). Publiceren zelf blijft een handmatige stap in de Zenodo-UI. Vars: ZENODO_TOKEN
 	uv run python scripts/publish_zenodo.py
 
-publish-huggingface: ## Zelfde bundel als publish-zenodo, maar naar een publieke HF-dataset-repo als live data (direct overschreven, geen aparte publiceerstap, zie docs/release.md). Vars: HUGGINGFACE_TOKEN
+publish-huggingface: ## Zelfde bundel als publish-zenodo, maar naar een publieke HF-dataset-repo als live data (direct overschreven, geen aparte publiceerstap, zie docs/release.md). De UMAP-reducer (umap-reducer-*.joblib, >10 GB) gaat niet mee; alleen naar Zenodo. Vars: HUGGINGFACE_TOKEN
 	uv run python scripts/publish_huggingface.py
 
 publish-tiles: ## Publiceert de kleine plenair-map.pmtiles/-grid.json (van `make tiles`) naar dezelfde Hugging Face-dataset-repo als publish-huggingface -- pmtiles hoort bij HF, niet bij de jsDelivr-submodule (issue #316, TiledPlenairMap.vue). Vars: HUGGINGFACE_TOKEN

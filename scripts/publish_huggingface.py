@@ -27,6 +27,12 @@ jsDelivr-route. Dit is mogelijk sinds CORS + HTTP Range bevestigd zijn te
 werken op HF's dataset-CDN voor bestanden van deze grootte (zie issue #293) --
 iets wat jsDelivr/git niet aankan boven de 100 MB-limiet.
 
+De gefitte UMAP-reducer (`umap-reducer-*.joblib`, ruim 10 GB op de volle
+dataset) gaat standaard NIET mee: de site leest hem niet (alleen
+`scripts/argument_tree/transform_arguments_into_umap.py` lokaal), dus hij
+hoort bij het Zenodo-archief en niet bij de live-data. Met `--include-reducer`
+gaat hij toch mee.
+
 Vereist HUGGINGFACE_TOKEN (zie .devcontainer/.env.local) met schrijfrechten
 op de doelrepo.
 """
@@ -34,6 +40,7 @@ op de doelrepo.
 from __future__ import annotations
 
 import argparse
+import fnmatch
 import logging
 import os
 import sys
@@ -48,6 +55,17 @@ logger = logging.getLogger(__name__)
 DEFAULT_BUNDLE_DIR = REPO_ROOT / "data" / "export" / "plenair-map" / "bundel"
 DEFAULT_REPO_ID = "SiggyF/bipolariteit-pmtiles"
 DEFAULT_REPO_SUBDIR = "plenair-map"
+# Bestanden die niet standaard naar de live-repo gaan (zie de moduledocstring).
+REDUCER_GLOB = "umap-reducer-*.joblib"
+
+
+def select_bundle_files(bundle_dir: Path, include_reducer: bool = False) -> tuple[list[Path], list[Path]]:
+    """Alle bestanden in de bundel, gesorteerd, en welke daarvan overgeslagen zijn."""
+    files = sorted(f for f in bundle_dir.iterdir() if f.is_file())
+    if include_reducer:
+        return files, []
+    skipped = [f for f in files if fnmatch.fnmatch(f.name, REDUCER_GLOB)]
+    return [f for f in files if f not in skipped], skipped
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -66,6 +84,11 @@ def main(argv: list[str] | None = None) -> int:
         help=f"submap in de dataset-repo waaronder de bestanden komen (default: {DEFAULT_REPO_SUBDIR!r}, "
         "leeg '' voor de repo-root)",
     )
+    parser.add_argument(
+        "--include-reducer",
+        action="store_true",
+        help=f"neem ook {REDUCER_GLOB} mee (standaard overgeslagen: ruim 10 GB en niet door de site gelezen)",
+    )
     parser.add_argument("--dry-run", action="store_true", help="toon wat er zou gebeuren, upload niets")
     args = parser.parse_args(argv)
 
@@ -78,7 +101,9 @@ def main(argv: list[str] | None = None) -> int:
                 DEFAULT_BUNDLE_DIR,
             )
             return 1
-        args.files = sorted(f for f in DEFAULT_BUNDLE_DIR.iterdir() if f.is_file())
+        args.files, skipped = select_bundle_files(DEFAULT_BUNDLE_DIR, args.include_reducer)
+        for f in skipped:
+            logger.info("overgeslagen: %s (%.1f GiB, --include-reducer om mee te sturen)", f.name, f.stat().st_size / 1024**3)
         if not args.files:
             logger.error("%s is leeg -- draai eerst `make tiles-full`", DEFAULT_BUNDLE_DIR)
             return 1
