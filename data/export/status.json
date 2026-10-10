@@ -1,21 +1,21 @@
 {
-  "generated_at": "2026-10-08T23:01:54+02:00",
+  "generated_at": "2026-10-10T20:09:28+02:00",
   "co2_estimate": {
     "energy_wh_per_1k_tokens_assumption": 0.3,
     "carbon_intensity_g_per_kwh": {
       "local": 0,
       "remote": 160
     },
-    "total_calls": 60655,
-    "total_tokens": 152845960,
-    "total_energy_kwh": 45.853788,
+    "total_calls": 60963,
+    "total_tokens": 153691171,
+    "total_energy_kwh": 46.107351300000005,
     "total_co2_kg": 5.367379584,
     "by_source": {
       "local": {
-        "n_calls": 14964,
-        "total_tokens": 41025552,
-        "n_calls_missing_tokens": 144,
-        "energy_kwh": 12.3076656,
+        "n_calls": 15272,
+        "total_tokens": 41870763,
+        "n_calls_missing_tokens": 146,
+        "energy_kwh": 12.5612289,
         "co2_g": 0.0
       },
       "remote": {
@@ -144,8 +144,8 @@
       "name": "Asiel en migratie",
       "vanaf": "2023-12-06",
       "documents_total": 8249,
-      "documents_extracted": 4872,
-      "arguments_total": 3572,
+      "documents_extracted": 4900,
+      "arguments_total": 3585,
       "arguments_tagged": 3572,
       "argumentenboom_banden": 11,
       "arguments_ander_onderwerp": 92,
@@ -206,13 +206,13 @@
         {
           "stage": "extraction",
           "model": "qwen/qwen3.8-27b",
-          "n_calls": 65,
-          "total_duration_s": 559.7996966728824,
-          "avg_duration_s": 8.612303025736653,
+          "n_calls": 93,
+          "total_duration_s": 925.4679350057268,
+          "avg_duration_s": 9.951268118341147,
           "n_errors": 0,
-          "total_completion_tokens": 4056,
+          "total_completion_tokens": 7508,
           "first_call_at": "2026-10-08T18:26:20.037928+00:00",
-          "last_call_at": "2026-10-08T18:38:12.282223+00:00"
+          "last_call_at": "2026-10-08T21:17:32.193787+00:00"
         },
         {
           "stage": "tagging",
@@ -254,11 +254,11 @@
       "name": "Energietransitie",
       "vanaf": "2023-12-06",
       "documents_total": 13412,
-      "documents_extracted": 7623,
-      "arguments_total": 5782,
+      "documents_extracted": 7901,
+      "arguments_total": 6066,
       "arguments_tagged": 5782,
       "argumentenboom_banden": 1,
-      "arguments_ander_onderwerp": 187,
+      "arguments_ander_onderwerp": 188,
       "ander_onderwerp_top": [
         {
           "onderwerp": "diepzeemijnbouw",
@@ -327,13 +327,13 @@
         {
           "stage": "extraction",
           "model": "qwen/qwen3.8-27b",
-          "n_calls": 1,
-          "total_duration_s": 160.40020669798832,
-          "avg_duration_s": 160.40020669798832,
-          "n_errors": 1,
-          "total_completion_tokens": 0,
+          "n_calls": 281,
+          "total_duration_s": 5069.871764399111,
+          "avg_duration_s": 18.042248271882958,
+          "n_errors": 3,
+          "total_completion_tokens": 67073,
           "first_call_at": "2026-10-07T21:08:29.616571+00:00",
-          "last_call_at": "2026-10-07T21:08:29.616571+00:00"
+          "last_call_at": "2026-10-09T20:34:43.436836+00:00"
         },
         {
           "stage": "tagging",

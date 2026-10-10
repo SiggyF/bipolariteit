@@ -195,7 +195,7 @@
     "slug": "asiel",
     "name": "Asiel en migratie",
     "description": "Dit debat gaat over het Nederlandse asiel- en migratiebeleid: de omvang van de\ninstroom, de opvang en spreiding daarvan, de asielprocedure, gezinshereniging,\nterugkeer en uitzetting, remigratie, en de ruimte die Europese en\ninternationale verplichtingen laten.\n\nPRO = bescherming van de asielzoeker. Nederland heeft een opvangprobleem: te\nweinig plekken en haperende procedures. Kenmerkende onderbouwingen: wie te laat\neen besluit krijgt houdt een rechtsmiddel, zorgvuldigheid gaat boven snelheid,\nopvang hoort kleinschalig en eerlijk verdeeld te zijn, gedwongen terugkeer kan\nalleen als het land van herkomst veilig is, en internationale en Europese\nverplichtingen worden nageleefd. Deze pool bekritiseert maatregelen vaak vanuit\nde rechtsstaat, niet vanuit een pleidooi voor meer migratie.\n\nCONTRA = beperking van de instroom. Nederland heeft te veel asielzoekers: er\nwordt te weinig afgewezen en teruggestuurd, en meer opvangcapaciteit lost dat\nniet op. Oplossingen die deze pool aandraagt: strengere toelating, sneller\nafwijzen, actief terugsturen en remigratie stimuleren, voorzieningen versoberen\nomdat ze als aanzuigende prikkel werken, gemeenten vrijlaten om niet mee te\nwerken aan opvang, en niet ruimhartiger zijn dan Europa vereist. Verder: het\ndraagvlak in de samenleving brokkelt af.",
-    "argument_count": 3480,
+    "argument_count": 3493,
     "image_url": "https://livestreaming-thumb.b67buv2.tweedekamer.nl/plenaire-zaal/1080/2024-11-12/14:40:35+0100.jpg",
     "party_positions": [
       {
@@ -213,13 +213,13 @@
       {
         "party": "PVV",
         "pro": 7,
-        "contra": 285,
+        "contra": 287,
         "unclear": 0
       },
       {
         "party": "JA21",
         "pro": 4,
-        "contra": 157,
+        "contra": 159,
         "unclear": 3
       },
       {
@@ -248,9 +248,9 @@
       },
       {
         "party": "CDA",
-        "pro": 91,
-        "contra": 301,
-        "unclear": 42
+        "pro": 92,
+        "contra": 304,
+        "unclear": 43
       },
       {
         "party": "SGP",
@@ -308,7 +308,7 @@
       },
       {
         "party": "PRO",
-        "pro": 4,
+        "pro": 8,
         "contra": 1,
         "unclear": 0
       }
@@ -318,7 +318,7 @@
     "slug": "energietransitie",
     "name": "Energietransitie",
     "description": "Dit debat gaat over het tempo en de mate van overheidssturing bij de Nederlandse energietransitie: investeringen in kernenergie, hernieuwbare energie en waterstof, de rol van het Klimaatfonds, de aanpak van netcongestie, de afbouw van de salderingsregeling, het volgen van EU-klimaatdoelen (Fit for 55, EU-klimaatwet), en welke maatstaf daarbij leidend is voor de te kiezen energievorm.\n\nPRO = voorstander van een versnelde, overheidsgestuurde energietransitie, ongeacht kabinet of instrument. Vier aspecten spelen hierbij: (1) hoog tempo en actieve overheidssturing zijn nodig (Klimaatfonds, subsidies, normering); (2) economische groei is geen leidend principe, krimp van vervuilende sectoren mag (degrowth); (3) voorkeur voor de \"groenste\" oplossing (zon, wind, isolatie, bos), ook als minder robuust; (4) bij meerdere CO2-neutrale opties heeft de oplossing met de minste industriele groei de voorkeur. Verder geldt: de vervuiler betaalt, niet de burger (bv. overwinstbelasting); klimaatrechtvaardigheid (sterkste schouders dragen zwaarste lasten); EU-klimaatdoelen moeten gevolgd of overtroffen worden. Kritiek richt zich op onvoldoende ambitie of snelheid, niet op verzet tegen de transitie zelf.\n\nCONTRA = voorstander van een realistisch tempo en een pragmatische, beperkte rol voor de overheid bij de energietransitie. Vier aspecten spelen hierbij: (1) een haalbaar tempo, met ruimte voor markt en vrijwilligheid in plaats van dwang vanuit de overheid; (2) economische groei, industriele concurrentiekracht en werkgelegenheid wegen zwaar, krimp is onwenselijk; (3) voorkeur voor een robuuste, betrouwbare energievorm (kernenergie, gas), ook als die minder \"zuiver groen\" oogt; (4) bij meerdere opties heeft de meest betaalbare en betrouwbare de voorkeur, ook als dat minder CO2-winst oplevert. Verder geldt: betaalbaarheid en financiele druk op burgers en ondernemers wegen zwaar (energierekening, energiearmoede, netkosten); EU-klimaatverplichtingen gaan te ver of te snel; burgers die al investeerden (bv. in zonnepanelen) mogen niet de dupe worden van beleidswijzigingen; nationale soevereiniteit en energieonafhankelijkheid wegen zwaarder dan een zo snel mogelijke verduurzaming.",
-    "argument_count": 5595,
+    "argument_count": 5878,
     "image_url": "https://livestreaming-thumb.b67buv2.tweedekamer.nl/thorbeckezaal/1080/2026-04-09/14:40:43+0200.jpg",
     "party_positions": [
       {
@@ -329,37 +329,37 @@
       },
       {
         "party": "D66",
-        "pro": 589,
-        "contra": 128,
-        "unclear": 14
+        "pro": 624,
+        "contra": 132,
+        "unclear": 15
       },
       {
         "party": "JA21",
-        "pro": 12,
-        "contra": 252,
+        "pro": 14,
+        "contra": 275,
         "unclear": 1
       },
       {
         "party": "SGP",
-        "pro": 23,
-        "contra": 265,
+        "pro": 24,
+        "contra": 275,
         "unclear": 0
       },
       {
         "party": "PVV",
         "pro": 1,
-        "contra": 206,
+        "contra": 230,
         "unclear": 0
       },
       {
         "party": "CDA",
-        "pro": 87,
-        "contra": 262,
-        "unclear": 4
+        "pro": 98,
+        "contra": 293,
+        "unclear": 13
       },
       {
         "party": "SP",
-        "pro": 115,
+        "pro": 116,
         "contra": 77,
         "unclear": 0
       },
@@ -377,9 +377,9 @@
       },
       {
         "party": "BBB",
-        "pro": 56,
-        "contra": 431,
-        "unclear": 1
+        "pro": 79,
+        "contra": 443,
+        "unclear": 3
       },
       {
         "party": "FVD",
@@ -395,9 +395,9 @@
       },
       {
         "party": "VVD",
-        "pro": 199,
-        "contra": 1024,
-        "unclear": 8
+        "pro": 200,
+        "contra": 1067,
+        "unclear": 9
       },
       {
         "party": "GroenLinks-PvdA",
@@ -413,7 +413,7 @@
       },
       {
         "party": "PvdD",
-        "pro": 296,
+        "pro": 305,
         "contra": 32,
         "unclear": 0
       },
@@ -431,9 +431,9 @@
       },
       {
         "party": "PRO",
-        "pro": 18,
-        "contra": 11,
-        "unclear": 0
+        "pro": 55,
+        "contra": 13,
+        "unclear": 1
       }
     ]
   },
